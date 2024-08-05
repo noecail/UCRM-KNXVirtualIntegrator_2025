@@ -22,11 +22,11 @@ namespace KNX_PROJET_2
         }
 
         //Méthode pour faire une check list
-        public class GroupAddressItem
+      /*  public class GroupAddressItem
         {
             public string DisplayText { get; set; }
             public bool IsSelected { get; set; }
-        }
+        }*/
 
     }
 }

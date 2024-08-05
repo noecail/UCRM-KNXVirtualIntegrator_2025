@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
+    <PackageReference Include="NETStandard.Library" Version="2.0.3" />
   </ItemGroup>
 
 </Project>

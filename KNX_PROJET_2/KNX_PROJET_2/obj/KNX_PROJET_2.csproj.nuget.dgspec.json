@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lison\\source\\repos\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj": {}
+    "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lison\\source\\repos\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj": {
+    "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lison\\source\\repos\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
+        "projectUniqueName": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
         "projectName": "KNX_PROJET_2",
-        "projectPath": "C:\\Users\\lison\\source\\repos\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
+        "projectPath": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
         "packagesPath": "C:\\Users\\lison\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lison\\source\\repos\\KNX_PROJET_2\\KNX_PROJET_2\\obj\\",
+        "outputPath": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -52,6 +52,10 @@
             "Knx.Falcon.Sdk": {
               "target": "Package",
               "version": "[6.1.6264, )"
+            },
+            "NETStandard.Library": {
+              "target": "Package",
+              "version": "[2.0.3, )"
             }
           },
           "imports": [
