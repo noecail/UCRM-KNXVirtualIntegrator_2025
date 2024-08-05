@@ -4,16 +4,7 @@
              xmlns:local="clr-namespace:KNX_PROJET_2"
              Width="300" Height="400">
     <Grid>
-        <ListBox x:Name="AddressesListBox">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Margin="5" IsChecked="{Binding IsSelected}" />
-                        <TextBlock Text="{Binding DisplayText}" VerticalAlignment="Center"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ListBox x:Name="AddressesListBox"/>
     </Grid>
 </UserControl>
 
