@@ -1,0 +1,76 @@
+﻿<Window x:Class="KNX_PROJET_2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:KNX_PROJET_2"
+        Title="KNX Falcon SDK" Height="600" Width="800">
+    <Grid>
+        <!-- Define rows and columns for the grid -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Import Button -->
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Bus Connection -->
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Discovered Interface -->
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Group Address List -->
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Modeles -->
+            <RowDefinition Height="Auto"/>
+            <!-- Row for Test Buttons -->
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Import Button -->
+        <Button Name="ImportButton" Content="Importer" Grid.Row="0" Grid.Column="0" Margin="5" Click="ImportButton_Click"/>
+
+        <!-- Bus Connection Section -->
+        <GroupBox Header="Bus Connection" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <StackPanel>
+                <ComboBox Name="ConnectionTypeComboBox">
+                    <ComboBoxItem Content="USB"/>
+                    <ComboBoxItem Content="IP Routing"/>
+                    <!-- Add more connection types here -->
+                </ComboBox>
+                <StackPanel Orientation="Horizontal">
+                    <Button Name="ConnectButton" Content="Connect" Margin="5"/>
+                    <Button Name="DisconnectButton" Content="Disconnect" Margin="5"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Discovered Interface Section -->
+        <GroupBox Header="Discovered Interface" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <StackPanel>
+                <ListBox Name="DiscoveredListBox"/>
+                <Button Name="RefreshButton" Content="Refresh" Margin="5"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Group Address List Section -->
+        <GroupBox Header="Liste des adresses de groupes non gérées" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <!-- Instance of GroupAddressList UserControl -->
+            <local:GroupAddressList x:Name="GroupAddressListControl"/>
+        </GroupBox>
+
+        <!-- Modeles Section -->
+        <GroupBox Header="Modèles" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal">
+                <ListBox Name="ModelesBox"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Test Buttons Section -->
+        <GroupBox Header="Tester les modeles" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Horizontal">
+                <Button Name="TestSelectedModelesButton" Content="Tester les modèles sélectionnés" Margin="5"/>
+                <Button Name="TestAllModelesButton" Content="Tout tester" Margin="5"/>
+            </StackPanel>
+        </GroupBox>
+    </Grid>
+</Window>
+
