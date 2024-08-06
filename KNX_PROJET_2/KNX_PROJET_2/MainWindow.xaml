@@ -31,17 +31,22 @@
         <!-- Bus Connection Section -->
         <GroupBox Header="Bus Connection" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel>
-                <ComboBox Name="ConnectionTypeComboBox">
+                <!-- ComboBox for selecting the type of connection -->
+                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0">
                     <ComboBoxItem Content="USB"/>
                     <ComboBoxItem Content="IP Routing"/>
                     <!-- Add more connection types here -->
                 </ComboBox>
-                <StackPanel Orientation="Horizontal">
-                    <Button Name="ConnectButton" Content="Connect" Margin="5"/>
-                    <Button Name="DisconnectButton" Content="Disconnect" Margin="5"/>
+
+                
+                <!-- Buttons for connecting and disconnecting -->
+                <StackPanel Orientation="Horizontal" Margin="5">
+                    <Button Name="ConnectButton" Content="Connect" Margin="5" Click="ConnectButton_Click"/>
+                    <Button Name="DisconnectButton" Content="Disconnect" Margin="5" Click="DisconnectButton_Click"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
+
 
         <!-- Discovered Interface Section -->
         <GroupBox Header="Discovered Interface" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">

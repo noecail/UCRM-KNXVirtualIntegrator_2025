@@ -6,6 +6,10 @@ using System.Text;
 using System.Xml;
 using System.Windows.Interop;
 using System.IO;
+using Knx.Falcon.Sdk;
+using System.Windows.Controls;
+using Knx.Falcon.Configuration;
+using Knx.Falcon;
 
 namespace KNX_PROJET_2
 {
@@ -29,6 +33,7 @@ namespace KNX_PROJET_2
         /// </summary>
         public string ProjectFolderPath { get; private set; } = "";
 
+        
 
 
 
@@ -54,10 +59,7 @@ namespace KNX_PROJET_2
             }
         }
         
-        //Gestion du clic sur le bouton Connect
-
-
-        //Gestion du clic sur le bouton Disconnect
+        
 
 
         
@@ -103,16 +105,147 @@ namespace KNX_PROJET_2
         }
 
 
-        //TACHE POUR CONNECTION AU BUS
 
+
+
+
+
+
+
+
+
+
+        private KnxBus _bus;
+        private CancellationTokenSource _cancellationTokenSource;
+
+        //Gestion du clic sur le bouton Connect
+        private async void ConnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            await ConnectBusAsync();
+        }
+
+        //Gestion du clic sur le bouton Disconnect
+        private async void DisconnectButton_Click(object sender, RoutedEventArgs e)
+        {
+            await DisconnectBusAsync();
+        }
+
+
+
+        //TACHE POUR CONNECTION AU BUS
+        private async Task ConnectBusAsync()
+        {
+            if (IsBusy)
+                return;
+
+            //_cancellationTokenSource = new CancellationTokenSource();
+
+            try
+            {
+                // Récupérer le type de connexion sélectionné
+                string connectionString = ((ComboBoxItem)ConnectionTypeComboBox.SelectedItem)?.Content.ToString();
+                
+
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    MessageBox.Show("Le type de connexion et la chaîne de connexion doivent être fournis.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
+                // Vérifier si un bus est déjà connecté, et le déconnecter si nécessaire
+                if (_bus != null)
+                {
+                    _bus.ConnectionStateChanged -= BusConnectionStateChanged;
+                    await _bus.DisposeAsync();
+                    _bus = null;
+                    UpdateConnectionState();
+                }
+
+                var connectorParameters = CreateConnectorParameters(connectionString);
+
+                // Connexion au bus
+                var bus = new KnxBus(connectorParameters);
+                await bus.ConnectAsync(_cancellationTokenSource.Token);
+                _bus = bus;
+
+                _bus.ConnectionStateChanged += BusConnectionStateChanged;
+                UpdateConnectionState();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
 
         //TACHE POUR DECONNECTION AU BUS
 
+        private async Task DisconnectBusAsync()
+        {
+            if (IsBusy || !IsConnected)
+                return;
+
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource = null;
+
+            try
+            {
+                if (_bus != null)
+                {
+                    _bus.ConnectionStateChanged -= BusConnectionStateChanged;
+                    await _bus.DisposeAsync();
+                    _bus = null;
+                }
+
+                UpdateConnectionState();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+        private void UpdateConnectionState()
+        {
+            // Cette méthode doit mettre à jour l'état de la connexion dans l'interface utilisateur
+            // Par exemple, vous pouvez mettre à jour des propriétés liées à la connexion
+            // Exemple :
+            // ConnectionStateTextBlock.Text = IsConnected ? "Connected" : "Disconnected";
+            // ou notifier d'autres parties de l'interface utilisateur
+        }
+
+        private void BusConnectionStateChanged(object sender, EventArgs e)
+        {
+            // Cette méthode sera appelée lorsque l'état de la connexion change
+            // Vous pouvez mettre à jour l'interface utilisateur en conséquence
+            UpdateConnectionState();
+        }
+
+        private ConnectorParameters CreateConnectorParameters(string connectionString)
+        {
+            // Créez les paramètres du connecteur en fonction du type sélectionné
+            switch (connectionString)
+            {
+                case "USB":
+                    // Créer les paramètres pour la connexion USB
+                    return ConnectorParameters.FromConnectionString(connectionString); // Assurez-vous que la chaîne de connexion est correcte pour USB
+                case "IP":
+                    // Créer les paramètres pour la connexion IP
+                    return ConnectorParameters.FromConnectionString(connectionString); // Assurez-vous que la chaîne de connexion est correcte pour IP
+                default:
+                    throw new InvalidOperationException("Type de connexion inconnu.");
+            }
+        }
+
+        public bool IsBusy => _cancellationTokenSource?.Token.IsCancellationRequested == false;
+
+        public bool IsConnected => _bus != null && _bus.ConnectionState == BusConnectionState.Connected;
 
     }
 
-        
+
 }
 
 
