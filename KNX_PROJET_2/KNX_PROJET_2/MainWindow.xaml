@@ -33,8 +33,8 @@
             <StackPanel>
                 <!-- ComboBox for selecting the type of connection -->
                 <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0">
-                    <ComboBoxItem Content="USB"/>
-                    <ComboBoxItem Content="IP Routing"/>
+                    <ComboBoxItem Content="Type=USB"/>
+                    <ComboBoxItem Content="Type=IpRouting"/>
                     <!-- Add more connection types here -->
                 </ComboBox>
 

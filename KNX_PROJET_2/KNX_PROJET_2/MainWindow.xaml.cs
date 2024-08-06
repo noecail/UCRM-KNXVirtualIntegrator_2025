@@ -143,8 +143,7 @@ namespace KNX_PROJET_2
             try
             {
                 // Récupérer le type de connexion sélectionné
-                string connectionString = ((ComboBoxItem)ConnectionTypeComboBox.SelectedItem)?.Content.ToString();
-                
+                var connectionString = ((ComboBoxItem)ConnectionTypeComboBox.SelectedItem)?.Content.ToString();
 
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
@@ -162,6 +161,8 @@ namespace KNX_PROJET_2
                 }
 
                 var connectorParameters = CreateConnectorParameters(connectionString);
+                
+                //var connectorParameters = ConnectorParameters.FromConnectionString(connectionString);
 
                 // Connexion au bus
                 var bus = new KnxBus(connectorParameters);
@@ -228,10 +229,10 @@ namespace KNX_PROJET_2
             // Créez les paramètres du connecteur en fonction du type sélectionné
             switch (connectionString)
             {
-                case "USB":
+                case "Type=USB":
                     // Créer les paramètres pour la connexion USB
                     return ConnectorParameters.FromConnectionString(connectionString); // Assurez-vous que la chaîne de connexion est correcte pour USB
-                case "IP":
+                case "Type=IpRouting":
                     // Créer les paramètres pour la connexion IP
                     return ConnectorParameters.FromConnectionString(connectionString); // Assurez-vous que la chaîne de connexion est correcte pour IP
                 default:
