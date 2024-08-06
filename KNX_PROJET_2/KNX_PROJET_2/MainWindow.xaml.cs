@@ -35,7 +35,6 @@ namespace KNX_PROJET_2
         // Gestion du clic sur le bouton Importer
         private async void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-
             // Créer une instance de OpenFileDialog pour sélectionner un fichier XML
             OpenFileDialog openFileDialog = new()
             {
@@ -55,7 +54,12 @@ namespace KNX_PROJET_2
             }
         }
         
-        
+        //Gestion du clic sur le bouton Connect
+
+
+        //Gestion du clic sur le bouton Disconnect
+
+
         
         //TACHE IMPORTER LISTE DES ADRESSES DE GROUPE
         private async Task ImportListGroupAddress(string filePath)
@@ -90,19 +94,20 @@ namespace KNX_PROJET_2
                         MessageBox.Show("Le contrôle de la liste des adresses de groupe n'est pas initialisé correctement.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
                     }
                 }
-
-
             }
-
 
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors du chargement du fichier XML : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-
-
-
         }
+
+
+        //TACHE POUR CONNECTION AU BUS
+
+
+
+        //TACHE POUR DECONNECTION AU BUS
 
 
     }
