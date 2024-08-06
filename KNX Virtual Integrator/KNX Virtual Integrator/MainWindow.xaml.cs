@@ -42,9 +42,9 @@ public partial class MainWindow
         // Créer une nouvelle instance de OpenFileDialog
         OpenFileDialog openFileDialog = new()
         {
+            // Définir des propriétés optionnelles
             Title = "Sélectionnez un projet KNX à importer",
             Filter = "Fichiers projet ETS|*.knxproj|Tous les fichiers|*.*",
-            // Définir des propriétés optionnelles
             /*Title = App.DisplayElements?.SettingsWindow!.AppLang switch
             {
                 // Arabe
@@ -185,6 +185,40 @@ public partial class MainWindow
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
             if ((App.Fm == null)||(!App.Fm.ExtractProjectFiles(openFileDialog.FileName))) return;
+            
+            _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
+           
+        }
+        else
+        {
+            App.ConsoleAndLogWriteLine("User aborted the file selection operation");
+        }
+    }
+    
+    private async void ImportGroupAddressesFileButtonClick(object sender, RoutedEventArgs e)
+    {
+        App.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
+        
+        // Créer une nouvelle instance de OpenFileDialog
+        OpenFileDialog openFileDialog = new()
+        {
+            // Définir des propriétés optionnelles
+            Title = "Sélectionnez un fichier d'adresses de groupe à importer",
+            Filter = "Fichiers d'adresses de groupes|*.xml|Tous les fichiers|*.*",
+            FilterIndex = 1,
+            Multiselect = false
+        };
+
+        // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
+        var result = openFileDialog.ShowDialog();
+
+        if (result == true)
+        {
+            // Récupérer le chemin du fichier sélectionné
+            App.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
+
+            // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
+            if ((App.Fm == null)||(!App.Fm.ExtractGroupAddressesFile(openFileDialog.FileName))) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            

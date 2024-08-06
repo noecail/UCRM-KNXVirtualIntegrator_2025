@@ -22,6 +22,19 @@ public class ProjectFileManager
     /// </summary>
     public string ProjectName { get; private set; } = "";
     
+    /// <summary>
+    /// Gets the path to the exported of the group addresses file.
+    /// </summary>
+    /// <remarks>
+    /// This property holds the file path  of the group addresses file
+    /// </remarks>
+    public string GroupAddressesFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    
+    /// <summary>
+    ///  Gets the name of the group addresses file the application is currently working on.
+    /// </summary>
+    public string GroupAddressesFileName { get; private set; } = "";
+    
     
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- METHODES --------------------------------------------
@@ -80,7 +93,7 @@ public class ProjectFileManager
                     // Si l'adresse du fichier du projet est vide
                     App.ConsoleAndLogWriteLine(
                         "Error: the .knxproj source file path is empty. Please try selecting the file again.");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue;
                 }
                 catch (PathTooLongException)
@@ -89,14 +102,14 @@ public class ProjectFileManager
                     App.ConsoleAndLogWriteLine(
                         $"Error: the path {knxprojSourceFilePath} is too long (more than 255 characters). " +
                         $"Please try selecting another path.");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue;
                 }
                 catch (Exception ex)
                 {
                     // Gestion générique des exceptions non prévues
                     App.ConsoleAndLogWriteLine($"Error normalizing file path: {ex.Message}");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue;
                 }
 
@@ -128,7 +141,7 @@ public class ProjectFileManager
                       + "Please try again. To obtain a .knxproj file, "
                       + "please head into the ETS app and click the \"Export Project\" button.";
                 App.ConsoleAndLogWriteLine(msg);
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
             }
 
@@ -143,7 +156,7 @@ public class ProjectFileManager
                 catch (IOException ex)
                 {
                     App.ConsoleAndLogWriteLine($"Error deleting existing file {zipArchivePath}: {ex.Message}");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
                 }
                 catch (UnauthorizedAccessException ex)
@@ -151,7 +164,7 @@ public class ProjectFileManager
                     // Si on n'a pas les droits de supprimer le fichier
                     App.ConsoleAndLogWriteLine($"Error deleting existing file {zipArchivePath}: {ex.Message}. " +
                                                $"Please change the rights of the file so the program can delete {zipArchivePath}");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
                 }
             }
@@ -166,7 +179,7 @@ public class ProjectFileManager
                 // Si le fichier n'existe pas ou que le path est incorrect
                 App.ConsoleAndLogWriteLine(
                     $"Error: the file {knxprojSourceFilePath} was not found. Please check the selected file path and try again.");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
             }
             catch (UnauthorizedAccessException)
@@ -176,7 +189,7 @@ public class ProjectFileManager
                       + "Please check that the program has access to the file or try running it "
                       + "as an administrator.";
                 App.ConsoleAndLogWriteLine(msg);
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
             }
             catch (DirectoryNotFoundException)
@@ -185,7 +198,7 @@ public class ProjectFileManager
                 msg = $"The folder {Path.GetDirectoryName(knxprojSourceFilePath)} cannot be found. "
                       + "Please check the entered path and try again.";
                 App.ConsoleAndLogWriteLine(msg);
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
             }
             catch (PathTooLongException)
@@ -193,7 +206,7 @@ public class ProjectFileManager
                 // Si le chemin est trop long
                 App.ConsoleAndLogWriteLine(
                     $"Error: the path {knxprojSourceFilePath} is too long (more than 255 characters). Please try again.");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
             }
             catch (Exception ex)
@@ -201,7 +214,7 @@ public class ProjectFileManager
                 // Gestion générique des exceptions non prévues
                 App.ConsoleAndLogWriteLine(
                     $"Error copying file {knxprojSourceFilePath} to {zipArchivePath}: {ex.Message}");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue;
             }
 
@@ -218,7 +231,7 @@ public class ProjectFileManager
                 {
                     App.ConsoleAndLogWriteLine(
                         $"Error deleting existing folder {knxprojExportFolderPath}: {ex.Message}");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue;
                 }
                 catch (UnauthorizedAccessException ex)
@@ -227,14 +240,14 @@ public class ProjectFileManager
                     App.ConsoleAndLogWriteLine(
                         $"Error deleting existing folder {knxprojExportFolderPath}: {ex.Message}" +
                         $"Please change the rights of the file so the program can delete {zipArchivePath}");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue;
                 }
                 catch (Exception ex)
                 {
                     // Gestion générique des exceptions non prévues
                     App.ConsoleAndLogWriteLine($"Error deleting folder {knxprojExportFolderPath}: {ex.Message}");
-                    knxprojSourceFilePath = AskForPath();
+                    knxprojSourceFilePath = AskForPath(false);
                     continue;
                 }
             }
@@ -255,28 +268,28 @@ public class ProjectFileManager
                     + "Please check that the file is not corrupted. \nIf necessary, please export your "
                     + "ETS project again and try to extract it.";
                 App.ConsoleAndLogWriteLine(msg);
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue;
             }
             catch (IOException ex)
             {
                 // Gestion des erreurs d'entrée/sortie générales
                 App.ConsoleAndLogWriteLine($"Error extracting file {zipArchivePath}: {ex.Message}");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue;
             }
             catch (UnauthorizedAccessException ex)
             {
                 // Si l'accès aux fichiers ou aux répertoires n'est pas autorisé
                 App.ConsoleAndLogWriteLine($"Unauthorized access extracting file {zipArchivePath}: {ex.Message}");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue;
             }
             catch (Exception ex)
             {
                 // Gestion générique des exceptions non prévues
                 App.ConsoleAndLogWriteLine($"Error extracting file {zipArchivePath}: {ex.Message}");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue;
             }
 
@@ -433,14 +446,14 @@ public class ProjectFileManager
                 // Gestion des erreurs d'accès non autorisé
                 App.ConsoleAndLogWriteLine(
                     $"Unauthorized access checking for protected project files: {ex.Message}.");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue;
             }
             catch (Exception ex)
             {
                 // Gestion générique des exceptions non prévues
                 App.ConsoleAndLogWriteLine($"Error checking for protected project files: {ex.Message}");
-                knxprojSourceFilePath = AskForPath();
+                knxprojSourceFilePath = AskForPath(false);
                 continue;
             }
 
@@ -541,19 +554,29 @@ public class ProjectFileManager
     /// <item>Handles potential exceptions, including invalid dialog state, external errors, and other unexpected issues.</item>
     /// </list>
     /// </remarks>
-    private static string AskForPath()
+    private static string AskForPath(bool isXmlFile)
     {
         try
         {
             // Créer une nouvelle instance de OpenFileDialog
-            var openFileDialog = new OpenFileDialog
+            var openFileDialog = new OpenFileDialog();
+
+            if (isXmlFile)
             {
-                // Définir des propriétés optionnelles
-                Title = "Sélectionnez un projet KNX à importer",
-                Filter = "ETS KNX Project File (*.knxproj)|*.knxproj|other file|*.*",
-                FilterIndex = 1,
-                Multiselect = false
-            };
+                // Définir des propriétés pour les fichiers XML
+                openFileDialog.Title = "Sélectionnez un fichier d'adresses de groupe à importer";
+                openFileDialog.Filter = "Fichiers d'adresses de groupes|*.xml|Tous les fichiers|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+            }
+            else
+            {
+                // Définir des propriétés pour les fichiers KNX
+                openFileDialog.Title = "Sélectionnez un projet KNX à importer";
+                openFileDialog.Filter = "ETS KNX Project File (*.knxproj)|*.knxproj|Tous les fichiers|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+            }
 
             // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
             var result = openFileDialog.ShowDialog();
@@ -587,5 +610,223 @@ public class ProjectFileManager
 
         return "";
     }
+    
+    public bool ExtractGroupAddressesFile(string groupAddressesSourceFilePath)
+    {
+        var managedToExtractXml= false;
+        var managedToNormalizePaths = false;
+        var cancelOperation = false;
+
+        // Tant que l'on n'a pas réussi à extraire le projet ou que l'on n'a pas demandé l'annulation de l'extraction
+        while (!managedToExtractXml && !cancelOperation)
+        {
+            /* ------------------------------------------------------------------------------------------------
+            ---------------------------------------- GESTION DES PATH -----------------------------------------
+            ------------------------------------------------------------------------------------------------ */
+
+            // Répéter tant que l'on n'a pas réussi à normaliser les chemins d'accès ou que l'on n'a pas demandé
+            // à annuler l'extraction
+            string msg;
+
+            while (!managedToNormalizePaths && !cancelOperation)
+            {
+                if (groupAddressesSourceFilePath.Equals("null", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    cancelOperation = true;
+                    App.ConsoleAndLogWriteLine("User cancelled the group addresses file extraction process.");
+                    continue;
+                }
+
+                // On tente d'abord de normaliser l'adresse du fichier du projet
+                try
+                {
+                    groupAddressesSourceFilePath =
+                        Path.GetFullPath(groupAddressesSourceFilePath); // Normalisation de l'adresse du fichier du projet
+                }
+                catch (ArgumentException)
+                {
+                    // Si l'adresse du fichier du projet est vide
+                    App.ConsoleAndLogWriteLine(
+                        "Error: the group addresses file source file path is empty. Please try selecting the file again.");
+                    groupAddressesSourceFilePath = AskForPath(true);
+                    continue;
+                }
+                catch (PathTooLongException)
+                {
+                    // Si l'adresse du fichier du projet est trop longue
+                    App.ConsoleAndLogWriteLine(
+                        $"Error: the path {groupAddressesSourceFilePath} is too long (more than 255 characters). " +
+                        $"Please try selecting another path.");
+                    groupAddressesSourceFilePath = AskForPath(true);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    // Gestion générique des exceptions non prévues
+                    App.ConsoleAndLogWriteLine($"Error normalizing file path: {ex.Message}");
+                    groupAddressesSourceFilePath = AskForPath(true);
+                    continue;
+                }
+
+                managedToNormalizePaths = true;
+            }
+
+            
+            App.ConsoleAndLogWriteLine($"Extracting {Path.GetFileName(groupAddressesSourceFilePath)}...");
+            
+            // Si le fichier entré est un .knxproj
+            var newFilePath =$"./{Path.GetFileName(groupAddressesSourceFilePath)}"; 
+            
+            // S'il existe déjà un fichier avec le même nom, le supprime
+            if (File.Exists(newFilePath))
+            {
+                App.ConsoleAndLogWriteLine(
+                    $"{newFilePath} already exists. Removing the file before creating the new archive.");
+                try
+                {
+                    File.Delete(newFilePath);
+                }
+                catch (IOException ex)
+                {
+                    App.ConsoleAndLogWriteLine($"Error deleting existing file {newFilePath}: {ex.Message}");
+                    groupAddressesSourceFilePath = AskForPath(true);
+                    continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
+                }
+                catch (UnauthorizedAccessException ex)
+                {
+                    // Si on n'a pas les droits de supprimer le fichier
+                    App.ConsoleAndLogWriteLine($"Error deleting existing file {newFilePath}: {ex.Message}. " +
+                                               $"Please change the rights of the file so the program can delete {newFilePath}");
+                    groupAddressesSourceFilePath = AskForPath(true);
+                    continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
+                }
+            }
+            
+            try
+            {
+                // On essaie extrait le fichier dans le bon path
+                File.Copy(groupAddressesSourceFilePath, newFilePath);
+            }
+            catch (FileNotFoundException)
+            {
+                // Si le fichier n'existe pas ou que le path est incorrect
+                App.ConsoleAndLogWriteLine(
+                    $"Error: the file {groupAddressesSourceFilePath} was not found. Please check the selected file path and try again.");
+                groupAddressesSourceFilePath = AskForPath(true);
+                continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // Si le fichier n'est pas accessible en écriture
+                msg = $"Unable to write to the file {groupAddressesSourceFilePath}. "
+                      + "Please check that the program has access to the file or try running it "
+                      + "as an administrator.";
+                App.ConsoleAndLogWriteLine(msg);
+                groupAddressesSourceFilePath = AskForPath(true);
+                continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
+            }
+            catch (DirectoryNotFoundException)
+            {
+                // Si le dossier destination n'a pas été trouvé
+                msg = $"The folder {Path.GetDirectoryName(groupAddressesSourceFilePath)} cannot be found. "
+                      + "Please check the entered path and try again.";
+                App.ConsoleAndLogWriteLine(msg);
+                groupAddressesSourceFilePath = AskForPath(true);
+                continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
+            }
+            catch (PathTooLongException)
+            {
+                // Si le chemin est trop long
+                App.ConsoleAndLogWriteLine(
+                    $"Error: the path {groupAddressesSourceFilePath} is too long (more than 255 characters). Please try again.");
+                groupAddressesSourceFilePath = AskForPath(true);
+                continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
+            }
+            catch (Exception ex)
+            {
+                // Gestion générique des exceptions non prévues
+                App.ConsoleAndLogWriteLine(
+                    $"Error copying file {groupAddressesSourceFilePath} to {newFilePath}: {ex.Message}");
+                groupAddressesSourceFilePath = AskForPath(true);
+                continue;
+            }
+
+
+            // On stocke le nouveau path d'exportation du projet
+            GroupAddressesFilePath = $"./{groupAddressesSourceFilePath}";
+                
+            managedToExtractXml = true;
+
+            // On stocke le nom du nouveau projet
+            GroupAddressesFileName = Path.GetFileNameWithoutExtension(groupAddressesSourceFilePath);
+                
+            /*App.DisplayElements!.MainWindow.Title = App.DisplayElements.SettingsWindow!.AppLang switch
+            {
+                // Arabe
+                "AR" => $"المشروع المستورد: {ProjectName}",
+                // Bulgare
+                "BG" => $"Импортиран проект: {ProjectName}",
+                // Tchèque
+                "CS" => $"Importovaný projekt: {ProjectName}",
+                // Danois
+                "DA" => $"Importerede projekt: {ProjectName}",
+                // Allemand
+                "DE" => $"Importiertes Projekt: {ProjectName}",
+                // Grec
+                "EL" => $"Εισαγόμενο έργο: {ProjectName}",
+                // Anglais
+                "EN" => $"Imported Project: {ProjectName}",
+                // Espagnol
+                "ES" => $"Proyecto importado: {ProjectName}",
+                // Estonien
+                "ET" => $"Imporditud projekt: {ProjectName}",
+                // Finnois
+                "FI" => $"Tuotu projekti: {ProjectName}",
+                // Hongrois
+                "HU" => $"Importált projekt: {ProjectName}",
+                // Indonésien
+                "ID" => $"Proyek yang diimpor: {ProjectName}",
+                // Italien
+                "IT" => $"Progetto importato: {ProjectName}",
+                // Japonais
+                "JA" => $"インポートされたプロジェクト: {ProjectName}",
+                // Coréen
+                "KO" => $"가져온 프로젝트: {ProjectName}",
+                // Letton
+                "LV" => $"Importēts projekts: {ProjectName}",
+                // Lituanien
+                "LT" => $"Importuotas projektas: {ProjectName}",
+                // Norvégien
+                "NB" => $"Importert prosjekt: {ProjectName}",
+                // Néerlandais
+                "NL" => $"Geïmporteerd project: {ProjectName}",
+                // Polonais
+                "PL" => $"Zaimportowany projekt: {ProjectName}",
+                // Portugais
+                "PT" => $"Projeto importado: {ProjectName}",
+                // Roumain
+                "RO" => $"Proiect importat: {ProjectName}",
+                // Russe
+                "RU" => $"Импортированный проект: {ProjectName}",
+                // Slovaque
+                "SK" => $"Importovaný projekt: {ProjectName}",
+                // Slovène
+                "SL" => $"Uvožen projekt: {ProjectName}",
+                // Suédois
+                "SV" => $"Importerade projekt: {ProjectName}",
+                // Turc
+                "TR" => $"İçe aktarılan proje: {ProjectName}",
+                // Ukrainien
+                "UK" => $"Імпортований проект: {ProjectName}",
+                // Chinois simplifié
+                "ZH" => $"导入项目: {ProjectName}",
+                // Cas par défaut (français)
+                _ => $"Projet importé : {ProjectName}"
+            };*/
+        }
+
+        return !cancelOperation && managedToExtractXml;
+    }
+
 
 }
