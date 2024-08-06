@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj": {}
+    "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj": {
+    "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj",
+        "projectUniqueName": "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj",
         "projectName": "KNX Virtual Integrator",
-        "projectPath": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj",
-        "packagesPath": "C:\\Users\\lison\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\obj\\",
+        "projectPath": "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\KNX Virtual Integrator.csproj",
+        "packagesPath": "C:\\Users\\coust\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX Virtual Integrator\\KNX Virtual Integrator\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\lison\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\coust\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,6 +26,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,11 +39,6 @@
           "warnAsError": [
             "NU1605"
           ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -67,7 +63,7 @@
               "privateAssets": "none"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.301/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
