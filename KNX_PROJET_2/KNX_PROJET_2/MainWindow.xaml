@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:KNX_PROJET_2"
-        Title="KNX Falcon SDK" Height="600" Width="800">
+        Title="KNX Falcon SDK" Height="913" Width="800">
     <Grid>
         <!-- Define rows and columns for the grid -->
         <Grid.RowDefinitions>
@@ -38,7 +38,6 @@
                     <!-- Add more connection types here -->
                 </ComboBox>
 
-                
                 <!-- Buttons for connecting and disconnecting -->
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <Button Name="ConnectButton" Content="Connect" Margin="5" Click="ConnectButton_Click"/>
@@ -47,12 +46,14 @@
             </StackPanel>
         </GroupBox>
 
-
         <!-- Discovered Interface Section -->
-        <GroupBox Header="Discovered Interface" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+        <GroupBox Header="Discovered Interfaces" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel>
-                <ListBox Name="DiscoveredListBox"/>
-                <Button Name="RefreshButton" Content="Refresh" Margin="5"/>
+                <!-- Liste des interfaces découvertes -->
+                <ListBox Name="InterfaceListBox" Width="400" Height="200" Margin="0,10,0,0"/>
+
+                <!-- Bouton pour rafraîchir la liste des interfaces -->
+                <Button Content="Refresh Interfaces" Click="RefreshInterfacesButton_Click" Margin="5"/>
             </StackPanel>
         </GroupBox>
 
@@ -70,7 +71,7 @@
         </GroupBox>
 
         <!-- Test Buttons Section -->
-        <GroupBox Header="Tester les modeles" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+        <GroupBox Header="Tester les modèles" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal">
                 <Button Name="TestSelectedModelesButton" Content="Tester les modèles sélectionnés" Margin="5"/>
                 <Button Name="TestAllModelesButton" Content="Tout tester" Margin="5"/>
@@ -78,4 +79,5 @@
         </GroupBox>
     </Grid>
 </Window>
+
 
