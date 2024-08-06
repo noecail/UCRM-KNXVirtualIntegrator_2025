@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = KNX_Virtual_Integrator
-build_property.ProjectDir = C:\Users\lison\Documents\GitHub\UCRM-KNXVirtualIntegrator\KNX Virtual Integrator\KNX Virtual Integrator\
+build_property.ProjectDir = C:\Users\PC-INSA\Desktop\UCRM-KNXVirtualIntegrator\KNX Virtual Integrator\KNX Virtual Integrator\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
