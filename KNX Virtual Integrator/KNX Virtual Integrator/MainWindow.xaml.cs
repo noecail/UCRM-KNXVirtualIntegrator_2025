@@ -42,6 +42,8 @@ public partial class MainWindow
         // Créer une nouvelle instance de OpenFileDialog
         OpenFileDialog openFileDialog = new()
         {
+            Title = "Sélectionnez un projet KNX à importer",
+            Filter = "Fichiers projet ETS|*.knxproj|Tous les fichiers|*.*",
             // Définir des propriétés optionnelles
             /*Title = App.DisplayElements?.SettingsWindow!.AppLang switch
             {
@@ -168,9 +170,9 @@ public partial class MainWindow
                 "ZH" => "KNX 项目文件|*.knxproj|所有文件|*.*",
                 // Cas par défaut (français)
                 _ => "Fichiers projet ETS|*.knxproj|Tous les fichiers|*.*"
-            },
+            },*/
             FilterIndex = 1,
-            Multiselect = false*/
+            Multiselect = false
         };
 
         // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
