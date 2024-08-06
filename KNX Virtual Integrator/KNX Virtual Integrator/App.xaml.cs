@@ -30,7 +30,7 @@ public partial class App
     {
         Console.WriteLine($@"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans la console
         
-        // TODO : A RAJOUTER UNE FOIS LES LOGS GERES
+        // A RAJOUTER UNE FOIS LES LOGS GERES
         //_writer?.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans le fichier logs
     }
 }
