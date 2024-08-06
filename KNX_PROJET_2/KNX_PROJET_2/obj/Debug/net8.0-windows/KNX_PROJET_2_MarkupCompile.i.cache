@@ -12,9 +12,9 @@ TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\lison\Documents\GitHub\UCRM-KNXVirtualIntegrator\KNX_PROJET_2\KNX_PROJET_2\App.xaml
 51045642819
 
-112016140129
+12-738505325
 209-1920885820
 BusConnection.xaml;DiscoveredInterface.xaml;GroupAddressList.xaml;MainWindow.xaml;TestButtons.xaml;
 
-True
+False
 

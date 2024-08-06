@@ -10,6 +10,8 @@ using Knx.Falcon.Sdk;
 using System.Windows.Controls;
 using Knx.Falcon.Configuration;
 using Knx.Falcon;
+using Knx.Falcon.KnxnetIp;
+using System.Collections.ObjectModel;
 
 namespace KNX_PROJET_2
 {
@@ -138,7 +140,7 @@ namespace KNX_PROJET_2
             if (IsBusy)
                 return;
 
-            //_cancellationTokenSource = new CancellationTokenSource();
+            _cancellationTokenSource = new CancellationTokenSource();
 
             try
             {
@@ -243,6 +245,70 @@ namespace KNX_PROJET_2
         public bool IsBusy => _cancellationTokenSource?.Token.IsCancellationRequested == false;
 
         public bool IsConnected => _bus != null && _bus.ConnectionState == BusConnectionState.Connected;
+
+        private async void RefreshInterfacesButton_Click(object sender, RoutedEventArgs e)
+        {
+            await DiscoverInterfacesAsync();
+        }
+
+        private async Task DiscoverInterfacesAsync()
+        {
+            try
+            {
+                // Créer un objet ObservableCollection pour stocker les interfaces découvertes
+                var discoveredInterfaces = new ObservableCollection<InterfaceViewModel>();
+
+                // Découverte des interfaces IP
+                var ipDiscoveryTask = Task.Run(async () =>
+                {
+                    var results = await KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+                    foreach (var result in results)
+                    {
+                        foreach (var tunnelingServer in result.GetTunnelingConnections())
+                        {
+                            discoveredInterfaces.Add(new InterfaceViewModel(
+                                ConnectorType.IpTunneling,
+                                tunnelingServer.Name,
+                                tunnelingServer.ToConnectionString()));
+                        }
+
+                        if (result.Supports(ServiceFamily.Routing, 1))
+                        {
+                            var routingParameters = IpRoutingConnectorParameters.FromDiscovery(result);
+                            discoveredInterfaces.Add(new InterfaceViewModel(
+                                ConnectorType.IpRouting,
+                                $"{result.MulticastAddress} on {result.LocalIPAddress}",
+                                routingParameters.ToConnectionString()));
+                        }
+                    }
+                });
+
+                // Découverte des périphériques USB
+                var usbDiscoveryTask = Task.Run(() =>
+                {
+                    foreach (var usbDevice in KnxBus.GetAttachedUsbDevices())
+                    {
+                        discoveredInterfaces.Add(new InterfaceViewModel(
+                            ConnectorType.Usb,
+                            usbDevice.DisplayName,
+                            usbDevice.ToConnectionString()));
+                    }
+                });
+
+                // Attendre que toutes les découvertes soient terminées
+                await Task.WhenAll(ipDiscoveryTask, usbDiscoveryTask);
+
+                // Mettre à jour l'interface utilisateur avec les résultats
+                InterfacesListBox.ItemsSource = discoveredInterfaces;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
+            }
+        }
+
+
+
 
     }
 
