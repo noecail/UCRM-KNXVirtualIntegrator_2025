@@ -13,6 +13,9 @@ using Knx.Falcon;
 using Knx.Falcon.KnxnetIp;
 using System.Collections.ObjectModel;
 
+using System;
+
+
 namespace KNX_PROJET_2
 {
     public partial class MainWindow : Window
@@ -124,6 +127,7 @@ namespace KNX_PROJET_2
         private async void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
             await ConnectBusAsync();
+            await DiscoverInterfacesAsync();
         }
 
         //Gestion du clic sur le bouton Disconnect
@@ -261,8 +265,8 @@ namespace KNX_PROJET_2
                 // Découverte des interfaces IP
                 var ipDiscoveryTask = Task.Run(async () =>
                 {
-                    var results = await KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
-                    foreach (var result in results)
+                    var results = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+                    await foreach (var result in results)
                     {
                         foreach (var tunnelingServer in result.GetTunnelingConnections())
                         {
@@ -299,7 +303,7 @@ namespace KNX_PROJET_2
                 await Task.WhenAll(ipDiscoveryTask, usbDiscoveryTask);
 
                 // Mettre à jour l'interface utilisateur avec les résultats
-                InterfacesListBox.ItemsSource = discoveredInterfaces;
+                InterfaceListBox.ItemsSource = discoveredInterfaces;
             }
             catch (Exception ex)
             {
