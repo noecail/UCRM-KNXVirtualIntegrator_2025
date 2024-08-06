@@ -5,5 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid />
+    
+    <!-- Conteneur principal -->
+    <Grid>
+        <!-- Ajout du bouton dans le Grid -->
+        <Button x:Name="ButtonChargerProject"
+                Margin="0,0,10,0"
+                Click="ImportProjectButtonClick"
+                Content="Charger Projet" />
+    </Grid>
 </Window>
