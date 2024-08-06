@@ -49,10 +49,6 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
-            "CommonServiceLocator": {
-              "target": "Package",
-              "version": "[2.0.7, )"
-            },
             "Knx.Falcon.Sdk": {
               "target": "Package",
               "version": "[6.1.6264, )"
