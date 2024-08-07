@@ -1,4 +1,4 @@
-﻿/***************************************************************************
+/***************************************************************************
  * Nom du Projet : KNX Virtual Integrator
  * Fichier       : App.xaml.cs
  * Auteurs       : MICHEL Hugo, COUSTON Emma, MALBRANCHE Daichi,
