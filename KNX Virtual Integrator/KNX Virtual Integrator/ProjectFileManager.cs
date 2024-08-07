@@ -688,7 +688,6 @@ public class ProjectFileManager
             
             App.ConsoleAndLogWriteLine($"Extracting {Path.GetFileName(groupAddressesSourceFilePath)}...");
             
-            // Si le fichier entré est un .knxproj
             var newFilePath =$"./{Path.GetFileName(groupAddressesSourceFilePath)}"; 
             
             // S'il existe déjà un fichier avec le même nom, le supprime
