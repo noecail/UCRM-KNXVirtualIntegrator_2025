@@ -32,12 +32,6 @@ public partial class App
     /// This method performs the following tasks:
     /// <list type="bullet">
     ///     <item>
-    ///         Creates a directory for log files if it does not already exist.
-    ///     </item>
-    ///     <item>
-    ///         Initializes the log file path and sets up the <see cref="_writer"/> for logging.
-    ///     </item>
-    ///     <item>
     ///         Logs the start-up process of the application.
     ///     </item>
     ///     <item>
@@ -45,12 +39,6 @@ public partial class App
     ///     </item>
     ///     <item>
     ///         Opens the project file manager.
-    ///     </item>
-    ///     <item>
-    ///         Attempts to archive old log files and cleans up folders from the last session.
-    ///     </item>
-    ///     <item>
-    ///         Logs a message indicating that the application has started successfully and performs garbage collection.
     ///     </item>
     /// </list>
     /// </para>

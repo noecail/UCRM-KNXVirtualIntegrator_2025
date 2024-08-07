@@ -11,6 +11,10 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    /// <summary>
+    /// True if the user choose to import a group addresses file, false if it's a project knx file 
+    /// </summary>
+    public bool UserChooseToImportGroupAddressesFile { get; private set; }
     
     /// <summary>
     /// The token source used to signal cancellation requests for ongoing tasks.
@@ -30,14 +34,15 @@ public partial class MainWindow
     /// <summary>
     /// Handles the button click event to import a KNX project file.
     /// Displays an OpenFileDialog for the user to select the project file,
-    /// extracts necessary files, shows a loading window during the import process,
-    /// and updates the view model upon successful import.
+    /// extracts necessary files.
     /// </summary>
     /// <param name="sender">The object that raised the event.</param>
     /// <param name="e">The event data.</param>
     private async void ImportProjectButtonClick(object sender, RoutedEventArgs e)
     {
         App.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
+
+        UserChooseToImportGroupAddressesFile = false;
         
         // Créer une nouvelle instance de OpenFileDialog
         OpenFileDialog openFileDialog = new()
@@ -195,9 +200,18 @@ public partial class MainWindow
         }
     }
     
+    /// <summary>
+    /// Handles the button click event to import a group addresses file.
+    /// Displays an OpenFileDialog for the user to select the file,
+    /// extracts necessary files.
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private async void ImportGroupAddressesFileButtonClick(object sender, RoutedEventArgs e)
     {
-        App.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
+        App.ConsoleAndLogWriteLine("Waiting for user to select group addresses file");
+
+        UserChooseToImportGroupAddressesFile = true;
         
         // Créer une nouvelle instance de OpenFileDialog
         OpenFileDialog openFileDialog = new()
