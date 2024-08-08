@@ -6,14 +6,15 @@ using System.Text;
 using System.Xml;
 using System.Windows.Interop;
 using System.IO;
-using Knx.Falcon.Sdk;
 using System.Windows.Controls;
-using Knx.Falcon.Configuration;
-using Knx.Falcon;
-using Knx.Falcon.KnxnetIp;
 using System.Collections.ObjectModel;
+using Knx.Falcon;
+using Knx.Falcon.Configuration;
+using Knx.Falcon.KnxnetIp;
+using Knx.Falcon.Sdk;
 
 using System;
+using System.Windows.Media;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -28,6 +29,7 @@ namespace KNX_PROJET_2
         public MainWindow()
         {
             InitializeComponent();
+            this.Loaded += MainWindow_Loaded;
         }
 
 
@@ -122,7 +124,10 @@ namespace KNX_PROJET_2
 
 
 
-
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            await DiscoverInterfacesAsync();
+        }
 
 
         private KnxBus _bus;
@@ -136,7 +141,6 @@ namespace KNX_PROJET_2
         {
             await DiscoverInterfacesAsync();
             await ConnectBusAsync();
-            
         }
 
         //Gestion du clic sur le bouton Disconnect
@@ -158,13 +162,7 @@ namespace KNX_PROJET_2
             try
             {
                 // Récupérer le type de connexion sélectionné
-<<<<<<< Updated upstream
                 var connectionString = ((ComboBoxItem)ConnectionTypeComboBox.SelectedItem)?.Content.ToString();
-=======
-                string connectionString = ((ComboBoxItem)ConnectionTypeComboBox.SelectedItem)?.Content.ToString();
-
-                
->>>>>>> Stashed changes
 
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
@@ -183,8 +181,6 @@ namespace KNX_PROJET_2
 
                 var connectorParameters = CreateConnectorParameters(connectionString);
                 
-                //var connectorParameters = ConnectorParameters.FromConnectionString(connectionString);
-
                 // Connexion au bus
                 var bus = new KnxBus(connectorParameters);
                 await bus.ConnectAsync(_cancellationTokenSource.Token);
@@ -192,6 +188,8 @@ namespace KNX_PROJET_2
 
                 _bus.ConnectionStateChanged += BusConnectionStateChanged;
                 UpdateConnectionState();
+                InfoConnect.Text = "Vous êtes connectés à " + bus + ".";
+                InfoConnect.Foreground = new SolidColorBrush(Colors.Green);
             }
             catch (Exception ex)
             {
@@ -222,6 +220,9 @@ namespace KNX_PROJET_2
                 }
 
                 UpdateConnectionState();
+                InfoConnect.Text = "Vous n'êtes pas connecté.";
+                InfoConnect.Foreground = new SolidColorBrush(Colors.Gray);
+
             }
             catch (Exception ex)
             {
@@ -268,6 +269,11 @@ namespace KNX_PROJET_2
             await DiscoverInterfacesAsync();
         }
 
+        public void UpdateDiscoveredInterfaces(ObservableCollection<InterfaceViewModel> interfaces)
+        {
+            InterfaceListBox.ItemsSource = interfaces;
+        }
+        
         private async Task DiscoverInterfacesAsync()
         {
             try
@@ -316,8 +322,10 @@ namespace KNX_PROJET_2
                 await Task.WhenAll(ipDiscoveryTask, usbDiscoveryTask);
 
                 // Mettre à jour l'interface utilisateur avec les résultats
-                InterfaceListBox.ItemsSource = discoveredInterfaces;
-            }
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    UpdateDiscoveredInterfaces(discoveredInterfaces);
+                });            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
