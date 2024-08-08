@@ -40,7 +40,9 @@
                 Click="ImportGroupAddressFileButtonClick"
                 Content="Charger Fichier Xml" />
 
-            <Button Content="Lancer le test" Width="100" Margin="5"/>
+            <Button Content="Lancer le test" Width="100" Margin="5" 
+                    Foreground="Red" Background="Yellow"
+                    BorderThickness="3" BorderBrush="Aqua"/>
             <Button Content="Exporter le rapport" Width="150" Margin="5"/>
         </StackPanel>
 
