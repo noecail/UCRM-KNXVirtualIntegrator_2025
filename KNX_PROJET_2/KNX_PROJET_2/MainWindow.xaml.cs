@@ -196,9 +196,9 @@ namespace KNX_PROJET_2
                     throw new InvalidOperationException("La connexion au bus a échoué.");
                 }
             }
-            catch (Exception ex)
+            catch (Exception exc)
             {
-                MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Erreur lors de la connexion au bus : {exc.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
