@@ -6,15 +6,14 @@ using System.Text;
 using System.Xml;
 using System.Windows.Interop;
 using System.IO;
-using System.Windows.Controls;
-using System.Collections.ObjectModel;
-using Knx.Falcon;
-using Knx.Falcon.Configuration;
-using Knx.Falcon.KnxnetIp;
 using Knx.Falcon.Sdk;
+using System.Windows.Controls;
+using Knx.Falcon.Configuration;
+using Knx.Falcon;
+using Knx.Falcon.KnxnetIp;
+using System.Collections.ObjectModel;
 
 using System;
-using System.Windows.Media;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -29,7 +28,6 @@ namespace KNX_PROJET_2
         public MainWindow()
         {
             InitializeComponent();
-            this.Loaded += MainWindow_Loaded;
         }
 
 
@@ -124,10 +122,7 @@ namespace KNX_PROJET_2
 
 
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            await DiscoverInterfacesAsync();
-        }
+
 
 
         private KnxBus _bus;
@@ -141,6 +136,7 @@ namespace KNX_PROJET_2
         {
             await DiscoverInterfacesAsync();
             await ConnectBusAsync();
+            
         }
 
         //Gestion du clic sur le bouton Disconnect
@@ -181,19 +177,34 @@ namespace KNX_PROJET_2
 
                 var connectorParameters = CreateConnectorParameters(connectionString);
                 
+                //var connectorParameters = ConnectorParameters.FromConnectionString(connectionString);
+
                 // Connexion au bus
                 var bus = new KnxBus(connectorParameters);
                 await bus.ConnectAsync(_cancellationTokenSource.Token);
-                _bus = bus;
 
-                _bus.ConnectionStateChanged += BusConnectionStateChanged;
-                UpdateConnectionState();
-                InfoConnect.Text = "Vous êtes connectés à " + bus + ".";
-                InfoConnect.Foreground = new SolidColorBrush(Colors.Green);
+                // Vérifier si la connexion est établie
+                if (bus.ConnectionState == BusConnectionState.Connected)
+                {
+                    _bus = bus;
+                    _bus.ConnectionStateChanged += BusConnectionStateChanged;
+                    UpdateConnectionState();
+                    MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    throw new InvalidOperationException("La connexion au bus a échoué.");
+                }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                // Dispose de CancellationTokenSource après la tâche
+                _cancellationTokenSource.Dispose();
+                _cancellationTokenSource = null;
             }
         }
 
@@ -202,12 +213,13 @@ namespace KNX_PROJET_2
 
         private async Task DisconnectBusAsync()
         {
-            var _isConnected = IsConnected ? true : false;
-            if (IsBusy || !_isConnected)
-                return;
+            
+            if (IsBusy || !IsConnected)
+                return; //test
 
-            _cancellationTokenSource.Cancel();
-            _cancellationTokenSource.Dispose();
+            // Indiquer que la déconnexion est en cours
+            _cancellationTokenSource?.Cancel(); // Annule toute opération en cours si nécessaire
+            //_cancellationTokenSource.Dispose(); //déja fait avant
             _cancellationTokenSource = null;
 
             try
@@ -217,13 +229,19 @@ namespace KNX_PROJET_2
                     _bus.ConnectionStateChanged -= BusConnectionStateChanged;
                     await _bus.DisposeAsync();
                     _bus = null;
+                
+
+                    UpdateConnectionState();
+
+                    // Affichage d'un message de succès
+                    MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-
-                UpdateConnectionState();
-                InfoConnect.Text = "Vous n'êtes pas connecté.";
-                InfoConnect.Foreground = new SolidColorBrush(Colors.Gray);
-
-            }
+                else
+                {
+                    // Si le bus est déjà déconnecté, informer l'utilisateur
+                    MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+        }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -264,16 +282,16 @@ namespace KNX_PROJET_2
 
 
 
+        public void UpdateDiscoveredInterfaces(ObservableCollection<InterfaceViewModel> interfaces)
+        {
+            InterfaceListBox.ItemsSource = interfaces;
+        }
+
         private async void RefreshInterfacesButton_Click(object sender, RoutedEventArgs e)
         {
             await DiscoverInterfacesAsync();
         }
 
-        public void UpdateDiscoveredInterfaces(ObservableCollection<InterfaceViewModel> interfaces)
-        {
-            InterfaceListBox.ItemsSource = interfaces;
-        }
-        
         private async Task DiscoverInterfacesAsync()
         {
             try
@@ -322,10 +340,8 @@ namespace KNX_PROJET_2
                 await Task.WhenAll(ipDiscoveryTask, usbDiscoveryTask);
 
                 // Mettre à jour l'interface utilisateur avec les résultats
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    UpdateDiscoveredInterfaces(discoveredInterfaces);
-                });            }
+                InterfaceListBox.ItemsSource = discoveredInterfaces;
+            }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
