@@ -28,12 +28,52 @@ namespace KNX_PROJET_2
     /// </summary>
     public partial class BusConnection : UserControl
     {
+       
+        
+            public BusConnection()
+            {
+                InitializeComponent();
 
-        public BusConnection()
-        {
-            InitializeComponent();
+            }
 
-        }
+            /*public string ConnectionString
+            //propriété qui définit la connexion = sert à établir les valeurs de la connexion avec les conversions qu'il faut pour comprendre en c# et en utilisateur
+            {
+                get => ConnectorParameters?.ToConnectionString();
+                // convertir l'objet ConnectorParameters en une chaîne de connexion
+                //autres parties application accede à la configuration de la connexion (chaîne de caractères facilement stockée, affichée ou transmise)
+                set     //chaîne de connexion en entrée, la convertit en un objet ConnectorParameters, et met à jour cet objet
+                {
+                    if (value is null)
+                        ConnectorParameters = null;
+                    else
+                    {
+                        ConnectorParameters = ConnectorParameters.FromConnectionString(value);    //conversion string en ConnectorParameter
+
+                        TypeSelection.SelectedItem = TypeSelection.Items.Cast<ConnectorParameters>()  //Synchronisation de l'interface utilisateur
+                            .FirstOrDefault(i => i.GetType() == ConnectorParameters.GetType());
+                    }
+                }
+            }
+
+            //propriete qui fournit un tableau des differentes connexions possibles
+            public ConnectorParameters[] ConnectorTypes => new ConnectorParameters[]
+            {
+            new UsbConnectorParameters(),
+            new IpRoutingConnectorParameters(),
+            new IpTunnelingConnectorParameters(),
+            new IpDeviceManagementConnectorParameters(),
+            new EiblibConnectorParameters(),
+            };
+
+            //faire de la mise a jour avec l'interface utilisateur
+            public ConnectorParameters ConnectorParameters
+            {
+                get => (ConnectorParameters)GetValue(ConnectorParametersProperty);
+                set => SetValue(ConnectorParametersProperty, value);
+            }*/
+
+            
 
     }
 }

@@ -11,6 +11,8 @@
             <RowDefinition Height="Auto"/>
             <!-- Row for Bus Connection -->
             <RowDefinition Height="Auto"/>
+            <!-- Row for Connection State -->
+            <RowDefinition Height="Auto"/>
             <!-- Row for Discovered Interface -->
             <RowDefinition Height="Auto"/>
             <!-- Row for Group Address List -->
@@ -46,8 +48,16 @@
             </StackPanel>
         </GroupBox>
 
+        <!-- Connection State Section -->
+        <GroupBox Header="Connection Status" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+            <StackPanel>
+                <TextBlock Name="ConnectionStateTextBlock" Text="Disconnected" FontSize="16" Margin="5"/>
+                <!-- Optionnel : Vous pouvez ajouter plus de contrôles ici pour afficher des informations supplémentaires -->
+            </StackPanel>
+        </GroupBox>
+
         <!-- Discovered Interface Section -->
-        <GroupBox Header="Discovered Interfaces" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+        <GroupBox Header="Discovered Interfaces" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel>
                 <!-- Liste des interfaces découvertes -->
                 <ListBox Name="InterfaceListBox" Width="400" Height="200" Margin="0,10,0,0"/>
@@ -58,20 +68,20 @@
         </GroupBox>
 
         <!-- Group Address List Section -->
-        <GroupBox Header="Liste des adresses de groupes non gérées" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+        <GroupBox Header="Liste des adresses de groupes non gérées" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
             <!-- Instance of GroupAddressList UserControl -->
             <local:GroupAddressList x:Name="GroupAddressListControl"/>
         </GroupBox>
 
         <!-- Modeles Section -->
-        <GroupBox Header="Modèles" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+        <GroupBox Header="Modèles" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal">
                 <ListBox Name="ModelesBox"/>
             </StackPanel>
         </GroupBox>
 
         <!-- Test Buttons Section -->
-        <GroupBox Header="Tester les modèles" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+        <GroupBox Header="Tester les modèles" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2">
             <StackPanel Orientation="Horizontal">
                 <Button Name="TestSelectedModelesButton" Content="Tester les modèles sélectionnés" Margin="5"/>
                 <Button Name="TestAllModelesButton" Content="Tout tester" Margin="5"/>
