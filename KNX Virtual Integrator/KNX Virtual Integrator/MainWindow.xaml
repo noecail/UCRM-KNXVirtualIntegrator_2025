@@ -8,10 +8,24 @@
     
     <!-- Conteneur principal -->
     <Grid>
-        <!-- Ajout du bouton dans le Grid -->
+        <!-- Définition des lignes du Grid -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Premier bouton dans la première ligne -->
         <Button x:Name="ButtonChargerProject"
-                Margin="0,0,10,0"
+                Grid.Row="0"
+                Margin="10"
                 Click="ImportProjectButtonClick"
                 Content="Charger Projet" />
+        
+        <!-- Deuxième bouton dans la deuxième ligne -->
+        <Button x:Name="ButtonChargerGroupAddressesXml"
+                Grid.Row="1"
+                Margin="10"
+                Click="ImportGroupAddressesFileButtonClick"
+                Content="Charger Fichier Xml" />
     </Grid>
 </Window>
