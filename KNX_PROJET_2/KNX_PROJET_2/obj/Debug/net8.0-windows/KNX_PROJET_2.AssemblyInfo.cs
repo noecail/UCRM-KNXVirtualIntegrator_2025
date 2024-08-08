@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KNX_PROJET_2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2c1d65c64f035ea7bec48cb07f581cd5351b4f20")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+41c6bc8b58ffe33799f3492bacfcf23e8656f47b")]
 [assembly: System.Reflection.AssemblyProductAttribute("KNX_PROJET_2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KNX_PROJET_2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
