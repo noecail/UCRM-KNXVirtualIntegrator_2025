@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-﻿using System.IO;
-using System.IO.Compression;
-=======
 ﻿﻿using System.Globalization;
 using System.IO;
 using System.IO.Compression;
@@ -9,7 +5,6 @@ using System.Management;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
 using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator;
@@ -32,8 +27,6 @@ public class ProjectFileManager
     /// </summary>
     public string ProjectName { get; private set; } = "";
     
-<<<<<<< HEAD
-=======
     /// <summary>
     /// Gets the path to the exported of the group addresses file.
     /// </summary>
@@ -47,7 +40,6 @@ public class ProjectFileManager
     /// </summary>
     public string GroupAddressFileName { get; private set; } = "";
     
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
     
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- METHODES --------------------------------------------
@@ -554,8 +546,6 @@ public class ProjectFileManager
         return !cancelOperation && managedToExtractProject;
     }
     
-<<<<<<< HEAD
-=======
     /// <summary>
     /// Extracts the group addresses file at the specified path and place it into the designated export folder.
     /// </summary>
@@ -786,7 +776,6 @@ public class ProjectFileManager
         return !cancelOperation && managedToExtractXml;
     }
     
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
     // Fonction permettant de demander à l'utilisateur d'entrer un path
     /// <summary>
     /// Prompts the user to select a file path using an OpenFileDialog.
@@ -805,16 +794,6 @@ public class ProjectFileManager
         try
         {
             // Créer une nouvelle instance de OpenFileDialog
-<<<<<<< HEAD
-            var openFileDialog = new OpenFileDialog
-            {
-                // Définir des propriétés optionnelles
-                Title = "Sélectionnez un projet KNX à importer",
-                Filter = "ETS KNX Project File (*.knxproj)|*.knxproj|other file|*.*",
-                FilterIndex = 1,
-                Multiselect = false
-            };
-=======
             var openFileDialog = new OpenFileDialog();
 
             if (App.DisplayElements != null && App.DisplayElements.MainWindow.UserChooseToImportGroupAddressFile)
@@ -833,7 +812,6 @@ public class ProjectFileManager
                 openFileDialog.FilterIndex = 1;
                 openFileDialog.Multiselect = false;
             }
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
 
             // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
             var result = openFileDialog.ShowDialog();
@@ -867,8 +845,6 @@ public class ProjectFileManager
 
         return "";
     }
-<<<<<<< HEAD
-=======
     
     /// <summary>
     /// Loads an XML document from a specified path.
@@ -1767,6 +1743,5 @@ public class ProjectFileManager
             return "Date invalide";
         }
     }
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
 
 }

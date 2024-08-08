@@ -9,4 +9,8 @@
         <UseWPF>true</UseWPF>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.Management" Version="9.0.0-preview.6.24327.7" />
+    </ItemGroup>
+
 </Project>

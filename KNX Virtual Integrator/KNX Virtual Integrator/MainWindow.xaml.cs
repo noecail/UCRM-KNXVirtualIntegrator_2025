@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+using System.Windows.Media;
+
+using Microsoft.Win32;
 using System.Windows;
 
 namespace KNX_Virtual_Integrator;
@@ -11,13 +13,10 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-<<<<<<< HEAD
-=======
     /// <summary>
     /// True if the user choose to import a group addresses file, false if it's a project knx file 
     /// </summary>
     public bool UserChooseToImportGroupAddressFile { get; private set; }
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
     
     /// <summary>
     /// The token source used to signal cancellation requests for ongoing tasks.
@@ -33,33 +32,46 @@ public partial class MainWindow
     }
     
     
+    /// <summary>
+    /// Converts a string representation of a color to a SolidColorBrush.
+    /// </summary>
+    /// <param name="colorInput">The string representation of the color (e.g., "#RRGGBB" or "ColorName").</param>
+    /// <returns>A SolidColorBrush representing the converted color.</returns>
+    public static SolidColorBrush ConvertStringColor(string colorInput)
+    {
+        return new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorInput));
+    }
+
+    public void ApplyScaling(float scaleFactor)
+    {
+        App.ConsoleAndLogWriteLine("MainWindow.ApplyScaling is not implemented");
+    }
+
+    public void UpdateWindowContents(bool b, bool b1, bool b2)
+    {
+        App.ConsoleAndLogWriteLine("MainWindow.UpdateWindowContents is not implemented");
+    }
+    
+    
     //--------------------- Gestion des boutons -----------------------------------------------------//
     /// <summary>
     /// Handles the button click event to import a KNX project file.
     /// Displays an OpenFileDialog for the user to select the project file,
-    /// extracts necessary files, shows a loading window during the import process,
-    /// and updates the view model upon successful import.
+    /// extracts necessary files.
     /// </summary>
     /// <param name="sender">The object that raised the event.</param>
     /// <param name="e">The event data.</param>
     private async void ImportProjectButtonClick(object sender, RoutedEventArgs e)
     {
         App.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
-<<<<<<< HEAD
-=======
 
         UserChooseToImportGroupAddressFile = false;
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
         
         // Créer une nouvelle instance de OpenFileDialog
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
-<<<<<<< HEAD
-            /*Title = App.DisplayElements?.SettingsWindow!.AppLang switch
-=======
             Title = App.DisplayElements?.SettingsWindow!.AppLang switch
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
             {
                 // Arabe
                 "AR" => "اختر مشروع KNX للاستيراد",
@@ -186,7 +198,7 @@ public partial class MainWindow
                 _ => "Fichiers projet ETS|*.knxproj|Tous les fichiers|*.*"
             },
             FilterIndex = 1,
-            Multiselect = false*/
+            Multiselect = false
         };
 
         // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
@@ -210,8 +222,6 @@ public partial class MainWindow
         GroupAddressManagement.ExtractGroupAddress();
     }
     
-<<<<<<< HEAD
-=======
     /// <summary>
     /// Handles the button click event to import a group addresses file.
     /// Displays an OpenFileDialog for the user to select the file,
@@ -256,5 +266,4 @@ public partial class MainWindow
         GroupAddressManagement.ExtractGroupAddress();
     }
     
->>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
 }
