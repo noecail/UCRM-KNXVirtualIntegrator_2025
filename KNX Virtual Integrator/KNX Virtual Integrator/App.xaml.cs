@@ -75,7 +75,26 @@ public partial class App
         // Ouverture du gestionnaire de fichiers de projet
         ConsoleAndLogWriteLine("Opening project file manager");
         Fm = new ProjectFileManager();
+<<<<<<< HEAD
      
+=======
+
+
+        // Tentative d'archivage des fichiers de log
+        ConsoleAndLogWriteLine("Trying to archive log files");
+        ArchiveLogs();
+
+
+        // Nettoyage des dossiers restants de la derniere session
+        ConsoleAndLogWriteLine("Starting to remove folders from projects extracted last time");
+        DeleteAllExceptLogsAndResources();
+
+        // CheckForUpdatesAsync();
+
+        ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP STARTED !");
+        ConsoleAndLogWriteLine("-----------------------------------------------------------");
+        
+>>>>>>> 909de65f463c9a83a512371a7f9ecefc3c1dfa7f
         // Appel au garbage collector pour nettoyer les variables issues 
         GC.Collect();
     }
