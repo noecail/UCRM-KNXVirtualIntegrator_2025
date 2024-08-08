@@ -7846,23 +7846,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\lison\\.nuget\\packages\\": {},
+    "C:\\Users\\coust\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
+      "projectUniqueName": "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
       "projectName": "KNX_PROJET_2",
-      "projectPath": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
-      "packagesPath": "C:\\Users\\lison\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\lison\\Documents\\GitHub\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\obj\\",
+      "projectPath": "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\KNX_PROJET_2.csproj",
+      "packagesPath": "C:\\Users\\coust\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\coust\\MySolutionFolder\\UCRM-KNXVirtualIntegrator\\KNX_PROJET_2\\KNX_PROJET_2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\lison\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\coust\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -7871,6 +7871,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -7883,11 +7884,6 @@
         "warnAsError": [
           "NU1605"
         ]
-      },
-      "restoreAuditProperties": {
-        "enableAudit": "true",
-        "auditLevel": "low",
-        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -7911,6 +7907,7 @@
             "version": "[5.4.1.1, )"
           },
           "NETStandard.Library": {
+            "suppressParent": "All",
             "target": "Package",
             "version": "[2.0.3, )"
           },
@@ -7946,7 +7943,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.301/PortableRuntimeIdentifierGraph.json"
       }
     }
   },
@@ -7955,7 +7952,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Le package 'MvvmLightLibs 5.4.1.1' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net8.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "message": "Package 'MvvmLightLibs 5.4.1.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net8.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "MvvmLightLibs",
       "targetGraphs": [
         "net8.0-windows7.0"
