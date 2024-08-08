@@ -14,6 +14,9 @@ using Knx.Falcon.KnxnetIp;
 using System.Collections.ObjectModel;
 
 using System;
+using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 
 
 namespace KNX_PROJET_2
@@ -123,11 +126,15 @@ namespace KNX_PROJET_2
         private KnxBus _bus;
         private CancellationTokenSource _cancellationTokenSource;
 
+        public bool IsBusy => _cancellationTokenSource?.Token.IsCancellationRequested == false;
+        public bool IsConnected => _bus != null && _bus.ConnectionState == BusConnectionState.Connected;
+
         //Gestion du clic sur le bouton Connect
         private async void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
-            await ConnectBusAsync();
             await DiscoverInterfacesAsync();
+            await ConnectBusAsync();
+            
         }
 
         //Gestion du clic sur le bouton Disconnect
@@ -189,7 +196,8 @@ namespace KNX_PROJET_2
 
         private async Task DisconnectBusAsync()
         {
-            if (IsBusy || !IsConnected)
+            var _isConnected = IsConnected ? true : false;
+            if (IsBusy || !_isConnected)
                 return;
 
             _cancellationTokenSource.Cancel();
@@ -216,18 +224,16 @@ namespace KNX_PROJET_2
 
         private void UpdateConnectionState()
         {
-            // Cette méthode doit mettre à jour l'état de la connexion dans l'interface utilisateur
-            // Par exemple, vous pouvez mettre à jour des propriétés liées à la connexion
-            // Exemple :
-            // ConnectionStateTextBlock.Text = IsConnected ? "Connected" : "Disconnected";
-            // ou notifier d'autres parties de l'interface utilisateur
+            // Met à jour l'état de la connexion dans l'interface utilisateur
+            ConnectionStateTextBlock.Text = IsConnected ? "Connected" : "Disconnected";
         }
 
         private void BusConnectionStateChanged(object sender, EventArgs e)
         {
             // Cette méthode sera appelée lorsque l'état de la connexion change
-            // Vous pouvez mettre à jour l'interface utilisateur en conséquence
-            UpdateConnectionState();
+            // Mettre à jour l'état de la connexion
+            Dispatcher.Invoke(() => UpdateConnectionState());
+
         }
 
         private ConnectorParameters CreateConnectorParameters(string connectionString)
@@ -246,9 +252,7 @@ namespace KNX_PROJET_2
             }
         }
 
-        public bool IsBusy => _cancellationTokenSource?.Token.IsCancellationRequested == false;
 
-        public bool IsConnected => _bus != null && _bus.ConnectionState == BusConnectionState.Connected;
 
         private async void RefreshInterfacesButton_Click(object sender, RoutedEventArgs e)
         {
