@@ -19,6 +19,8 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 
 
+using GalaSoft.MvvmLight;
+
 namespace KNX_PROJET_2
 {
     public partial class MainWindow : Window
@@ -142,8 +144,8 @@ namespace KNX_PROJET_2
         {
             await DisconnectBusAsync();
         }
-
-
+        
+       
 
         //TACHE POUR CONNECTION AU BUS
         private async Task ConnectBusAsync()
@@ -156,7 +158,13 @@ namespace KNX_PROJET_2
             try
             {
                 // Récupérer le type de connexion sélectionné
+<<<<<<< Updated upstream
                 var connectionString = ((ComboBoxItem)ConnectionTypeComboBox.SelectedItem)?.Content.ToString();
+=======
+                string connectionString = ((ComboBoxItem)ConnectionTypeComboBox.SelectedItem)?.Content.ToString();
+
+                
+>>>>>>> Stashed changes
 
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
@@ -238,6 +246,7 @@ namespace KNX_PROJET_2
 
         private ConnectorParameters CreateConnectorParameters(string connectionString)
         {
+            
             // Créez les paramètres du connecteur en fonction du type sélectionné
             switch (connectionString)
             {

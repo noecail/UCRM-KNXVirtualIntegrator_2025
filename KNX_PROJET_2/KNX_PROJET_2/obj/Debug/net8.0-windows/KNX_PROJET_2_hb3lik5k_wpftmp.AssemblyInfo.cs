@@ -14,11 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KNX_PROJET_2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< Updated upstream
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f2889533fbfad27564bc2a3a18380803e8ff6b7b")]
-=======
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5964b7ae6ccc121aa2e6d7cb28e1fe57ecf7cd38")]
->>>>>>> Stashed changes
 [assembly: System.Reflection.AssemblyProductAttribute("KNX_PROJET_2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KNX_PROJET_2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
