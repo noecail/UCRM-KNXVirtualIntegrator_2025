@@ -25,7 +25,7 @@
         <Button x:Name="ButtonChargerGroupAddressesXml"
                 Grid.Row="1"
                 Margin="10"
-                Click="ImportGroupAddressesFileButtonClick"
+                Click="ImportGroupAddressFileButtonClick"
                 Content="Charger Fichier Xml" />
     </Grid>
 </Window>

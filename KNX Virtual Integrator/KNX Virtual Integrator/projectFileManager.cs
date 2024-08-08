@@ -3,6 +3,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Management;
 using System.Windows;
+using System.Xml;
+using System.Xml.Linq;
 using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator;
@@ -31,12 +33,12 @@ public class ProjectFileManager
     /// <remarks>
     /// This property holds the file path  of the group addresses file
     /// </remarks>
-    public string GroupAddressesFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    public string GroupAddressFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
     
     /// <summary>
     ///  Gets the name of the group addresses file the application is currently working on.
     /// </summary>
-    public string GroupAddressesFileName { get; private set; } = "";
+    public string GroupAddressFileName { get; private set; } = "";
     
     
     /* ------------------------------------------------------------------------------------------------
@@ -310,7 +312,7 @@ public class ProjectFileManager
                     App.ConsoleAndLogWriteLine(
                         $"Encountered an error while extracting {knxprojSourceFilePath} : the project is locked with a password in ETS6");
                         
-                    /*var messageBoxText = App.DisplayElements?.SettingsWindow!.AppLang switch
+                    var messageBoxText = App.DisplayElements?.SettingsWindow!.AppLang switch
                     {
                         // Arabe
                         "AR" => "خطأ: المشروع الذي اخترته محمي بكلمة مرور ولا يمكن تشغيله. يرجى إلغاء قفله في ETS والمحاولة مرة أخرى.",
@@ -438,7 +440,7 @@ public class ProjectFileManager
                         _ => "Erreur"
                     };
 
-                    MessageBox.Show(messageBoxText, caption, MessageBoxButton.OK, MessageBoxImage.Error);*/
+                    MessageBox.Show(messageBoxText, caption, MessageBoxButton.OK, MessageBoxImage.Error);
                         
                     cancelOperation = true;
                     continue;
@@ -476,7 +478,7 @@ public class ProjectFileManager
             // On stocke le nom du nouveau projet
             ProjectName = Path.GetFileNameWithoutExtension(knxprojSourceFilePath);
                 
-            /*App.DisplayElements!.MainWindow.Title = App.DisplayElements.SettingsWindow!.AppLang switch
+            App.DisplayElements!.MainWindow.Title = App.DisplayElements.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => $"المشروع المستورد: {ProjectName}",
@@ -538,82 +540,11 @@ public class ProjectFileManager
                 "ZH" => $"导入项目: {ProjectName}",
                 // Cas par défaut (français)
                 _ => $"Projet importé : {ProjectName}"
-            };*/
+            };
         }
 
         return !cancelOperation && managedToExtractProject;
     }
-    
-    // Fonction permettant de demander à l'utilisateur d'entrer un path
-    /// <summary>
-    /// Prompts the user to select a file path using an OpenFileDialog.
-    /// </summary>
-    /// <returns>Returns the selected file path as a string if a file is chosen; otherwise, returns an empty string.</returns>
-    /// <remarks>
-    /// This method:
-    /// <list type="number">
-    /// <item>Displays a file open dialog with predefined filters and settings.</item>
-    /// <item>Returns the path of the selected file if the user confirms their choice.</item>
-    /// <item>Handles potential exceptions, including invalid dialog state, external errors, and other unexpected issues.</item>
-    /// </list>
-    /// </remarks>
-    private static string AskForPath()
-    {
-        try
-        {
-            // Créer une nouvelle instance de OpenFileDialog
-            var openFileDialog = new OpenFileDialog();
-
-            if (App.DisplayElements != null && App.DisplayElements.MainWindow.UserChooseToImportGroupAddressesFile)
-            {
-                // Définir des propriétés pour les fichiers XML
-                openFileDialog.Title = "Sélectionnez un fichier d'adresses de groupe à importer";
-                openFileDialog.Filter = "Fichiers d'adresses de groupes|*.xml|Tous les fichiers|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.Multiselect = false;
-            }
-            else
-            {
-                // Définir des propriétés pour les fichiers KNX
-                openFileDialog.Title = "Sélectionnez un projet KNX à importer";
-                openFileDialog.Filter = "ETS KNX Project File (*.knxproj)|*.knxproj|Tous les fichiers|*.*";
-                openFileDialog.FilterIndex = 1;
-                openFileDialog.Multiselect = false;
-            }
-
-            // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
-            var result = openFileDialog.ShowDialog();
-
-            if (result == true)
-            {
-                // Récupérer le chemin du fichier sélectionné
-                return openFileDialog.FileName;
-            }
-            else
-            {
-                return "";
-            }
-        }
-        catch (InvalidOperationException ex)
-        {
-            // Gérer les exceptions liées à l'état non valide de l'OpenFileDialog
-            App.ConsoleAndLogWriteLine($"Error: Could not open file dialog. Details: {ex.Message}");
-        }
-        catch (System.Runtime.InteropServices.ExternalException ex)
-        {
-            // Gérer les exceptions liées aux erreurs internes des bibliothèques de l'OS
-            App.ConsoleAndLogWriteLine(
-                $"Error: An external error occurred while trying to open the file dialog. Details: {ex.Message}");
-        }
-        catch (Exception ex)
-        {
-            // Gérer toutes autres exceptions génériques
-            App.ConsoleAndLogWriteLine($"Error: An unexpected error occurred. Details: {ex.Message}");
-        }
-
-        return "";
-    }
-    
     
     /// <summary>
     /// Extracts the group addresses file at the specified path and place it into the designated export folder.
@@ -628,7 +559,7 @@ public class ProjectFileManager
     /// <item>Copy the file to the right folder path and indicates successful extraction if no cancellation occurred.</item>
     /// </list>
     /// </remarks>
-    public bool ExtractGroupAddressesFile(string groupAddressesSourceFilePath)
+    public bool ExtractGroupAddressFile(string groupAddressesSourceFilePath)
     {
         var managedToExtractXml= false;
         var managedToNormalizePaths = false;
@@ -770,82 +701,177 @@ public class ProjectFileManager
             App.ConsoleAndLogWriteLine($"Done! Copy the file: {Path.GetFullPath(groupAddressesSourceFilePath)}");
 
             // On stocke le nouveau path d'exportation du projet
-            GroupAddressesFilePath = $"./{groupAddressesSourceFilePath}";
+            GroupAddressFilePath = newFilePath;
                 
             managedToExtractXml = true;
 
             // On stocke le nom du nouveau projet
-            GroupAddressesFileName = Path.GetFileNameWithoutExtension(groupAddressesSourceFilePath);
+            GroupAddressFileName = Path.GetFileNameWithoutExtension(groupAddressesSourceFilePath);
                 
-            /*App.DisplayElements!.MainWindow.Title = App.DisplayElements.SettingsWindow!.AppLang switch
+            App.DisplayElements!.MainWindow.Title = App.DisplayElements.SettingsWindow!.AppLang switch
             {
                 // Arabe
-                "AR" => $"المشروع المستورد: {ProjectName}",
+                "AR" => $"الملف المستورد :  {GroupAddressFileName}",
                 // Bulgare
-                "BG" => $"Импортиран проект: {ProjectName}",
+                "BG" => $"Импортиран файл: {GroupAddressFileName}",
                 // Tchèque
-                "CS" => $"Importovaný projekt: {ProjectName}",
+                "CS" => $"Importovaný soubor : {GroupAddressFileName}",
                 // Danois
-                "DA" => $"Importerede projekt: {ProjectName}",
+                "DA" => $"Importeret fil : {GroupAddressFileName}",
                 // Allemand
-                "DE" => $"Importiertes Projekt: {ProjectName}",
+                "DE" => $"Importierte Datei : {GroupAddressFileName}",
                 // Grec
-                "EL" => $"Εισαγόμενο έργο: {ProjectName}",
+                "EL" => $"Εισαγόμενο αρχείο : {GroupAddressFileName}",
                 // Anglais
-                "EN" => $"Imported Project: {ProjectName}",
+                "EN" => $"Imported file : {GroupAddressFileName}",
                 // Espagnol
-                "ES" => $"Proyecto importado: {ProjectName}",
+                "ES" => $"Fichero importado : {GroupAddressFileName}",
                 // Estonien
-                "ET" => $"Imporditud projekt: {ProjectName}",
+                "ET" => $"Imporditud fail : {GroupAddressFileName}",
                 // Finnois
-                "FI" => $"Tuotu projekti: {ProjectName}",
+                "FI" => $"Tuotu tiedosto : {GroupAddressFileName}",
                 // Hongrois
-                "HU" => $"Importált projekt: {ProjectName}",
+                "HU" => $"Importált fájl : {GroupAddressFileName}",
                 // Indonésien
-                "ID" => $"Proyek yang diimpor: {ProjectName}",
+                "ID" => $"File yang diimpor : {GroupAddressFileName}",
                 // Italien
-                "IT" => $"Progetto importato: {ProjectName}",
+                "IT" => $"File importato : {GroupAddressFileName}",
                 // Japonais
-                "JA" => $"インポートされたプロジェクト: {ProjectName}",
+                "JA" => $"インポートされたファイル：{GroupAddressFileName}",
                 // Coréen
-                "KO" => $"가져온 프로젝트: {ProjectName}",
+                "KO" => $"가져온 파일 : {GroupAddressFileName}",
                 // Letton
-                "LV" => $"Importēts projekts: {ProjectName}",
+                "LV" => $"Importētais fails : {GroupAddressFileName}",
                 // Lituanien
-                "LT" => $"Importuotas projektas: {ProjectName}",
+                "LT" => $"Importuotas failas : {GroupAddressFileName}",
                 // Norvégien
-                "NB" => $"Importert prosjekt: {ProjectName}",
+                "NB" => $"Importert fil : {GroupAddressFileName}",
                 // Néerlandais
-                "NL" => $"Geïmporteerd project: {ProjectName}",
+                "NL" => $"Geïmporteerd bestand : {GroupAddressFileName}",
                 // Polonais
-                "PL" => $"Zaimportowany projekt: {ProjectName}",
+                "PL" => $"Zaimportowany plik : {GroupAddressFileName}",
                 // Portugais
-                "PT" => $"Projeto importado: {ProjectName}",
+                "PT" => $"Fișier importat : {GroupAddressFileName}",
                 // Roumain
-                "RO" => $"Proiect importat: {ProjectName}",
+                "RO" => $"Proiect importat: {GroupAddressFileName}",
                 // Russe
-                "RU" => $"Импортированный проект: {ProjectName}",
+                "RU" => $"Импортированный файл : {GroupAddressFileName}",
                 // Slovaque
-                "SK" => $"Importovaný projekt: {ProjectName}",
+                "SK" => $"Importovaný súbor : {GroupAddressFileName}",
                 // Slovène
-                "SL" => $"Uvožen projekt: {ProjectName}",
+                "SL" => $"Uvožena datoteka : {GroupAddressFileName}",
                 // Suédois
-                "SV" => $"Importerade projekt: {ProjectName}",
+                "SV" => $"Importerad fil : {GroupAddressFileName}",
                 // Turc
-                "TR" => $"İçe aktarılan proje: {ProjectName}",
+                "TR" => $"İçe aktarılan dosya : {GroupAddressFileName}",
                 // Ukrainien
-                "UK" => $"Імпортований проект: {ProjectName}",
+                "UK" => $"Імпортований файл : {GroupAddressFileName}",
                 // Chinois simplifié
-                "ZH" => $"导入项目: {ProjectName}",
+                "ZH" => $"导入文件 ： {GroupAddressFileName}",
                 // Cas par défaut (français)
-                _ => $"Projet importé : {ProjectName}"
-            };*/
+                _ => $" Fichier importé : {GroupAddressFileName}"
+            };
         }
 
         return !cancelOperation && managedToExtractXml;
     }
-
     
+    // Fonction permettant de demander à l'utilisateur d'entrer un path
+    /// <summary>
+    /// Prompts the user to select a file path using an OpenFileDialog.
+    /// </summary>
+    /// <returns>Returns the selected file path as a string if a file is chosen; otherwise, returns an empty string.</returns>
+    /// <remarks>
+    /// This method:
+    /// <list type="number">
+    /// <item>Displays a file open dialog with predefined filters and settings.</item>
+    /// <item>Returns the path of the selected file if the user confirms their choice.</item>
+    /// <item>Handles potential exceptions, including invalid dialog state, external errors, and other unexpected issues.</item>
+    /// </list>
+    /// </remarks>
+    private static string AskForPath()
+    {
+        try
+        {
+            // Créer une nouvelle instance de OpenFileDialog
+            var openFileDialog = new OpenFileDialog();
+
+            if (App.DisplayElements != null && App.DisplayElements.MainWindow.UserChooseToImportGroupAddressFile)
+            {
+                // Définir des propriétés pour les fichiers XML
+                openFileDialog.Title = "Sélectionnez un fichier d'adresses de groupe à importer";
+                openFileDialog.Filter = "Fichiers d'adresses de groupes|*.xml|Tous les fichiers|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+            }
+            else
+            {
+                // Définir des propriétés pour les fichiers KNX
+                openFileDialog.Title = "Sélectionnez un projet KNX à importer";
+                openFileDialog.Filter = "ETS KNX Project File (*.knxproj)|*.knxproj|Tous les fichiers|*.*";
+                openFileDialog.FilterIndex = 1;
+                openFileDialog.Multiselect = false;
+            }
+
+            // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
+            var result = openFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                // Récupérer le chemin du fichier sélectionné
+                return openFileDialog.FileName;
+            }
+            else
+            {
+                return "";
+            }
+        }
+        catch (InvalidOperationException ex)
+        {
+            // Gérer les exceptions liées à l'état non valide de l'OpenFileDialog
+            App.ConsoleAndLogWriteLine($"Error: Could not open file dialog. Details: {ex.Message}");
+        }
+        catch (System.Runtime.InteropServices.ExternalException ex)
+        {
+            // Gérer les exceptions liées aux erreurs internes des bibliothèques de l'OS
+            App.ConsoleAndLogWriteLine(
+                $"Error: An external error occurred while trying to open the file dialog. Details: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            // Gérer toutes autres exceptions génériques
+            App.ConsoleAndLogWriteLine($"Error: An unexpected error occurred. Details: {ex.Message}");
+        }
+
+        return "";
+    }
+    
+    /// <summary>
+    /// Loads an XML document from a specified path.
+    /// </summary>
+    /// <param name="path">The path to the XML document to load.</param>
+    /// <returns>Returns an XDocument if the file is successfully loaded; otherwise, returns null.</returns>
+    /// <remarks>
+    /// This method:
+    /// <list type="number">
+    /// <item>Attempts to load the XML document from the specified path.</item>
+    /// <item>Catches and logs specific exceptions such as FileNotFoundException, DirectoryNotFoundException, IOException, UnauthorizedAccessException, and XmlException.</item>
+    /// <item>Logs an error message and returns null if an exception is thrown.</item>
+    /// </list>
+    /// </remarks>
+    public XDocument? LoadXmlDocument(string path)
+    {
+        try
+        {
+            return XDocument.Load(path);
+        }
+        catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException ||
+                                   ex is IOException || ex is UnauthorizedAccessException || ex is XmlException)
+        {
+            App.ConsoleAndLogWriteLine($"Error loading XML: {ex.Message}");
+            return null;
+        }
+    }
     
     
     // Fonction générant les fichiers de débogage de l'application

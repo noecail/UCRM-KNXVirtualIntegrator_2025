@@ -16,7 +16,7 @@ public partial class MainWindow
     /// <summary>
     /// True if the user choose to import a group addresses file, false if it's a project knx file 
     /// </summary>
-    public bool UserChooseToImportGroupAddressesFile { get; private set; }
+    public bool UserChooseToImportGroupAddressFile { get; private set; }
     
     /// <summary>
     /// The token source used to signal cancellation requests for ongoing tasks.
@@ -65,15 +65,13 @@ public partial class MainWindow
     {
         App.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
 
-        UserChooseToImportGroupAddressesFile = false;
+        UserChooseToImportGroupAddressFile = false;
         
         // Créer une nouvelle instance de OpenFileDialog
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
-            Title = "Sélectionnez un projet KNX à importer",
-            Filter = "Fichiers projet ETS|*.knxproj|Tous les fichiers|*.*",
-            /*Title = App.DisplayElements?.SettingsWindow!.AppLang switch
+            Title = App.DisplayElements?.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => "اختر مشروع KNX للاستيراد",
@@ -198,7 +196,7 @@ public partial class MainWindow
                 "ZH" => "KNX 项目文件|*.knxproj|所有文件|*.*",
                 // Cas par défaut (français)
                 _ => "Fichiers projet ETS|*.knxproj|Tous les fichiers|*.*"
-            },*/
+            },
             FilterIndex = 1,
             Multiselect = false
         };
@@ -221,6 +219,7 @@ public partial class MainWindow
         {
             App.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
+        GroupAddressManagement.ExtractGroupAddress();
     }
     
     /// <summary>
@@ -230,11 +229,11 @@ public partial class MainWindow
     /// </summary>
     /// <param name="sender">The object that raised the event.</param>
     /// <param name="e">The event data.</param>
-    private async void ImportGroupAddressesFileButtonClick(object sender, RoutedEventArgs e)
+    private async void ImportGroupAddressFileButtonClick(object sender, RoutedEventArgs e)
     {
         App.ConsoleAndLogWriteLine("Waiting for user to select group addresses file");
 
-        UserChooseToImportGroupAddressesFile = true;
+        UserChooseToImportGroupAddressFile = true;
         
         // Créer une nouvelle instance de OpenFileDialog
         OpenFileDialog openFileDialog = new()
@@ -255,7 +254,7 @@ public partial class MainWindow
             App.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if ((App.Fm == null)||(!App.Fm.ExtractGroupAddressesFile(openFileDialog.FileName))) return;
+            if ((App.Fm == null)||(!App.Fm.ExtractGroupAddressFile(openFileDialog.FileName))) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
@@ -264,6 +263,7 @@ public partial class MainWindow
         {
             App.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
+        GroupAddressManagement.ExtractGroupAddress();
     }
     
 }

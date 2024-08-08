@@ -165,7 +165,7 @@ public partial class App
 
         ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP STARTED !");
         ConsoleAndLogWriteLine("-----------------------------------------------------------");
-            
+        
         // Appel au garbage collector pour nettoyer les variables issues 
         GC.Collect();
     }
