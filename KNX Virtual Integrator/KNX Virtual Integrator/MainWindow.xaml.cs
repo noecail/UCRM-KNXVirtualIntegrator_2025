@@ -219,6 +219,9 @@ public partial class MainWindow
         {
             App.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
+
+        // Partie management des adresses de groupes
+        App.Fm?.FindZeroXml();
         GroupAddressManagement.ExtractGroupAddress();
     }
     
