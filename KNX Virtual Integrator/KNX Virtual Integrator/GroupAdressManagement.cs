@@ -6,7 +6,7 @@ namespace KNX_Virtual_Integrator;
 public class GroupAddressManagement
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
-
+    //test
     public static void ExtractGroupAddress()
     {
         if (App.DisplayElements != null && App.DisplayElements.MainWindow.UserChooseToImportGroupAddressFile)
