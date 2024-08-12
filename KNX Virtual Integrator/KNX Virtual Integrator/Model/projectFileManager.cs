@@ -1,4 +1,4 @@
-﻿﻿using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Management;
@@ -7,7 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Win32;
 
-namespace KNX_Virtual_Integrator;
+namespace KNX_Virtual_Integrator.Model;
 
 public class ProjectFileManager
 {
@@ -320,7 +320,7 @@ public class ProjectFileManager
                     App.ConsoleAndLogWriteLine(
                         $"Encountered an error while extracting {knxprojSourceFilePath} : the project is locked with a password in ETS6");
                         
-                    var messageBoxText = App.DisplayElements?.SettingsWindow!.AppLang switch
+                    var messageBoxText = App.WindowManager?.SettingsWindow!.AppLang switch
                     {
                         // Arabe
                         "AR" => "خطأ: المشروع الذي اخترته محمي بكلمة مرور ولا يمكن تشغيله. يرجى إلغاء قفله في ETS والمحاولة مرة أخرى.",
@@ -384,7 +384,7 @@ public class ProjectFileManager
                         _ => "Erreur : Le projet que vous avez sélectionné est protégé par mot de passe et ne peut pas être opéré. Veuillez le déverrouiller dans ETS et réessayez."
                     };
 
-                    var caption = App.DisplayElements?.SettingsWindow!.AppLang switch
+                    var caption = App.WindowManager?.SettingsWindow!.AppLang switch
                     {
                         // Arabe
                         "AR" => "خطأ",
@@ -486,7 +486,7 @@ public class ProjectFileManager
             // On stocke le nom du nouveau projet
             ProjectName = Path.GetFileNameWithoutExtension(knxprojSourceFilePath);
                 
-            App.DisplayElements!.MainWindow.Title = App.DisplayElements.SettingsWindow!.AppLang switch
+            App.WindowManager!.MainWindow.Title = App.WindowManager.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => $"المشروع المستورد: {ProjectName}",
@@ -716,7 +716,7 @@ public class ProjectFileManager
             // On stocke le nom du nouveau projet
             GroupAddressFileName = Path.GetFileNameWithoutExtension(groupAddressesSourceFilePath);
                 
-            App.DisplayElements!.MainWindow.Title = App.DisplayElements.SettingsWindow!.AppLang switch
+            App.WindowManager!.MainWindow.Title = App.WindowManager.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => $"الملف المستورد :  {GroupAddressFileName}",
@@ -804,7 +804,7 @@ public class ProjectFileManager
             // Créer une nouvelle instance de OpenFileDialog
             var openFileDialog = new OpenFileDialog();
 
-            if (App.DisplayElements != null && App.DisplayElements.MainWindow.UserChooseToImportGroupAddressFile)
+            if (App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile)
             {
                 // Définir des propriétés pour les fichiers XML
                 openFileDialog.Title = "Sélectionnez un fichier d'adresses de groupe à importer";
@@ -1312,7 +1312,7 @@ public class ProjectFileManager
             string title;
 
             // Traduction de la fenêtre d'erreur
-            switch (App.DisplayElements?.SettingsWindow!.AppLang)
+            switch (App.WindowManager?.SettingsWindow!.AppLang)
             {
                 // Arabe
                 case "AR":
@@ -1558,7 +1558,7 @@ public class ProjectFileManager
         // Afficher la boîte de dialogue de sauvegarde
         var saveFileDialog = new SaveFileDialog
         {
-            Title = App.DisplayElements?.SettingsWindow!.AppLang switch
+            Title = App.WindowManager?.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => "حفظ أرشيف التصحيح باسم...",
@@ -1623,7 +1623,7 @@ public class ProjectFileManager
             },
             FileName = $"debug-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.zip",
             DefaultExt = ".zip",
-            Filter = App.DisplayElements?.SettingsWindow!.AppLang switch
+            Filter = App.WindowManager?.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => "ملفات ZIP|*.zip",

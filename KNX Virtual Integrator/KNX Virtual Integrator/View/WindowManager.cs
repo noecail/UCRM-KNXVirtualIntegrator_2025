@@ -1,6 +1,6 @@
-﻿namespace KNX_Virtual_Integrator;
+﻿namespace KNX_Virtual_Integrator.View;
 
-public class DisplayElements
+public class WindowManager
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
