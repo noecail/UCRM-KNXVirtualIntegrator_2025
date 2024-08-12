@@ -22,7 +22,9 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
+using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.View;
+using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator;
 
@@ -75,6 +77,12 @@ public partial class App
     /// Manages the application's display elements, including windows, buttons, and other UI components.
     /// </summary>
     public static WindowManager? WindowManager { get; private set; } // Gestionnaire de l'affichage (contient les fenetres, boutons, ...)
+    
+    
+    public static MainViewModel? MainViewModel { get; private set; }
+    
+    
+    public static ModelManager? ModelManager { get; private set; }
         
         
         
@@ -136,6 +144,13 @@ public partial class App
             $"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
 
+        // Création du Main View Model
+        MainViewModel = new();
+        
+        
+        // Création du Model Manager
+        ModelManager = new();
+        
 
         // Ouverture la fenetre principale
         ConsoleAndLogWriteLine("Opening main window");
@@ -201,7 +216,6 @@ public partial class App
         _writer?.Close(); // Fermeture du stream d'ecriture des logs
     }
 
-        
         
     // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
     // logs sans sauter de ligne apres le message.
