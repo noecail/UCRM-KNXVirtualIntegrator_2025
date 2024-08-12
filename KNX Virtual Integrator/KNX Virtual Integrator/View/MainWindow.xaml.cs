@@ -1,5 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
+using KNX_Virtual_Integrator.Model;
 using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.View;

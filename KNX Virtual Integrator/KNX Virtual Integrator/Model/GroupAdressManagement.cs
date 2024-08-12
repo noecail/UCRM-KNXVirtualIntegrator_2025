@@ -1,12 +1,12 @@
 ﻿using System.Xml;
 using System.Xml.Linq;
 
-namespace KNX_Virtual_Integrator;
+namespace KNX_Virtual_Integrator.Model;
 
 public class GroupAddressManagement
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
-    //test
+
     public static void ExtractGroupAddress()
     {
         if (App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile)

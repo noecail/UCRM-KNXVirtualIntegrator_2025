@@ -22,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
+using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.View;
 
 namespace KNX_Virtual_Integrator;

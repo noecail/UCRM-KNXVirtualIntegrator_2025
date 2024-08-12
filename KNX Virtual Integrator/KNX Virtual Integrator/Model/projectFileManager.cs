@@ -1,4 +1,4 @@
-﻿﻿using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Management;
@@ -7,7 +7,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Microsoft.Win32;
 
-namespace KNX_Virtual_Integrator;
+namespace KNX_Virtual_Integrator.Model;
 
 public class ProjectFileManager
 {

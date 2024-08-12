@@ -8,6 +8,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
+using KNX_Virtual_Integrator.Model;
 using Microsoft.Win32;
 
 // ReSharper disable NullableWarningSuppressionIsUsed
