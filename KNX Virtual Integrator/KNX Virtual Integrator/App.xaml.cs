@@ -45,9 +45,9 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public static readonly int AppBuild = 1;
-        
-        
+    public const int AppBuild = 1;
+
+
     // Gestion des logs
     /// <summary>
     /// Stores the file path for the log file. This path is used to determine where the log entries will be written.
