@@ -32,7 +32,8 @@ public partial class App
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    // Donnees de l'application
+    
+    // --> Données de l'application
 
     /// <summary>
     /// Represents the name of the application.
@@ -50,7 +51,9 @@ public partial class App
     public const int AppBuild = 80;
 
 
-    // Gestion des logs
+    
+    // --> Gestion des logs
+    
     /// <summary>
     /// Stores the file path for the log file. This path is used to determine where the log entries will be written.
     /// </summary>
@@ -66,8 +69,9 @@ public partial class App
         
         
         
-    // Composants de l'application
-        
+    
+    // --> Composants de l'application
+    
     /// <summary>
     /// Manages project files, providing functionality to handle project-related file operations.
     /// </summary>
@@ -84,7 +88,7 @@ public partial class App
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- METHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    // Fonction s'executant e l'ouverture de l'application
+    // Fonction s'executant à l'ouverture de l'application
     /// <summary>
     /// Executes when the application starts up.
     /// <para>
