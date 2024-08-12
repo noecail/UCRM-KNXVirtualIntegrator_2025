@@ -25,12 +25,7 @@ namespace KNX_PROJET_2
 {
     public partial class MainWindow : Window
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
-
-
+        
         //ATTRIBUTS
 
         /// <summary>
@@ -42,7 +37,28 @@ namespace KNX_PROJET_2
         /// Gets the path to the exported project folder.
         /// </summary>
         public string ProjectFolderPath { get; private set; } = "";
+        private KnxBus _bus;
+        private CancellationTokenSource _cancellationTokenSource;
 
+        public bool IsBusy { get; private set; }
+        public bool IsConnected => _bus != null && _bus.ConnectionState == BusConnectionState.Connected;
+
+        
+        public MainWindow()
+        {
+            InitializeComponent();
+            _cancellationTokenSource = new CancellationTokenSource();
+            IsBusy = false;
+            this.Loaded += MainWindow_Loaded;
+        }
+        
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            await DiscoverInterfacesAsync();
+        }
+
+
+        
         
 
 
@@ -125,11 +141,6 @@ namespace KNX_PROJET_2
 
 
 
-        private KnxBus _bus;
-        private CancellationTokenSource _cancellationTokenSource;
-
-        public bool IsBusy => _cancellationTokenSource?.Token.IsCancellationRequested == false;
-        public bool IsConnected => _bus != null && _bus.ConnectionState == BusConnectionState.Connected;
 
         //Gestion du clic sur le bouton Connect
         private async void ConnectButton_Click(object sender, RoutedEventArgs e)
