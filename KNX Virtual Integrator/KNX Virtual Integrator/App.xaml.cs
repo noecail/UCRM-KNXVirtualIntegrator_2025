@@ -130,10 +130,11 @@ public partial class App
 
         // Activation de l'auto-vidage du buffer du stream d'ecriture
         _writer.AutoFlush = true;
-
-
+        
+        
         ConsoleAndLogWriteLine(
-            $"STARTING {AppName.ToUpper()} V{AppVersion.ToString(CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
+            $"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
+
 
 
         // Ouverture la fenetre principale
