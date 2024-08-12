@@ -28,9 +28,8 @@ namespace KNX_PROJET_2
         public MainWindow()
         {
             InitializeComponent();
-            _cancellationTokenSource = new CancellationTokenSource();
-            this.Loaded += MainWindow_Loaded;
         }
+
 
         //ATTRIBUTS
 
@@ -124,10 +123,7 @@ namespace KNX_PROJET_2
 
 
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            await DiscoverInterfacesAsync();
-        }
+
 
         private KnxBus _bus;
         private CancellationTokenSource _cancellationTokenSource;
@@ -200,9 +196,9 @@ namespace KNX_PROJET_2
                     throw new InvalidOperationException("La connexion au bus a échoué.");
                 }
             }
-            catch (Exception exc)
+            catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors de la connexion au bus : {exc.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             finally
             {
