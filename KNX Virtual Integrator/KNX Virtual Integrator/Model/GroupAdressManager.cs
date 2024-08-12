@@ -11,7 +11,7 @@ public class GroupAddressManagement
     {
         if (App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile)
         {
-            var groupAddressFile = App.Fm?.LoadXmlDocument(App.Fm.GroupAddressFilePath);
+            var groupAddressFile = FileLoader.LoadXmlDocument(App.Fm.GroupAddressFilePath);
             var groupAddresses = groupAddressFile?.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
             
             if (groupAddresses != null)
@@ -67,13 +67,11 @@ public class GroupAddressManagement
         }
         else
         {
-            if (App.Fm?.ZeroXmlPath != null)
-            {
-                var groupAddressFile = App.Fm?.LoadXmlDocument(App.Fm.ZeroXmlPath);
-                SetNamespaceFromXml(App.Fm?.ZeroXmlPath!);
-                var groupAddresses = groupAddressFile?.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
+            var groupAddressFile = FileLoader.LoadXmlDocument(ProjectFileManager.ZeroXmlPath);
+            SetNamespaceFromXml(ProjectFileManager.ZeroXmlPath!);
+            var groupAddresses = groupAddressFile?.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
 
-                if (groupAddresses != null)
+            if (groupAddresses != null)
                 {
                     var ieGroupAddresses = groupAddresses
                         .Where(ga =>
@@ -125,8 +123,6 @@ public class GroupAddressManagement
                     }
 
                 }
-            }
-
         }
     }
     

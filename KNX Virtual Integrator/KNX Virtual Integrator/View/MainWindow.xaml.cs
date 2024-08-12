@@ -221,7 +221,7 @@ public partial class MainWindow
         }
 
         // Partie management des adresses de groupes
-        App.Fm?.FindZeroXml();
+        FileFinder.FindZeroXml(App.Fm.ProjectFolderPath);
         GroupAddressManagement.ExtractGroupAddress();
     }
     
