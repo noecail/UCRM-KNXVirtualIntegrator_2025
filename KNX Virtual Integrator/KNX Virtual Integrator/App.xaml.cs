@@ -45,7 +45,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 1;
+    public const int AppBuild = 80;
 
 
     // Gestion des logs
@@ -427,6 +427,7 @@ public partial class App
         _writer?.Close();
     }
 }
+
 
 
 
