@@ -1,4 +1,5 @@
 ﻿using Knx.Falcon.Configuration;
+using Knx.Falcon.KnxnetIp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +10,13 @@ namespace KNX_PROJET_2
 {
     public class InterfaceViewModel
     {
-        public ConnectorType Type { get; }
-        public string DisplayName { get; }
-        public string ConnectionString { get; }
+        public ConnectorType ConnectorType { get; }
+        public string DisplayName { get; set; } // Ajout du set pour DisplayName
+        public string ConnectionString { get; set; } // Ajout du set pour ConnectionString
 
-        public InterfaceViewModel(ConnectorType type, string displayName, string connectionString)
+        public InterfaceViewModel(ConnectorType connectorType, string displayName, string connectionString)
         {
-            Type = type;
+            ConnectorType = connectorType;
             DisplayName = displayName;
             ConnectionString = connectionString;
         }

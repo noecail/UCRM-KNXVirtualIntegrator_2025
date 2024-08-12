@@ -11,7 +11,7 @@ public class GroupAddressManagement
     {
         if (App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile)
         {
-            XDocument? groupAddressFile = App.Fm?.LoadXmlDocument(App.Fm.GroupAddressFilePath);
+            var groupAddressFile = App.Fm?.LoadXmlDocument(App.Fm.GroupAddressFilePath);
             var groupAddresses = groupAddressFile?.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
             
             if (groupAddresses != null)
@@ -69,7 +69,7 @@ public class GroupAddressManagement
         {
             if (App.Fm?.ZeroXmlPath != null)
             {
-                XDocument? groupAddressFile = App.Fm?.LoadXmlDocument(App.Fm.ZeroXmlPath);
+                var groupAddressFile = App.Fm?.LoadXmlDocument(App.Fm.ZeroXmlPath);
                 SetNamespaceFromXml(App.Fm?.ZeroXmlPath!);
                 var groupAddresses = groupAddressFile?.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
 
