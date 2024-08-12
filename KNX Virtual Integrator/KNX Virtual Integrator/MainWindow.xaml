@@ -38,9 +38,15 @@
                 Margin="5"
                 Width="150"
                 Click="ImportGroupAddressFileButtonClick"
-                Content="Charger Fichier Xml" />
+                Content="Charger Fichier Xml"
+                Foreground="Blue"
+                Background="DeepPink"
+                BorderThickness="3"
+                BorderBrush="Brown"/>
 
-            <Button Content="Lancer le test" Width="100" Margin="5"/>
+            <Button Content="Lancer le test" Width="100" Margin="5" 
+                    Foreground="Red" Background="Yellow"
+                    BorderThickness="3" BorderBrush="Aqua"/>
             <Button Content="Exporter le rapport" Width="150" Margin="5"/>
         </StackPanel>
 
