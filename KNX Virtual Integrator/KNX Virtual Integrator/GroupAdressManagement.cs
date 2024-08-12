@@ -9,7 +9,7 @@ public class GroupAddressManagement
     //test
     public static void ExtractGroupAddress()
     {
-        if (App.DisplayElements != null && App.DisplayElements.MainWindow.UserChooseToImportGroupAddressFile)
+        if (App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile)
         {
             XDocument? groupAddressFile = App.Fm?.LoadXmlDocument(App.Fm.GroupAddressFilePath);
             var groupAddresses = groupAddressFile?.Descendants(_globalKnxNamespace + "GroupAddress").ToList();

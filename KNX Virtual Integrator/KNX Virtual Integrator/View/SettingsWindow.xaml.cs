@@ -1,12 +1,7 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Security;
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -20,7 +15,7 @@ using Microsoft.Win32;
 // ReSharper disable ConvertToUsingDeclaration
 
 
-namespace KNX_Virtual_Integrator;
+namespace KNX_Virtual_Integrator.View;
 
 /// <summary>
 ///  Window used to set the application settings.
@@ -2389,10 +2384,10 @@ public partial class SettingsWindow
             {
                 ApplyScaling(scaleFactor - 0.2f);
             }
-            App.DisplayElements!.MainWindow.ApplyScaling(scaleFactor); }
+            App.WindowManager!.MainWindow.ApplyScaling(scaleFactor); }
         
         // Mise à jour de la fenêtre principale
-        App.DisplayElements?.MainWindow.UpdateWindowContents(previousAppLang != AppLang, previousEnableLightTheme != EnableLightTheme, previousAppScaleFactor == AppScaleFactor);
+        App.WindowManager?.MainWindow.UpdateWindowContents(previousAppLang != AppLang, previousEnableLightTheme != EnableLightTheme, previousAppScaleFactor == AppScaleFactor);
 
         // Masquage de la fenêtre de paramètres
         Hide();

@@ -22,6 +22,7 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
+using KNX_Virtual_Integrator.View;
 
 namespace KNX_Virtual_Integrator;
 
@@ -74,7 +75,7 @@ public partial class App
     /// <summary>
     /// Manages the application's display elements, including windows, buttons, and other UI components.
     /// </summary>
-    public static DisplayElements? DisplayElements { get; private set; } // Gestionnaire de l'affichage (contient les fenetres, boutons, ...)
+    public static WindowManager? WindowManager { get; private set; } // Gestionnaire de l'affichage (contient les fenetres, boutons, ...)
         
         
         
@@ -139,13 +140,13 @@ public partial class App
 
         // Ouverture la fenetre principale
         ConsoleAndLogWriteLine("Opening main window");
-        DisplayElements = new DisplayElements();
+        WindowManager = new WindowManager();
         
         // Mise a jour de la fenetre principale (titre, langue, thème, ...)
-        DisplayElements.MainWindow.UpdateWindowContents(true, true, true);
+        WindowManager.MainWindow.UpdateWindowContents(true, true, true);
 
         // Affichage de la fenêtre principale
-        DisplayElements.ShowMainWindow();
+        WindowManager.ShowMainWindow();
 
 
         // Ouverture du gestionnaire de fichiers de projet

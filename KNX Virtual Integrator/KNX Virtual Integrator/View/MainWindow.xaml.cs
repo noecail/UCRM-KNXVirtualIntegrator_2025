@@ -1,9 +1,8 @@
-using System.Windows.Media;
-
-using Microsoft.Win32;
 using System.Windows;
+using System.Windows.Media;
+using Microsoft.Win32;
 
-namespace KNX_Virtual_Integrator;
+namespace KNX_Virtual_Integrator.View;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -71,7 +70,7 @@ public partial class MainWindow
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
-            Title = App.DisplayElements?.SettingsWindow!.AppLang switch
+            Title = App.WindowManager?.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => "اختر مشروع KNX للاستيراد",
@@ -134,7 +133,7 @@ public partial class MainWindow
                 // Cas par défaut (français)
                 _ => "Sélectionnez un projet KNX à importer"
             },
-            Filter = App.DisplayElements?.SettingsWindow!.AppLang switch
+            Filter = App.WindowManager?.SettingsWindow!.AppLang switch
             {
                 // Arabe
                 "AR" => "ملفات مشروع KNX|*.knxproj|جميع الملفات|*.*",
