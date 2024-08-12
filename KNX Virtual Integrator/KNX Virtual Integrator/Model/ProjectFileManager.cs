@@ -16,13 +16,13 @@ public class ProjectFileManager
     /// <remarks>
     /// This property holds the file path of the project folder where the project files are exported.
     /// </remarks>
-    public string ProjectFolderPath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    public static string ProjectFolderPath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
     
     
     /// <summary>
     ///  Gets the name of the project the application is currently working on.
     /// </summary>
-    public string ProjectName { get; private set; } = "";
+    public static string ProjectName { get; private set; } = "";
     
     
     /// <summary>
@@ -40,13 +40,13 @@ public class ProjectFileManager
     /// <remarks>
     /// This property holds the file path  of the group addresses file
     /// </remarks>
-    public string GroupAddressFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    public static string GroupAddressFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
     
     
     /// <summary>
     ///  Gets the name of the group addresses file the application is currently working on.
     /// </summary>
-    public string GroupAddressFileName { get; private set; } = "";
+    public static string GroupAddressFileName { get; private set; } = "";
     
     
     
@@ -70,7 +70,7 @@ public class ProjectFileManager
     /// <item>Sets the project folder path and indicates successful extraction if no cancellation occurred.</item>
     /// </list>
     /// </remarks>
-    public bool ExtractProjectFiles(string knxprojSourceFilePath)
+    public static bool ExtractProjectFiles(string knxprojSourceFilePath)
     {
         var managedToExtractProject = false;
         var managedToNormalizePaths = false;
@@ -569,7 +569,7 @@ public class ProjectFileManager
     /// <item>Copy the file to the right folder path and indicates successful extraction if no cancellation occurred.</item>
     /// </list>
     /// </remarks>
-    public bool ExtractGroupAddressFile(string groupAddressesSourceFilePath)
+    public static bool ExtractGroupAddressFile(string groupAddressesSourceFilePath)
     {
         var managedToExtractXml= false;
         var managedToNormalizePaths = false;

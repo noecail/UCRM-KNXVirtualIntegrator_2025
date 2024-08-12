@@ -11,7 +11,7 @@ public class GroupAddressManagement
     {
         if (App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile)
         {
-            var groupAddressFile = FileLoader.LoadXmlDocument(App.Fm.GroupAddressFilePath);
+            var groupAddressFile = FileLoader.LoadXmlDocument(ProjectFileManager.GroupAddressFilePath);
             var groupAddresses = groupAddressFile?.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
             
             if (groupAddresses != null)

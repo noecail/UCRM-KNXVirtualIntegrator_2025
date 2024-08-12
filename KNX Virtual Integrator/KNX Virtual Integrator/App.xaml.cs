@@ -22,7 +22,6 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
-using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.View;
 
 namespace KNX_Virtual_Integrator;
@@ -72,11 +71,6 @@ public partial class App
     
     // --> Composants de l'application
     
-    /// <summary>
-    /// Manages project files, providing functionality to handle project-related file operations.
-    /// </summary>
-    public static ProjectFileManager? Fm { get; private set; } // Gestionnaire de fichiers du projet
-        
     /// <summary>
     /// Manages the application's display elements, including windows, buttons, and other UI components.
     /// </summary>
@@ -152,11 +146,6 @@ public partial class App
 
         // Affichage de la fenêtre principale
         WindowManager.ShowMainWindow();
-
-
-        // Ouverture du gestionnaire de fichiers de projet
-        ConsoleAndLogWriteLine("Opening project file manager");
-        Fm = new ProjectFileManager();
 
 
         // Tentative d'archivage des fichiers de log
