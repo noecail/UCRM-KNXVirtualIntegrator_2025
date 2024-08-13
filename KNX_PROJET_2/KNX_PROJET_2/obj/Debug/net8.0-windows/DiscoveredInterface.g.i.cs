@@ -68,7 +68,7 @@ namespace KNX_PROJET_2 {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/KNX_PROJET_2;component/discoveredinterface.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/KNX_PROJET_2;V1.0.0.0;component/discoveredinterface.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\DiscoveredInterface.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

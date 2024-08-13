@@ -20,6 +20,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 
 
 using GalaSoft.MvvmLight;
+using System.Threading;
 
 namespace KNX_PROJET_2
 {
@@ -29,8 +30,15 @@ namespace KNX_PROJET_2
         {
             InitializeComponent();
             _cancellationTokenSource = new CancellationTokenSource();
+            IsBusy = false;
             this.Loaded += MainWindow_Loaded;
         }
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            await DiscoverInterfacesAsync();
+        }
+    
+
 
         //ATTRIBUTS
 
@@ -124,15 +132,12 @@ namespace KNX_PROJET_2
 
 
 
-        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
-        {
-            await DiscoverInterfacesAsync();
-        }
+
 
         private KnxBus _bus;
         private CancellationTokenSource _cancellationTokenSource;
 
-        public bool IsBusy => _cancellationTokenSource?.Token.IsCancellationRequested == false;
+        public bool IsBusy { get; private set; }
         public bool IsConnected => _bus != null && _bus.ConnectionState == BusConnectionState.Connected;
 
         //Gestion du clic sur le bouton Connect
@@ -306,24 +311,39 @@ namespace KNX_PROJET_2
                 // Découverte des interfaces IP
                 var ipDiscoveryTask = Task.Run(async () =>
                 {
-                    var results = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
-                    await foreach (var result in results)
+                    using (var cts = new CancellationTokenSource())
                     {
-                        foreach (var tunnelingServer in result.GetTunnelingConnections())
+                        var results = KnxBus.DiscoverIpDevicesAsync(cts.Token);
+                        await foreach (var result in results)
                         {
-                            discoveredInterfaces.Add(new InterfaceViewModel(
-                                ConnectorType.IpTunneling,
-                                tunnelingServer.Name,
-                                tunnelingServer.ToConnectionString()));
-                        }
+                            // Traitement des connexions tunneling
+                            foreach (var tunnelingServer in result.GetTunnelingConnections())
+                            {
+                                // Mettre à jour les connexions existantes ou ajouter de nouvelles connexions
+                                if (result.IsExtensionOf != null)
+                                {
+                                    var existing = discoveredInterfaces.FirstOrDefault(i => i.ConnectionString == result.IsExtensionOf.ToConnectionString());
+                                    if (existing != null)
+                                    {
+                                        existing.ConnectionString = tunnelingServer.ToConnectionString();
+                                        continue;
+                                    }
+                                }
 
-                        if (result.Supports(ServiceFamily.Routing, 1))
-                        {
-                            var routingParameters = IpRoutingConnectorParameters.FromDiscovery(result);
-                            discoveredInterfaces.Add(new InterfaceViewModel(
-                                ConnectorType.IpRouting,
-                                $"{result.MulticastAddress} on {result.LocalIPAddress}",
-                                routingParameters.ToConnectionString()));
+                                var displayName = tunnelingServer.IndividualAddress.HasValue
+                                    ? $"{tunnelingServer.Name} {tunnelingServer.HostAddress} ({tunnelingServer.IndividualAddress.Value})"
+                                    : $"{tunnelingServer.Name} {tunnelingServer.HostAddress}";
+                                var tunneling = new InterfaceViewModel(ConnectorType.IpTunneling, displayName, tunnelingServer.ToConnectionString());
+                                discoveredInterfaces.Add(tunneling);
+                            }
+
+                            // Traitement des connexions IP routing
+                            if (result.Supports(ServiceFamily.Routing, 1))
+                            {
+                                var routingParameters = IpRoutingConnectorParameters.FromDiscovery(result);
+                                var routing = new InterfaceViewModel(ConnectorType.IpRouting, $"{result.MulticastAddress} on {result.LocalIPAddress}", routingParameters.ToConnectionString());
+                                discoveredInterfaces.Add(routing);
+                            }
                         }
                     }
                 });
@@ -333,10 +353,8 @@ namespace KNX_PROJET_2
                 {
                     foreach (var usbDevice in KnxBus.GetAttachedUsbDevices())
                     {
-                        discoveredInterfaces.Add(new InterfaceViewModel(
-                            ConnectorType.Usb,
-                            usbDevice.DisplayName,
-                            usbDevice.ToConnectionString()));
+                        var interfaceViewModel = new InterfaceViewModel(ConnectorType.Usb, usbDevice.DisplayName, usbDevice.ToConnectionString());
+                        discoveredInterfaces.Add(interfaceViewModel);
                     }
                 });
 
@@ -351,6 +369,7 @@ namespace KNX_PROJET_2
                 MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
             }
         }
+
 
 
 

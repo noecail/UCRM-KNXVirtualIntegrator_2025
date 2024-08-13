@@ -2,7 +2,7 @@
  * Nom du Projet : KNX Virtual Integrator
  * Fichier       : App.xaml.cs
  * Auteurs       : MICHEL Hugo, COUSTON Emma, MALBRANCHE Daichi,
- *                 BRUGIERE Nathan, OLIVEIRA LOPES Maxime
+ *                 BRUGIERE Nathan, OLIVEIRA LOPES Maxime, TETAZ Louison
  * Date          : 07/08/2024
  * Version       : 1.0
  *
@@ -22,6 +22,9 @@ using System.Globalization;
 using System.IO;
 using System.IO.Compression;
 using System.Windows;
+using KNX_Virtual_Integrator.Model;
+using KNX_Virtual_Integrator.View;
+using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator;
 
@@ -30,7 +33,8 @@ public partial class App
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    // Donnees de l'application
+    
+    // --> Données de l'application
 
     /// <summary>
     /// Represents the name of the application.
@@ -45,10 +49,12 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public static readonly int AppBuild = 1;
-        
-        
-    // Gestion des logs
+    public const int AppBuild = 81;
+
+
+    
+    // --> Gestion des logs
+    
     /// <summary>
     /// Stores the file path for the log file. This path is used to determine where the log entries will be written.
     /// </summary>
@@ -64,17 +70,19 @@ public partial class App
         
         
         
-    // Composants de l'application
-        
-    /// <summary>
-    /// Manages project files, providing functionality to handle project-related file operations.
-    /// </summary>
-    public static ProjectFileManager? Fm { get; private set; } // Gestionnaire de fichiers du projet
-        
+    
+    // --> Composants de l'application
+    
     /// <summary>
     /// Manages the application's display elements, including windows, buttons, and other UI components.
     /// </summary>
-    public static DisplayElements? DisplayElements { get; private set; } // Gestionnaire de l'affichage (contient les fenetres, boutons, ...)
+    public static WindowManager? WindowManager { get; private set; } // Gestionnaire de l'affichage (contient les fenetres, boutons, ...)
+    
+    
+    public static MainViewModel? MainViewModel { get; private set; }
+    
+    
+    public static ModelManager? ModelManager { get; private set; }
         
         
         
@@ -82,7 +90,7 @@ public partial class App
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- METHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    // Fonction s'executant e l'ouverture de l'application
+    // Fonction s'executant à l'ouverture de l'application
     /// <summary>
     /// Executes when the application starts up.
     /// <para>
@@ -130,26 +138,29 @@ public partial class App
 
         // Activation de l'auto-vidage du buffer du stream d'ecriture
         _writer.AutoFlush = true;
-
-
+        
+        
         ConsoleAndLogWriteLine(
-            $"STARTING {AppName.ToUpper()} V{AppVersion.ToString(CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
+            $"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
+
+        // Création du Main View Model
+        MainViewModel = new();
+        
+        
+        // Création du Model Manager
+        ModelManager = new();
+        
 
         // Ouverture la fenetre principale
         ConsoleAndLogWriteLine("Opening main window");
-        DisplayElements = new DisplayElements();
+        WindowManager = new WindowManager();
         
         // Mise a jour de la fenetre principale (titre, langue, thème, ...)
-        DisplayElements.MainWindow.UpdateWindowContents(true, true, true);
+        WindowManager.MainWindow.UpdateWindowContents(true, true, true);
 
         // Affichage de la fenêtre principale
-        DisplayElements.ShowMainWindow();
-
-
-        // Ouverture du gestionnaire de fichiers de projet
-        ConsoleAndLogWriteLine("Opening project file manager");
-        Fm = new ProjectFileManager();
+        WindowManager.ShowMainWindow();
 
 
         // Tentative d'archivage des fichiers de log
@@ -205,7 +216,6 @@ public partial class App
         _writer?.Close(); // Fermeture du stream d'ecriture des logs
     }
 
-        
         
     // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
     // logs sans sauter de ligne apres le message.
@@ -427,6 +437,8 @@ public partial class App
         _writer?.Close();
     }
 }
+
+
 
 
 

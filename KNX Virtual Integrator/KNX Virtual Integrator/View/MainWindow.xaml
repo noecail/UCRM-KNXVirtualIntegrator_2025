@@ -1,0 +1,84 @@
+﻿<Window x:Class="KNX_Virtual_Integrator.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <!-- Conteneur principal -->
+    <Grid>
+        <!-- Define columns with GridSplitter for resizing -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="263*" />
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="91*" />
+            <ColumnDefinition Width="173*"/>
+            <ColumnDefinition Width="5" />
+            <ColumnDefinition Width="263*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Define rows for buttons and content -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Buttons at the top -->
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" Margin="5,5,5,5">
+            <!-- Premier bouton dans la première ligne -->
+            <Button x:Name="ButtonChargerProject"
+                Margin="5"
+                Width="100"
+                Click="ImportProjectButtonClick"
+                Content="Charger Projet" />
+
+            <!-- Deuxième bouton dans la deuxième ligne -->
+            <Button x:Name="ButtonChargerGroupAddressesXml"
+                Margin="5"
+                Width="150"
+                Click="ImportGroupAddressFileButtonClick"
+                Content="Charger Fichier Xml"
+                Foreground="Blue"
+                Background="DeepPink"
+                BorderThickness="3"
+                BorderBrush="Brown"/>
+
+            <Button Content="Lancer le test" Width="100" Margin="5" 
+                    Foreground="Red" Background="Yellow"
+                    BorderThickness="3" BorderBrush="Aqua"/>
+            <Button Content="Exporter le rapport" Width="150" Margin="5"/>
+        </StackPanel>
+
+        <!-- ListBox in the first column -->
+        <ListBox Grid.Row="1" Grid.Column="0" Margin="5,5,5,5">
+            <ListBoxItem Content="Test1" />
+            <ListBoxItem Content="Test2" />
+            <ListBoxItem Content="Test3" />
+            <ListBoxItem Content="Test4" />
+        </ListBox>
+
+        <!-- First GridSplitter -->
+        <GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Width="5" Background="Gray" />
+
+        <!-- Parameters section (Center Column) -->
+        <TextBlock Grid.Row="1" Grid.Column="2" Text="ICI LES PARAMETRES DU TEST QUAND ON CLIQUE SUR UNE ADRESSE ?" 
+                   TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+
+        <!-- Second GridSplitter -->
+        <GridSplitter Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Width="5" Background="Gray" />
+
+        <!-- TreeView in the third column -->
+        <TreeView Grid.Row="1" Grid.Column="5" Margin="5,5,5,5">
+            <TreeViewItem Header="Éclairage">
+                <TreeViewItem Header="Marche/Arrêt">
+                    <TreeViewItem Header="Cmd_PlanDeTravail_Cuisine" />
+                </TreeViewItem>
+                <TreeViewItem Header="Indication d'état">
+                    <TreeViewItem Header="le_PlanDeTravail_Cuisine" />
+                </TreeViewItem>
+            </TreeViewItem>
+        </TreeView>
+    </Grid>
+</Window>
+
