@@ -6,157 +6,175 @@ namespace KNX_Virtual_Integrator.Model;
 public class GroupAddressManagement
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
+    private static readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();
 
+    /// <summary>
+    /// Extracts group address information from a specified XML file.
+    ///
+    /// Determines the file path to use based on user input and whether a specific group address
+    /// file is chosen or a default file is used. Depending on the file path, it processes the XML
+    /// file to extract and group addresses either from a specific format or a standard format.
+    /// </summary>
     public static void ExtractGroupAddress()
     {
-        // Vérification si l'utilisateur a choisi d'importer un fichier spécifique ou non
-        string? filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile 
-            ? ProjectFileManager.GroupAddressFilePath 
+        string filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile
+            ? ProjectFileManager.GroupAddressFilePath
             : ProjectFileManager.ZeroXmlPath;
 
-        if (filePath != null)
+        XDocument? groupAddressFile = FileLoader.LoadXmlDocument(filePath);
+        if (groupAddressFile == null) return;
+
+        if (filePath == ProjectFileManager.ZeroXmlPath)
         {
-            XDocument? groupAddressFile = FileLoader.LoadXmlDocument(filePath);
-            if (groupAddressFile != null)
+            SetNamespaceFromXml(filePath);
+            ProcessZeroXmlFile(groupAddressFile);
+        }
+        else
+        {
+            ProcessStandardXmlFile(groupAddressFile);
+        }
+    }
+
+    /// <summary>
+    /// Processes an XML file in the Zero format to extract and group addresses.
+    ///
+    /// This method extracts device references and their links, processes group addresses, and 
+    /// groups them based on device links and common names. It handles the creation and updating 
+    /// of grouped addresses, avoiding name collisions by appending suffixes if necessary.
+    ///
+    /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+    /// </summary>
+    private static void ProcessZeroXmlFile(XDocument groupAddressFile)
+    {
+        var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance")
+            .Select(di => new
             {
-                if (filePath == ProjectFileManager.ZeroXmlPath)
+                Id = di.Attribute("Id")?.Value,
+                Links = di.Descendants(_globalKnxNamespace + "ComObjectInstanceRef")
+                          .Where(cir => cir.Attribute("Links") != null)
+                          .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? [])
+                          .ToHashSet()
+            }).ToList();
+
+        var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
+        var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId), HashSet<string>>();
+
+        foreach (var ga in groupAddresses)
+        {
+            var id = ga.Attribute("Id")?.Value;
+            var name = ga.Attribute("Name")?.Value;
+
+            if (id == null || name == null) continue;
+
+            var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
+            var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
+
+            foreach (var device in linkedDevices)
+            {
+                var commonName = name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase)
+                    ? name.Substring(2)
+                    : name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase)
+                        ? name.Substring(3)
+                        : name;
+
+                var key = (CommonName: commonName, DeviceId: device.Id);
+
+                if (!tempGroupedAddresses.ContainsKey(key))
                 {
-                    SetNamespaceFromXml(filePath);
-
-                    // Extraction des références de dispositifs et leurs liens
-                    var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance").Select(di =>
-                        new
-                        {
-                            Id = di.Attribute("Id")?.Value,
-                            Links = di.Descendants(_globalKnxNamespace + "ComObjectInstanceRef")
-                                .Where(cir => cir.Attribute("Links") != null)
-                                .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? Array.Empty<string>())
-                                .ToHashSet()
-                        }).ToList();
-
-                    var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
-                    var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId), HashSet<string>>();
-
-                    foreach (var ga in groupAddresses)
-                    {
-                        var id = (string?)ga.Attribute("Id");
-                        var name = (string?)ga.Attribute("Name");
-
-                        if (id != null && name != null)
-                        {
-                            var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
-                            var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
-
-                            foreach (var device in linkedDevices)
-                            {
-                                var commonName = name;
-                                if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
-                                    commonName = name.Substring(2);
-                                else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
-                                    commonName = name.Substring(3);
-
-                                var key = (CommonName: commonName, DeviceId: device.Id);
-
-                                if (!tempGroupedAddresses.ContainsKey(key))
-                                {
-                                    tempGroupedAddresses[key] = new HashSet<string>();
-                                }
-
-                                tempGroupedAddresses[key].Add(id);
-                            }
-                        }
-                    }
-
-                    var groupedAddresses = new Dictionary<string, List<XElement>>();
-                    // Transférer les éléments de tempGroupedAddresses vers groupedAddresses
-                    int suffixCounter = 1; // Compteur pour différencier les noms communs identiques
-
-                    foreach (var entry in tempGroupedAddresses)
-                    {
-                        var commonName = entry.Key.CommonName;
-                        var gaIds = entry.Value;
-
-                        // Chercher si tous les gaIds de tempGroupedAddresses sont déjà dans une entrée de groupedAddresses
-                        var existingEntry = groupedAddresses.FirstOrDefault(g =>
-                            gaIds.All(id => g.Value.Any(x => x.Attribute("Id")?.Value == id)) ||
-                            g.Value.Select(x => x.Attribute("Id")?.Value).All(id => gaIds.Contains(id ?? string.Empty)));
-
-                        if (existingEntry.Value != null)
-                        {
-                            // Un ensemble existant contient tous les gaIds ou est un sous-ensemble, ajouter les nouveaux IDs manquants
-                            App.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
-                            
-                            foreach (var gaId in gaIds)
-                            {
-                                var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
-                                if (ga != null && existingEntry.Value.All(x => x.Attribute("Id")?.Value != gaId))
-                                {
-                                    existingEntry.Value.Add(ga);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Vérifier si un nom commun existe déjà mais avec des adresses différentes
-                            while (groupedAddresses.ContainsKey(commonName))
-                            {
-                                // Si oui, modifier le nom pour éviter la collision
-                                commonName = $"{entry.Key.CommonName}_{suffixCounter++}";
-                            }
-
-                            // Créer une nouvelle entrée
-                            App.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
-                            groupedAddresses[commonName] = new List<XElement>();
-
-                            foreach (var gaId in gaIds)
-                            {
-                                var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
-                                if (ga != null)
-                                {
-                                    groupedAddresses[commonName].Add(ga);
-                                }
-                            }
-                        }
-                    }
+                    tempGroupedAddresses[key] = new HashSet<string>();
                 }
-                else
+
+                tempGroupedAddresses[key].Add(id);
+            }
+        }
+
+        int suffixCounter = 1;
+
+        foreach (var entry in tempGroupedAddresses)
+        {
+            var commonName = entry.Key.CommonName;
+            var gaIds = entry.Value;
+
+            var existingEntry = GroupedAddresses.FirstOrDefault(g =>
+                gaIds.All(id => g.Value.Any(x => x.Attribute("Id")?.Value == id)) ||
+                g.Value.Select(x => x.Attribute("Id")?.Value).All(id => gaIds.Contains(id ?? string.Empty)));
+
+            if (existingEntry.Value != null)
+            {
+                App.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
+
+                foreach (var gaId in gaIds)
                 {
-
-                    var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
-
-                    var groupedAddresses = new Dictionary<string, List<XElement>>();
-
-                    foreach (var ga in groupAddresses)
+                    if (existingEntry.Value.All(x => x.Attribute("Id")?.Value != gaId))
                     {
-                        var name = (string?)ga.Attribute("Name");
-                        if (name != null)
-                        {
-                            if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
-                            {
-                                AddToGroupedAddresses(groupedAddresses, ga, name, 2); // Supprimer le préfixe "Ie"
-                            }
-                            else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
-                            {
-                                AddToGroupedAddresses(groupedAddresses, ga, name, 3);
-                            }
-                        }
+                        var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
+                        if (ga != null) existingEntry.Value.Add(ga);
                     }
                 }
             }
+            else
+            {
+                while (GroupedAddresses.ContainsKey(commonName))
+                {
+                    commonName = $"{entry.Key.CommonName}_{suffixCounter++}";
+                }
+
+                App.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
+                GroupedAddresses[commonName] = gaIds.Select(id => groupAddresses.First(x => x.Attribute("Id")?.Value == id)).ToList();
+            }
         }
     }
-    
-    private static void AddToGroupedAddresses(Dictionary<string, List<XElement>> groupedAddresses, XElement ga, string name, int prefixLength)
+
+    /// <summary>
+    /// Processes an XML file in the standard format to extract and group addresses.
+    ///
+    /// This method processes group addresses from the XML file, normalizing the names by removing
+    /// specific prefixes ("Ie" or "Cmd") and grouping addresses based on the remaining common names.
+    ///
+    /// <param name="groupAddressFile">The XML document containing group address data in standard format.</param>
+    /// </summary>
+    private static void ProcessStandardXmlFile(XDocument groupAddressFile)
     {
-        var commonName = name.Substring(prefixLength);
+        var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
+        
+        foreach (var ga in groupAddresses)
+        {
+            var name = ga.Attribute("Name")?.Value;
+            if (name != null)
+            {
+                if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
+                {
+                    AddToGroupedAddresses(GroupedAddresses, ga, name.Substring(2));
+                }
+                else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
+                {
+                    AddToGroupedAddresses(GroupedAddresses, ga, name.Substring(3));
+                }
+            }
+        }
+
+        // Log and use `groupedAddresses` as needed
+    }
+
+    /// <summary>
+    /// Adds a group address to the grouped addresses dictionary with a normalized common name.
+    ///
+    /// This method ensures that the group address is added to the list associated with the specified
+    /// common name. If the common name does not already exist in the dictionary, it is created.
+    ///
+    /// <param name="groupedAddresses">The dictionary of grouped addresses where the group address will be added.</param>
+    /// <param name="ga">The group address element to be added.</param>
+    /// <param name="commonName">The common name used for grouping the address.</param>
+    /// </summary>
+    private static void AddToGroupedAddresses(Dictionary<string, List<XElement>> groupedAddresses, XElement ga, string commonName)
+    {
         if (!groupedAddresses.ContainsKey(commonName))
         {
             groupedAddresses[commonName] = new List<XElement>();
         }
         groupedAddresses[commonName].Add(ga);
     }
-    
-    
+  
     // Method that retrieves the namespace to use for searching in .xml files from the zeroFilePath (since the namespace varies depending on the ETS version)
     /// <summary>
     /// Sets the global KNX XML namespace from the specified XML file.
