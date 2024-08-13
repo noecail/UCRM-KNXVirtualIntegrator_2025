@@ -210,7 +210,7 @@ public partial class MainWindow
             App.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if (ProjectFileManager.ExtractProjectFiles(openFileDialog.FileName)) return;
+            if (!ProjectFileManager.ExtractProjectFiles(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            

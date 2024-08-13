@@ -10,36 +10,121 @@ public class GroupAddressManagement
     public static void ExtractGroupAddress()
     {
         // Vérification si l'utilisateur a choisi d'importer un fichier spécifique ou non
-        string? filePath = App.DisplayElements != null && App.DisplayElements.MainWindow.UserChooseToImportGroupAddressFile 
-            ? App.Fm?.GroupAddressFilePath 
-            : App.Fm?.ZeroXmlPath;
+        string? filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile 
+            ? ProjectFileManager.GroupAddressFilePath 
+            : ProjectFileManager.ZeroXmlPath;
 
         if (filePath != null)
         {
-            XDocument? groupAddressFile = App.Fm?.LoadXmlDocument(filePath);
+            XDocument? groupAddressFile = FileLoader.LoadXmlDocument(filePath);
             if (groupAddressFile != null)
             {
-                if (filePath == App.Fm?.ZeroXmlPath)
+                if (filePath == ProjectFileManager.ZeroXmlPath)
                 {
                     SetNamespaceFromXml(filePath); // Définir le namespace si nécessaire
-                }
+                    var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance").Select(di =>
+                        new
+                        {
+                            Id = di.Attribute("Id")?.Value,
+                            Links = di.Descendants(_globalKnxNamespace + "ComObjectInstanceRef")
+                                .Where(cir =>
+                                    cir.Attribute("Links") != null && cir.Attribute("Links")?.Value.Split(' ') != null)
+                                .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? [])
+                                .ToHashSet()
+                        }).ToList();
 
-                var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
+                    var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
 
-                var groupedAddresses = new Dictionary<string, List<XElement>>();
+                    var groupedAddresses = new Dictionary<string, List<XElement>>();
 
-                foreach (var ga in groupAddresses)
-                {
-                    var name = (string?)ga.Attribute("Name");
-                    if (name != null)
+                    // Dictionnaire temporaire pour regrouper par nom et ID de device, avec un HashSet pour éviter les doublons
+                    var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId), HashSet<string>>();
+
+                    foreach (var ga in groupAddresses)
                     {
-                        if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
+                        var id = (string?)ga.Attribute("Id");
+                        var name = (string?)ga.Attribute("Name");
+
+                        if (id != null && name != null)
                         {
-                            AddToGroupedAddresses(groupedAddresses, ga, name, 2); // Supprimer le préfixe "Ie"
+                            // Extraire seulement la partie de l'ID après "GA-"
+                            var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
+
+                            // Trouver les DeviceInstances qui référencent cette adresse
+                            var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
+
+                            foreach (var device in linkedDevices)
+                            {
+                                var commonName = name;
+
+                                if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    commonName = name.Substring(2); // Supprimer le préfixe "Ie"
+                                }
+                                else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    commonName = name.Substring(3); // Supprimer le préfixe "Cmd"
+                                }
+
+                                var key = (CommonName: commonName, DeviceId: device.Id);
+
+                                if (!tempGroupedAddresses.ContainsKey(key))
+                                {
+                                    tempGroupedAddresses[key] = new HashSet<string>();
+                                }
+
+                                // Ajouter l'ID au HashSet pour éviter les doublons
+                                tempGroupedAddresses[key].Add(id);
+                            }
                         }
-                        else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
+                    }
+
+                    // Transférer les éléments de tempGroupedAddresses vers groupedAddresses
+                    foreach (var entry in tempGroupedAddresses)
+                    {
+                        var commonName = entry.Key.CommonName; // Extraire le nom commun du tuple
+                        var gaIds = entry.Value;
+
+                        foreach (var gaId in gaIds)
                         {
-                            AddToGroupedAddresses(groupedAddresses, ga, name, 3); 
+                            var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
+                            if (ga != null)
+                            {
+                                // On utilise un HashSet ici pour éviter les doublons
+                                if (!groupedAddresses.ContainsKey(commonName))
+                                {
+                                    groupedAddresses[commonName] = new List<XElement>();
+                                }
+
+                                // Ajout uniquement si l'élément n'est pas déjà présent
+                                if (!groupedAddresses[commonName].Any(x => x.Attribute("Id")?.Value == gaId))
+                                {
+                                    groupedAddresses[commonName].Add(ga);
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+
+                    var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
+
+                    var groupedAddresses = new Dictionary<string, List<XElement>>();
+
+                    foreach (var ga in groupAddresses)
+                    {
+                        var name = (string?)ga.Attribute("Name");
+                        if (name != null)
+                        {
+                            if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
+                            {
+                                AddToGroupedAddresses(groupedAddresses, ga, name, 2); // Supprimer le préfixe "Ie"
+                            }
+                            else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
+                            {
+                                AddToGroupedAddresses(groupedAddresses, ga, name, 3);
+                            }
                         }
                     }
                 }
@@ -56,6 +141,7 @@ public class GroupAddressManagement
         }
         groupedAddresses[commonName].Add(ga);
     }
+    
     
     // Method that retrieves the namespace to use for searching in .xml files from the zeroFilePath (since the namespace varies depending on the ETS version)
     /// <summary>
