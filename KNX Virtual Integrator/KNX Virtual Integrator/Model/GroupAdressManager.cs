@@ -21,23 +21,20 @@ public class GroupAddressManagement
             {
                 if (filePath == ProjectFileManager.ZeroXmlPath)
                 {
-                    SetNamespaceFromXml(filePath); // Définir le namespace si nécessaire
+                    SetNamespaceFromXml(filePath);
+
+                    // Extraction des références de dispositifs et leurs liens
                     var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance").Select(di =>
                         new
                         {
                             Id = di.Attribute("Id")?.Value,
                             Links = di.Descendants(_globalKnxNamespace + "ComObjectInstanceRef")
-                                .Where(cir =>
-                                    cir.Attribute("Links") != null && cir.Attribute("Links")?.Value.Split(' ') != null)
-                                .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? [])
+                                .Where(cir => cir.Attribute("Links") != null)
+                                .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? Array.Empty<string>())
                                 .ToHashSet()
                         }).ToList();
 
                     var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
-
-                    var groupedAddresses = new Dictionary<string, List<XElement>>();
-
-                    // Dictionnaire temporaire pour regrouper par nom et ID de device, avec un HashSet pour éviter les doublons
                     var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId), HashSet<string>>();
 
                     foreach (var ga in groupAddresses)
@@ -47,24 +44,16 @@ public class GroupAddressManagement
 
                         if (id != null && name != null)
                         {
-                            // Extraire seulement la partie de l'ID après "GA-"
                             var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
-
-                            // Trouver les DeviceInstances qui référencent cette adresse
                             var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
 
                             foreach (var device in linkedDevices)
                             {
                                 var commonName = name;
-
                                 if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    commonName = name.Substring(2); // Supprimer le préfixe "Ie"
-                                }
+                                    commonName = name.Substring(2);
                                 else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
-                                {
-                                    commonName = name.Substring(3); // Supprimer le préfixe "Cmd"
-                                }
+                                    commonName = name.Substring(3);
 
                                 var key = (CommonName: commonName, DeviceId: device.Id);
 
@@ -73,31 +62,56 @@ public class GroupAddressManagement
                                     tempGroupedAddresses[key] = new HashSet<string>();
                                 }
 
-                                // Ajouter l'ID au HashSet pour éviter les doublons
                                 tempGroupedAddresses[key].Add(id);
                             }
                         }
                     }
 
+                    var groupedAddresses = new Dictionary<string, List<XElement>>();
                     // Transférer les éléments de tempGroupedAddresses vers groupedAddresses
+                    int suffixCounter = 1; // Compteur pour différencier les noms communs identiques
+
                     foreach (var entry in tempGroupedAddresses)
                     {
-                        var commonName = entry.Key.CommonName; // Extraire le nom commun du tuple
+                        var commonName = entry.Key.CommonName;
                         var gaIds = entry.Value;
 
-                        foreach (var gaId in gaIds)
-                        {
-                            var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
-                            if (ga != null)
-                            {
-                                // On utilise un HashSet ici pour éviter les doublons
-                                if (!groupedAddresses.ContainsKey(commonName))
-                                {
-                                    groupedAddresses[commonName] = new List<XElement>();
-                                }
+                        // Chercher si tous les gaIds de tempGroupedAddresses sont déjà dans une entrée de groupedAddresses
+                        var existingEntry = groupedAddresses.FirstOrDefault(g =>
+                            gaIds.All(id => g.Value.Any(x => x.Attribute("Id")?.Value == id)) ||
+                            g.Value.Select(x => x.Attribute("Id")?.Value).All(id => gaIds.Contains(id ?? string.Empty)));
 
-                                // Ajout uniquement si l'élément n'est pas déjà présent
-                                if (!groupedAddresses[commonName].Any(x => x.Attribute("Id")?.Value == gaId))
+                        if (existingEntry.Value != null)
+                        {
+                            // Un ensemble existant contient tous les gaIds ou est un sous-ensemble, ajouter les nouveaux IDs manquants
+                            App.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
+                            
+                            foreach (var gaId in gaIds)
+                            {
+                                var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
+                                if (ga != null && existingEntry.Value.All(x => x.Attribute("Id")?.Value != gaId))
+                                {
+                                    existingEntry.Value.Add(ga);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // Vérifier si un nom commun existe déjà mais avec des adresses différentes
+                            while (groupedAddresses.ContainsKey(commonName))
+                            {
+                                // Si oui, modifier le nom pour éviter la collision
+                                commonName = $"{entry.Key.CommonName}_{suffixCounter++}";
+                            }
+
+                            // Créer une nouvelle entrée
+                            App.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
+                            groupedAddresses[commonName] = new List<XElement>();
+
+                            foreach (var gaId in gaIds)
+                            {
+                                var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
+                                if (ga != null)
                                 {
                                     groupedAddresses[commonName].Add(ga);
                                 }
