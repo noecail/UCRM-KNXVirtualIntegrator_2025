@@ -2483,7 +2483,7 @@ public partial class SettingsWindow
         var includeImportedProjects = AddImportedFilesCheckBox.IsChecked;
         var includeRemovedGroupAddressList = (bool)IncludeAddressListCheckBox.IsChecked! && (bool)AddImportedFilesCheckBox.IsChecked!;
 
-        ProjectFileManager.CreateDebugArchive((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!, includeRemovedGroupAddressList!);
+        DebugArchiveGenerator.CreateDebugArchive((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!, includeRemovedGroupAddressList!);
     }
 
 
