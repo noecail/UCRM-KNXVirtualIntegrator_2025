@@ -24,7 +24,7 @@ namespace KNX_PROJET_2
         private CancellationTokenSource _cancellationTokenSource;
 
         // Propriétés liées à l'interface utilisateur
-        public ObservableCollection<string> GroupAddresses { get; } = new();
+        public ObservableCollection<InterfaceViewModel> GroupAddresses { get; private set; }
         public ObservableCollection<InterfaceViewModel> DiscoveredInterfaces { get; private set; }
         public ICommand ImportCommand { get; private set; }
         public ICommand ConnectCommand { get; private set; }
@@ -55,7 +55,7 @@ namespace KNX_PROJET_2
         public MainViewModel()
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            GroupAddresses = new ObservableCollection<string>();
+            GroupAddresses = new ObservableCollection<InterfaceViewModel>();
             DiscoveredInterfaces = new ObservableCollection<InterfaceViewModel>();
 
             ImportCommand = new RelayCommand(async () => await ImportListGroupAddress());
@@ -83,14 +83,20 @@ namespace KNX_PROJET_2
                     var allGroupAddresses = doc.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
 
                     GroupAddresses.Clear();
+                    // J'AI DU CHANGER ICI, A VOIR SI LE CONNECTORTYPE EST BON
                     foreach (var groupAddress in allGroupAddresses)
                     {
-                        var msg = new StringBuilder();
-                        msg.AppendLine("--------------------------------------------------------------------");
-                        msg.AppendLine($"Name: {groupAddress.Attribute("Name")?.Value}");
-                        msg.AppendLine($"Adresse: {groupAddress.Attribute("Address")?.Value}");
+                        var name = groupAddress.Attribute("Name")?.Value;
+                        var address = groupAddress.Attribute("Address")?.Value;
 
-                        GroupAddresses.Add(msg.ToString());
+                        var interfaceViewModel = new InterfaceViewModel(
+                            ConnectorType.Usb, 
+                            $"{name} - {address}",
+                            address 
+                        );
+
+                        // Ajouter l'instance à GroupAddresses
+                        GroupAddresses.Add(interfaceViewModel);
                     }
                 }
                 catch (Exception ex)
@@ -109,15 +115,20 @@ namespace KNX_PROJET_2
 
             try
             {
+                // Le bus est occupé le temps de la connexion
                 IsBusy = true;
+                // Dans connectionString, on a toutes les informations nécessaire pour bien gérer la connexion :
+                // Type=IpTunneling;HostAddress=127.0.0.1;SerialNumber=00FA:00000001;MacAddress=060606030E47;ProtocolType=Udp;Name="KNX Virtual "
                 var connectionString = SelectedInterface?.ConnectionString;
 
+                // Si on n'a pas choisit d'interface, demande d'en choisir une
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
                     MessageBox.Show("Le type de connexion et la chaîne de connexion doivent être fournis.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
 
+                // Si le bus est déjà connecté, on le déconnecte
                 if (_bus != null)
                 {
                     _bus.ConnectionStateChanged -= BusConnectionStateChanged;
@@ -126,11 +137,14 @@ namespace KNX_PROJET_2
                     UpdateConnectionState();
                 }
 
+                // A partir de connectionString, on obtient les paramètres de connexion
                 var connectorParameters = ConnectorParameters.FromConnectionString(connectionString);
 
+                // Création du bus et connexion
                 _bus = new KnxBus(connectorParameters);
                 await _bus.ConnectAsync(_cancellationTokenSource.Token);
 
+                // Si le bus est bien connecté, on met à jour son état et les variables qui vont avec
                 if (_bus.ConnectionState == BusConnectionState.Connected)
                 {
                     _bus.ConnectionStateChanged += BusConnectionStateChanged;
@@ -138,15 +152,18 @@ namespace KNX_PROJET_2
                     UpdateConnectionState();
                     MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
+                // Sinon, message d'erreur
                 else
                 {
                     throw new InvalidOperationException("La connexion au bus a échoué.");
                 }
             }
+            // Exception si y a besoin
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+            // En fin de connexion, on n'est plus occupé
             finally
             {
                 IsBusy = false;
@@ -268,7 +285,7 @@ namespace KNX_PROJET_2
                     GroupAddresses.Clear();
                     foreach (var discoveredInterface in discoveredInterfaces)
                     {
-                        GroupAddresses.Add(discoveredInterface.ToString());
+                        GroupAddresses.Add(discoveredInterface);
                     }
                 });              
             }
