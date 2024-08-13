@@ -6,157 +6,177 @@ namespace KNX_Virtual_Integrator.Model;
 public class GroupAddressManagement
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
+    private static readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();
 
+    /// <summary>
+    /// Extracts group address information from a specified XML file.
+    ///
+    /// Determines the file path to use based on user input and whether a specific group address
+    /// file is chosen or a default file is used. Depending on the file path, it processes the XML
+    /// file to extract and group addresses either from a specific format or a standard format.
+    /// </summary>
     public static void ExtractGroupAddress()
     {
-        // Vérification si l'utilisateur a choisi d'importer un fichier spécifique ou non
-        string? filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile 
-            ? ProjectFileManager.GroupAddressFilePath 
+        string filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile
+            ? ProjectFileManager.GroupAddressFilePath
             : ProjectFileManager.ZeroXmlPath;
 
-        if (filePath != null)
+        XDocument? groupAddressFile = FileLoader.LoadXmlDocument(filePath);
+        if (groupAddressFile == null) return;
+
+        if (filePath == ProjectFileManager.ZeroXmlPath)
         {
-            XDocument? groupAddressFile = FileLoader.LoadXmlDocument(filePath);
-            if (groupAddressFile != null)
+            SetNamespaceFromXml(filePath);
+            ProcessZeroXmlFile(groupAddressFile);
+        }
+        else
+        {
+            ProcessStandardXmlFile(groupAddressFile);
+        }
+    }
+
+    /// <summary>
+    /// Processes an XML file in the Zero format to extract and group addresses.
+    ///
+    /// This method extracts device references and their links, processes group addresses, and 
+    /// groups them based on device links and common names. It handles the creation and updating 
+    /// of grouped addresses, avoiding name collisions by appending suffixes if necessary.
+    ///
+    /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+    /// </summary>
+    private static void ProcessZeroXmlFile(XDocument groupAddressFile)
+    {
+        var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance")
+            .Select(di => new
             {
-                if (filePath == ProjectFileManager.ZeroXmlPath)
+                Id = di.Attribute("Id")?.Value,
+                Links = di.Descendants(_globalKnxNamespace + "ComObjectInstanceRef")
+                          .Where(cir => cir.Attribute("Links") != null)
+                          .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? [])
+                          .ToHashSet()
+            }).ToList();
+
+        var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
+        var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId), HashSet<string>>();
+
+        foreach (var ga in groupAddresses)
+        {
+            var id = ga.Attribute("Id")?.Value;
+            var name = ga.Attribute("Name")?.Value;
+
+            if (id == null || name == null) continue;
+
+            var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
+            var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
+
+            foreach (var device in linkedDevices)
+            {
+                var commonName = name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase)
+                    ? name.Substring(2)
+                    : name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase)
+                        ? name.Substring(3)
+                        : name;
+
+                var key = (CommonName: commonName, DeviceId: device.Id);
+
+                if (!tempGroupedAddresses.ContainsKey(key))
                 {
-                    SetNamespaceFromXml(filePath);
-
-                    // Extraction des références de dispositifs et leurs liens
-                    var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance").Select(di =>
-                        new
-                        {
-                            Id = di.Attribute("Id")?.Value,
-                            Links = di.Descendants(_globalKnxNamespace + "ComObjectInstanceRef")
-                                .Where(cir => cir.Attribute("Links") != null)
-                                .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? Array.Empty<string>())
-                                .ToHashSet()
-                        }).ToList();
-
-                    var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
-                    var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId), HashSet<string>>();
-
-                    foreach (var ga in groupAddresses)
-                    {
-                        var id = (string?)ga.Attribute("Id");
-                        var name = (string?)ga.Attribute("Name");
-
-                        if (id != null && name != null)
-                        {
-                            var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
-                            var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
-
-                            foreach (var device in linkedDevices)
-                            {
-                                var commonName = name;
-                                if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
-                                    commonName = name.Substring(2);
-                                else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
-                                    commonName = name.Substring(3);
-
-                                var key = (CommonName: commonName, DeviceId: device.Id);
-
-                                if (!tempGroupedAddresses.ContainsKey(key))
-                                {
-                                    tempGroupedAddresses[key] = new HashSet<string>();
-                                }
-
-                                tempGroupedAddresses[key].Add(id);
-                            }
-                        }
-                    }
-
-                    var groupedAddresses = new Dictionary<string, List<XElement>>();
-                    // Transférer les éléments de tempGroupedAddresses vers groupedAddresses
-                    int suffixCounter = 1; // Compteur pour différencier les noms communs identiques
-
-                    foreach (var entry in tempGroupedAddresses)
-                    {
-                        var commonName = entry.Key.CommonName;
-                        var gaIds = entry.Value;
-
-                        // Chercher si tous les gaIds de tempGroupedAddresses sont déjà dans une entrée de groupedAddresses
-                        var existingEntry = groupedAddresses.FirstOrDefault(g =>
-                            gaIds.All(id => g.Value.Any(x => x.Attribute("Id")?.Value == id)) ||
-                            g.Value.Select(x => x.Attribute("Id")?.Value).All(id => gaIds.Contains(id ?? string.Empty)));
-
-                        if (existingEntry.Value != null)
-                        {
-                            // Un ensemble existant contient tous les gaIds ou est un sous-ensemble, ajouter les nouveaux IDs manquants
-                            App.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
-                            
-                            foreach (var gaId in gaIds)
-                            {
-                                var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
-                                if (ga != null && existingEntry.Value.All(x => x.Attribute("Id")?.Value != gaId))
-                                {
-                                    existingEntry.Value.Add(ga);
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Vérifier si un nom commun existe déjà mais avec des adresses différentes
-                            while (groupedAddresses.ContainsKey(commonName))
-                            {
-                                // Si oui, modifier le nom pour éviter la collision
-                                commonName = $"{entry.Key.CommonName}_{suffixCounter++}";
-                            }
-
-                            // Créer une nouvelle entrée
-                            App.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
-                            groupedAddresses[commonName] = new List<XElement>();
-
-                            foreach (var gaId in gaIds)
-                            {
-                                var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
-                                if (ga != null)
-                                {
-                                    groupedAddresses[commonName].Add(ga);
-                                }
-                            }
-                        }
-                    }
+                    tempGroupedAddresses[key] = new HashSet<string>();
                 }
-                else
+
+                tempGroupedAddresses[key].Add(id);
+            }
+        }
+
+        int suffixCounter = 1;
+
+        foreach (var entry in tempGroupedAddresses)
+        {
+            var commonName = entry.Key.CommonName;
+            var gaIds = entry.Value;
+
+            var existingEntry = GroupedAddresses.FirstOrDefault(g =>
+                gaIds.All(id => g.Value.Any(x => x.Attribute("Id")?.Value == id)) ||
+                g.Value.Select(x => x.Attribute("Id")?.Value).All(id => gaIds.Contains(id ?? string.Empty)));
+
+            if (existingEntry.Value != null)
+            {
+                App.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
+
+                foreach (var gaId in gaIds)
                 {
-
-                    var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
-
-                    var groupedAddresses = new Dictionary<string, List<XElement>>();
-
-                    foreach (var ga in groupAddresses)
+                    if (existingEntry.Value.All(x => x.Attribute("Id")?.Value != gaId))
                     {
-                        var name = (string?)ga.Attribute("Name");
-                        if (name != null)
-                        {
-                            if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
-                            {
-                                AddToGroupedAddresses(groupedAddresses, ga, name, 2); // Supprimer le préfixe "Ie"
-                            }
-                            else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
-                            {
-                                AddToGroupedAddresses(groupedAddresses, ga, name, 3);
-                            }
-                        }
+                        var ga = groupAddresses.FirstOrDefault(x => x.Attribute("Id")?.Value == gaId);
+                        if (ga != null) existingEntry.Value.Add(ga);
                     }
                 }
             }
+            else
+            {
+                while (GroupedAddresses.ContainsKey(commonName))
+                {
+                    commonName = $"{entry.Key.CommonName}_{suffixCounter++}";
+                }
+
+                App.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
+                GroupedAddresses[commonName] = gaIds.Select(id => groupAddresses.First(x => x.Attribute("Id")?.Value == id)).ToList();
+            }
         }
+        MergeSingleElementGroups(GroupedAddresses);
     }
-    
-    private static void AddToGroupedAddresses(Dictionary<string, List<XElement>> groupedAddresses, XElement ga, string name, int prefixLength)
+
+    /// <summary>
+    /// Processes an XML file in the standard format to extract and group addresses.
+    ///
+    /// This method processes group addresses from the XML file, normalizing the names by removing
+    /// specific prefixes ("Ie" or "Cmd") and grouping addresses based on the remaining common names.
+    ///
+    /// <param name="groupAddressFile">The XML document containing group address data in standard format.</param>
+    /// </summary>
+    private static void ProcessStandardXmlFile(XDocument groupAddressFile)
     {
-        var commonName = name.Substring(prefixLength);
+        var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
+        
+        foreach (var ga in groupAddresses)
+        {
+            var name = ga.Attribute("Name")?.Value;
+            if (name != null)
+            {
+                if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
+                {
+                    AddToGroupedAddresses(GroupedAddresses, ga, name.Substring(2));
+                }
+                else if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
+                {
+                    AddToGroupedAddresses(GroupedAddresses, ga, name.Substring(3));
+                }
+            }
+        }
+
+        MergeSingleElementGroups(GroupedAddresses);
+        // Log and use `groupedAddresses` as needed
+    }
+
+    /// <summary>
+    /// Adds a group address to the grouped addresses dictionary with a normalized common name.
+    ///
+    /// This method ensures that the group address is added to the list associated with the specified
+    /// common name. If the common name does not already exist in the dictionary, it is created.
+    ///
+    /// <param name="groupedAddresses">The dictionary of grouped addresses where the group address will be added.</param>
+    /// <param name="ga">The group address element to be added.</param>
+    /// <param name="commonName">The common name used for grouping the address.</param>
+    /// </summary>
+    private static void AddToGroupedAddresses(Dictionary<string, List<XElement>> groupedAddresses, XElement ga, string commonName)
+    {
         if (!groupedAddresses.ContainsKey(commonName))
         {
             groupedAddresses[commonName] = new List<XElement>();
         }
         groupedAddresses[commonName].Add(ga);
     }
-    
-    
+  
     // Method that retrieves the namespace to use for searching in .xml files from the zeroFilePath (since the namespace varies depending on the ETS version)
     /// <summary>
     /// Sets the global KNX XML namespace from the specified XML file.
@@ -198,4 +218,193 @@ public class GroupAddressManagement
             App.ConsoleAndLogWriteLine($"An unexpected error occurred during SetNamespaceFromXml(): {ex.Message}");
         }
     }
+    
+    /// <summary>
+    /// Merges single-element groups in the grouped addresses dictionary with other groups if their names
+    /// match with a similarity of 80% or more.
+    ///
+    /// This method compares the names of groups with a single element to other groups and merges them
+    /// if they are similar enough, based on a similarity threshold of 80%.
+    ///
+    /// <param name="groupedAddresses">The dictionary of grouped addresses to be merged.</param>
+    /// </summary>
+    private static void MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses)
+    {
+        var singleElementGroups = groupedAddresses.Where(g => g.Value.Count == 1).ToList();
+        var mergedGroups = new HashSet<string>();
+
+        // Fusionner les groupes d'un seul élément entre eux
+        for (int i = 0; i < singleElementGroups.Count; i++)
+        {
+            var group1 = singleElementGroups[i];
+            var name1 = group1.Key;
+
+            for (int j = i + 1; j < singleElementGroups.Count; j++)
+            {
+                var group2 = singleElementGroups[j];
+                var name2 = group2.Key;
+
+                if (AreNamesSimilar(name1, name2))
+                {
+                    App.ConsoleAndLogWriteLine($"Merging single-element groups '{name1}' and '{name2}'.");
+
+                    // Fusionner les éléments
+                    group1.Value.Add(group2.Value.First());
+                    groupedAddresses.Remove(name2);
+                    mergedGroups.Add(name1);
+                    mergedGroups.Add(name2);
+                    break;
+                }
+            }
+        }
+
+        // Fusionner les groupes restants d'un seul élément avec les groupes déjà existants
+        foreach (var singleGroup in singleElementGroups)
+        {
+            var singleName = singleGroup.Key;
+
+            if (mergedGroups.Contains(singleName)) continue;
+
+            foreach (var otherGroup in groupedAddresses.ToList())
+            {
+                if (singleGroup.Key == otherGroup.Key || otherGroup.Value.Count == 1) continue;
+
+                var otherName = otherGroup.Key;
+                if (AreNamesSimilar(singleName, otherName))
+                {
+                    App.ConsoleAndLogWriteLine($"Merging single-element group '{singleName}' with group '{otherName}'.");
+
+                    // Ajouter l'élément unique au groupe existant
+                    otherGroup.Value.Add(singleGroup.Value.First());
+
+                    // Supprimer le groupe à un seul élément
+                    groupedAddresses.Remove(singleName);
+
+                    break;
+                }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Compare two names based on the similarity of their first three words
+    /// and exact match of the remaining words.
+    /// </summary>
+    /// <param name="name1">The first name to compare.</param>
+    /// <param name="name2">The second name to compare.</param>
+    /// <returns>True if the names are similar based on the criteria; otherwise, false.</returns>
+    private static bool AreNamesSimilar(string name1, string name2)
+    {
+        var words1 = NormalizeName(name1).Split(new[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var words2 = NormalizeName(name2).Split(new[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+        if (words1.Length < 3 || words2.Length < 3)
+            return false; // Ensure we have at least three words to compare
+
+        // Compare the first three words with 80% similarity
+        var prefix1 = string.Join(" ", words1.Take(3));
+        var prefix2 = string.Join(" ", words2.Take(3));
+
+        if (CalculateSimilarity(prefix1, prefix2) < 0.8)
+            return false;
+
+        // Ensure remaining words match exactly
+        var remainingWords1 = words1.Skip(3);
+        var remainingWords2 = words2.Skip(3);
+
+        return remainingWords1.SequenceEqual(remainingWords2);
+    }
+
+    /// <summary>
+    /// Normalizes the name by removing specific prefixes.
+    /// </summary>
+    /// <param name="name">The name to normalize.</param>
+    /// <returns>The normalized name.</returns>
+    private static string NormalizeName(string name)
+    {
+        if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
+            return name.Substring(2);
+        if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
+            return name.Substring(3);
+        return name;
+    }
+
+    /// <summary>
+    /// Calculates the similarity between two strings using a similarity ratio.
+    ///
+    /// This method calculates the similarity ratio between two strings. The similarity ratio is
+    /// a measure of how closely the two strings match, ranging from 0 to 1. A ratio of 1 means
+    /// the strings are identical, while a ratio of 0 means they have no similarity.
+    ///
+    /// <param name="str1">The first string to compare.</param>
+    /// <param name="str2">The second string to compare.</param>
+    /// <returns>A similarity ratio between 0 and 1.</returns>
+    /// </summary>
+    private static double CalculateSimilarity(string str1, string str2)
+    {
+        var len1 = str1.Length;
+        var len2 = str2.Length;
+        var maxLen = Math.Max(len1, len2);
+
+        if (maxLen == 0) return 1.0; // Both strings are empty
+
+        var distance = LevenshteinDistance(str1, str2);
+        return 1.0 - (double)distance / maxLen;
+    }
+
+    /// <summary>
+    /// Computes the Levenshtein distance between two strings.
+    ///
+    /// The Levenshtein distance is a measure of the difference between two sequences. It is defined
+    /// as the minimum number of single-character edits (insertions, deletions, or substitutions)
+    /// required to change one string into the other.
+    ///
+    /// <param name="str1">The first string.</param>
+    /// <param name="str2">The second string.</param>
+    /// <returns>The Levenshtein distance between the two strings.</returns>
+    /// </summary>
+    private static int LevenshteinDistance(string str1, string str2)
+    {
+        var n = str1.Length;
+        var m = str2.Length;
+        var d = new int[n + 1, m + 1];
+
+        if (n == 0) return m;
+        if (m == 0) return n;
+
+        for (var i = 0; i <= n; i++) d[i, 0] = i;
+        for (var j = 0; j <= m; j++) d[0, j] = j;
+
+        for (var i = 1; i <= n; i++)
+        {
+            for (var j = 1; j <= m; j++)
+            {
+                var cost = (str1[i - 1] == str2[j - 1]) ? 0 : 1;
+                d[i, j] = Math.Min(
+                    Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
+                    d[i - 1, j - 1] + cost
+                );
+            }
+        }
+
+        return d[n, m];
+    }
+
+    /// <summary>
+    /// Normalizes the name by removing specific prefixes.
+    ///
+    /// This method removes "Ie" or "Cmd" prefixes from the name if present, and returns the
+    /// normalized name. If neither prefix is present, the name is returned as-is.
+    ///
+    /// <param name="name">The name to normalize.</param>
+    /// <returns>The normalized name.</returns>
+    /// </summary>
+    /*private static string NormalizeName(string name)
+    {
+        if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
+            return name.Substring(2);
+        if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
+            return name.Substring(3);
+        return name;
+    }*/
 }
