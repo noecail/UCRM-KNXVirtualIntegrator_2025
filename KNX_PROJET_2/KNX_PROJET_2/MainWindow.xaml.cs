@@ -21,6 +21,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 
 using GalaSoft.MvvmLight;
 using System.Threading;
+using System.Windows.Threading;
 
 namespace KNX_PROJET_2
 {
@@ -274,20 +275,60 @@ namespace KNX_PROJET_2
 
         private ConnectorParameters CreateConnectorParameters(string connectionString)
         {
-            
-            // Créez les paramètres du connecteur en fonction du type sélectionné
-            switch (connectionString)
+            if (string.IsNullOrWhiteSpace(connectionString))
             {
-                case "Type=USB":
+                throw new ArgumentException("La chaîne de connexion ne peut pas être vide.", nameof(connectionString));
+            }
+
+            // Extrait les parties de la chaîne de connexion
+            var parts = connectionString.Split(';');
+            var typePart = parts.FirstOrDefault(p => p.StartsWith("Type=", StringComparison.OrdinalIgnoreCase));
+            var multicastAddressPart = parts.FirstOrDefault(p => p.StartsWith("MulticastAddress=", StringComparison.OrdinalIgnoreCase));
+            var localIpAddressPart = parts.FirstOrDefault(p => p.StartsWith("LocalIPAddress=", StringComparison.OrdinalIgnoreCase));
+            var portPart = parts.FirstOrDefault(p => p.StartsWith("Port=", StringComparison.OrdinalIgnoreCase));
+            var namePart = parts.FirstOrDefault(p => p.StartsWith("Name=", StringComparison.OrdinalIgnoreCase));
+
+            if (typePart == null)
+            {
+                throw new InvalidOperationException("Le type de connexion est manquant dans la chaîne de connexion.");
+            }
+
+            var connectionType = typePart.Substring("Type=".Length).Trim();
+
+            switch (connectionType)
+            {
+                case "USB":
                     // Créer les paramètres pour la connexion USB
-                    return ConnectorParameters.FromConnectionString(connectionString); // Assurez-vous que la chaîne de connexion est correcte pour USB
-                case "Type=IpRouting":
-                    // Créer les paramètres pour la connexion IP
-                    return ConnectorParameters.FromConnectionString(connectionString); // Assurez-vous que la chaîne de connexion est correcte pour IP
+                    return ConnectorParameters.FromConnectionString(connectionString);
+
+                case "IpRouting":
+                    // Assurez-vous que toutes les informations nécessaires sont présentes pour IP Routing 
+                    if (multicastAddressPart == null || localIpAddressPart == null || portPart == null)
+                    {
+                        throw new InvalidOperationException("Les informations nécessaires pour la connexion IP Routing sont manquantes.");
+                    }
+
+                    var multicastAddress = multicastAddressPart.Substring("MulticastAddress=".Length).Trim();
+                    var localIpAddress = localIpAddressPart.Substring("LocalIPAddress=".Length).Trim();
+                    var port = int.Parse(portPart.Substring("Port=".Length).Trim());
+
+                    // Utiliser les informations extraites pour créer les paramètres de connexion IP Routing
+                    return new IpRoutingConnectorParameters
+                    {
+                        //MulticastAddress = multicastAddress,
+                        //LocalIPAddress = localIpAddress,
+                        //Port = port,
+        
+
+                        Name = namePart?.Substring("Name=".Length).Trim() // Utiliser le nom 
+                    };
+
                 default:
                     throw new InvalidOperationException("Type de connexion inconnu.");
             }
         }
+
+
 
 
 
@@ -311,9 +352,13 @@ namespace KNX_PROJET_2
                 // Découverte des interfaces IP
                 var ipDiscoveryTask = Task.Run(async () =>
                 {
+                    
                     using (var cts = new CancellationTokenSource())
                     {
-                        var results = KnxBus.DiscoverIpDevicesAsync(cts.Token);
+
+                        var results = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+                        
+
                         await foreach (var result in results)
                         {
                             // Traitement des connexions tunneling

@@ -210,7 +210,7 @@ public partial class MainWindow
             App.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if ((App.Fm == null)||(!App.Fm.ExtractProjectFiles(openFileDialog.FileName))) return;
+            if (!ProjectFileManager.ExtractProjectFiles(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
@@ -221,7 +221,7 @@ public partial class MainWindow
         }
 
         // Partie management des adresses de groupes
-        App.Fm?.FindZeroXml();
+        FileFinder.FindZeroXml(ProjectFileManager.ProjectFolderPath);
         GroupAddressManagement.ExtractGroupAddress();
     }
     
@@ -257,7 +257,7 @@ public partial class MainWindow
             App.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if ((App.Fm == null)||(!App.Fm.ExtractGroupAddressFile(openFileDialog.FileName))) return;
+            if (!ProjectFileManager.ExtractGroupAddressFile(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
