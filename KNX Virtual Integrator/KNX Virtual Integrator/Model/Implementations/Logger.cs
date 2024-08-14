@@ -1,6 +1,7 @@
 ﻿using System.IO;
+using KNX_Virtual_Integrator.Model.Interfaces;
 
-namespace KNX_Virtual_Integrator.Model;
+namespace KNX_Virtual_Integrator.Model.Implementations;
 
 /// <summary>
 /// Provides logging functionality for the application by writing log entries to a specified log file.
@@ -12,7 +13,7 @@ namespace KNX_Virtual_Integrator.Model;
 /// The log file is automatically named with the current date and time to prevent overwriting previous logs.
 /// </para>
 /// </summary>
-public class Logger
+public class Logger : ILogger
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -20,15 +21,15 @@ public class Logger
     /// <summary>
     /// Stores the file path for the log file. This path is used to determine where the log entries will be written.
     /// </summary>
-    public static string? LogPath { get; } = $"./logs/logs-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt"; // Chemin du fichier logs
-        
+    public string LogPath { get; } = $"./logs/logs-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt"; // Chemin du fichier logs
+
     /// <summary>
     /// Provides a <see cref="StreamWriter"/> instance for writing log entries to the log file.
     /// </summary>
     /// <remarks>
     /// This writer is used for appending log messages to the file specified by <see cref="LogPath"/>.
     /// </remarks>
-    private static readonly StreamWriter Writer = new(LogPath); // Permet l'ecriture du fichier de logging
+    private readonly StreamWriter _writer; // Permet l'ecriture du fichier de logging
     
     
     
@@ -36,6 +37,11 @@ public class Logger
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- METHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    public Logger()
+    {
+        _writer = new(LogPath);
+    }
+    
     // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
     // logs sans sauter de ligne apres le message.
     /// <summary>
@@ -56,12 +62,12 @@ public class Logger
     /// </para>
     /// </summary>
     /// <param name="msg">The message to be written to the console and log file.</param>
-    public static void ConsoleAndLogWrite(string msg)
+    public void ConsoleAndLogWrite(string msg)
     {
         Console.Write(msg); // Ecriture du message dans la console
-        Writer.Write(msg); // Ecriture du message dans le fichier logs
+        _writer.Write(msg); // Ecriture du message dans le fichier logs
         
-        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
+        _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
 
     
@@ -85,12 +91,12 @@ public class Logger
     /// </para>
     /// </summary>
     /// <param name="msg">The message to be written to the console and log file.</param>
-    public static void ConsoleAndLogWriteLine(string msg)
+    public void ConsoleAndLogWriteLine(string msg)
     {
         Console.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans la console
-        Writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans le fichier logs
+        _writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans le fichier logs
         
-        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
+        _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
     
     
@@ -98,11 +104,11 @@ public class Logger
     /// Writes a message to the log file without appending a newline after the message.
     /// </summary>
     /// <param name="msg">The message to be written to the log file.</param>
-    public static void LogWrite(string msg)
+    public void LogWrite(string msg)
     {
-        Writer.Write(msg); // Ecriture du message dans le fichier logs
+        _writer.Write(msg); // Ecriture du message dans le fichier logs
         
-        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
+        _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
 
     
@@ -110,16 +116,16 @@ public class Logger
     /// Writes a message to the log file, including the current date and time, and appends a newline after the message.
     /// </summary>
     /// <param name="msg">The message to be written to the log file.</param>
-    public static void LogWriteLine(string msg)
+    public void LogWriteLine(string msg)
     {
-        Writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message avec timestamp dans le fichier logs
+        _writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message avec timestamp dans le fichier logs
         
-        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
+        _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
 
 
-    public static void CloseLogWriter()
+    public void CloseLogWriter()
     {
-        Writer.Close();
+        _writer.Close();
     }
 }
