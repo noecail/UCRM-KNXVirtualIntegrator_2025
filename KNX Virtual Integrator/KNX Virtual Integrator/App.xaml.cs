@@ -46,7 +46,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 84;
+    public const int AppBuild = 85;
     
         
     
@@ -58,10 +58,6 @@ public partial class App
     
     
     public static MainViewModel? MainViewModel { get; private set; }
-    
-    
-    public static ModelManager? ModelManager { get; private set; }
-        
         
         
         
@@ -112,10 +108,6 @@ public partial class App
 
         // Création du Main View Model
         MainViewModel = new();
-        
-        // Création du Model Manager
-        ModelManager = new();
-        
 
         // Ouverture la fenetre principale
         Logger.ConsoleAndLogWriteLine("Opening main window");
@@ -180,23 +172,5 @@ public partial class App
         Logger.CloseLogWriter(); // Fermeture du stream d'ecriture des logs
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

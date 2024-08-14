@@ -222,7 +222,7 @@ public partial class MainWindow
 
         // Partie management des adresses de groupes
         FileFinder.FindZeroXml(ProjectFileManager.ProjectFolderPath);
-        GroupAddressManagement.ExtractGroupAddress();
+        GroupAddressManager.ExtractGroupAddress();
     }
     
     /// <summary>
@@ -266,7 +266,7 @@ public partial class MainWindow
         {
             Logger.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
-        GroupAddressManagement.ExtractGroupAddress();
+        GroupAddressManager.ExtractGroupAddress();
     }
     
 }

@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace KNX_Virtual_Integrator.Model;
 
-public class GroupAddressManagement
+public class GroupAddressManager
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
     private static readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();

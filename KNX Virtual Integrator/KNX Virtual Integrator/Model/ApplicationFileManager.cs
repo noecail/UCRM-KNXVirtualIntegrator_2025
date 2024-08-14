@@ -27,7 +27,6 @@ public class ApplicationFileManager
             Environment.Exit(1); // Terminates the application with an exit code indicating an error
         }
     }
-
     
     
     // Fonction d'archivage des logs
@@ -185,6 +184,13 @@ public class ApplicationFileManager
     }
 
 
+    /// <summary>
+    /// Ensures a configuration file exists at the specified path. If not, it creates the file and sets defaults 
+    /// based on the system theme and language. Handles exceptions such as unauthorized access, invalid paths, 
+    /// and I/O errors, displaying an error message and closing the application if an issue arises.
+    ///
+    /// <param name="settingsPath">The path to the configuration file.</param>
+    /// </summary>
     internal static void EnsureSettingsFileExists(string settingsPath)
     {
         try
