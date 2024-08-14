@@ -11,7 +11,6 @@ using System.Windows.Navigation;
 using KNX_Virtual_Integrator.Model;
 
 // ReSharper disable NullableWarningSuppressionIsUsed
-
 // ReSharper disable ConvertToUsingDeclaration
 
 
