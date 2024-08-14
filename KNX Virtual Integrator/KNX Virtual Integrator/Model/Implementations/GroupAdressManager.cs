@@ -1,10 +1,13 @@
 ﻿using System.Xml;
 using System.Xml.Linq;
+using KNX_Virtual_Integrator.Model.Interfaces;
 
-namespace KNX_Virtual_Integrator.Model;
+namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class GroupAddressManager
+public class GroupAddressManager(Logger logger) : IGroupAddressManager
 {
+    private readonly ILogger _logger = logger;
+    
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
     private static readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();
 
@@ -15,13 +18,13 @@ public class GroupAddressManager
     /// file is chosen or a default file is used. Depending on the file path, it processes the XML
     /// file to extract and group addresses either from a specific format or a standard format.
     /// </summary>
-    public static void ExtractGroupAddress()
+    public void ExtractGroupAddress()
     {
-        string filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile
+        var filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile
             ? ProjectFileManager.GroupAddressFilePath
             : ProjectFileManager.ZeroXmlPath;
 
-        XDocument? groupAddressFile = FileLoader.LoadXmlDocument(filePath);
+        var groupAddressFile = App.ModelManager?.LoadXmlDocument(filePath);
         if (groupAddressFile == null) return;
 
         if (filePath == ProjectFileManager.ZeroXmlPath)
@@ -44,7 +47,7 @@ public class GroupAddressManager
     ///
     /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
     /// </summary>
-    private static void ProcessZeroXmlFile(XDocument groupAddressFile)
+    public void ProcessZeroXmlFile(XDocument groupAddressFile)
     {
         var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance")
             .Select(di => new
@@ -88,7 +91,7 @@ public class GroupAddressManager
             }
         }
 
-        int suffixCounter = 1;
+        var suffixCounter = 1;
 
         foreach (var entry in tempGroupedAddresses)
         {
@@ -101,7 +104,7 @@ public class GroupAddressManager
 
             if (existingEntry.Value != null)
             {
-                Logger.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
+                _logger.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
 
                 foreach (var gaId in gaIds)
                 {
@@ -119,7 +122,7 @@ public class GroupAddressManager
                     commonName = $"{entry.Key.CommonName}_{suffixCounter++}";
                 }
 
-                Logger.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
+                _logger.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
                 GroupedAddresses[commonName] = gaIds.Select(id => groupAddresses.First(x => x.Attribute("Id")?.Value == id)).ToList();
             }
         }
@@ -134,7 +137,7 @@ public class GroupAddressManager
     ///
     /// <param name="groupAddressFile">The XML document containing group address data in standard format.</param>
     /// </summary>
-    private static void ProcessStandardXmlFile(XDocument groupAddressFile)
+    public void ProcessStandardXmlFile(XDocument groupAddressFile)
     {
         var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
         
@@ -168,7 +171,7 @@ public class GroupAddressManager
     /// <param name="ga">The group address element to be added.</param>
     /// <param name="commonName">The common name used for grouping the address.</param>
     /// </summary>
-    private static void AddToGroupedAddresses(Dictionary<string, List<XElement>> groupedAddresses, XElement ga, string commonName)
+    public void AddToGroupedAddresses(Dictionary<string, List<XElement>> groupedAddresses, XElement ga, string commonName)
     {
         if (!groupedAddresses.ContainsKey(commonName))
         {
@@ -188,7 +191,7 @@ public class GroupAddressManager
     ///
     /// <param name="zeroXmlFilePath">The path to the XML file from which to extract the namespace.</param>
     /// </summary>
-    private static void SetNamespaceFromXml(string zeroXmlFilePath)
+    public void SetNamespaceFromXml(string zeroXmlFilePath)
     {
         try
         {
@@ -211,11 +214,11 @@ public class GroupAddressManager
         }
         catch (XmlException ex)
         {
-            Logger.ConsoleAndLogWriteLine($"Error loading XML file (XML exception): {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Error loading XML file (XML exception): {ex.Message}");
         }
         catch (Exception ex)
         {
-            Logger.ConsoleAndLogWriteLine($"An unexpected error occurred during SetNamespaceFromXml(): {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"An unexpected error occurred during SetNamespaceFromXml(): {ex.Message}");
         }
     }
     
@@ -228,25 +231,25 @@ public class GroupAddressManager
     ///
     /// <param name="groupedAddresses">The dictionary of grouped addresses to be merged.</param>
     /// </summary>
-    private static void MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses)
+    public void MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses)
     {
         var singleElementGroups = groupedAddresses.Where(g => g.Value.Count == 1).ToList();
         var mergedGroups = new HashSet<string>();
 
         // Fusionner les groupes d'un seul élément entre eux
-        for (int i = 0; i < singleElementGroups.Count; i++)
+        for (var i = 0; i < singleElementGroups.Count; i++)
         {
             var group1 = singleElementGroups[i];
             var name1 = group1.Key;
 
-            for (int j = i + 1; j < singleElementGroups.Count; j++)
+            for (var j = i + 1; j < singleElementGroups.Count; j++)
             {
                 var group2 = singleElementGroups[j];
                 var name2 = group2.Key;
 
                 if (AreNamesSimilar(name1, name2))
                 {
-                    Logger.ConsoleAndLogWriteLine($"Merging single-element groups '{name1}' and '{name2}'.");
+                    _logger.ConsoleAndLogWriteLine($"Merging single-element groups '{name1}' and '{name2}'.");
 
                     // Fusionner les éléments
                     group1.Value.Add(group2.Value.First());
@@ -272,7 +275,7 @@ public class GroupAddressManager
                 var otherName = otherGroup.Key;
                 if (AreNamesSimilar(singleName, otherName))
                 {
-                    Logger.ConsoleAndLogWriteLine($"Merging single-element group '{singleName}' with group '{otherName}'.");
+                    _logger.ConsoleAndLogWriteLine($"Merging single-element group '{singleName}' with group '{otherName}'.");
 
                     // Ajouter l'élément unique au groupe existant
                     otherGroup.Value.Add(singleGroup.Value.First());
@@ -293,7 +296,7 @@ public class GroupAddressManager
     /// <param name="name1">The first name to compare.</param>
     /// <param name="name2">The second name to compare.</param>
     /// <returns>True if the names are similar based on the criteria; otherwise, false.</returns>
-    private static bool AreNamesSimilar(string name1, string name2)
+    public bool AreNamesSimilar(string name1, string name2)
     {
         var words1 = NormalizeName(name1).Split(new[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries);
         var words2 = NormalizeName(name2).Split(new[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -320,7 +323,7 @@ public class GroupAddressManager
     /// </summary>
     /// <param name="name">The name to normalize.</param>
     /// <returns>The normalized name.</returns>
-    private static string NormalizeName(string name)
+    public string NormalizeName(string name)
     {
         if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
             return name.Substring(2);
@@ -340,7 +343,7 @@ public class GroupAddressManager
     /// <param name="str2">The second string to compare.</param>
     /// <returns>A similarity ratio between 0 and 1.</returns>
     /// </summary>
-    private static double CalculateSimilarity(string str1, string str2)
+    public double CalculateSimilarity(string str1, string str2)
     {
         var len1 = str1.Length;
         var len2 = str2.Length;
@@ -363,7 +366,7 @@ public class GroupAddressManager
     /// <param name="str2">The second string.</param>
     /// <returns>The Levenshtein distance between the two strings.</returns>
     /// </summary>
-    private static int LevenshteinDistance(string str1, string str2)
+    public int LevenshteinDistance(string str1, string str2)
     {
         var n = str1.Length;
         var m = str2.Length;

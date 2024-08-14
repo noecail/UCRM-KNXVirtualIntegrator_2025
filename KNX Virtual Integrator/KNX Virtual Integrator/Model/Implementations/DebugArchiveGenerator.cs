@@ -2,11 +2,13 @@
 using System.IO;
 using System.Management;
 using System.Windows;
+using KNX_Virtual_Integrator.Model.Interfaces;
 using Microsoft.Win32;
+// ReSharper disable NullableWarningSuppressionIsUsed
 
-namespace KNX_Virtual_Integrator.Model;
+namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class DebugArchiveGenerator
+public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManager) : IDebugArchiveGenerator
 {
     /// <summary>
     /// Generates a debug file for the application.
@@ -15,7 +17,7 @@ public class DebugArchiveGenerator
     /// </summary>
     /// <param name="includeOsInfo">Indicates whether to include operating system information. (Optional)</param>
     /// <param name="includeHardwareInfo">Indicates whether to include hardware information. (Optional)</param>
-    private static void WriteSystemInformationDebugFile(bool includeOsInfo = true, bool includeHardwareInfo = true)
+    private void WriteSystemInformationDebugFile(bool includeOsInfo = true, bool includeHardwareInfo = true)
     {
         string filePath;
 
@@ -29,27 +31,27 @@ public class DebugArchiveGenerator
         }
         catch (DirectoryNotFoundException)
         {
-            Logger.ConsoleAndLogWriteLine("Error : could not find path './debug'. Could not make the directory. The creation of the debug archive was aborted.");
+            logger.ConsoleAndLogWriteLine("Error : could not find path './debug'. Could not make the directory. The creation of the debug archive was aborted.");
             return;
         }
         catch (IOException)
         {
-            Logger.ConsoleAndLogWriteLine("Error : an I/O error occured while creating the folder './debug'. Could not make the directory. The creation of the debug archive was aborted.");
+            logger.ConsoleAndLogWriteLine("Error : an I/O error occured while creating the folder './debug'. Could not make the directory. The creation of the debug archive was aborted.");
             return;
         }
         catch (UnauthorizedAccessException)
         {
-            Logger.ConsoleAndLogWriteLine($"Error : the application cannot write to {Path.GetFullPath("./debug")}. Could not make the directory. The creation of the debug archive was aborted.");
+            logger.ConsoleAndLogWriteLine($"Error : the application cannot write to {Path.GetFullPath("./debug")}. Could not make the directory. The creation of the debug archive was aborted.");
             return;
         }
         catch (ArgumentException)
         {
-            Logger.ConsoleAndLogWriteLine($"Error : could not create the directory {Path.GetFullPath("./debug")} because the path is too long, too small or contains illegal characters. The creation of the debug archive was aborted.");
+            logger.ConsoleAndLogWriteLine($"Error : could not create the directory {Path.GetFullPath("./debug")} because the path is too long, too small or contains illegal characters. The creation of the debug archive was aborted.");
             return;
         }
         catch (NotSupportedException)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: path {Path.GetFullPath("./debug")} is incorrect. Could not make the directory. The creation of the debug archive was aborted.");
+            logger.ConsoleAndLogWriteLine($"Error: path {Path.GetFullPath("./debug")} is incorrect. Could not make the directory. The creation of the debug archive was aborted.");
             return;
         }
 
@@ -269,11 +271,11 @@ public class DebugArchiveGenerator
                 }
             }
 
-            Logger.ConsoleAndLogWriteLine($"System information debug file created at {filePath}");
+            logger.ConsoleAndLogWriteLine($"System information debug file created at {filePath}");
         }
         catch (Exception e)
         {
-            Logger.ConsoleAndLogWriteLine($"An exception was raised while writing the system information debug file : {e.Message}");
+            logger.ConsoleAndLogWriteLine($"An exception was raised while writing the system information debug file : {e.Message}");
         }
     }
     
@@ -287,7 +289,7 @@ public class DebugArchiveGenerator
     /// <param name="includeHardwareInfo">Specifies whether to include hardware information in the archive.</param>
     /// <param name="includeImportedProjects">Specifies whether to include imported projects in the archive.</param>
     /// <param name="includeRemovedGroupAddressList">Specifies whether to include a list of removed group addresses in the archive.</param>
-    public static void CreateDebugArchive(bool includeOsInfo = true, bool includeHardwareInfo = true, bool includeImportedProjects = true, bool includeRemovedGroupAddressList = true)
+    public void CreateDebugArchive(bool includeOsInfo = true, bool includeHardwareInfo = true, bool includeImportedProjects = true, bool includeRemovedGroupAddressList = true)
     {
         // Ecriture du fichier d'informations système
         WriteSystemInformationDebugFile(includeOsInfo, includeHardwareInfo);
@@ -494,16 +496,16 @@ public class DebugArchiveGenerator
 
         try
         {
-            if (Logger.LogPath != null) File.Copy(Logger.LogPath, "debug/latest-log.txt");
+            if (logger is Logger log) File.Copy(log.LogPath, "debug/latest-log.txt");
 
             debugArchiveName = $"debug-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.zip";
 
             // Création de l'archive zip et ajout des fichiers
-            ZipArchiveManager.CreateZipArchive(debugArchiveName, "debug/debugInfo.txt", "debug/latest-log.txt");
+            zipManager.CreateZipArchive(debugArchiveName, "debug/debugInfo.txt", "debug/latest-log.txt");
         }
         catch (Exception e)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: could not copy the latest log file : {e.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: could not copy the latest log file : {e.Message}");
             return;
         }
 
@@ -528,21 +530,21 @@ public class DebugArchiveGenerator
                     // Ajout du dossier du projet dans l'archive de debug
                     foreach (var file in Directory.GetFiles(directory))
                     {
-                        ZipArchiveManager.CreateZipArchive(debugArchiveName,
+                        zipManager.CreateZipArchive(debugArchiveName,
                             $"{directory.TrimStart('.', '/')}/{Path.GetFileName(file)}");
                     }
 
                     foreach (var dir in Directory.GetDirectories(directory))
                     {
-                        Logger.ConsoleAndLogWriteLine(dir.TrimStart('.', '/'));
-                        ZipArchiveManager.CreateZipArchive(debugArchiveName, dir.TrimStart('.', '/'));
+                        logger.ConsoleAndLogWriteLine(dir.TrimStart('.', '/'));
+                        zipManager.CreateZipArchive(debugArchiveName, dir.TrimStart('.', '/'));
                     }
                 }
             }
         }
         catch (Exception e)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: an error occured while adding the necessary folders and files to the debug archive : {e.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: an error occured while adding the necessary folders and files to the debug archive : {e.Message}");
             return;
         }
 
@@ -685,19 +687,19 @@ public class DebugArchiveGenerator
         {
             if (result == true)
             {
-                Logger.ConsoleAndLogWriteLine($"Debug archive saved at {saveFileDialog.FileName}.");
+                logger.ConsoleAndLogWriteLine($"Debug archive saved at {saveFileDialog.FileName}.");
 
                 if (File.Exists(saveFileDialog.FileName)) File.Delete(saveFileDialog.FileName);
                 File.Copy(debugArchiveName, $"{saveFileDialog.FileName}");
             }
             else
             {
-                Logger.ConsoleAndLogWriteLine("User did not save the debug archived and cancelled the operation.");
+                logger.ConsoleAndLogWriteLine("User did not save the debug archived and cancelled the operation.");
             }
         }
         catch (Exception e)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: an error occured while saving the debug archive : {e.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: an error occured while saving the debug archive : {e.Message}");
         }
     }
        

@@ -1,10 +1,13 @@
 ﻿using System.IO;
 using System.IO.Compression;
+using KNX_Virtual_Integrator.Model.Interfaces;
 
-namespace KNX_Virtual_Integrator.Model;
+namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ZipArchiveManager
+public class ZipArchiveManager(Logger logger)
 {
+    private readonly ILogger _logger = logger;
+
     // Fonction permettant de créer une archive zip et d'ajouter des fichiers dedans
     /// <summary>
     /// Creates a ZIP archive at the specified path, adding files and/or directories to it.
@@ -14,7 +17,7 @@ public class ZipArchiveManager
     /// </summary>
     /// <param name="zipFilePath">The path where the ZIP archive will be created.</param>
     /// <param name="paths">An array of file and/or directory paths to include in the archive.</param>
-    public static void CreateZipArchive(string zipFilePath, params string[] paths)
+    public void CreateZipArchive(string zipFilePath, params string[] paths)
     {
         // Si l'archive existe déjà, on va juste la mettre à jour
         if (File.Exists(zipFilePath))
@@ -28,7 +31,7 @@ public class ZipArchiveManager
                     if (Directory.Exists(path))
                     {
                         // Ajouter tous les fichiers du répertoire (et sous-répertoires) à l'archive
-                        Logger.ConsoleAndLogWriteLine($"{path} {Path.GetDirectoryName(path)}");
+                        _logger.ConsoleAndLogWriteLine($"{path} {Path.GetDirectoryName(path)}");
                         AddDirectoryToArchive(archive, path, path);
                     }
                     else if (File.Exists(path))
@@ -44,14 +47,14 @@ public class ZipArchiveManager
                     }
                     else
                     {
-                        Logger.ConsoleAndLogWriteLine(
+                        _logger.ConsoleAndLogWriteLine(
                             $"Le chemin {path} n'a pas été trouvé et ne sera pas ajouté à l'archive en cours de création.");
                     }
                 }
             }
             catch (Exception e)
             {
-                Logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
+                _logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
             }
         }
         else
@@ -80,14 +83,14 @@ public class ZipArchiveManager
                     }
                     else
                     {
-                        Logger.ConsoleAndLogWriteLine(
+                        _logger.ConsoleAndLogWriteLine(
                             $"Le chemin {path} n'a pas été trouvé et ne sera pas ajouté à l'archive en cours de création.");
                     }
                 }
             }
             catch (Exception e)
             {
-                Logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
+                _logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
             }
         }
     }
@@ -101,7 +104,7 @@ public class ZipArchiveManager
     /// <param name="archive">The ZIP archive to which files and subdirectories will be added.</param>
     /// <param name="directoryPath">The path of the directory whose contents will be added to the archive.</param>
     /// <param name="entryName">The relative path within the ZIP archive where the contents of the directory will be placed.</param>
-    public static void AddDirectoryToArchive(ZipArchive archive, string directoryPath, string entryName)
+    public void AddDirectoryToArchive(ZipArchive archive, string directoryPath, string entryName)
     {
         try
         {
@@ -127,7 +130,7 @@ public class ZipArchiveManager
         }
         catch (Exception e)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: an error occured while adding a directory to the debug archive : {e.Message}");
+            _logger.ConsoleAndLogWriteLine($"Error: an error occured while adding a directory to the debug archive : {e.Message}");
         }
     }
 }

@@ -1,10 +1,11 @@
 ﻿using System.IO;
 using System.IO.Compression;
 using System.Windows;
+using KNX_Virtual_Integrator.Model.Interfaces;
 
-namespace KNX_Virtual_Integrator.Model;
+namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ApplicationFileManager
+public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector detector) : IApplicationFileManager
 {
     /// <summary>
     /// Ensures that the log directory exists by creating it if it does not already exist.
@@ -12,7 +13,7 @@ public class ApplicationFileManager
     /// If the directory cannot be created due to an exception, the application will be terminated with an error message.
     /// </para>
     /// </summary>
-    internal static void EnsureLogDirectoryExists()
+    public void EnsureLogDirectoryExists()
     {
         try
         {
@@ -23,7 +24,7 @@ public class ApplicationFileManager
         }
         catch (Exception ex)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: Unable to create the log directory. {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: Unable to create the log directory. {ex.Message}");
             Environment.Exit(1); // Terminates the application with an exit code indicating an error
         }
     }
@@ -47,7 +48,7 @@ public class ApplicationFileManager
     /// If an error occurs during the process, it logs the error message to the console and log file.
     /// </para>
     /// </summary>
-    internal static void ArchiveLogs()
+    public void ArchiveLogs()
     {
         var logDirectory = @"./logs/"; // Chemin du dossier de logs
             
@@ -56,7 +57,7 @@ public class ApplicationFileManager
             // Verifier si le repertoire existe
             if (!Directory.Exists(logDirectory))
             {
-                Logger.ConsoleAndLogWriteLine($"--> The specified directory does not exist : {logDirectory}");
+                logger.ConsoleAndLogWriteLine($"--> The specified directory does not exist : {logDirectory}");
                 return;
             }
 
@@ -77,7 +78,7 @@ public class ApplicationFileManager
                         File.Delete(archiveFile);
                     }
 
-                    Logger.ConsoleAndLogWriteLine("--> Deleted all existing archive files as they exceeded the limit of 10.");
+                    logger.ConsoleAndLogWriteLine("--> Deleted all existing archive files as they exceeded the limit of 10.");
                 }
 
                 // Creer le nom du fichier zip avec la date actuelle
@@ -88,7 +89,7 @@ public class ApplicationFileManager
                 {
                     foreach (var logFile in logFiles)
                     {
-                        if (logFile != Logger.LogPath) // Si le fichier logs n'est pas celui que l'on vient de creer pour le lancement actuel
+                        if (logger is Logger log && logFile != log.LogPath) // Si le fichier logs n'est pas celui que l'on vient de creer pour le lancement actuel
                         {
                             zip.CreateEntryFromFile(logFile, Path.GetFileName(logFile)); // On l'ajoute e l'archive
                             File.Delete(logFile); // Puis, on le supprime
@@ -96,16 +97,16 @@ public class ApplicationFileManager
                     }
                 }
 
-                Logger.ConsoleAndLogWriteLine($"--> Successfully archived log files to {zipFileName}");
+                logger.ConsoleAndLogWriteLine($"--> Successfully archived log files to {zipFileName}");
             }
             else
             {
-                Logger.ConsoleAndLogWriteLine("--> Not enough log files to archive.");
+                logger.ConsoleAndLogWriteLine("--> Not enough log files to archive.");
             }
         }
         catch (Exception ex)
         {
-            Logger.ConsoleAndLogWriteLine($"--> An error occured while creating the log archive : {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"--> An error occured while creating the log archive : {ex.Message}");
         }
     }
 
@@ -126,11 +127,11 @@ public class ApplicationFileManager
     /// The method logs the path of each successfully deleted directory to the application log for tracking purposes.
     /// </para>
     /// </summary>
-    internal static void DeleteAllExceptLogsAndResources()
+    public void DeleteAllExceptLogsAndResources()
     {
         if (Directory.GetDirectories("./").Length <= 3 && Directory.GetFiles("./", "*.zip").Length == 0)
         {
-            Logger.ConsoleAndLogWriteLine("--> No folder or zip file to delete");
+            logger.ConsoleAndLogWriteLine("--> No folder or zip file to delete");
         }
             
         // Itération sur tous les répertoires dans le répertoire de base
@@ -149,16 +150,16 @@ public class ApplicationFileManager
             }
             catch (UnauthorizedAccessException ex)
             {
-                Logger.ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {directory}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {directory}: {ex.Message}");
                 continue;
             }
             catch (IOException ex)
             {
-                Logger.ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {directory}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {directory}: {ex.Message}");
                 continue;
             }
 
-            Logger.ConsoleAndLogWriteLine($"--> Deleted directory: {directory}");
+            logger.ConsoleAndLogWriteLine($"--> Deleted directory: {directory}");
         }
 
         foreach (var zipFile in Directory.GetFiles("./", "*.zip"))
@@ -169,16 +170,16 @@ public class ApplicationFileManager
             }
             catch (UnauthorizedAccessException ex)
             {
-                Logger.ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {zipFile}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {zipFile}: {ex.Message}");
                 continue;
             }
             catch (IOException ex)
             {
-                Logger.ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {zipFile}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {zipFile}: {ex.Message}");
                 continue;
             }
 
-            Logger.ConsoleAndLogWriteLine($"--> Deleted file: {zipFile}");
+            logger.ConsoleAndLogWriteLine($"--> Deleted file: {zipFile}");
         }
             
     }
@@ -191,7 +192,7 @@ public class ApplicationFileManager
     ///
     /// <param name="settingsPath">The path to the configuration file.</param>
     /// </summary>
-    internal static void EnsureSettingsFileExists(string settingsPath)
+    public void EnsureSettingsFileExists(string settingsPath)
     {
         try
         {
@@ -204,10 +205,10 @@ public class ApplicationFileManager
             if (App.WindowManager == null || App.WindowManager.SettingsWindow == null) return;
             
             // Le thème appliqué par défaut est le même que celui de windows
-            App.WindowManager.SettingsWindow.EnableLightTheme = SystemSettingsDetector.DetectWindowsTheme();
+            App.WindowManager.SettingsWindow.EnableLightTheme = detector.DetectWindowsTheme();
 
             // La langue de l'application appliquée est la même que celle de windows
-            App.WindowManager.SettingsWindow.AppLang = SystemSettingsDetector.DetectWindowsLanguage();
+            App.WindowManager.SettingsWindow.AppLang = detector.DetectWindowsLanguage();
         }
         // Si le programme n'a pas accès en écriture pour créer le fichier
         catch (UnauthorizedAccessException)
@@ -507,7 +508,7 @@ public class ApplicationFileManager
     /// <summary>
     /// Saves the application settings to the appSettings file, handling potential I/O errors during the process.
     /// </summary>
-    internal static void SaveApplicationSettings()
+    public void SaveApplicationSettings()
     {
         // Création du stream d'écriture du fichier appSettings
         var writer = new StreamWriter("./appSettings");
@@ -538,18 +539,18 @@ public class ApplicationFileManager
         // Aucune idée de la raison
         catch (IOException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: an I/O error occured while writing appSettings.");
+            logger.ConsoleAndLogWriteLine("Error: an I/O error occured while writing appSettings.");
         }
         // Si le buffer d'écriture est plein
         catch (NotSupportedException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: the streamwriter buffer for appSettings is full. Flushing it.");
+            logger.ConsoleAndLogWriteLine("Error: the streamwriter buffer for appSettings is full. Flushing it.");
             writer.Flush(); // Vidage du buffer
         }
         // Si le stream a été fermé pendant l'écriture
         catch (ObjectDisposedException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: the streamwriter for appSettings was closed before finishing the writing operation.");
+            logger.ConsoleAndLogWriteLine("Error: the streamwriter for appSettings was closed before finishing the writing operation.");
         }
         finally
         {

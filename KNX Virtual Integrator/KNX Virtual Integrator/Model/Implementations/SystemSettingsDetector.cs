@@ -1,8 +1,9 @@
-﻿using Microsoft.Win32;
+﻿using KNX_Virtual_Integrator.Model.Interfaces;
+using Microsoft.Win32;
 
-namespace KNX_Virtual_Integrator.Model;
+namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class SystemSettingsDetector
+public class SystemSettingsDetector (ILogger logger) : ISystemSettingsDetector
 {
     // Fonction permettant de détecter le thème de windows (clair/sombre)
     /// <summary>
@@ -14,7 +15,7 @@ public class SystemSettingsDetector
     /// <returns>
     /// A boolean value indicating whether the Windows theme is light (true) or dark (false).
     /// </returns>
-    internal static bool DetectWindowsTheme()
+    public bool DetectWindowsTheme()
     {
         try
         {
@@ -30,7 +31,7 @@ public class SystemSettingsDetector
         }
         catch (Exception ex)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: An error occured while trying to retrieve the windows theme : {ex.Message}. Thème par défaut : clair.");
+            logger.ConsoleAndLogWriteLine($"Error: An error occured while trying to retrieve the windows theme : {ex.Message}. Thème par défaut : clair.");
             return true; // Default to dark theme in case of error
         }
 
@@ -53,7 +54,7 @@ public class SystemSettingsDetector
     /// It extracts the language code from this value and checks if it is in the set of valid language codes.
     /// If an error occurs during the registry access or if the language code is not supported, an empty string is returned.
     /// </remarks>
-    internal static string DetectWindowsLanguage()
+    public string DetectWindowsLanguage()
     {
         try
         {
@@ -79,7 +80,7 @@ public class SystemSettingsDetector
                     // Vérifier si le code de langue extrait est dans le HashSet
                     if (languageCode != null && validLanguageCodes.Contains(languageCode))
                     {
-                        Logger.ConsoleAndLogWriteLine($"Langue windows détectée : {languageCode}");
+                        logger.ConsoleAndLogWriteLine($"Langue windows détectée : {languageCode}");
                         return languageCode;
                     }
                 }
@@ -87,7 +88,7 @@ public class SystemSettingsDetector
         }
         catch (Exception ex)
         {
-            Logger.ConsoleAndLogWriteLine($"Error: An error occured while reading the windows language from registry : {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: An error occured while reading the windows language from registry : {ex.Message}");
             return "";
         }
 
