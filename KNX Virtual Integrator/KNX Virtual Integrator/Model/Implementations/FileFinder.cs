@@ -1,10 +1,14 @@
 ﻿using System.IO;
 using System.Windows;
+using KNX_Virtual_Integrator.Model.Interfaces;
 
-namespace KNX_Virtual_Integrator.Model;
+namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class FileFinder
+public class FileFinder(Logger logger) : IFileFinder
 {
+    private readonly ILogger _logger = logger;
+    
+    
     // Fonction permettant de trouver un fichier dans un dossier donné
     /// <summary>
     /// Searches for a specific file within a given directory and its subdirectories.
@@ -21,11 +25,11 @@ public class FileFinder
     /// <item>Handles exceptions such as unauthorized access, directory not found, and general I/O errors.</item>
     /// </list>
     /// </remarks>
-    private static string FindFile(string rootPath, string fileNameToSearch)
+    public string FindFile(string rootPath, string fileNameToSearch)
     {
         if (!Directory.Exists(rootPath))
         {
-            Logger.ConsoleAndLogWriteLine($"Directory {rootPath} does not exist.");
+            _logger.ConsoleAndLogWriteLine($"Directory {rootPath} does not exist.");
             return "";
         }
 
@@ -58,22 +62,22 @@ public class FileFinder
             catch (UnauthorizedAccessException unAuthEx)
             {
                 // Si l'accès au répertoire est refusé
-                Logger.ConsoleAndLogWriteLine($"Access refused to {currentDirectory} : {unAuthEx.Message}");
+                _logger.ConsoleAndLogWriteLine($"Access refused to {currentDirectory} : {unAuthEx.Message}");
             }
             catch (DirectoryNotFoundException dirNotFoundEx)
             {
                 // Si le répertoire est introuvable
-                Logger.ConsoleAndLogWriteLine($"Directory not found : {currentDirectory} : {dirNotFoundEx.Message}");
+                _logger.ConsoleAndLogWriteLine($"Directory not found : {currentDirectory} : {dirNotFoundEx.Message}");
             }
             catch (IOException ioEx)
             {
                 // Si une erreur d'entrée/sortie survient
-                Logger.ConsoleAndLogWriteLine($"I/O Error while accessing {currentDirectory} : {ioEx.Message}");
+                _logger.ConsoleAndLogWriteLine($"I/O Error while accessing {currentDirectory} : {ioEx.Message}");
             }
             catch (Exception ex)
             {
                 // Gérer toutes autres exceptions génériques
-                Logger.ConsoleAndLogWriteLine(
+                _logger.ConsoleAndLogWriteLine(
                     $"An unexpected error occurred while accessing {currentDirectory} : {ex.Message}");
             }
         }
@@ -97,7 +101,7 @@ public class FileFinder
     /// <item>Handles exceptions related to file access, directory not found, and general I/O errors.</item>
     /// </list>
     /// </remarks>
-    public static async Task FindZeroXml(string rootPath)
+    public async Task FindZeroXml(string rootPath)
     {
         try
         {
@@ -106,36 +110,36 @@ public class FileFinder
             // Si le fichier n'a pas été trouvé
             if (string.IsNullOrEmpty(foundPath))
             {
-                Logger.ConsoleAndLogWriteLine("Unable to find the file '0.xml' in the project folders. "
-                                              + "Please ensure that the extracted archive is indeed a KNX ETS project.");
+                _logger.ConsoleAndLogWriteLine("Unable to find the file '0.xml' in the project folders. "
+                                               + "Please ensure that the extracted archive is indeed a KNX ETS project.");
                 // Utilisation de Dispatcher.Invoke pour fermer l'application depuis un thread non-UI
                 await Application.Current.Dispatcher.InvokeAsync(() => Application.Current.Shutdown());
             }
             else // Sinon
             {
                 ProjectFileManager.ZeroXmlPath = foundPath;
-                Logger.ConsoleAndLogWriteLine($"Found '0.xml' file at {Path.GetFullPath(ProjectFileManager.ZeroXmlPath)}.");
+                _logger.ConsoleAndLogWriteLine($"Found '0.xml' file at {Path.GetFullPath(ProjectFileManager.ZeroXmlPath)}.");
             }
         }
         catch (UnauthorizedAccessException unAuthEx)
         {
             // Gérer les erreurs d'accès non autorisé
-            Logger.ConsoleAndLogWriteLine($"Access refused while searching for '0.xml': {unAuthEx.Message}");
+            _logger.ConsoleAndLogWriteLine($"Access refused while searching for '0.xml': {unAuthEx.Message}");
         }
         catch (DirectoryNotFoundException dirNotFoundEx)
         {
             // Gérer les erreurs où le répertoire n'est pas trouvé
-            Logger.ConsoleAndLogWriteLine($"Directory not found while searching for '0.xml': {dirNotFoundEx.Message}");
+            _logger.ConsoleAndLogWriteLine($"Directory not found while searching for '0.xml': {dirNotFoundEx.Message}");
         }
         catch (IOException ioEx)
         {
             // Gérer les erreurs d'entrée/sortie
-            Logger.ConsoleAndLogWriteLine($"I/O Error while searching for '0.xml': {ioEx.Message}");
+            _logger.ConsoleAndLogWriteLine($"I/O Error while searching for '0.xml': {ioEx.Message}");
         }
         catch (Exception ex)
         {
             // Gérer toutes autres exceptions génériques
-            Logger.ConsoleAndLogWriteLine($"An unexpected error occurred while searching for '0.xml': {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"An unexpected error occurred while searching for '0.xml': {ex.Message}");
         }
     }
 }
