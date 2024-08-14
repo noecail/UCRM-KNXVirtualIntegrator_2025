@@ -50,25 +50,7 @@ public partial class App
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
     public const int AppBuild = 82;
-
-
     
-    // --> Gestion des logs
-    
-    /// <summary>
-    /// Stores the file path for the log file. This path is used to determine where the log entries will be written.
-    /// </summary>
-    public static string? LogPath { get; private set; } // Chemin du fichier logs
-        
-    /// <summary>
-    /// Provides a <see cref="StreamWriter"/> instance for writing log entries to the log file.
-    /// </summary>
-    /// <remarks>
-    /// This writer is used for appending log messages to the file specified by <see cref="LogPath"/>.
-    /// </remarks>
-    private static StreamWriter? _writer; // Permet l'ecriture du fichier de logging
-        
-        
         
     
     // --> Composants de l'application
@@ -128,19 +110,16 @@ public partial class App
             Directory.CreateDirectory("./logs");
         }
 
-        LogPath = $"./logs/logs-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.txt";
-        _writer = new StreamWriter(LogPath);
-
         base.OnStartup(e);
             
         var currentProcess = Process.GetCurrentProcess();
         currentProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
 
         // Activation de l'auto-vidage du buffer du stream d'ecriture
-        _writer.AutoFlush = true;
-        
-        
-        ConsoleAndLogWriteLine(
+        Logger.Writer.AutoFlush = true;
+
+
+        Logger.ConsoleAndLogWriteLine(
             $"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
 
@@ -153,7 +132,7 @@ public partial class App
         
 
         // Ouverture la fenetre principale
-        ConsoleAndLogWriteLine("Opening main window");
+        Logger.ConsoleAndLogWriteLine("Opening main window");
         WindowManager = new WindowManager();
         
         // Mise a jour de la fenetre principale (titre, langue, thème, ...)
@@ -164,18 +143,18 @@ public partial class App
 
 
         // Tentative d'archivage des fichiers de log
-        ConsoleAndLogWriteLine("Trying to archive log files");
+        Logger.ConsoleAndLogWriteLine("Trying to archive log files");
         ArchiveLogs();
 
 
         // Nettoyage des dossiers restants de la derniere session
-        ConsoleAndLogWriteLine("Starting to remove folders from projects extracted last time");
+        Logger.ConsoleAndLogWriteLine("Starting to remove folders from projects extracted last time");
         DeleteAllExceptLogsAndResources();
 
         // CheckForUpdatesAsync();
 
-        ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP STARTED !");
-        ConsoleAndLogWriteLine("-----------------------------------------------------------");
+        Logger.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP STARTED !");
+        Logger.ConsoleAndLogWriteLine("-----------------------------------------------------------");
         
         // Appel au garbage collector pour nettoyer les variables issues 
         GC.Collect();
@@ -207,72 +186,16 @@ public partial class App
     /// <param name="e">An instance of <see cref="ExitEventArgs"/> that contains the event data.</param>
     protected override void OnExit(ExitEventArgs e)
     {
-        ConsoleAndLogWriteLine("-----------------------------------------------------------");
-        ConsoleAndLogWriteLine($"CLOSING {AppName.ToUpper()} APP...");
+        Logger.ConsoleAndLogWriteLine("-----------------------------------------------------------");
+        Logger.ConsoleAndLogWriteLine($"CLOSING {AppName.ToUpper()} APP...");
             
         base.OnExit(e);
-            
-        ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP CLOSED !");
-        _writer?.Close(); // Fermeture du stream d'ecriture des logs
+
+        Logger.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP CLOSED !");
+        Logger.Writer.Close(); // Fermeture du stream d'ecriture des logs
     }
 
-        
-    // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
-    // logs sans sauter de ligne apres le message.
-    /// <summary>
-    /// Writes a message to the application console and log file without appending a newline after the message.
-    /// <para>
-    /// This method performs the following tasks:
-    /// <list type="bullet">
-    ///     <item>
-    ///         Writes the provided message to the console without adding a newline character.
-    ///     </item>
-    ///     <item>
-    ///         If the console window is visible, scrolls to the end of the console text to ensure the latest message is visible.
-    ///     </item>
-    ///     <item>
-    ///         Writes the same message to the log file without appending a newline character.
-    ///     </item>
-    /// </list>
-    /// </para>
-    /// </summary>
-    /// <param name="msg">The message to be written to the console and log file.</param>
-    public static void ConsoleAndLogWrite(string msg)
-    {
-        Console.Write(msg); // Ecriture du message dans la console
-        _writer?.Write(msg); // Ecriture du message dans le fichier logs
-    }
 
-        
-        
-    // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
-    // logs. Ajoute la date et l'heure avant affichage. Saut d'une ligne en fin de message.
-    /// <summary>
-    /// Writes a message to the application console and log file, including the current date and time, and appends a newline after the message.
-    /// <para>
-    /// This method performs the following tasks:
-    /// <list type="bullet">
-    ///     <item>
-    ///         Writes the provided message to the console with a timestamp (date and time) at the beginning, followed by a newline.
-    ///     </item>
-    ///     <item>
-    ///         If the console window is visible, scrolls to the end of the console text to ensure that the latest message is displayed.
-    ///     </item>
-    ///     <item>
-    ///         Writes the same message to the log file with a timestamp (date and time) at the beginning, followed by a newline.
-    ///     </item>
-    /// </list>
-    /// </para>
-    /// </summary>
-    /// <param name="msg">The message to be written to the console and log file.</param>
-    public static void ConsoleAndLogWriteLine(string msg)
-    {
-        Console.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans la console
-        _writer?.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans le fichier logs
-    }
-
-        
-        
     // Fonction d'archivage des logs
     // Fonctionnement : S'il y a plus de 50 fichiers logs.txt, ces fichiers sont rassembles et compresses dans une archive zip
     // S'il y a plus de 10 archives, ces dernieres sont supprimees avant la creation de la nouvelle archive
@@ -300,7 +223,7 @@ public partial class App
             // Verifier si le repertoire existe
             if (!Directory.Exists(logDirectory))
             {
-                ConsoleAndLogWriteLine($"--> The specified directory does not exist : {logDirectory}");
+                Logger.ConsoleAndLogWriteLine($"--> The specified directory does not exist : {logDirectory}");
                 return;
             }
 
@@ -320,7 +243,8 @@ public partial class App
                     {
                         File.Delete(archiveFile);
                     }
-                    ConsoleAndLogWriteLine("--> Deleted all existing archive files as they exceeded the limit of 10.");
+
+                    Logger.ConsoleAndLogWriteLine("--> Deleted all existing archive files as they exceeded the limit of 10.");
                 }
 
                 // Creer le nom du fichier zip avec la date actuelle
@@ -331,7 +255,7 @@ public partial class App
                 {
                     foreach (var logFile in logFiles)
                     {
-                        if (logFile != LogPath) // Si le fichier logs n'est pas celui que l'on vient de creer pour le lancement actuel
+                        if (logFile != Logger.LogPath) // Si le fichier logs n'est pas celui que l'on vient de creer pour le lancement actuel
                         {
                             zip.CreateEntryFromFile(logFile, Path.GetFileName(logFile)); // On l'ajoute e l'archive
                             File.Delete(logFile); // Puis, on le supprime
@@ -339,16 +263,16 @@ public partial class App
                     }
                 }
 
-                ConsoleAndLogWriteLine($"--> Successfully archived log files to {zipFileName}");
+                Logger.ConsoleAndLogWriteLine($"--> Successfully archived log files to {zipFileName}");
             }
             else
             {
-                ConsoleAndLogWriteLine("--> Not enough log files to archive.");
+                Logger.ConsoleAndLogWriteLine("--> Not enough log files to archive.");
             }
         }
         catch (Exception ex)
         {
-            ConsoleAndLogWriteLine($"--> An error occured while creating the log archive : {ex.Message}");
+            Logger.ConsoleAndLogWriteLine($"--> An error occured while creating the log archive : {ex.Message}");
         }
     }
         
@@ -374,7 +298,7 @@ public partial class App
     {
         if (Directory.GetDirectories("./").Length <= 3 && Directory.GetFiles("./", "*.zip").Length == 0)
         {
-            ConsoleAndLogWriteLine("--> No folder or zip file to delete");
+            Logger.ConsoleAndLogWriteLine("--> No folder or zip file to delete");
         }
             
         // Itération sur tous les répertoires dans le répertoire de base
@@ -393,15 +317,16 @@ public partial class App
             }
             catch (UnauthorizedAccessException ex)
             {
-                ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {directory}: {ex.Message}");
+                Logger.ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {directory}: {ex.Message}");
                 continue;
             }
             catch (IOException ex)
             {
-                ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {directory}: {ex.Message}");
+                Logger.ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {directory}: {ex.Message}");
                 continue;
             }
-            ConsoleAndLogWriteLine($"--> Deleted directory: {directory}");
+
+            Logger.ConsoleAndLogWriteLine($"--> Deleted directory: {directory}");
         }
 
         foreach (var zipFile in Directory.GetFiles("./", "*.zip"))
@@ -412,15 +337,16 @@ public partial class App
             }
             catch (UnauthorizedAccessException ex)
             {
-                ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {zipFile}: {ex.Message}");
+                Logger.ConsoleAndLogWriteLine($@"--> Access denied while attempting to delete {zipFile}: {ex.Message}");
                 continue;
             }
             catch (IOException ex)
             {
-                ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {zipFile}: {ex.Message}");
+                Logger.ConsoleAndLogWriteLine($@"--> I/O error while attempting to delete {zipFile}: {ex.Message}");
                 continue;
             }
-            ConsoleAndLogWriteLine($"--> Deleted file: {zipFile}");
+
+            Logger.ConsoleAndLogWriteLine($"--> Deleted file: {zipFile}");
         }
             
     }
@@ -434,7 +360,7 @@ public partial class App
     ~App()
     {
         // Si le stream d'écriture dans les logs est toujours ouvert, on le ferme
-        _writer?.Close();
+        Logger.Writer.Close();
     }
 }
 

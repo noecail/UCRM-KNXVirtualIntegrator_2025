@@ -28,7 +28,7 @@ public class ZipArchiveManager
                     if (Directory.Exists(path))
                     {
                         // Ajouter tous les fichiers du répertoire (et sous-répertoires) à l'archive
-                        App.ConsoleAndLogWriteLine($"{path} {Path.GetDirectoryName(path)}");
+                        Logger.ConsoleAndLogWriteLine($"{path} {Path.GetDirectoryName(path)}");
                         AddDirectoryToArchive(archive, path, path);
                     }
                     else if (File.Exists(path))
@@ -44,14 +44,14 @@ public class ZipArchiveManager
                     }
                     else
                     {
-                        App.ConsoleAndLogWriteLine(
+                        Logger.ConsoleAndLogWriteLine(
                             $"Le chemin {path} n'a pas été trouvé et ne sera pas ajouté à l'archive en cours de création.");
                     }
                 }
             }
             catch (Exception e)
             {
-                App.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
+                Logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
             }
         }
         else
@@ -80,14 +80,14 @@ public class ZipArchiveManager
                     }
                     else
                     {
-                        App.ConsoleAndLogWriteLine(
+                        Logger.ConsoleAndLogWriteLine(
                             $"Le chemin {path} n'a pas été trouvé et ne sera pas ajouté à l'archive en cours de création.");
                     }
                 }
             }
             catch (Exception e)
             {
-                App.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
+                Logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
             }
         }
     }
@@ -127,7 +127,7 @@ public class ZipArchiveManager
         }
         catch (Exception e)
         {
-            App.ConsoleAndLogWriteLine($"Error: an error occured while adding a directory to the debug archive : {e.Message}");
+            Logger.ConsoleAndLogWriteLine($"Error: an error occured while adding a directory to the debug archive : {e.Message}");
         }
     }
 }

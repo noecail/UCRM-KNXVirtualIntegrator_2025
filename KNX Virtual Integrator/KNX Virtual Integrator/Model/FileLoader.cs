@@ -28,7 +28,7 @@ public class FileLoader
         catch (Exception ex) when (ex is FileNotFoundException || ex is DirectoryNotFoundException ||
                                    ex is IOException || ex is UnauthorizedAccessException || ex is XmlException)
         {
-            App.ConsoleAndLogWriteLine($"Error loading XML: {ex.Message}");
+            Logger.ConsoleAndLogWriteLine($"Error loading XML: {ex.Message}");
             return null;
         }
     }

@@ -101,7 +101,7 @@ public class GroupAddressManagement
 
             if (existingEntry.Value != null)
             {
-                App.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
+                Logger.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
 
                 foreach (var gaId in gaIds)
                 {
@@ -119,7 +119,7 @@ public class GroupAddressManagement
                     commonName = $"{entry.Key.CommonName}_{suffixCounter++}";
                 }
 
-                App.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
+                Logger.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
                 GroupedAddresses[commonName] = gaIds.Select(id => groupAddresses.First(x => x.Attribute("Id")?.Value == id)).ToList();
             }
         }
@@ -211,11 +211,11 @@ public class GroupAddressManagement
         }
         catch (XmlException ex)
         {
-            App.ConsoleAndLogWriteLine($"Error loading XML file (XML exception): {ex.Message}");
+            Logger.ConsoleAndLogWriteLine($"Error loading XML file (XML exception): {ex.Message}");
         }
         catch (Exception ex)
         {
-            App.ConsoleAndLogWriteLine($"An unexpected error occurred during SetNamespaceFromXml(): {ex.Message}");
+            Logger.ConsoleAndLogWriteLine($"An unexpected error occurred during SetNamespaceFromXml(): {ex.Message}");
         }
     }
     
@@ -246,7 +246,7 @@ public class GroupAddressManagement
 
                 if (AreNamesSimilar(name1, name2))
                 {
-                    App.ConsoleAndLogWriteLine($"Merging single-element groups '{name1}' and '{name2}'.");
+                    Logger.ConsoleAndLogWriteLine($"Merging single-element groups '{name1}' and '{name2}'.");
 
                     // Fusionner les éléments
                     group1.Value.Add(group2.Value.First());
@@ -272,7 +272,7 @@ public class GroupAddressManagement
                 var otherName = otherGroup.Key;
                 if (AreNamesSimilar(singleName, otherName))
                 {
-                    App.ConsoleAndLogWriteLine($"Merging single-element group '{singleName}' with group '{otherName}'.");
+                    Logger.ConsoleAndLogWriteLine($"Merging single-element group '{singleName}' with group '{otherName}'.");
 
                     // Ajouter l'élément unique au groupe existant
                     otherGroup.Value.Add(singleGroup.Value.First());

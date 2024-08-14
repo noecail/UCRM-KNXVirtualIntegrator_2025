@@ -511,7 +511,7 @@ public partial class SettingsWindow
                         }
                         catch (Exception)
                         {
-                            App.ConsoleAndLogWriteLine("Error: Could not parse the integer value of the window scale factor. Restoring default value (100%).");
+                            Logger.ConsoleAndLogWriteLine("Error: Could not parse the integer value of the window scale factor. Restoring default value (100%).");
                         }
                         break;
                         
@@ -522,13 +522,13 @@ public partial class SettingsWindow
         // Si l'application a manqué de mémoire pendant la récupération des lignes
         catch (OutOfMemoryException)
         {
-            App.ConsoleAndLogWriteLine("Error: The program does not have sufficient memory to run. Please try closing a few applications before trying again.");
+            Logger.ConsoleAndLogWriteLine("Error: The program does not have sufficient memory to run. Please try closing a few applications before trying again.");
             return;
         }
         // Aucune idée de la raison
         catch (IOException)
         {
-            App.ConsoleAndLogWriteLine("Error: An I/O error occured while reading the settings file.");
+            Logger.ConsoleAndLogWriteLine("Error: An I/O error occured while reading the settings file.");
             return;
         }
         finally
@@ -591,18 +591,18 @@ public partial class SettingsWindow
         // Aucune idée de la raison
         catch (IOException)
         {
-            App.ConsoleAndLogWriteLine("Error: an I/O error occured while writing appSettings.");
+            Logger.ConsoleAndLogWriteLine("Error: an I/O error occured while writing appSettings.");
         }
         // Si le buffer d'écriture est plein
         catch (NotSupportedException)
         {
-            App.ConsoleAndLogWriteLine("Error: the streamwriter buffer for appSettings is full. Flushing it.");
+            Logger.ConsoleAndLogWriteLine("Error: the streamwriter buffer for appSettings is full. Flushing it.");
             writer.Flush(); // Vidage du buffer
         }
         // Si le stream a été fermé pendant l'écriture
         catch (ObjectDisposedException)
         {
-            App.ConsoleAndLogWriteLine("Error: the streamwriter for appSettings was closed before finishing the writing operation.");
+            Logger.ConsoleAndLogWriteLine("Error: the streamwriter for appSettings was closed before finishing the writing operation.");
         }
         finally
         {
@@ -2270,7 +2270,7 @@ public partial class SettingsWindow
         }
         catch (Exception ex)
         {
-            App.ConsoleAndLogWriteLine($"Error: An error occured while trying to retrieve the windows theme : {ex.Message}. Thème par défaut : clair.");
+            Logger.ConsoleAndLogWriteLine($"Error: An error occured while trying to retrieve the windows theme : {ex.Message}. Thème par défaut : clair.");
             return true; // Default to dark theme in case of error
         }
 
@@ -2319,7 +2319,7 @@ public partial class SettingsWindow
                     // Vérifier si le code de langue extrait est dans le HashSet
                     if (languageCode != null && validLanguageCodes.Contains(languageCode))
                     {
-                        App.ConsoleAndLogWriteLine($"Langue windows détectée : {languageCode}");
+                        Logger.ConsoleAndLogWriteLine($"Langue windows détectée : {languageCode}");
                         return languageCode;
                     }
                 }
@@ -2327,7 +2327,7 @@ public partial class SettingsWindow
         }
         catch (Exception ex)
         {
-            App.ConsoleAndLogWriteLine($"Error: An error occured while reading the windows language from registry : {ex.Message}");
+            Logger.ConsoleAndLogWriteLine($"Error: An error occured while reading the windows language from registry : {ex.Message}");
             return "";
         }
 
@@ -2360,13 +2360,13 @@ public partial class SettingsWindow
             previousAppScaleFactor != AppScaleFactor)
         {
             // Sauvegarde des paramètres dans le fichier appSettings
-            App.ConsoleAndLogWriteLine($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
+            Logger.ConsoleAndLogWriteLine($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
             SaveSettings();
-            App.ConsoleAndLogWriteLine("Settings saved successfully");
+            Logger.ConsoleAndLogWriteLine("Settings saved successfully");
         }
         else
         {
-            App.ConsoleAndLogWriteLine("Settings are unchanged. No need to save them.");
+            Logger.ConsoleAndLogWriteLine("Settings are unchanged. No need to save them.");
         }
 
         // Mise à jour éventuellement du contenu pour update la langue du menu
@@ -2506,15 +2506,15 @@ public partial class SettingsWindow
         }
         catch (InvalidOperationException)
         {
-            App.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            Logger.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
         }
         catch (ArgumentException)
         {
-            App.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            Logger.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
         }
         catch (PlatformNotSupportedException)
         {
-            App.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            Logger.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
         }
 
         e.Handled = true;
@@ -2596,7 +2596,7 @@ public partial class SettingsWindow
             // Si le slider est null, quitter la méthode
             if (slider == null) 
             {
-                App.ConsoleAndLogWrite("Slider not found.");
+                Logger.ConsoleAndLogWrite("Slider not found.");
                 return;
             }
         
@@ -2613,7 +2613,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Logue l'erreur en cas d'exception
-            App.ConsoleAndLogWrite($"An error occurred: {ex.Message}");
+            Logger.ConsoleAndLogWrite($"An error occurred: {ex.Message}");
         }
     }
 
@@ -2653,7 +2653,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            App.ConsoleAndLogWrite($"An error occurred while finding parent: {ex.Message}");
+            Logger.ConsoleAndLogWrite($"An error occurred while finding parent: {ex.Message}");
             return null;
         }
     }
@@ -2680,7 +2680,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            App.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonDown: {ex.Message}");
+            Logger.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonDown: {ex.Message}");
         }
     }
 
@@ -2703,7 +2703,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            App.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonUp: {ex.Message}");
+            Logger.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonUp: {ex.Message}");
         }
     }
 
@@ -2726,7 +2726,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            App.ConsoleAndLogWrite($"An error occurred in SliderMouseMove: {ex.Message}");
+            Logger.ConsoleAndLogWrite($"An error occurred in SliderMouseMove: {ex.Message}");
         }
     }
 
@@ -2760,7 +2760,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            App.ConsoleAndLogWrite($"An error occurred in UpdateSliderValue: {ex.Message}");
+            Logger.ConsoleAndLogWrite($"An error occurred in UpdateSliderValue: {ex.Message}");
         }
     }
 

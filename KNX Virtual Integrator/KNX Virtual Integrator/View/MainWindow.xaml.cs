@@ -44,12 +44,12 @@ public partial class MainWindow
 
     public void ApplyScaling(float scaleFactor)
     {
-        App.ConsoleAndLogWriteLine("MainWindow.ApplyScaling is not implemented");
+        Logger.ConsoleAndLogWriteLine("MainWindow.ApplyScaling is not implemented");
     }
 
     public void UpdateWindowContents(bool b, bool b1, bool b2)
     {
-        App.ConsoleAndLogWriteLine("MainWindow.UpdateWindowContents is not implemented");
+        Logger.ConsoleAndLogWriteLine("MainWindow.UpdateWindowContents is not implemented");
     }
     
     
@@ -63,7 +63,7 @@ public partial class MainWindow
     /// <param name="e">The event data.</param>
     private async void ImportProjectButtonClick(object sender, RoutedEventArgs e)
     {
-        App.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
+        Logger.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
 
         UserChooseToImportGroupAddressFile = false;
         
@@ -207,7 +207,7 @@ public partial class MainWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            App.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
+            Logger.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
             if (!ProjectFileManager.ExtractProjectFiles(openFileDialog.FileName)) return;
@@ -217,7 +217,7 @@ public partial class MainWindow
         }
         else
         {
-            App.ConsoleAndLogWriteLine("User aborted the file selection operation");
+            Logger.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
 
         // Partie management des adresses de groupes
@@ -234,7 +234,7 @@ public partial class MainWindow
     /// <param name="e">The event data.</param>
     private async void ImportGroupAddressFileButtonClick(object sender, RoutedEventArgs e)
     {
-        App.ConsoleAndLogWriteLine("Waiting for user to select group addresses file");
+        Logger.ConsoleAndLogWriteLine("Waiting for user to select group addresses file");
 
         UserChooseToImportGroupAddressFile = true;
         
@@ -254,7 +254,7 @@ public partial class MainWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            App.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
+            Logger.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
             if (!ProjectFileManager.ExtractGroupAddressFile(openFileDialog.FileName)) return;
@@ -264,7 +264,7 @@ public partial class MainWindow
         }
         else
         {
-            App.ConsoleAndLogWriteLine("User aborted the file selection operation");
+            Logger.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
         GroupAddressManagement.ExtractGroupAddress();
     }

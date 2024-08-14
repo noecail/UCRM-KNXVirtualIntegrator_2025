@@ -25,7 +25,7 @@ public class FileFinder
     {
         if (!Directory.Exists(rootPath))
         {
-            App.ConsoleAndLogWriteLine($"Directory {rootPath} does not exist.");
+            Logger.ConsoleAndLogWriteLine($"Directory {rootPath} does not exist.");
             return "";
         }
 
@@ -58,22 +58,22 @@ public class FileFinder
             catch (UnauthorizedAccessException unAuthEx)
             {
                 // Si l'accès au répertoire est refusé
-                App.ConsoleAndLogWriteLine($"Access refused to {currentDirectory} : {unAuthEx.Message}");
+                Logger.ConsoleAndLogWriteLine($"Access refused to {currentDirectory} : {unAuthEx.Message}");
             }
             catch (DirectoryNotFoundException dirNotFoundEx)
             {
                 // Si le répertoire est introuvable
-                App.ConsoleAndLogWriteLine($"Directory not found : {currentDirectory} : {dirNotFoundEx.Message}");
+                Logger.ConsoleAndLogWriteLine($"Directory not found : {currentDirectory} : {dirNotFoundEx.Message}");
             }
             catch (IOException ioEx)
             {
                 // Si une erreur d'entrée/sortie survient
-                App.ConsoleAndLogWriteLine($"I/O Error while accessing {currentDirectory} : {ioEx.Message}");
+                Logger.ConsoleAndLogWriteLine($"I/O Error while accessing {currentDirectory} : {ioEx.Message}");
             }
             catch (Exception ex)
             {
                 // Gérer toutes autres exceptions génériques
-                App.ConsoleAndLogWriteLine(
+                Logger.ConsoleAndLogWriteLine(
                     $"An unexpected error occurred while accessing {currentDirectory} : {ex.Message}");
             }
         }
@@ -106,36 +106,36 @@ public class FileFinder
             // Si le fichier n'a pas été trouvé
             if (string.IsNullOrEmpty(foundPath))
             {
-                App.ConsoleAndLogWriteLine("Unable to find the file '0.xml' in the project folders. "
-                                           + "Please ensure that the extracted archive is indeed a KNX ETS project.");
+                Logger.ConsoleAndLogWriteLine("Unable to find the file '0.xml' in the project folders. "
+                                              + "Please ensure that the extracted archive is indeed a KNX ETS project.");
                 // Utilisation de Dispatcher.Invoke pour fermer l'application depuis un thread non-UI
                 await Application.Current.Dispatcher.InvokeAsync(() => Application.Current.Shutdown());
             }
             else // Sinon
             {
                 ProjectFileManager.ZeroXmlPath = foundPath;
-                App.ConsoleAndLogWriteLine($"Found '0.xml' file at {Path.GetFullPath(ProjectFileManager.ZeroXmlPath)}.");
+                Logger.ConsoleAndLogWriteLine($"Found '0.xml' file at {Path.GetFullPath(ProjectFileManager.ZeroXmlPath)}.");
             }
         }
         catch (UnauthorizedAccessException unAuthEx)
         {
             // Gérer les erreurs d'accès non autorisé
-            App.ConsoleAndLogWriteLine($"Access refused while searching for '0.xml': {unAuthEx.Message}");
+            Logger.ConsoleAndLogWriteLine($"Access refused while searching for '0.xml': {unAuthEx.Message}");
         }
         catch (DirectoryNotFoundException dirNotFoundEx)
         {
             // Gérer les erreurs où le répertoire n'est pas trouvé
-            App.ConsoleAndLogWriteLine($"Directory not found while searching for '0.xml': {dirNotFoundEx.Message}");
+            Logger.ConsoleAndLogWriteLine($"Directory not found while searching for '0.xml': {dirNotFoundEx.Message}");
         }
         catch (IOException ioEx)
         {
             // Gérer les erreurs d'entrée/sortie
-            App.ConsoleAndLogWriteLine($"I/O Error while searching for '0.xml': {ioEx.Message}");
+            Logger.ConsoleAndLogWriteLine($"I/O Error while searching for '0.xml': {ioEx.Message}");
         }
         catch (Exception ex)
         {
             // Gérer toutes autres exceptions génériques
-            App.ConsoleAndLogWriteLine($"An unexpected error occurred while searching for '0.xml': {ex.Message}");
+            Logger.ConsoleAndLogWriteLine($"An unexpected error occurred while searching for '0.xml': {ex.Message}");
         }
     }
 }
