@@ -12,7 +12,7 @@ public class ModelManager
     ------------------------------------------------------------------------------------------------ */
     private readonly IFileLoader _fileLoader;
     private readonly IFileFinder _fileFinder;
-    private readonly IProjectFileManager _projectFileManager; // TODO A implémenter
+    private readonly IProjectFileManager _projectFileManager;
     private readonly ILogger _logger;
     private readonly IZipArchiveManager _zipArchiveManager;
     private readonly IGroupAddressManager _groupAddressManager;

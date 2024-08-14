@@ -7,7 +7,7 @@ using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ProjectFileManager(Logger logger)
+public class ProjectFileManager(Logger logger) : IProjectFileManager
 {
     private readonly ILogger _logger = logger;
 
@@ -521,7 +521,7 @@ public class ProjectFileManager(Logger logger)
     /// <item>Handles potential exceptions, including invalid dialog state, external errors, and other unexpected issues.</item>
     /// </list>
     /// </remarks>
-    private string SelectAnotherFile()
+    public string SelectAnotherFile()
     {
         try
         {
