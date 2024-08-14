@@ -2,6 +2,16 @@
 
 namespace KNX_Virtual_Integrator.Model;
 
+/// <summary>
+/// Provides logging functionality for the application by writing log entries to a specified log file.
+/// <para>
+/// The <see cref="Logger"/> class allows messages to be recorded in a log file, optionally including timestamps, 
+/// and provides methods for both console output combined with logging and logging to the file only.
+/// </para>
+/// <para>
+/// The log file is automatically named with the current date and time to prevent overwriting previous logs.
+/// </para>
+/// </summary>
 public class Logger
 {
     /* ------------------------------------------------------------------------------------------------
