@@ -44,12 +44,12 @@ public partial class App
     /// <summary>
     /// Represents the version of the application.
     /// </summary>
-    public const float AppVersion = 1.0f; // Version de l'application
+    public const float AppVersion = 1.1f; // Version de l'application
 
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 82;
+    public const int AppBuild = 83;
     
         
     
