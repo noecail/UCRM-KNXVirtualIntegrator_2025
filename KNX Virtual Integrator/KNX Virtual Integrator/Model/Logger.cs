@@ -28,7 +28,7 @@ public class Logger
     /// <remarks>
     /// This writer is used for appending log messages to the file specified by <see cref="LogPath"/>.
     /// </remarks>
-    public static readonly StreamWriter Writer = new(LogPath); // Permet l'ecriture du fichier de logging
+    private static readonly StreamWriter Writer = new(LogPath); // Permet l'ecriture du fichier de logging
     
     
     
@@ -60,6 +60,8 @@ public class Logger
     {
         Console.Write(msg); // Ecriture du message dans la console
         Writer.Write(msg); // Ecriture du message dans le fichier logs
+        
+        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
 
     
@@ -87,6 +89,8 @@ public class Logger
     {
         Console.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans la console
         Writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans le fichier logs
+        
+        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
     
     
@@ -97,6 +101,8 @@ public class Logger
     public static void LogWrite(string msg)
     {
         Writer.Write(msg); // Ecriture du message dans le fichier logs
+        
+        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
 
     
@@ -107,5 +113,13 @@ public class Logger
     public static void LogWriteLine(string msg)
     {
         Writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message avec timestamp dans le fichier logs
+        
+        Writer.Flush(); // Nettoyage du buffer du stream d'écriture
+    }
+
+
+    public static void CloseLogWriter()
+    {
+        Writer.Close();
     }
 }

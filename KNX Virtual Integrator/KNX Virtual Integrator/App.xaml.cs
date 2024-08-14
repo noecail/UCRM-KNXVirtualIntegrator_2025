@@ -115,10 +115,6 @@ public partial class App
         var currentProcess = Process.GetCurrentProcess();
         currentProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
 
-        // Activation de l'auto-vidage du buffer du stream d'ecriture
-        Logger.Writer.AutoFlush = true;
-
-
         Logger.ConsoleAndLogWriteLine(
             $"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
@@ -192,19 +188,7 @@ public partial class App
         base.OnExit(e);
 
         Logger.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP CLOSED !");
-        Logger.Writer.Close(); // Fermeture du stream d'ecriture des logs
-    }
-
-
-    // Destructeur de App
-    /// <summary>
-    /// Finalizer for the <see cref="App"/> class.
-    /// Closes the log writer stream if it is still open when the application is being finalized.
-    /// </summary>
-    ~App()
-    {
-        // Si le stream d'écriture dans les logs est toujours ouvert, on le ferme
-        Logger.Writer.Close();
+        Logger.CloseLogWriter(); // Fermeture du stream d'ecriture des logs
     }
 }
 
