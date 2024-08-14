@@ -19,8 +19,6 @@
 
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
-using System.IO.Compression;
 using System.Windows;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.View;
@@ -35,7 +33,6 @@ public partial class App
     ------------------------------------------------------------------------------------------------ */
     
     // --> Données de l'application
-
     /// <summary>
     /// Represents the name of the application.
     /// </summary>
@@ -54,7 +51,6 @@ public partial class App
         
     
     // --> Composants de l'application
-    
     /// <summary>
     /// Manages the application's display elements, including windows, buttons, and other UI components.
     /// </summary>
@@ -105,23 +101,17 @@ public partial class App
     /// <param name="e">An instance of <see cref="StartupEventArgs"/> that contains the event data.</param>
     protected override void OnStartup(StartupEventArgs e)
     {
-        if (!Directory.Exists("./logs"))
-        {
-            Directory.CreateDirectory("./logs");
-        }
+        ApplicationFileManager.EnsureLogDirectoryExists();
 
         base.OnStartup(e);
-            
-        var currentProcess = Process.GetCurrentProcess();
-        currentProcess.PriorityClass = ProcessPriorityClass.BelowNormal;
-
+        
+        Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+        
         Logger.ConsoleAndLogWriteLine(
             $"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
-
         // Création du Main View Model
         MainViewModel = new();
-        
         
         // Création du Model Manager
         ModelManager = new();
@@ -156,8 +146,7 @@ public partial class App
         GC.Collect();
     }
 
-        
-        
+
     // Fonction s'executant lorsque l'on ferme l'application
     /// <summary>
     /// Executes when the application is closing.
