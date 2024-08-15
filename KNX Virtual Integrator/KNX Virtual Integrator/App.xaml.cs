@@ -4,7 +4,7 @@
  * Auteurs       : MICHEL Hugo, COUSTON Emma, MALBRANCHE Daichi,
  *                 BRUGIERE Nathan, OLIVEIRA LOPES Maxime, TETAZ Louison
  * Date          : 07/08/2024
- * Version       : 1.0
+ * Version       : 1.1
  *
  * Description :
  * Fichier principal contenant la structure de l'application et toutes les
@@ -93,7 +93,7 @@ public partial class App
         var projectFileManager = new ProjectFileManager(logger);
         var fileFinder = new FileFinder(logger, projectFileManager);
         var zipArchiveManager = new ZipArchiveManager(logger);
-        var groupAddressManager = new GroupAddressManager(logger, projectFileManager);
+        var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader);
         var systemSettingsDetector = new SystemSettingsDetector(logger);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager);
         var applicationFileManager = new ApplicationFileManager(logger, systemSettingsDetector);
@@ -110,9 +110,9 @@ public partial class App
             debugArchiveGenerator,
             applicationFileManager);
         
-        ModelManager.EnsureLogDirectoryExists();
+        ModelManager.ApplicationFileManager.EnsureLogDirectoryExists();
 
-        ModelManager.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
+        ModelManager.Logger.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
         MainViewModel = new MainViewModel();
         WindowManager = new WindowManager();
@@ -120,34 +120,34 @@ public partial class App
 
     private void OpenMainWindow()
     {
-        ModelManager?.ConsoleAndLogWriteLine("Opening main window");
+        ModelManager?.Logger.ConsoleAndLogWriteLine("Opening main window");
         WindowManager?.MainWindow.UpdateWindowContents(true, true, true);
         WindowManager?.ShowMainWindow();
     }
 
     private void PerformStartupTasks()
     {
-        ModelManager?.ConsoleAndLogWriteLine("Trying to archive log files");
-        ModelManager?.ArchiveLogs();
+        ModelManager?.Logger.ConsoleAndLogWriteLine("Trying to archive log files");
+        ModelManager?.ApplicationFileManager.ArchiveLogs();
 
-        ModelManager?.ConsoleAndLogWriteLine("Starting to remove folders from projects extracted last time");
-        ModelManager?.DeleteAllExceptLogsAndResources();
+        ModelManager?.Logger.ConsoleAndLogWriteLine("Starting to remove folders from projects extracted last time");
+        ModelManager?.ApplicationFileManager.DeleteAllExceptLogsAndResources();
 
-        ModelManager?.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP STARTED !");
-        ModelManager?.ConsoleAndLogWriteLine("-----------------------------------------------------------");
+        ModelManager?.Logger.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP STARTED !");
+        ModelManager?.Logger.ConsoleAndLogWriteLine("-----------------------------------------------------------");
 
         GC.Collect();
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
-        ModelManager?.ConsoleAndLogWriteLine("-----------------------------------------------------------");
-        ModelManager?.ConsoleAndLogWriteLine($"CLOSING {AppName.ToUpper()} APP...");
+        ModelManager?.Logger.ConsoleAndLogWriteLine("-----------------------------------------------------------");
+        ModelManager?.Logger.ConsoleAndLogWriteLine($"CLOSING {AppName.ToUpper()} APP...");
 
         base.OnExit(e);
 
-        ModelManager?.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP CLOSED !");
-        ModelManager?.CloseLogWriter();
+        ModelManager?.Logger.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP CLOSED !");
+        ModelManager?.Logger.CloseLogWriter();
     }
 
 }

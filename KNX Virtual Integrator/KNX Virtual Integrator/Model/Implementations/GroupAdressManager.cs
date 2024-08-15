@@ -4,7 +4,7 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class GroupAddressManager(Logger logger, ProjectFileManager projectFileManager) : IGroupAddressManager
+public class GroupAddressManager(Logger logger, ProjectFileManager projectFileManager, FileLoader loader) : IGroupAddressManager
 {
     private readonly ILogger _logger = logger;
 
@@ -26,7 +26,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             ? manager.GroupAddressFilePath
             : manager.ZeroXmlPath;
 
-        var groupAddressFile = App.ModelManager?.LoadXmlDocument(filePath);
+        var groupAddressFile = loader.LoadXmlDocument(filePath);
         if (groupAddressFile == null) return;
 
         if (filePath == manager.ZeroXmlPath)
