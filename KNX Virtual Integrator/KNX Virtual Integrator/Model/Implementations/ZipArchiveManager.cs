@@ -4,7 +4,7 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ZipArchiveManager(Logger logger)
+public class ZipArchiveManager(Logger logger) : IZipArchiveManager
 {
     private readonly ILogger _logger = logger;
 

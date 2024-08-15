@@ -288,8 +288,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
     /// <param name="includeOsInfo">Specifies whether to include operating system information in the archive.</param>
     /// <param name="includeHardwareInfo">Specifies whether to include hardware information in the archive.</param>
     /// <param name="includeImportedProjects">Specifies whether to include imported projects in the archive.</param>
-    /// <param name="includeRemovedGroupAddressList">Specifies whether to include a list of removed group addresses in the archive.</param>
-    public void CreateDebugArchive(bool includeOsInfo = true, bool includeHardwareInfo = true, bool includeImportedProjects = true, bool includeRemovedGroupAddressList = true)
+    public void CreateDebugArchive(bool includeOsInfo = true, bool includeHardwareInfo = true, bool includeImportedProjects = true)
     {
         // Ecriture du fichier d'informations système
         WriteSystemInformationDebugFile(includeOsInfo, includeHardwareInfo);

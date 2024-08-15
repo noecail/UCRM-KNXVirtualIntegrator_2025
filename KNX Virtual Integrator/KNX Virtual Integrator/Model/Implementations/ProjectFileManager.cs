@@ -20,13 +20,13 @@ public class ProjectFileManager(Logger logger) : IProjectFileManager
     /// <remarks>
     /// This property holds the file path of the project folder where the project files are exported.
     /// </remarks>
-    public static string ProjectFolderPath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    public string ProjectFolderPath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
     
     
     /// <summary>
     ///  Gets the name of the project the application is currently working on.
     /// </summary>
-    public static string ProjectName { get; private set; } = "";
+    public string ProjectName { get; private set; } = "";
     
     
     /// <summary>
@@ -35,7 +35,7 @@ public class ProjectFileManager(Logger logger) : IProjectFileManager
     /// <remarks>
     /// This property holds the file path to the 0.xml file associated with the project.
     /// </remarks>
-    public static string ZeroXmlPath { get; internal set; } = ""; // Chemin d'accès au fichier 0.xml du projet
+    public string ZeroXmlPath { get; internal set; } = ""; // Chemin d'accès au fichier 0.xml du projet
     
     
     /// <summary>
@@ -44,13 +44,13 @@ public class ProjectFileManager(Logger logger) : IProjectFileManager
     /// <remarks>
     /// This property holds the file path  of the group addresses file
     /// </remarks>
-    public static string GroupAddressFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    public string GroupAddressFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
     
     
     /// <summary>
     ///  Gets the name of the group addresses file the application is currently working on.
     /// </summary>
-    public static string GroupAddressFileName { get; private set; } = "";
+    public string GroupAddressFileName { get; private set; } = "";
     
     
     

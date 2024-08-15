@@ -4,9 +4,10 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class FileFinder(Logger logger) : IFileFinder
+public class FileFinder(Logger logger, ProjectFileManager projectFileManager) : IFileFinder
 {
     private readonly ILogger _logger = logger;
+    private readonly IProjectFileManager _projectFileManager = projectFileManager;
     
     
     // Fonction permettant de trouver un fichier dans un dossier donné
@@ -117,8 +118,11 @@ public class FileFinder(Logger logger) : IFileFinder
             }
             else // Sinon
             {
-                ProjectFileManager.ZeroXmlPath = foundPath;
-                _logger.ConsoleAndLogWriteLine($"Found '0.xml' file at {Path.GetFullPath(ProjectFileManager.ZeroXmlPath)}.");
+                if (_projectFileManager is ProjectFileManager manager)
+                {
+                    manager.ZeroXmlPath = foundPath;
+                    _logger.ConsoleAndLogWriteLine($"Found '0.xml' file at {Path.GetFullPath(manager.ZeroXmlPath)}.");
+                }
             }
         }
         catch (UnauthorizedAccessException unAuthEx)

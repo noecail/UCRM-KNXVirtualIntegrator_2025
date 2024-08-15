@@ -4,10 +4,10 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class GroupAddressManager(Logger logger) : IGroupAddressManager
+public class GroupAddressManager(Logger logger, ProjectFileManager projectFileManager) : IGroupAddressManager
 {
     private readonly ILogger _logger = logger;
-    
+
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
     private static readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();
 
@@ -20,14 +20,16 @@ public class GroupAddressManager(Logger logger) : IGroupAddressManager
     /// </summary>
     public void ExtractGroupAddress()
     {
+        if (projectFileManager is not { } manager) return;
+        
         var filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile
-            ? ProjectFileManager.GroupAddressFilePath
-            : ProjectFileManager.ZeroXmlPath;
+            ? manager.GroupAddressFilePath
+            : manager.ZeroXmlPath;
 
         var groupAddressFile = App.ModelManager?.LoadXmlDocument(filePath);
         if (groupAddressFile == null) return;
 
-        if (filePath == ProjectFileManager.ZeroXmlPath)
+        if (filePath == manager.ZeroXmlPath)
         {
             SetNamespaceFromXml(filePath);
             ProcessZeroXmlFile(groupAddressFile);
