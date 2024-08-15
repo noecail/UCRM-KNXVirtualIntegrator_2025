@@ -1,6 +1,8 @@
-﻿namespace KNX_Virtual_Integrator.View;
+﻿using KNX_Virtual_Integrator.ViewModel;
 
-public class WindowManager
+namespace KNX_Virtual_Integrator.View;
+
+public class WindowManager (MainViewModel mainViewModel)
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -8,12 +10,12 @@ public class WindowManager
     /// <summary>
     /// Represents the main window instance of the application.
     /// </summary>
-    public MainWindow MainWindow { get; } = new();
+    public MainWindow MainWindow { get; } = new(mainViewModel);
         
     /// <summary>
     /// Represents the settings window instance where application settings are configured.
     /// </summary>
-    public SettingsWindow? SettingsWindow { get; } = new();
+    public SettingsWindow? SettingsWindow { get; } = new(mainViewModel);
     
         
     /* ------------------------------------------------------------------------------------------------

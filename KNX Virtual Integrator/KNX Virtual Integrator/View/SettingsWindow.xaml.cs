@@ -8,7 +8,8 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using KNX_Virtual_Integrator.Model;
+using KNX_Virtual_Integrator.Model.Implementations;
+using KNX_Virtual_Integrator.ViewModel;
 
 // ReSharper disable NullableWarningSuppressionIsUsed
 // ReSharper disable ConvertToUsingDeclaration
@@ -24,6 +25,9 @@ public partial class SettingsWindow
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    private readonly MainViewModel _viewModel;
+    
+    
     /// <summary>
     /// Gets or sets a value indicating whether the light theme is enabled for the application.
     /// </summary>
@@ -54,9 +58,11 @@ public partial class SettingsWindow
     /// Initializes a new instance of the <see cref="SettingsWindow"/> class,
     /// loading and applying settings from the appSettings file, and setting default values where necessary.
     /// </summary>
-    public SettingsWindow()
+    public SettingsWindow(MainViewModel viewModel)
     {
         InitializeComponent(); // Initialisation de la fenêtre de paramétrage
+
+        _viewModel = viewModel;
 
         // Initialement, l'application dispose des paramètres par défaut, qui seront potentiellement modifiés après par
         // la lecture du fichier settings. Cela permet d'éviter un crash si le fichier 
@@ -66,7 +72,7 @@ public partial class SettingsWindow
 
         const string settingsPath = "./appSettings"; // Chemin du fichier paramètres
 
-        ApplicationFileManager.EnsureSettingsFileExists(settingsPath);
+        _viewModel.EnsureSettingsFileExists(settingsPath);
 
         // Déclaration du stream pour la lecture du fichier appSettings, initialement null
         StreamReader? reader = null;
@@ -204,7 +210,7 @@ public partial class SettingsWindow
                         }
                         catch (Exception)
                         {
-                            Logger.ConsoleAndLogWriteLine("Error: Could not parse the integer value of the window scale factor. Restoring default value (100%).");
+                            _viewModel.ConsoleAndLogWriteLine("Error: Could not parse the integer value of the window scale factor. Restoring default value (100%).");
                         }
                         break;
                         
@@ -215,19 +221,19 @@ public partial class SettingsWindow
         // Si l'application a manqué de mémoire pendant la récupération des lignes
         catch (OutOfMemoryException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: The program does not have sufficient memory to run. Please try closing a few applications before trying again.");
+            _viewModel.ConsoleAndLogWriteLine("Error: The program does not have sufficient memory to run. Please try closing a few applications before trying again.");
             return;
         }
         // Aucune idée de la raison
         catch (IOException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: An I/O error occured while reading the settings file.");
+            _viewModel.ConsoleAndLogWriteLine("Error: An I/O error occured while reading the settings file.");
             return;
         }
         finally
         {
             reader?.Close(); // Fermeture du stream de lecture
-            ApplicationFileManager.SaveApplicationSettings(); // Mise à jour du fichier appSettings
+            _viewModel.SaveApplicationSettings(); // Mise à jour du fichier appSettings
         }
             
         UpdateWindowContents(false, true, true); // Affichage des paramètres dans la fenêtre
@@ -1907,13 +1913,13 @@ public partial class SettingsWindow
             previousAppScaleFactor != AppScaleFactor)
         {
             // Sauvegarde des paramètres dans le fichier appSettings
-            Logger.ConsoleAndLogWriteLine($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
-            ApplicationFileManager.SaveApplicationSettings();
-            Logger.ConsoleAndLogWriteLine("Settings saved successfully");
+            _viewModel.ConsoleAndLogWriteLine($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
+            _viewModel.SaveApplicationSettings();
+            _viewModel.ConsoleAndLogWriteLine("Settings saved successfully");
         }
         else
         {
-            Logger.ConsoleAndLogWriteLine("Settings are unchanged. No need to save them.");
+            _viewModel.ConsoleAndLogWriteLine("Settings are unchanged. No need to save them.");
         }
 
         // Mise à jour éventuellement du contenu pour update la langue du menu
@@ -2030,7 +2036,7 @@ public partial class SettingsWindow
         var includeImportedProjects = AddImportedFilesCheckBox.IsChecked;
         var includeRemovedGroupAddressList = (bool)IncludeAddressListCheckBox.IsChecked! && (bool)AddImportedFilesCheckBox.IsChecked!;
 
-        DebugArchiveGenerator.CreateDebugArchive((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!, includeRemovedGroupAddressList!);
+        _viewModel.CreateDebugArchive((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!);
     }
 
 
@@ -2053,15 +2059,15 @@ public partial class SettingsWindow
         }
         catch (InvalidOperationException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            _viewModel.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
         }
         catch (ArgumentException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            _viewModel.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
         }
         catch (PlatformNotSupportedException)
         {
-            Logger.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            _viewModel.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
         }
 
         e.Handled = true;
@@ -2143,7 +2149,7 @@ public partial class SettingsWindow
             // Si le slider est null, quitter la méthode
             if (slider == null) 
             {
-                Logger.ConsoleAndLogWrite("Slider not found.");
+                _viewModel.ConsoleAndLogWrite("Slider not found.");
                 return;
             }
         
@@ -2160,7 +2166,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Logue l'erreur en cas d'exception
-            Logger.ConsoleAndLogWrite($"An error occurred: {ex.Message}");
+            _viewModel.ConsoleAndLogWrite($"An error occurred: {ex.Message}");
         }
     }
 
@@ -2171,7 +2177,7 @@ public partial class SettingsWindow
     /// <typeparam name="T">The type of the parent to find.</typeparam>
     /// <param name="child">The starting child object from which to search up the visual tree.</param>
     /// <returns>The parent of type T, or null if no such parent is found.</returns>
-    private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
+    private T? FindParent<T>(DependencyObject child) where T : DependencyObject
     {
         try
         {
@@ -2200,7 +2206,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            Logger.ConsoleAndLogWrite($"An error occurred while finding parent: {ex.Message}");
+            _viewModel.ConsoleAndLogWrite($"An error occurred while finding parent: {ex.Message}");
             return null;
         }
     }
@@ -2227,7 +2233,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            Logger.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonDown: {ex.Message}");
+            _viewModel.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonDown: {ex.Message}");
         }
     }
 
@@ -2250,7 +2256,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            Logger.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonUp: {ex.Message}");
+            _viewModel.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonUp: {ex.Message}");
         }
     }
 
@@ -2273,7 +2279,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            Logger.ConsoleAndLogWrite($"An error occurred in SliderMouseMove: {ex.Message}");
+            _viewModel.ConsoleAndLogWrite($"An error occurred in SliderMouseMove: {ex.Message}");
         }
     }
 
@@ -2307,7 +2313,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            Logger.ConsoleAndLogWrite($"An error occurred in UpdateSliderValue: {ex.Message}");
+            _viewModel.ConsoleAndLogWrite($"An error occurred in UpdateSliderValue: {ex.Message}");
         }
     }
 

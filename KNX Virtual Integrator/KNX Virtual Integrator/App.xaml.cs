@@ -114,8 +114,8 @@ public partial class App
 
         ModelManager.Logger.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
-        MainViewModel = new MainViewModel();
-        WindowManager = new WindowManager();
+        MainViewModel = new MainViewModel(ModelManager);
+        WindowManager = new WindowManager(MainViewModel);
     }
 
     private void OpenMainWindow()

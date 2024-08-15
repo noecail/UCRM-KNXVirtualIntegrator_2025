@@ -1,6 +1,6 @@
 using System.Windows;
 using System.Windows.Media;
-using KNX_Virtual_Integrator.Model;
+using KNX_Virtual_Integrator.ViewModel;
 using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.View;
@@ -13,6 +13,8 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    private readonly MainViewModel _viewModel;
+    
     /// <summary>
     /// True if the user choose to import a group addresses file, false if it's a project knx file 
     /// </summary>
@@ -26,9 +28,12 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- METHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    public MainWindow()
+    public MainWindow(MainViewModel viewModel)
     {
         InitializeComponent();
+        
+        _viewModel = viewModel;
+        DataContext = _viewModel;
     }
     
     
@@ -44,12 +49,12 @@ public partial class MainWindow
 
     public void ApplyScaling(float scaleFactor)
     {
-        Logger.ConsoleAndLogWriteLine("MainWindow.ApplyScaling is not implemented");
+        _viewModel.ConsoleAndLogWriteLine("MainWindow.ApplyScaling is not implemented");
     }
 
     public void UpdateWindowContents(bool b, bool b1, bool b2)
     {
-        Logger.ConsoleAndLogWriteLine("MainWindow.UpdateWindowContents is not implemented");
+        _viewModel.ConsoleAndLogWriteLine("MainWindow.UpdateWindowContents is not implemented");
     }
     
     
@@ -63,7 +68,7 @@ public partial class MainWindow
     /// <param name="e">The event data.</param>
     private async void ImportProjectButtonClick(object sender, RoutedEventArgs e)
     {
-        Logger.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
+        _viewModel.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
 
         UserChooseToImportGroupAddressFile = false;
         
@@ -207,22 +212,22 @@ public partial class MainWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            Logger.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
+            _viewModel.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if (!ProjectFileManager.ExtractProjectFiles(openFileDialog.FileName)) return;
+            if (!_viewModel.ExtractProjectFiles(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
         }
         else
         {
-            Logger.ConsoleAndLogWriteLine("User aborted the file selection operation");
+            _viewModel.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
 
         // Partie management des adresses de groupes
-        FileFinder.FindZeroXml(ProjectFileManager.ProjectFolderPath);
-        GroupAddressManager.ExtractGroupAddress();
+        _ = _viewModel.FindZeroXml(_viewModel.ProjectFolderPath);
+        _viewModel.ExtractGroupAddress();
     }
     
     /// <summary>
@@ -234,7 +239,7 @@ public partial class MainWindow
     /// <param name="e">The event data.</param>
     private async void ImportGroupAddressFileButtonClick(object sender, RoutedEventArgs e)
     {
-        Logger.ConsoleAndLogWriteLine("Waiting for user to select group addresses file");
+        _viewModel.ConsoleAndLogWriteLine("Waiting for user to select group addresses file");
 
         UserChooseToImportGroupAddressFile = true;
         
@@ -254,19 +259,19 @@ public partial class MainWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            Logger.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
+            _viewModel.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if (!ProjectFileManager.ExtractGroupAddressFile(openFileDialog.FileName)) return;
+            if (!_viewModel.ExtractGroupAddressFile(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
         }
         else
         {
-            Logger.ConsoleAndLogWriteLine("User aborted the file selection operation");
+            _viewModel.ConsoleAndLogWriteLine("User aborted the file selection operation");
         }
-        GroupAddressManager.ExtractGroupAddress();
+        _viewModel.ExtractGroupAddress();
     }
     
 }

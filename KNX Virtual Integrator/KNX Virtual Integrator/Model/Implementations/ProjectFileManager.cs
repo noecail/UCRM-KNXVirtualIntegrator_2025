@@ -249,6 +249,9 @@ public class ProjectFileManager(Logger logger) : IProjectFileManager
         try
         {
             var knxprojExportFolderPath = $"./{Path.GetFileNameWithoutExtension(knxprojSourceFilePath)}/knxproj_exported/";
+
+            ProjectFolderPath = knxprojExportFolderPath;
+            
             ZipFile.ExtractToDirectory(zipArchivePath, knxprojExportFolderPath);
             File.Delete(zipArchivePath);
             return true;
