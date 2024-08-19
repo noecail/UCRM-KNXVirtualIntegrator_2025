@@ -39,10 +39,11 @@
         <GroupBox Header="Bus Connection" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
             <StackPanel>
                 <!-- ComboBox for selecting the type of connection -->
-                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0" SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}">
+                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0" SelectedItem="{Binding SelectedConnectionType}">
                     <ComboBoxItem Content="Type=USB"/>
-                    <ComboBoxItem Content="Type=IpRouting"/>
+                    <ComboBoxItem Content="Type=IP"/>
                     <!-- Add more connection types here -->
+                    
                 </ComboBox>
                 
                 
@@ -51,11 +52,17 @@
                     <StackPanel>
                         <!-- Liste des interfaces découvertes -->
                         <ListBox Name="InterfaceListBox" 
-                                 ItemsSource="{Binding GroupAddresses}"
+                                 ItemsSource="{Binding DiscoveredInterfaces}"
                                  SelectedItem="{Binding SelectedInterface}"
                                  Width="700" Height="50" 
                                  Margin="0,10,0,0"
-                                 SelectionMode="Single"/>
+                                 SelectionMode="Single">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding DisplayName}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
 
                         <!-- Bouton pour rafraîchir la liste des interfaces -->
                         <Button Content="Refresh Interfaces" Width="700" 
@@ -80,8 +87,23 @@
 
         <!-- Group Address List Section -->
         <GroupBox Header="Liste des adresses de groupes non gérées" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <!-- Instance of GroupAddressList UserControl -->
-            <local:GroupAddressList x:Name="GroupAddressListControl" Width="500" Height="150" Margin="5" />
+            <StackPanel Orientation="Vertical"><!-- Instance of GroupAddressList UserControl -->
+                <ListBox Name="GroupAddressListBox" 
+                         ItemsSource="{Binding GroupAddresses}"
+                         Width="700" Height="150" 
+                         Margin="0,10,0,0">
+                </ListBox>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Test d'envoi allumer" 
+                                    Command="{Binding GroupCommunicationVM.GroupValueWriteCommand}"
+                                    Margin="10"/>
+                    <Button Content="Test d'envoi éteindre" 
+                            Command="{Binding GroupCommunicationVM.GroupValueWrite0Command}"
+                            Margin="10"/>
+                </StackPanel>
+                
+            </StackPanel>
+            
         </GroupBox>
 
         <!-- Modeles Section -->
