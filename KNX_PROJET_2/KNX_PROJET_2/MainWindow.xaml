@@ -95,10 +95,10 @@
                 </ListBox>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Test d'envoi allumer" 
-                                    Command="{Binding TestWriteCommandOn}"
+                                    Command="{Binding GroupCommunicationVM.GroupValueWriteCommand}"
                                     Margin="10"/>
                     <Button Content="Test d'envoi éteindre" 
-                            Command="{Binding TestWriteCommandOff}"
+                            Command="{Binding GroupCommunicationVM.GroupValueWrite0Command}"
                             Margin="10"/>
                 </StackPanel>
                 
