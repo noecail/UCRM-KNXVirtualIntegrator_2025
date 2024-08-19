@@ -23,7 +23,7 @@ namespace KNX_PROJET_2
         public KnxBus _bus;
         public CancellationTokenSource _cancellationTokenSource;
 
-        // Propriétés liées à l'interface utilisateur
+        // Propriétés liées à l'interface utilisateur //test
         public ObservableCollection<InterfaceViewModel> GroupAddresses { get; private set; }
         public ObservableCollection<InterfaceViewModel> DiscoveredInterfaces { get; private set; }
         public ICommand ImportCommand { get; private set; }
