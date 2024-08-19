@@ -87,12 +87,23 @@
 
         <!-- Group Address List Section -->
         <GroupBox Header="Liste des adresses de groupes non gérées" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <!-- Instance of GroupAddressList UserControl -->
-            <ListBox Name="GroupAddressListBox" 
-                     ItemsSource="{Binding GroupAddresses}"
-                     Width="700" Height="150" 
-                     Margin="0,10,0,0">
-            </ListBox>
+            <StackPanel Orientation="Vertical"><!-- Instance of GroupAddressList UserControl -->
+                <ListBox Name="GroupAddressListBox" 
+                         ItemsSource="{Binding GroupAddresses}"
+                         Width="700" Height="150" 
+                         Margin="0,10,0,0">
+                </ListBox>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Test d'envoi allumer" 
+                                    Command="{Binding TestWriteCommandOn}"
+                                    Margin="10"/>
+                    <Button Content="Test d'envoi éteindre" 
+                            Command="{Binding TestWriteCommandOff}"
+                            Margin="10"/>
+                </StackPanel>
+                
+            </StackPanel>
+            
         </GroupBox>
 
         <!-- Modeles Section -->

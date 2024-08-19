@@ -30,6 +30,9 @@ namespace KNX_PROJET_2
         public ICommand ConnectCommand { get; private set; }
         public ICommand DisconnectCommand { get; private set; }
         public ICommand RefreshInterfacesCommand { get; private set; }
+        public ICommand TestWriteCommandOn { get; private set; }
+        public ICommand TestWriteCommandOff { get; private set; }
+
 
         public ICommand TypeConnectionCommand { get; set; }
 
@@ -83,6 +86,42 @@ namespace KNX_PROJET_2
             DisconnectCommand = new RelayCommand(async () => await DisconnectBusAsync());
             RefreshInterfacesCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
             TypeConnectionCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
+            
+            TestWriteCommandOn = new RelayCommand(async () => await TestWriteOn());
+            TestWriteCommandOff = new RelayCommand(async () => await TestWriteOff());
+
+        }
+
+        private async Task TestWriteOn()
+        {
+            if (_bus == null)
+            {
+                MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            
+            try
+            {
+                var valueToSend = new GroupValue(1);
+                await _bus.WriteGroupValueAsync((GroupAddress)"0/1/1", valueToSend, MessagePriority.High, _cancellationTokenSource.Token);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}\nStack Trace: {ex.StackTrace}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        
+        private async Task TestWriteOff()
+        {
+            try
+            {
+                var valueToSend = new GroupValue(0);
+                await _bus.WriteGroupValueAsync((GroupAddress)"0/1/1", valueToSend, MessagePriority.High, _cancellationTokenSource.Token);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private async Task ImportListGroupAddress()
@@ -138,11 +177,12 @@ namespace KNX_PROJET_2
             {
                 // Le bus est occupé le temps de la connexion
                 IsBusy = true;
+                
                 // Dans connectionString, on a toutes les informations nécessaire pour bien gérer la connexion :
                 // Type=IpTunneling;HostAddress=127.0.0.1;SerialNumber=00FA:00000001;MacAddress=060606030E47;ProtocolType=Udp;Name="KNX Virtual "
                 var connectionString = SelectedInterface?.ConnectionString;
 
-                // Si on n'a pas choisit d'interface, demande d'en choisir une
+                // Si on n'a pas choisi d'interface, demande d'en choisir une
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
                     MessageBox.Show("Le type de connexion et la chaîne de connexion doivent être fournis.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -188,8 +228,9 @@ namespace KNX_PROJET_2
             finally
             {
                 IsBusy = false;
-                _cancellationTokenSource.Dispose();
-                _cancellationTokenSource = null;
+                ResetCancellationTokenSource();
+                //_cancellationTokenSource.Dispose();
+                //_cancellationTokenSource = null;
             }
         }
 
@@ -294,10 +335,10 @@ namespace KNX_PROJET_2
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         // Mettre à jour les interfaces pour l'utilisateur
-                        GroupAddresses.Clear();
+                        DiscoveredInterfaces.Clear();
                         foreach (var discoveredInterface in discoveredInterfaces)
                         {
-                            GroupAddresses.Add(discoveredInterface);
+                            DiscoveredInterfaces.Add(discoveredInterface);
                         }
                     });
                 }
@@ -319,21 +360,28 @@ namespace KNX_PROJET_2
                     Application.Current.Dispatcher.Invoke(() =>
                     {
                         // Mettre à jour les interfaces pour l'utilisateur
-                        GroupAddresses.Clear();
+                        DiscoveredInterfaces.Clear();
                         foreach (var discoveredInterface in discoveredInterfaces)
                         {
-                            GroupAddresses.Add(discoveredInterface);
+                            DiscoveredInterfaces.Add(discoveredInterface);
                         }
                     });
                 }
-                
-
                               
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
             }
+        }
+        
+        private void ResetCancellationTokenSource()
+        {
+            // Si l'ancien TokenSource existe, le supprimer pour éviter les fuites de mémoire
+            _cancellationTokenSource?.Dispose();
+
+            // Réinitialiser le TokenSource
+            _cancellationTokenSource = new CancellationTokenSource();
         }
 
         private InterfaceViewModel _selectedInterface;
