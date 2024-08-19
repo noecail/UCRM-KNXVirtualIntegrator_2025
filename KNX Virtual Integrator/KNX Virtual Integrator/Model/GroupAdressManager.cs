@@ -46,6 +46,8 @@ public class GroupAddressManagement
     /// </summary>
     private static void ProcessZeroXmlFile(XDocument groupAddressFile)
     {
+        GroupedAddresses.Clear();
+
         var deviceRefs = groupAddressFile.Descendants(_globalKnxNamespace + "DeviceInstance")
             .Select(di => new
             {
@@ -136,6 +138,7 @@ public class GroupAddressManagement
     /// </summary>
     private static void ProcessStandardXmlFile(XDocument groupAddressFile)
     {
+        GroupedAddresses.Clear();
         var groupAddresses = groupAddressFile.Descendants(_globalKnxNamespace + "GroupAddress").ToList();
         
         foreach (var ga in groupAddresses)
@@ -305,7 +308,7 @@ public class GroupAddressManagement
         var prefix1 = string.Join(" ", words1.Take(3));
         var prefix2 = string.Join(" ", words2.Take(3));
 
-        if (CalculateSimilarity(prefix1, prefix2) < 0.8)
+        if (CalculateSimilarity(prefix1, prefix2) < 0.8) 
             return false;
 
         // Ensure remaining words match exactly
@@ -389,22 +392,5 @@ public class GroupAddressManagement
 
         return d[n, m];
     }
-
-    /// <summary>
-    /// Normalizes the name by removing specific prefixes.
-    ///
-    /// This method removes "Ie" or "Cmd" prefixes from the name if present, and returns the
-    /// normalized name. If neither prefix is present, the name is returned as-is.
-    ///
-    /// <param name="name">The name to normalize.</param>
-    /// <returns>The normalized name.</returns>
-    /// </summary>
-    /*private static string NormalizeName(string name)
-    {
-        if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
-            return name.Substring(2);
-        if (name.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase))
-            return name.Substring(3);
-        return name;
-    }*/
+    
 }
