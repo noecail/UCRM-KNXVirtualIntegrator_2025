@@ -282,10 +282,10 @@ namespace KNX_PROJET_2
                 Application.Current.Dispatcher.Invoke(() =>
                 {
                     // Mettre à jour les interfaces pour l'utilisateur
-                    GroupAddresses.Clear();
+                    DiscoveredInterfaces.Clear();
                     foreach (var discoveredInterface in discoveredInterfaces)
                     {
-                        GroupAddresses.Add(discoveredInterface);
+                        DiscoveredInterfaces.Add(discoveredInterface);
                     }
                 });              
             }
