@@ -31,6 +31,8 @@ namespace KNX_PROJET_2
         public ICommand DisconnectCommand { get; private set; }
         public ICommand RefreshInterfacesCommand { get; private set; }
 
+        public ICommand TypeConnectionCommand { get; set; }
+
         private bool _isBusy;
         public bool IsBusy
         {
@@ -52,6 +54,24 @@ namespace KNX_PROJET_2
             private set => Set(ref _connectionState, value);
         }
 
+        private string _selectedConnectionType;
+        public string SelectedConnectionType
+        {
+            get => _selectedConnectionType;
+            set
+            {
+                if (_selectedConnectionType != value)
+                {
+                    _selectedConnectionType = value;
+                    
+                    // Exécuter la commande lorsque la sélection change
+                    TypeConnectionCommand?.Execute(null);
+                }
+            }
+        }
+
+
+
         public MainViewModel()
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -62,6 +82,7 @@ namespace KNX_PROJET_2
             ConnectCommand = new RelayCommand(async () => await ConnectBusAsync());
             DisconnectCommand = new RelayCommand(async () => await DisconnectBusAsync());
             RefreshInterfacesCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
+            TypeConnectionCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
         }
 
         private async Task ImportListGroupAddress()
@@ -223,71 +244,91 @@ namespace KNX_PROJET_2
                 var discoveredInterfaces = new ObservableCollection<InterfaceViewModel>();
 
                 // Découverte des interfaces IP
-                var ipDiscoveryTask = Task.Run(async () =>
+                if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=IP")
                 {
-                    
-                    using (var cts = new CancellationTokenSource())
-                    {
+                    var ipDiscoveryTask = Task.Run(async () =>
+                {
 
-                        var results = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
-                        
-
-                        await foreach (var result in results)
+                        using (var cts = new CancellationTokenSource())
                         {
-                            // Traitement des connexions tunneling
-                            foreach (var tunnelingServer in result.GetTunnelingConnections())
+
+                            var results = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+
+
+                            await foreach (var result in results)
                             {
-                                // Mettre à jour les connexions existantes ou ajouter de nouvelles connexions
-                                if (result.IsExtensionOf != null)
+                                // Traitement des connexions tunneling
+                                foreach (var tunnelingServer in result.GetTunnelingConnections())
                                 {
-                                    var existing = discoveredInterfaces.FirstOrDefault(i => i.ConnectionString == result.IsExtensionOf.ToConnectionString());
-                                    if (existing != null)
+                                    // Mettre à jour les connexions existantes ou ajouter de nouvelles connexions
+                                    if (result.IsExtensionOf != null)
                                     {
-                                        existing.ConnectionString = tunnelingServer.ToConnectionString();
-                                        continue;
+                                        var existing = discoveredInterfaces.FirstOrDefault(i => i.ConnectionString == result.IsExtensionOf.ToConnectionString());
+                                        if (existing != null)
+                                        {
+                                            existing.ConnectionString = tunnelingServer.ToConnectionString();
+                                            continue;
+                                        }
                                     }
+
+                                    var displayName = tunnelingServer.IndividualAddress.HasValue
+                                        ? $"{tunnelingServer.Name} {tunnelingServer.HostAddress} ({tunnelingServer.IndividualAddress.Value})"
+                                        : $"{tunnelingServer.Name} {tunnelingServer.HostAddress}";
+                                    var tunneling = new InterfaceViewModel(ConnectorType.IpTunneling, displayName, tunnelingServer.ToConnectionString());
+                                    discoveredInterfaces.Add(tunneling);
                                 }
 
-                                var displayName = tunnelingServer.IndividualAddress.HasValue
-                                    ? $"{tunnelingServer.Name} {tunnelingServer.HostAddress} ({tunnelingServer.IndividualAddress.Value})"
-                                    : $"{tunnelingServer.Name} {tunnelingServer.HostAddress}";
-                                var tunneling = new InterfaceViewModel(ConnectorType.IpTunneling, displayName, tunnelingServer.ToConnectionString());
-                                discoveredInterfaces.Add(tunneling);
-                            }
-
-                            // Traitement des connexions IP routing
-                            if (result.Supports(ServiceFamily.Routing, 1))
-                            {
-                                var routingParameters = IpRoutingConnectorParameters.FromDiscovery(result);
-                                var routing = new InterfaceViewModel(ConnectorType.IpRouting, $"{result.MulticastAddress} on {result.LocalIPAddress}", routingParameters.ToConnectionString());
-                                discoveredInterfaces.Add(routing);
+                                // Traitement des connexions IP routing
+                                if (result.Supports(ServiceFamily.Routing, 1))
+                                {
+                                    var routingParameters = IpRoutingConnectorParameters.FromDiscovery(result);
+                                    var routing = new InterfaceViewModel(ConnectorType.IpRouting, $"{result.MulticastAddress} on {result.LocalIPAddress}", routingParameters.ToConnectionString());
+                                    discoveredInterfaces.Add(routing);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                    // Attendre que toutes les découvertes soient terminées
+                    await Task.WhenAll(ipDiscoveryTask);
+
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        // Mettre à jour les interfaces pour l'utilisateur
+                        GroupAddresses.Clear();
+                        foreach (var discoveredInterface in discoveredInterfaces)
+                        {
+                            GroupAddresses.Add(discoveredInterface);
+                        }
+                    });
+                }
 
                 // Découverte des périphériques USB
-                var usbDiscoveryTask = Task.Run(() =>
+                if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=USB")
                 {
-                    foreach (var usbDevice in KnxBus.GetAttachedUsbDevices())
+                    var usbDiscoveryTask = Task.Run(() =>
                     {
-                        var interfaceViewModel = new InterfaceViewModel(ConnectorType.Usb, usbDevice.DisplayName, usbDevice.ToConnectionString());
-                        discoveredInterfaces.Add(interfaceViewModel);
-                    }
-                });
+                        foreach (var usbDevice in KnxBus.GetAttachedUsbDevices())
+                        {
+                            var interfaceViewModel = new InterfaceViewModel(ConnectorType.Usb, usbDevice.DisplayName, usbDevice.ToConnectionString());
+                           discoveredInterfaces.Add(interfaceViewModel);
+                        }
+                    });
+                    // Attendre que toutes les découvertes soient terminées
+                    await Task.WhenAll(usbDiscoveryTask);
 
-                // Attendre que toutes les découvertes soient terminées
-                await Task.WhenAll(ipDiscoveryTask, usbDiscoveryTask);
-
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    // Mettre à jour les interfaces pour l'utilisateur
-                    GroupAddresses.Clear();
-                    foreach (var discoveredInterface in discoveredInterfaces)
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
-                        GroupAddresses.Add(discoveredInterface);
-                    }
-                });              
+                        // Mettre à jour les interfaces pour l'utilisateur
+                        GroupAddresses.Clear();
+                        foreach (var discoveredInterface in discoveredInterfaces)
+                        {
+                            GroupAddresses.Add(discoveredInterface);
+                        }
+                    });
+                }
+                
+
+                              
             }
             catch (Exception ex)
             {

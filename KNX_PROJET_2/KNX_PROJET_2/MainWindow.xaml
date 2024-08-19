@@ -39,10 +39,11 @@
         <GroupBox Header="Bus Connection" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
             <StackPanel>
                 <!-- ComboBox for selecting the type of connection -->
-                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0" SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}">
+                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0" SelectedItem="{Binding SelectedConnectionType}">
                     <ComboBoxItem Content="Type=USB"/>
-                    <ComboBoxItem Content="Type=IpRouting"/>
+                    <ComboBoxItem Content="Type=IP"/>
                     <!-- Add more connection types here -->
+                    
                 </ComboBox>
                 
                 
