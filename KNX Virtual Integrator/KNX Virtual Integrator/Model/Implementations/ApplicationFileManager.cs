@@ -522,14 +522,15 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
                 "|                            KNX VIRTUAL INTEGRATOR SETTINGS                            |");
             writer.WriteLine(
                 "-----------------------------------------------------------------------------------------");
-            writer.Write("theme : ");
-            writer.WriteLine((bool)App.WindowManager?.SettingsWindow?.EnableLightTheme ? "light" : "dark");
-
-            writer.Write("application language : ");
-            writer.WriteLine(App.WindowManager.SettingsWindow?.AppLang);
-
-            writer.Write("window scale factor : ");
-            writer.WriteLine(App.WindowManager.SettingsWindow?.AppScaleFactor);
+            // TODO A FIX AVEC HUGO
+            // writer.Write("theme : ");
+            // writer.WriteLine((bool)App.WindowManager?.SettingsWindow?.EnableLightTheme ? "light" : "dark");
+            //
+            // writer.Write("application language : ");
+            // writer.WriteLine(App.WindowManager.SettingsWindow?.AppLang);
+            //
+            // writer.Write("window scale factor : ");
+            // writer.WriteLine(App.WindowManager.SettingsWindow?.AppScaleFactor);
 
             writer.WriteLine(
                 "-----------------------------------------------------------------------------------------");
