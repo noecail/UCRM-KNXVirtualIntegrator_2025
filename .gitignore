@@ -16,14 +16,6 @@
 /KNX Virtual Integrator/KNX Virtual Integrator/obj/Debug/net8.0-windows/KNX Virtual Integrator.sourcelink.json
 /KNX Virtual Integrator/KNX Virtual Integrator/obj/Debug/net8.0-windows/MainWindow.baml
 /KNX Virtual Integrator/.idea/.idea.KNX Virtual Integrator/.idea/vcs.xml
-# Visual Studio files
-.vs/
-*.suo
-*.user
-*.userosscache
-*.sln.docstates
-*.vsidx
-*.vsidx
 KNX Virtual Integrator/KNX Virtual Integrator/obj
 /KNX Virtual Integrator/KNX Virtual Integrator/obj
 KNX Virtual Integrator/KNX Virtual Integrator/obj/
@@ -63,4 +55,17 @@ KNX Virtual Integrator/KNX Virtual Integrator/obj/Debug/net8.0-windows/apphost.e
 /KNX Virtual Integrator/KNX Virtual Integrator/font/aptos-light.ttf
 /KNX Virtual Integrator/KNX Virtual Integrator/font/aptos-light-italic.ttf
 /KNX Virtual Integrator/KNX Virtual Integrator/font/aptos-semibold.ttf
+
+#General
+**/bin/
+**/obj/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.vsidx
 *.exe
+.vs/
+.idea/
+**/rider.project.restore.info
+**/Debug/**
