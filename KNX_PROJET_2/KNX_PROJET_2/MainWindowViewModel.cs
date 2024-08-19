@@ -113,14 +113,20 @@ namespace KNX_PROJET_2
         
         private async Task TestWriteOff()
         {
+            if (_bus == null)
+            {
+                MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            
             try
             {
-                var valueToSend = new GroupValue(0);
+                var valueToSend = new GroupValue(1);
                 await _bus.WriteGroupValueAsync((GroupAddress)"0/1/1", valueToSend, MessagePriority.High, _cancellationTokenSource.Token);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}\nStack Trace: {ex.StackTrace}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
