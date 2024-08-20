@@ -47,7 +47,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 90;
+    public const int AppBuild = 91;
     
         
     
@@ -105,6 +105,7 @@ public partial class App
         var systemSettingsDetector = new SystemSettingsDetector(logger);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager);
         var applicationFileManager = new ApplicationFileManager(logger, systemSettingsDetector);
+        var busConnection = new BusConnection();
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
@@ -116,7 +117,8 @@ public partial class App
             groupAddressManager,
             systemSettingsDetector,
             debugArchiveGenerator,
-            applicationFileManager);
+            applicationFileManager,
+            busConnection);
     
         // Assurer l'existence du répertoire de logs
         ModelManager.ApplicationFileManager.EnsureLogDirectoryExists();
@@ -191,5 +193,7 @@ public partial class App
     }
     
 }
+
+
 
 
