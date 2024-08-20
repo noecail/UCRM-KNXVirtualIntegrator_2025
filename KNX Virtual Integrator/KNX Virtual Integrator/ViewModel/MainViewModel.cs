@@ -44,11 +44,6 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
             }
         );
     
-    
-    
-    
-    
-    
     public bool ExtractGroupAddressFile(string fileName)
     {
         Console.WriteLine("Not implemented");
@@ -66,4 +61,21 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
         Console.WriteLine("Not implemented");
         return null;
     }
+    
+    
+    public ICommand ConnectBusCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.BusConnection.ConnectBusAsync());
+
+    public ICommand DisconnectBusCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.BusConnection.DisconnectBusAsync());
+
+    public ICommand RefreshInterfacesCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.BusConnection.DiscoverInterfacesAsync());
+
+    public ICommand GroupValueWriteOnCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOnAsync());
+
+    public ICommand GroupValueWriteOffCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOffAsync());
+
 }

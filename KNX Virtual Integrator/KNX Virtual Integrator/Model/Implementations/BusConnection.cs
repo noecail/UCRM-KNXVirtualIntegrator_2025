@@ -16,14 +16,14 @@ public class BusConnection : ObservableObject ,IBusConnection
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
 
-    private KnxBus? _bus;
-    private CancellationTokenSource? _cancellationTokenSource;
+    public KnxBus? _bus;
+    public CancellationTokenSource? _cancellationTokenSource;
 
     // Propriétés liées à l'interface utilisateur //test
-    public ObservableCollection<ConnectionInterfaceViewModel> GroupAddresses { get; private set; }
-    public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces { get; private set; }
+    public ObservableCollection<ConnectionInterfaceViewModel>? GroupAddresses { get; private set; }
+    public ObservableCollection<ConnectionInterfaceViewModel>? DiscoveredInterfaces { get; private set; }
     
-    public GroupCommunicationViewModel GroupCommunicationVM { get; }
+    //public GroupCommunicationViewModel GroupCommunicationVM { get; }
 
     private ConnectionInterfaceViewModel? _selectedInterface;
     public ConnectionInterfaceViewModel? SelectedInterface
@@ -33,14 +33,14 @@ public class BusConnection : ObservableObject ,IBusConnection
     }
     
     private bool _isBusy;
-    private bool IsBusy
+    public bool IsBusy
     {
         get => _isBusy;
         set => Set(ref _isBusy, value);
     }
 
     private bool _isConnected;
-    private bool IsConnected
+    public bool IsConnected
     {
         get => _isConnected;
         set => Set(ref _isConnected, value);
@@ -62,10 +62,24 @@ public class BusConnection : ObservableObject ,IBusConnection
             if (_selectedConnectionType != value)
             {
                 _selectedConnectionType = value;
-                TypeConnectionCommand?.Execute(null);
+                OnSelectedConnectionTypeChanged();
             }
         }
     }
+    
+    private async void OnSelectedConnectionTypeChanged()
+    {
+        try
+        {
+            await DiscoverInterfacesAsync();
+        }
+        catch (Exception ex)
+        {
+            // Gestion d'erreur
+            Console.WriteLine($"Erreur lors de la découverte des interfaces: {ex.Message}");
+        }
+    }
+    
     public async Task ConnectBusAsync()
     {
         if (IsBusy)
@@ -132,6 +146,38 @@ public class BusConnection : ObservableObject ,IBusConnection
         }
     }
     
+    public async Task DisconnectBusAsync()
+    {
+        if (IsBusy || !IsConnected)
+        {
+            MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        _cancellationTokenSource?.Cancel();
+        _cancellationTokenSource = null;
+
+        try
+        {
+            if (_bus != null)
+            {
+                _bus.ConnectionStateChanged -= BusConnectionStateChanged;
+                await _bus.DisposeAsync();
+                _bus = null;
+                IsConnected = false;
+                UpdateConnectionState();
+                MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
     
     public async Task DiscoverInterfacesAsync()
     {

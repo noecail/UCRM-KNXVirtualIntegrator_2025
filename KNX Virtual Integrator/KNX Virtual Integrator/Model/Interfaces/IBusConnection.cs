@@ -4,5 +4,7 @@ public interface IBusConnection
 { 
     Task ConnectBusAsync();
 
+    Task DisconnectBusAsync();
+
     Task DiscoverInterfacesAsync();
 }
