@@ -199,11 +199,11 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
             // Si le fichier de paramétrage n'existe pas, on le crée
             // Note : comme File.Create ouvre un stream vers le fichier à la création, on le ferme directement avec Close().
             if (File.Exists(settingsPath)) return;
-            
+
             File.Create(settingsPath).Close();
 
             if (App.WindowManager == null || App.WindowManager.SettingsWindow == null) return;
-            
+
             // Le thème appliqué par défaut est le même que celui de windows
             settings.EnableLightTheme = detector.DetectWindowsTheme();
 
@@ -217,65 +217,92 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
             var messageBoxText = settings.AppLang switch
             {
                 // Arabe
-                "AR" => "خطأ: تعذر الوصول إلى ملف إعدادات التطبيق. يرجى التحقق من أنه ليس للقراءة فقط وحاول مرة أخرى، أو قم بتشغيل البرنامج كمسؤول.\nرمز الخطأ: 1",
+                "AR" =>
+                    "خطأ: تعذر الوصول إلى ملف إعدادات التطبيق. يرجى التحقق من أنه ليس للقراءة فقط وحاول مرة أخرى، أو قم بتشغيل البرنامج كمسؤول.\nرمز الخطأ: 1",
                 // Bulgare
-                "BG" => "Грешка: Не може да се получи достъп до конфигурационния файл на приложението. Моля, проверете дали файлът не е само за четене и опитайте отново, или стартирайте програмата като администратор.\nКод за грешка: 1",
+                "BG" =>
+                    "Грешка: Не може да се получи достъп до конфигурационния файл на приложението. Моля, проверете дали файлът не е само за четене и опитайте отново, или стартирайте програмата като администратор.\nКод за грешка: 1",
                 // Tchèque
-                "CS" => "Chyba: Nelze získat přístup k konfiguračnímu souboru aplikace. Zkontrolujte, zda není pouze ke čtení, a zkuste to znovu, nebo spusťte program jako správce.\nChybový kód: 1",
+                "CS" =>
+                    "Chyba: Nelze získat přístup k konfiguračnímu souboru aplikace. Zkontrolujte, zda není pouze ke čtení, a zkuste to znovu, nebo spusťte program jako správce.\nChybový kód: 1",
                 // Danois
-                "DA" => "Fejl: Kan ikke få adgang til applikationskonfigurationsfilen. Kontroller venligst, at filen ikke er skrivebeskyttet, og prøv igen, eller start programmet som administrator.\nFejlkode: 1",
+                "DA" =>
+                    "Fejl: Kan ikke få adgang til applikationskonfigurationsfilen. Kontroller venligst, at filen ikke er skrivebeskyttet, og prøv igen, eller start programmet som administrator.\nFejlkode: 1",
                 // Allemand
-                "DE" => "Fehler: Zugriff auf die Konfigurationsdatei der Anwendung nicht möglich. Bitte überprüfen Sie, ob die Datei schreibgeschützt ist, und versuchen Sie es erneut, oder starten Sie das Programm als Administrator.\nFehlercode: 1",
+                "DE" =>
+                    "Fehler: Zugriff auf die Konfigurationsdatei der Anwendung nicht möglich. Bitte überprüfen Sie, ob die Datei schreibgeschützt ist, und versuchen Sie es erneut, oder starten Sie das Programm als Administrator.\nFehlercode: 1",
                 // Grec
-                "EL" => "Σφάλμα: δεν είναι δυνατή η πρόσβαση στο αρχείο ρυθμίσεων της εφαρμογής. Παρακαλώ ελέγξτε αν δεν είναι μόνο για ανάγνωση και προσπαθήστε ξανά, ή ξεκινήστε το πρόγραμμα ως διαχειριστής.\nΚωδικός σφάλματος: 1",
+                "EL" =>
+                    "Σφάλμα: δεν είναι δυνατή η πρόσβαση στο αρχείο ρυθμίσεων της εφαρμογής. Παρακαλώ ελέγξτε αν δεν είναι μόνο για ανάγνωση και προσπαθήστε ξανά, ή ξεκινήστε το πρόγραμμα ως διαχειριστής.\nΚωδικός σφάλματος: 1",
                 // Anglais
-                "EN" => "Error: Unable to access the application configuration file. Please check if it is read-only and try again, or run the program as an administrator.\nError Code: 1",
+                "EN" =>
+                    "Error: Unable to access the application configuration file. Please check if it is read-only and try again, or run the program as an administrator.\nError Code: 1",
                 // Espagnol
-                "ES" => "Error: No se puede acceder al archivo de configuración de la aplicación. Por favor, verifique si el archivo es de solo lectura y vuelva a intentarlo, o ejecute el programa como administrador.\nCódigo de error: 1",
+                "ES" =>
+                    "Error: No se puede acceder al archivo de configuración de la aplicación. Por favor, verifique si el archivo es de solo lectura y vuelva a intentarlo, o ejecute el programa como administrador.\nCódigo de error: 1",
                 // Estonien
-                "ET" => "Viga: rakenduse konfiguratsioonifailile ei saa juurde pääseda. Kontrollige, kas fail on ainult lugemiseks ja proovige uuesti või käivitage programm administraatorina.\nVeakood: 1",
+                "ET" =>
+                    "Viga: rakenduse konfiguratsioonifailile ei saa juurde pääseda. Kontrollige, kas fail on ainult lugemiseks ja proovige uuesti või käivitage programm administraatorina.\nVeakood: 1",
                 // Finnois
-                "FI" => "Virhe: Sovelluksen asetustiedostoon ei pääse käsiksi. Tarkista, ettei tiedosto ole vain luku -tilassa, ja yritä uudelleen tai käynnistä ohjelma järjestelmänvalvojana.\nVirhekoodi: 1",
+                "FI" =>
+                    "Virhe: Sovelluksen asetustiedostoon ei pääse käsiksi. Tarkista, ettei tiedosto ole vain luku -tilassa, ja yritä uudelleen tai käynnistä ohjelma järjestelmänvalvojana.\nVirhekoodi: 1",
                 // Hongrois
-                "HU" => "Hiba: Nem lehet hozzáférni az alkalmazás konfigurációs fájljához. Kérjük, ellenőrizze, hogy a fájl nem csak olvasásra van-e beállítva, és próbálja újra, vagy futtassa a programot rendszergazdai jogosultságokkal.\nHibakód: 1",
+                "HU" =>
+                    "Hiba: Nem lehet hozzáférni az alkalmazás konfigurációs fájljához. Kérjük, ellenőrizze, hogy a fájl nem csak olvasásra van-e beállítva, és próbálja újra, vagy futtassa a programot rendszergazdai jogosultságokkal.\nHibakód: 1",
                 // Indonésien
-                "ID" => "Kesalahan: tidak dapat mengakses file konfigurasi aplikasi. Silakan periksa apakah file tersebut hanya-baca dan coba lagi, atau jalankan program sebagai administrator.\nKode kesalahan: 1",
+                "ID" =>
+                    "Kesalahan: tidak dapat mengakses file konfigurasi aplikasi. Silakan periksa apakah file tersebut hanya-baca dan coba lagi, atau jalankan program sebagai administrator.\nKode kesalahan: 1",
                 // Italien
-                "IT" => "Errore: impossibile accedere al file di configurazione dell'applicazione. Verifica se il file è solo in lettura e riprova, oppure avvia il programma come amministratore.\nCodice errore: 1",
+                "IT" =>
+                    "Errore: impossibile accedere al file di configurazione dell'applicazione. Verifica se il file è solo in lettura e riprova, oppure avvia il programma come amministratore.\nCodice errore: 1",
                 // Japonais
                 "JA" => "エラー: アプリケーションの設定ファイルにアクセスできません。ファイルが読み取り専用でないか確認し、再試行するか、管理者としてプログラムを実行してください。\nエラーコード: 1",
                 // Coréen
                 "KO" => "오류: 애플리케이션 구성 파일에 액세스할 수 없습니다. 파일이 읽기 전용인지 확인하고 다시 시도하거나 관리자로 프로그램을 실행하세요.\n오류 코드: 1",
                 // Letton
-                "LV" => "Kļūda: nevar piekļūt lietojumprogrammas konfigurācijas failam. Lūdzu, pārbaudiet, vai fails nav tikai lasāms, un mēģiniet vēlreiz vai palaidiet programmu kā administrators.\nKļūdas kods: 1",
+                "LV" =>
+                    "Kļūda: nevar piekļūt lietojumprogrammas konfigurācijas failam. Lūdzu, pārbaudiet, vai fails nav tikai lasāms, un mēģiniet vēlreiz vai palaidiet programmu kā administrators.\nKļūdas kods: 1",
                 // Lituanien
-                "LT" => "Klaida: negalima prieiti prie programos konfigūracijos failo. Patikrinkite, ar failas nėra tik skaitymui ir bandykite dar kartą arba paleiskite programą kaip administratorius.\nKlaidos kodas: 1",
+                "LT" =>
+                    "Klaida: negalima prieiti prie programos konfigūracijos failo. Patikrinkite, ar failas nėra tik skaitymui ir bandykite dar kartą arba paleiskite programą kaip administratorius.\nKlaidos kodas: 1",
                 // Norvégien
-                "NB" => "Feil: Kan ikke få tilgang til applikasjonskonfigurasjonsfilen. Sjekk om filen er skrivebeskyttet og prøv igjen, eller kjør programmet som administrator.\nFeilkode: 1",
+                "NB" =>
+                    "Feil: Kan ikke få tilgang til applikasjonskonfigurasjonsfilen. Sjekk om filen er skrivebeskyttet og prøv igjen, eller kjør programmet som administrator.\nFeilkode: 1",
                 // Néerlandais
-                "NL" => "Fout: kan geen toegang krijgen tot het configuratiebestand van de applicatie. Controleer of het bestand alleen-lezen is en probeer het opnieuw, of voer het programma uit als administrator.\nFoutcode: 1",
+                "NL" =>
+                    "Fout: kan geen toegang krijgen tot het configuratiebestand van de applicatie. Controleer of het bestand alleen-lezen is en probeer het opnieuw, of voer het programma uit als administrator.\nFoutcode: 1",
                 // Polonais
-                "PL" => "Błąd: Nie można uzyskać dostępu do pliku konfiguracyjnego aplikacji. Sprawdź, czy plik nie jest tylko do odczytu, a następnie spróbuj ponownie lub uruchom program jako administrator.\nKod błędu: 1",
+                "PL" =>
+                    "Błąd: Nie można uzyskać dostępu do pliku konfiguracyjnego aplikacji. Sprawdź, czy plik nie jest tylko do odczytu, a następnie spróbuj ponownie lub uruchom program jako administrator.\nKod błędu: 1",
                 // Portugais
-                "PT" => "Erro: não foi possível acessar o arquivo de configuração do aplicativo. Verifique se o arquivo é somente leitura e tente novamente, ou execute o programa como administrador.\nCódigo de erro: 1",
+                "PT" =>
+                    "Erro: não foi possível acessar o arquivo de configuração do aplicativo. Verifique se o arquivo é somente leitura e tente novamente, ou execute o programa como administrador.\nCódigo de erro: 1",
                 // Roumain
-                "RO" => "Eroare: Nu se poate accesa fișierul de configurare al aplicației. Vă rugăm să verificați dacă fișierul este numai pentru citire și să încercați din nou sau să rulați programul ca administrator.\nCod eroare: 1",
+                "RO" =>
+                    "Eroare: Nu se poate accesa fișierul de configurare al aplicației. Vă rugăm să verificați dacă fișierul este numai pentru citire și să încercați din nou sau să rulați programul ca administrator.\nCod eroare: 1",
                 // Russe
-                "RU" => "Ошибка: невозможно получить доступ к файлу конфигурации приложения. Проверьте, не является ли файл только для чтения, и попробуйте снова, или запустите программу от имени администратора.\nКод ошибки: 1",
+                "RU" =>
+                    "Ошибка: невозможно получить доступ к файлу конфигурации приложения. Проверьте, не является ли файл только для чтения, и попробуйте снова, или запустите программу от имени администратора.\nКод ошибки: 1",
                 // Slovaque
-                "SK" => "Chyba: nemožno získať prístup k konfiguračnému súboru aplikácie. Skontrolujte, či nie je súbor iba na čítanie, a skúste to znova, alebo spustite program ako správca.\nChybový kód: 1",
+                "SK" =>
+                    "Chyba: nemožno získať prístup k konfiguračnému súboru aplikácie. Skontrolujte, či nie je súbor iba na čítanie, a skúste to znova, alebo spustite program ako správca.\nChybový kód: 1",
                 // Slovène
-                "SL" => "Napaka: dostop do konfiguracijske datoteke aplikacije ni mogoč. Preverite, ali je datoteka samo za branje, in poskusite znova, ali zaženite program kot skrbnik.\nKoda napake: 1",
+                "SL" =>
+                    "Napaka: dostop do konfiguracijske datoteke aplikacije ni mogoč. Preverite, ali je datoteka samo za branje, in poskusite znova, ali zaženite program kot skrbnik.\nKoda napake: 1",
                 // Suédois
-                "SV" => "Fel: Kan inte komma åt konfigurationsfilen för applikationen. Kontrollera om filen är skrivskyddad och försök igen, eller kör programmet som administratör.\nFelkod: 1",
+                "SV" =>
+                    "Fel: Kan inte komma åt konfigurationsfilen för applikationen. Kontrollera om filen är skrivskyddad och försök igen, eller kör programmet som administratör.\nFelkod: 1",
                 // Turc
-                "TR" => "Hata: Uygulama yapılandırma dosyasına erişilemiyor. Dosyanın salt okunur olup olmadığını kontrol edin ve tekrar deneyin veya programı yönetici olarak çalıştırın.\nHata Kodu: 1",
+                "TR" =>
+                    "Hata: Uygulama yapılandırma dosyasına erişilemiyor. Dosyanın salt okunur olup olmadığını kontrol edin ve tekrar deneyin veya programı yönetici olarak çalıştırın.\nHata Kodu: 1",
                 // Ukrainien
-                "UK" => "Помилка: неможливо отримати доступ до файлу конфігурації програми. Будь ласка, перевірте, чи не є файл тільки для читання, і спробуйте ще раз або запустіть програму від імені адміністратора.\nКод помилки: 1",
+                "UK" =>
+                    "Помилка: неможливо отримати доступ до файлу конфігурації програми. Будь ласка, перевірте, чи не є файл тільки для читання, і спробуйте ще раз або запустіть програму від імені адміністратора.\nКод помилки: 1",
                 // Chinois simplifié
                 "ZH" => "错误: 无法访问应用程序配置文件。请检查文件是否为只读，并重试，或者以管理员身份运行程序。\n错误代码: 1",
                 // Cas par défaut (français)
-                _ => "Erreur: impossible d'accéder au fichier de paramétrage de l'application. Veuillez vérifier qu'il n'est pas en lecture seule et réessayer, ou démarrez le programme en tant qu'administrateur.\nCode erreur: 1"
+                _ =>
+                    "Erreur: impossible d'accéder au fichier de paramétrage de l'application. Veuillez vérifier qu'il n'est pas en lecture seule et réessayer, ou démarrez le programme en tant qu'administrateur.\nCode erreur: 1"
             };
 
             var caption = settings.AppLang switch
@@ -387,36 +414,63 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
 
             var errorMessage = settings.AppLang switch
             {
-                "AR" => $"خطأ: هناك أحرف غير مدعومة في مسار ملف الإعدادات ({settingsPath}). تعذر الوصول إلى الملف.\nرمز الخطأ: 2",
-                "BG" => $"Грешка: Съдържа неразрешени символи в пътя на файла с настройки ({settingsPath}). Невъзможно е да се достъпи до файла.\nКод на грешката: 2",
-                "CS" => $"Chyba: V cestě k souboru nastavení ({settingsPath}) jsou přítomny nepodporované znaky. Nelze přistupovat k souboru.\nKód chyby: 2",
-                "DA" => $"Fejl: Ugyldige tegn findes i stien til konfigurationsfilen ({settingsPath}). Kan ikke få adgang til filen.\nFejlkode: 2",
-                "DE" => $"Fehler: Im Pfad zur Einstellungsdatei ({settingsPath}) sind nicht unterstützte Zeichen vorhanden. Auf die Datei kann nicht zugegriffen werden.\nFehlercode: 2",
-                "EL" => $"Σφάλμα: Υπάρχουν μη υποστηριγμένοι χαρακτήρες στη διαδρομή του αρχείου ρυθμίσεων ({settingsPath}). Δεν είναι δυνατή η πρόσβαση στο αρχείο.\nΚωδικός σφάλματος: 2",
-                "EN" => $"Error: Unsupported characters are present in the settings file path ({settingsPath}). Unable to access the file.\nError code: 2",
-                "ES" => $"Error: Hay caracteres no admitidos en la ruta del archivo de configuración ({settingsPath}). No se puede acceder al archivo.\nCódigo de error: 2",
-                "ET" => $"Viga: Seadistusfaili tee ({settingsPath}) sisaldab toetamatuid märke. Failile ei ole võimalik juurde pääseda.\nVigakood: 2",
-                "FI" => $"Virhe: Asetustiedoston polussa ({settingsPath}) on tukemattomia merkkejä. Tiedostoon ei voi käyttää.\nVirhekoodi: 2",
-                "HU" => $"Hiba: Az beállítási fájl elérési útvonalán ({settingsPath}) nem támogatott karakterek találhatók. A fájlhoz nem lehet hozzáférni.\nHibakód: 2",
-                "ID" => $"Kesalahan: Karakter yang tidak didukung ada di jalur file pengaturan ({settingsPath}). Tidak dapat mengakses file.\nKode kesalahan: 2",
-                "IT" => $"Errore: Sono presenti caratteri non supportati nel percorso del file di configurazione ({settingsPath}). Impossibile accedere al file.\nCodice errore: 2",
+                "AR" =>
+                    $"خطأ: هناك أحرف غير مدعومة في مسار ملف الإعدادات ({settingsPath}). تعذر الوصول إلى الملف.\nرمز الخطأ: 2",
+                "BG" =>
+                    $"Грешка: Съдържа неразрешени символи в пътя на файла с настройки ({settingsPath}). Невъзможно е да се достъпи до файла.\nКод на грешката: 2",
+                "CS" =>
+                    $"Chyba: V cestě k souboru nastavení ({settingsPath}) jsou přítomny nepodporované znaky. Nelze přistupovat k souboru.\nKód chyby: 2",
+                "DA" =>
+                    $"Fejl: Ugyldige tegn findes i stien til konfigurationsfilen ({settingsPath}). Kan ikke få adgang til filen.\nFejlkode: 2",
+                "DE" =>
+                    $"Fehler: Im Pfad zur Einstellungsdatei ({settingsPath}) sind nicht unterstützte Zeichen vorhanden. Auf die Datei kann nicht zugegriffen werden.\nFehlercode: 2",
+                "EL" =>
+                    $"Σφάλμα: Υπάρχουν μη υποστηριγμένοι χαρακτήρες στη διαδρομή του αρχείου ρυθμίσεων ({settingsPath}). Δεν είναι δυνατή η πρόσβαση στο αρχείο.\nΚωδικός σφάλματος: 2",
+                "EN" =>
+                    $"Error: Unsupported characters are present in the settings file path ({settingsPath}). Unable to access the file.\nError code: 2",
+                "ES" =>
+                    $"Error: Hay caracteres no admitidos en la ruta del archivo de configuración ({settingsPath}). No se puede acceder al archivo.\nCódigo de error: 2",
+                "ET" =>
+                    $"Viga: Seadistusfaili tee ({settingsPath}) sisaldab toetamatuid märke. Failile ei ole võimalik juurde pääseda.\nVigakood: 2",
+                "FI" =>
+                    $"Virhe: Asetustiedoston polussa ({settingsPath}) on tukemattomia merkkejä. Tiedostoon ei voi käyttää.\nVirhekoodi: 2",
+                "HU" =>
+                    $"Hiba: Az beállítási fájl elérési útvonalán ({settingsPath}) nem támogatott karakterek találhatók. A fájlhoz nem lehet hozzáférni.\nHibakód: 2",
+                "ID" =>
+                    $"Kesalahan: Karakter yang tidak didukung ada di jalur file pengaturan ({settingsPath}). Tidak dapat mengakses file.\nKode kesalahan: 2",
+                "IT" =>
+                    $"Errore: Sono presenti caratteri non supportati nel percorso del file di configurazione ({settingsPath}). Impossibile accedere al file.\nCodice errore: 2",
                 "JA" => $"エラー: 設定ファイルのパス ({settingsPath}) にサポートされていない文字が含まれています。ファイルにアクセスできません。\nエラーコード: 2",
                 "KO" => $"오류: 설정 파일 경로 ({settingsPath})에 지원되지 않는 문자가 포함되어 있습니다. 파일에 접근할 수 없습니다.\n오류 코드: 2",
-                "LV" => $"Kļūda: Iestatījumu faila ceļā ({settingsPath}) ir neatbalstīti rakstzīmes. Nevar piekļūt failam.\nKļūdas kods: 2",
-                "LT" => $"Klaida: Nustatymų failo kelias ({settingsPath}) turi nepalaikomų simbolių. Nepavyksta pasiekti failo.\nKlaidos kodas: 2",
-                "NB" => $"Feil: Det finnes ikke-støttede tegn i stien til innstillingsfilen ({settingsPath}). Kan ikke få tilgang til filen.\nFeilkode: 2",
-                "NL" => $"Fout: Onondersteunde tekens zijn aanwezig in het pad naar het instellingenbestand ({settingsPath}). Kan niet toegang krijgen tot het bestand.\nFoutcode: 2",
-                "PL" => $"Błąd: W ścieżce pliku ustawień ({settingsPath}) znajdują się nieobsługiwane znaki. Nie można uzyskać dostępu do pliku.\nKod błędu: 2",
-                "PT" => $"Erro: Caracteres não suportados estão presentes no caminho do arquivo de configuração ({settingsPath}). Não é possível acessar o arquivo.\nCódigo de erro: 2",
-                "RO" => $"Eroare: Caracterelor nesuportate sunt prezente în calea fișierului de configurare ({settingsPath}). Nu se poate accesa fișierul.\nCod eroare: 2",
-                "RU" => $"Ошибка: В пути к файлу настроек ({settingsPath}) присутствуют неподдерживаемые символы. Невозможно получить доступ к файлу.\nКод ошибки: 2",
-                "SK" => $"Chyba: V ceste k súboru nastavení ({settingsPath}) sú prítomné nepodporované znaky. Nie je možné pristupovať k súboru.\nKód chyby: 2",
-                "SL" => $"Napaka: V poti do konfiguracijske datoteke ({settingsPath}) so prisotne nepodprte znake. Do datoteke ni mogoče dostopati.\nKoda napake: 2",
-                "SV" => $"Fel: I inställningsfilens sökväg ({settingsPath}) finns tecken som inte stöds. Kan inte komma åt filen.\nFelkod: 2",
-                "TR" => $"Hata: Ayar dosyası yolunda ({settingsPath}) desteklenmeyen karakterler bulunuyor. Dosyaya erişilemiyor.\nHata kodu: 2",
-                "UK" => $"Помилка: У шляху до файлу налаштувань ({settingsPath}) є непідтримувані символи. Не вдалося отримати доступ до файлу.\nКод помилки: 2",
+                "LV" =>
+                    $"Kļūda: Iestatījumu faila ceļā ({settingsPath}) ir neatbalstīti rakstzīmes. Nevar piekļūt failam.\nKļūdas kods: 2",
+                "LT" =>
+                    $"Klaida: Nustatymų failo kelias ({settingsPath}) turi nepalaikomų simbolių. Nepavyksta pasiekti failo.\nKlaidos kodas: 2",
+                "NB" =>
+                    $"Feil: Det finnes ikke-støttede tegn i stien til innstillingsfilen ({settingsPath}). Kan ikke få tilgang til filen.\nFeilkode: 2",
+                "NL" =>
+                    $"Fout: Onondersteunde tekens zijn aanwezig in het pad naar het instellingenbestand ({settingsPath}). Kan niet toegang krijgen tot het bestand.\nFoutcode: 2",
+                "PL" =>
+                    $"Błąd: W ścieżce pliku ustawień ({settingsPath}) znajdują się nieobsługiwane znaki. Nie można uzyskać dostępu do pliku.\nKod błędu: 2",
+                "PT" =>
+                    $"Erro: Caracteres não suportados estão presentes no caminho do arquivo de configuração ({settingsPath}). Não é possível acessar o arquivo.\nCódigo de erro: 2",
+                "RO" =>
+                    $"Eroare: Caracterelor nesuportate sunt prezente în calea fișierului de configurare ({settingsPath}). Nu se poate accesa fișierul.\nCod eroare: 2",
+                "RU" =>
+                    $"Ошибка: В пути к файлу настроек ({settingsPath}) присутствуют неподдерживаемые символы. Невозможно получить доступ к файлу.\nКод ошибки: 2",
+                "SK" =>
+                    $"Chyba: V ceste k súboru nastavení ({settingsPath}) sú prítomné nepodporované znaky. Nie je možné pristupovať k súboru.\nKód chyby: 2",
+                "SL" =>
+                    $"Napaka: V poti do konfiguracijske datoteke ({settingsPath}) so prisotne nepodprte znake. Do datoteke ni mogoče dostopati.\nKoda napake: 2",
+                "SV" =>
+                    $"Fel: I inställningsfilens sökväg ({settingsPath}) finns tecken som inte stöds. Kan inte komma åt filen.\nFelkod: 2",
+                "TR" =>
+                    $"Hata: Ayar dosyası yolunda ({settingsPath}) desteklenmeyen karakterler bulunuyor. Dosyaya erişilemiyor.\nHata kodu: 2",
+                "UK" =>
+                    $"Помилка: У шляху до файлу налаштувань ({settingsPath}) є непідтримувані символи. Не вдалося отримати доступ до файлу.\nКод помилки: 2",
                 "ZH" => $"错误: 配置文件路径 ({settingsPath}) 中存在不支持的字符。无法访问文件。\n错误代码: 2",
-                _ => $"Erreur: des caractères non supportés sont présents dans le chemin d'accès du fichier de paramétrage ({settingsPath}). Impossible d'accéder au fichier.\nCode erreur: 2"
+                _ =>
+                    $"Erreur: des caractères non supportés sont présents dans le chemin d'accès du fichier de paramétrage ({settingsPath}). Impossible d'accéder au fichier.\nCode erreur: 2"
             };
 
             // Affichage de la MessageBox avec le titre et le message traduits
@@ -500,63 +554,6 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
             MessageBox.Show(ioErrorMessage, ioErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
 
             Application.Current.Shutdown(3);
-        }
-    }
-    
-    
-    // Fonction permettant de sauvegarder les paramètres dans le fichier appSettings
-    /// <summary>
-    /// Saves the application settings to the appSettings file, handling potential I/O errors during the process.
-    /// </summary>
-    public void SaveApplicationSettings()
-    {
-        // Création du stream d'écriture du fichier appSettings
-        var writer = new StreamWriter("./appSettings");
-
-        // Ecriture de toutes les lignes du fichier
-        try
-        {
-            writer.WriteLine(
-                "-----------------------------------------------------------------------------------------");
-            writer.WriteLine(
-                "|                            KNX VIRTUAL INTEGRATOR SETTINGS                            |");
-            writer.WriteLine(
-                "-----------------------------------------------------------------------------------------");
-            // TODO A FIX AVEC HUGO
-            // writer.Write("theme : ");
-            // writer.WriteLine((bool)App.WindowManager?.SettingsWindow?.EnableLightTheme ? "light" : "dark");
-            //
-            // writer.Write("application language : ");
-            // writer.WriteLine(App.WindowManager.SettingsWindow?.AppLang);
-            //
-            // writer.Write("window scale factor : ");
-            // writer.WriteLine(App.WindowManager.SettingsWindow?.AppScaleFactor);
-
-            writer.WriteLine(
-                "-----------------------------------------------------------------------------------------");
-            writer.Write(
-                "/!\\ WARNING:\nAny value that you modify in this file and that is not correct will be replaced by a default value.");
-        }
-        // Aucune idée de la raison
-        catch (IOException)
-        {
-            logger.ConsoleAndLogWriteLine("Error: an I/O error occured while writing appSettings.");
-        }
-        // Si le buffer d'écriture est plein
-        catch (NotSupportedException)
-        {
-            logger.ConsoleAndLogWriteLine("Error: the streamwriter buffer for appSettings is full. Flushing it.");
-            writer.Flush(); // Vidage du buffer
-        }
-        // Si le stream a été fermé pendant l'écriture
-        catch (ObjectDisposedException)
-        {
-            logger.ConsoleAndLogWriteLine("Error: the streamwriter for appSettings was closed before finishing the writing operation.");
-        }
-        finally
-        {
-            // Fermeture du stream d'écriture
-            writer.Close();
         }
     }
 }

@@ -217,10 +217,10 @@ public partial class SettingsWindow
         finally
         {
             reader?.Close(); // Fermeture du stream de lecture
-            _viewModel.SaveApplicationSettingsCommand.Execute(null); // Mise à jour du fichier appSettings
+            _viewModel.SaveSettingsCommand.Execute(null); // Mise à jour du fichier appSettings
         }
             
-        UpdateWindowContents(false, true, true); // Affichage des paramètres dans la fenêtre
+        UpdateWindowContents(true, true); // Affichage des paramètres dans la fenêtre
         ScaleSlider.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(SliderMouseLeftButtonDown), true);
         ScaleSlider.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(SliderMouseLeftButtonUp), true);
         ScaleSlider.AddHandler(MouseMoveEvent, new MouseEventHandler(SliderMouseMove), true);
@@ -234,7 +234,7 @@ public partial class SettingsWindow
     private void ClosingSettingsWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true; // Pour éviter de tuer l'instance de SettingsWindow, on annule la fermeture
-        UpdateWindowContents(true); // Mise à jour du contenu de la fenêtre pour remettre les valeurs précédentes
+        UpdateWindowContents(); // Mise à jour du contenu de la fenêtre pour remettre les valeurs précédentes
         Hide(); // On masque la fenêtre à la place
     }
 
@@ -243,7 +243,7 @@ public partial class SettingsWindow
     /// <summary>
     /// Updates the contents (texts, textboxes, checkboxes, ...) of the settingswindow accordingly to the application settings.
     /// </summary>
-    private void UpdateWindowContents(bool isClosing = false, bool langChanged = false, bool themeChanged = false)
+    private void UpdateWindowContents(bool langChanged = false, bool themeChanged = false)
     {
         if (_viewModel.AppSettings.AppLang != "FR")
         {
@@ -1898,7 +1898,7 @@ public partial class SettingsWindow
         {
             // Sauvegarde des paramètres dans le fichier appSettings
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
-            _viewModel.SaveApplicationSettingsCommand.Execute(null);
+            _viewModel.SaveSettingsCommand.Execute(null);
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("Settings saved successfully");
         }
         else
@@ -1907,7 +1907,7 @@ public partial class SettingsWindow
         }
 
         // Mise à jour éventuellement du contenu pour update la langue du menu
-        UpdateWindowContents(false, previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme);
+        UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme);
 
         // Si on a modifié l'échelle dans les paramètres
         if (_viewModel.AppSettings.AppScaleFactor != previousAppScaleFactor)
@@ -1940,7 +1940,7 @@ public partial class SettingsWindow
     /// <param name="e">The event data.</param>
     private void CancelButtonClick(object sender, RoutedEventArgs e)
     {
-        UpdateWindowContents(false, true, true); // Restauration des paramètres précédents dans la fenêtre de paramétrage
+        UpdateWindowContents(true, true); // Restauration des paramètres précédents dans la fenêtre de paramétrage
         Hide(); // Masquage de la fenêtre de paramétrage
     }
 
@@ -2072,7 +2072,7 @@ public partial class SettingsWindow
         {
             // Si on appuie sur échap, on ferme la fenêtre et on annule les modifications
             case Key.Escape:
-                UpdateWindowContents(false, true, true); // Restauration des paramètres précédents dans la fenêtre de paramétrage
+                UpdateWindowContents(true, true); // Restauration des paramètres précédents dans la fenêtre de paramétrage
                 Hide(); // Masquage de la fenêtre de paramétrage
                 break;
 
