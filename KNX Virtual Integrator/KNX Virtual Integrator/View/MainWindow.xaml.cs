@@ -49,12 +49,12 @@ public partial class MainWindow
 
     public void ApplyScaling(float scaleFactor)
     {
-        _viewModel.ConsoleAndLogWriteLine("MainWindow.ApplyScaling is not implemented");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyScaling is not implemented");
     }
 
     public void UpdateWindowContents(bool b, bool b1, bool b2)
     {
-        _viewModel.ConsoleAndLogWriteLine("MainWindow.UpdateWindowContents is not implemented");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.UpdateWindowContents is not implemented");
     }
     
     
@@ -68,7 +68,7 @@ public partial class MainWindow
     /// <param name="e">The event data.</param>
     private async void ImportProjectButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.ConsoleAndLogWriteLine("Waiting for user to select KNX project file");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select KNX project file");
 
         UserChooseToImportGroupAddressFile = false;
         
@@ -212,7 +212,7 @@ public partial class MainWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            _viewModel.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
             if (!_viewModel.ExtractProjectFiles(openFileDialog.FileName)) return;
@@ -222,12 +222,12 @@ public partial class MainWindow
         }
         else
         {
-            _viewModel.ConsoleAndLogWriteLine("User aborted the file selection operation");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
 
         // Partie management des adresses de groupes
         _ = _viewModel.FindZeroXml(_viewModel.ProjectFolderPath);
-        _viewModel.ExtractGroupAddress();
+        _viewModel.ExtractGroupAddressCommand.Execute(null);
     }
     
     /// <summary>
@@ -239,7 +239,7 @@ public partial class MainWindow
     /// <param name="e">The event data.</param>
     private async void ImportGroupAddressFileButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.ConsoleAndLogWriteLine("Waiting for user to select group addresses file");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select group addresses file");
 
         UserChooseToImportGroupAddressFile = true;
         
@@ -259,7 +259,7 @@ public partial class MainWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            _viewModel.ConsoleAndLogWriteLine($"File selected: {openFileDialog.FileName}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
             if (!_viewModel.ExtractGroupAddressFile(openFileDialog.FileName)) return;
@@ -269,9 +269,9 @@ public partial class MainWindow
         }
         else
         {
-            _viewModel.ConsoleAndLogWriteLine("User aborted the file selection operation");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
-        _viewModel.ExtractGroupAddress();
+        _viewModel.ExtractGroupAddressCommand.Execute(null);
     }
     
 }
