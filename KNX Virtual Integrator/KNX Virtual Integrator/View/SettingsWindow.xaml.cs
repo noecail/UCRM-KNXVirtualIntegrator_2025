@@ -8,7 +8,6 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
-using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.ViewModel;
 
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -72,7 +71,7 @@ public partial class SettingsWindow
 
         const string settingsPath = "./appSettings"; // Chemin du fichier paramètres
 
-        _viewModel.EnsureSettingsFileExists(settingsPath);
+        _viewModel.EnsureSettingsFileExistsCommand.Execute(settingsPath);
 
         // Déclaration du stream pour la lecture du fichier appSettings, initialement null
         StreamReader? reader = null;
@@ -210,7 +209,7 @@ public partial class SettingsWindow
                         }
                         catch (Exception)
                         {
-                            _viewModel.ConsoleAndLogWriteLine("Error: Could not parse the integer value of the window scale factor. Restoring default value (100%).");
+                            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: Could not parse the integer value of the window scale factor. Restoring default value (100%).");
                         }
                         break;
                         
@@ -221,19 +220,19 @@ public partial class SettingsWindow
         // Si l'application a manqué de mémoire pendant la récupération des lignes
         catch (OutOfMemoryException)
         {
-            _viewModel.ConsoleAndLogWriteLine("Error: The program does not have sufficient memory to run. Please try closing a few applications before trying again.");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: The program does not have sufficient memory to run. Please try closing a few applications before trying again.");
             return;
         }
         // Aucune idée de la raison
         catch (IOException)
         {
-            _viewModel.ConsoleAndLogWriteLine("Error: An I/O error occured while reading the settings file.");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: An I/O error occured while reading the settings file.");
             return;
         }
         finally
         {
             reader?.Close(); // Fermeture du stream de lecture
-            _viewModel.SaveApplicationSettings(); // Mise à jour du fichier appSettings
+            _viewModel.SaveApplicationSettingsCommand.Execute(null); // Mise à jour du fichier appSettings
         }
             
         UpdateWindowContents(false, true, true); // Affichage des paramètres dans la fenêtre
@@ -1913,13 +1912,13 @@ public partial class SettingsWindow
             previousAppScaleFactor != AppScaleFactor)
         {
             // Sauvegarde des paramètres dans le fichier appSettings
-            _viewModel.ConsoleAndLogWriteLine($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
-            _viewModel.SaveApplicationSettings();
-            _viewModel.ConsoleAndLogWriteLine("Settings saved successfully");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
+            _viewModel.SaveApplicationSettingsCommand.Execute(null);
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Settings saved successfully");
         }
         else
         {
-            _viewModel.ConsoleAndLogWriteLine("Settings are unchanged. No need to save them.");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Settings are unchanged. No need to save them.");
         }
 
         // Mise à jour éventuellement du contenu pour update la langue du menu
@@ -2036,7 +2035,7 @@ public partial class SettingsWindow
         var includeImportedProjects = AddImportedFilesCheckBox.IsChecked;
         var includeRemovedGroupAddressList = (bool)IncludeAddressListCheckBox.IsChecked! && (bool)AddImportedFilesCheckBox.IsChecked!;
 
-        _viewModel.CreateDebugArchive((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!);
+        _viewModel.CreateDebugArchiveCommand.Execute(((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!));
     }
 
 
@@ -2059,15 +2058,15 @@ public partial class SettingsWindow
         }
         catch (InvalidOperationException)
         {
-            _viewModel.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: cannot redirect to the clicked link.");
         }
         catch (ArgumentException)
         {
-            _viewModel.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: cannot redirect to the clicked link.");
         }
         catch (PlatformNotSupportedException)
         {
-            _viewModel.ConsoleAndLogWriteLine("Error: cannot redirect to the clicked link.");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: cannot redirect to the clicked link.");
         }
 
         e.Handled = true;
@@ -2149,7 +2148,7 @@ public partial class SettingsWindow
             // Si le slider est null, quitter la méthode
             if (slider == null) 
             {
-                _viewModel.ConsoleAndLogWrite("Slider not found.");
+                _viewModel.ConsoleAndLogWriteLineCommand.Execute("Slider not found.");
                 return;
             }
         
@@ -2166,7 +2165,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Logue l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWrite($"An error occurred: {ex.Message}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred: {ex.Message}");
         }
     }
 
@@ -2206,7 +2205,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWrite($"An error occurred while finding parent: {ex.Message}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred while finding parent: {ex.Message}");
             return null;
         }
     }
@@ -2233,7 +2232,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonDown: {ex.Message}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in SliderMouseLeftButtonDown: {ex.Message}");
         }
     }
 
@@ -2256,7 +2255,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWrite($"An error occurred in SliderMouseLeftButtonUp: {ex.Message}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in SliderMouseLeftButtonUp: {ex.Message}");
         }
     }
 
@@ -2279,7 +2278,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWrite($"An error occurred in SliderMouseMove: {ex.Message}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in SliderMouseMove: {ex.Message}");
         }
     }
 
@@ -2313,7 +2312,7 @@ public partial class SettingsWindow
         catch (Exception ex)
         {
             // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWrite($"An error occurred in UpdateSliderValue: {ex.Message}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in UpdateSliderValue: {ex.Message}");
         }
     }
 
