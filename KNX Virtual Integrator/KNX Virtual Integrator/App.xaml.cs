@@ -107,6 +107,7 @@ public partial class App
         var applicationFileManager = new ApplicationFileManager(logger, systemSettingsDetector);
         var busConnection = new BusConnection();
         var groupCommunication = new GroupCommunication(busConnection);
+        var appSettings = new ApplicationSettings();
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
@@ -120,7 +121,8 @@ public partial class App
             debugArchiveGenerator,
             applicationFileManager,
             busConnection,
-            groupCommunication);
+            groupCommunication,
+            appSettings);
     
         // Assurer l'existence du répertoire de logs
         ModelManager.ApplicationFileManager.EnsureLogDirectoryExists();

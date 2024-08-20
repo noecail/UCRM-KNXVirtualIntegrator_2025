@@ -1,5 +1,4 @@
 ﻿using KNX_Virtual_Integrator.Model;
-using KNX_Virtual_Integrator.Model.Implementations;
 
 // ReSharper disable NullableWarningSuppressionIsUsed
 
