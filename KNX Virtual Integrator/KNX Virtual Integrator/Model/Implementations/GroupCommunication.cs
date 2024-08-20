@@ -29,10 +29,10 @@ public class GroupCommunication(BusConnection busConnection) : ObservableObject,
             if (busConnection is { IsConnected: true, IsBusy: false })
             {
                 _groupValue = new GroupValue(true); // Exemple de valeur par défaut
-                if (busConnection is { _cancellationTokenSource: not null, _bus: not null })
-                    await busConnection._bus.WriteGroupValueAsync(
+                if (busConnection is { CancellationTokenSource: not null, Bus: not null })
+                    await busConnection.Bus.WriteGroupValueAsync(
                         _groupAddress, _groupValue, MessagePriority.High,
-                        busConnection._cancellationTokenSource.Token
+                        busConnection.CancellationTokenSource.Token
                     );
             }
             else
@@ -57,10 +57,10 @@ public class GroupCommunication(BusConnection busConnection) : ObservableObject,
             if (busConnection is { IsConnected: true, IsBusy: false })
             {
                 _groupValue = new GroupValue(false); // Exemple de valeur par défaut
-                if (busConnection is { _cancellationTokenSource: not null, _bus: not null })
-                    await busConnection._bus.WriteGroupValueAsync(
+                if (busConnection is { CancellationTokenSource: not null, Bus: not null })
+                    await busConnection.Bus.WriteGroupValueAsync(
                         _groupAddress, _groupValue, MessagePriority.High,
-                        busConnection._cancellationTokenSource.Token
+                        busConnection.CancellationTokenSource.Token
                     );
             }
             else

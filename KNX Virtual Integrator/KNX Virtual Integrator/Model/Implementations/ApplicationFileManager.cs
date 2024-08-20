@@ -5,7 +5,7 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector detector) : IApplicationFileManager
+public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector detector, IApplicationSettings settings) : IApplicationFileManager
 {
     /// <summary>
     /// Ensures that the log directory exists by creating it if it does not already exist.
@@ -205,16 +205,16 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
             if (App.WindowManager == null || App.WindowManager.SettingsWindow == null) return;
             
             // Le thème appliqué par défaut est le même que celui de windows
-            App.WindowManager.SettingsWindow.EnableLightTheme = detector.DetectWindowsTheme();
+            settings.EnableLightTheme = detector.DetectWindowsTheme();
 
             // La langue de l'application appliquée est la même que celle de windows
-            App.WindowManager.SettingsWindow.AppLang = detector.DetectWindowsLanguage();
+            settings.AppLang = detector.DetectWindowsLanguage();
         }
         // Si le programme n'a pas accès en écriture pour créer le fichier
         catch (UnauthorizedAccessException)
         {
             // Définir les variables pour le texte du message et le titre du MessageBox
-            var messageBoxText = App.WindowManager?.SettingsWindow?.AppLang switch
+            var messageBoxText = settings.AppLang switch
             {
                 // Arabe
                 "AR" => "خطأ: تعذر الوصول إلى ملف إعدادات التطبيق. يرجى التحقق من أنه ليس للقراءة فقط وحاول مرة أخرى، أو قم بتشغيل البرنامج كمسؤول.\nرمز الخطأ: 1",
@@ -278,7 +278,7 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
                 _ => "Erreur: impossible d'accéder au fichier de paramétrage de l'application. Veuillez vérifier qu'il n'est pas en lecture seule et réessayer, ou démarrez le programme en tant qu'administrateur.\nCode erreur: 1"
             };
 
-            var caption = App.WindowManager?.SettingsWindow?.AppLang switch
+            var caption = settings.AppLang switch
             {
                 // Arabe
                 "AR" => "خطأ",
@@ -351,7 +351,7 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
         catch (ArgumentException)
         {
             // Traductions des messages d'erreur et du titre en fonction de la langue
-            var errorTitle = App.WindowManager?.SettingsWindow?.AppLang switch
+            var errorTitle = settings.AppLang switch
             {
                 "AR" => "خطأ",
                 "BG" => "Грешка",
@@ -385,7 +385,7 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
                 _ => "Erreur"
             };
 
-            var errorMessage = App.WindowManager?.SettingsWindow?.AppLang switch
+            var errorMessage = settings.AppLang switch
             {
                 "AR" => $"خطأ: هناك أحرف غير مدعومة في مسار ملف الإعدادات ({settingsPath}). تعذر الوصول إلى الملف.\nرمز الخطأ: 2",
                 "BG" => $"Грешка: Съдържа неразрешени символи в пътя на файла с настройки ({settingsPath}). Невъзможно е да се достъпи до файла.\nКод на грешката: 2",
@@ -428,7 +428,7 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
         catch (IOException)
         {
             // Traductions du titre et du message d'erreur en fonction de la langue
-            var ioErrorTitle = App.WindowManager?.SettingsWindow?.AppLang switch
+            var ioErrorTitle = settings.AppLang switch
             {
                 "AR" => "خطأ",
                 "BG" => "Грешка",
@@ -462,7 +462,7 @@ public class ApplicationFileManager (ILogger logger, ISystemSettingsDetector det
                 _ => "Erreur"
             };
 
-            var ioErrorMessage = App.WindowManager?.SettingsWindow?.AppLang switch
+            var ioErrorMessage = settings.AppLang switch
             {
                 "AR" => $"خطأ: خطأ في الإدخال/الإخراج عند فتح ملف الإعدادات.\nرمز الخطأ: 3",
                 "BG" => "Грешка: Грешка при четене/запис на файла с настройки.\nКод на грешката: 3",

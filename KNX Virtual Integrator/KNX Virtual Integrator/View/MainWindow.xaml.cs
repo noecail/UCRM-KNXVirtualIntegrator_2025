@@ -76,7 +76,7 @@ public partial class MainWindow
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
-            Title = App.WindowManager?.SettingsWindow!.AppLang switch
+            Title = _viewModel.AppSettings.AppLang switch
             {
                 // Arabe
                 "AR" => "اختر مشروع KNX للاستيراد",
@@ -139,7 +139,7 @@ public partial class MainWindow
                 // Cas par défaut (français)
                 _ => "Sélectionnez un projet KNX à importer"
             },
-            Filter = App.WindowManager?.SettingsWindow!.AppLang switch
+            Filter = _viewModel.AppSettings.AppLang switch
             {
                 // Arabe
                 "AR" => "ملفات مشروع KNX|*.knxproj|جميع الملفات|*.*",

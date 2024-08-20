@@ -25,27 +25,12 @@ public partial class SettingsWindow
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     private readonly MainViewModel _viewModel;
-    
-    
-    /// <summary>
-    /// Gets or sets a value indicating whether the light theme is enabled for the application.
-    /// </summary>
-    public bool EnableLightTheme { get; internal set; } // Thème de l'application (sombre/clair)
-
-    /// <summary>
-    /// Gets or sets the application language, with French as the default.
-    /// </summary>
-    public string AppLang { get; internal set; } // Langue de l'application (français par défaut)
-
-    /// <summary>
-    ///  Gets or sets the scale factor for the content of every window of the application
-    /// </summary>
-    public int AppScaleFactor { get; private set; } // Facteur d'échelle pour les fenêtres de l'application
 
     /// <summary>
     /// Variable used to know if the user is dragging the scaling slider cursor.
     /// </summary>
     private bool _isDragging;
+    
     
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- METHODES  --------------------------------------------
@@ -65,9 +50,9 @@ public partial class SettingsWindow
 
         // Initialement, l'application dispose des paramètres par défaut, qui seront potentiellement modifiés après par
         // la lecture du fichier settings. Cela permet d'éviter un crash si le fichier 
-        EnableLightTheme = true;
-        AppLang = "FR";
-        AppScaleFactor = 100;
+        _viewModel.AppSettings.EnableLightTheme = true;
+        _viewModel.AppSettings.AppLang = "FR";
+        _viewModel.AppSettings.AppScaleFactor = 100;
 
         const string settingsPath = "./appSettings"; // Chemin du fichier paramètres
 
@@ -85,7 +70,7 @@ public partial class SettingsWindow
         catch (IOException)
         {
             // Traductions du titre et du message d'erreur en fonction de la langue
-            var ioErrorTitle = AppLang switch
+            var ioErrorTitle = _viewModel.AppSettings.AppLang switch
             {
                 "AR" => "خطأ",
                 "BG" => "Грешка",
@@ -119,7 +104,7 @@ public partial class SettingsWindow
                 _ => "Erreur"
             };
 
-            var ioErrorMessage = AppLang switch
+            var ioErrorMessage = _viewModel.AppSettings.AppLang switch
             {
                 "AR" => $"خطأ: خطأ في الإدخال/الإخراج عند فتح ملف الإعدادات.\nرمز الخطأ: 3",
                 "BG" => "Грешка: Грешка при четене/запис на файла с настройки.\nКод на грешката: 3",
@@ -186,25 +171,25 @@ public partial class SettingsWindow
                 {
                     case "theme":
                         // Si la valeur n'est pas dark, on mettra toujours le thème clair (en cas d'erreur, ou si la value est "light")
-                        EnableLightTheme = !value.Equals("dark", StringComparison.CurrentCultureIgnoreCase);
+                        _viewModel.AppSettings.EnableLightTheme = !value.Equals("dark", StringComparison.CurrentCultureIgnoreCase);
                         break;
 
                     case "application language":
                         // Vérifier si value est un code de langue valide, si elle est valide, on assigne la valeur, sinon on met la langue par défaut
-                        AppLang = validLanguageCodes.Contains(value.ToUpper()) ? value : "FR";
+                        _viewModel.AppSettings.AppLang = validLanguageCodes.Contains(value.ToUpper()) ? value : "FR";
                         break;
 
                     case "window scale factor":
                         try
                         {
-                            AppScaleFactor = Convert.ToInt32(value) > 300 || Convert.ToInt32(value) < 50 ? 100 : Convert.ToInt32(value);
-                            if (AppScaleFactor <= 100)
+                            _viewModel.AppSettings.AppScaleFactor = Convert.ToInt32(value) > 300 || Convert.ToInt32(value) < 50 ? 100 : Convert.ToInt32(value);
+                            if (_viewModel.AppSettings.AppScaleFactor <= 100)
                             {
-                                ApplyScaling(AppScaleFactor/100f - 0.1f);
+                                ApplyScaling(_viewModel.AppSettings.AppScaleFactor/100f - 0.1f);
                             }
                             else
                             {
-                                ApplyScaling(AppScaleFactor/100f - 0.2f);
+                                ApplyScaling(_viewModel.AppSettings.AppScaleFactor/100f - 0.2f);
                             }
                         }
                         catch (Exception)
@@ -260,25 +245,25 @@ public partial class SettingsWindow
     /// </summary>
     private void UpdateWindowContents(bool isClosing = false, bool langChanged = false, bool themeChanged = false)
     {
-        if (AppLang != "FR")
+        if (_viewModel.AppSettings.AppLang != "FR")
         {
-            FrAppLanguageComboBoxItem.IsSelected = (AppLang == "FR"); // Sélection/Désélection
+            FrAppLanguageComboBoxItem.IsSelected = (_viewModel.AppSettings.AppLang == "FR"); // Sélection/Désélection
 
             // Sélection du langage de l'application (même fonctionnement que le code ci-dessus)
             foreach (ComboBoxItem item in AppLanguageComboBox.Items)
             {
-                if (!item.Content.ToString()!.StartsWith(AppLang)) continue;
+                if (!item.Content.ToString()!.StartsWith(_viewModel.AppSettings.AppLang)) continue;
                 item.IsSelected = true;
                 break;
             }
         }
         
         // Sélection du thème clair ou sombre
-        LightThemeComboBoxItem.IsSelected = EnableLightTheme;
-        DarkThemeComboBoxItem.IsSelected = !EnableLightTheme;
+        LightThemeComboBoxItem.IsSelected = _viewModel.AppSettings.EnableLightTheme;
+        DarkThemeComboBoxItem.IsSelected = !_viewModel.AppSettings.EnableLightTheme;
 
         // Mise à jour du slider
-        ScaleSlider.Value = AppScaleFactor;
+        ScaleSlider.Value = _viewModel.AppSettings.AppScaleFactor;
             
         // Traduction du menu settings
         if (langChanged) TranslateWindowContents();
@@ -294,7 +279,7 @@ public partial class SettingsWindow
     /// </summary>
     private void TranslateWindowContents()
     {
-        switch (AppLang)
+        switch (_viewModel.AppSettings.AppLang)
         {
             // Arabe
             case "AR":
@@ -1770,7 +1755,7 @@ public partial class SettingsWindow
         var checkboxStyle = (Style)FindResource("CheckboxLightThemeStyle");
         Brush borderBrush;
 
-        if (EnableLightTheme) // Si le thème clair est actif,
+        if (_viewModel.AppSettings.EnableLightTheme) // Si le thème clair est actif,
         {
             textColor = "#000000";
             darkBackgroundColor = "#F5F5F5";
@@ -1875,14 +1860,14 @@ public partial class SettingsWindow
         foreach (ComboBoxItem item in ThemeComboBox.Items)
         {
             item.Foreground = item.IsSelected ? new SolidColorBrush(Colors.White) : textColorBrush;
-            item.Background = EnableLightTheme ? new SolidColorBrush(Colors.White) : new SolidColorBrush((Color)ColorConverter.ConvertFromString(darkBackgroundColor));
+            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : new SolidColorBrush((Color)ColorConverter.ConvertFromString(darkBackgroundColor));
         }
 
 
         foreach (ComboBoxItem item in AppLanguageComboBox.Items)
         {
             item.Foreground = item.IsSelected ? new SolidColorBrush(Colors.White) : textColorBrush;
-            item.Background = EnableLightTheme ? new SolidColorBrush(Colors.White) : new SolidColorBrush((Color)ColorConverter.ConvertFromString(darkBackgroundColor));
+            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : new SolidColorBrush((Color)ColorConverter.ConvertFromString(darkBackgroundColor));
         }
     }
 
@@ -1898,18 +1883,18 @@ public partial class SettingsWindow
     private void SaveButtonClick(object sender, RoutedEventArgs e)
     {
         // Sauvegarde des anciens paramètres
-        var previousEnableLightTheme = EnableLightTheme;
-        var previousAppLang = AppLang;
-        var previousAppScaleFactor = AppScaleFactor;
+        var previousEnableLightTheme = _viewModel.AppSettings.EnableLightTheme;
+        var previousAppLang = _viewModel.AppSettings.AppLang;
+        var previousAppScaleFactor = _viewModel.AppSettings.AppScaleFactor;
 
         // Récupération de tous les paramètres entrés dans la fenêtre de paramétrage
-        EnableLightTheme = LightThemeComboBoxItem.IsSelected;
-        AppLang = AppLanguageComboBox.Text.Split([" - "], StringSplitOptions.None)[0];
-        AppScaleFactor = (int)ScaleSlider.Value;
+        _viewModel.AppSettings.EnableLightTheme = LightThemeComboBoxItem.IsSelected;
+        _viewModel.AppSettings.AppLang = AppLanguageComboBox.Text.Split([" - "], StringSplitOptions.None)[0];
+        _viewModel.AppSettings.AppScaleFactor = (int)ScaleSlider.Value;
 
         // Si on a changé un des paramètres, on les sauvegarde. Sinon, inutile de réécrire le fichier.
-        if (previousEnableLightTheme != EnableLightTheme || previousAppLang != AppLang ||
-            previousAppScaleFactor != AppScaleFactor)
+        if (previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme || previousAppLang != _viewModel.AppSettings.AppLang ||
+            previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor)
         {
             // Sauvegarde des paramètres dans le fichier appSettings
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"Settings changed. Saving application settings at {Path.GetFullPath("./appSettings")}");
@@ -1922,13 +1907,13 @@ public partial class SettingsWindow
         }
 
         // Mise à jour éventuellement du contenu pour update la langue du menu
-        UpdateWindowContents(false, previousAppLang != AppLang, previousEnableLightTheme != EnableLightTheme);
+        UpdateWindowContents(false, previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme);
 
         // Si on a modifié l'échelle dans les paramètres
-        if (AppScaleFactor != previousAppScaleFactor)
+        if (_viewModel.AppSettings.AppScaleFactor != previousAppScaleFactor)
         {
             // Mise à jour de l'échelle de toutes les fenêtres
-            var scaleFactor = AppScaleFactor / 100f;
+            var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
             if (scaleFactor <= 1f)
             {
                 ApplyScaling(scaleFactor - 0.1f);
@@ -1940,7 +1925,7 @@ public partial class SettingsWindow
             App.WindowManager!.MainWindow.ApplyScaling(scaleFactor); }
         
         // Mise à jour de la fenêtre principale
-        App.WindowManager?.MainWindow.UpdateWindowContents(previousAppLang != AppLang, previousEnableLightTheme != EnableLightTheme, previousAppScaleFactor == AppScaleFactor);
+        App.WindowManager?.MainWindow.UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, previousAppScaleFactor == _viewModel.AppSettings.AppScaleFactor);
 
         // Masquage de la fenêtre de paramètres
         Hide();
@@ -1970,7 +1955,7 @@ public partial class SettingsWindow
     {
         IncludeAddressListCheckBox.IsEnabled = true;
 
-        IncludeAddressListCheckBox.Foreground = EnableLightTheme ?
+        IncludeAddressListCheckBox.Foreground = _viewModel.AppSettings.EnableLightTheme ?
             new SolidColorBrush(Colors.Black) : MainWindow.ConvertStringColor("#E3DED4");
     }
 
@@ -1985,7 +1970,7 @@ public partial class SettingsWindow
         IncludeAddressListCheckBox.IsEnabled = false;
         IncludeAddressListCheckBox.IsChecked = false;
 
-        IncludeAddressListCheckBox.Foreground = EnableLightTheme ?
+        IncludeAddressListCheckBox.Foreground = _viewModel.AppSettings.EnableLightTheme ?
             new SolidColorBrush(Colors.Gray) : new SolidColorBrush(Colors.DimGray);
     }
 
@@ -2033,7 +2018,6 @@ public partial class SettingsWindow
         var includeOsInfo = AddInfosOsCheckBox.IsChecked;
         var includeHardwareInfo = AddInfosHardCheckBox.IsChecked;
         var includeImportedProjects = AddImportedFilesCheckBox.IsChecked;
-        var includeRemovedGroupAddressList = (bool)IncludeAddressListCheckBox.IsChecked! && (bool)AddImportedFilesCheckBox.IsChecked!;
 
         _viewModel.CreateDebugArchiveCommand.Execute(((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!));
     }

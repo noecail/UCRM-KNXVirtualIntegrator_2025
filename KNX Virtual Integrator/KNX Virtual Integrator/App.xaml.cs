@@ -98,16 +98,16 @@ public partial class App
         // Instancier les dépendances nécessaires
         var fileLoader = new FileLoader();
         var logger = new Logger();
-        var projectFileManager = new ProjectFileManager(logger);
+        var appSettings = new ApplicationSettings();
+        var projectFileManager = new ProjectFileManager(logger, appSettings);
         var fileFinder = new FileFinder(logger, projectFileManager);
         var zipArchiveManager = new ZipArchiveManager(logger);
         var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader);
         var systemSettingsDetector = new SystemSettingsDetector(logger);
-        var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager);
-        var applicationFileManager = new ApplicationFileManager(logger, systemSettingsDetector);
+        var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
+        var applicationFileManager = new ApplicationFileManager(logger, systemSettingsDetector, appSettings);
         var busConnection = new BusConnection();
         var groupCommunication = new GroupCommunication(busConnection);
-        var appSettings = new ApplicationSettings();
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
