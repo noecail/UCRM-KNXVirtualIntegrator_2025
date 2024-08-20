@@ -15,6 +15,8 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     public IApplicationSettings AppSettings => modelManager.AppSettings;
 
     
+    
+    
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
     ------------------------------------------------------------------------------------------------ */
