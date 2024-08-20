@@ -47,180 +47,11 @@ public partial class SettingsWindow
         InitializeComponent(); // Initialisation de la fenêtre de paramétrage
 
         _viewModel = viewModel;
-
-        // Initialement, l'application dispose des paramètres par défaut, qui seront potentiellement modifiés après par
-        // la lecture du fichier settings. Cela permet d'éviter un crash si le fichier 
-        _viewModel.AppSettings.EnableLightTheme = true;
-        _viewModel.AppSettings.AppLang = "FR";
-        _viewModel.AppSettings.AppScaleFactor = 100;
-
-        const string settingsPath = "./appSettings"; // Chemin du fichier paramètres
-
-        _viewModel.EnsureSettingsFileExistsCommand.Execute(settingsPath);
-
-        // Déclaration du stream pour la lecture du fichier appSettings, initialement null
-        StreamReader? reader = null;
-
-        try
-        {
-            // Création du stream
-            reader = new StreamReader(settingsPath);
-        }
-        // Aucune idée de la raison
-        catch (IOException)
-        {
-            // Traductions du titre et du message d'erreur en fonction de la langue
-            var ioErrorTitle = _viewModel.AppSettings.AppLang switch
-            {
-                "AR" => "خطأ",
-                "BG" => "Грешка",
-                "CS" => "Chyba",
-                "DA" => "Fejl",
-                "DE" => "Fehler",
-                "EL" => "Σφάλμα",
-                "EN" => "Error",
-                "ES" => "Error",
-                "ET" => "Viga",
-                "FI" => "Virhe",
-                "HU" => "Hiba",
-                "ID" => "Kesalahan",
-                "IT" => "Errore",
-                "JA" => "エラー",
-                "KO" => "오류",
-                "LV" => "Kļūda",
-                "LT" => "Klaida",
-                "NB" => "Feil",
-                "NL" => "Fout",
-                "PL" => "Błąd",
-                "PT" => "Erro",
-                "RO" => "Eroare",
-                "RU" => "Ошибка",
-                "SK" => "Chyba",
-                "SL" => "Napaka",
-                "SV" => "Fel",
-                "TR" => "Hata",
-                "UK" => "Помилка",
-                "ZH" => "错误",
-                _ => "Erreur"
-            };
-
-            var ioErrorMessage = _viewModel.AppSettings.AppLang switch
-            {
-                "AR" => $"خطأ: خطأ في الإدخال/الإخراج عند فتح ملف الإعدادات.\nرمز الخطأ: 3",
-                "BG" => "Грешка: Грешка при четене/запис на файла с настройки.\nКод на грешката: 3",
-                "CS" => "Chyba: Chyba I/O při otevírání souboru nastavení.\nKód chyby: 3",
-                "DA" => "Fejl: I/O-fejl ved åbning af konfigurationsfilen.\nFejlkode: 3",
-                "DE" => "Fehler: I/O-Fehler beim Öffnen der Einstellungsdatei.\nFehlercode: 3",
-                "EL" => "Σφάλμα: Σφάλμα I/O κατά το άνοιγμα του αρχείου ρυθμίσεων.\nΚωδικός σφάλματος: 3",
-                "EN" => "Error: I/O error while opening the settings file.\nError code: 3",
-                "ES" => "Error: Error de I/O al abrir el archivo de configuración.\nCódigo de error: 3",
-                "ET" => "Viga: I/O viga seadistusfaili avamisel.\nVigakood: 3",
-                "FI" => "Virhe: I/O-virhe asetustiedoston avaamisessa.\nVirhekoodi: 3",
-                "HU" => "Hiba: I/O hiba a beállítási fájl megnyitásakor.\nHibakód: 3",
-                "ID" => "Kesalahan: Kesalahan I/O saat membuka file pengaturan.\nKode kesalahan: 3",
-                "IT" => "Errore: Errore I/O durante l'apertura del file di configurazione.\nCodice errore: 3",
-                "JA" => "エラー: 設定ファイルのオープン時にI/Oエラーが発生しました。\nエラーコード: 3",
-                "KO" => "오류: 설정 파일 열기 중 I/O 오류가 발생했습니다.\n오류 코드: 3",
-                "LV" => "Kļūda: I/O kļūda atverot iestatījumu failu.\nKļūdas kods: 3",
-                "LT" => "Klaida: I/O klaida atidarant nustatymų failą.\nKlaidos kodas: 3",
-                "NB" => "Feil: I/O-feil ved åpning av innstillingsfilen.\nFeilkode: 3",
-                "NL" => "Fout: I/O-fout bij het openen van het instellingenbestand.\nFoutcode: 3",
-                "PL" => "Błąd: Błąd I/O podczas otwierania pliku konfiguracyjnego.\nKod błędu: 3",
-                "PT" => "Erro: Erro de I/O ao abrir o arquivo de configuração.\nCódigo de erro: 3",
-                "RO" => "Eroare: Eroare I/O la deschiderea fișierului de configurare.\nCod eroare: 3",
-                "RU" => "Ошибка: Ошибка ввода/вывода при открытии файла настроек.\nКод ошибки: 3",
-                "SK" => "Chyba: Chyba I/O pri otváraní súboru nastavení.\nKód chyby: 3",
-                "SL" => "Napaka: Napaka I/O pri odpiranju konfiguracijske datoteke.\nKoda napake: 3",
-                "SV" => "Fel: I/O-fel vid öppning av inställningsfilen.\nFelkod: 3",
-                "TR" => "Hata: Ayar dosyasını açarken I/O hatası oluştu.\nHata kodu: 3",
-                "UK" => "Помилка: Помилка вводу/виводу під час відкриття файлу налаштувань.\nКод помилки: 3",
-                "ZH" => "错误: 打开设置文件时发生I/O错误。\n错误代码: 3",
-                _ => "Erreur: Erreur I/O lors de l'ouverture du fichier de paramétrage.\nCode erreur: 3"
-            };
-
-            // Affichage de la MessageBox avec le titre et le message traduits
-            MessageBox.Show(ioErrorMessage, ioErrorTitle, MessageBoxButton.OK, MessageBoxImage.Error);
-
-            Application.Current.Shutdown(3);
-        }
-
-        try
-        {
-            // On parcourt toutes les lignes tant qu'elle n'est pas 'null'
-            while (reader?.ReadLine() is { } line)
-            {
-                // Créer un HashSet avec tous les codes de langue valides
-                var validLanguageCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                {
-                    "AR", "BG", "CS", "DA", "DE", "EL", "EN", "ES", "ET", "FI",
-                    "HU", "ID", "IT", "JA", "KO", "LT", "LV", "NB", "NL", "PL",
-                    "PT", "RO", "RU", "SK", "SL", "SV", "TR", "UK", "ZH"
-                };
-
-                // On coupe la ligne en deux morceaux : la partie avant le ' : ' qui contient le type de paramètre contenu dans la ligne,
-                // la partie après qui contient la valeur du paramètre
-                var parts = line.Split(':');
-
-                // S'il n'y a pas de ' : ' ou qu'il n'y a rien après les deux points, on skip car la ligne nous intéresse pas
-                if (parts.Length < 2) continue;
-
-                var parameter = parts[0].Trim().ToLower();
-                var value = parts[1].Trim();
-
-                switch (parameter)
-                {
-                    case "theme":
-                        // Si la valeur n'est pas dark, on mettra toujours le thème clair (en cas d'erreur, ou si la value est "light")
-                        _viewModel.AppSettings.EnableLightTheme = !value.Equals("dark", StringComparison.CurrentCultureIgnoreCase);
-                        break;
-
-                    case "application language":
-                        // Vérifier si value est un code de langue valide, si elle est valide, on assigne la valeur, sinon on met la langue par défaut
-                        _viewModel.AppSettings.AppLang = validLanguageCodes.Contains(value.ToUpper()) ? value : "FR";
-                        break;
-
-                    case "window scale factor":
-                        try
-                        {
-                            _viewModel.AppSettings.AppScaleFactor = Convert.ToInt32(value) > 300 || Convert.ToInt32(value) < 50 ? 100 : Convert.ToInt32(value);
-                            if (_viewModel.AppSettings.AppScaleFactor <= 100)
-                            {
-                                ApplyScaling(_viewModel.AppSettings.AppScaleFactor/100f - 0.1f);
-                            }
-                            else
-                            {
-                                ApplyScaling(_viewModel.AppSettings.AppScaleFactor/100f - 0.2f);
-                            }
-                        }
-                        catch (Exception)
-                        {
-                            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: Could not parse the integer value of the window scale factor. Restoring default value (100%).");
-                        }
-                        break;
-                        
-                }
-            }
-
-        }
-        // Si l'application a manqué de mémoire pendant la récupération des lignes
-        catch (OutOfMemoryException)
-        {
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: The program does not have sufficient memory to run. Please try closing a few applications before trying again.");
-            return;
-        }
-        // Aucune idée de la raison
-        catch (IOException)
-        {
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute("Error: An I/O error occured while reading the settings file.");
-            return;
-        }
-        finally
-        {
-            reader?.Close(); // Fermeture du stream de lecture
-            _viewModel.SaveSettingsCommand.Execute(null); // Mise à jour du fichier appSettings
-        }
+        DataContext = _viewModel;
             
+        // A enlever ? ⬇️
         UpdateWindowContents(true, true); // Affichage des paramètres dans la fenêtre
+        
         ScaleSlider.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(SliderMouseLeftButtonDown), true);
         ScaleSlider.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(SliderMouseLeftButtonUp), true);
         ScaleSlider.AddHandler(MouseMoveEvent, new MouseEventHandler(SliderMouseMove), true);
@@ -1893,7 +1724,8 @@ public partial class SettingsWindow
         _viewModel.AppSettings.AppScaleFactor = (int)ScaleSlider.Value;
 
         // Si on a changé un des paramètres, on les sauvegarde. Sinon, inutile de réécrire le fichier.
-        if (previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme || previousAppLang != _viewModel.AppSettings.AppLang ||
+        if (previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme || 
+            previousAppLang != _viewModel.AppSettings.AppLang ||
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor)
         {
             // Sauvegarde des paramètres dans le fichier appSettings
