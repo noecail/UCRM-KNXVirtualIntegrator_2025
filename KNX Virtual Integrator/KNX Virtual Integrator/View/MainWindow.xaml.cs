@@ -215,7 +215,9 @@ public partial class MainWindow
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if (!_viewModel.ExtractProjectFiles(openFileDialog.FileName)) return;
+
+            if (_viewModel.ExtractProjectFilesCommand is RelayCommandWithResult<string, bool> extractProjectFilesCommand &&
+                !extractProjectFilesCommand.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
@@ -226,7 +228,10 @@ public partial class MainWindow
         }
 
         // Partie management des adresses de groupes
-        _ = _viewModel.FindZeroXml(_viewModel.ProjectFolderPath);
+        if (_viewModel.FindZeroXmlCommand is RelayCommandWithResult<string, bool> findZeroXmlCommand)
+        {
+            _ = findZeroXmlCommand.ExecuteWithResult(_viewModel.ProjectFolderPath);
+        }
         _viewModel.ExtractGroupAddressCommand.Execute(null);
     }
     
@@ -262,7 +267,8 @@ public partial class MainWindow
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            if (!_viewModel.ExtractGroupAddressFile(openFileDialog.FileName)) return;
+            if (_viewModel.ExtractGroupAddressFileCommand is RelayCommandWithResult<string, bool> command &&
+                !command.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
