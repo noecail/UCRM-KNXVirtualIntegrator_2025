@@ -18,6 +18,6 @@ public partial class ConnectionWindow : Window
     
     private async void ConnectionWindow_Loaded(object sender, RoutedEventArgs e)
     {
-        await _viewModel.DiscoverInterfacesAsync();
+        // await .DiscoverInterfacesAsync();
     }
 }

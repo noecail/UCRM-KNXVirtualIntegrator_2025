@@ -8,8 +8,8 @@
         mc:Ignorable="d"
         Title="ConnectionWindow" Height="475" Width="800">
    
-        <Window.DataContext>
-        <viewModel:MainViewModel />
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
     </Window.DataContext>
     
     <Grid>
@@ -74,8 +74,8 @@
                 </GroupBox>
                 <!-- Buttons for connecting and disconnecting -->
                 <StackPanel Orientation="Horizontal" Margin="5">
-                    <Button Name="ConnectButton" Content="Connect" Margin="5" Padding="5,2" Command="{Binding ConnectCommand}"/>
-                    <Button Name="DisconnectButton" Content="Disconnect" Margin="5" Padding="5,2" Command="{Binding DisconnectCommand}"/>
+                    <Button Name="ConnectButton" Content="Connect" Margin="5" Padding="5,2" Command="{Binding ConnectBusCommand}"/>
+                    <Button Name="DisconnectButton" Content="Disconnect" Margin="5" Padding="5,2" Command="{Binding DisconnectBusCommand}"/>
                     <TextBlock Name="ConnectionStateTextBlock" 
                                Text="{Binding ConnectionState}" 
                                Foreground="Red" 
