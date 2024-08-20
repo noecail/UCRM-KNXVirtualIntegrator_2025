@@ -1,4 +1,5 @@
 ﻿using KNX_Virtual_Integrator.Model;
+using KNX_Virtual_Integrator.Model.Implementations;
 
 // ReSharper disable NullableWarningSuppressionIsUsed
 
@@ -60,6 +61,21 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     
     public ICommand FindZeroXmlCommand { get; } = new RelayCommand<string>(fileName => modelManager.FileFinder.FindZeroXml(fileName));
     
+    public ICommand ConnectBusCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.BusConnection.ConnectBusAsync());
+
+    public ICommand DisconnectBusCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.BusConnection.DisconnectBusAsync());
+
+    public ICommand RefreshInterfacesCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.BusConnection.DiscoverInterfacesAsync());
+
+    public ICommand GroupValueWriteOnCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOnAsync());
+
+    public ICommand GroupValueWriteOffCommand { get; } =
+        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOffAsync());
+    
     
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------
@@ -86,20 +102,4 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
 
     public ICommand ExtractProjectFilesCommand { get; } = new RelayCommandWithResult<string, bool>(fileName =>
         modelManager.ProjectFileManager.ExtractProjectFiles(fileName));
-    
-    public ICommand ConnectBusCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.BusConnection.ConnectBusAsync());
-
-    public ICommand DisconnectBusCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.BusConnection.DisconnectBusAsync());
-
-    public ICommand RefreshInterfacesCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.BusConnection.DiscoverInterfacesAsync());
-
-    public ICommand GroupValueWriteOnCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOnAsync());
-
-    public ICommand GroupValueWriteOffCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOffAsync());
-
 }
