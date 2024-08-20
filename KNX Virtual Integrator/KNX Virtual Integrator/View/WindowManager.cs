@@ -17,10 +17,10 @@ public class WindowManager (MainViewModel mainViewModel)
     /// </summary>
     public SettingsWindow? SettingsWindow { get; } = new(mainViewModel);
     
-    /// <summary>
-    /// Represents the connection window instance.
-    /// </summary>
-    public ConnectionWindow? ConnectionWindow { get; } = new(mainViewModel);
+    // /// <summary>
+    // /// Represents the connection window instance.
+    // /// </summary>
+    // public ConnectionWindow? ConnectionWindow { get; } = new(mainViewModel);
 
         
     /* ------------------------------------------------------------------------------------------------
@@ -44,11 +44,11 @@ public class WindowManager (MainViewModel mainViewModel)
     }
     
     
-    /// <summary>
-    /// Shows the connection window of the application if it is available.
-    /// </summary>
-    public void ShowConnectionWindow()
-    {
-        ConnectionWindow?.Show();
-    }
+    // /// <summary>
+    // /// Shows the connection window of the application if it is available.
+    // /// </summary>
+    // public void ShowConnectionWindow()
+    // {
+    //     ConnectionWindow?.Show();
+    // }
 }

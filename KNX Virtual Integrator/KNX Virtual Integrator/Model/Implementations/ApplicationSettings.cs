@@ -1,12 +1,11 @@
 ﻿using System.IO;
+using System.Xml.Serialization;
 using KNX_Virtual_Integrator.Model.Interfaces;
-using Newtonsoft.Json;
-using Formatting = Newtonsoft.Json.Formatting;
 
 namespace KNX_Virtual_Integrator.Model.Implementations
 {
     /// <summary>
-    /// Provides an implementation for managing application settings, including reading from and writing to a JSON file.
+    /// Provides an implementation for managing application settings, including reading from and writing to an XML file.
     /// </summary>
     public class ApplicationSettings : IApplicationSettings
     {
@@ -25,53 +24,73 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         /// </summary>
         public int AppScaleFactor { get; set; } = 100;
 
-        private readonly string _settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.json");
+        private readonly string _settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ApplicationSettings"/> class.
         /// </summary>
         /// <remarks>
-        /// Loads the settings from the JSON file if it exists. If the file is not found or an error occurs during loading,
+        /// Loads the settings from the XML file if it exists. If the file is not found or an error occurs during loading,
         /// the default settings are used.
         /// </remarks>
-        public ApplicationSettings()
+        public ApplicationSettings(ApplicationFileManager manager, SystemSettingsDetector detector)
         {
-            if (!File.Exists(_settingsFilePath)) return;
-
-            try
+            // Si le fichier de paramétrage n'existe pas, on détecte les paramètres de windows
+            if (!manager.EnsureSettingsFileExists(_settingsFilePath))
             {
-                var json = File.ReadAllText(_settingsFilePath);
-                var loadedSettings = JsonConvert.DeserializeObject<ApplicationSettings>(json);
-
-                if (loadedSettings == null) return;
-
-                EnableLightTheme = loadedSettings.EnableLightTheme;
-                AppLang = loadedSettings.AppLang;
-                AppScaleFactor = loadedSettings.AppScaleFactor;
+                Console.WriteLine("Les paramètres existent pas on détecte");
+                AppLang = detector.DetectWindowsLanguage();
+                EnableLightTheme = detector.DetectWindowsTheme();
             }
-            catch (Exception e)
+            else
             {
-                // A FAIRE
+                try
+                {
+                    var serializer = new XmlSerializer(typeof(ApplicationSettings));
+                    using var fileStream = new FileStream(_settingsFilePath, FileMode.Open);
+                    var loadedSettings = (ApplicationSettings)serializer.Deserialize(fileStream)!;
+
+                    EnableLightTheme = loadedSettings.EnableLightTheme;
+                    AppLang = loadedSettings.AppLang;
+                    AppScaleFactor = loadedSettings.AppScaleFactor;
+                    
+                    Console.WriteLine($"Les paramètres existaient, on a détecté: {EnableLightTheme}, {AppLang}, {AppScaleFactor}");
+                }
+                catch (Exception e)
+                {
+                    // Handle the exception (e.g., log the error, notify the user, etc.)
+                    Console.WriteLine($"Error loading settings: {e.Message}");
+                }
             }
         }
 
         /// <summary>
-        /// Saves the current settings to a JSON file.
+        /// Parameterless constructor required for XML serialization
+        /// </summary>
+        public ApplicationSettings()
+        {
+            
+        }
+
+        /// <summary>
+        /// Saves the current settings to an XML file.
         /// </summary>
         /// <remarks>
-        /// Serializes the settings and writes them to the JSON file. If an error occurs during the saving process, 
+        /// Serializes the settings and writes them to the XML file. If an error occurs during the saving process, 
         /// the error should be handled accordingly.
         /// </remarks>
         public void Save()
         {
             try
             {
-                var json = JsonConvert.SerializeObject(this, Formatting.Indented);
-                File.WriteAllText(_settingsFilePath, json);
+                var serializer = new XmlSerializer(typeof(ApplicationSettings));
+                using var fileStream = new FileStream(_settingsFilePath, FileMode.Create);
+                serializer.Serialize(fileStream, this);
             }
             catch (Exception e)
             {
-                // A FAIRE
+                // Handle the exception (e.g., log the error, notify the user, etc.)
+                Console.WriteLine($"Error saving settings: {e.Message}");
             }
         }
     }

@@ -48,6 +48,8 @@ public partial class SettingsWindow
 
         _viewModel = viewModel;
         DataContext = _viewModel;
+        
+        _viewModel.SaveSettingsCommand.Execute(null);
             
         // A enlever ? ⬇️
         UpdateWindowContents(true, true); // Affichage des paramètres dans la fenêtre
