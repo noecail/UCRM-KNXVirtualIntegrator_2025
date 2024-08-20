@@ -12,7 +12,9 @@ namespace KNX_Virtual_Integrator.Model
         ISystemSettingsDetector systemSettingsDetector,
         IDebugArchiveGenerator debugArchiveGenerator,
         IApplicationFileManager applicationFileManager,
-        IBusConnection busConnection)
+        IBusConnection busConnection,
+        IGroupCommunication groupCommunication,
+        IApplicationSettings appSettings)
 
     {
     public IFileLoader FileLoader { get; } = fileLoader;
@@ -25,5 +27,7 @@ namespace KNX_Virtual_Integrator.Model
     public IDebugArchiveGenerator DebugArchiveGenerator { get; } = debugArchiveGenerator;
     public IApplicationFileManager ApplicationFileManager { get; } = applicationFileManager;
     public IBusConnection BusConnection { get; } = busConnection;
+    public IGroupCommunication GroupCommunication { get; } = groupCommunication;
+    public IApplicationSettings AppSettings { get; } = appSettings;
     }
 }

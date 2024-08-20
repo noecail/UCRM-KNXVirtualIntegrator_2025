@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManager) : IDebugArchiveGenerator
+public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManager, IApplicationSettings settings) : IDebugArchiveGenerator
 {
     /// <summary>
     /// Generates a debug file for the application.
@@ -304,7 +304,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
             string title;
 
             // Traduction de la fenêtre d'erreur
-            switch (App.WindowManager?.SettingsWindow!.AppLang)
+            switch (settings.AppLang)
             {
                 // Arabe
                 case "AR":
@@ -550,7 +550,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
         // Afficher la boîte de dialogue de sauvegarde
         var saveFileDialog = new SaveFileDialog
         {
-            Title = App.WindowManager?.SettingsWindow!.AppLang switch
+            Title = settings.AppLang switch
             {
                 // Arabe
                 "AR" => "حفظ أرشيف التصحيح باسم...",
@@ -615,7 +615,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
             },
             FileName = $"debug-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.zip",
             DefaultExt = ".zip",
-            Filter = App.WindowManager?.SettingsWindow!.AppLang switch
+            Filter = settings.AppLang switch
             {
                 // Arabe
                 "AR" => "ملفات ZIP|*.zip",

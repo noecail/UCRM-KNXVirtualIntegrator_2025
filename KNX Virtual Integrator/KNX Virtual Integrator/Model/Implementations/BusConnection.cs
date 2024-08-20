@@ -16,14 +16,14 @@ public class BusConnection : ObservableObject ,IBusConnection
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
 
-    private KnxBus? _bus;
-    private CancellationTokenSource? _cancellationTokenSource;
+    public KnxBus? Bus;
+    public CancellationTokenSource? CancellationTokenSource;
 
     // Propriétés liées à l'interface utilisateur //test
-    public ObservableCollection<ConnectionInterfaceViewModel> GroupAddresses { get; private set; }
-    public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces { get; private set; }
+    public ObservableCollection<ConnectionInterfaceViewModel>? GroupAddresses { get; private set; }
+    public ObservableCollection<ConnectionInterfaceViewModel>? DiscoveredInterfaces { get; private set; }
     
-    public GroupCommunicationViewModel GroupCommunicationVM { get; }
+    //public GroupCommunicationViewModel GroupCommunicationVM { get; }
 
     private ConnectionInterfaceViewModel? _selectedInterface;
     public ConnectionInterfaceViewModel? SelectedInterface
@@ -33,14 +33,14 @@ public class BusConnection : ObservableObject ,IBusConnection
     }
     
     private bool _isBusy;
-    private bool IsBusy
+    public bool IsBusy
     {
         get => _isBusy;
         set => Set(ref _isBusy, value);
     }
 
     private bool _isConnected;
-    private bool IsConnected
+    public bool IsConnected
     {
         get => _isConnected;
         set => Set(ref _isConnected, value);
@@ -62,16 +62,30 @@ public class BusConnection : ObservableObject ,IBusConnection
             if (_selectedConnectionType != value)
             {
                 _selectedConnectionType = value;
-                TypeConnectionCommand?.Execute(null);
+                OnSelectedConnectionTypeChanged();
             }
         }
     }
+    
+    private async void OnSelectedConnectionTypeChanged()
+    {
+        try
+        {
+            await DiscoverInterfacesAsync();
+        }
+        catch (Exception ex)
+        {
+            // Gestion d'erreur
+            Console.WriteLine($"Erreur lors de la découverte des interfaces: {ex.Message}");
+        }
+    }
+    
     public async Task ConnectBusAsync()
     {
         if (IsBusy)
             return;
 
-        _cancellationTokenSource = new CancellationTokenSource();
+        CancellationTokenSource = new CancellationTokenSource();
 
         try
         {
@@ -90,11 +104,11 @@ public class BusConnection : ObservableObject ,IBusConnection
             }
 
             // Si le bus est déjà connecté, on le déconnecte
-            if (_bus != null)
+            if (Bus != null)
             {
-                _bus.ConnectionStateChanged -= BusConnectionStateChanged;
-                await _bus.DisposeAsync();
-                _bus = null;
+                Bus.ConnectionStateChanged -= BusConnectionStateChanged;
+                await Bus.DisposeAsync();
+                Bus = null;
                 UpdateConnectionState();
             }
 
@@ -102,13 +116,13 @@ public class BusConnection : ObservableObject ,IBusConnection
             var connectorParameters = ConnectorParameters.FromConnectionString(connectionString);
 
             // Création du bus et connexion
-            _bus = new KnxBus(connectorParameters);
-            await _bus.ConnectAsync(_cancellationTokenSource.Token);
+            Bus = new KnxBus(connectorParameters);
+            await Bus.ConnectAsync(CancellationTokenSource.Token);
 
             // Si le bus est bien connecté, on met à jour son état et les variables qui vont avec
-            if (_bus.ConnectionState == BusConnectionState.Connected)
+            if (Bus.ConnectionState == BusConnectionState.Connected)
             {
-                _bus.ConnectionStateChanged += BusConnectionStateChanged;
+                Bus.ConnectionStateChanged += BusConnectionStateChanged;
                 IsConnected = true;
                 UpdateConnectionState();
                 MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -132,6 +146,38 @@ public class BusConnection : ObservableObject ,IBusConnection
         }
     }
     
+    public async Task DisconnectBusAsync()
+    {
+        if (IsBusy || !IsConnected)
+        {
+            MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        CancellationTokenSource?.Cancel();
+        CancellationTokenSource = null;
+
+        try
+        {
+            if (Bus != null)
+            {
+                Bus.ConnectionStateChanged -= BusConnectionStateChanged;
+                await Bus.DisposeAsync();
+                Bus = null;
+                IsConnected = false;
+                UpdateConnectionState();
+                MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
     
     public async Task DiscoverInterfacesAsync()
     {
@@ -243,7 +289,7 @@ public class BusConnection : ObservableObject ,IBusConnection
     
     private void ResetCancellationTokenSource()
     {
-        _cancellationTokenSource?.Dispose();
-        _cancellationTokenSource = new CancellationTokenSource();
+        CancellationTokenSource?.Dispose();
+        CancellationTokenSource = new CancellationTokenSource();
     }
 }

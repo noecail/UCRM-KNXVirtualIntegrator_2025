@@ -6,8 +6,8 @@ namespace KNX_Virtual_Integrator.ViewModel;
 public class ConnectionInterfaceViewModel
 {
     public ConnectorType ConnectorType { get; }
-    public string DisplayName { get; set; } // Ajout du set pour DisplayName
-    public string ConnectionString { get; set; } // Ajout du set pour ConnectionString
+    public string DisplayName { get; set; } 
+    public string ConnectionString { get; set; }
 
     public ConnectionInterfaceViewModel(ConnectorType connectorType, string displayName, string connectionString)
     {

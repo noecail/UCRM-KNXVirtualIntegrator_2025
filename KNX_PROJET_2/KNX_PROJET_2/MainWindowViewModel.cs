@@ -67,8 +67,21 @@ namespace KNX_PROJET_2
                     _selectedConnectionType = value;
                     
                     // Exécuter la commande lorsque la sélection change
-                    TypeConnectionCommand?.Execute(null);
+                    OnSelectedConnectionTypeChanged();
                 }
+            }
+        }
+        
+        private async void OnSelectedConnectionTypeChanged()
+        {
+            try
+            {
+                await DiscoverInterfacesAsync();
+            }
+            catch (Exception ex)
+            {
+                // Gestion d'erreur
+                Console.WriteLine($"Erreur lors de la découverte des interfaces: {ex.Message}");
             }
         }
 
@@ -83,10 +96,8 @@ namespace KNX_PROJET_2
             ConnectCommand = new RelayCommand(async () => await ConnectBusAsync());
             DisconnectCommand = new RelayCommand(async () => await DisconnectBusAsync());
             RefreshInterfacesCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
-            TypeConnectionCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
             
             GroupCommunicationVM = new GroupCommunicationViewModel(this);
-
         }
 
         
