@@ -26,10 +26,5 @@
         /// </summary>
         /// <param name="settingsPath">The path to the configuration file.</param>
         void EnsureSettingsFileExists(string settingsPath);
-
-        /// <summary>
-        /// Saves the application settings to the appSettings file.
-        /// </summary>
-        void SaveApplicationSettings();
     }
 }

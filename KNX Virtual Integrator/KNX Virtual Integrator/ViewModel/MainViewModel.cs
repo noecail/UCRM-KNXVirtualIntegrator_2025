@@ -50,13 +50,6 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
 
     
     /// <summary>
-    /// Command that saves the application settings using the ApplicationFileManager.
-    /// </summary>
-    public ICommand SaveApplicationSettingsCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.ApplicationFileManager.SaveApplicationSettings());
-
-    
-    /// <summary>
     /// Command that ensures the settings file exists. Creates the file if it does not exist, using the provided file path.
     /// </summary>
     public ICommand EnsureSettingsFileExistsCommand { get; } =
