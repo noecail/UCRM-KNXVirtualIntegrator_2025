@@ -20,21 +20,22 @@ namespace KNX_PROJET_2
     {
         private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
 
-        private KnxBus _bus;
-        private CancellationTokenSource _cancellationTokenSource;
+        public KnxBus _bus;
+        public CancellationTokenSource _cancellationTokenSource;
 
-        // Propriétés liées à l'interface utilisateur
+        // Propriétés liées à l'interface utilisateur //test
         public ObservableCollection<InterfaceViewModel> GroupAddresses { get; private set; }
         public ObservableCollection<InterfaceViewModel> DiscoveredInterfaces { get; private set; }
         public ICommand ImportCommand { get; private set; }
         public ICommand ConnectCommand { get; private set; }
         public ICommand DisconnectCommand { get; private set; }
         public ICommand RefreshInterfacesCommand { get; private set; }
-        public ICommand TestWriteCommandOn { get; private set; }
-        public ICommand TestWriteCommandOff { get; private set; }
-
-
+        
+        
         public ICommand TypeConnectionCommand { get; set; }
+
+
+        public GroupCommunicationViewModel GroupCommunicationVM {get; }
 
         private bool _isBusy;
         public bool IsBusy
@@ -73,8 +74,7 @@ namespace KNX_PROJET_2
             }
         }
 
-
-
+        
         public MainViewModel()
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -87,42 +87,11 @@ namespace KNX_PROJET_2
             RefreshInterfacesCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
             TypeConnectionCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
             
-            TestWriteCommandOn = new RelayCommand(async () => await TestWriteOn());
-            TestWriteCommandOff = new RelayCommand(async () => await TestWriteOff());
+            GroupCommunicationVM = new GroupCommunicationViewModel(this);
 
         }
 
-        private async Task TestWriteOn()
-        {
-            if (_bus == null)
-            {
-                MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-            
-            try
-            {
-                var valueToSend = new GroupValue(1);
-                await _bus.WriteGroupValueAsync((GroupAddress)"0/1/1", valueToSend, MessagePriority.High, _cancellationTokenSource.Token);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}\nStack Trace: {ex.StackTrace}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
         
-        private async Task TestWriteOff()
-        {
-            try
-            {
-                var valueToSend = new GroupValue(0);
-                await _bus.WriteGroupValueAsync((GroupAddress)"0/1/1", valueToSend, MessagePriority.High, _cancellationTokenSource.Token);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
 
         private async Task ImportListGroupAddress()
         {

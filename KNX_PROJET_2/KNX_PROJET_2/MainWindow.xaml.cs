@@ -21,7 +21,6 @@ namespace KNX_PROJET_2
             var viewModel = (MainViewModel)this.DataContext;
             await viewModel.DiscoverInterfacesAsync();
         }
-
     }
 }
 
