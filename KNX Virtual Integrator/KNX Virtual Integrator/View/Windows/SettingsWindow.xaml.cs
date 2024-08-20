@@ -14,7 +14,7 @@ using KNX_Virtual_Integrator.ViewModel;
 // ReSharper disable ConvertToUsingDeclaration
 
 
-namespace KNX_Virtual_Integrator.View;
+namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
 ///  Window used to set the application settings.
@@ -1607,7 +1607,7 @@ public partial class SettingsWindow
             OngletInformations.Style = (Style)FindResource("LightOnglet");
             OngletParametresApplication.Style = (Style)FindResource("LightOnglet");
             IncludeAddressListCheckBox.Foreground = (bool)AddImportedFilesCheckBox.IsChecked! ? 
-            MainWindow.ConvertStringColor(textColor) : new SolidColorBrush(Colors.Gray);
+            new SolidColorBrush((Color)ColorConverter.ConvertFromString(textColor)) : new SolidColorBrush(Colors.Gray);
             HyperlinkInfo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4071B4"));
         }
         else // Sinon, on met le thème sombre
@@ -1629,7 +1629,7 @@ public partial class SettingsWindow
             OngletInformations.Style = (Style)FindResource("DarkOnglet");
             OngletParametresApplication.Style = (Style)FindResource("DarkOnglet");
             IncludeAddressListCheckBox.Foreground = (bool)AddImportedFilesCheckBox.IsChecked! ? 
-                MainWindow.ConvertStringColor(textColor) : new SolidColorBrush(Colors.DimGray);
+                new SolidColorBrush((Color)ColorConverter.ConvertFromString(textColor)) : new SolidColorBrush(Colors.DimGray);
             HyperlinkInfo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4071B4"));
 
 
@@ -1790,7 +1790,7 @@ public partial class SettingsWindow
         IncludeAddressListCheckBox.IsEnabled = true;
 
         IncludeAddressListCheckBox.Foreground = _viewModel.AppSettings.EnableLightTheme ?
-            new SolidColorBrush(Colors.Black) : MainWindow.ConvertStringColor("#E3DED4");
+            new SolidColorBrush(Colors.Black) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E3DED4"));
     }
 
 
