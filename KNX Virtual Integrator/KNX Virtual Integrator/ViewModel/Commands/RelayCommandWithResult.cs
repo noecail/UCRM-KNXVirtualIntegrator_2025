@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace KNX_Virtual_Integrator.ViewModel;
+namespace KNX_Virtual_Integrator.ViewModel.Commands;
 
 public class RelayCommandWithResult<T, TResult>(Func<T, TResult> execute, Func<T, bool>? canExecute = null) : ICommand
 {

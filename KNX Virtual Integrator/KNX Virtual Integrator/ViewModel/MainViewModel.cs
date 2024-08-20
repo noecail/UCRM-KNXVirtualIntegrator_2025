@@ -1,6 +1,8 @@
 ﻿using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
+using KNX_Virtual_Integrator.ViewModel.Commands;
 
+// ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
 
 namespace KNX_Virtual_Integrator.ViewModel;
@@ -47,18 +49,6 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// </summary>
     public ICommand ExtractGroupAddressCommand { get; } =
         new RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress());
-
-    
-    /// <summary>
-    /// Command that ensures the settings file exists. Creates the file if it does not exist, using the provided file path.
-    /// </summary>
-    public ICommand EnsureSettingsFileExistsCommand { get; } =
-        new RelayCommand<string>(
-            parameter =>
-            {
-                if (!string.IsNullOrWhiteSpace(parameter)) modelManager.ApplicationFileManager.EnsureSettingsFileExists(parameter);
-            }
-        );
 
     
     /// <summary>

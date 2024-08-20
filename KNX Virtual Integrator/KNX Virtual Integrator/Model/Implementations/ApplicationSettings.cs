@@ -24,6 +24,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         /// </summary>
         public int AppScaleFactor { get; set; } = 100;
 
+        /// <summary>
+        /// Path to the application settings file
+        /// </summary>
         private readonly string _settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
 
         /// <summary>

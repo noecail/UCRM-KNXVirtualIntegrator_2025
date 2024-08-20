@@ -1,9 +1,10 @@
 using System.Windows;
 using System.Windows.Media;
 using KNX_Virtual_Integrator.ViewModel;
+using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
 
-namespace KNX_Virtual_Integrator.View;
+namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml

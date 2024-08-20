@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace KNX_Virtual_Integrator.ViewModel;
+namespace KNX_Virtual_Integrator.ViewModel.Commands;
 
 public class RelayCommand<T> : ICommand
 {

@@ -14,7 +14,7 @@ using KNX_Virtual_Integrator.ViewModel;
 // ReSharper disable ConvertToUsingDeclaration
 
 
-namespace KNX_Virtual_Integrator.View;
+namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
 ///  Window used to set the application settings.
