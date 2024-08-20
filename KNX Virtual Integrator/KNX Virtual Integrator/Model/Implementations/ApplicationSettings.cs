@@ -38,7 +38,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             // Si le fichier de paramétrage n'existe pas, on détecte les paramètres de windows
             if (!manager.EnsureSettingsFileExists(_settingsFilePath))
             {
-                Console.WriteLine("Les paramètres existent pas on détecte");
                 AppLang = detector.DetectWindowsLanguage();
                 EnableLightTheme = detector.DetectWindowsTheme();
             }
@@ -53,8 +52,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     EnableLightTheme = loadedSettings.EnableLightTheme;
                     AppLang = loadedSettings.AppLang;
                     AppScaleFactor = loadedSettings.AppScaleFactor;
-                    
-                    Console.WriteLine($"Les paramètres existaient, on a détecté: {EnableLightTheme}, {AppLang}, {AppScaleFactor}");
                 }
                 catch (Exception e)
                 {
