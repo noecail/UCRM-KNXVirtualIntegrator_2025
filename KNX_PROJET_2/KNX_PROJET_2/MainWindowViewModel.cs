@@ -30,12 +30,10 @@ namespace KNX_PROJET_2
         public ICommand ConnectCommand { get; private set; }
         public ICommand DisconnectCommand { get; private set; }
         public ICommand RefreshInterfacesCommand { get; private set; }
-        
-        
         public ICommand TypeConnectionCommand { get; set; }
 
 
-        public GroupCommunicationViewModel GroupCommunicationVM {get; }
+        public GroupCommunicationViewModel GroupCommunicationVM { get; }
 
         private bool _isBusy;
         public bool IsBusy

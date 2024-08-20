@@ -458,9 +458,13 @@ public class MainViewModel (ModelManager modelManager) : ICommand, INotifyProper
     
     // ------------------------------------ CONNECTION TO THE KNX BUS ------------------------------------ //
 
+    public async Task ConnectBusAsync()
+    {
+        await modelManager.BusConnection.ConnectBusAsync();
+    }
+
     public async Task DiscoverInterfacesAsync()
     {
-        
+        await modelManager.BusConnection.DiscoverInterfacesAsync();
     }
-    
 }
