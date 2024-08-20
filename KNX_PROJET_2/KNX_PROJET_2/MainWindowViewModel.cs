@@ -31,8 +31,7 @@ namespace KNX_PROJET_2
         public ICommand DisconnectCommand { get; private set; }
         public ICommand RefreshInterfacesCommand { get; private set; }
         
-
-
+        
         public ICommand TypeConnectionCommand { get; set; }
 
 
@@ -75,8 +74,7 @@ namespace KNX_PROJET_2
             }
         }
 
-
-
+        
         public MainViewModel()
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -89,8 +87,6 @@ namespace KNX_PROJET_2
             RefreshInterfacesCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
             TypeConnectionCommand = new RelayCommand(async () => await DiscoverInterfacesAsync());
             
-            
-
             GroupCommunicationVM = new GroupCommunicationViewModel(this);
 
         }

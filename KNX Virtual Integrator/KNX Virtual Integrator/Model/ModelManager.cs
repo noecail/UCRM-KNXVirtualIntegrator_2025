@@ -11,16 +11,19 @@ namespace KNX_Virtual_Integrator.Model
         IGroupAddressManager groupAddressManager,
         ISystemSettingsDetector systemSettingsDetector,
         IDebugArchiveGenerator debugArchiveGenerator,
-        IApplicationFileManager applicationFileManager)
+        IApplicationFileManager applicationFileManager,
+        IBusConnection busConnection)
+
     {
-        public IFileLoader FileLoader { get; } = fileLoader;
-        public IFileFinder FileFinder { get; } = fileFinder;
-        public IProjectFileManager ProjectFileManager { get; } = projectFileManager;
-        public ILogger Logger { get; } = logger;
-        public IZipArchiveManager ZipArchiveManager { get; } = zipArchiveManager;
-        public IGroupAddressManager GroupAddressManager { get; } = groupAddressManager;
-        public ISystemSettingsDetector SystemSettingsDetector { get; } = systemSettingsDetector;
-        public IDebugArchiveGenerator DebugArchiveGenerator { get; } = debugArchiveGenerator;
-        public IApplicationFileManager ApplicationFileManager { get; } = applicationFileManager;
+    public IFileLoader FileLoader { get; } = fileLoader;
+    public IFileFinder FileFinder { get; } = fileFinder;
+    public IProjectFileManager ProjectFileManager { get; } = projectFileManager;
+    public ILogger Logger { get; } = logger;
+    public IZipArchiveManager ZipArchiveManager { get; } = zipArchiveManager;
+    public IGroupAddressManager GroupAddressManager { get; } = groupAddressManager;
+    public ISystemSettingsDetector SystemSettingsDetector { get; } = systemSettingsDetector;
+    public IDebugArchiveGenerator DebugArchiveGenerator { get; } = debugArchiveGenerator;
+    public IApplicationFileManager ApplicationFileManager { get; } = applicationFileManager;
+    public IBusConnection BusConnection { get; } = busConnection;
     }
 }

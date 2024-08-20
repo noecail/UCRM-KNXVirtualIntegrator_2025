@@ -22,7 +22,7 @@ public class MainViewModel (ModelManager modelManager) : ICommand, INotifyProper
     /// This method:
     /// <list type="number">
     /// <item>Attempts to load the XML document from the specified path.</item>
-    /// <item>Catches and logs specific exceptions such as FileNotFoundException, DirectoryNotFoundException, IOException, UnauthorizedAccessException, and XmlException.</item>
+    /// <item>Catches and logs specific exceptions such as FileNotFoundException, DirectoryNotFoundException, IOException, UnauthorizedAccessException and XmlException.</item>
     /// <item>Logs an error message and returns null if an exception is thrown.</item>
     /// </list>
     /// </remarks>
@@ -454,4 +454,13 @@ public class MainViewModel (ModelManager modelManager) : ICommand, INotifyProper
     {
         modelManager.ApplicationFileManager.SaveApplicationSettings();
     }
+    
+    
+    // ------------------------------------ CONNECTION TO THE KNX BUS ------------------------------------ //
+
+    public async Task DiscoverInterfacesAsync()
+    {
+        
+    }
+    
 }
