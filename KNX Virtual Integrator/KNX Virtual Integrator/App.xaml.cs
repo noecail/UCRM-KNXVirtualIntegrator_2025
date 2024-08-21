@@ -47,7 +47,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 92;
+    public const int AppBuild = 93;
     
         
     
@@ -113,7 +113,7 @@ public partial class App
         var busConnection = new BusConnection();
         var groupCommunication = new GroupCommunication(busConnection);
         var parentFinder = new ParentFinder(logger);
-        var sliderClickHandler = new SliderClickHandler(logger, parentFinder);
+        var settingsSliderClickHandler = new SliderClickHandler(logger, parentFinder);
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
@@ -130,7 +130,7 @@ public partial class App
             groupCommunication,
             appSettings,
             parentFinder,
-            sliderClickHandler);
+            settingsSliderClickHandler);
     
         // Assurer l'existence du répertoire de logs
         ModelManager.ApplicationFileManager.EnsureLogDirectoryExists();
@@ -207,6 +207,7 @@ public partial class App
     }
     
 }
+
 
 
 

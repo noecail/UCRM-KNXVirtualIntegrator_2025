@@ -171,7 +171,7 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// <param name="e">Event data for the mouse button event.</param>
     public void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        modelManager.SliderClickHandler.SliderMouseLeftButtonDown(sender, e);
+        modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
     }
 
     /// <summary>
@@ -181,7 +181,7 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// <param name="e">Event data for the mouse button event.</param>
     public void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        modelManager.SliderClickHandler.SliderMouseLeftButtonUp(sender, e);
+        modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
     }
 
     /// <summary>
@@ -191,12 +191,12 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// <param name="e">Event data for the mouse movement event.</param>
     public void SliderMouseMove(object sender, MouseEventArgs e)
     {
-        modelManager.SliderClickHandler.SliderMouseMove(sender, e);
+        modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
     }
 
     public void OnSliderClick(object sender, RoutedEventArgs e)
     {
-        modelManager.SliderClickHandler.OnSliderClick(sender, e);
+        modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
     }
     
 }
