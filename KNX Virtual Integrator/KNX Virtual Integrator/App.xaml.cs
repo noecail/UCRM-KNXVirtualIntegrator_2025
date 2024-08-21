@@ -96,8 +96,8 @@ public partial class App
         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
 
         // Instancier les dépendances nécessaires
-        var fileLoader = new FileLoader();
         var logger = new Logger();
+        var fileLoader = new FileLoader(logger);
         var applicationFileManager = new ApplicationFileManager(logger);
         var systemSettingsDetector = new SystemSettingsDetector(logger);
         var appSettings = new ApplicationSettings(applicationFileManager, systemSettingsDetector);
