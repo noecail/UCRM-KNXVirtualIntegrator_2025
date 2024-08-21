@@ -962,12 +962,9 @@
                                                    </CheckBox>
                                                
                                                    <CheckBox x:Name="AddImportedFilesCheckBox" Style="{StaticResource CheckboxLightThemeStyle}"
-                                                             Margin="10,5,0,10" Checked="EnableIncludeAddress" Unchecked="DisableIncludeAddress">
-                                                   </CheckBox>
-                                               
-                                                   <CheckBox x:Name="IncludeAddressListCheckBox" Style="{StaticResource CheckboxLightThemeStyle}"
                                                              Margin="10,5,0,10">
                                                    </CheckBox>
+                                                   
                                                </StackPanel>
                                            </ScrollViewer>
                                        </TabItem>
