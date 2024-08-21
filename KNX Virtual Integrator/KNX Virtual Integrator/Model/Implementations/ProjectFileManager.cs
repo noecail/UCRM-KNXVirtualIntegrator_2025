@@ -7,7 +7,7 @@ using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ProjectFileManager(Logger logger) : IProjectFileManager
+public class ProjectFileManager(Logger logger, ApplicationSettings settings) : IProjectFileManager
 {
     private readonly ILogger _logger = logger;
 
@@ -442,7 +442,7 @@ public class ProjectFileManager(Logger logger) : IProjectFileManager
             // On stocke le nom du nouveau projet
             GroupAddressFileName = Path.GetFileNameWithoutExtension(groupAddressesSourceFilePath);
                 
-            App.WindowManager!.MainWindow.Title = App.WindowManager.SettingsWindow!.AppLang switch
+            App.WindowManager!.MainWindow.Title = settings.AppLang switch
             {
                 // Arabe
                 "AR" => $"الملف المستورد :  {GroupAddressFileName}",

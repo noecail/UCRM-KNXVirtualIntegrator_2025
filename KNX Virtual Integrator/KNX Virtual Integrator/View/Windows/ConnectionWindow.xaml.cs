@@ -1,7 +1,7 @@
 using System.Windows;
 using KNX_Virtual_Integrator.ViewModel;
 
-namespace KNX_Virtual_Integrator.View;
+namespace KNX_Virtual_Integrator.View.Windows;
 
 public partial class ConnectionWindow : Window
 {

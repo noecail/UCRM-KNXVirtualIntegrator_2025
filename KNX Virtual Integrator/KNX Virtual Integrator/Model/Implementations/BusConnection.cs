@@ -16,8 +16,8 @@ public class BusConnection : ObservableObject ,IBusConnection
 {
     private static XNamespace _globalKnxNamespace = "http://knx.org/xml/ga-export/01";
 
-    public KnxBus? _bus;
-    public CancellationTokenSource? _cancellationTokenSource;
+    public KnxBus? Bus;
+    public CancellationTokenSource? CancellationTokenSource;
 
     // Propriétés liées à l'interface utilisateur //test
     public ObservableCollection<ConnectionInterfaceViewModel>? GroupAddresses { get; private set; }
@@ -85,7 +85,7 @@ public class BusConnection : ObservableObject ,IBusConnection
         if (IsBusy)
             return;
 
-        _cancellationTokenSource = new CancellationTokenSource();
+        CancellationTokenSource = new CancellationTokenSource();
 
         try
         {
@@ -104,11 +104,11 @@ public class BusConnection : ObservableObject ,IBusConnection
             }
 
             // Si le bus est déjà connecté, on le déconnecte
-            if (_bus != null)
+            if (Bus != null)
             {
-                _bus.ConnectionStateChanged -= BusConnectionStateChanged;
-                await _bus.DisposeAsync();
-                _bus = null;
+                Bus.ConnectionStateChanged -= BusConnectionStateChanged;
+                await Bus.DisposeAsync();
+                Bus = null;
                 UpdateConnectionState();
             }
 
@@ -116,13 +116,13 @@ public class BusConnection : ObservableObject ,IBusConnection
             var connectorParameters = ConnectorParameters.FromConnectionString(connectionString);
 
             // Création du bus et connexion
-            _bus = new KnxBus(connectorParameters);
-            await _bus.ConnectAsync(_cancellationTokenSource.Token);
+            Bus = new KnxBus(connectorParameters);
+            await Bus.ConnectAsync(CancellationTokenSource.Token);
 
             // Si le bus est bien connecté, on met à jour son état et les variables qui vont avec
-            if (_bus.ConnectionState == BusConnectionState.Connected)
+            if (Bus.ConnectionState == BusConnectionState.Connected)
             {
-                _bus.ConnectionStateChanged += BusConnectionStateChanged;
+                Bus.ConnectionStateChanged += BusConnectionStateChanged;
                 IsConnected = true;
                 UpdateConnectionState();
                 MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -154,16 +154,16 @@ public class BusConnection : ObservableObject ,IBusConnection
             return;
         }
 
-        _cancellationTokenSource?.Cancel();
-        _cancellationTokenSource = null;
+        CancellationTokenSource?.Cancel();
+        CancellationTokenSource = null;
 
         try
         {
-            if (_bus != null)
+            if (Bus != null)
             {
-                _bus.ConnectionStateChanged -= BusConnectionStateChanged;
-                await _bus.DisposeAsync();
-                _bus = null;
+                Bus.ConnectionStateChanged -= BusConnectionStateChanged;
+                await Bus.DisposeAsync();
+                Bus = null;
                 IsConnected = false;
                 UpdateConnectionState();
                 MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -289,7 +289,7 @@ public class BusConnection : ObservableObject ,IBusConnection
     
     private void ResetCancellationTokenSource()
     {
-        _cancellationTokenSource?.Dispose();
-        _cancellationTokenSource = new CancellationTokenSource();
+        CancellationTokenSource?.Dispose();
+        CancellationTokenSource = new CancellationTokenSource();
     }
 }

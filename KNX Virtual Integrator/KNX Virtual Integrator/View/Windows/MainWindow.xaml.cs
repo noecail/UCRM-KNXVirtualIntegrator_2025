@@ -1,9 +1,10 @@
+using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media;
 using KNX_Virtual_Integrator.ViewModel;
+using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
 
-namespace KNX_Virtual_Integrator.View;
+namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
@@ -35,17 +36,6 @@ public partial class MainWindow
         _viewModel = viewModel;
         DataContext = _viewModel;
     }
-    
-    
-    /// <summary>
-    /// Converts a string representation of a color to a SolidColorBrush.
-    /// </summary>
-    /// <param name="colorInput">The string representation of the color (e.g., "#RRGGBB" or "ColorName").</param>
-    /// <returns>A SolidColorBrush representing the converted color.</returns>
-    public static SolidColorBrush ConvertStringColor(string colorInput)
-    {
-        return new SolidColorBrush((Color)ColorConverter.ConvertFromString(colorInput));
-    }
 
     public void ApplyScaling(float scaleFactor)
     {
@@ -76,7 +66,7 @@ public partial class MainWindow
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
-            Title = App.WindowManager?.SettingsWindow!.AppLang switch
+            Title = _viewModel.AppSettings.AppLang switch
             {
                 // Arabe
                 "AR" => "اختر مشروع KNX للاستيراد",
@@ -139,7 +129,7 @@ public partial class MainWindow
                 // Cas par défaut (français)
                 _ => "Sélectionnez un projet KNX à importer"
             },
-            Filter = App.WindowManager?.SettingsWindow!.AppLang switch
+            Filter = _viewModel.AppSettings.AppLang switch
             {
                 // Arabe
                 "AR" => "ملفات مشروع KNX|*.knxproj|جميع الملفات|*.*",
@@ -279,5 +269,10 @@ public partial class MainWindow
         }
         _viewModel.ExtractGroupAddressCommand.Execute(null);
     }
-    
+
+    private void ClosingMainWindow(object? sender, CancelEventArgs e)
+    {
+        e.Cancel = true;
+        Application.Current.Shutdown();
+    }
 }

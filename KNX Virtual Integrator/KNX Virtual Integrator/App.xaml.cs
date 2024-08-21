@@ -96,15 +96,20 @@ public partial class App
         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
 
         // Instancier les dépendances nécessaires
-        var fileLoader = new FileLoader();
         var logger = new Logger();
-        var projectFileManager = new ProjectFileManager(logger);
+        var fileLoader = new FileLoader(logger);
+        var applicationFileManager = new ApplicationFileManager(logger);
+        var systemSettingsDetector = new SystemSettingsDetector(logger);
+        var appSettings = new ApplicationSettings(applicationFileManager, systemSettingsDetector);
+        var projectFileManager = new ProjectFileManager(logger, appSettings);
         var fileFinder = new FileFinder(logger, projectFileManager);
         var zipArchiveManager = new ZipArchiveManager(logger);
-        var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader);
-        var systemSettingsDetector = new SystemSettingsDetector(logger);
-        var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager);
-        var applicationFileManager = new ApplicationFileManager(logger, systemSettingsDetector);
+        var namespaceResolver = new NamespaceResolver(logger);
+        var groupAddressProcessor = new GroupAddressProcessor(logger);
+        var stringManagement = new StringManagement(groupAddressProcessor);
+        var groupAddressMerger = new GroupAddressMerger(groupAddressProcessor, stringManagement, logger);
+        var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader, namespaceResolver, groupAddressProcessor, groupAddressMerger);
+        var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
         var busConnection = new BusConnection();
         var groupCommunication = new GroupCommunication(busConnection);
 
@@ -120,7 +125,8 @@ public partial class App
             debugArchiveGenerator,
             applicationFileManager,
             busConnection,
-            groupCommunication);
+            groupCommunication,
+            appSettings);
     
         // Assurer l'existence du répertoire de logs
         ModelManager.ApplicationFileManager.EnsureLogDirectoryExists();

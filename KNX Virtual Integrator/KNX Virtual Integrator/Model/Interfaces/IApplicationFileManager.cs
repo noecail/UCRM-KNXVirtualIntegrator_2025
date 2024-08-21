@@ -25,11 +25,6 @@
         /// Ensures a configuration file exists at the specified path, creating it and setting defaults if necessary.
         /// </summary>
         /// <param name="settingsPath">The path to the configuration file.</param>
-        void EnsureSettingsFileExists(string settingsPath);
-
-        /// <summary>
-        /// Saves the application settings to the appSettings file.
-        /// </summary>
-        void SaveApplicationSettings();
+        bool EnsureSettingsFileExists(string settingsPath);
     }
 }
