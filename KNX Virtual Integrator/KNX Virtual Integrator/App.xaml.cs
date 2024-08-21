@@ -108,6 +108,8 @@ public partial class App
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
         var busConnection = new BusConnection();
         var groupCommunication = new GroupCommunication(busConnection);
+        var parentFinder = new ParentFinder(logger);
+        var sliderClickHandler = new SliderClickHandler(logger, parentFinder);
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
@@ -122,7 +124,9 @@ public partial class App
             applicationFileManager,
             busConnection,
             groupCommunication,
-            appSettings);
+            appSettings,
+            parentFinder,
+            sliderClickHandler);
     
         // Assurer l'existence du répertoire de logs
         ModelManager.ApplicationFileManager.EnsureLogDirectoryExists();
@@ -149,6 +153,8 @@ public partial class App
     
         // Afficher la fenêtre principale
         WindowManager?.ShowMainWindow();
+        
+        WindowManager?.ShowSettingsWindow();
     }
 
     

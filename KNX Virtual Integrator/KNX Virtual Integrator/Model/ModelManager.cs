@@ -14,7 +14,9 @@ namespace KNX_Virtual_Integrator.Model
         IApplicationFileManager applicationFileManager,
         IBusConnection busConnection,
         IGroupCommunication groupCommunication,
-        IApplicationSettings appSettings)
+        IApplicationSettings appSettings,
+        IParentFinder parentFinder,
+        ISliderClickHandler sliderClickHandler)
 
     {
     public IFileLoader FileLoader { get; } = fileLoader;
@@ -29,5 +31,7 @@ namespace KNX_Virtual_Integrator.Model
     public IBusConnection BusConnection { get; } = busConnection;
     public IGroupCommunication GroupCommunication { get; } = groupCommunication;
     public IApplicationSettings AppSettings { get; } = appSettings;
+    public IParentFinder ParentFinder { get; } = parentFinder;
+    public ISliderClickHandler SliderClickHandler { get; } = sliderClickHandler;
     }
 }

@@ -8,6 +8,7 @@
         Background="#F5F5F5"
         Closing="ClosingSettingsWindow"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:viewModel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
         PreviewKeyDown="SettingsWindow_PreviewKeyDown">
 
     <Window.Resources>
