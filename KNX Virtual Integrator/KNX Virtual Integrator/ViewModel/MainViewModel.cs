@@ -1,6 +1,9 @@
-﻿using KNX_Virtual_Integrator.Model;
+﻿using System.Windows;
+using System.Windows.Input;
+using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.ViewModel.Commands;
+using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -118,6 +121,7 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
 
     
     
+    
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -156,4 +160,46 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// <returns>True if the extraction was successful; otherwise, false.</returns>
     public ICommand ExtractProjectFilesCommand { get; } = new RelayCommandWithResult<string, bool>(fileName =>
         modelManager.ProjectFileManager.ExtractProjectFiles(fileName));
+
+
+    
+    
+    /* ------------------------------------------------------------------------------------------------
+    -------------------------------------------- HANDLERS  --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    /// <summary>
+    /// Handles the event when the left mouse button is pressed down on the slider.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">Event data for the mouse button event.</param>
+    public void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
+    }
+
+    /// <summary>
+    /// Handles the event when the left mouse button is released on the slider.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">Event data for the mouse button event.</param>
+    public void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
+    }
+
+    /// <summary>
+    /// Handles the event when the mouse is moved over the slider while dragging.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">Event data for the mouse movement event.</param>
+    public void SliderMouseMove(object sender, MouseEventArgs e)
+    {
+        modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
+    }
+
+    public void OnSliderClick(object sender, RoutedEventArgs e)
+    {
+        modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
+    }
+    
 }

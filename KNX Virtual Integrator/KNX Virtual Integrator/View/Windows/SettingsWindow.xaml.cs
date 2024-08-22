@@ -4,7 +4,6 @@ using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
@@ -25,11 +24,6 @@ public partial class SettingsWindow
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     private readonly MainViewModel _viewModel;
-
-    /// <summary>
-    /// Variable used to know if the user is dragging the scaling slider cursor.
-    /// </summary>
-    private bool _isDragging;
     
     
     /* ------------------------------------------------------------------------------------------------
@@ -54,9 +48,9 @@ public partial class SettingsWindow
         // A enlever ? ⬇️
         UpdateWindowContents(true, true); // Affichage des paramètres dans la fenêtre
         
-        ScaleSlider.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(SliderMouseLeftButtonDown), true);
-        ScaleSlider.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(SliderMouseLeftButtonUp), true);
-        ScaleSlider.AddHandler(MouseMoveEvent, new MouseEventHandler(SliderMouseMove), true);
+        ScaleSlider.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(_viewModel.SliderMouseLeftButtonDown), true);
+        ScaleSlider.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(_viewModel.SliderMouseLeftButtonUp), true);
+        ScaleSlider.AddHandler(MouseMoveEvent, new MouseEventHandler(_viewModel.SliderMouseMove), true);
     }
 
 
@@ -126,7 +120,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "تضمين معلومات نظام التشغيل";
                 AddInfosHardCheckBox.Content = "تضمين معلومات الأجهزة";
                 AddImportedFilesCheckBox.Content = "تضمين الملفات المستوردة منذ بدء التشغيل";
-                IncludeAddressListCheckBox.Content = "تضمين قائمة العناوين المحذوفة من المشاريع";
                 CreateArchiveDebugText.Text = "إنشاء ملف التصحيح";
                 OngletDebug.Header = "تصحيح";
                 OngletInformations.Header = "معلومات";
@@ -169,7 +162,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Включване на информация за операционната система";
                 AddInfosHardCheckBox.Content = "Включване на информация за хардуера на компютъра";
                 AddImportedFilesCheckBox.Content = "Включване на файлове, импортирани след стартиране";
-                IncludeAddressListCheckBox.Content = "Включване на списък с адреси на групи, премахнати от проекти";
                 CreateArchiveDebugText.Text = "Създаване на файл за отстраняване на грешки";
                 OngletDebug.Header = "Отстраняване на грешки";
                 OngletInformations.Header = "Информация";
@@ -212,7 +204,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Zahrnout informace o operačním systému";
                 AddInfosHardCheckBox.Content = "Zahrnout informace o hardwaru počítače";
                 AddImportedFilesCheckBox.Content = "Zahrnout soubory importované od spuštění";
-                IncludeAddressListCheckBox.Content = "Zahrnout seznam odstraněných skupinových adres v projektech";
                 CreateArchiveDebugText.Text = "Vytvořit soubor pro ladění";
                 OngletDebug.Header = "Ladění";
                 OngletInformations.Header = "Informace";
@@ -255,7 +246,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Inkluder oplysninger om operativsystemet";
                 AddInfosHardCheckBox.Content = "Inkluder oplysninger om computerhardware";
                 AddImportedFilesCheckBox.Content = "Inkluder filer importeret siden opstart";
-                IncludeAddressListCheckBox.Content = "Inkluder liste over gruppeadresser slettet fra projekter";
                 CreateArchiveDebugText.Text = "Opret fejlfindingsfil";
                 OngletDebug.Header = "Fejlfindings";
                 OngletInformations.Header = "Information";
@@ -301,7 +291,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Betriebssysteminformationen hinzufügen";
                 AddInfosHardCheckBox.Content = "Hardwareinformationen hinzufügen";
                 AddImportedFilesCheckBox.Content = "Importierte Projektdateien seit dem Start hinzufügen";
-                IncludeAddressListCheckBox.Content = "Liste der gelöschten Gruppenadressen in Projekten hinzufügen";
 
                 CreateArchiveDebugText.Text = "Debug-Datei erstellen";
 
@@ -349,7 +338,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Συμπερίληψη πληροφοριών λειτουργικού συστήματος";
                 AddInfosHardCheckBox.Content = "Συμπερίληψη πληροφοριών υλικού υπολογιστή";
                 AddImportedFilesCheckBox.Content = "Συμπερίληψη αρχείων που εισάγονται από την εκκίνηση";
-                IncludeAddressListCheckBox.Content = "Συμπερίληψη λίστας διαγραμμένων ομαδικών διευθύνσεων στα έργα";
                 CreateArchiveDebugText.Text = "Δημιουργία αρχείου εντοπισμού σφαλμάτων";
                 OngletDebug.Header = "Εντοπισμός σφαλμάτων";
                 OngletInformations.Header = "Πληροφορίες";
@@ -394,7 +382,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Include operating system information";
                 AddInfosHardCheckBox.Content = "Include computer hardware information";
                 AddImportedFilesCheckBox.Content = "Include project files imported since launch";
-                IncludeAddressListCheckBox.Content = "Include list of deleted group addresses in projects";
 
                 CreateArchiveDebugText.Text = "Create debug file";
 
@@ -444,7 +431,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Incluir información del sistema operativo";
                 AddInfosHardCheckBox.Content = "Incluir información de hardware del ordenador";
                 AddImportedFilesCheckBox.Content = "Incluir archivos de proyectos importados desde el inicio";
-                IncludeAddressListCheckBox.Content = "Incluir lista de direcciones de grupo eliminadas en los proyectos";
 
                 CreateArchiveDebugText.Text = "Crear archivo de depuración";
 
@@ -492,7 +478,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Lisage teave operatsioonisüsteemi kohta";
                 AddInfosHardCheckBox.Content = "Lisage teave arvuti riistvara kohta";
                 AddImportedFilesCheckBox.Content = "Lisage käivitamisest imporditud failid";
-                IncludeAddressListCheckBox.Content = "Lisage projektidest eemaldatud rühma aadresside loend";
                 CreateArchiveDebugText.Text = "Loo silumisfail";
                 OngletDebug.Header = "Silumine";
                 OngletInformations.Header = "Teave";
@@ -536,7 +521,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Sisällytä käyttöjärjestelmän tiedot";
                 AddInfosHardCheckBox.Content = "Sisällytä tietokoneen laitteistotiedot";
                 AddImportedFilesCheckBox.Content = "Sisällytä aloituksen jälkeen tuodut projektitiedostot";
-                IncludeAddressListCheckBox.Content = "Sisällytä poistettujen ryhmäosoitteiden luettelo projekteihin";
 
                 CreateArchiveDebugText.Text = "Luo virheenkorjaustiedosto";
                     
@@ -586,7 +570,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Tartalmazza az operációs rendszer információit";
                 AddInfosHardCheckBox.Content = "Tartalmazza a számítógép hardverinformációit";
                 AddImportedFilesCheckBox.Content = "Tartalmazza az indítás óta importált projektek fájljait";
-                IncludeAddressListCheckBox.Content = "Tartalmazza a projektekben törölt csoport címek listáját";
 
                 CreateArchiveDebugText.Text = "Hibakeresési fájl létrehozása";
 
@@ -636,7 +619,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Sertakan informasi sistem operasi";
                 AddInfosHardCheckBox.Content = "Sertakan informasi perangkat keras komputer";
                 AddImportedFilesCheckBox.Content = "Sertakan file proyek yang diimpor sejak diluncurkan";
-                IncludeAddressListCheckBox.Content = "Sertakan daftar alamat grup yang dihapus dalam proyek";
 
                 CreateArchiveDebugText.Text = "Buat file debug";
 
@@ -686,7 +668,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Includi informazioni sul sistema operativo";
                 AddInfosHardCheckBox.Content = "Includi informazioni sull'hardware del computer";
                 AddImportedFilesCheckBox.Content = "Includi i file dei progetti importati dall'avvio";
-                IncludeAddressListCheckBox.Content = "Includi l'elenco degli indirizzi di gruppo eliminati nei progetti";
 
                 CreateArchiveDebugText.Text = "Crea file di debug";
 
@@ -736,7 +717,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "オペレーティングシステム情報を含める";
                 AddInfosHardCheckBox.Content = "コンピュータのハードウェア情報を含める";
                 AddImportedFilesCheckBox.Content = "起動以来インポートされたプロジェクトファイルを含める";
-                IncludeAddressListCheckBox.Content = "プロジェクトに削除されたグループアドレスのリストを含める";
 
                 CreateArchiveDebugText.Text = "デバッグファイルを作成";
 
@@ -786,7 +766,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "운영 체제 정보 포함";
                 AddInfosHardCheckBox.Content = "컴퓨터 하드웨어 정보 포함";
                 AddImportedFilesCheckBox.Content = "시작 후 가져온 프로젝트 파일 포함";
-                IncludeAddressListCheckBox.Content = "프로젝트에서 삭제된 그룹 주소 목록 포함";
 
                 CreateArchiveDebugText.Text = "디버그 파일 생성";
 
@@ -835,7 +814,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Iekļaut operētājsistēmas informāciju";
                 AddInfosHardCheckBox.Content = "Iekļaut datora aparatūras informāciju";
                 AddImportedFilesCheckBox.Content = "Iekļaut projektos importēto failu informāciju";
-                IncludeAddressListCheckBox.Content = "Iekļaut grupu adreses, kas dzēstas no projektiem";
 
                 CreateArchiveDebugText.Text = "Izveidot problēmu novēršanas failu";
 
@@ -885,7 +863,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Įtraukti operacinės sistemos informaciją";
                 AddInfosHardCheckBox.Content = "Įtraukti kompiuterio aparatūros informaciją";
                 AddImportedFilesCheckBox.Content = "Įtraukti importuotų projektų failus";
-                IncludeAddressListCheckBox.Content = "Įtraukti iš projektų ištrintų grupių adresų sąrašą";
 
                 CreateArchiveDebugText.Text = "Sukurti derinimo failą";
 
@@ -935,7 +912,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Inkluder informasjon om operativsystemet";
                 AddInfosHardCheckBox.Content = "Inkluder informasjon om datamaskinens maskinvare";
                 AddImportedFilesCheckBox.Content = "Inkluder filer importert til prosjekter siden oppstart";
-                IncludeAddressListCheckBox.Content = "Inkluder listen over fjernede gruppeadresser fra prosjekter";
 
                 CreateArchiveDebugText.Text = "Opprett feilsøkingsfil";
 
@@ -985,7 +961,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Inclusief OS-informatie";
                 AddInfosHardCheckBox.Content = "Inclusief hardware-informatie";
                 AddImportedFilesCheckBox.Content = "Inclusief geïmporteerde projectbestanden sinds de start";
-                IncludeAddressListCheckBox.Content = "Inclusief verwijderde groepsadreslijst in projecten";
 
                 CreateArchiveDebugText.Text = "Maak debugbestand aan";
 
@@ -1035,7 +1010,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Dołącz informacje o systemie operacyjnym";
                 AddInfosHardCheckBox.Content = "Dołącz informacje o sprzęcie";
                 AddImportedFilesCheckBox.Content = "Dołącz pliki projektów zaimportowane od uruchomienia";
-                IncludeAddressListCheckBox.Content = "Dołącz listę usuniętych adresów grup w projektach";
 
                 CreateArchiveDebugText.Text = "Utwórz plik debugowania";
 
@@ -1084,7 +1058,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Incluir informações do sistema operacional";
                 AddInfosHardCheckBox.Content = "Incluir informações de hardware";
                 AddImportedFilesCheckBox.Content = "Incluir arquivos de projetos importados desde o início";
-                IncludeAddressListCheckBox.Content = "Incluir lista de endereços de grupo removidos nos projetos";
 
                 CreateArchiveDebugText.Text = "Criar arquivo de depuração";
 
@@ -1133,7 +1106,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Includeți informațiile despre sistemul de operare";
                 AddInfosHardCheckBox.Content = "Includeți informațiile despre hardware-ul computerului";
                 AddImportedFilesCheckBox.Content = "Includeți fișierele importate în proiecte de la pornire";
-                IncludeAddressListCheckBox.Content = "Includeți lista adreselor de grup șterse din proiecte";
 
                 CreateArchiveDebugText.Text = "Creați fișierul de depanare";
 
@@ -1183,7 +1155,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Zahrnúť informácie o operačnom systéme";
                 AddInfosHardCheckBox.Content = "Zahrnúť informácie o hardvéri počítača";
                 AddImportedFilesCheckBox.Content = "Zahrnúť súbory importované do projektov od spustenia";
-                IncludeAddressListCheckBox.Content = "Zahrnúť zoznam odstránených skupinových adries z projektov";
 
                 CreateArchiveDebugText.Text = "Vytvoriť ladiaci súbor";
 
@@ -1234,7 +1205,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Vključi informacije o operacijskem sistemu";
                 AddInfosHardCheckBox.Content = "Vključi informacije o strojni opremi računalnika";
                 AddImportedFilesCheckBox.Content = "Vključi datoteke, uvožene v projekte od zagona";
-                IncludeAddressListCheckBox.Content = "Vključi seznam izbrisanih skupinskih naslovov iz projektov";
 
                 CreateArchiveDebugText.Text = "Ustvari datoteko za odpravljanje napak";
 
@@ -1284,7 +1254,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Inkludera information om operativsystemet";
                 AddInfosHardCheckBox.Content = "Inkludera information om hårdvara";
                 AddImportedFilesCheckBox.Content = "Inkludera importerade projektfiler sedan start";
-                IncludeAddressListCheckBox.Content = "Inkludera lista över borttagna gruppadresser i projekt";
 
                 CreateArchiveDebugText.Text = "Skapa felsökningsfil";
 
@@ -1334,7 +1303,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "İşletim sistemi bilgilerini dahil et";
                 AddInfosHardCheckBox.Content = "Donanım bilgilerini dahil et";
                 AddImportedFilesCheckBox.Content = "Başlatmadan bu yana ithal edilen proje dosyalarını dahil et";
-                IncludeAddressListCheckBox.Content = "Projelerde silinen grup adresi listesini dahil et";
 
                 CreateArchiveDebugText.Text = "Hata ayıklama dosyası oluştur";
 
@@ -1383,7 +1351,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Включити інформацію про операційну систему";
                 AddInfosHardCheckBox.Content = "Включити інформацію про апаратне забезпечення";
                 AddImportedFilesCheckBox.Content = "Включити файли проектів, імпортовані з моменту запуску";
-                IncludeAddressListCheckBox.Content = "Включити список видалених адрес груп у проектах";
 
                 CreateArchiveDebugText.Text = "Створити файл налагодження";
 
@@ -1432,7 +1399,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Включить информацию о ОС";
                 AddInfosHardCheckBox.Content = "Включить информацию о оборудовании";
                 AddImportedFilesCheckBox.Content = "Включить файлы проектов, импортированные с момента запуска";
-                IncludeAddressListCheckBox.Content = "Включить список удаленных адресов групп в проектах";
 
                 CreateArchiveDebugText.Text = "Создать файл отладки";
 
@@ -1482,7 +1448,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "包括操作系统信息";
                 AddInfosHardCheckBox.Content = "包括硬件信息";
                 AddImportedFilesCheckBox.Content = "包括启动以来导入的项目文件";
-                IncludeAddressListCheckBox.Content = "包括项目中删除的组地址列表";
 
                 CreateArchiveDebugText.Text = "创建调试文件";
 
@@ -1532,7 +1497,6 @@ public partial class SettingsWindow
                 AddInfosOsCheckBox.Content = "Inclure les informations sur le système d'exploitation";
                 AddInfosHardCheckBox.Content = "Inclure les informations sur le matériel de l'ordinateur";
                 AddImportedFilesCheckBox.Content = "Inclure les fichiers des projets importés depuis le lancement";
-                IncludeAddressListCheckBox.Content = "Inclure la liste des adresses de groupe supprimées sur les projets";
 
                 CreateArchiveDebugText.Text = "Créer le fichier de débogage";
                     
@@ -1606,8 +1570,6 @@ public partial class SettingsWindow
             OngletDebug.Style = (Style)FindResource("LightOnglet");
             OngletInformations.Style = (Style)FindResource("LightOnglet");
             OngletParametresApplication.Style = (Style)FindResource("LightOnglet");
-            IncludeAddressListCheckBox.Foreground = (bool)AddImportedFilesCheckBox.IsChecked! ? 
-            new SolidColorBrush((Color)ColorConverter.ConvertFromString(textColor)) : new SolidColorBrush(Colors.Gray);
             HyperlinkInfo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4071B4"));
         }
         else // Sinon, on met le thème sombre
@@ -1628,8 +1590,6 @@ public partial class SettingsWindow
             OngletDebug.Style = (Style)FindResource("DarkOnglet");
             OngletInformations.Style = (Style)FindResource("DarkOnglet");
             OngletParametresApplication.Style = (Style)FindResource("DarkOnglet");
-            IncludeAddressListCheckBox.Foreground = (bool)AddImportedFilesCheckBox.IsChecked! ? 
-                new SolidColorBrush((Color)ColorConverter.ConvertFromString(textColor)) : new SolidColorBrush(Colors.DimGray);
             HyperlinkInfo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4071B4"));
 
 
@@ -1671,11 +1631,9 @@ public partial class SettingsWindow
         AddInfosOsCheckBox.Style = checkboxStyle;
         AddInfosHardCheckBox.Style = checkboxStyle;
         AddImportedFilesCheckBox.Style = checkboxStyle;
-        IncludeAddressListCheckBox.Style = checkboxStyle;
         AddInfosOsCheckBox.Foreground = textColorBrush;
         AddInfosHardCheckBox.Foreground = textColorBrush;
         AddImportedFilesCheckBox.Foreground = textColorBrush;
-        IncludeAddressListCheckBox.Foreground = (bool)AddImportedFilesCheckBox.IsChecked ? textColorBrush : new SolidColorBrush(Colors.DimGray);
 
 
 
@@ -1686,8 +1644,7 @@ public partial class SettingsWindow
         DebugBrush2.Brush = textColorBrush;
         OngletInformations.Foreground = textColorBrush;
         InformationsText.Foreground = textColorBrush;
-
-        IncludeAddressListCheckBox.IsEnabled = (bool)AddImportedFilesCheckBox.IsChecked!;
+        
         
 
         foreach (ComboBoxItem item in ThemeComboBox.Items)
@@ -1778,37 +1735,7 @@ public partial class SettingsWindow
         Hide(); // Masquage de la fenêtre de paramétrage
     }
 
-
-    // ----- GESTION DE DES CASES A COCHER -----
-    /// <summary>
-    /// Enables the <see cref="IncludeAddressListCheckBox"/> control and sets its foreground color based on the theme.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The event data.</param>
-    private void EnableIncludeAddress(object sender, RoutedEventArgs e)
-    {
-        IncludeAddressListCheckBox.IsEnabled = true;
-
-        IncludeAddressListCheckBox.Foreground = _viewModel.AppSettings.EnableLightTheme ?
-            new SolidColorBrush(Colors.Black) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E3DED4"));
-    }
-
-
-    /// <summary>
-    /// Disables the <see cref="IncludeAddressListCheckBox"/> control, unchecks it, and sets its foreground color based on the theme.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The event data.</param>
-    private void DisableIncludeAddress(object sender, RoutedEventArgs e)
-    {
-        IncludeAddressListCheckBox.IsEnabled = false;
-        IncludeAddressListCheckBox.IsChecked = false;
-
-        IncludeAddressListCheckBox.Foreground = _viewModel.AppSettings.EnableLightTheme ?
-            new SolidColorBrush(Colors.Gray) : new SolidColorBrush(Colors.DimGray);
-    }
-
-
+    
     /// <summary>
     /// Handles the <see cref="TabControl.SelectionChanged"/> event to adjust the visibility of buttons based on the selected tab.
     /// </summary>
@@ -1927,10 +1854,8 @@ public partial class SettingsWindow
     /// <param name="e">Event data containing information about the mouse button event.</param>
     private void Header_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
-        {
-            DragMove();
-        }
+        if (e.LeftButton != MouseButtonState.Pressed) return;
+        DragMove();
     }
 
 
@@ -1950,189 +1875,8 @@ public partial class SettingsWindow
 
 
     // ----- GESTION DU CLIC SUR UN SLIDER -----
-    /// <summary>
-    /// Handles the click event of a slider's RepeatButton, updating the slider's value based on the click position.
-    /// </summary>
     private void OnSliderClick(object sender, RoutedEventArgs e)
     {
-        try
-        {
-            // Vérifie si l'objet sender est un RepeatButton
-            if (sender is not RepeatButton repeatButton) return;
-        
-            // Trouve le Slider parent du RepeatButton
-            var slider = FindParent<Slider>(repeatButton);
-        
-            // Si le slider est null, quitter la méthode
-            if (slider == null) 
-            {
-                _viewModel.ConsoleAndLogWriteLineCommand.Execute("Slider not found.");
-                return;
-            }
-        
-            // Obtient la position de la souris relative au slider
-            var position = Mouse.GetPosition(slider);
-        
-            // Calcule la nouvelle valeur du slider en fonction de la position de la souris
-            var relativeX = position.X / slider.ActualWidth;
-            var newValue = slider.Minimum + (relativeX * (slider.Maximum - slider.Minimum));
-        
-            // Met à jour la valeur du slider
-            slider.Value = newValue;
-        }
-        catch (Exception ex)
-        {
-            // Logue l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred: {ex.Message}");
-        }
+        _viewModel.OnSliderClick(sender, e);
     }
-
-        
-    /// <summary>
-    /// Utility method to find the parent of a specific type in the visual tree.
-    /// </summary>
-    /// <typeparam name="T">The type of the parent to find.</typeparam>
-    /// <param name="child">The starting child object from which to search up the visual tree.</param>
-    /// <returns>The parent of type T, or null if no such parent is found.</returns>
-    private T? FindParent<T>(DependencyObject child) where T : DependencyObject
-    {
-        try
-        {
-            // Boucle jusqu'à ce qu'un parent de type T soit trouvé ou qu'il n'y ait plus de parents
-            while (true)
-            {
-                // Obtient le parent visuel de l'objet enfant actuel
-                var parentObject = VisualTreeHelper.GetParent(child);
-            
-                // Gère les différents cas possibles pour le parentObject
-                switch (parentObject)
-                {
-                    // Si aucun parent n'est trouvé, retourne null
-                    case null:
-                        return null;
-                    // Si le parent est du type T, retourne ce parent
-                    case T parent:
-                        return parent;
-                    // Sinon, continue la recherche avec le parentObject comme nouvel enfant
-                    default:
-                        child = parentObject;
-                        break;
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred while finding parent: {ex.Message}");
-            return null;
-        }
-    }
-
-
-    /// <summary>
-    /// Handles the event when the left mouse button is pressed down on the slider.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">Event data for the mouse button event.</param>
-    private void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        try
-        {
-            // Indique que le glissement est en cours
-            _isDragging = true;
-        
-            // Capture le mouse pour suivre le mouvement au-dessus du slider
-            Mouse.Capture(ScaleSlider);
-        
-            // Met à jour la valeur du slider en fonction de la position de la souris
-            UpdateSliderValue(sender, e);
-        }
-        catch (Exception ex)
-        {
-            // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in SliderMouseLeftButtonDown: {ex.Message}");
-        }
-    }
-
-        
-    /// <summary>
-    /// Handles the event when the left mouse button is released on the slider.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">Event data for the mouse button event.</param>
-    private void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        try
-        {
-            // Indique que le glissement est terminé
-            _isDragging = false;
-        
-            // Relâche la capture de la souris
-            Mouse.Capture(null);
-        }
-        catch (Exception ex)
-        {
-            // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in SliderMouseLeftButtonUp: {ex.Message}");
-        }
-    }
-
-        
-    /// <summary>
-    /// Handles the event when the mouse is moved over the slider while dragging.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">Event data for the mouse movement event.</param>
-    private void SliderMouseMove(object sender, MouseEventArgs e)
-    {
-        try
-        {
-            // Met à jour la valeur du slider uniquement si le glissement est en cours
-            if (_isDragging)
-            {
-                UpdateSliderValue(sender, e);
-            }
-        }
-        catch (Exception ex)
-        {
-            // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in SliderMouseMove: {ex.Message}");
-        }
-    }
-
-        
-    /// <summary>
-    /// Updates the slider's value based on the current mouse position.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">Event data for the mouse movement event.</param>
-    private void UpdateSliderValue(object sender, MouseEventArgs e)
-    {
-        try
-        {
-            // Vérifie si l'objet sender est un Slider
-            if (sender is not Slider slider) return;
-        
-            // Obtient la position de la souris relative au slider
-            var position = e.GetPosition(slider);
-        
-            // Calcule la nouvelle valeur du slider en fonction de la position de la souris
-            var relativeX = position.X / slider.ActualWidth;
-            var newValue = slider.Minimum + (relativeX * (slider.Maximum - slider.Minimum));
-        
-            // Ajuste la valeur pour correspondre au tick le plus proche
-            var tickFrequency = slider.TickFrequency;
-            newValue = Math.Round(newValue / tickFrequency) * tickFrequency;
-        
-            // Met à jour la valeur du slider en s'assurant qu'elle reste dans les limites
-            slider.Value = Math.Max(slider.Minimum, Math.Min(slider.Maximum, newValue));
-        }
-        catch (Exception ex)
-        {
-            // Log l'erreur en cas d'exception
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"An error occurred in UpdateSliderValue: {ex.Message}");
-        }
-    }
-
-
 }
