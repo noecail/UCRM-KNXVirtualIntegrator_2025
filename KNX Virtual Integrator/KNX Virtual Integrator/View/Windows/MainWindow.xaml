@@ -28,11 +28,12 @@
         <!-- Buttons at the top -->
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" Margin="5,5,5,5">
             <!-- Premier bouton dans la première ligne -->
-            <Button x:Name="ButtonChargerProject"
+            <Button Content="{StaticResource Bouton1}"
                 Margin="5"
                 Width="100"
                 Click="ImportProjectButtonClick"
-                Content="Charger Projet" />
+                Style="{StaticResource BaseButtonStyle}"
+                 />
 
             <!-- Deuxième bouton dans la deuxième ligne -->
             <Button x:Name="ButtonChargerGroupAddressesXml"

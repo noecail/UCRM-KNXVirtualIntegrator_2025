@@ -10,10 +10,20 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
+      <Page Remove="Resources\Styles.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
       <PackageReference Include="MvvmLight" Version="5.4.1.1" />
       <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
       <PackageReference Include="System.Management" Version="9.0.0-preview.6.24327.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\Strings.MainWindow.fr.xaml" />
+      <Resource Include="Resources\Styles.xaml" />
     </ItemGroup>
 
     <ItemGroup>
