@@ -20,7 +20,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
     /// <remarks>
     /// This property holds the file path of the project folder where the project files are exported.
     /// </remarks>
-    public string ProjectFolderPath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    public string ProjectFolderPath { get; set; } = ""; // Chemin d'accès au dossier exporté du projet
     
     
     /// <summary>
