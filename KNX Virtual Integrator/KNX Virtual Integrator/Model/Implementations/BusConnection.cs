@@ -67,7 +67,7 @@ public class BusConnection : ObservableObject ,IBusConnection
         }
     }
     
-    private async void OnSelectedConnectionTypeChanged()
+    public async void OnSelectedConnectionTypeChanged()
     {
         try
         {
@@ -285,6 +285,11 @@ public class BusConnection : ObservableObject ,IBusConnection
     private void BusConnectionStateChanged(object sender, EventArgs e)
     {
         UpdateConnectionState();
+    }
+    
+    public BusConnection()
+    {
+        DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
     }
     
     private void ResetCancellationTokenSource()
