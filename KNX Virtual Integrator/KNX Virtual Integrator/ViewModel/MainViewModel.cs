@@ -1,7 +1,11 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
+using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 
@@ -10,18 +14,44 @@ using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 
 namespace KNX_Virtual_Integrator.ViewModel;
 
-public class MainViewModel : INotifyPropertyChanged
+public class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
+    private readonly ModelManager _modelManager;
+    private readonly WindowManager? _windowManager;
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
     
+    private readonly IBusConnection _busConnection;
+    
     public IApplicationSettings AppSettings => _modelManager.AppSettings;
     private readonly ModelManager _modelManager;  // Référence à ModelManager
-
     
-
+public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces => _busConnection.DiscoveredInterfaces;
+    public string SelectedConnectionType
+    {
+        get => _busConnection.SelectedConnectionType;
+        set
+        {
+            if (_busConnection.SelectedConnectionType != value)
+            {
+                _busConnection.SelectedConnectionType = value;
+                _busConnection.OnSelectedConnectionTypeChanged();
+            }
+        }
+    }
+    public ConnectionInterfaceViewModel? SelectedInterface
+    {
+        get => _busConnection.SelectedInterface;
+        set
+        {
+            if (_busConnection.SelectedInterface != value)
+            {
+                _busConnection.SelectedInterface = value;
+            }
+        }
+    }
     
     /* ------------------------------------------------------------------------------------------------
     ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
@@ -101,13 +131,19 @@ public class MainViewModel : INotifyPropertyChanged
     /// <summary>
     /// Command that writes a line of text to the console and log if the provided parameter is not null or whitespace.
     /// </summary>
-    public ICommand ConsoleAndLogWriteLineCommand { get; }
+    public ICommand ConsoleAndLogWriteLineCommand { get; private set; }
 
     
     /// <summary>
     /// Command that extracts a group address using the GroupAddressManager.
     /// </summary>
-    public ICommand ExtractGroupAddressCommand { get; }
+    public ICommand ExtractGroupAddressCommand { get; private set; }
+
+    
+    /// <summary>
+    /// Command that ensures the settings file exists. Creates the file if it does not exist, using the provided file path.
+    /// </summary>
+    public ICommand EnsureSettingsFileExistsCommand { get; private set; }
 
     
     /// <summary>
@@ -116,52 +152,52 @@ public class MainViewModel : INotifyPropertyChanged
     /// <param name="IncludeOsInfo">Specifies whether to include OS information in the debug archive.</param>
     /// <param name="IncludeHardwareInfo">Specifies whether to include hardware information in the debug archive.</param>
     /// <param name="IncludeImportedProjects">Specifies whether to include imported projects in the debug archive.</param>
-    public ICommand CreateDebugArchiveCommand { get; }
+    public ICommand CreateDebugArchiveCommand { get; private set; }
 
     
     /// <summary>
     /// Command that finds a zero XML file based on the provided file name.
     /// </summary>
     /// <param name="fileName">The name of the file to find.</param>
-    public ICommand FindZeroXmlCommand { get; }
+    public ICommand FindZeroXmlCommand { get; private set; }
 
+    public System.Windows.Input.ICommand OpenConnectionWindowCommand { get; }
     
     /// <summary>
     /// Command that connects to the bus asynchronously.
     /// </summary>
-    public ICommand ConnectBusCommand { get; }
+    public System.Windows.Input.ICommand ConnectBusCommand { get; private set; }
 
     
     /// <summary>
     /// Command that disconnects from the bus asynchronously.
     /// </summary>
-    public ICommand DisconnectBusCommand { get; }
+    public System.Windows.Input.ICommand DisconnectBusCommand { get; private set; } 
 
     
     /// <summary>
     /// Command that refreshes the list of bus interfaces asynchronously.
     /// </summary>
-    public ICommand RefreshInterfacesCommand { get; }
+    public System.Windows.Input.ICommand RefreshInterfacesCommand { get; private set; }
 
     
     /// <summary>
     /// Command that sends a group value write "on" command asynchronously.
     /// </summary>
-    public ICommand GroupValueWriteOnCommand { get; }
+    public System.Windows.Input.ICommand GroupValueWriteOnCommand { get; private set; }
 
     
     /// <summary>
     /// Command that sends a group value write "off" command asynchronously.
     /// </summary>
-    public ICommand GroupValueWriteOffCommand { get; }
+    public System.Windows.Input.ICommand GroupValueWriteOffCommand { get; private set; }
 
     
     /// <summary>
     /// Command that saves the current application settings.
     /// </summary>
-    public ICommand SaveSettingsCommand { get; }
+    public ICommand SaveSettingsCommand { get; private set; }
 
-    
     
     
     /* ------------------------------------------------------------------------------------------------
@@ -191,7 +227,7 @@ public class MainViewModel : INotifyPropertyChanged
     /// </summary>
     /// <param name="fileName">The name of the file to extract.</param>
     /// <returns>True if the extraction was successful; otherwise, false.</returns>
-    public ICommand ExtractGroupAddressFileCommand { get; }
+    public ICommand ExtractGroupAddressFileCommand { get; private set; }
 
     
     /// <summary>
@@ -199,9 +235,58 @@ public class MainViewModel : INotifyPropertyChanged
     /// </summary>
     /// <param name="fileName">The name of the file to extract.</param>
     /// <returns>True if the extraction was successful; otherwise, false.</returns>
-    public ICommand ExtractProjectFilesCommand { get; }
+    public ICommand ExtractProjectFilesCommand { get; private set; }
+    
+    
+    public MainViewModel(ModelManager modelManager)
+    {
+        _modelManager = modelManager;
+        _windowManager = new WindowManager(this);
 
-
+        _busConnection = _modelManager.BusConnection;
+        
+        _busConnection.SelectedConnectionType = "Type=USB";
+        
+        ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
+                parameter =>
+                {
+                    if (!string.IsNullOrWhiteSpace(parameter)) modelManager.Logger.ConsoleAndLogWriteLine(parameter);
+                }
+            );
+        ExtractGroupAddressCommand = new Commands.RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress());
+        
+        EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(
+            parameter =>
+            {
+                if (!string.IsNullOrWhiteSpace(parameter)) modelManager.ApplicationFileManager.EnsureSettingsFileExists(parameter);
+            }
+        );
+        
+        CreateDebugArchiveCommand = new Commands.RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
+            parameters =>
+            {
+                modelManager.DebugArchiveGenerator.CreateDebugArchive(parameters.IncludeOsInfo,
+                    parameters.IncludeHardwareInfo,
+                    parameters.IncludeImportedProjects);
+            }
+        );
+        
+        FindZeroXmlCommand = new Commands.RelayCommand<string>(fileName => modelManager.FileFinder.FindZeroXml(fileName));
+        
+        OpenConnectionWindowCommand = new RelayCommand(() => _windowManager.ShowConnectionWindow());
+        ConnectBusCommand = new RelayCommand(()  => modelManager.BusConnection.ConnectBusAsync());
+        DisconnectBusCommand = new RelayCommand(() => modelManager.BusConnection.DisconnectBusAsync());
+        RefreshInterfacesCommand = new RelayCommand(() => modelManager.BusConnection.DiscoverInterfacesAsync());
+        GroupValueWriteOnCommand = new RelayCommand(() => modelManager.GroupCommunication.GroupValueWriteOnAsync());
+        GroupValueWriteOffCommand = new RelayCommand(() => modelManager.GroupCommunication.GroupValueWriteOffAsync());
+        
+        SaveSettingsCommand = new Commands.RelayCommand<object>(_ => modelManager.AppSettings.Save());
+        
+        ExtractGroupAddressFileCommand = new RelayCommandWithResult<string, bool>(fileName => 
+            modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName));
+        ExtractProjectFilesCommand = new RelayCommandWithResult<string, bool>(fileName =>
+            modelManager.ProjectFileManager.ExtractProjectFiles(fileName));
+    }
     
     
     /* ------------------------------------------------------------------------------------------------

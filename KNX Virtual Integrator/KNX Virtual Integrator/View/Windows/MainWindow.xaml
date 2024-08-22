@@ -49,6 +49,11 @@
                     Foreground="Red" Background="Yellow"
                     BorderThickness="3" BorderBrush="Aqua"/>
             <Button Content="Exporter le rapport" Width="150" Margin="5"/>
+            <Button Content="Connexion" Width="100" Margin="5" 
+                    Foreground="DarkRed" Background="Tomato"
+                    BorderThickness="3" BorderBrush="Yellow"
+                    Command="{Binding OpenConnectionWindowCommand}"/>
+
         </StackPanel>
 
         <!-- ListBox in the first column -->

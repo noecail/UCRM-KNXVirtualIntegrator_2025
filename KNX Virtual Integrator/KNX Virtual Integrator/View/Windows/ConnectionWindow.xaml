@@ -7,10 +7,6 @@
         xmlns:viewModel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
         mc:Ignorable="d"
         Title="ConnectionWindow" Height="475" Width="800">
-   
-    <Window.DataContext>
-        <viewModel:MainViewModel/>
-    </Window.DataContext>
     
     <Grid>
         <!-- Define rows and columns for the grid -->
@@ -36,14 +32,13 @@
 
         <!-- Import Button -->
         <Button Name="ImportButton" Content="Importer" 
-                Grid.Row="0" Grid.Column="0" Margin="5" 
-                Command="{Binding ImportCommand}"/>
+                Grid.Row="0" Grid.Column="0" Margin="5" />
 
         <!-- Bus Connection Section -->
         <GroupBox Header="Bus Connection" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
             <StackPanel>
                 <!-- ComboBox for selecting the type of connection -->
-                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0" SelectedItem="{Binding SelectedConnectionType}">
+                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0" SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}">
                     <ComboBoxItem Content="Type=USB"/>
                     <ComboBoxItem Content="Type=IP"/>
                 </ComboBox>
@@ -96,10 +91,10 @@
                 </ListBox>
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Test d'envoi allumer" 
-                                    Command="{Binding GroupCommunicationVM.GroupValueWriteCommand}"
+                                    Command="{Binding GroupValueWriteOnCommand}"
                                     Margin="10"/>
                     <Button Content="Test d'envoi éteindre" 
-                            Command="{Binding GroupCommunicationVM.GroupValueWrite0Command}"
+                            Command="{Binding GroupValueWriteOffCommand}"
                             Margin="10"/>
                 </StackPanel>
                 

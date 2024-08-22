@@ -8,7 +8,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class GroupCommunication(BusConnection busConnection) : ObservableObject, IGroupCommunication
 {
-    private GroupAddress _groupAddress;
+    private GroupAddress _groupAddress = new("0/1/1");
     public GroupAddress GroupAddress
     {
         get => _groupAddress;
@@ -28,7 +28,7 @@ public class GroupCommunication(BusConnection busConnection) : ObservableObject,
         {
             if (busConnection is { IsConnected: true, IsBusy: false })
             {
-                _groupValue = new GroupValue(true); // Exemple de valeur par défaut
+                _groupValue = new GroupValue(true);
                 if (busConnection is { CancellationTokenSource: not null, Bus: not null })
                     await busConnection.Bus.WriteGroupValueAsync(
                         _groupAddress, _groupValue, MessagePriority.High,
@@ -56,7 +56,7 @@ public class GroupCommunication(BusConnection busConnection) : ObservableObject,
         {
             if (busConnection is { IsConnected: true, IsBusy: false })
             {
-                _groupValue = new GroupValue(false); // Exemple de valeur par défaut
+                _groupValue = new GroupValue(false);
                 if (busConnection is { CancellationTokenSource: not null, Bus: not null })
                     await busConnection.Bus.WriteGroupValueAsync(
                         _groupAddress, _groupValue, MessagePriority.High,
