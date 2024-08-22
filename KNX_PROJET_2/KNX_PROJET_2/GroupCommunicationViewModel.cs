@@ -52,7 +52,7 @@ namespace KNX_PROJET_2
         
         private readonly GroupValueViewModel _groupValue;
         public GroupValueViewModel GroupValue => _groupValue;
-
+        
         //________________________________________________________________________________________________________//
         public ICommand GroupValueWriteONCommand { get; set; }
         public ICommand GroupValueWrite0FFCommand { get; set; }
@@ -79,7 +79,7 @@ namespace KNX_PROJET_2
 
             //Initialisation @ de groupe + GroupValue = type booleen 1 bit
             //_groupAddress = new GroupAddress("0/1/2"); // Exemple d'adresse par défaut
-            //_groupValue = new GroupValueViewModel(new GroupValue(true));
+            _groupValue = new GroupValueViewModel(new GroupValue(false));
             //EST CE QUE CA SERT A QQCHOSE DE METTRE PAR DEFAUT ?
         }
 
@@ -105,24 +105,13 @@ namespace KNX_PROJET_2
             }
             catch (Exception ex)
             {
-                switch (ex)
-                {
-                    case NullReferenceException _ when GroupAddress == "0/0/0":
-                        MessageBox.Show("L'adresse de groupe est nulle. Veuillez remplir le champ d'adresse de groupe.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        break;
-
-                    case NullReferenceException _ when GroupValue == null:
-                        MessageBox.Show("La valeur est nulle. Veuillez remplir le champ de valeur.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        break;
-
-                    default:
-                        MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-                        break;
-                }
+                MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                   
             }
         }
 
 
+        //fonction a verifier plus tard = creer endroit ou lire les trames
         private async Task GroupValueReadAsync()
         {
 

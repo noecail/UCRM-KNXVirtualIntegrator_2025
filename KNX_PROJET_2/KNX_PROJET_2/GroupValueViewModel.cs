@@ -19,6 +19,7 @@ namespace KNX_PROJET_2
         private KnxEditableValue _editableValue;
         private Exception _conversionError;
 
+        //mettre de type GroupValueVM
         public GroupValueViewModel(GroupValue value)
         {
             Value = value;
@@ -32,7 +33,7 @@ namespace KNX_PROJET_2
             {
                 if (Set(() => Value, ref _value, value))
                 {
-                    InternalConvert();
+                   InternalConvert();
                 }
             }
         }
@@ -56,7 +57,7 @@ namespace KNX_PROJET_2
             {
                 if (Set(() => EditableValue, ref _editableValue, value))
                 {
-                    InternalConvertBack();
+                    InternalConvertBack();  //cest pour le read je pense
                 }
             }
         }

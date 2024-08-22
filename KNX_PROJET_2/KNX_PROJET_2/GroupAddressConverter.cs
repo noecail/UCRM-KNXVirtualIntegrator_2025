@@ -23,7 +23,7 @@ namespace KNX_PROJET_2.Converter
         {
             //string stringValue = value as string;
             //return new GroupAddress(System.Convert.ToString(stringValue));
-            return GroupAddress.Parse((string)value);
+           return GroupAddress.Parse((string)value);
         }
     }
 }
