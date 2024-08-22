@@ -41,5 +41,50 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
         groupedAddresses[commonName].Add(ga);
     }
     
+    /// <summary>
+    /// Filters a dictionary of XElement lists, retaining only those lists where all elements
+    /// share the same first word in their "Name" attribute.
+    /// 
+    /// This method processes each list in the dictionary that contains more than one XElement. 
+    /// It checks if all elements in the list start with the same word (separated by spaces or underscores) 
+    /// in their "Name" attribute. If they do, the list is added to the resulting dictionary.
+    /// 
+    /// <param name="dictionary">A dictionary where the key is a string and the value is a list of XElement objects.</param>
+    /// <returns>A dictionary containing only the lists of XElement objects where all elements have the same first word in their "Name" attribute.</returns>
+    /// </summary>
+    public Dictionary<string, List<XElement>> FilterElements(Dictionary<string, List<XElement>> dictionary)
+    {
+        var result = new Dictionary<string, List<XElement>>();
+
+        foreach (var kvp in dictionary)
+        {
+            var elements = kvp.Value;
+
+            // Ne traiter que les listes contenant plus d'un élément
+            if (elements.Count > 1)
+            {
+                // Extraire le premier mot du premier élément
+                var separators = new[] { ' ', '_' };
+                var firstElementName = elements.First().Attribute("Name")?.Value;
+                var firstWord = firstElementName?.Split(separators, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+
+                // Vérifier si tous les éléments commencent par le même premier mot
+                bool allStartWithSameWord = elements.All(el =>
+                {
+                    var nameAttribute = el.Attribute("Name")?.Value;
+                    var currentFirstWord = nameAttribute?.Split(separators, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
+                    return currentFirstWord == firstWord;
+                });
+
+                // Si tous commencent par le même premier mot, les ajouter au dictionnaire résultant
+                if (allStartWithSameWord)
+                {
+                    result.Add(kvp.Key, elements);
+                }
+            }
+        }
+        return result;
+    }
+  
 }
 

@@ -23,4 +23,18 @@ public interface IGroupAddressProcessor
     /// <param name="name">The name to normalize.</param>
     /// <returns>The normalized name.</returns>
     public string NormalizeName(string name);
+
+    /// <summary>
+    /// Filters a dictionary of XElement lists, retaining only those lists where all elements
+    /// share the same first word in their "Name" attribute.
+    /// 
+    /// This method processes each list in the dictionary that contains more than one XElement. 
+    /// It checks if all elements in the list start with the same word (separated by spaces or underscores) 
+    /// in their "Name" attribute. If they do, the list is added to the resulting dictionary.
+    /// 
+    /// <param name="dictionary">A dictionary where the key is a string and the value is a list of XElement objects.</param>
+    /// <returns>A dictionary containing only the lists of XElement objects where all elements have the same first word in their "Name" attribute.</returns>
+    /// </summary>
+    public Dictionary<string, List<XElement>> FilterElements(Dictionary<string, List<XElement>> dictionary);
+
 }
