@@ -52,13 +52,22 @@ namespace KNX_PROJET_2
         
         private readonly GroupValueViewModel _groupValue;
         public GroupValueViewModel GroupValue => _groupValue;
-        
+
+        private List<(GroupAddress addr, GroupValue value)> _groupValues;
+        public List<(GroupAddress addr, GroupValue value)> GroupValues
+        {
+            get => _groupValues;
+            set => Set(() => GroupValues, ref _groupValues, value);
+        }
+
         //________________________________________________________________________________________________________//
         public ICommand GroupValueWriteONCommand { get; set; }
         public ICommand GroupValueWrite0FFCommand { get; set; }
 
         public ICommand GroupValueReadCommand { get; set; }
         public ICommand GroupValueWriteCommand { get; set; }
+
+        public ICommand SendGroupValuesCommand { get; set; }
 
         //________________________________________________________________________________________________________//
 
@@ -77,11 +86,24 @@ namespace KNX_PROJET_2
             GroupValueWriteCommand = new RelayCommand(
                 async () => await GroupValueWriteAsync(), () => _globalViewModel.IsConnected && !_globalViewModel.IsBusy);
 
+            SendGroupValuesCommand = new RelayCommand<object>(async (parameter) => 
+            await SendGroupValuesAsync(parameter as List<(GroupAddress, GroupValue)>));
+
+            // Initialisation de la liste GroupValues
+            GroupValues = new List<(GroupAddress, GroupValue)>
+                {
+                    (new GroupAddress("0/1/1"), new GroupValue(true)),
+                    (new GroupAddress("1/0/1"), new GroupValue(true)),
+                    
+                };
+
             //Initialisation @ de groupe + GroupValue = type booleen 1 bit
             //_groupAddress = new GroupAddress("0/1/2"); // Exemple d'adresse par défaut
             _groupValue = new GroupValueViewModel(new GroupValue(false));
             //EST CE QUE CA SERT A QQCHOSE DE METTRE PAR DEFAUT ?
         }
+
+
 
         //________________________________________________________________________________________________________//
 
@@ -147,8 +169,36 @@ namespace KNX_PROJET_2
         }
 
 
+ 
 
+        private async Task SendGroupValuesAsync(List<(GroupAddress addr, GroupValue value)> groupValues)
+        {
+            if (groupValues == null || !groupValues.Any())
+            {
+                MessageBox.Show("La liste des valeurs de groupe est vide.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
+            if (!_globalViewModel.IsConnected || _globalViewModel.IsBusy)
+            {
+                MessageBox.Show("Le bus KNX n'est pas connecté ou est occupé. Veuillez réessayer plus tard.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                foreach (var (addr, value) in groupValues)
+                {
+                    await _globalViewModel._bus.WriteGroupValueAsync(
+                        addr, value, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token
+                    );
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
 
         //________________________________________________________________________________________________________//

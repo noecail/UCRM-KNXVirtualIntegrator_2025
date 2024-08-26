@@ -124,6 +124,10 @@
                             Margin="10"/>
                 </StackPanel>
                 
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="Envoyer Trames" Command="{Binding  GroupCommunicationVM.SendGroupValuesCommand}" CommandParameter="{Binding  GroupCommunicationVM.GroupValues}" />
+                </StackPanel>
+
             </StackPanel>
             
         </GroupBox>
