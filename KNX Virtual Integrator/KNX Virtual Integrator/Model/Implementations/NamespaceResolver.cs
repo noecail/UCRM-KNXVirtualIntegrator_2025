@@ -30,7 +30,7 @@ public class NamespaceResolver(Logger logger) : INamespaceResolver
             var defaultNamespace = document.Root?.GetDefaultNamespace();
             if (defaultNamespace != null)
             {
-                GroupAddressManager._globalKnxNamespace = defaultNamespace.NamespaceName;
+                GroupAddressManager.GlobalKnxNamespace = defaultNamespace.NamespaceName;
             }
         }
         catch (Exception ex)

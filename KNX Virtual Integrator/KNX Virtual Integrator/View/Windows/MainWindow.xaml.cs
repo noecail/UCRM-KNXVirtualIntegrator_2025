@@ -218,10 +218,7 @@ public partial class MainWindow
         }
 
         // Partie management des adresses de groupes
-        if (_viewModel.FindZeroXmlCommand is RelayCommandWithResult<string, bool> findZeroXmlCommand)
-        {
-            _ = findZeroXmlCommand.ExecuteWithResult(_viewModel.ProjectFolderPath);
-        }
+        _viewModel.FindZeroXmlCommand.Execute(_viewModel.ProjectFolderPath);
         _viewModel.ExtractGroupAddressCommand.Execute(null);
     }
     
