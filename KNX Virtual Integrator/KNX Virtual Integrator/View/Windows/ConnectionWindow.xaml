@@ -6,100 +6,93 @@
         xmlns:local="clr-namespace:KNX_Virtual_Integrator.View"
         xmlns:viewModel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
         mc:Ignorable="d"
-        Title="ConnectionWindow" Height="475" Width="800">
+        Title="Connexion au Bus KNX" Height="275" Width="300"
+        ResizeMode="NoResize">
     
+    <Window.Resources>
+        <SolidColorBrush x:Key="BackgroundButton" Color="#4071B4"/>
+        <SolidColorBrush x:Key="ForegroundButtonColour" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="KNXGreen" Color="#369026"/>
+        <SolidColorBrush x:Key="ButtonDisabled" Color="#A0A0A0"/>
+        
+        
+        
+    </Window.Resources>
+
     <Grid>
         <!-- Define rows and columns for the grid -->
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <!-- Row for Import Button -->
-            <RowDefinition Height="Auto"/>
-            <!-- Row for Bus Connection -->
-            <RowDefinition Height="Auto"/>
-            <!-- Row for Discovered Interface -->
-            <RowDefinition Height="Auto"/>
-            <!-- Row for Group Address List -->
-            <RowDefinition Height="Auto"/>
-            <!-- Row for Modeles -->
-            <RowDefinition Height="Auto"/>
-            <!-- Row for Test Buttons -->
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <!-- Bus Connection Type Selection -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <TextBlock Text="Type de connexion :" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Name="ConnectionTypeComboBox"
+                      Width="120" Height="25"
+                      SelectedIndex="1" 
+                      SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}">
+                <ComboBoxItem Content="Type=IP"/>
+                <ComboBoxItem Content="Type=USB"/>
+            </ComboBox>
+        </StackPanel>
 
-        <!-- Import Button -->
-        <Button Name="ImportButton" Content="Importer" 
-                Grid.Row="0" Grid.Column="0" Margin="5" />
+        <!-- Discovered Interfaces Section -->
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,10,10,0">
+            <Grid Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
 
-        <!-- Bus Connection Section -->
-        <GroupBox Header="Bus Connection" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10">
-            <StackPanel>
-                <!-- ComboBox for selecting the type of connection -->
-                <ComboBox Name="ConnectionTypeComboBox" SelectedIndex="0" SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}">
-                    <ComboBoxItem Content="Type=USB"/>
-                    <ComboBoxItem Content="Type=IP"/>
-                </ComboBox>
-                
-                <GroupBox Header="Discovered Interfaces">
-                    <!-- Discovered Interface Section -->
-                    <StackPanel>
-                        <!-- Liste des interfaces découvertes -->
-                        <ListBox Name="InterfaceListBox" 
-                                 ItemsSource="{Binding DiscoveredInterfaces}"
-                                 SelectedItem="{Binding SelectedInterface}"
-                                 Width="700" Height="50" 
-                                 Margin="0,10,0,0"
-                                 SelectionMode="Single">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding DisplayName}" />
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
+                <!-- Text for "Interfaces disponibles" aligned on the left -->
+                <TextBlock Text="Interfaces disponibles :" VerticalAlignment="Center" Grid.Column="0" />
 
-                        <!-- Bouton pour rafraîchir la liste des interfaces -->
-                        <Button Content="Refresh Interfaces" Width="700" 
-                                Background="Yellow" Foreground="DeepPink"
-                                BorderThickness="3" BorderBrush="Aqua" 
-                                Command="{Binding RefreshInterfacesCommand}" Margin="5"/>
+                <!-- Button "Rafraîchir" aligned to the right with a checkmark -->
+                <Button Grid.Column="1" HorizontalAlignment="Center" Width="100" Height="20" 
+                        Background="{StaticResource BackgroundButton}" 
+                        Margin="0"
+                        Foreground="{StaticResource ForegroundButtonColour}"
+                        BorderThickness="0"
+                        Command="{Binding RefreshInterfacesCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <!-- Checkmark icon -->
+                        <TextBlock Text="⟲" FontSize="14" Margin="0,0,5,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Rafraîchir" VerticalAlignment="Center" Margin="0,0,0,0"/>
                     </StackPanel>
-                </GroupBox>
-                <!-- Buttons for connecting and disconnecting -->
-                <StackPanel Orientation="Horizontal" Margin="5">
-                    <Button Name="ConnectButton" Content="Connect" Margin="5" Padding="5,2" Command="{Binding ConnectBusCommand}"/>
-                    <Button Name="DisconnectButton" Content="Disconnect" Margin="5" Padding="5,2" Command="{Binding DisconnectBusCommand}"/>
-                    <TextBlock Name="ConnectionStateTextBlock" 
-                               Text="{Binding ConnectionState}" 
-                               Foreground="Red" 
-                               Margin="5,7,0,0"/>
-                </StackPanel>
-            </StackPanel>
-        </GroupBox>
+                </Button>
+            </Grid>
 
-        
+            <!-- List of discovered interfaces -->
+            <ListBox Name="InterfaceListBox" Width="275" Height="100" 
+                     ItemsSource="{Binding DiscoveredInterfaces}" 
+                     SelectedItem="{Binding SelectedInterface}" 
+                     Margin="0,10,0,0"
+                     SelectionMode="Single">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
 
-        <!-- Group Address List Section -->
-        <GroupBox Header="Liste des adresses de groupes non gérées" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Vertical"><!-- Instance of GroupAddressList UserControl -->
-                <ListBox Name="GroupAddressListBox" 
-                         ItemsSource="{Binding GroupAddresses}"
-                         Width="700" Height="150" 
-                         Margin="0,10,0,0">
-                </ListBox>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Test d'envoi allumer" 
-                                    Command="{Binding GroupValueWriteOnCommand}"
-                                    Margin="10"/>
-                    <Button Content="Test d'envoi éteindre" 
-                            Command="{Binding GroupValueWriteOffCommand}"
-                            Margin="10"/>
-                </StackPanel>
-                
-            </StackPanel>
-            
-        </GroupBox>
+        <!-- Buttons for connection and disconnection -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,10,0">
+            <Button Name="DisconnectButton" Content="Déconnexion" 
+                    Width="100" Height="25"
+                    Margin="5" Padding="5,2"
+                    Command="{Binding DisconnectBusCommand}" 
+                    Background="{StaticResource ButtonDisabled}"/>
+            <Button Name="ConnectButton" Content="Connexion" 
+                    Width="100" Height="25"
+                    Margin="5" Padding="5,2"
+                    Background="{StaticResource KNXGreen}"
+                    Foreground="{StaticResource ForegroundButtonColour}"
+                    BorderThickness="0"
+                    Command="{Binding ConnectBusCommand}" />
+        </StackPanel>
     </Grid>
 </Window>
