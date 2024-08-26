@@ -68,43 +68,32 @@ public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, Str
     }
     
     /// <summary>
-    /// Retrieves a list of XElement objects from a dictionary, sorted by their similarity to a given search string,
-    /// ignoring specific prefixes ("Ie" and "Cmd") in the names of the elements.
+    /// Retrieves a list of XElement objects from a list, sorted by their similarity to a given search string,
+    /// ignoring specific prefixe ("Ie") in the names of the elements.
     /// 
-    /// This method filters the dictionary to only include entries with a single XElement, removes the prefixes 
-    /// "Ie" and "Cmd" from the element names, and then sorts the resulting elements by their similarity 
-    /// to the provided search string. The similarity is calculated using the modified names.
+    /// This method processes a list of XElement objects, removes the prefixe "Ie" from the element names,
+    /// and then sorts the elements based on their similarity to the provided search string. The similarity is calculated
+    /// using the modified names.
     /// 
     /// <param name="searchString">The string to compare against the element names after removing prefixes.</param>
-    /// <param name="dictionary">A dictionary where the key is a string and the value is a list of XElement objects.</param>
+    /// <param name="ieAddressesSet">A list of XElement objects to be filtered and sorted.</param>
     /// <returns>A sorted list of XElement objects based on their similarity to the search string.</returns>
     /// </summary>
-    public List<XElement> GetElementsBySimilarity(string searchString, Dictionary<string, List<XElement>> dictionary)
+    public List<XElement> GetElementsBySimilarity(string searchString, List<XElement> ieAddressesSet)
     {
-        // Step 1: Filter the dictionary to get entries with only one XElement
-        var filteredElements = dictionary
-            .Where(kv => kv.Value.Count == 1)
-            .Select(kv => kv.Value.First()) // Since we only have one element, take the first (and only) one
-            .ToList();
-
-        // Step 2: Sort the elements by similarity to the search string
-        var sortedElements = filteredElements
+        var sortedElements = ieAddressesSet
             .OrderByDescending(element => 
             {
-                var name = element.Attribute("Name").Value;
-            
-                // Remove the prefixes "Ie" and "Cmd" if they exist
-                if (name.StartsWith("Ie"))
+                var name = element.Attribute("Name")?.Value;
+
+                // Remove the prefixe "Ie" if it exist
+                if (name != null && name.StartsWith("Ie"))
                 {
                     name = name.Substring(2); // Remove the first 2 characters
                 }
-                else if (name.StartsWith("Cmd"))
-                {
-                    name = name.Substring(3); // Remove the first 3 characters
-                }
-            
+                
                 // Calculate the similarity based on the modified name
-                return stringManagement.CalculateSimilarity(searchString, name);
+                return stringManagement.CalculateSimilarity(searchString, name ?? string.Empty);
             })
             .ToList();
 

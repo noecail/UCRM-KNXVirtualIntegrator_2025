@@ -179,8 +179,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
         }
        
-        groupAddressMerger.MergeSingleElementGroups(GroupedAddresses);
-        groupAddressProcessor.FilterElements(GroupedAddresses);
+        //groupAddressMerger.MergeSingleElementGroups(GroupedAddresses);
     }
 
     /// <summary>
@@ -276,8 +275,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
         }
 
-        groupAddressMerger.MergeSingleElementGroups(GroupedAddresses);
-        groupAddressMerger.GetElementsBySimilarity("_VoletRoulant_Stop_MaqKnxC_MaisonDupre_RezDeChaussee_Salon", GroupedAddresses);
-        groupAddressProcessor.FilterElements(GroupedAddresses);
+        //groupAddressMerger.MergeSingleElementGroups(GroupedAddresses);
+        groupAddressMerger.GetElementsBySimilarity("_VoletRoulant_Position_MaqKnxC_MaisonDupre_RezDeChaussee_Tgbt", ieAddressesSet);
     }
 }
