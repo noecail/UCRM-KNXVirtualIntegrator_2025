@@ -179,7 +179,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
         }
        
-        //groupAddressMerger.MergeSingleElementGroups(GroupedAddresses);
+        groupAddressMerger.MergeSingleElementGroups(_groupedAddresses, _ieAddressesSet);
     }
 
     /// <summary>
