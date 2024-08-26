@@ -41,6 +41,7 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
         groupedAddresses[commonName].Add(ga);
     }
     
+    // Inutile maintenant je pense mais je laisse au cas où
     /// <summary>
     /// Filters a dictionary of XElement lists, retaining only those lists where all elements
     /// share the same first word in their "Name" attribute.
