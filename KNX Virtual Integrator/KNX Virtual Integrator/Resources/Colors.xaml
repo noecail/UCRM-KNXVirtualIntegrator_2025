@@ -1,0 +1,40 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Couleurs -->
+    <Color x:Key="BlackColor">Black</Color>
+    <Color x:Key="WhiteColor">White</Color>
+    <Color x:Key="GreenColor">#369026</Color>
+    <Color x:Key="BlueColor">#006BB4</Color>
+    <Color x:Key="RedColor">#B20000</Color>
+    <Color x:Key="LightGrayColor">#F3F3F3</Color>
+    <Color x:Key="GrayColor">#CDCDCD</Color>
+    <Color x:Key="Gray2Color">#999999</Color>
+    <Color x:Key="DarkGrayColor">#979797</Color>
+    
+
+    <!-- Fond -->
+    <SolidColorBrush x:Key="BackgroundWhite" Color="{StaticResource BlackColor}"/>
+    <SolidColorBrush x:Key="BackgroundGreen" Color="{StaticResource WhiteColor}"/>
+    <SolidColorBrush x:Key="BackgroundLightGray" Color="{StaticResource LightGrayColor}"/>
+    <SolidColorBrush x:Key="BackgroundDarkGray" Color="{StaticResource GrayColor}"/>
+
+    <!-- Bordure -->
+    <SolidColorBrush x:Key="BorderGray" Color="{StaticResource DarkGrayColor}"/>
+
+    <!-- Accentuation -->
+    <SolidColorBrush x:Key="AccentuateGreen" Color="{StaticResource GreenColor}"/>
+    <SolidColorBrush x:Key="AccentuateGray" Color="{StaticResource GreenColor}"/>
+    <SolidColorBrush x:Key="AccentuateBlue" Color="{StaticResource Gray2Color}"/>
+    <SolidColorBrush x:Key="AccentuateRed" Color="{StaticResource RedColor}"/>
+
+    <!-- Textes -->
+    <SolidColorBrush x:Key="TextBlack" Color="{StaticResource BlackColor}"/>
+    <SolidColorBrush x:Key="TextWhite" Color="{StaticResource WhiteColor}"/>
+    <SolidColorBrush x:Key="TextGreen" Color="{StaticResource GreenColor}"/>
+
+
+
+
+
+</ResourceDictionary>

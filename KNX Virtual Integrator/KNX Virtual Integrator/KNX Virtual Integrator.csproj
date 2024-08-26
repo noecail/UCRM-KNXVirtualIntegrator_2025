@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Page Remove="Resources\Images.xaml" />
       <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
       <Page Remove="Resources\Styles.xaml" />
     </ItemGroup>
@@ -22,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Resource Include="Resources\Images.xaml" />
       <Resource Include="Resources\Strings.MainWindow.fr.xaml" />
       <Resource Include="Resources\Styles.xaml" />
     </ItemGroup>

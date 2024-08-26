@@ -275,4 +275,9 @@ public partial class MainWindow
         e.Cancel = true;
         Application.Current.Shutdown();
     }
+
+    private void Button_Click()
+    {
+
+    }
 }

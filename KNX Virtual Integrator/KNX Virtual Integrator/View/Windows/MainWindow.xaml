@@ -29,22 +29,16 @@
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" Margin="5,5,5,5">
             <!-- Premier bouton dans la première ligne -->
             <Button Content="{StaticResource Bouton1}"
-                Margin="5"
-                Width="100"
                 Click="ImportProjectButtonClick"
                 Style="{StaticResource BaseButtonStyle}"
                  />
 
             <!-- Deuxième bouton dans la deuxième ligne -->
-            <Button x:Name="ButtonChargerGroupAddressesXml"
-                Margin="5"
-                Width="150"
-                Click="ImportGroupAddressFileButtonClick"
-                Content="Charger Fichier Xml"
-                Foreground="Blue"
-                Background="DeepPink"
-                BorderThickness="3"
-                BorderBrush="Brown"/>
+            <Button Style="{StaticResource IconButtonStyle}"
+            Tag="{StaticResource plug_connect_svgrepo_comDrawingImage}"
+            Content="Charger Fichier Xml "
+               />
+
 
             <Button Content="Lancer le test" Width="100" Margin="5" 
                     Foreground="Red" Background="Yellow"

@@ -9,6 +9,13 @@
 
                 <!-- Ajouter le dictionnaire de ressources pour les styles -->
                 <ResourceDictionary Source="Resources/Styles.xaml" />
+
+                <!-- Ajouter le dictionnaire de ressources pour les icones -->
+                <ResourceDictionary Source="Resources/Images.xaml" />
+                
+                <!-- Ajouter le dictionnaire de ressources pour les couleurs -->
+                <ResourceDictionary Source="Resources/Colors.xaml"/>
+
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
          
