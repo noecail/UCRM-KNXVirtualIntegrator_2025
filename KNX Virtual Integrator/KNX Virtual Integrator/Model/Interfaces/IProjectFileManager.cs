@@ -5,6 +5,8 @@
 /// </summary>
 public interface IProjectFileManager
 {
+    string ProjectFolderPath { get; set; }
+    
     /// <summary>
     /// Extracts project files from the specified .knxproj file path.
     /// </summary>

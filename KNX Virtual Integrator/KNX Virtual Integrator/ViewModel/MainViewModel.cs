@@ -1,8 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.View;
@@ -14,18 +12,18 @@ using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 
 namespace KNX_Virtual_Integrator.ViewModel;
 
-public class MainViewModel : ObservableObject, INotifyPropertyChanged
+public class MainViewModel : INotifyPropertyChanged
 {
-    private readonly ModelManager _modelManager;
-    private readonly WindowManager? _windowManager;
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    public string ProjectFolderPath = "";
+    public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
     
     private readonly IBusConnection _busConnection;
+    private readonly WindowManager? _windowManager;
     
     public IApplicationSettings AppSettings => _modelManager.AppSettings;
+    private readonly ModelManager _modelManager;  // Référence à ModelManager
     
     public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces => _busConnection.DiscoveredInterfaces;
     public string SelectedConnectionType
@@ -51,7 +49,101 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         }
     }
+    
+    /* ------------------------------------------------------------------------------------------------
+    ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    public MainViewModel(ModelManager modelManager)
+    {
+        // Initialisation des attributs
+        _modelManager = modelManager;
+        _windowManager = new WindowManager(this);
+        _busConnection = _modelManager.BusConnection;
+        ProjectFolderPath = "";
 
+        // Définir le type de connexion initial
+        _busConnection.SelectedConnectionType = "Type=USB";
+
+        // Initialisation des commandes
+        ConsoleAndLogWriteLineCommand = new RelayCommand<string>(
+            parameter =>
+            {
+                if (!string.IsNullOrWhiteSpace(parameter))
+                    modelManager.Logger.ConsoleAndLogWriteLine(parameter);
+            }
+        );
+
+        ExtractGroupAddressCommand = new RelayCommand<object>(
+            _ => modelManager.GroupAddressManager.ExtractGroupAddress()
+        );
+
+        EnsureSettingsFileExistsCommand = new RelayCommand<string>(
+            parameter =>
+            {
+                if (!string.IsNullOrWhiteSpace(parameter))
+                    modelManager.ApplicationFileManager.EnsureSettingsFileExists(parameter);
+            }
+        );
+
+        CreateDebugArchiveCommand = new RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
+            parameters =>
+            {
+                modelManager.DebugArchiveGenerator.CreateDebugArchive(
+                    parameters.IncludeOsInfo,
+                    parameters.IncludeHardwareInfo,
+                    parameters.IncludeImportedProjects
+                );
+            }
+        );
+
+        FindZeroXmlCommand = new RelayCommand<string>(
+            fileName => modelManager.FileFinder.FindZeroXml(fileName)
+        );
+
+        OpenConnectionWindowCommand = new RelayCommand<object>(
+            _ => _windowManager.ShowConnectionWindow()
+        );
+
+        ConnectBusCommand = new RelayCommand<object>(
+            _ => modelManager.BusConnection.ConnectBusAsync()
+        );
+
+        DisconnectBusCommand = new RelayCommand<object>(
+            _ => modelManager.BusConnection.DisconnectBusAsync()
+        );
+
+        RefreshInterfacesCommand = new RelayCommand<object>(
+            _ => modelManager.BusConnection.DiscoverInterfacesAsync()
+        );
+
+        GroupValueWriteOnCommand = new RelayCommand<object>(
+            _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
+        );
+
+        GroupValueWriteOffCommand = new RelayCommand<object>(
+            _ => modelManager.GroupCommunication.GroupValueWriteOffAsync()
+        );
+
+        SaveSettingsCommand = new RelayCommand<object>(
+            _ => modelManager.AppSettings.Save()
+        );
+
+        ExtractGroupAddressFileCommand = new RelayCommandWithResult<string, bool>(
+            fileName => modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName)
+        );
+
+        ExtractProjectFilesCommand = new RelayCommandWithResult<string, bool>(
+            fileName =>
+            {
+                var success = _modelManager.ProjectFileManager.ExtractProjectFiles(fileName);
+                ProjectFolderPath = _modelManager.ProjectFileManager.ProjectFolderPath;
+                return success;
+            }
+        );
+    }
+    
+    
+    
     
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
@@ -62,8 +154,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     // Si la fonction n'a pas d'arguments, la déclarer en tant que commande dont les paramètres sont de type "object"
     // et lors de l'utilisation, on écrira macommande.Execute(null);
     // Pour un exemple, voir : ExtractGroupAddressCommand
-    
-    
     
     
     /// <summary>
@@ -99,36 +189,36 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// <param name="fileName">The name of the file to find.</param>
     public ICommand FindZeroXmlCommand { get; private set; }
 
-    public System.Windows.Input.ICommand OpenConnectionWindowCommand { get; }
+    public ICommand OpenConnectionWindowCommand { get; }
     
     /// <summary>
     /// Command that connects to the bus asynchronously.
     /// </summary>
-    public System.Windows.Input.ICommand ConnectBusCommand { get; private set; }
+    public ICommand ConnectBusCommand { get; private set; }
 
     
     /// <summary>
     /// Command that disconnects from the bus asynchronously.
     /// </summary>
-    public System.Windows.Input.ICommand DisconnectBusCommand { get; private set; } 
+    public ICommand DisconnectBusCommand { get; private set; } 
 
     
     /// <summary>
     /// Command that refreshes the list of bus interfaces asynchronously.
     /// </summary>
-    public System.Windows.Input.ICommand RefreshInterfacesCommand { get; private set; }
+    public ICommand RefreshInterfacesCommand { get; private set; }
 
     
     /// <summary>
     /// Command that sends a group value write "on" command asynchronously.
     /// </summary>
-    public System.Windows.Input.ICommand GroupValueWriteOnCommand { get; private set; }
+    public ICommand GroupValueWriteOnCommand { get; private set; }
 
     
     /// <summary>
     /// Command that sends a group value write "off" command asynchronously.
     /// </summary>
-    public System.Windows.Input.ICommand GroupValueWriteOffCommand { get; private set; }
+    public ICommand GroupValueWriteOffCommand { get; private set; }
 
     
     /// <summary>
@@ -136,6 +226,7 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// </summary>
     public ICommand SaveSettingsCommand { get; private set; }
 
+    
     
     
     /* ------------------------------------------------------------------------------------------------
@@ -158,8 +249,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     // if (maCommande != null) [UTILISATION DE maCommande DIRECTEMENT]
     
     
-    
-    
     /// <summary>
     /// Command that extracts a group address file based on the provided file name and returns a boolean indicating success.
     /// </summary>
@@ -176,60 +265,13 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     public ICommand ExtractProjectFilesCommand { get; private set; }
     
     
-    public MainViewModel(ModelManager modelManager)
-    {
-        _modelManager = modelManager;
-        _windowManager = new WindowManager(this);
-
-        _busConnection = _modelManager.BusConnection;
-        
-        _busConnection.SelectedConnectionType = "Type=USB";
-        
-        ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
-                parameter =>
-                {
-                    if (!string.IsNullOrWhiteSpace(parameter)) modelManager.Logger.ConsoleAndLogWriteLine(parameter);
-                }
-            );
-        ExtractGroupAddressCommand = new Commands.RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress());
-        
-        EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(
-            parameter =>
-            {
-                if (!string.IsNullOrWhiteSpace(parameter)) modelManager.ApplicationFileManager.EnsureSettingsFileExists(parameter);
-            }
-        );
-        
-        CreateDebugArchiveCommand = new Commands.RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
-            parameters =>
-            {
-                modelManager.DebugArchiveGenerator.CreateDebugArchive(parameters.IncludeOsInfo,
-                    parameters.IncludeHardwareInfo,
-                    parameters.IncludeImportedProjects);
-            }
-        );
-        
-        FindZeroXmlCommand = new Commands.RelayCommand<string>(fileName => modelManager.FileFinder.FindZeroXml(fileName));
-        
-        OpenConnectionWindowCommand = new RelayCommand(() => _windowManager.ShowConnectionWindow());
-        ConnectBusCommand = new RelayCommand(()  => modelManager.BusConnection.ConnectBusAsync());
-        DisconnectBusCommand = new RelayCommand(() => modelManager.BusConnection.DisconnectBusAsync());
-        RefreshInterfacesCommand = new RelayCommand(() => modelManager.BusConnection.DiscoverInterfacesAsync());
-        GroupValueWriteOnCommand = new RelayCommand(() => modelManager.GroupCommunication.GroupValueWriteOnAsync());
-        GroupValueWriteOffCommand = new RelayCommand(() => modelManager.GroupCommunication.GroupValueWriteOffAsync());
-        
-        SaveSettingsCommand = new Commands.RelayCommand<object>(_ => modelManager.AppSettings.Save());
-        
-        ExtractGroupAddressFileCommand = new RelayCommandWithResult<string, bool>(fileName => 
-            modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName));
-        ExtractProjectFilesCommand = new RelayCommandWithResult<string, bool>(fileName =>
-            modelManager.ProjectFileManager.ExtractProjectFiles(fileName));
-    }
     
     
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- HANDLERS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    
+    
     /// <summary>
     /// Handles the event when the left mouse button is pressed down on the slider.
     /// </summary>
