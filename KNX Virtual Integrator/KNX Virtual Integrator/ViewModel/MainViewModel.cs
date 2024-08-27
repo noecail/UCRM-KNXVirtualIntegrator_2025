@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.View;
@@ -12,7 +14,7 @@ using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 
 namespace KNX_Virtual_Integrator.ViewModel;
 
-public class MainViewModel : INotifyPropertyChanged
+public class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -49,7 +51,8 @@ public class MainViewModel : INotifyPropertyChanged
             }
         }
     }
-    
+    public bool IsConnected => _busConnection.IsConnected;
+
     /* ------------------------------------------------------------------------------------------------
     ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -59,13 +62,20 @@ public class MainViewModel : INotifyPropertyChanged
         _modelManager = modelManager;
         _windowManager = new WindowManager(this);
         _busConnection = _modelManager.BusConnection;
+        _busConnection.PropertyChanged += (sender, e) =>
+        {
+            if (e.PropertyName != nameof(_busConnection.IsConnected)) return;
+            RaisePropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
+            ConnectBusCommand?.RaiseCanExecuteChanged();
+            DisconnectBusCommand?.RaiseCanExecuteChanged();
+        };
         ProjectFolderPath = "";
 
         // Définir le type de connexion initial
         _busConnection.SelectedConnectionType = "Type=USB";
 
         // Initialisation des commandes
-        ConsoleAndLogWriteLineCommand = new RelayCommand<string>(
+        ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
             parameter =>
             {
                 if (!string.IsNullOrWhiteSpace(parameter))
@@ -73,11 +83,11 @@ public class MainViewModel : INotifyPropertyChanged
             }
         );
 
-        ExtractGroupAddressCommand = new RelayCommand<object>(
+        ExtractGroupAddressCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupAddressManager.ExtractGroupAddress()
         );
 
-        EnsureSettingsFileExistsCommand = new RelayCommand<string>(
+        EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(
             parameter =>
             {
                 if (!string.IsNullOrWhiteSpace(parameter))
@@ -85,7 +95,7 @@ public class MainViewModel : INotifyPropertyChanged
             }
         );
 
-        CreateDebugArchiveCommand = new RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
+        CreateDebugArchiveCommand = new Commands.RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
             parameters =>
             {
                 modelManager.DebugArchiveGenerator.CreateDebugArchive(
@@ -96,35 +106,35 @@ public class MainViewModel : INotifyPropertyChanged
             }
         );
 
-        FindZeroXmlCommand = new RelayCommand<string>(
+        FindZeroXmlCommand = new Commands.RelayCommand<string>(
             fileName => modelManager.FileFinder.FindZeroXml(fileName)
         );
 
-        OpenConnectionWindowCommand = new RelayCommand<object>(
-            _ => _windowManager.ShowConnectionWindow()
+        OpenConnectionWindowCommand = new RelayCommand(
+             () => _windowManager.ShowConnectionWindow()
         );
 
-        ConnectBusCommand = new RelayCommand<object>(
-            _ => modelManager.BusConnection.ConnectBusAsync()
+        ConnectBusCommand = new RelayCommand(
+            () => modelManager.BusConnection.ConnectBusAsync()
         );
 
-        DisconnectBusCommand = new RelayCommand<object>(
-            _ => modelManager.BusConnection.DisconnectBusAsync()
+        DisconnectBusCommand = new RelayCommand(
+            () => modelManager.BusConnection.DisconnectBusAsync()
         );
 
-        RefreshInterfacesCommand = new RelayCommand<object>(
+        RefreshInterfacesCommand = new Commands.RelayCommand<object>(
             _ => modelManager.BusConnection.DiscoverInterfacesAsync()
         );
 
-        GroupValueWriteOnCommand = new RelayCommand<object>(
+        GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
         );
 
-        GroupValueWriteOffCommand = new RelayCommand<object>(
+        GroupValueWriteOffCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOffAsync()
         );
 
-        SaveSettingsCommand = new RelayCommand<object>(
+        SaveSettingsCommand = new Commands.RelayCommand<object>(
             _ => modelManager.AppSettings.Save()
         );
 
@@ -141,10 +151,9 @@ public class MainViewModel : INotifyPropertyChanged
             }
         );
     }
-    
-    
-    
-    
+
+
+
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -189,18 +198,18 @@ public class MainViewModel : INotifyPropertyChanged
     /// <param name="fileName">The name of the file to find.</param>
     public ICommand FindZeroXmlCommand { get; private set; }
 
-    public ICommand OpenConnectionWindowCommand { get; }
+    public RelayCommand OpenConnectionWindowCommand { get; }
     
     /// <summary>
     /// Command that connects to the bus asynchronously.
     /// </summary>
-    public ICommand ConnectBusCommand { get; private set; }
+    public RelayCommand ConnectBusCommand { get; private set; }
 
     
     /// <summary>
     /// Command that disconnects from the bus asynchronously.
     /// </summary>
-    public ICommand DisconnectBusCommand { get; private set; } 
+    public RelayCommand DisconnectBusCommand { get; private set; } 
 
     
     /// <summary>

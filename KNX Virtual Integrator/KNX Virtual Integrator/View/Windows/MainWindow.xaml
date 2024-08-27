@@ -7,7 +7,6 @@
         Title="MainWindow" Height="450" Width="800"
         Closing="ClosingMainWindow">
 
-    <!-- Conteneur principal -->
     <Grid>
         <!-- Define columns with GridSplitter for resizing -->
         <Grid.ColumnDefinitions>
