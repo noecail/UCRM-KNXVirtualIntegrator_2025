@@ -9,16 +9,6 @@
 
     <!-- Conteneur principal -->
     <Grid>
-        <!-- Define columns with GridSplitter for resizing -->
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="263*" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="91*" />
-            <ColumnDefinition Width="173*"/>
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="263*" />
-        </Grid.ColumnDefinitions>
-
         <!-- Define rows for buttons and content -->
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -26,55 +16,258 @@
         </Grid.RowDefinitions>
 
         <!-- Buttons at the top -->
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="6" Margin="5,5,5,5">
-            <!-- Premier bouton dans la première ligne -->
-            <Button Content="{StaticResource Bouton1}"
-                Click="ImportProjectButtonClick"
-                Style="{StaticResource BaseButtonStyle}"
-                 />
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" >
 
-            <!-- Deuxième bouton dans la deuxième ligne -->
+            <!-- Bouton Connexion -->
             <Button Style="{StaticResource IconButtonStyle}"
-            Tag="{StaticResource plug_connect_svgrepo_comDrawingImage}"
-            Content="Charger Fichier Xml "
-               />
+                    Tag="{StaticResource DisconnectedDrawingImage}"
+                    Margin="5,5,5,5"
+            />
 
+            <!-- Premier bouton Importation -->
+            <Button Style="{StaticResource IconButtonStyle}"
+                    Tag="{StaticResource ImportedDrawingImage}" 
+                    Click="Button_Click_1"
+            />
 
-            <Button Content="Lancer le test" Width="100" Margin="5" 
-                    Foreground="Red" Background="Yellow"
-                    BorderThickness="3" BorderBrush="Aqua"/>
-            <Button Content="Exporter le rapport" Width="150" Margin="5"/>
+            <!-- Deuxième bouton Importation -->
+            <Button Content="{StaticResource ImportButton}"
+                    Style="{StaticResource IconTextButtonStyle}"
+                    Tag="{StaticResource ImportedDrawingImage}"
+                    Background="{StaticResource AccentuateBlue}"
+            />
+
+            <!-- Bouton Paramètres -->
+            <Button Style="{StaticResource IconButtonStyle}"
+                    Tag="{StaticResource settingsDrawingImage}"
+                    Background="{StaticResource BackgroundWhite}"
+                    BorderBrush="{StaticResource BorderGray}"
+                    BorderThickness="1"
+            />
         </StackPanel>
 
-        <!-- ListBox in the first column -->
-        <ListBox Grid.Row="1" Grid.Column="0" Margin="5,5,5,5">
-            <ListBoxItem Content="Test1" />
-            <ListBoxItem Content="Test2" />
-            <ListBoxItem Content="Test3" />
-            <ListBoxItem Content="Test4" />
-        </ListBox>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
 
-        <!-- First GridSplitter -->
-        <GridSplitter Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" Width="5" Background="Gray" />
+            <!-- Bouton de Test -->
+            <Button Content="{StaticResource TestButton}"
+                    Style="{StaticResource IconTextButtonStyle}"
+                    Tag="{StaticResource playDrawingImage}"
+                    ToolTip="5"
+            />
+            <!-- Bouton d'Exportation -->
+            <Button Content="{StaticResource ExportButton}"
+                    Style="{StaticResource IconTextButtonStyle}"
+                    Tag="{StaticResource ExportedDrawingImage}"
+            />
+        </StackPanel>
 
-        <!-- Parameters section (Center Column) -->
-        <TextBlock Grid.Row="1" Grid.Column="2" Text="ICI LES PARAMETRES DU TEST QUAND ON CLIQUE SUR UNE ADRESSE ?" 
-                   TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.ColumnSpan="2"/>
+        <Border Grid.Row="1" BorderBrush="{StaticResource BorderGray}" BorderThickness="1" Margin="10,0,10,10">
+            <Grid>
+            <!-- Define rows and columns for the nested grid -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <!-- Row for nested top content -->
+                <RowDefinition Height="*" />
+                <!-- Row for nested main content -->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <!-- Column for nested section 1 -->
+                <ColumnDefinition Width="*" />
+                <!-- Column for nested expandable section -->
+                <ColumnDefinition Width="Auto" />
+                <!-- Column for nested section 2 -->
+                <ColumnDefinition Width="*" />
+                <!-- Column for nested section 2 -->
+                <ColumnDefinition Width="*" />
+                <!-- Column for nested section 2 -->
+            </Grid.ColumnDefinitions>
 
-        <!-- Second GridSplitter -->
-        <GridSplitter Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Width="5" Background="Gray" />
+        <!-- Première colonne -->
+                <!-- En-tête -->
+                <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource BackgroundLightGray}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Column for title -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Column for button -->
+                    </Grid.ColumnDefinitions>
 
-        <!-- TreeView in the third column -->
-        <TreeView Grid.Row="1" Grid.Column="5" Margin="5,5,5,5">
-            <TreeViewItem Header="Éclairage">
-                <TreeViewItem Header="Marche/Arrêt">
-                    <TreeViewItem Header="Cmd_PlanDeTravail_Cuisine" />
-                </TreeViewItem>
-                <TreeViewItem Header="Indication d'état">
-                    <TreeViewItem Header="le_PlanDeTravail_Cuisine" />
-                </TreeViewItem>
-            </TreeViewItem>
-        </TreeView>
+                    <TextBlock Grid.Column="0"
+                               Style="{StaticResource TitleTextStyle}"
+                               Text="{StaticResource ModelsTitle}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                     />
+
+                    <Button Grid.Column="1"
+                            Style="{StaticResource IconButtonStyle}"
+                            Tag="{StaticResource SearchDrawingImage}"
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            BorderThickness="1"
+                            HorizontalAlignment="Right"
+                            Margin="0"
+                     />
+                </Grid>
+
+                <ListBox Grid.Row="1" Grid.Column="0">
+                    <ListBoxItem Content="Item 1" />
+                    <ListBoxItem Content="Item 2" />
+                    <ListBoxItem Content="Item 3" />
+                </ListBox>
+
+        <!-- Deuxième colonne -->
+                <!-- En-tête -->
+                <Grid Grid.Row="0" Grid.Column="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Column for title -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Column for button -->
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Style="{StaticResource TitleTextStyle}"
+                               Text="{StaticResource ModelsParametersTitle}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                     />
+
+                    <Button Grid.Column="1"
+                            Style="{StaticResource IconButtonStyle}"
+                            Tag="{StaticResource CloseDrawingImage}"
+                            Background="Transparent"
+                            HorizontalAlignment="Right"
+                            Margin="0"
+                    />
+                </Grid>
+
+                <Grid  Margin="10" Grid.Row="1" Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Nom :" VerticalAlignment="Center" Grid.Row="0"/>
+                    <TextBox x:Name="NomTextBox" Width="200" Grid.Row="0" Margin="80,0,0,0"/>
+
+                    <TextBlock Text="DPT envoyé :" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
+                    <ComboBox x:Name="DptSortieComboBox" Width="200" Grid.Row="1" Margin="80,10,0,0">
+                        <ComboBoxItem Content="1 bit" />
+                        <ComboBoxItem Content="2 bits" />
+                        <ComboBoxItem Content="4 bits" />
+                        <!-- Ajoutez d'autres options ici si nécessaire -->
+                    </ComboBox>
+
+                    <CheckBox x:Name="ParametresAvancesCheckBox" Foreground="White" 
+                              Content="Paramètres Avancés" Grid.Row="2" Margin="0,10,0,0"/>
+
+                    <TextBlock Text="DPT de retour :" VerticalAlignment="Center" Grid.Row="3" Margin="0,10,0,0"/>
+                    <ComboBox x:Name="DptRetourComboBox" Width="200" Grid.Row="3" Margin="80,10,0,0">
+                        <ComboBoxItem Content="8 bit" />
+                        <ComboBoxItem Content="16 bits" />
+                        <!-- Ajoutez d'autres options ici si nécessaire -->
+                    </ComboBox>
+
+                    <StackPanel Grid.Row="4" Margin="0,10,0,0">
+                        <TextBlock Text="Valeur Envoyé / Valeur Attendue :" />
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBox x:Name="ValeurEnvoye1TextBox" Width="50" />
+                            <TextBox x:Name="ValeurAttendue1TextBox" Width="50" Margin="10,0,0,0" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBox x:Name="ValeurEnvoye2TextBox" Width="50" />
+                            <TextBox x:Name="ValeurAttendue2TextBox" Width="50" Margin="10,0,0,0" />
+                        </StackPanel>
+
+                        <Button Content="+" Width="30" Height="30" Margin="0,5,0,0"/>
+                        <Button Content="-" Width="30" Height="30" Margin="40,5,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="5">
+                        <Button Content="Filtrer" Width="75" Margin="0,0,10,0"/>
+                        <Button Content="Enregistrer" Width="75"/>
+                    </StackPanel>
+                </Grid>
+
+                <!-- Second GridSplitter -->
+                <GridSplitter Grid.Column="2" Grid.RowSpan="2" HorizontalAlignment="Center" Width="5" Background="{StaticResource BorderGray}" />
+
+                
+ <!-- Troisième colonne -->
+                <!-- En-tête -->
+                <Grid Grid.Row="0" Grid.Column="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Column for title -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Column for button -->
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Style="{StaticResource TitleTextStyle}"
+                               Text="{StaticResource CommandeParametersTitle}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                     />
+
+                    <Button Grid.Column="1"
+                            Style="{StaticResource IconButtonStyle}"
+                            Tag="{StaticResource CloseDrawingImage}"
+                            Background="Transparent"
+                            HorizontalAlignment="Right"
+                            Margin="0"
+                    />
+                </Grid>
+
+                <TextBlock Grid.Row="1" Grid.Column="3" Text="ICI LES PARAMETRES DE LA COMMANDE QUAND ON CLIQUE SUR UNE ADRESSE ?" 
+TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" />
+
+                <!-- Quatrième colonne -->
+                <!-- En-tête -->
+                <Grid Grid.Row="0" Grid.Column="4"  Background="{StaticResource BackgroundLightGray}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Column for title -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Column for button -->
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               Style="{StaticResource TitleTextStyle}"
+                               Text="{StaticResource GroupAdressesTitle}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                     />
+
+                    <Button Grid.Column="1"
+                            Style="{StaticResource IconButtonStyle}"
+                            Tag="{StaticResource SearchDrawingImage}"
+                            HorizontalAlignment="Right"
+                    />
+                </Grid>
+
+                <!-- TreeView in the third column -->
+                <TreeView Grid.Row="1" Grid.Column="4" >
+                    <TreeViewItem Header="Éclairage">
+                        <TreeViewItem Header="Marche/Arrêt">
+                            <TreeViewItem Header="Cmd_PlanDeTravail_Cuisine" />
+                        </TreeViewItem>
+                        <TreeViewItem Header="Indication d'état">
+                            <TreeViewItem Header="le_PlanDeTravail_Cuisine" />
+                        </TreeViewItem>
+                    </TreeViewItem>
+                </TreeView>
+
+            </Grid>
+    </Border>
+        
     </Grid>
 </Window>
 

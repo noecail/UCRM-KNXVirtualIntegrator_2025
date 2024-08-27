@@ -1,5 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="Bouton1">ImportProjectButtonClick</sys:String>
-    
+    <sys:String x:Key="ExportButton">Exporter le rapport de test</sys:String>
+    <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>
+    <sys:String x:Key="TestButton">Lancer le test</sys:String>
+    <sys:String x:Key="GroupAdressesTitle">Adresses de Groupe</sys:String>
+    <sys:String x:Key="ModelsTitle">Modèles Fonctionnels</sys:String>
+    <sys:String x:Key="ModelsParametersTitle">Paramètres du Modèle Fonctionnel</sys:String>
+    <sys:String x:Key="CommandeParametersTitle">Paramètres Commande : </sys:String>
+    <sys:String x:Key="LinkedModels">Modèles Liées</sys:String>
+    <sys:String x:Key="UnlinkedModels">Modèles Non Liées</sys:String>
+    <sys:String x:Key="AddModelsButton">Ajouter</sys:String>
+
 </ResourceDictionary>

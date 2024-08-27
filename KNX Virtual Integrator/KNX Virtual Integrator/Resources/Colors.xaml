@@ -14,8 +14,9 @@
     
 
     <!-- Fond -->
-    <SolidColorBrush x:Key="BackgroundWhite" Color="{StaticResource BlackColor}"/>
-    <SolidColorBrush x:Key="BackgroundGreen" Color="{StaticResource WhiteColor}"/>
+    <SolidColorBrush x:Key="BackgroundWhite" Color="{StaticResource WhiteColor}"/>
+    <SolidColorBrush x:Key="BackgroundBlack" Color="{StaticResource BlackColor}"/>
+    <SolidColorBrush x:Key="BackgroundGreen" Color="{StaticResource GreenColor}"/>
     <SolidColorBrush x:Key="BackgroundLightGray" Color="{StaticResource LightGrayColor}"/>
     <SolidColorBrush x:Key="BackgroundDarkGray" Color="{StaticResource GrayColor}"/>
 
@@ -24,8 +25,8 @@
 
     <!-- Accentuation -->
     <SolidColorBrush x:Key="AccentuateGreen" Color="{StaticResource GreenColor}"/>
-    <SolidColorBrush x:Key="AccentuateGray" Color="{StaticResource GreenColor}"/>
-    <SolidColorBrush x:Key="AccentuateBlue" Color="{StaticResource Gray2Color}"/>
+    <SolidColorBrush x:Key="AccentuateGray" Color="{StaticResource Gray2Color}"/>
+    <SolidColorBrush x:Key="AccentuateBlue" Color="{StaticResource BlueColor}"/>
     <SolidColorBrush x:Key="AccentuateRed" Color="{StaticResource RedColor}"/>
 
     <!-- Textes -->
