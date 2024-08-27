@@ -58,6 +58,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         
         _ieAddressesSet.Clear();
         _groupedAddresses.Clear();
+
+        int groupAddressStructure = DetermineGroupAddressStructure(groupAddressFile);
         
         // Étape 1 : Extraire les références des appareils
         var deviceRefs = groupAddressFile.Descendants(GlobalKnxNamespace + "DeviceInstance")
@@ -78,9 +80,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         {
             var id = ga.Attribute("Id")?.Value;
             var name = ga.Attribute("Name")?.Value;
-            var address = ga.Attribute("Address")?.Value;
+            var address = groupAddressProcessor.DecodeValueToString(ga.Attribute("Address")?.Value ?? string.Empty, groupAddressStructure);
 
-            if (id == null || name == null || address == null) continue;
+            if (address != String.Empty)
+            {
+                ga.Attribute("Address")!.Value = address;
+            }
+
+            if (id == null || name == null) continue;
 
             var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
             var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
@@ -181,7 +188,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
        
         groupAddressMerger.MergeSingleElementGroups(_groupedAddresses, _ieAddressesSet);
     }
-
+    
     /// <summary>
     /// Processes an XML file in the standard format to extract and group addresses.
     ///
@@ -278,4 +285,43 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         groupAddressMerger.MergeSingleElementGroups(_groupedAddresses, _ieAddressesSet);
         groupAddressMerger.GetElementsBySimilarity("_VoletRoulant_Position_MaqKnxC_MaisonDupre_RezDeChaussee_Tgbt", _ieAddressesSet);
     }
+    
+    /// <summary>
+    /// Determines the level structure of group addresses in an XML document to check for overlaps.
+    /// 
+    /// This method examines an XML document containing group address ranges and specific group addresses.
+    /// It helps in identifying whether the group addresses are organized into 2 levels or 3 levels by detecting if there are any overlapping addresses.
+    /// 
+    /// If the addresses are detected to overlap, the method returns the value 3.
+    /// If no overlaps are found, the method returns the value 2.
+    /// 
+    /// <param name="doc">The XML document (XDocument) containing the group address ranges and specific group addresses.</param>
+    /// <returns>An integer indicating the overlap status: 3 for detected overlap, 2 for no overlap.</returns>
+    /// </summary>
+    public int DetermineGroupAddressStructure(XDocument doc)
+    {
+        // Ensemble pour vérifier les chevauchements d'adresses
+        HashSet<int> allAddresses = new HashSet<int>();
+
+        // Parcourir chaque GroupRange
+        foreach (var groupRange in doc.Descendants(GlobalKnxNamespace + "GroupRange"))
+        {
+            // Parcourir chaque GroupAddress du GroupRange
+            foreach (var groupAddress in groupRange.Descendants(GlobalKnxNamespace + "GroupAddress"))
+            {
+                int address = int.Parse(groupAddress.Attribute("Address")!.Value);
+
+                // Si l'adresse est déjà dans l'ensemble, il y a chevauchement
+                if (!allAddresses.Add(address))
+                {
+                    // Retourne 3 si un chevauchement est détecté
+                    return 3;
+                }
+            }
+        }
+
+        // Si aucun chevauchement n'est trouvé, retourne 2
+        return 2;
+    }
+
 }
