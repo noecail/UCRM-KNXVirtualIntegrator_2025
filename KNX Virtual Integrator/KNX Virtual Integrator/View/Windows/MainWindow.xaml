@@ -2,9 +2,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" 
+        WindowState="Maximized"
+        ResizeMode="CanResize"
+        WindowStyle="SingleBorderWindow"
+        Width="1366" Height="786"
         Closing="ClosingMainWindow">
 
     <!-- Conteneur principal -->
@@ -16,18 +20,20 @@
         </Grid.RowDefinitions>
 
         <!-- Buttons at the top -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" >
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
 
             <!-- Bouton Connexion -->
             <Button Style="{StaticResource IconButtonStyle}"
                     Tag="{StaticResource DisconnectedDrawingImage}"
-                    Margin="5,5,5,5"
+                    Margin="0,0,5,0"
+                    
             />
 
             <!-- Premier bouton Importation -->
             <Button Style="{StaticResource IconButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}" 
                     Click="Button_Click_1"
+                    Margin="5,0,0,0"     
             />
 
             <!-- Deuxième bouton Importation -->
@@ -35,6 +41,7 @@
                     Style="{StaticResource IconTextButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}"
                     Background="{StaticResource AccentuateBlue}"
+                    Margin="5,0"
             />
 
             <!-- Bouton Paramètres -->
@@ -43,16 +50,17 @@
                     Background="{StaticResource BackgroundWhite}"
                     BorderBrush="{StaticResource BorderGray}"
                     BorderThickness="1"
+                    Margin="0,0"
             />
         </StackPanel>
 
-        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
 
             <!-- Bouton de Test -->
             <Button Content="{StaticResource TestButton}"
                     Style="{StaticResource IconTextButtonStyle}"
                     Tag="{StaticResource playDrawingImage}"
-                    ToolTip="5"
+                    Margin="5,0"
             />
             <!-- Bouton d'Exportation -->
             <Button Content="{StaticResource ExportButton}"
@@ -71,13 +79,13 @@
                 <!-- Row for nested main content -->
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
                 <!-- Column for nested section 1 -->
-                <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="{Binding ColumnWidth}" />
                 <!-- Column for nested expandable section -->
                 <ColumnDefinition Width="Auto" />
                 <!-- Column for nested section 2 -->
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="0" />
                 <!-- Column for nested section 2 -->
                 <ColumnDefinition Width="*" />
                 <!-- Column for nested section 2 -->
@@ -117,7 +125,7 @@
                     <ListBoxItem Content="Item 3" />
                 </ListBox>
 
-        <!-- Deuxième colonne -->
+                <!-- Deuxième colonne -->
                 <!-- En-tête -->
                 <Grid Grid.Row="0" Grid.Column="1">
                     <Grid.ColumnDefinitions>
@@ -137,64 +145,84 @@
                     <Button Grid.Column="1"
                             Style="{StaticResource IconButtonStyle}"
                             Tag="{StaticResource CloseDrawingImage}"
-                            Background="Transparent"
+                            Background="Blue"
                             HorizontalAlignment="Right"
                             Margin="0"
+                            Command="{Binding HideColumnCommand}"
                     />
                 </Grid>
 
-                <Grid  Margin="10" Grid.Row="1" Grid.Column="1">
+                <Grid Margin="10,10,10,0" Grid.Row="1" Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Nom :" VerticalAlignment="Center" Grid.Row="0"/>
-                    <TextBox x:Name="NomTextBox" Width="200" Grid.Row="0" Margin="80,0,0,0"/>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" FocusVisualStyle="{x:Null}" BorderThickness="0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                                <TextBlock Text="{StaticResource Name:}" VerticalAlignment="Center" Grid.Row="0"/>
+                                <TextBox x:Name="NomTextBox2" HorizontalAlignment="Left" Width="200" Grid.Row="0"/>
 
-                    <TextBlock Text="DPT envoyé :" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
-                    <ComboBox x:Name="DptSortieComboBox" Width="200" Grid.Row="1" Margin="80,10,0,0">
-                        <ComboBoxItem Content="1 bit" />
-                        <ComboBoxItem Content="2 bits" />
-                        <ComboBoxItem Content="4 bits" />
-                        <!-- Ajoutez d'autres options ici si nécessaire -->
-                    </ComboBox>
+                                <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
+                                <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left" Grid.Row="1">
+                                    <ComboBoxItem Content="1 bit" />
+                                    <ComboBoxItem Content="2 bits" />
+                                    <ComboBoxItem Content="4 bits" />
+                                    <!-- Ajoutez d'autres options ici si nécessaire -->
+                                </ComboBox>
 
-                    <CheckBox x:Name="ParametresAvancesCheckBox" Foreground="White" 
-                              Content="Paramètres Avancés" Grid.Row="2" Margin="0,10,0,0"/>
+                                <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="Black" FocusVisualStyle="{x:Null}" 
+                                           Content="{StaticResource AdvancedSettings}" Grid.Row="2" Margin="0,10,0,0"/>
 
-                    <TextBlock Text="DPT de retour :" VerticalAlignment="Center" Grid.Row="3" Margin="0,10,0,0"/>
-                    <ComboBox x:Name="DptRetourComboBox" Width="200" Grid.Row="3" Margin="80,10,0,0">
-                        <ComboBoxItem Content="8 bit" />
-                        <ComboBoxItem Content="16 bits" />
-                        <!-- Ajoutez d'autres options ici si nécessaire -->
-                    </ComboBox>
+                                
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,10,0,0">
+                                <TextBlock Text="{StaticResource ExpectedDPT}" VerticalAlignment="Center" Grid.Row="3" Margin="0,10,0,0"/>
+                                <ComboBox x:Name="DptRetourComboBox2" HorizontalAlignment="Left" Width="200" Grid.Row="3">
+                                    <ComboBoxItem Content="8 bit" />
+                                    <ComboBoxItem Content="16 bits" />
+                                    <!-- Ajoutez d'autres options ici si nécessaire -->
+                                </ComboBox>
+                            </StackPanel>
 
-                    <StackPanel Grid.Row="4" Margin="0,10,0,0">
-                        <TextBlock Text="Valeur Envoyé / Valeur Attendue :" />
+                            <StackPanel Grid.Row="4" Margin="0,10,0,0">
+                                <TextBlock Text="{StaticResource TableTitleSentExpected}" />
 
-                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBox x:Name="ValeurEnvoye1TextBox" Width="50" />
-                            <TextBox x:Name="ValeurAttendue1TextBox" Width="50" Margin="10,0,0,0" />
-                        </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                    <Button Content="+" Width="30" Height="30" Margin="0,5,0,0"/>
+                                    <TextBox x:Name="ValeurEnvoye1TextBox" Width="50" Margin="10,0,0,0" />
+                                    <TextBox x:Name="ValeurAttendue1TextBox" Width="50" Margin="10,0,0,0" />
+                                </StackPanel>
 
-                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                            <TextBox x:Name="ValeurEnvoye2TextBox" Width="50" />
-                            <TextBox x:Name="ValeurAttendue2TextBox" Width="50" Margin="10,0,0,0" />
-                        </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                    <Button Content="-" Width="30" Height="29" Margin="0,5,0,0"/>
+                                    <TextBox x:Name="ValeurEnvoye2TextBox" Width="50" Margin="10,0,0,0" />
+                                    <TextBox x:Name="ValeurAttendue2TextBox" Width="50" Margin="10,0,0,0" />
+                                </StackPanel>
 
-                        <Button Content="+" Width="30" Height="30" Margin="0,5,0,0"/>
-                        <Button Content="-" Width="30" Height="30" Margin="40,5,0,0"/>
-                    </StackPanel>
+                                
+                                
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="5">
-                        <Button Content="Filtrer" Width="75" Margin="0,0,10,0"/>
-                        <Button Content="Enregistrer" Width="75"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Row="1">
+                        <Button Style="{StaticResource IconTextButtonStyle}"
+                                Tag="{StaticResource ImportedDrawingImage}"
+                                Content="Filtrer" />
+                        <Button Style="{StaticResource IconTextButtonStyle}"
+                                Tag="{StaticResource ImportedDrawingImage}"
+                                Content="Enregistrer"/>
                     </StackPanel>
                 </Grid>
+
 
                 <!-- Second GridSplitter -->
                 <GridSplitter Grid.Column="2" Grid.RowSpan="2" HorizontalAlignment="Center" Width="5" Background="{StaticResource BorderGray}" />

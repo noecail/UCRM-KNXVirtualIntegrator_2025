@@ -12,12 +12,12 @@
         <Setter Property="Foreground" Value="{StaticResource TextWhite}" />
         <Setter Property="BorderBrush" Value="Transparent" />
         <Setter Property="BorderThickness" Value="0" />
-        <Setter Property="FontSize" Value="14" />
+        <Setter Property="FontSize" Value="18" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Padding" Value="10,5,10,5"/>
         <Setter Property="Height" Value="40"/>
-        <Setter Property="Margin" Value="0,5,5,5"/>
+
         <!-- Hauteur du bouton -->
         <Setter Property="Template">
             <Setter.Value>
@@ -26,7 +26,6 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Padding="{TemplateBinding Padding}"
-                        Margin="{TemplateBinding Margin}"
                         CornerRadius="0">
                         <ContentPresenter HorizontalAlignment="Center"
                                       VerticalAlignment="Center"
@@ -41,7 +40,6 @@
 
     <!-- Style bouton avec icon et texte-->
     <Style x:Key="IconTextButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="ToolTip" Value="16" />        <!--Taille de l'icone par defaut -->
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -62,7 +60,7 @@
                                VerticalAlignment="Center"
                                HorizontalAlignment="Center"
                                Margin="0,0,5,0"
-                               Height="{TemplateBinding ToolTip}"
+                               Height="20"
                             />
 
                             <!-- Text -->
@@ -71,8 +69,7 @@
                                           VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              Margin="0,0,0,0"
-                             />
+                            />
                             
                         </Grid>
                     </Border>
@@ -83,8 +80,7 @@
 
     <!-- Style bouton avec icon -->
     <Style x:Key="IconButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=Height}" />
-        <Setter Property="ToolTip" Value="16" />        <!--Taille de l'icone par defaut -->
+        
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -92,7 +88,8 @@
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     Padding="{TemplateBinding Padding}"
-                    Margin="{TemplateBinding Margin}"
+                    Width="{TemplateBinding Height}"
+                    Height="{TemplateBinding Height}"
                     CornerRadius="0">
                         <Grid>
 
@@ -100,7 +97,7 @@
                             <Image Source="{TemplateBinding Tag}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Center"
-                           Height="{TemplateBinding ToolTip}"
+                           Height="20"
                            />
 
                         </Grid>
@@ -116,59 +113,6 @@
         <Setter Property="FontSize" Value="14" />
         <Setter Property="Padding" Value="5" />
         <Setter Property="Foreground" Value="{StaticResource TextBlack}" />
-    </Style>
-
-    <!-- Style pour l -->
-    <Style x:Key="CustomCheckBoxStyle" TargetType="CheckBox">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="CheckBox">
-                    <BulletDecorator Background="Transparent">
-                        <BulletDecorator.Bullet>
-                            <Grid Width="20" Height="20">
-                                <!-- Background Rectangle -->
-                                <Border x:Name="Border" Width="20" Height="20" 
-                                    Background="Transparent"
-                                    BorderBrush="Gray"
-                                    BorderThickness="2"
-                                    CornerRadius="3"/>
-                                <!-- Checkmark Path -->
-                                <Path 
-                      Width="7"
-                      Height="7"
-                      x:Name="CheckMark"
-                      SnapsToDevicePixels="False"
-                      StrokeThickness="2"
-                     Data="M 0 7 L 7 0"/>
-                            </Grid>
-                        </BulletDecorator.Bullet>
-                        <ContentPresenter VerticalAlignment="Center" Margin="5,0,0,0" />
-                    </BulletDecorator>
-
-                    <ControlTemplate.Triggers>
-                        <!-- Trigger when the CheckBox is checked -->
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="Blue"/>
-                            <Setter TargetName="CheckMark" Property="Stroke" Value="White"/>
-                        </Trigger>
-                        <!-- Trigger when the CheckBox is unchecked -->
-                        <Trigger Property="IsChecked" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="Transparent"/>
-                            <Setter TargetName="CheckMark" Property="Stroke" Value="Transparent"/>
-                        </Trigger>
-                        <!-- Trigger when the CheckBox is pressed -->
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#FF3366CC"/>
-                        </Trigger>
-                        <!-- Trigger when the CheckBox is disabled -->
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Border" Property="Background" Value="Gray"/>
-                            <Setter TargetName="CheckMark" Property="Stroke" Value="LightGray"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
 
 

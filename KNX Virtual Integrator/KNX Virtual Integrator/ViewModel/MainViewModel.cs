@@ -1,27 +1,145 @@
-﻿using System.Windows;
+﻿using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
+using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
+using System.ComponentModel;
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
 
 namespace KNX_Virtual_Integrator.ViewModel;
 
-public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
+public class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    public string ProjectFolderPath = "";
-    
-    public IApplicationSettings AppSettings => modelManager.AppSettings;
+    public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
 
-    
-    
-    
+    private readonly IBusConnection _busConnection;
+    private readonly WindowManager? _windowManager;
+
+    public IApplicationSettings AppSettings => _modelManager.AppSettings;
+    private readonly ModelManager _modelManager;  // Référence à ModelManager
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private GridLength _columnWidth = new GridLength(1, GridUnitType.Auto);
+
+    // Propriété ColumnWidth
+    public GridLength ColumnWidth
+    {
+        get { return _columnWidth; }
+        set
+        {
+            if (_columnWidth != value)
+            {
+                _columnWidth = value;
+                OnPropertyChanged(nameof(ColumnWidth)); // Notification du changement
+            }
+        }
+    }
+
+
+
+    /* ------------------------------------------------------------------------------------------------
+    ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    public MainViewModel(ModelManager modelManager)
+    {
+        // Initialisation des attributs
+        _modelManager = modelManager;
+        _windowManager = new WindowManager(this);
+  
+        ProjectFolderPath = "";
+
+
+        // Initialisation des commandes
+        ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
+            parameter =>
+            {
+                if (!string.IsNullOrWhiteSpace(parameter))
+                    modelManager.Logger.ConsoleAndLogWriteLine(parameter);
+            }
+        );
+
+        ExtractGroupAddressCommand = new Commands.RelayCommand<object>(
+            _ => modelManager.GroupAddressManager.ExtractGroupAddress()
+        );
+
+        HideColumnCommand = new Commands.RelayCommand<object>(
+            _ => HideColumn());
+
+        EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(
+            parameter =>
+            {
+                if (!string.IsNullOrWhiteSpace(parameter))
+                    modelManager.ApplicationFileManager.EnsureSettingsFileExists(parameter);
+            }
+        );
+
+        CreateDebugArchiveCommand = new Commands.RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
+            parameters =>
+            {
+                modelManager.DebugArchiveGenerator.CreateDebugArchive(
+                    parameters.IncludeOsInfo,
+                    parameters.IncludeHardwareInfo,
+                    parameters.IncludeImportedProjects
+                );
+            }
+        );
+
+        FindZeroXmlCommand = new Commands.RelayCommand<string>(
+            fileName => modelManager.FileFinder.FindZeroXml(fileName)
+        );
+
+
+        ConnectBusCommand = new RelayCommand(
+            () => modelManager.BusConnection.ConnectBusAsync()
+        );
+
+        DisconnectBusCommand = new RelayCommand(
+            () => modelManager.BusConnection.DisconnectBusAsync()
+        );
+
+        RefreshInterfacesCommand = new Commands.RelayCommand<object>(
+            _ => modelManager.BusConnection.DiscoverInterfacesAsync()
+        );
+
+        GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
+            _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
+        );
+
+        GroupValueWriteOffCommand = new Commands.RelayCommand<object>(
+            _ => modelManager.GroupCommunication.GroupValueWriteOffAsync()
+        );
+
+        SaveSettingsCommand = new Commands.RelayCommand<object>(
+            _ => modelManager.AppSettings.Save()
+        );
+
+        ExtractGroupAddressFileCommand = new RelayCommandWithResult<string, bool>(
+            fileName => modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName)
+        );
+
+        ExtractProjectFilesCommand = new RelayCommandWithResult<string, bool>(
+            fileName =>
+            {
+                var success = _modelManager.ProjectFileManager.ExtractProjectFiles(fileName);
+                //ProjectFolderPath = _modelManager.ProjectFileManager.ProjectFolderPath;
+                return success;
+            }
+        );
+    }
+
+
+
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -31,97 +149,85 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     // Si la fonction n'a pas d'arguments, la déclarer en tant que commande dont les paramètres sont de type "object"
     // et lors de l'utilisation, on écrira macommande.Execute(null);
     // Pour un exemple, voir : ExtractGroupAddressCommand
-    
-    
-    
-    
+
+
     /// <summary>
     /// Command that writes a line of text to the console and log if the provided parameter is not null or whitespace.
     /// </summary>
-    public ICommand ConsoleAndLogWriteLineCommand { get; } =
-        new RelayCommand<string>(
-            parameter =>
-            {
-                if (!string.IsNullOrWhiteSpace(parameter)) modelManager.Logger.ConsoleAndLogWriteLine(parameter);
-            }
-        );
+    public ICommand ConsoleAndLogWriteLineCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that extracts a group address using the GroupAddressManager.
     /// </summary>
-    public ICommand ExtractGroupAddressCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress());
+    public ICommand ExtractGroupAddressCommand { get; private set; }
 
-    
+    public ICommand HideColumnCommand { get; private set;}
+
+
+
+    /// <summary>
+    /// Command that ensures the settings file exists. Creates the file if it does not exist, using the provided file path.
+    /// </summary>
+    public ICommand EnsureSettingsFileExistsCommand { get; private set; }
+
+
     /// <summary>
     /// Command that creates a debug archive with optional OS info, hardware info, and imported projects.
     /// </summary>
     /// <param name="IncludeOsInfo">Specifies whether to include OS information in the debug archive.</param>
     /// <param name="IncludeHardwareInfo">Specifies whether to include hardware information in the debug archive.</param>
     /// <param name="IncludeImportedProjects">Specifies whether to include imported projects in the debug archive.</param>
-    public ICommand CreateDebugArchiveCommand { get; } =
-        new RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
-            parameters =>
-            {
-                modelManager.DebugArchiveGenerator.CreateDebugArchive(parameters.IncludeOsInfo,
-                    parameters.IncludeHardwareInfo,
-                    parameters.IncludeImportedProjects);
-            }
-        );
+    public ICommand CreateDebugArchiveCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that finds a zero XML file based on the provided file name.
     /// </summary>
     /// <param name="fileName">The name of the file to find.</param>
-    public ICommand FindZeroXmlCommand { get; } = new RelayCommand<string>(fileName => modelManager.FileFinder.FindZeroXml(fileName));
+    public ICommand FindZeroXmlCommand { get; private set; }
 
-    
+    public RelayCommand OpenConnectionWindowCommand { get; }
+
     /// <summary>
     /// Command that connects to the bus asynchronously.
     /// </summary>
-    public ICommand ConnectBusCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.BusConnection.ConnectBusAsync());
+    public RelayCommand ConnectBusCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that disconnects from the bus asynchronously.
     /// </summary>
-    public ICommand DisconnectBusCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.BusConnection.DisconnectBusAsync());
+    public RelayCommand DisconnectBusCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that refreshes the list of bus interfaces asynchronously.
     /// </summary>
-    public ICommand RefreshInterfacesCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.BusConnection.DiscoverInterfacesAsync());
+    public ICommand RefreshInterfacesCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that sends a group value write "on" command asynchronously.
     /// </summary>
-    public ICommand GroupValueWriteOnCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOnAsync());
+    public ICommand GroupValueWriteOnCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that sends a group value write "off" command asynchronously.
     /// </summary>
-    public ICommand GroupValueWriteOffCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.GroupCommunication.GroupValueWriteOffAsync());
+    public ICommand GroupValueWriteOffCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that saves the current application settings.
     /// </summary>
-    public ICommand SaveSettingsCommand { get; } =
-        new RelayCommand<object>(_ => modelManager.AppSettings.Save());
+    public ICommand SaveSettingsCommand { get; private set; }
 
-    
-    
-    
+
+
+
+
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -140,33 +246,31 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     // var maCommande = _viewModel.NOMDELACOMMANDE as RelayCommandWithResult<typeDuParametre, typeDeRetour>;
     //
     // if (maCommande != null) [UTILISATION DE maCommande DIRECTEMENT]
-    
-    
-    
-    
+
+
     /// <summary>
     /// Command that extracts a group address file based on the provided file name and returns a boolean indicating success.
     /// </summary>
     /// <param name="fileName">The name of the file to extract.</param>
     /// <returns>True if the extraction was successful; otherwise, false.</returns>
-    public ICommand ExtractGroupAddressFileCommand { get; } = new RelayCommandWithResult<string, bool>(fileName => 
-        modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName));
+    public ICommand ExtractGroupAddressFileCommand { get; private set; }
 
-    
+
     /// <summary>
     /// Command that extracts project files based on the provided file name and returns a boolean indicating success.
     /// </summary>
     /// <param name="fileName">The name of the file to extract.</param>
     /// <returns>True if the extraction was successful; otherwise, false.</returns>
-    public ICommand ExtractProjectFilesCommand { get; } = new RelayCommandWithResult<string, bool>(fileName =>
-        modelManager.ProjectFileManager.ExtractProjectFiles(fileName));
+    public ICommand ExtractProjectFilesCommand { get; private set; }
 
 
-    
-    
+
+
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- HANDLERS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+
+
     /// <summary>
     /// Handles the event when the left mouse button is pressed down on the slider.
     /// </summary>
@@ -174,7 +278,7 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// <param name="e">Event data for the mouse button event.</param>
     public void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
-        modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
+        _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
     }
 
     /// <summary>
@@ -184,7 +288,7 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// <param name="e">Event data for the mouse button event.</param>
     public void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
-        modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
+        _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
     }
 
     /// <summary>
@@ -194,12 +298,24 @@ public class MainViewModel (ModelManager modelManager) : INotifyPropertyChanged
     /// <param name="e">Event data for the mouse movement event.</param>
     public void SliderMouseMove(object sender, MouseEventArgs e)
     {
-        modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
+        _modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
     }
 
     public void OnSliderClick(object sender, RoutedEventArgs e)
     {
-        modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
+        _modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
     }
-    
+
+    // Méthode pour déclencher l'événement PropertyChanged
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    // Méthode pour cacher la colonne
+    private void HideColumn()
+    {
+        ColumnWidth = new GridLength(0);
+    }
+
 }

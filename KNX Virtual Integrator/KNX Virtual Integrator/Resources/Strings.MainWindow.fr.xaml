@@ -10,5 +10,10 @@
     <sys:String x:Key="LinkedModels">Modèles Liées</sys:String>
     <sys:String x:Key="UnlinkedModels">Modèles Non Liées</sys:String>
     <sys:String x:Key="AddModelsButton">Ajouter</sys:String>
+    <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
+    <sys:String x:Key="SentDPT">DPT envoyé :</sys:String>
+    <sys:String x:Key="Name:">Nom :</sys:String>
+    <sys:String x:Key="ExpectedDPT">DPT attendu :</sys:String>
+    <sys:String x:Key="TableTitleSentExpected">Valeur Envoyé / Valeur Attendue :</sys:String>
 
 </ResourceDictionary>
