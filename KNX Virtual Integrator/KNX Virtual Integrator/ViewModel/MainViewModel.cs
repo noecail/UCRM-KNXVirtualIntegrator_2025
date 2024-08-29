@@ -107,7 +107,10 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
 
         FindZeroXmlCommand = new Commands.RelayCommand<string>(
-            fileName => modelManager.FileFinder.FindZeroXml(fileName)
+            fileName =>
+            {
+                if (fileName != null) modelManager.FileFinder.FindZeroXml(fileName);
+            }
         );
 
         OpenConnectionWindowCommand = new RelayCommand(

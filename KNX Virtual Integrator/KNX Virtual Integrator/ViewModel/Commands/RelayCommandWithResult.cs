@@ -19,9 +19,9 @@ public class RelayCommandWithResult<T, TResult>(Func<T, TResult> execute, Func<T
     public TResult ExecuteWithResult(object? parameter)
     {
         // Assurez-vous que le paramètre est du type attendu
-        if (parameter is T tParameter)
+        if (parameter is T or null)
         {
-            return _execute(tParameter);
+            return _execute((T?)parameter!);
         }
         throw new ArgumentException($"Parameter is not of type {typeof(T).Name}");
     }
