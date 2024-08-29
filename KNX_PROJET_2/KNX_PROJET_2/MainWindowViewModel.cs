@@ -102,13 +102,13 @@ namespace KNX_PROJET_2
             
         }
 
-
+        //GESTIONNAIRE EVENEMENT POUR GROUPCOMMUNICATIONVIEWMODEL
         public event EventHandler<KnxBus> BusConnectedReady;
         protected virtual void OnBusConnectedReady(KnxBus bus)
         {
             BusConnectedReady?.Invoke(this, bus);
         }
-
+        //------------//
 
         private async Task ImportListGroupAddress()
         {
@@ -197,7 +197,7 @@ namespace KNX_PROJET_2
                     _bus.ConnectionStateChanged += BusConnectionStateChanged;
                     IsConnected = true;
                     UpdateConnectionState();
-                    OnBusConnectedReady(_bus);
+                    OnBusConnectedReady(_bus); //AVERTIR GROUPCOMMUNICATIONVIEWMODEL = cest bon tu peux commencer à ecouter les messages
                     MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 // Sinon, message d'erreur

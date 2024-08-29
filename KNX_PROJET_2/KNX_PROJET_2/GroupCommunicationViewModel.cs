@@ -25,7 +25,7 @@ namespace KNX_PROJET_2
         private readonly MainViewModel _globalViewModel;
 
         //________________________________________________________________________________________________________//
-
+        //GroupAddress et GroupValue pour envoi simple lampe garage on off
         private GroupAddress _groupAddressone;
         public GroupAddress GroupAddressone
         {
@@ -40,11 +40,8 @@ namespace KNX_PROJET_2
             set => Set(() => GroupValueone, ref _groupValueone, value);
         }
 
-
-
         //________________________________________________________________________________________________________//
-
-
+        //GroupAddress et GroupValue pour envoi trame global
         private GroupAddress _groupAddress;
         public GroupAddress GroupAddress
         {
@@ -55,6 +52,8 @@ namespace KNX_PROJET_2
         private readonly GroupValueViewModel _groupValue;
         public GroupValueViewModel GroupValue => _groupValue;
 
+        //________________________________________________________________________________________________________//
+        //Liste de GroupAddress et GroupValue pour envoi trame global sous forme de liste
         private List<(GroupAddress addr, GroupValue value)> _groupValues;
         public List<(GroupAddress addr, GroupValue value)> GroupValues
         {
@@ -62,6 +61,8 @@ namespace KNX_PROJET_2
             set => Set(() => GroupValues, ref _groupValues, value);
         }
 
+        //________________________________________________________________________________________________________//
+        //Liste de GroupAddress pour lecture trame global sous forme de liste
         private List<GroupAddress> _groupaddr;
         public List<GroupAddress> ListGroupAddr
         {
@@ -69,20 +70,9 @@ namespace KNX_PROJET_2
             set => Set(() => ListGroupAddr, ref _groupaddr, value);
         }
 
-        /*public List<(GroupAddress addr, GroupValue value)> GroupValues
-        {
-            get => _groupValues;
-            set
-            {
-                if (Set(() => GroupValues, ref _groupValues, value))
-                {
-                    // Notifiez les modifications
-                    RaisePropertyChanged(nameof(GroupValues));
-                }
-            }
-        }*/
-
+        
         //________________________________________________________________________________________________________//
+        //Toutes les commandes
         public ICommand GroupValueWriteONCommand { get; set; }
         public ICommand GroupValueWrite0FFCommand { get; set; }
 
@@ -97,7 +87,6 @@ namespace KNX_PROJET_2
         public GroupCommunicationViewModel(MainViewModel globalViewModel)
         {
             _globalViewModel = globalViewModel;
-            //_dispatcher = Dispatcher.CurrentDispatcher;
 
             _groupAddressone = new GroupAddress("0/1/1"); // Exemple d'adresse par défaut
             GroupValueWriteONCommand = new RelayCommand(async () => await GroupValueWriteONAsync());
@@ -116,7 +105,8 @@ namespace KNX_PROJET_2
             ReadGroupAddressCommand = new RelayCommand<object>(async (parameter) =>
             await ReadGroupAddressAsync(parameter as List<GroupAddress>));
 
-            // Initialisation de la liste GroupValues
+            
+            // Initialisation de la liste ENVOI DES TRAMES
             GroupValues = new List<(GroupAddress, GroupValue)>
             {
                 (new GroupAddress("0/1/1"), new GroupValue(true)),
@@ -124,6 +114,7 @@ namespace KNX_PROJET_2
                     
             };
 
+            // Initialisation de la liste LECTURE DES TRAMES
             ListGroupAddr = new List<GroupAddress>
             {
                 new GroupAddress("0/2/1"),
@@ -135,13 +126,10 @@ namespace KNX_PROJET_2
             _groupValue = new GroupValueViewModel(new GroupValue(false));
             //EST CE QUE CA SERT A QQCHOSE DE METTRE PAR DEFAUT ?
 
+            //Evenement un bus est detecte
             BusChanged(null, _globalViewModel._bus);
 
-            // Abonnez-vous à l'événement GroupMessageReceived
-            //_globalViewModel._bus.GroupMessageReceived += OnGroupMessageReceived;
-
-            // Abonne-toi à l'événement BusConnected
-
+            //Des que jai BusConnectedReady je m'abonne à l'événement OnBusConnectedReady donc je suis pret à faire ce quil y a dedans
             _globalViewModel.BusConnectedReady += OnBusConnectedReady;
         }
         
@@ -166,7 +154,7 @@ namespace KNX_PROJET_2
         }
 
         //________________________________________________________________________________________________________//
-
+        //TACHE ENVOYER TRAME NORMALE
         private async Task GroupValueWriteAsync()
         {
 
@@ -192,21 +180,8 @@ namespace KNX_PROJET_2
             }
         }
 
-        /*
-        private GroupAddress _readGroupAddress;
-        public GroupAddress ReadGroupAddress
-        {
-            get => _readGroupAddress;
-            set => Set(() => ReadGroupAddress, ref _readGroupAddress, value);
-        }
-
-        private string _readGroupValue;
-        public string ReadGroupValue
-        {
-            get => _readGroupValue;
-            set => Set(() => ReadGroupValue, ref _readGroupValue, value);
-        }*/
-
+        
+        //TACHE LECTURE TRAME NORMALE
         private async Task GroupValueReadAsync()
         {
             try
@@ -229,6 +204,7 @@ namespace KNX_PROJET_2
                                 "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
 
         // Liste observable pour les messages reçus
         public ObservableCollection<GroupMessage> Messages { get; private set; } = new ObservableCollection<GroupMessage>();
@@ -255,9 +231,7 @@ namespace KNX_PROJET_2
                 Console.WriteLine("Les paramètres de l'événement sont null.");
                 return; // Arrêter l'exécution si e est null
             }
-            // Test de verification
-            //MessageBox.Show($"Message reçu: Adresse - {e.DestinationAddress}, Valeur - {e.Value}");
-            //bool messagerecu = true;
+            
         
             // Crée une nouvelle entrée pour le message reçu
             var newMessage = new GroupMessage
@@ -265,10 +239,10 @@ namespace KNX_PROJET_2
                 SourceAddress = e.SourceAddress,
                 DestinationAddress = e.DestinationAddress,
                 Value = e.Value,
-                EventType = e.EventType // Définir le type d'événement si nécessaire
+                EventType = e.EventType 
             };
 
-            // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
+            // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher ???????
             Application.Current.Dispatcher.Invoke(() =>
             {
                 // Ajoute la nouvelle entrée à la liste observable
@@ -278,7 +252,7 @@ namespace KNX_PROJET_2
         }
 
 
-
+        //TACHE ENVOYER TRAME LISTE
         private async Task SendGroupValuesAsync(List<(GroupAddress addr, GroupValue value)> groupValues)
         {
             if (groupValues == null || !groupValues.Any())
@@ -309,7 +283,7 @@ namespace KNX_PROJET_2
         }
 
 
-
+        //TACHE LECTURE TRAME LISTE
         private async Task ReadGroupAddressAsync(List<GroupAddress> groupAddresses)
         {
             if (groupAddresses == null)
@@ -347,7 +321,7 @@ namespace KNX_PROJET_2
 
 
         //________________________________________________________________________________________________________//
-
+        //TACHES EXEMPLE SIMPLE POUR GARAGE ON OFF
         private async Task GroupValueWriteONAsync()
         {
             
@@ -403,19 +377,6 @@ namespace KNX_PROJET_2
             }
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
