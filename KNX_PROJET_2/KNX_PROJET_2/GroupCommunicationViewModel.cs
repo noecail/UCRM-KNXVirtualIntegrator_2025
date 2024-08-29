@@ -13,6 +13,8 @@ using System.Windows.Input;
 using System.Xml.Linq;
 using Knx.Falcon.Configuration;
 using Knx.Falcon.Sdk;
+using System.Windows.Threading;
+using System.Net;
 
 
 
@@ -60,6 +62,19 @@ namespace KNX_PROJET_2
             set => Set(() => GroupValues, ref _groupValues, value);
         }
 
+        /*public List<(GroupAddress addr, GroupValue value)> GroupValues
+        {
+            get => _groupValues;
+            set
+            {
+                if (Set(() => GroupValues, ref _groupValues, value))
+                {
+                    // Notifiez les modifications
+                    RaisePropertyChanged(nameof(GroupValues));
+                }
+            }
+        }*/
+
         //________________________________________________________________________________________________________//
         public ICommand GroupValueWriteONCommand { get; set; }
         public ICommand GroupValueWrite0FFCommand { get; set; }
@@ -74,14 +89,15 @@ namespace KNX_PROJET_2
         public GroupCommunicationViewModel(MainViewModel globalViewModel)
         {
             _globalViewModel = globalViewModel;
+            //_dispatcher = Dispatcher.CurrentDispatcher;
 
             _groupAddressone = new GroupAddress("0/1/1"); // Exemple d'adresse par défaut
             GroupValueWriteONCommand = new RelayCommand(async () => await GroupValueWriteONAsync());
             GroupValueWrite0FFCommand = new RelayCommand(async () => await GroupValueWrite0FFAsync());
 
 
-            GroupValueReadCommand = new RelayCommand(
-                async () => await GroupValueReadAsync(), () => _globalViewModel.IsConnected && !_globalViewModel.IsBusy);
+            GroupValueReadCommand = new RelayCommand<object>(async (parameter) => 
+                await GroupValueReadAsync(parameter as List<(GroupAddress, GroupValue)>));
 
             GroupValueWriteCommand = new RelayCommand(
                 async () => await GroupValueWriteAsync(), () => _globalViewModel.IsConnected && !_globalViewModel.IsBusy);
@@ -101,9 +117,36 @@ namespace KNX_PROJET_2
             //_groupAddress = new GroupAddress("0/1/2"); // Exemple d'adresse par défaut
             _groupValue = new GroupValueViewModel(new GroupValue(false));
             //EST CE QUE CA SERT A QQCHOSE DE METTRE PAR DEFAUT ?
+
+            BusChanged(null, _globalViewModel._bus);
+
+            // Abonnez-vous à l'événement GroupMessageReceived
+            //_globalViewModel._bus.GroupMessageReceived += OnGroupMessageReceived;
+
+            // Abonne-toi à l'événement BusConnected
+
+            _globalViewModel.BusConnectedReady += OnBusConnectedReady;
         }
+        
+        
+        
+        private readonly ObservableCollection<GroupEventArgs> _groupEvents = new ObservableCollection<GroupEventArgs>();
+        public ObservableCollection<GroupEventArgs> GroupEvents => _groupEvents;
 
-
+        private void OnBusConnectedReady(object sender, KnxBus newBus)
+        {
+            // Appelle BusChanged avec le nouveau bus
+            BusChanged(null, newBus);
+            //attention potentiellement si je me connecte à un nouveau bus lancien va pas se desabonner de levenement dans BusChanged
+        }
+        internal void BusChanged(KnxBus oldBus, KnxBus newBus)
+        {
+            if (oldBus != null)
+                oldBus.GroupMessageReceived -= OnGroupMessageReceived;
+            if (newBus != null)
+                newBus.GroupMessageReceived += OnGroupMessageReceived;
+            _groupEvents.Clear();
+        }
 
         //________________________________________________________________________________________________________//
 
@@ -132,44 +175,119 @@ namespace KNX_PROJET_2
             }
         }
 
-
-        //fonction a verifier plus tard = creer endroit ou lire les trames
-        private async Task GroupValueReadAsync()
+        /*
+        private GroupAddress _readGroupAddress;
+        public GroupAddress ReadGroupAddress
         {
+            get => _readGroupAddress;
+            set => Set(() => ReadGroupAddress, ref _readGroupAddress, value);
+        }
+
+        private string _readGroupValue;
+        public string ReadGroupValue
+        {
+            get => _readGroupValue;
+            set => Set(() => ReadGroupValue, ref _readGroupValue, value);
+        }*/
+
+        
+
+        private async Task GroupValueReadAsync(List<(GroupAddress addr, GroupValue value)> groupValues)
+        {
+            if (groupValues == null || groupValues.Count == 0)
+            {
+                MessageBox.Show("La liste des valeurs de groupe est vide ou nulle.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Crée une nouvelle liste pour stocker les résultats de lecture
+            var updatedGroupValues = new List<(GroupAddress addr, GroupValue value)>(groupValues);
 
             try
             {
                 if (_globalViewModel.IsConnected && !_globalViewModel.IsBusy)
                 {
-                    await _globalViewModel._bus.RequestGroupValueAsync(
-                        GroupAddress, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token
-                    );
-                    //Settings.Default.GroupAddress = GroupAddress;
+                    foreach (var (addr, _) in groupValues)
+                    {
+                        var readValue = await _globalViewModel._bus.ReadGroupValueAsync(
+                            addr, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
+
+                        // Met à jour la valeur lue dans la nouvelle liste
+                        var index = updatedGroupValues.FindIndex(item => item.addr == addr);
+                        if (index != -1)
+                        {
+                            updatedGroupValues[index] = (addr, readValue);
+                        }
+                    }
+
+                    // Remplace la liste d'origine par la nouvelle liste mise à jour
+                    GroupValues = updatedGroupValues;
+
+                    // Notifie l'interface utilisateur que les valeurs ont été mises à jour
+                    RaisePropertyChanged(nameof(GroupValues));
                 }
                 else
                 {
-                    MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.",
+                                    "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
                 }
-
             }
             catch (Exception ex)
             {
-                switch (ex)
-                {
-                    case NullReferenceException _ when GroupAddress == "0/0/0":
-                        MessageBox.Show("L'adresse de groupe est nulle. Veuillez remplir le champ d'adresse de groupe.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                        break;
-                    default:
-                        MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-                        break;
-                }
+                MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
+                                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
 
+        // Liste observable pour les messages reçus
+        public ObservableCollection<GroupMessage> Messages { get; private set; } = new ObservableCollection<GroupMessage>();
+
+        public class GroupMessage
+        {
+            public GroupAddress DestinationAddress { get; set; }
+            public IndividualAddress SourceAddress { get; set; }
+            public GroupValue Value { get; set; }
+            public GroupEventType EventType { get; set; } // Type d'événement, si nécessaire
         }
 
 
- 
+        //Ce qui ce declenche à l'evenement
+        private void OnGroupMessageReceived(object sender, GroupEventArgs e)
+        {
+            if (sender == null)
+            {
+                Console.WriteLine("Le sender est null.");
+            }
+
+            if (e == null)
+            {
+                Console.WriteLine("Les paramètres de l'événement sont null.");
+                return; // Arrêter l'exécution si e est null
+            }
+            // Test de verification
+            //MessageBox.Show($"Message reçu: Adresse - {e.DestinationAddress}, Valeur - {e.Value}");
+            //bool messagerecu = true;
+        
+            // Crée une nouvelle entrée pour le message reçu
+            var newMessage = new GroupMessage
+            {
+                SourceAddress = e.SourceAddress,
+                DestinationAddress = e.DestinationAddress,
+                Value = e.Value,
+                EventType = e.EventType // Définir le type d'événement si nécessaire
+            };
+
+            // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                // Ajoute la nouvelle entrée à la liste observable
+                Messages.Add(newMessage);
+            });
+            
+        }
+
+
 
         private async Task SendGroupValuesAsync(List<(GroupAddress addr, GroupValue value)> groupValues)
         {

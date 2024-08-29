@@ -20,6 +20,7 @@ namespace KNX_PROJET_2
         {
             var viewModel = (MainViewModel)this.DataContext;
             await viewModel.DiscoverInterfacesAsync();
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

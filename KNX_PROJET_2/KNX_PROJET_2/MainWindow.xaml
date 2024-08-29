@@ -97,47 +97,71 @@
             <StackPanel Orientation="Vertical"><!-- Instance of GroupAddressList UserControl -->
                 <ListBox Name="GroupAddressListBox" 
                          ItemsSource="{Binding GroupAddresses}"
-                         Width="700" Height="150" 
+                         Width="700" Height="10" 
                          Margin="0,10,0,0">
                 </ListBox>
-                
-                
-                
+            </StackPanel>
+        </GroupBox>
+            
+        <!-- Modeles Section -->
+        <GroupBox Header="Modèles" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
+            <StackPanel Orientation="Vertical">
                 <StackPanel Orientation="Horizontal">
-                    <Label Grid.Row="0" Grid.Column="0" Content="Group Address:"  Margin="4" VerticalAlignment="Center" />
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding GroupCommunicationVM.GroupAddress, Converter={StaticResource GroupAddressConverter}}" MinWidth="100" Margin="4" VerticalAlignment="Center" />
-                    <Button Grid.Row="0" Grid.Column="2" Content="Read" Command="{Binding GroupCommunicationVM.GroupValueReadCommand}" MinWidth="120" Margin="4" VerticalAlignment="Center"/>
+                        <Label Grid.Row="0" Grid.Column="0" Content="Group Address:"  Margin="4" VerticalAlignment="Center" />
+                        <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding GroupCommunicationVM.GroupAddress, Converter={StaticResource GroupAddressConverter}}" MinWidth="100" Margin="4" VerticalAlignment="Center" />
+                        <Button Grid.Row="0" Grid.Column="2" Content="Read" Command="{Binding GroupCommunicationVM.GroupValueReadCommand}" MinWidth="120" Margin="4" VerticalAlignment="Center"/>
                     
-                    <Label Grid.Row="1" Grid.Column="0" Content="Value:"  Margin="4" VerticalAlignment="Center" />
-                    <TextBox Grid.Column="0" Text="{Binding GroupCommunicationVM.GroupValue.Value, Converter={StaticResource GroupValueConverter}}" MinWidth="100" Margin="4" VerticalAlignment="Center" />
-                    <Button Grid.Row="1" Grid.Column="2" Content="Write" Command="{Binding GroupCommunicationVM.GroupValueWriteCommand}" MinWidth="120" Margin="4" VerticalAlignment="Center"/>
+                        <Label Grid.Row="1" Grid.Column="0" Content="Value:"  Margin="4" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="0" Text="{Binding GroupCommunicationVM.GroupValue.Value, Converter={StaticResource GroupValueConverter}}" MinWidth="100" Margin="4" VerticalAlignment="Center" />
+                        <Button Grid.Row="1" Grid.Column="2" Content="Write" Command="{Binding GroupCommunicationVM.GroupValueWriteCommand}" MinWidth="120" Margin="4" VerticalAlignment="Center"/>
                 </StackPanel>
-                
-                
                 
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Test d'envoi allumer" 
-                                    Command="{Binding GroupCommunicationVM.GroupValueWriteONCommand}"
-                                    Margin="10" Click="Button_Click"/>
+                        Command="{Binding GroupCommunicationVM.GroupValueWriteONCommand}"
+                        Margin="10" Click="Button_Click"/>
                     <Button Content="Test d'envoi éteindre" 
-                            Command="{Binding GroupCommunicationVM.GroupValueWrite0FFCommand}"
-                            Margin="10"/>
+                        Command="{Binding GroupCommunicationVM.GroupValueWrite0FFCommand}"
+                        Margin="10"/>
                 </StackPanel>
                 
                 <StackPanel Orientation="Horizontal">
                     <Button Content="Envoyer Trames" Command="{Binding  GroupCommunicationVM.SendGroupValuesCommand}" CommandParameter="{Binding  GroupCommunicationVM.GroupValues}" />
                 </StackPanel>
 
+                <Grid>
+                    <DataGrid  Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="4" Height="120" 
+                                      ItemsSource="{Binding GroupCommunicationVM.Messages}" IsSynchronizedWithCurrentItem="True"
+                                      AutoGenerateColumns="False" IsReadOnly="True" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header ="EventType" Binding="{Binding EventType}" />
+                            <DataGridTextColumn Header ="SourceAddress" Binding="{Binding SourceAddress}" />
+                            <DataGridTextColumn Header ="DestinationAddress" Binding="{Binding DestinationAddress}" />
+                            <DataGridTextColumn Header ="Value" Binding="{Binding Value}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+
+
+                <!--<Grid>
+                    <ListView ItemsSource="{Binding GroupCommunicationVM.GroupValues}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="Group Address" Width="150" DisplayMemberBinding="{Binding addr}" />
+                                <GridViewColumn Header="Group Value" Width="150" DisplayMemberBinding="{Binding value}" />
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                    <Button Content="Lire les valeurs" Command="{Binding GroupCommunicationVM.GroupValueReadCommand}" 
+                            CommandParameter="{Binding  GroupCommunicationVM.GroupValues}"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="120" Margin="10"/>
+                </Grid>-->
+
             </StackPanel>
-            
         </GroupBox>
 
-        <!-- Modeles Section -->
-        <GroupBox Header="Modèles" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">
-            <StackPanel Orientation="Horizontal">
-                <ListBox Name="ModelesBox" Width="400" Height="50" />
-            </StackPanel>
-        </GroupBox>
+
 
         <!-- Test Buttons Section -->
         <GroupBox Header="Tester les modèles" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
