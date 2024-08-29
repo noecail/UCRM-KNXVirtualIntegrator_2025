@@ -80,7 +80,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         {
             var id = ga.Attribute("Id")?.Value;
             var name = ga.Attribute("Name")?.Value;
-            var address = groupAddressProcessor.DecodeValueToString(ga.Attribute("Address")?.Value ?? string.Empty, groupAddressStructure);
+            // Convert the address to the x/x/x format (depending on the groupAddressStructure)
+            var address = groupAddressProcessor.DecodeAddress(ga.Attribute("Address")?.Value ?? string.Empty, groupAddressStructure); 
 
             if (address != String.Empty)
             {
@@ -187,6 +188,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         }
        
         groupAddressMerger.MergeSingleElementGroups(_groupedAddresses, _ieAddressesSet);
+        
+        
     }
     
     /// <summary>

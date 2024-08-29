@@ -110,7 +110,7 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
     /// <param name="groupAddressStructure">An integer indicating the group address structure: 2 for 2-level and 3 for 3-level.</param>
     /// <returns>A formatted string representing the decoded value based on the group address structure. Returns the original string if conversion fails or if the structure is unrecognized.</returns>
     /// </summary>
-    public string DecodeValueToString(string valueString, int groupAddressStructure)
+    public string DecodeAddress(string valueString, int groupAddressStructure)
     {
         // Convertir la chaîne en entier
         if (!int.TryParse(valueString, out int value))
