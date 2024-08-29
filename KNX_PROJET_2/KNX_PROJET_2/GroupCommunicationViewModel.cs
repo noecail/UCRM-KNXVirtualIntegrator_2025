@@ -62,6 +62,13 @@ namespace KNX_PROJET_2
             set => Set(() => GroupValues, ref _groupValues, value);
         }
 
+        private List<GroupAddress> _groupaddr;
+        public List<GroupAddress> ListGroupAddr
+        {
+            get => _groupaddr;
+            set => Set(() => ListGroupAddr, ref _groupaddr, value);
+        }
+
         /*public List<(GroupAddress addr, GroupValue value)> GroupValues
         {
             get => _groupValues;
@@ -83,6 +90,7 @@ namespace KNX_PROJET_2
         public ICommand GroupValueWriteCommand { get; set; }
 
         public ICommand SendGroupValuesCommand { get; set; }
+        public ICommand ReadGroupAddressCommand { get; set; }
 
         //________________________________________________________________________________________________________//
 
@@ -97,21 +105,30 @@ namespace KNX_PROJET_2
 
 
             GroupValueReadCommand = new RelayCommand<object>(async (parameter) => 
-                await GroupValueReadAsync(parameter as List<(GroupAddress, GroupValue)>));
+            await GroupValueReadAsync());
 
             GroupValueWriteCommand = new RelayCommand(
-                async () => await GroupValueWriteAsync(), () => _globalViewModel.IsConnected && !_globalViewModel.IsBusy);
+            async () => await GroupValueWriteAsync(), () => _globalViewModel.IsConnected && !_globalViewModel.IsBusy);
 
             SendGroupValuesCommand = new RelayCommand<object>(async (parameter) => 
             await SendGroupValuesAsync(parameter as List<(GroupAddress, GroupValue)>));
 
+            ReadGroupAddressCommand = new RelayCommand<object>(async (parameter) =>
+            await ReadGroupAddressAsync(parameter as List<GroupAddress>));
+
             // Initialisation de la liste GroupValues
             GroupValues = new List<(GroupAddress, GroupValue)>
-                {
-                    (new GroupAddress("0/1/1"), new GroupValue(true)),
-                    (new GroupAddress("1/0/1"), new GroupValue(true)),
+            {
+                (new GroupAddress("0/1/1"), new GroupValue(true)),
+                (new GroupAddress("1/0/1"), new GroupValue(true)),
                     
-                };
+            };
+
+            ListGroupAddr = new List<GroupAddress>
+            {
+                new GroupAddress("0/2/1"),
+                new GroupAddress("1/4/1")
+            };
 
             //Initialisation @ de groupe + GroupValue = type booleen 1 bit
             //_groupAddress = new GroupAddress("0/1/2"); // Exemple d'adresse par défaut
@@ -190,41 +207,14 @@ namespace KNX_PROJET_2
             set => Set(() => ReadGroupValue, ref _readGroupValue, value);
         }*/
 
-        
-
-        private async Task GroupValueReadAsync(List<(GroupAddress addr, GroupValue value)> groupValues)
+        private async Task GroupValueReadAsync()
         {
-            if (groupValues == null || groupValues.Count == 0)
-            {
-                MessageBox.Show("La liste des valeurs de groupe est vide ou nulle.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
-            // Crée une nouvelle liste pour stocker les résultats de lecture
-            var updatedGroupValues = new List<(GroupAddress addr, GroupValue value)>(groupValues);
-
             try
             {
                 if (_globalViewModel.IsConnected && !_globalViewModel.IsBusy)
                 {
-                    foreach (var (addr, _) in groupValues)
-                    {
-                        var readValue = await _globalViewModel._bus.ReadGroupValueAsync(
-                            addr, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
-
-                        // Met à jour la valeur lue dans la nouvelle liste
-                        var index = updatedGroupValues.FindIndex(item => item.addr == addr);
-                        if (index != -1)
-                        {
-                            updatedGroupValues[index] = (addr, readValue);
-                        }
-                    }
-
-                    // Remplace la liste d'origine par la nouvelle liste mise à jour
-                    GroupValues = updatedGroupValues;
-
-                    // Notifie l'interface utilisateur que les valeurs ont été mises à jour
-                    RaisePropertyChanged(nameof(GroupValues));
+                        var readValue = await _globalViewModel._bus.RequestGroupValueAsync(
+                        GroupAddress, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
                 }
                 else
                 {
@@ -315,6 +305,43 @@ namespace KNX_PROJET_2
             catch (Exception ex)
             {
                 MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
+
+        private async Task ReadGroupAddressAsync(List<GroupAddress> groupAddresses)
+        {
+            if (groupAddresses == null)
+            {
+                MessageBox.Show("La liste des adresses de groupe est nulle.",
+                                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            try
+            {
+                if (_globalViewModel.IsConnected && !_globalViewModel.IsBusy)
+                {
+                    foreach (var address in groupAddresses)
+                    {
+                        var readValue = await _globalViewModel._bus.RequestGroupValueAsync(
+                            address, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
+
+                        // Traite la valeur lue comme nécessaire
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.",
+                                    "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
+                                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
