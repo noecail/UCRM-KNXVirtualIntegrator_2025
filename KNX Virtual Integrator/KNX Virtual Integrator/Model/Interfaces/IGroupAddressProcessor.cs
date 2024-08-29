@@ -37,4 +37,29 @@ public interface IGroupAddressProcessor
     /// </summary>
     public Dictionary<string, List<XElement>> FilterElements(Dictionary<string, List<XElement>> dictionary);
 
+    /// <summary>
+    /// Decodes a string representing a numeric value into a formatted string based on the group address structure.
+    /// 
+    /// This method takes a string representation of a numeric value and converts it into a formatted string. The format of the output string depends on the specified group address structure:
+    /// 
+    /// - For a 3-level group address structure, the value is decoded into three components: "champ1/champ2/champ3".
+    /// - For a 2-level group address structure, the value is decoded into two components: "champ1/champ2".
+    /// 
+    /// The decoding is performed as follows:
+    /// - For 3-level structure:
+    ///   - The third component (`champ3`) is extracted as the least significant 8 bits.
+    ///   - The second component (`champ2`) is extracted as the next 3 bits.
+    ///   - The first component (`champ1`) is extracted as the most significant 5 bits.
+    /// - For 2-level structure:
+    ///   - The second component (`champ2`) is extracted as the least significant 11 bits.
+    ///   - The first component (`champ1`) is extracted as the next 5 bits.
+    /// 
+    /// If the input string cannot be converted to an integer, or if the group address structure is not recognized, the method logs an error message and returns the original input string.
+    /// 
+    /// <param name="valueString">The string representation of the numeric value to decode.</param>
+    /// <param name="groupAddressStructure">An integer indicating the group address structure: 2 for 2-level and 3 for 3-level.</param>
+    /// <returns>A formatted string representing the decoded value based on the group address structure. Returns the original string if conversion fails or if the structure is unrecognized.</returns>
+    /// </summary>
+    public string DecodeAddress(string valueString, int groupAddressStructure);
+
 }

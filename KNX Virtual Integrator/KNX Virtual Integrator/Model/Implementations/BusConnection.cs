@@ -2,6 +2,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Knx.Falcon;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Interfaces;
@@ -21,9 +22,9 @@ public class BusConnection : ObservableObject ,IBusConnection
 
     // Propriétés liées à l'interface utilisateur //test
     public ObservableCollection<ConnectionInterfaceViewModel>? GroupAddresses { get; private set; }
-    public ObservableCollection<ConnectionInterfaceViewModel>? DiscoveredInterfaces { get; private set; }
+    public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces { get; private set; }
     
-    //public GroupCommunicationViewModel GroupCommunicationVM { get; }
+    public bool IsBusConnected => IsConnected;
 
     private ConnectionInterfaceViewModel? _selectedInterface;
     public ConnectionInterfaceViewModel? SelectedInterface
@@ -43,7 +44,12 @@ public class BusConnection : ObservableObject ,IBusConnection
     public bool IsConnected
     {
         get => _isConnected;
-        set => Set(ref _isConnected, value);
+        set
+        {
+            if (_isConnected == value) return;
+            _isConnected = value;
+            OnPropertyChanged(nameof(IsConnected));
+        }
     }
 
     private string? _connectionState;
@@ -297,4 +303,20 @@ public class BusConnection : ObservableObject ,IBusConnection
         CancellationTokenSource?.Dispose();
         CancellationTokenSource = new CancellationTokenSource();
     }
+    
+    private void BusConnection_PropertyChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(BusConnection.IsConnected))
+        {
+            OnPropertyChanged(nameof(IsConnected));
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    
 }

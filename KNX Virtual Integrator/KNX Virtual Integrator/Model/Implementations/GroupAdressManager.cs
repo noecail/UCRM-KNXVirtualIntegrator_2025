@@ -9,8 +9,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     private readonly ILogger _logger = logger;
 
     public static XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01";
-    private static readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();
-    private readonly List<XElement> ieAddressesSet = new();
+    private readonly Dictionary<string, List<XElement>> _groupedAddresses = new ();
+    private readonly List<XElement> _ieAddressesSet = new();
 
     /// <summary>
     /// Extracts group address information from a specified XML file.
@@ -56,8 +56,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         /// Initialiser le dictionnaire pour les adresses qui commencent par "Ie" avec un HashSet pour éviter les doublons
         var ieAddresses = new HashSet<string>();
         
-        ieAddressesSet.Clear();
-        GroupedAddresses.Clear();
+        _ieAddressesSet.Clear();
+        _groupedAddresses.Clear();
+
+        int groupAddressStructure = DetermineGroupAddressStructure(groupAddressFile);
         
         // Étape 1 : Extraire les références des appareils
         var deviceRefs = groupAddressFile.Descendants(GlobalKnxNamespace + "DeviceInstance")
@@ -78,9 +80,15 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         {
             var id = ga.Attribute("Id")?.Value;
             var name = ga.Attribute("Name")?.Value;
-            var address = ga.Attribute("Address")?.Value;
+            // Convert the address to the x/x/x format (depending on the groupAddressStructure)
+            var address = groupAddressProcessor.DecodeAddress(ga.Attribute("Address")?.Value ?? string.Empty, groupAddressStructure); 
 
-            if (id == null || name == null || address == null) continue;
+            if (address != String.Empty)
+            {
+                ga.Attribute("Address")!.Value = address;
+            }
+
+            if (id == null || name == null) continue;
 
             var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
             var linkedDevices = deviceRefs.Where(dr => dr.Links.Contains(gaId));
@@ -122,7 +130,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 {
                     if (ieAddresses.Add(address)) // Essaie d'ajouter l'adresse, retourne vrai si l'adresse n'était pas déjà dans l'ensemble
                     {
-                        ieAddressesSet.Add(ga);
+                        _ieAddressesSet.Add(ga);
                     }
                 }
             }
@@ -135,7 +143,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             var gaIds = entry.Value;
 
             // Chercher l'entrée existante basée sur le commonName et le DeviceId
-            var existingEntry = GroupedAddresses.FirstOrDefault(g =>
+            var existingEntry = _groupedAddresses.FirstOrDefault(g =>
                 gaIds.All(id => g.Value.Any(x => x.Attribute("Id")?.Value == id)) ||
                 g.Value.Select(x => x.Attribute("Id")?.Value).All(id => gaIds.Contains(id ?? string.Empty)));
 
@@ -155,34 +163,35 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             else
             {
                 _logger.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
-                GroupedAddresses[commonName] = gaIds.Select(id => groupAddresses.First(x => x.Attribute("Id")?.Value == id)).ToList();
+                _groupedAddresses[commonName] = gaIds.Select(id => groupAddresses.First(x => x.Attribute("Id")?.Value == id)).ToList();
             }
         }
 
         // Étape 4 : Finaliser les regroupements sous les adresses "Cmd"
-        foreach (var entry in GroupedAddresses)
+        foreach (var entry in _groupedAddresses)
         {
             var cmdAddress = entry.Value.FirstOrDefault(x => (bool)x.Attribute("Name")?.Value.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase));
 
             if (cmdAddress != null)
             {
                 var commonName = entry.Key;
-                GroupedAddresses[commonName] = new List<XElement> { cmdAddress };
+                _groupedAddresses[commonName] = new List<XElement> { cmdAddress };
 
                 // Ajouter toutes les adresses "Ie" correspondantes sous le même nom commun
-                GroupedAddresses[commonName].AddRange(entry.Value.Where(x => (bool)x.Attribute("Name")?.Value.StartsWith("Ie", StringComparison.OrdinalIgnoreCase)));
+                _groupedAddresses[commonName].AddRange(entry.Value.Where(x => (bool)x.Attribute("Name")?.Value.StartsWith("Ie", StringComparison.OrdinalIgnoreCase)));
             }
             else
             {
                 // Si aucune adresse "Cmd" n'est trouvée, ajouter le groupe tel quel
-                GroupedAddresses[entry.Key] = entry.Value;
+                _groupedAddresses[entry.Key] = entry.Value;
             }
         }
        
-        groupAddressMerger.MergeSingleElementGroups(GroupedAddresses);
-        groupAddressProcessor.FilterElements(GroupedAddresses);
+        groupAddressMerger.MergeSingleElementGroups(_groupedAddresses, _ieAddressesSet);
+        
+        
     }
-
+    
     /// <summary>
     /// Processes an XML file in the standard format to extract and group addresses.
     ///
@@ -193,8 +202,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// </summary>
     public void ProcessStandardXmlFile(XDocument groupAddressFile)
     {
-        ieAddressesSet.Clear();
-        GroupedAddresses.Clear();
+        _ieAddressesSet.Clear();
+        _groupedAddresses.Clear();
         var groupAddresses = groupAddressFile.Descendants(GlobalKnxNamespace + "GroupAddress").ToList();
     
         var ieAddresses = new Dictionary<string, List<XElement>>(StringComparer.OrdinalIgnoreCase);
@@ -211,9 +220,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 {
                     var suffix = name.Substring(2);
                     // Vérifier si l'adresse est déjà présente dans la liste ieAddressesSet
-                    if (!ieAddressesSet.Any(x => x.Attribute("Address")?.Value == address))
+                    if (!_ieAddressesSet.Any(x => x.Attribute("Address")?.Value == address))
                     {
-                        ieAddressesSet.Add(ga);
+                        _ieAddressesSet.Add(ga);
 
                         if (!ieAddresses.ContainsKey(suffix))
                         {
@@ -257,27 +266,65 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
                         if (ieAddresses.ContainsKey(suffix))
                         {
-                            groupAddressProcessor.AddToGroupedAddresses(GroupedAddresses, cmd,
+                            groupAddressProcessor.AddToGroupedAddresses(_groupedAddresses, cmd,
                                 $"{suffix}_{address}"); // Ajouter l'adresse "Cmd"
                             // Si des adresses "Ie" avec le même suffixe existent, on les associe à l'adresse "Cmd"
                             foreach (var ieGa in ieAddresses[suffix])
                             {
-                                groupAddressProcessor.AddToGroupedAddresses(GroupedAddresses, ieGa,
+                                groupAddressProcessor.AddToGroupedAddresses(_groupedAddresses, ieGa,
                                     $"{suffix}_{address}"); // Ajouter les adresses "Ie"
                             }
                         }
                         else
                         {
                             // Si aucune adresse "Ie" ne correspond, on ajoute uniquement l'adresse "Cmd"
-                            groupAddressProcessor.AddToGroupedAddresses(GroupedAddresses, cmd, $"{suffix}_{address}");
+                            groupAddressProcessor.AddToGroupedAddresses(_groupedAddresses, cmd, $"{suffix}_{address}");
                         }
                     }
                 }
             }
         }
 
-        groupAddressMerger.MergeSingleElementGroups(GroupedAddresses);
-        groupAddressMerger.GetElementsBySimilarity("_VoletRoulant_Stop_MaqKnxC_MaisonDupre_RezDeChaussee_Salon", GroupedAddresses);
-        groupAddressProcessor.FilterElements(GroupedAddresses);
+        groupAddressMerger.MergeSingleElementGroups(_groupedAddresses, _ieAddressesSet);
+        groupAddressMerger.GetElementsBySimilarity("_VoletRoulant_Position_MaqKnxC_MaisonDupre_RezDeChaussee_Tgbt", _ieAddressesSet);
     }
+    
+    /// <summary>
+    /// Determines the level structure of group addresses in an XML document to check for overlaps.
+    /// 
+    /// This method examines an XML document containing group address ranges and specific group addresses.
+    /// It helps in identifying whether the group addresses are organized into 2 levels or 3 levels by detecting if there are any overlapping addresses.
+    /// 
+    /// If the addresses are detected to overlap, the method returns the value 3.
+    /// If no overlaps are found, the method returns the value 2.
+    /// 
+    /// <param name="doc">The XML document (XDocument) containing the group address ranges and specific group addresses.</param>
+    /// <returns>An integer indicating the overlap status: 3 for detected overlap, 2 for no overlap.</returns>
+    /// </summary>
+    public int DetermineGroupAddressStructure(XDocument doc)
+    {
+        // Ensemble pour vérifier les chevauchements d'adresses
+        HashSet<int> allAddresses = new HashSet<int>();
+
+        // Parcourir chaque GroupRange
+        foreach (var groupRange in doc.Descendants(GlobalKnxNamespace + "GroupRange"))
+        {
+            // Parcourir chaque GroupAddress du GroupRange
+            foreach (var groupAddress in groupRange.Descendants(GlobalKnxNamespace + "GroupAddress"))
+            {
+                int address = int.Parse(groupAddress.Attribute("Address")!.Value);
+
+                // Si l'adresse est déjà dans l'ensemble, il y a chevauchement
+                if (!allAddresses.Add(address))
+                {
+                    // Retourne 3 si un chevauchement est détecté
+                    return 3;
+                }
+            }
+        }
+
+        // Si aucun chevauchement n'est trouvé, retourne 2
+        return 2;
+    }
+
 }

@@ -7,104 +7,72 @@ public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, Str
     private readonly ILogger _logger = logger;
         
     /// <summary>
-    /// Merges single-element groups in the grouped addresses dictionary with other groups if their names
-    /// match with a similarity of 80% or more.
-    ///
-    /// This method compares the names of groups with a single element to other groups and merges them
-    /// if they are similar enough, based on a similarity threshold of 80%.
-    ///
-    /// <param name="groupedAddresses">The dictionary of grouped addresses to be merged.</param>
+    /// Merges single-element groups in the grouped addresses dictionary with entries from the provided 
+    /// IeAddressesSet if their names have a similarity of 80% or more.
+    /// 
+    /// This method iterates over groups in the groupedAddresses dictionary that contain a single XElement 
+    /// and attempts to find matching entries in the IeAddressesSet based on a similarity threshold of 80%. 
+    /// If a similar entry is found, it is added to the corresponding group.
+    /// 
+    /// <param name="groupedAddresses">The dictionary of grouped addresses that will be modified and potentially merged with elements from IeAddressesSet.</param>
+    /// <param name="IeAddressesSet">A list of XElement entries that will be compared against single-element groups in groupedAddresses for potential merging.</param>
+    /// <returns>Returns the modified dictionary of grouped addresses with merged entries.</returns>
     /// </summary>
-    public void MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses)
-    { 
-        var singleElementGroups = groupedAddresses.Where(g => g.Value.Count == 1).ToList(); 
-        var mergedGroups = new HashSet<string>();
-        
-        for (var i = 0; i < singleElementGroups.Count; i++)
+    public Dictionary<string, List<XElement>> MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses, List<XElement> IeAddressesSet)
+    {
+        var singleElementGroups = groupedAddresses.Where(g => g.Value.Count == 1).ToList();
+
+        // Parcourir chaque groupe isolé dans groupedAddresses
+        foreach (var group in singleElementGroups)
         {
-            var group1 = singleElementGroups[i];
-            var name1 = group1.Key;
+            var groupName = group.Key;
+            var groupElement = group.Value.First();
 
-            for (var j = i + 1; j < singleElementGroups.Count; j++)
+            // Rechercher dans IeAddressesSet les éléments similaires à au moins 80%
+            foreach (var ieElement in IeAddressesSet)
             {
-                var group2 = singleElementGroups[j];
-                var name2 = group2.Key;
+                var ieElementName = ieElement.Attribute("Name")?.Value; // Supposant que les éléments dans IeAddressesSet ont un élément "Name"
 
-                if (stringManagement.AreNamesSimilar(name1, name2))
+                if (ieElementName != null && stringManagement.CalculateSimilarity(groupName, ieElementName) >= 0.8)
                 {
-                    _logger.ConsoleAndLogWriteLine($"Merging single-element groups '{name1}' and '{name2}'.");
+                    _logger.ConsoleAndLogWriteLine($"Adding '{ieElementName}' from IeAddressesSet to single-element group '{groupName}'.");
 
-                    group1.Value.Add(group2.Value.First());
-                    groupedAddresses.Remove(name2);
-                    mergedGroups.Add(name1);
-                    mergedGroups.Add(name2);
-                    break;
+                    group.Value.Add(ieElement);
                 }
             }
         }
 
-        foreach (var singleGroup in singleElementGroups)
-        {
-            var singleName = singleGroup.Key;
-
-            if (mergedGroups.Contains(singleName)) continue;
-
-            foreach (var otherGroup in groupedAddresses.ToList())
-            {
-                if (singleGroup.Key == otherGroup.Key || otherGroup.Value.Count == 1) continue;
-
-                var otherName = otherGroup.Key;
-                if (stringManagement.AreNamesSimilar(singleName, otherName))
-                {
-                    _logger.ConsoleAndLogWriteLine($"Merging single-element group '{singleName}' with group '{otherName}'.");
-
-                    otherGroup.Value.Add(singleGroup.Value.First());
-                    groupedAddresses.Remove(singleName);
-
-                    break;
-                }
-            }
-        }
+        // Retourner le dictionnaire modifié
+        return groupedAddresses;
     }
     
     /// <summary>
-    /// Retrieves a list of XElement objects from a dictionary, sorted by their similarity to a given search string,
-    /// ignoring specific prefixes ("Ie" and "Cmd") in the names of the elements.
+    /// Retrieves a list of XElement objects from a list, sorted by their similarity to a given search string,
+    /// ignoring specific prefixe ("Ie") in the names of the elements.
     /// 
-    /// This method filters the dictionary to only include entries with a single XElement, removes the prefixes 
-    /// "Ie" and "Cmd" from the element names, and then sorts the resulting elements by their similarity 
-    /// to the provided search string. The similarity is calculated using the modified names.
+    /// This method processes a list of XElement objects, removes the prefixe "Ie" from the element names,
+    /// and then sorts the elements based on their similarity to the provided search string. The similarity is calculated
+    /// using the modified names.
     /// 
     /// <param name="searchString">The string to compare against the element names after removing prefixes.</param>
-    /// <param name="dictionary">A dictionary where the key is a string and the value is a list of XElement objects.</param>
+    /// <param name="ieAddressesSet">A list of XElement objects to be filtered and sorted.</param>
     /// <returns>A sorted list of XElement objects based on their similarity to the search string.</returns>
     /// </summary>
-    public List<XElement> GetElementsBySimilarity(string searchString, Dictionary<string, List<XElement>> dictionary)
+    public List<XElement> GetElementsBySimilarity(string searchString, List<XElement> ieAddressesSet)
     {
-        // Step 1: Filter the dictionary to get entries with only one XElement
-        var filteredElements = dictionary
-            .Where(kv => kv.Value.Count == 1)
-            .Select(kv => kv.Value.First()) // Since we only have one element, take the first (and only) one
-            .ToList();
-
-        // Step 2: Sort the elements by similarity to the search string
-        var sortedElements = filteredElements
+        var sortedElements = ieAddressesSet
             .OrderByDescending(element => 
             {
-                var name = element.Attribute("Name").Value;
-            
-                // Remove the prefixes "Ie" and "Cmd" if they exist
-                if (name.StartsWith("Ie"))
+                var name = element.Attribute("Name")?.Value;
+
+                // Remove the prefixe "Ie" if it exist
+                if (name != null && name.StartsWith("Ie"))
                 {
                     name = name.Substring(2); // Remove the first 2 characters
                 }
-                else if (name.StartsWith("Cmd"))
-                {
-                    name = name.Substring(3); // Remove the first 3 characters
-                }
-            
+                
                 // Calculate the similarity based on the modified name
-                return stringManagement.CalculateSimilarity(searchString, name);
+                return stringManagement.CalculateSimilarity(searchString, name ?? string.Empty);
             })
             .ToList();
 

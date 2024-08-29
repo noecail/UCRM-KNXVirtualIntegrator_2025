@@ -41,6 +41,7 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
         groupedAddresses[commonName].Add(ga);
     }
     
+    // Inutile maintenant je pense mais je laisse au cas où
     /// <summary>
     /// Filters a dictionary of XElement lists, retaining only those lists where all elements
     /// share the same first word in their "Name" attribute.
@@ -85,6 +86,70 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
         }
         return result;
     }
-  
+    
+    /// <summary>
+    /// Decodes a string representing a numeric value into a formatted string based on the group address structure.
+    /// 
+    /// This method takes a string representation of a numeric value and converts it into a formatted string. The format of the output string depends on the specified group address structure:
+    /// 
+    /// - For a 3-level group address structure, the value is decoded into three components: "champ1/champ2/champ3".
+    /// - For a 2-level group address structure, the value is decoded into two components: "champ1/champ2".
+    /// 
+    /// The decoding is performed as follows:
+    /// - For 3-level structure:
+    ///   - The third component (`champ3`) is extracted as the least significant 8 bits.
+    ///   - The second component (`champ2`) is extracted as the next 3 bits.
+    ///   - The first component (`champ1`) is extracted as the most significant 5 bits.
+    /// - For 2-level structure:
+    ///   - The second component (`champ2`) is extracted as the least significant 11 bits.
+    ///   - The first component (`champ1`) is extracted as the next 5 bits.
+    /// 
+    /// If the input string cannot be converted to an integer, or if the group address structure is not recognized, the method logs an error message and returns the original input string.
+    /// 
+    /// <param name="valueString">The string representation of the numeric value to decode.</param>
+    /// <param name="groupAddressStructure">An integer indicating the group address structure: 2 for 2-level and 3 for 3-level.</param>
+    /// <returns>A formatted string representing the decoded value based on the group address structure. Returns the original string if conversion fails or if the structure is unrecognized.</returns>
+    /// </summary>
+    public string DecodeAddress(string valueString, int groupAddressStructure)
+    {
+        // Convertir la chaîne en entier
+        if (!int.TryParse(valueString, out int value))
+        {
+            logger.ConsoleAndLogWriteLine($"Impossible to convert {valueString} in integer");
+            return valueString;
+        }
+
+        if (groupAddressStructure == 3)
+        {
+            // Extraire le troisième champ (8 bits)
+            int champ3 = value & 0xFF;
+
+            // Extraire le deuxième champ (3 bits)
+            int champ2 = (value >> 8) & 0x7;
+
+            // Extraire le premier champ (5 bits)
+            int champ1 = (value >> 11) & 0x1F;
+
+            // Construire la chaîne de caractères au format "champ1/champ2/champ3"
+            return $"{champ1}/{champ2}/{champ3}";
+        }
+        else if (groupAddressStructure == 2)
+        {
+            // Extraire le deuxième champ (11 bits)
+            int champ2 = value & 0x7FF; // 0x7FF est 2047 en hexadécimal
+
+            // Extraire le premier champ (5 bits)
+            int champ1 = (value >> 11) & 0x1F; // 0x1F est 31 en hexadécimal
+
+            // Construire la chaîne de caractères au format "champ1/champ2"
+            return $"{champ1}/{champ2}";
+        }
+        
+        logger.ConsoleAndLogWriteLine($"Impossible conversion for {valueString}");
+        return valueString;
+
+    }
+    
+    
 }
 
