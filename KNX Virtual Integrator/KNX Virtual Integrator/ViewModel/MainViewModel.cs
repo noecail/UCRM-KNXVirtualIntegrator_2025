@@ -17,6 +17,8 @@ namespace KNX_Virtual_Integrator.ViewModel;
 
 public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
+    public event PropertyChangedEventHandler PropertyChanged;
+
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -154,6 +156,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 return success;
             }
         );
+
+        // Gestion des colonnes 
+        HideModelColumnCommand = new RelayCommand(
+            () => HideModelColumn());
+
+        HideAdressColumnCommand = new RelayCommand(
+            () => HideAdressColumn());
+
+        ShowModelColumnCommand = new RelayCommand(
+            () => ShowModelColumn());
+
+        ShowAdressColumnCommand = new RelayCommand(
+            () => ShowAdressColumn());
+
     }
 
 
