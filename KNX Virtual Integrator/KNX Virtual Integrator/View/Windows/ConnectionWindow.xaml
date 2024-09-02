@@ -1,13 +1,18 @@
-<Window x:Class="KNX_Virtual_Integrator.View.Windows.ConnectionWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:KNX_Virtual_Integrator.View"
-        xmlns:viewModel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
-        mc:Ignorable="d"
-        Title="Connexion au Bus KNX" Height="275" Width="300"
-        ResizeMode="NoResize">
+<mah:MetroWindow  x:Class="KNX_Virtual_Integrator.View.Windows.ConnectionWindow"
+                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                  xmlns:local="clr-namespace:KNX_Virtual_Integrator.View"
+                  xmlns:viewModel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
+                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                  mc:Ignorable="d"
+                  Title="Connexion au Bus KNX" Height="275" Width="300"
+                  TitleCharacterCasing="Normal"
+                  ResizeMode="NoResize"
+                  Background="White"
+                  BorderThickness="0"
+                  WindowTitleBrush="#369026">
     
     <Window.Resources>
         <SolidColorBrush x:Key="ButtonBlue" Color="#4071B4"/>
@@ -18,13 +23,18 @@
         <SolidColorBrush x:Key="ButtonRedAccentuated" Color="#B73B3B"/>
         <SolidColorBrush x:Key="ForegroundButtonColour" Color="#FFFFFF"/>
 
-        
+        <SolidColorBrush x:Key="ComboBoxLightBorder" Color="#b8b8b8"/>
+        <SolidColorBrush x:Key="LightHover" Color="#d3d3d3"/>
+        <SolidColorBrush x:Key="LightBackground" Color="White" />
+        <SolidColorBrush x:Key="LightForeground" Color="Black" />
+
+
         <SolidColorBrush x:Key="ButtonDisabled" Color="#A0A0A0"/>
         
         <!-- Style pour le bouton Connexion -->
         <Style x:Key="ConnectButton" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource KnxGreen}"/>
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource LightBackground}"/>
             <Setter Property="FontSize" Value="12"/>            
             <Setter Property="Height" Value="25"/>
             <Setter Property="Padding" Value="0,0"/>
@@ -149,6 +159,171 @@
             </Setter>
         </Style>
         
+        <!-- Style pour le bouton refresh -->
+        <Style x:Key="RefreshButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonBlue}"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundButtonColour}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="btnBorder" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Survol -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource ButtonBlueAccentuated}"/>
+                            </Trigger>
+                            <!-- Clic -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource ButtonBlueAccentuated}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        
+        <Style x:Key="LightComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="{StaticResource LightBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource LightForeground}"/>
+            <Setter Property="Padding" Value="5,2.5,0,0"/>
+            <Setter Property="FontSize" Value="10"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#729CD5" TargetName="Border"/>
+                                <Setter Property="Foreground" Value="#ffffff"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="{StaticResource ButtonBlue}" TargetName="Border"/>
+                                <Setter Property="Foreground" Value="#FFFFFF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <ControlTemplate x:Key="ComboBoxToggleButtonTemplateLight" TargetType="ToggleButton">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Border x:Name="templateRoot"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{StaticResource ComboBoxLightBorder}" 
+                        BorderThickness="1"
+                        Grid.RowSpan="2"
+                        CornerRadius="2"/>
+                <Border x:Name="border" 
+                        BorderBrush="{StaticResource ComboBoxLightBorder}"
+                        BorderThickness="1" 
+                        Background="{TemplateBinding Background}" 
+                        Grid.RowSpan="2" 
+                        CornerRadius="0"/>
+                <Path x:Name="Arrow"
+                      HorizontalAlignment="Right"
+                      Margin="0,0,10,0"
+                      VerticalAlignment="Center"
+                      Data="M 0 0 L 4 4 L 8 0 Z"
+                      Fill="{StaticResource LightForeground}"/>
+            </Grid>
+        </ControlTemplate>
+        
+        <Style x:Key="LightComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Foreground" Value="{StaticResource LightForeground}"/>
+            <Setter Property="Background" Value="{StaticResource LightBackground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ComboBoxLightBorder}"/>
+            <Setter Property="BorderThickness" Value="1,1,1,1"/>
+            <Setter Property="Padding" Value="5,3"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="ItemContainerStyle" Value="{StaticResource LightComboBoxItemStyle}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton Name="ToggleButton"
+                                          Template="{StaticResource ComboBoxToggleButtonTemplateLight}"
+                                          Focusable="False"
+                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                          ClickMode="Press">
+                                <ToggleButton.Background>
+                                    <StaticResource ResourceKey="LightBackground"/>
+                                </ToggleButton.Background>
+                                <ToggleButton.Foreground>
+                                    <StaticResource ResourceKey="LightBackground"/>
+                                </ToggleButton.Foreground>
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite"
+                                              IsHitTestVisible="False"
+                                              Content="{TemplateBinding SelectionBoxItem}"
+                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                              Margin="7,3,23,3"
+                                              VerticalAlignment="Center"
+                                              HorizontalAlignment="Left"/>
+                            <Popup Name="Popup"
+                                   Placement="Bottom"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   PopupAnimation="Slide">
+                                <Grid Name="DropDown"
+                                      SnapsToDevicePixels="True"
+                                      MinWidth="{TemplateBinding ActualWidth}"
+                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border x:Name="DropDownBorder"
+                                            Background="{StaticResource LightBackground}"
+                                            BorderThickness="1"
+                                            BorderBrush="{StaticResource ComboBoxLightBorder}"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasDropShadow" SourceName="Popup" Value="True">
+                                <Setter Property="Margin" TargetName="DropDown" Value="0,0,5,5"/>
+                                <Setter Property="SnapsToDevicePixels" TargetName="DropDown" Value="True"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" TargetName="ToggleButton" Value="{StaticResource LightHover}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Foreground" Value="{StaticResource LightForeground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     
@@ -162,19 +337,21 @@
             </Grid.RowDefinitions>
 
             <!-- Bus Connection Type Selection -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,5">
                 <TextBlock Text="Type de connexion :" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <ComboBox Name="ConnectionTypeComboBox"
-                          Width="120" Height="20"
-                          SelectedIndex="1" 
+                <ComboBox Name="ConnectionTypeComboBox" Style="{StaticResource LightComboBoxStyle}"
+                          Width="120" Height="25"
+                          VerticalAlignment="Center"
+                          FontSize="10" 
+                          SelectedIndex="0" Padding="0"
                           SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}">
-                    <ComboBoxItem Content="Type=IP"/>
-                    <ComboBoxItem Content="Type=USB"/>
+                    <ComboBoxItem Content="Type=IP" Style="{StaticResource LightComboBoxItemStyle}"/>
+                    <ComboBoxItem Content="Type=USB" Style="{StaticResource LightComboBoxItemStyle}"/>
                 </ComboBox>
             </StackPanel>
 
             <!-- Discovered Interfaces Section -->
-            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,10,10,0">
+            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,5,10,0">
                 <Grid Margin="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -183,14 +360,11 @@
 
                     <TextBlock Text="Interfaces disponibles :" VerticalAlignment="Center" Grid.Column="0" />
 
-                    <Button Grid.Column="1" HorizontalAlignment="Center" Width="75" Height="15"
-                            Background="{StaticResource ButtonBlue}" 
-                            Margin="0"
-                            Foreground="{StaticResource ForegroundButtonColour}"
-                            BorderThickness="0"
-                            Command="{Binding RefreshInterfacesCommand}">
+                    <Button Grid.Column="1" Command="{Binding RefreshInterfacesCommand}"
+                            Style="{StaticResource RefreshButton}"
+                            Padding="5,0">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="⟲" FontSize="12" Height="20" Margin="0,0,5,0" VerticalAlignment="Center" />
+                            <TextBlock Text="⟲" FontSize="12" Height="20" Margin="0,2,5,0" VerticalAlignment="Center" />
                             <TextBlock Text="Rafraîchir" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
                         </StackPanel>
                     </Button>
@@ -200,6 +374,8 @@
                 <ListBox Name="InterfaceListBox" Width="250" Height="100" 
                          ItemsSource="{Binding DiscoveredInterfaces}" 
                          SelectedItem="{Binding SelectedInterface}" 
+                         BorderThickness="1"
+                         BorderBrush="{StaticResource ComboBoxLightBorder}"
                          Margin="0,5,0,0"
                          SelectionMode="Single">
                     <ListBox.ItemTemplate>
@@ -211,20 +387,33 @@
             </StackPanel>
 
             <!-- Buttons for connection and disconnection -->
-            <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,10,0">
-                <Button Name="DisconnectButton" Content="Déconnexion" 
+            <Grid Grid.Row="2" Margin="12.5,0" VerticalAlignment="Center">
+                <!-- Définir deux colonnes pour le placement des boutons -->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de déconnexion -->
+                    <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de connexion -->
+                </Grid.ColumnDefinitions>
+            
+                <!-- Bouton Déconnexion, collé à gauche -->
+                <Button Grid.Column="0" Name="DisconnectButton" Content="Déconnexion" 
                         Style="{StaticResource DisconnectButton}"
                         Margin="5" Padding="5,2"
                         Command="{Binding DisconnectBusCommand}" 
-                        IsEnabled="{Binding IsConnected}"/>
-                <Button Name="ConnectButton" Content="Connexion" 
+                        IsEnabled="{Binding IsConnected}"
+                        HorizontalAlignment="Left" />
+            
+                <!-- Bouton Connexion, collé à droite -->
+                <Button Grid.Column="1" Name="ConnectButton" Content="Connexion" 
                         Style="{StaticResource ConnectButton}"
                         Margin="5" Padding="5,2"
                         Foreground="{StaticResource ForegroundButtonColour}"
-                        Command="{Binding ConnectBusCommand}" />
-            </StackPanel>
+                        Command="{Binding ConnectBusCommand}"
+                        HorizontalAlignment="Right" />
+            </Grid>
+
+            
         </Grid>
     </Border>
 
     
-</Window>
+</mah:MetroWindow>
