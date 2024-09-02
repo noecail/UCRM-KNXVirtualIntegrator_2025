@@ -5,6 +5,7 @@
     <Color x:Key="BlackColor">Black</Color>
     <Color x:Key="WhiteColor">White</Color>
     <Color x:Key="GreenColor">#369026</Color>
+    <Color x:Key="LightGreenColor">#4a9b3c</Color>
     <Color x:Key="BlueColor">#006BB4</Color>
     <Color x:Key="RedColor">#B20000</Color>
     <Color x:Key="LightGrayColor">#F3F3F3</Color>
@@ -17,11 +18,14 @@
     <SolidColorBrush x:Key="BackgroundWhite" Color="{StaticResource WhiteColor}"/>
     <SolidColorBrush x:Key="BackgroundBlack" Color="{StaticResource BlackColor}"/>
     <SolidColorBrush x:Key="BackgroundGreen" Color="{StaticResource GreenColor}"/>
+    <SolidColorBrush x:Key="BackgroundLightGreen" Color="{StaticResource LightGreenColor}"/>
     <SolidColorBrush x:Key="BackgroundLightGray" Color="{StaticResource LightGrayColor}"/>
     <SolidColorBrush x:Key="BackgroundDarkGray" Color="{StaticResource GrayColor}"/>
 
     <!-- Bordure -->
     <SolidColorBrush x:Key="BorderGray" Color="{StaticResource DarkGrayColor}"/>
+    <SolidColorBrush x:Key="BorderGreen" Color="{StaticResource GreenColor}"/>
+
 
     <!-- Accentuation -->
     <SolidColorBrush x:Key="AccentuateGreen" Color="{StaticResource GreenColor}"/>

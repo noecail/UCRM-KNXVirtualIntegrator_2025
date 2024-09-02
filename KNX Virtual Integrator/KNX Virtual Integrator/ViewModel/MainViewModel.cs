@@ -15,7 +15,7 @@ using System.ComponentModel;
 
 namespace KNX_Virtual_Integrator.ViewModel;
 
-public class MainViewModel : ObservableObject, INotifyPropertyChanged
+public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -30,21 +30,7 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
-    private GridLength _columnWidth = new GridLength(1, GridUnitType.Auto);
-
-    // Propriété ColumnWidth
-    public GridLength ColumnWidth
-    {
-        get { return _columnWidth; }
-        set
-        {
-            if (_columnWidth != value)
-            {
-                _columnWidth = value;
-                OnPropertyChanged(nameof(ColumnWidth)); // Notification du changement
-            }
-        }
-    }
+    
 
 
 
@@ -73,8 +59,18 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
             _ => modelManager.GroupAddressManager.ExtractGroupAddress()
         );
 
-        HideColumnCommand = new Commands.RelayCommand<object>(
-            _ => HideColumn());
+        // Gestion des colonnes 
+        HideModelColumnCommand = new RelayCommand(
+            () => HideModelColumn());
+
+        HideAdressColumnCommand = new RelayCommand(
+            () => HideAdressColumn());
+
+        ShowModelColumnCommand = new RelayCommand(
+            () => ShowModelColumn());
+
+        ShowAdressColumnCommand = new RelayCommand(
+            () => ShowAdressColumn());
 
         EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(
             parameter =>
@@ -161,8 +157,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// Command that extracts a group address using the GroupAddressManager.
     /// </summary>
     public ICommand ExtractGroupAddressCommand { get; private set; }
-
-    public ICommand HideColumnCommand { get; private set;}
 
 
 
@@ -310,12 +304,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     protected void OnPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    // Méthode pour cacher la colonne
-    private void HideColumn()
-    {
-        ColumnWidth = new GridLength(0);
     }
 
 }

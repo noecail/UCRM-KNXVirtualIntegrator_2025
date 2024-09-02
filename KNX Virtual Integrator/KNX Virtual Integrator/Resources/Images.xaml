@@ -108,12 +108,12 @@
                 </DrawingGroup.Transform>
                 <GeometryDrawing Geometry="F1 M25,25z M0,0z M3,21.32L21,3.32001">
                     <GeometryDrawing.Pen>
-                        <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+                        <Pen Brush="{StaticResource BorderGray}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
                 <GeometryDrawing Geometry="F1 M25,25z M0,0z M3,3.32001L21,21.32">
                     <GeometryDrawing.Pen>
-                        <Pen Brush="#FF000000" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+                        <Pen Brush="{StaticResource BorderGray}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
             </DrawingGroup>
@@ -133,8 +133,149 @@
     </DrawingImage>
 
 
+    <DrawingImage x:Key="GroupAdressesDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V104.1 H104.1 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="#FF9199A3">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="0,0,104.1,104.1" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="6.89,21.37,89.96,76.52" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FF3C4B5E">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="6.89,13.79,89.96,7.58" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <DrawingGroup Opacity="1">
+                            <GeometryDrawing Brush="#FF334A9A">
+                                <GeometryDrawing.Geometry>
+                                    <RectangleGeometry RadiusX="0" RadiusY="0" Rect="27.66,35.16,20.51,20.51" />
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                            <GeometryDrawing Brush="#FF334A9A">
+                                <GeometryDrawing.Geometry>
+                                    <RectangleGeometry RadiusX="0" RadiusY="0" Rect="55.58,35.16,20.51,20.51" />
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingGroup>
+                        <GeometryDrawing Brush="#FF334A9A">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="27.66,63.08,20.51,20.51" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FF334A9A">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="55.58,63.08,20.51,20.51" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="6.89,6.89,28.26,6.89" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="55.58,6.89,6.46,6.55" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="69.97,6.89,6.55,6.55" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFB82318">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="84.45,6.89,6.89,6.89" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="FonctionalModelDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V104.1 H104.1 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="#FF9199A3">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="0,0,104.1,104.1" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="6.89,21.37,89.96,76.52" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FF3C4B5E">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="6.89,13.79,89.96,7.58" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="6.89,6.89,28.26,6.89" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="55.58,6.89,6.46,6.55" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FFE4E5E4">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="69.97,6.89,6.55,6.55" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                        <GeometryDrawing Brush="#FF068737">
+                            <GeometryDrawing.Geometry>
+                                <RectangleGeometry RadiusX="0" RadiusY="0" Rect="84.45,6.89,6.89,6.89" />
+                            </GeometryDrawing.Geometry>
+                        </GeometryDrawing>
+                    </DrawingGroup>
+                    <GeometryDrawing Brush="#FF068737" Geometry="F1 M104.1,104.1z M0,0z M85.02,45.87L85.02,45.87 80.23,45.87 80.23,55.45 72.56,55.45 72.56,45.87 67.77,45.87 76.87,30.54 85.02,45.87z" />
+                    <GeometryDrawing Brush="#FF334A9A" Geometry="F1 M104.1,104.1z M0,0z M62.86,69.84L60.47,73.9C59.38,75.72,57.09,76.47,55.14,75.64L52.26,74.42C51.45,74.08 50.4,74.2 49.38,74.79 48.37,75.38 47.78,76.21 47.68,77.02L47.3,80.06C47.05,82.15,45.25,83.71,43.1,83.71L38.32,83.71C36.19,83.71,34.38,82.15,34.14,80.06L33.82,77.53C33.71,76.59 33,75.64 31.81,74.99 30.71,74.38 29.56,74.26 28.67,74.63L26.31,75.64C24.33,76.47,22.04,75.72,20.98,73.9L18.59,69.84C17.52,68.02,18,65.71,19.71,64.45L21.57,63.09C22.4,62.47 22.89,61.37 22.89,60.01 22.89,58.65 22.4,57.54 21.57,56.95L19.71,55.59C18,54.32,17.52,52.01,18.59,50.18L20.98,46.13C22.04,44.32,24.33,43.57,26.31,44.4L28.67,45.38C29.56,45.76 30.71,45.66 31.81,45.03 33,44.38 33.71,43.43 33.82,42.48L34.14,39.96C34.38,37.88,36.19,36.3,38.32,36.3L43.1,36.3C45.25,36.3,47.05,37.88,47.3,39.96L47.68,43C47.78,43.82 48.37,44.65 49.38,45.25 50.4,45.84 51.45,45.94 52.26,45.6L55.14,44.4C57.09,43.57,59.38,44.32,60.47,46.13L62.86,50.18C63.92,52.01,63.43,54.32,61.71,55.59L59.01,57.58C58.36,58.05 57.94,58.92 57.94,60.01 57.94,61.1 58.36,61.98 59.01,62.46L61.71,64.45C63.43,65.71,63.92,68.02,62.86,69.84z" />
+                    <GeometryDrawing Brush="#FF334A9A" Geometry="F1 M104.1,104.1z M0,0z M84.7,72.72L84.7,72.72 79.91,72.72 79.91,63.14 72.24,63.14 72.24,72.72 67.45,72.72 76.55,88.05 84.7,72.72z" />
+                    <GeometryDrawing Brush="#FFE4E5E4">
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="9" RadiusY="9" Center="40.71,60.01" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+    <DrawingImage x:Key="FilterDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V32 H32 V0 H0 Z">
+                <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M32,32z M0,0z M30,6.749L2,6.749C1.31,6.749 0.75,7.309 0.75,7.999 0.75,8.689 1.31,9.249 2,9.249L2,9.249 30,9.249C30.69,9.249 31.25,8.689 31.25,7.999 31.25,7.309 30.69,6.749 30,6.749L30,6.749z M24,14.75L8,14.75C7.31,14.75 6.75,15.31 6.75,16 6.75,16.69 7.31,17.25 8,17.25L8,17.25 24,17.25C24.69,17.25 25.25,16.69 25.25,16 25.25,15.31 24.69,14.75 24,14.75L24,14.75z M19,22.75L12.947,22.75C12.257,22.75 11.697,23.31 11.697,24 11.697,24.69 12.257,25.25 12.947,25.25L12.947,25.25 19,25.25C19.69,25.25 20.25,24.69 20.25,24 20.25,23.31 19.69,22.75 19,22.75L19,22.75z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 
 
+
+    <DrawingImage x:Key="CheckmarkDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V48 H48 V0 H0 Z">
+                <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M48,48z M0,0z M40.6,12.1L40.6,12.1 17,35.7 7.4,26.1 4.6,29 17,41.3 43.4,14.9z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 
 
 </ResourceDictionary>
