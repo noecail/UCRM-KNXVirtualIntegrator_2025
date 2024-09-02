@@ -109,7 +109,7 @@
                 <StackPanel Orientation="Horizontal">
                         <Label Grid.Row="0" Grid.Column="0" Content="Group Address:"  Margin="4" VerticalAlignment="Center" />
                         <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding GroupCommunicationVM.GroupAddress, Converter={StaticResource GroupAddressConverter}}" MinWidth="100" Margin="4" VerticalAlignment="Center" />
-                    <Button Grid.Row="0" Grid.Column="2" Content="Read" Command="{Binding GroupCommunicationVM.GroupValueReadCommand}" MinWidth="120" Margin="4" VerticalAlignment="Center"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="Read" Command="{Binding GroupCommunicationVM.ReadCommand}" MinWidth="120" Margin="4" VerticalAlignment="Center"/>
                     
                         <Label Grid.Row="1" Grid.Column="0" Content="Value:"  Margin="4" VerticalAlignment="Center" />
                         <TextBox Grid.Column="0" Text="{Binding GroupCommunicationVM.GroupValue.Value, Converter={StaticResource GroupValueConverter}}" MinWidth="100" Margin="4" VerticalAlignment="Center" />
