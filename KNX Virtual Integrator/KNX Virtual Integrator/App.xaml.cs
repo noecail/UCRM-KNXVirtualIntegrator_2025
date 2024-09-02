@@ -131,7 +131,8 @@ public partial class App
             groupCommunication,
             appSettings, 
             parentFinder,
-            sliderClickHandler);
+            sliderClickHandler,
+            pdfDocumentCreator);
         
         // Enregistrer un message de démarrage dans la console et le journal
         ModelManager.Logger.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
