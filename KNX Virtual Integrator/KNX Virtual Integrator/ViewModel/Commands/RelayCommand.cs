@@ -1,6 +1,6 @@
-﻿using System.Windows.Input;
+﻿    using System.Windows.Input;
 
-namespace KNX_Virtual_Integrator.ViewModel.Commands;
+    namespace KNX_Virtual_Integrator.ViewModel.Commands;
 
 public class RelayCommand<T>(Action<T?> execute, Func<T, bool>? canExecute = null) : ICommand
 {
@@ -11,7 +11,13 @@ public class RelayCommand<T>(Action<T?> execute, Func<T, bool>? canExecute = nul
         // Assurez-vous que le paramètre est du type attendu
         if (parameter is T or null)
         {
-            return canExecute?.Invoke((T?)parameter!) ?? true;
+            // Assurez-vous que le paramètre est du type attendu
+            if (parameter is T tParameter || parameter == null)
+            {
+                return canExecute?.Invoke((T?)parameter!) ?? true;
+            }
+
+            return false;
         }
         return false;
     }
@@ -24,10 +30,3 @@ public class RelayCommand<T>(Action<T?> execute, Func<T, bool>? canExecute = nul
             _execute((T?)parameter);
         }
     }
-
-    public event EventHandler? CanExecuteChanged
-    {
-        add => CommandManager.RequerySuggested += value;
-        remove => CommandManager.RequerySuggested -= value;
-    }
-}

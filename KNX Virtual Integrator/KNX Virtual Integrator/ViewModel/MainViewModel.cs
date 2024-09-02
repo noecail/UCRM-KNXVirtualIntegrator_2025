@@ -8,13 +8,14 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
+using System.ComponentModel;
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
 
 namespace KNX_Virtual_Integrator.ViewModel;
 
-public class MainViewModel : ObservableObject, INotifyPropertyChanged
+public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -173,7 +174,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// </summary>
     public ICommand ConsoleAndLogWriteLineCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that extracts a group address using the GroupAddressManager.
     /// </summary>
@@ -185,7 +185,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// </summary>
     public ICommand EnsureSettingsFileExistsCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that creates a debug archive with optional OS info, hardware info, and imported projects.
     /// </summary>
@@ -194,7 +193,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// <param name="IncludeImportedProjects">Specifies whether to include imported projects in the debug archive.</param>
     public ICommand CreateDebugArchiveCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that finds a zero XML file based on the provided file name.
     /// </summary>
@@ -208,39 +206,31 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// </summary>
     public RelayCommand ConnectBusCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that disconnects from the bus asynchronously.
     /// </summary>
     public RelayCommand DisconnectBusCommand { get; private set; } 
 
-    
     /// <summary>
     /// Command that refreshes the list of bus interfaces asynchronously.
     /// </summary>
     public RelayCommand RefreshInterfacesCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that sends a group value write "on" command asynchronously.
     /// </summary>
     public ICommand GroupValueWriteOnCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that sends a group value write "off" command asynchronously.
     /// </summary>
     public ICommand GroupValueWriteOffCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that saves the current application settings.
     /// </summary>
     public ICommand SaveSettingsCommand { get; private set; }
 
-    
-    
-    
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -268,7 +258,6 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// <returns>True if the extraction was successful; otherwise, false.</returns>
     public ICommand ExtractGroupAddressFileCommand { get; private set; }
 
-    
     /// <summary>
     /// Command that extracts project files based on the provided file name and returns a boolean indicating success.
     /// </summary>
@@ -318,5 +307,11 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
         _modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
     }
-    
+
+    // Méthode pour déclencher l'événement PropertyChanged
+    protected void OnPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
 }
