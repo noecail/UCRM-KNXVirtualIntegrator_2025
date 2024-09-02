@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="iTextSharp" Version="5.5.13.4" />
       <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
       <PackageReference Include="MvvmLight" Version="5.4.1.1" />
       <PackageReference Include="System.Management" Version="9.0.0-preview.6.24327.7" />

@@ -59,7 +59,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         _ieAddressesSet.Clear();
         _groupedAddresses.Clear();
 
-        int groupAddressStructure = DetermineGroupAddressStructure(groupAddressFile);
+        var groupAddressStructure = DetermineGroupAddressStructure(groupAddressFile);
         
         // Étape 1 : Extraire les références des appareils
         var deviceRefs = groupAddressFile.Descendants(GlobalKnxNamespace + "DeviceInstance")
@@ -304,7 +304,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     public int DetermineGroupAddressStructure(XDocument doc)
     {
         // Ensemble pour vérifier les chevauchements d'adresses
-        HashSet<int> allAddresses = new HashSet<int>();
+        var allAddresses = new HashSet<int>();
 
         // Parcourir chaque GroupRange
         foreach (var groupRange in doc.Descendants(GlobalKnxNamespace + "GroupRange"))
@@ -312,7 +312,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             // Parcourir chaque GroupAddress du GroupRange
             foreach (var groupAddress in groupRange.Descendants(GlobalKnxNamespace + "GroupAddress"))
             {
-                int address = int.Parse(groupAddress.Attribute("Address")!.Value);
+                var address = int.Parse(groupAddress.Attribute("Address")!.Value);
 
                 // Si l'adresse est déjà dans l'ensemble, il y a chevauchement
                 if (!allAddresses.Add(address))
