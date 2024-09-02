@@ -12,7 +12,8 @@
                   ResizeMode="NoResize"
                   Background="White"
                   BorderThickness="0"
-                  WindowTitleBrush="#369026">
+                  WindowTitleBrush="#369026"
+                  NonActiveWindowTitleBrush="#4a9b3c">
     
     <Window.Resources>
         <SolidColorBrush x:Key="ButtonBlue" Color="#4071B4"/>
@@ -195,7 +196,7 @@
             </Setter>
         </Style>
         
-        
+        <!-- Style pour le menu déroulant -->
         <Style x:Key="LightComboBoxItemStyle" TargetType="ComboBoxItem">
             <Setter Property="Background" Value="{StaticResource LightBackground}"/>
             <Setter Property="Foreground" Value="{StaticResource LightForeground}"/>
@@ -324,6 +325,26 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <!-- Style pour les interfaces découvertes -->
+        <Style x:Key="LightInterfacesItem" TargetType="ListBoxItem">
+            <Setter Property="Background" Value="{StaticResource LightBackground }"/>
+            <Setter Property="Foreground" Value="{StaticResource LightForeground}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     
@@ -378,17 +399,39 @@
                          BorderBrush="{StaticResource ComboBoxLightBorder}"
                          Margin="0,5,0,0"
                          SelectionMode="Single">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <!-- Style de base du ListBoxItem -->
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+                            <!-- Définir le Trigger pour IsMouseOver -->
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#FFD8E0FF"/>
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#FF729CD5"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <!-- ItemTemplate pour afficher les données -->
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding DisplayName}" />
+                            <TextBlock Text="{Binding DisplayName}" 
+                                       FontStyle="Italic"/>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </StackPanel>
 
             <!-- Buttons for connection and disconnection -->
-            <Grid Grid.Row="2" Margin="12.5,0" VerticalAlignment="Center">
-                <!-- Définir deux colonnes pour le placement des boutons -->
+            <Grid Grid.Row="2" Margin="20,0" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de déconnexion -->
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de connexion -->
