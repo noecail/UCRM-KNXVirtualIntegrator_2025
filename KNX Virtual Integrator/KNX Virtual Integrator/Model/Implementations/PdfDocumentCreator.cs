@@ -184,10 +184,10 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         document.Add(projectStructureParagraph);
         
         
-        var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
-        img.Alignment = Element.ALIGN_CENTER;
-        img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
-        document.Add(img);
+        // var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
+        // img.Alignment = Element.ALIGN_CENTER;
+        // img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
+        // document.Add(img);
         
         
         var conductedTests = new Paragraph("Tests réalisés :", underlineFont)
