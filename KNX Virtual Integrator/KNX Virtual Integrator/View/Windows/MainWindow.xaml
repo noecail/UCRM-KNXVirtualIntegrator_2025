@@ -200,7 +200,7 @@
         <GridSplitter Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" Width="5" Background="Gray" />
 
         <!-- TreeView in the third column -->
-        <TreeView Grid.Row="1" Grid.Column="5" Margin="5,5,5,5">
+        <TreeView Grid.Row="1" Grid.Column="5" Margin="5,5,5,5" MinWidth="200">
             <TreeViewItem Header="Éclairage">
                 <TreeViewItem Header="Marche/Arrêt">
                     <TreeViewItem Header="Cmd_PlanDeTravail_Cuisine" />

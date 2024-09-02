@@ -72,7 +72,7 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
         ProjectFolderPath = "";
 
         // Définir le type de connexion initial
-        _busConnection.SelectedConnectionType = "Type=USB";
+        _busConnection.SelectedConnectionType = "Type=IP";
 
         // Initialisation des commandes
         ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
@@ -114,19 +114,19 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
 
         OpenConnectionWindowCommand = new RelayCommand(
-             () => _windowManager.ShowConnectionWindow()
+            () => _windowManager.ShowConnectionWindow()
         );
 
         ConnectBusCommand = new RelayCommand(
-            () => modelManager.BusConnection.ConnectBusAsync()
+            async () => await modelManager.BusConnection.ConnectBusAsync()
         );
 
         DisconnectBusCommand = new RelayCommand(
-            () => modelManager.BusConnection.DisconnectBusAsync()
+            async () => await modelManager.BusConnection.DisconnectBusAsync()
         );
 
-        RefreshInterfacesCommand = new Commands.RelayCommand<object>(
-            _ => modelManager.BusConnection.DiscoverInterfacesAsync()
+        RefreshInterfacesCommand = new RelayCommand(
+            async () => await modelManager.BusConnection.DiscoverInterfacesAsync()
         );
 
         GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
@@ -218,7 +218,7 @@ public class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// <summary>
     /// Command that refreshes the list of bus interfaces asynchronously.
     /// </summary>
-    public ICommand RefreshInterfacesCommand { get; private set; }
+    public RelayCommand RefreshInterfacesCommand { get; private set; }
 
     
     /// <summary>
