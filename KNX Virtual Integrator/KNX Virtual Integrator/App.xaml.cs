@@ -131,10 +131,7 @@ public partial class App
             appSettings, 
             parentFinder,
             sliderClickHandler);
-    
-        // Assurer l'existence du répertoire de logs
-        ModelManager.ApplicationFileManager.EnsureLogDirectoryExists();
-
+        
         // Enregistrer un message de démarrage dans la console et le journal
         ModelManager.Logger.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
 
