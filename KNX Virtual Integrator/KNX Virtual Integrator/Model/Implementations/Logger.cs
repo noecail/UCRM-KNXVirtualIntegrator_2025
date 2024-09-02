@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Windows;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
@@ -39,7 +40,25 @@ public class Logger : ILogger
     ------------------------------------------------------------------------------------------------ */
     public Logger()
     {
-        _writer = new(LogPath);
+        try
+        {
+            if (!Directory.Exists("./logs"))
+            {
+                Directory.CreateDirectory("./logs");
+            }
+
+            if (!File.Exists(LogPath))
+            {
+                File.Create(LogPath).Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error: Unable to create the log directory. {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            Environment.Exit(1); // Terminates the application with an exit code indicating an error
+        }
+        
+        _writer = new StreamWriter(LogPath);
     }
     
     // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
@@ -122,8 +141,8 @@ public class Logger : ILogger
         
         _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
-
-
+    
+    
     public void CloseLogWriter()
     {
         _writer.Close();
