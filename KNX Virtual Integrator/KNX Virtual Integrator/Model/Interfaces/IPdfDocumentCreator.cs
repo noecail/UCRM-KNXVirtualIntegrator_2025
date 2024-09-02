@@ -9,4 +9,6 @@ public interface IPdfDocumentCreator
     void ClosePdf();
 
     void GenerateReport();
+
+    void OpenLatestReport();
 }

@@ -114,7 +114,7 @@ public partial class App
         var groupCommunication = new GroupCommunication(busConnection);
         var parentFinder = new ParentFinder(logger);
         var sliderClickHandler = new SliderClickHandler(logger, parentFinder);
-        var PdfDocumentCreator = new PdfDocumentCreator();
+        var PdfDocumentCreator = new PdfDocumentCreator(projectFileManager);
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
