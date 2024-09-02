@@ -131,10 +131,11 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         var underlineFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12, Font.UNDERLINE);
         var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14);
         var regularFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
-    
-        // Définir la couleur pour le trait de séparation (gris clair #D7D7D7)
+        
         var separatorColor = new BaseColor(215, 215, 215); // RGB pour #D7D7D7
 
+        
+        
         // Ajout d'un trait de séparation avec la couleur définie
         var separator = new LineSeparator(0.5f, 80f, separatorColor, Element.ALIGN_CENTER, 1); // Utilisez une épaisseur de 1 pour une ligne fine
         document.Add(new Chunk(separator));
@@ -152,7 +153,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         };
         projectInformationParagraph.Add(installationChunk);
         projectInformationParagraph.Add(projectNameChunk);
-    
+        
         // Ajouter le paragraphe au document
         document.Add(projectInformationParagraph);
 
@@ -175,6 +176,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
             document.Add(evaluatorNameParagraph);
         }
 
+        
 
         var projectStructureParagraph = new Paragraph("Structure de l'installation évaluée :", underlineFont)
         {
@@ -184,15 +186,24 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         document.Add(projectStructureParagraph);
         
         
-        // var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
-        // img.Alignment = Element.ALIGN_CENTER;
-        // img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
-        // document.Add(img);
+        
+        var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
+        img.Alignment = Element.ALIGN_CENTER;
+        img.SpacingAfter = 5f;
+        img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
+        document.Add(img);
+        
+        
+        
+        // Ajout d'un trait de séparation avec la couleur définie
+        var separator2 = new LineSeparator(0.5f, 80f, separatorColor, Element.ALIGN_CENTER, 1); // Utilisez une épaisseur de 1 pour une ligne fine
+        document.Add(new Chunk(separator2));
+        
         
         
         var conductedTests = new Paragraph("Tests réalisés :", underlineFont)
         {
-            SpacingBefore = 20f,
+            SpacingBefore = 15f,
             IndentationLeft = 5f
         };
         document.Add(conductedTests);

@@ -26,7 +26,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
     /// <summary>
     ///  Gets the name of the project the application is currently working on.
     /// </summary>
-    public string ProjectName { get; private set; } = "zizi mou";
+    public string ProjectName { get; private set; } = "";
     
     
     /// <summary>
