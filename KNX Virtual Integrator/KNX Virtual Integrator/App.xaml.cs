@@ -47,7 +47,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 99;
+    public const int AppBuild = 100;
     
         
     
@@ -205,6 +205,7 @@ public partial class App
     }
     
 }
+
 
 
 
