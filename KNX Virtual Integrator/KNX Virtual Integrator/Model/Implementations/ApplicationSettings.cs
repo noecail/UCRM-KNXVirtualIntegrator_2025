@@ -43,6 +43,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 AppLang = detector.DetectWindowsLanguage();
                 EnableLightTheme = detector.DetectWindowsTheme();
+                Save();
             }
             else
             {

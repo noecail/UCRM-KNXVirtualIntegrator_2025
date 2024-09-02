@@ -193,7 +193,7 @@ public class BusConnection : ObservableObject ,IBusConnection
             var discoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
 
             // Découverte des interfaces IP
-            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=IP")
+            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=IP" || SelectedConnectionType == "Type=IP")
             {
                 var ipDiscoveryTask = Task.Run(async () =>
             {
@@ -252,7 +252,7 @@ public class BusConnection : ObservableObject ,IBusConnection
             }
 
             // Découverte des périphériques USB
-            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=USB")
+            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=USB" || SelectedConnectionType == "Type=USB")
             {
                 var usbDiscoveryTask = Task.Run(() =>
                 {

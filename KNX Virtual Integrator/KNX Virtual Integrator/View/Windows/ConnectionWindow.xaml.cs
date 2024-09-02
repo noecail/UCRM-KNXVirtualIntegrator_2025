@@ -3,7 +3,7 @@ using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
-public partial class ConnectionWindow : Window
+public partial class ConnectionWindow 
 {
     private readonly MainViewModel _viewModel;
 

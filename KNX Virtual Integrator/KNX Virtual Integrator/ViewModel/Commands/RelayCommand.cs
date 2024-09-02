@@ -21,7 +21,7 @@ public class RelayCommand<T>(Action<T?> execute, Func<T, bool>? canExecute = nul
         // Assurez-vous que le paramètre est du type attendu
         if (parameter is T or null)
         {
-            _execute((T?)parameter!);
+            _execute((T?)parameter);
         }
     }
 

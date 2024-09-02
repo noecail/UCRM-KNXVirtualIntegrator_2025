@@ -10,9 +10,23 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Page Remove="Resources\Images.xaml" />
+      <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
+      <Page Remove="Resources\Styles.xaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="iTextSharp" Version="5.5.13.4" />
       <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
+      <PackageReference Include="MahApps.Metro" Version="2.4.10" />
       <PackageReference Include="MvvmLight" Version="5.4.1.1" />
       <PackageReference Include="System.Management" Version="9.0.0-preview.6.24327.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Resource Include="Resources\Images.xaml" />
+      <Resource Include="Resources\Strings.MainWindow.fr.xaml" />
+      <Resource Include="Resources\Styles.xaml" />
     </ItemGroup>
 
     <ItemGroup>
