@@ -114,7 +114,6 @@ public partial class App
         var groupCommunication = new GroupCommunication(busConnection);
         var parentFinder = new ParentFinder(logger);
         var sliderClickHandler = new SliderClickHandler(logger, parentFinder);
-        var PdfDocumentCreator = new PdfDocumentCreator();
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
@@ -139,8 +138,6 @@ public partial class App
         // Initialiser le ViewModel principal et le gestionnaire de fenêtres
         MainViewModel = new MainViewModel(ModelManager);
         WindowManager = new WindowManager(MainViewModel);
-        
-        PdfDocumentCreator.CreatePdf("test.pdf");
     }
 
     

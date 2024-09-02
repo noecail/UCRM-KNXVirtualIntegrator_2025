@@ -82,9 +82,11 @@ namespace KNX_PROJET_2
         public ICommand SendGroupValuesCommand { get; set; }
         public ICommand ReadGroupAddressCommand { get; set; }
 
-        //________________________________________________________________________________________________________//
+        public ICommand ReadCommand { get; set; }
 
-        public GroupCommunicationViewModel(MainViewModel globalViewModel)
+    //________________________________________________________________________________________________________//
+
+    public GroupCommunicationViewModel(MainViewModel globalViewModel)
         {
             _globalViewModel = globalViewModel;
 
@@ -105,7 +107,11 @@ namespace KNX_PROJET_2
             ReadGroupAddressCommand = new RelayCommand<object>(async (parameter) =>
             await ReadGroupAddressAsync(parameter as List<GroupAddress>));
 
+            ReadCommand = new RelayCommand<object>(async (parameter) =>
+            await MaGroupValueReadAsync(GroupAddress));
             
+
+
             // Initialisation de la liste ENVOI DES TRAMES
             GroupValues = new List<(GroupAddress, GroupValue)>
             {
@@ -188,8 +194,9 @@ namespace KNX_PROJET_2
             {
                 if (_globalViewModel.IsConnected && !_globalViewModel.IsBusy)
                 {
-                        var readValue = await _globalViewModel._bus.RequestGroupValueAsync(
-                        GroupAddress, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
+                    await _globalViewModel._bus.RequestGroupValueAsync(
+                    GroupAddress, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
+
                 }
                 else
                 {
@@ -204,6 +211,57 @@ namespace KNX_PROJET_2
                                 "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
+        // Tâche de lecture de la trame pour une adresse de groupe spécifique
+        private async Task<GroupValue> MaGroupValueReadAsync(GroupAddress groupAddress)
+        {
+            if (!_globalViewModel.IsConnected || _globalViewModel.IsBusy)
+            {
+                MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.",
+                                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return null;
+            }
+
+            // TaskCompletionSource pour capturer la valeur lue
+            var tcs = new TaskCompletionSource<GroupValue>();
+
+            // Handler temporaire pour capturer la valeur lue
+            EventHandler<GroupEventArgs> handler = null;
+            handler = (sender, e) =>
+            {
+                // Vérifie si l'adresse correspond à l'adresse demandée
+                if (e.DestinationAddress == groupAddress)
+                {
+                    // Définis le résultat pour terminer la tâche
+                    tcs.SetResult(e.Value);
+
+                    // Désabonne l'handler une fois que la valeur est capturée
+                    _globalViewModel._bus.GroupMessageReceived -= handler;
+                }
+            };
+
+            // S'abonner à l'événement
+            _globalViewModel._bus.GroupMessageReceived += handler;
+
+            try
+            {
+                // Envoie la requête pour lire la valeur du groupe
+                await _globalViewModel._bus.RequestGroupValueAsync(
+                    groupAddress, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
+                                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                _globalViewModel._bus.GroupMessageReceived -= handler; // Assurez-vous de désabonner même en cas d'exception
+                return null;
+            }
+
+            // Attendre la tâche de capture de la valeur
+            return await tcs.Task;
+        }
+
 
 
         // Liste observable pour les messages reçus
@@ -299,7 +357,7 @@ namespace KNX_PROJET_2
                 {
                     foreach (var address in groupAddresses)
                     {
-                        var readValue = await _globalViewModel._bus.RequestGroupValueAsync(
+                            await _globalViewModel._bus.RequestGroupValueAsync(
                             address, MessagePriority.High, _globalViewModel._cancellationTokenSource.Token);
 
                         // Traite la valeur lue comme nécessaire
