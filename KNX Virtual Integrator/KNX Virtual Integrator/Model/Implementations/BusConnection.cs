@@ -306,7 +306,7 @@ public class BusConnection : ObservableObject ,IBusConnection
     
     private void BusConnection_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(BusConnection.IsConnected))
+        if (e.PropertyName == nameof(IsConnected))
         {
             OnPropertyChanged(nameof(IsConnected));
         }

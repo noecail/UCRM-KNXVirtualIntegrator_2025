@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.draw;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
@@ -25,7 +26,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
 
         // Ecriture du contenu du document PDF
         GeneratePdfHeader(document, writer); // Génération de la bannière d'en-tête
-        GenerateProjectInformationSection(document, writer); // Génération de la section d'infos du projet (nom, ...)
+        GenerateProjectInformationSection(document, writer, "Maxou"); // Génération de la section d'infos du projet (nom, ...)
 
         // Fermeture du document et du stream d'écriture
         document.Close();
@@ -115,7 +116,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     
     
         // Titre du document
-        boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14);
+        boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
         var titleParagraph = new Paragraph("RAPPORT DE FONCTIONNEMENT DE L’INSTALLATION KNX", boldFont)
             {
                 Alignment = Element.ALIGN_CENTER,
@@ -125,23 +126,78 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         document.Add(titleParagraph);
     }
 
-    private void GenerateProjectInformationSection(Document document, PdfWriter writer)
+    private void GenerateProjectInformationSection(Document document, PdfWriter writer, string username = "")
     {
-        var cb = writer.DirectContent;
-        var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
+        var underlineFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12, Font.UNDERLINE);
+        var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14);
+        var regularFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
+    
+        // Définir la couleur pour le trait de séparation (gris clair #D7D7D7)
+        var separatorColor = new BaseColor(215, 215, 215); // RGB pour #D7D7D7
+
+        // Ajout d'un trait de séparation avec la couleur définie
+        var separator = new LineSeparator(0.5f, 80f, separatorColor, Element.ALIGN_CENTER, 1); // Utilisez une épaisseur de 1 pour une ligne fine
+        document.Add(new Chunk(separator));
+    
         
         
-        // Créer un nouveau paragraphe avec du texte et définir la police
-        var paragraph = new Paragraph($"\n\nInstallation évaluée : {manager.ProjectName}",
-            FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12))
+        var installationChunk = new Chunk("Installation évaluée :", underlineFont);
+        var projectNameChunk = new Chunk($" {manager.ProjectName}", boldFont);
+
+        // Combiner les deux Chunk dans un Paragraph
+        var projectInformationParagraph = new Paragraph
         {
-            IndentationRight = 5f
+            IndentationLeft = 5f, 
+            SpacingBefore = 10f
         };
-
+        projectInformationParagraph.Add(installationChunk);
+        projectInformationParagraph.Add(projectNameChunk);
+    
         // Ajouter le paragraphe au document
-        document.Add(paragraph);
+        document.Add(projectInformationParagraph);
 
+        
+        
+        if (!string.IsNullOrWhiteSpace(username))
+        {
+            var evaluationChunk = new Chunk("Evaluation menée par :", underlineFont);
+            var usernameChunk = new Chunk($" {username}", regularFont);
+            
+            var evaluatorNameParagraph = new Paragraph
+            {
+                IndentationLeft = 5f,
+                SpacingBefore = 5f
+            };
+            evaluatorNameParagraph.Add(evaluationChunk);
+            evaluatorNameParagraph.Add(usernameChunk);
+
+            // Ajouter le paragraphe au document
+            document.Add(evaluatorNameParagraph);
+        }
+
+
+        var projectStructureParagraph = new Paragraph("Structure de l'installation évaluée :", underlineFont)
+        {
+            SpacingBefore = 20f,
+            IndentationLeft = 5f
+        };
+        document.Add(projectStructureParagraph);
+        
+        
+        var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
+        img.Alignment = Element.ALIGN_CENTER;
+        img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
+        document.Add(img);
+        
+        
+        var conductedTests = new Paragraph("Tests réalisés :", underlineFont)
+        {
+            SpacingBefore = 20f,
+            IndentationLeft = 5f
+        };
+        document.Add(conductedTests);
     }
+
 
     public void OpenLatestReport()
     {
