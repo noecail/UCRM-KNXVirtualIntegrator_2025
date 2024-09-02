@@ -58,7 +58,7 @@ public class Logger : ILogger
             Environment.Exit(1); // Terminates the application with an exit code indicating an error
         }
         
-        _writer = new(LogPath);
+        _writer = new StreamWriter(LogPath);
     }
     
     // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
@@ -141,8 +141,8 @@ public class Logger : ILogger
         
         _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
-
-
+    
+    
     public void CloseLogWriter()
     {
         _writer.Close();
