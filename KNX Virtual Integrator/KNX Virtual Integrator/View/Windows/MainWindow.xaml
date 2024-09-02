@@ -198,7 +198,7 @@
                 <!-- Premier bouton Importation -->
                 <Button Style="{StaticResource IconButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}" 
-                    Click="Button_Click_1"
+                    Click="ImportGroupAddressFileButtonClick"
                     Command="{Binding ShowModelColumnCommand}"
                     Margin="5,0,0,0"     
             />
@@ -207,6 +207,7 @@
                 <Button Content="{StaticResource ImportButton}"
                     Style="{StaticResource IconTextButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}"
+                    Click="ImportProjectButtonClick"
                     Background="{StaticResource AccentuateBlue}"
                     Command="{Binding ShowAdressColumnCommand}"
                     Margin="5,0"
