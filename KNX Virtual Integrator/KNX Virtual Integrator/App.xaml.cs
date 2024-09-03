@@ -23,6 +23,7 @@ using System.Windows;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.View;
+using KNX_Virtual_Integrator.View.Windows;
 using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator;
@@ -69,7 +70,7 @@ public partial class App
     /// </summary>
     private static ModelManager? ModelManager { get; set; }
 
-        
+    private ReportCreationWindow w = new ReportCreationWindow();
         
         
     /* ------------------------------------------------------------------------------------------------
@@ -84,6 +85,7 @@ public partial class App
         InitializeApplicationComponents(); // Initialiser les composants de l'application
         OpenMainWindow(); // Ouvrir la fenêtre principale
         PerformStartupTasks(); // Exécuter les tâches de démarrage
+        w.Show();
     }
 
     
@@ -140,8 +142,6 @@ public partial class App
         // Initialiser le ViewModel principal et le gestionnaire de fenêtres
         MainViewModel = new MainViewModel(ModelManager);
         WindowManager = new WindowManager(MainViewModel);
-        
-        // pdfDocumentCreator.CreatePdf("test.pdf");
     }
 
     
