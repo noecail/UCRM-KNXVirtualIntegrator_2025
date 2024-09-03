@@ -11,7 +11,7 @@
  * fonctions necessaires a son utilisation.
  *
  * Remarques :
- * Repo GitHub --> https://github.com/Daichi9764/UCRM
+ * Repo GitHub --> https://github.com/Moliveiralo/UCRM-KNXVirtualIntegrator
  *
  * **************************************************************************/
 
@@ -23,6 +23,7 @@ using System.Windows;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.View;
+using KNX_Virtual_Integrator.View.Windows;
 using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator;
@@ -42,12 +43,12 @@ public partial class App
     /// <summary>
     /// Represents the version of the application.
     /// </summary>
-    public const float AppVersion = 1.1f; // Version de l'application
+    public const float AppVersion = 1.2f; // Version de l'application
 
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 102;
+    public const int AppBuild = 104;
     
         
     
@@ -69,7 +70,7 @@ public partial class App
     /// </summary>
     private static ModelManager? ModelManager { get; set; }
 
-        
+    private ReportCreationWindow w = new ReportCreationWindow();
         
         
     /* ------------------------------------------------------------------------------------------------
@@ -84,6 +85,7 @@ public partial class App
         InitializeApplicationComponents(); // Initialiser les composants de l'application
         OpenMainWindow(); // Ouvrir la fenêtre principale
         PerformStartupTasks(); // Exécuter les tâches de démarrage
+        w.Show();
     }
 
     
@@ -109,6 +111,7 @@ public partial class App
         var stringManagement = new StringManagement(groupAddressProcessor);
         var groupAddressMerger = new GroupAddressMerger(groupAddressProcessor, stringManagement, logger);
         var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader, namespaceResolver, groupAddressProcessor, groupAddressMerger);
+        var projectInfoManager = new ProjectInfoManager(namespaceResolver);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
         var busConnection = new BusConnection();
         var groupCommunication = new GroupCommunication(busConnection);
@@ -140,8 +143,6 @@ public partial class App
         // Initialiser le ViewModel principal et le gestionnaire de fenêtres
         MainViewModel = new MainViewModel(ModelManager);
         WindowManager = new WindowManager(MainViewModel);
-        
-        // pdfDocumentCreator.CreatePdf("test.pdf");
     }
 
     
@@ -206,18 +207,4 @@ public partial class App
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows;
 using KNX_Virtual_Integrator.ViewModel;
 
@@ -19,5 +20,11 @@ public partial class ConnectionWindow
     private async void ConnectionWindow_Loaded(object sender, RoutedEventArgs e)
     {
         // await .DiscoverInterfacesAsync();
+    }
+
+    private void ClosingConnectionWindow(object? sender, CancelEventArgs e)
+    {
+        e.Cancel = true;
+        Hide();
     }
 }

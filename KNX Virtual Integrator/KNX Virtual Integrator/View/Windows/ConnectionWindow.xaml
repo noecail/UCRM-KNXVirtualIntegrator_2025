@@ -3,8 +3,6 @@
                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:local="clr-namespace:KNX_Virtual_Integrator.View"
-                  xmlns:viewModel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                   xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                   mc:Ignorable="d"
                   Title="Connexion au Bus KNX" Height="275" Width="300"
@@ -13,7 +11,8 @@
                   Background="White"
                   BorderThickness="0"
                   WindowTitleBrush="#369026"
-                  NonActiveWindowTitleBrush="#4a9b3c">
+                  NonActiveWindowTitleBrush="#4a9b3c"
+                  Closing="ClosingConnectionWindow">
     
     <Window.Resources>
         <SolidColorBrush x:Key="ButtonBlue" Color="#4071B4"/>
