@@ -62,6 +62,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
         // Initialisation des attributs
         _modelManager = modelManager;
+        
         _busConnection = _modelManager.BusConnection;
         _busConnection.PropertyChanged += (sender, e) =>
         {
@@ -70,11 +71,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             ConnectBusCommand?.RaiseCanExecuteChanged();
             DisconnectBusCommand?.RaiseCanExecuteChanged();
         };
+        
         ProjectFolderPath = "";
 
         // Définir le type de connexion initial
         _busConnection.SelectedConnectionType = "Type=IP";
 
+        
+        
         // Initialisation des commandes
         ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
             parameter =>
@@ -115,15 +119,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
 
         ConnectBusCommand = new RelayCommand(
-            async () => await modelManager.BusConnection.ConnectBusAsync()
+            Execute
         );
 
         DisconnectBusCommand = new RelayCommand(
-            async () => await modelManager.BusConnection.DisconnectBusAsync()
+            Action
         );
 
         RefreshInterfacesCommand = new RelayCommand(
-            async () => await modelManager.BusConnection.DiscoverInterfacesAsync()
+            Execute1
         );
 
         GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
@@ -163,7 +167,12 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         ShowAdressColumnCommand = new RelayCommand(
             ShowAdressColumn);
+        
+        return;
 
+        async void Execute() => await modelManager.BusConnection.ConnectBusAsync();
+        async void Action() => await modelManager.BusConnection.DisconnectBusAsync();
+        async void Execute1() => await modelManager.BusConnection.DiscoverInterfacesAsync();
     }
 
 
@@ -288,40 +297,34 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data for the mouse button event.</param>
-    public void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
-    }
+    public void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
 
     /// <summary>
     /// Handles the event when the left mouse button is released on the slider.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data for the mouse button event.</param>
-    public void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
-    }
+    public void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e) => _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
 
     /// <summary>
     /// Handles the event when the mouse is moved over the slider while dragging.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data for the mouse movement event.</param>
-    public void SliderMouseMove(object sender, MouseEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
-    }
+    public void SliderMouseMove(object sender, MouseEventArgs e) => _modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
 
-    public void OnSliderClick(object sender, RoutedEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
-    }
+    /// <summary>
+    /// Handles the event when the slider is clicked.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">Event data for the routed event.</param>
+    public void OnSliderClick(object sender, RoutedEventArgs e) => _modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
 
-    // Méthode pour déclencher l'événement PropertyChanged
-    protected void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+    
+    /// <summary>
+    /// Triggers the PropertyChanged event for the specified property.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that changed.</param>
+    private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 }
