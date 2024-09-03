@@ -159,16 +159,16 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         // Gestion des colonnes 
         HideModelColumnCommand = new RelayCommand(
-            () => HideModelColumn());
+            HideModelColumn);
 
         HideAdressColumnCommand = new RelayCommand(
-            () => HideAdressColumn());
+            HideAdressColumn);
 
         ShowModelColumnCommand = new RelayCommand(
-            () => ShowModelColumn());
+            ShowModelColumn);
 
         ShowAdressColumnCommand = new RelayCommand(
-            () => ShowAdressColumn());
+            ShowAdressColumn);
 
     }
 
