@@ -26,7 +26,7 @@ namespace KNX_Virtual_Integrator.ViewModel
                 if (_modelColumnWidth != value)
                 {
                     _modelColumnWidth = value;
-                    //OnPropertyChanged(nameof(ModelColumnWidth)); // Notification du changement
+                    OnPropertyChanged(nameof(ModelColumnWidth)); // Notification du changement
                 }
             }
         }
@@ -38,7 +38,7 @@ namespace KNX_Virtual_Integrator.ViewModel
                 if (_adressColumnWidth != value)
                 {
                     _adressColumnWidth = value;
-                    //OnPropertyChanged(nameof(AdressColumnWidth)); // Notification du changement
+                    OnPropertyChanged(nameof(AdressColumnWidth)); // Notification du changement
                 }
             }
         }
