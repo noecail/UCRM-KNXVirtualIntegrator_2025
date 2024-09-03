@@ -111,6 +111,7 @@ public partial class App
         var stringManagement = new StringManagement(groupAddressProcessor);
         var groupAddressMerger = new GroupAddressMerger(groupAddressProcessor, stringManagement, logger);
         var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader, namespaceResolver, groupAddressProcessor, groupAddressMerger);
+        var projectInfoManager = new ProjectInfoManager(namespaceResolver);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
         var busConnection = new BusConnection();
         var groupCommunication = new GroupCommunication(busConnection);
