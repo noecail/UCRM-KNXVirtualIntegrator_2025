@@ -10,7 +10,8 @@
                   ResizeMode="NoResize"
                   Background="White"
                   BorderThickness="0"
-                  WindowTitleBrush="#369026">
+                  WindowTitleBrush="#369026"
+                  Closing="ClosingConnectionWindow">
     
     <Window.Resources>
         <SolidColorBrush x:Key="ButtonBlue" Color="#4071B4"/>

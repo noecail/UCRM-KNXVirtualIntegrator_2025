@@ -17,7 +17,7 @@ namespace KNX_Virtual_Integrator.ViewModel;
 
 public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler PropertyChanged;
+    public new event PropertyChangedEventHandler? PropertyChanged;
 
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -25,7 +25,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
     
     private readonly IBusConnection _busConnection;
-    private readonly WindowManager? _windowManager;
     
     public IApplicationSettings AppSettings => _modelManager.AppSettings;
     private readonly ModelManager _modelManager;  // Référence à ModelManager
@@ -63,7 +62,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
         // Initialisation des attributs
         _modelManager = modelManager;
-        _windowManager = new WindowManager(this);
         _busConnection = _modelManager.BusConnection;
         _busConnection.PropertyChanged += (sender, e) =>
         {
@@ -114,10 +112,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 if (fileName != null) modelManager.FileFinder.FindZeroXml(fileName);
             }
-        );
-
-        OpenConnectionWindowCommand = new RelayCommand(
-            () => _windowManager.ShowConnectionWindow()
         );
 
         ConnectBusCommand = new RelayCommand(

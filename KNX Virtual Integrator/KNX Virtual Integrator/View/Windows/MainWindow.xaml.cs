@@ -15,6 +15,8 @@ public partial class MainWindow
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     private readonly MainViewModel _viewModel;
+
+    private readonly ConnectionWindow _connectionWindow;
     
     /// <summary>
     /// True if the user choose to import a group addresses file, false if it's a project knx file 
@@ -29,12 +31,14 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- METHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    public MainWindow(MainViewModel viewModel)
+    public MainWindow(MainViewModel viewModel, ConnectionWindow cw)
     {
         InitializeComponent();
         
         _viewModel = viewModel;
         DataContext = _viewModel;
+
+        _connectionWindow = cw;
     }
 
     public void ApplyScaling(float scaleFactor)
@@ -288,4 +292,8 @@ public partial class MainWindow
 
     }
 
+    private void OpenConnectionWindow(object sender, RoutedEventArgs e)
+    {
+        _connectionWindow.Show();
+    }
 }
