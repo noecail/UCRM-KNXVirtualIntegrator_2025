@@ -11,7 +11,7 @@
  * fonctions necessaires a son utilisation.
  *
  * Remarques :
- * Repo GitHub --> https://github.com/Daichi9764/UCRM
+ * Repo GitHub --> https://github.com/Moliveiralo/UCRM-KNXVirtualIntegrator
  *
  * **************************************************************************/
 
@@ -43,7 +43,7 @@ public partial class App
     /// <summary>
     /// Represents the version of the application.
     /// </summary>
-    public const float AppVersion = 1.1f; // Version de l'application
+    public const float AppVersion = 1.2f; // Version de l'application
 
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.

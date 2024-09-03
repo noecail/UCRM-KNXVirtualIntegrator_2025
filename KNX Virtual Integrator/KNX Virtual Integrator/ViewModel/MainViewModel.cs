@@ -35,11 +35,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         get => _busConnection.SelectedConnectionType;
         set
         {
-            if (_busConnection.SelectedConnectionType != value)
-            {
-                _busConnection.SelectedConnectionType = value;
-                _busConnection.OnSelectedConnectionTypeChanged();
-            }
+            if (_busConnection.SelectedConnectionType == value) return;
+            _busConnection.SelectedConnectionType = value;
+            _busConnection.OnSelectedConnectionTypeChanged();
         }
     }
     public ConnectionInterfaceViewModel? SelectedInterface
@@ -47,10 +45,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         get => _busConnection.SelectedInterface;
         set
         {
-            if (_busConnection.SelectedInterface != value)
-            {
-                _busConnection.SelectedInterface = value;
-            }
+            if (_busConnection.SelectedInterface == value) return;
+            _busConnection.SelectedInterface = value;
         }
     }
     public bool IsConnected => _busConnection.IsConnected;
@@ -118,17 +114,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        ConnectBusCommand = new RelayCommand(
-            Execute
-        );
+        ConnectBusCommand = new RelayCommand(ConnectBusTask);
 
-        DisconnectBusCommand = new RelayCommand(
-            Action
-        );
+        DisconnectBusCommand = new RelayCommand(DisconnectBusTask);
 
-        RefreshInterfacesCommand = new RelayCommand(
-            Execute1
-        );
+        RefreshInterfacesCommand = new RelayCommand(RefreshInterfacesTask);
 
         GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
@@ -170,9 +160,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         return;
 
-        async void Execute() => await modelManager.BusConnection.ConnectBusAsync();
-        async void Action() => await modelManager.BusConnection.DisconnectBusAsync();
-        async void Execute1() => await modelManager.BusConnection.DiscoverInterfacesAsync();
+        async void ConnectBusTask() => await modelManager.BusConnection.ConnectBusAsync();
+        async void DisconnectBusTask() => await modelManager.BusConnection.DisconnectBusAsync();
+        async void RefreshInterfacesTask() => await modelManager.BusConnection.DiscoverInterfacesAsync();
     }
 
 
