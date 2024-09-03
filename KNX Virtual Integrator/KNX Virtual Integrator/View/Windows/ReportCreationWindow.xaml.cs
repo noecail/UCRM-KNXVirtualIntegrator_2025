@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
-public partial class ReportCreationWindow : Window
+public partial class ReportCreationWindow
 {
     public ReportCreationWindow()
     {
@@ -14,6 +14,16 @@ public partial class ReportCreationWindow : Window
     {
         if (e.LeftButton != MouseButtonState.Pressed) return;
         DragMove();
+    }
+
+    private void CloseReportCreationWindow(object sender, RoutedEventArgs e)
+    {
+        Hide();
+    }
+
+    private void SaveButtonClick(object sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 
     private void CancelButtonClick(object sender, RoutedEventArgs e)
