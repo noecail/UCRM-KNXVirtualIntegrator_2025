@@ -16,7 +16,8 @@ namespace KNX_Virtual_Integrator.Model
         IGroupCommunication groupCommunication,
         IApplicationSettings appSettings,
         IParentFinder parentFinder,
-        ISliderClickHandler settingsSliderClickHandler)
+        ISliderClickHandler settingsSliderClickHandler,
+        IPdfDocumentCreator pdfDocumentCreator)
 
     {
     public IFileLoader FileLoader { get; } = fileLoader;
@@ -33,5 +34,6 @@ namespace KNX_Virtual_Integrator.Model
     public IApplicationSettings AppSettings { get; } = appSettings;
     public IParentFinder ParentFinder { get; } = parentFinder;
     public ISliderClickHandler SettingsSliderClickHandler { get; } = settingsSliderClickHandler;
+    public IPdfDocumentCreator PdfDocumentCreator { get; } = pdfDocumentCreator;
     }
 }

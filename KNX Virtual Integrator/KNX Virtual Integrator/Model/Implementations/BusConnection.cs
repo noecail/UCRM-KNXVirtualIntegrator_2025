@@ -72,7 +72,16 @@ public class BusConnection : ObservableObject ,IBusConnection
             }
         }
     }
-    
+
+
+    //GESTIONNAIRE EVENEMENT POUR GROUPCOMMUNICATIONVIEWMODEL
+    public event EventHandler<KnxBus> BusConnectedReady;
+    protected virtual void OnBusConnectedReady(KnxBus bus)
+    {
+        BusConnectedReady?.Invoke(this, bus);
+    }
+    //------------//
+
     public async void OnSelectedConnectionTypeChanged()
     {
         try
@@ -131,6 +140,7 @@ public class BusConnection : ObservableObject ,IBusConnection
                 Bus.ConnectionStateChanged += BusConnectionStateChanged;
                 IsConnected = true;
                 UpdateConnectionState();
+                OnBusConnectedReady(Bus); //AVERTIR GROUPCOMMUNICATIONVIEWMODEL = cest bon tu peux commencer à ecouter les messages
                 MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             // Sinon, message d'erreur
@@ -193,7 +203,7 @@ public class BusConnection : ObservableObject ,IBusConnection
             var discoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
 
             // Découverte des interfaces IP
-            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=IP" || SelectedConnectionType == "Type=IP")
+            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=IP")
             {
                 var ipDiscoveryTask = Task.Run(async () =>
             {
@@ -252,7 +262,7 @@ public class BusConnection : ObservableObject ,IBusConnection
             }
 
             // Découverte des périphériques USB
-            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=USB" || SelectedConnectionType == "Type=USB")
+            if (SelectedConnectionType == "System.Windows.Controls.ComboBoxItem : Type=USB")
             {
                 var usbDiscoveryTask = Task.Run(() =>
                 {
@@ -306,7 +316,7 @@ public class BusConnection : ObservableObject ,IBusConnection
     
     private void BusConnection_PropertyChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(BusConnection.IsConnected))
+        if (e.PropertyName == nameof(IsConnected))
         {
             OnPropertyChanged(nameof(IsConnected));
         }

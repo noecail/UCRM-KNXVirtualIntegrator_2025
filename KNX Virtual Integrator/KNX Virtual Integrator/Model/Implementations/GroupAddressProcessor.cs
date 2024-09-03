@@ -70,7 +70,7 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
                 var firstWord = firstElementName?.Split(separators, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
 
                 // Vérifier si tous les éléments commencent par le même premier mot
-                bool allStartWithSameWord = elements.All(el =>
+                var allStartWithSameWord = elements.All(el =>
                 {
                     var nameAttribute = el.Attribute("Name")?.Value;
                     var currentFirstWord = nameAttribute?.Split(separators, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault();
@@ -113,7 +113,7 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
     public string DecodeAddress(string valueString, int groupAddressStructure)
     {
         // Convertir la chaîne en entier
-        if (!int.TryParse(valueString, out int value))
+        if (!int.TryParse(valueString, out var value))
         {
             logger.ConsoleAndLogWriteLine($"Impossible to convert {valueString} in integer");
             return valueString;
@@ -122,13 +122,13 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
         if (groupAddressStructure == 3)
         {
             // Extraire le troisième champ (8 bits)
-            int champ3 = value & 0xFF;
+            var champ3 = value & 0xFF;
 
             // Extraire le deuxième champ (3 bits)
-            int champ2 = (value >> 8) & 0x7;
+            var champ2 = (value >> 8) & 0x7;
 
             // Extraire le premier champ (5 bits)
-            int champ1 = (value >> 11) & 0x1F;
+            var champ1 = (value >> 11) & 0x1F;
 
             // Construire la chaîne de caractères au format "champ1/champ2/champ3"
             return $"{champ1}/{champ2}/{champ3}";
@@ -136,10 +136,10 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
         else if (groupAddressStructure == 2)
         {
             // Extraire le deuxième champ (11 bits)
-            int champ2 = value & 0x7FF; // 0x7FF est 2047 en hexadécimal
+            var champ2 = value & 0x7FF; // 0x7FF est 2047 en hexadécimal
 
             // Extraire le premier champ (5 bits)
-            int champ1 = (value >> 11) & 0x1F; // 0x1F est 31 en hexadécimal
+            var champ1 = (value >> 11) & 0x1F; // 0x1F est 31 en hexadécimal
 
             // Construire la chaîne de caractères au format "champ1/champ2"
             return $"{champ1}/{champ2}";

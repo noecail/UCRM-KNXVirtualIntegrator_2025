@@ -47,7 +47,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 99;
+    public const int AppBuild = 102;
     
         
     
@@ -114,6 +114,7 @@ public partial class App
         var groupCommunication = new GroupCommunication(busConnection);
         var parentFinder = new ParentFinder(logger);
         var sliderClickHandler = new SliderClickHandler(logger, parentFinder);
+        var pdfDocumentCreator = new PdfDocumentCreator(projectFileManager);
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
@@ -130,7 +131,8 @@ public partial class App
             groupCommunication,
             appSettings, 
             parentFinder,
-            sliderClickHandler);
+            sliderClickHandler,
+            pdfDocumentCreator);
         
         // Enregistrer un message de démarrage dans la console et le journal
         ModelManager.Logger.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
@@ -138,6 +140,8 @@ public partial class App
         // Initialiser le ViewModel principal et le gestionnaire de fenêtres
         MainViewModel = new MainViewModel(ModelManager);
         WindowManager = new WindowManager(MainViewModel);
+        
+        // pdfDocumentCreator.CreatePdf("test.pdf");
     }
 
     
@@ -202,6 +206,9 @@ public partial class App
     }
     
 }
+
+
+
 
 
 
