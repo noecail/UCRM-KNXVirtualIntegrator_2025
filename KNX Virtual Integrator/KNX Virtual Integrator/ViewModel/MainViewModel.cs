@@ -9,6 +9,7 @@ using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
+using KNXIntegrator.Models;
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -170,6 +171,16 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ShowAdressColumnCommand = new RelayCommand(
             () => ShowAdressColumn());
 
+        //Gestion des modèles
+        _functionalModelDictionary = new FunctionalModelDictionary();
+
+        // Ajout de 3 modèles par défaut
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(1, "Patrick"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Patrick 2"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Model 3"));
+
+        // Chargement des modèles dans la collection observable
+        Models = new ObservableCollection<FunctionalModel>(_functionalModelDictionary.GetAllModels());
     }
 
 

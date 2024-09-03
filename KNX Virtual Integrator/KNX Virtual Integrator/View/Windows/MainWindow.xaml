@@ -173,13 +173,9 @@
 
                     </Grid>
 
-                    <ListBox Grid.Row="1" Grid.Column="0">
-                        <ListBoxItem Content="Item 1" />
-                        <ListBoxItem Content="Item 2" />
-                        <ListBoxItem Content="Item 3" />
-                    </ListBox>
+                <ListBox ItemsSource="{Binding Models}" DisplayMemberPath="DisplayText" />
 
-                    <!-- Deuxième colonne -->
+                <!-- Deuxième colonne -->
                     <!-- En-tête -->
                     <Grid Grid.Row="0" Grid.Column="1">
                         <Grid.ColumnDefinitions>
