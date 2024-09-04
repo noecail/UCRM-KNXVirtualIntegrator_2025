@@ -13,10 +13,10 @@ public interface IGroupAddressMerger
     /// If a similar entry is found, it is added to the corresponding group.
     /// 
     /// <param name="groupedAddresses">The dictionary of grouped addresses that will be modified and potentially merged with elements from IeAddressesSet.</param>
-    /// <param name="IeAddressesSet">A list of XElement entries that will be compared against single-element groups in groupedAddresses for potential merging.</param>
+    /// <param name="ieAddressesSet">A list of XElement entries that will be compared against single-element groups in groupedAddresses for potential merging.</param>
     /// <returns>Returns the modified dictionary of grouped addresses with merged entries.</returns>
     /// </summary>
-    public Dictionary<string, List<XElement>> MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses, List<XElement> IeAddressesSet);
+    public Dictionary<string, List<XElement>> MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses, List<XElement> ieAddressesSet);
 
     /// <summary>
     /// Processes the name attribute of the provided 'cmdElement' XElement to extract a relevant search string, 
