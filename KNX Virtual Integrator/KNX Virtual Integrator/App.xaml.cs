@@ -111,7 +111,7 @@ public partial class App
         var namespaceResolver = new NamespaceResolver(logger);
         var groupAddressProcessor = new GroupAddressProcessor(logger);
         var stringManagement = new StringManagement(groupAddressProcessor);
-        var groupAddressMerger = new GroupAddressMerger(groupAddressProcessor, stringManagement, logger);
+        var groupAddressMerger = new GroupAddressMerger(stringManagement, logger);
         var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader, namespaceResolver, groupAddressProcessor, groupAddressMerger);
         var projectInfoManager = new ProjectInfoManager(namespaceResolver);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
