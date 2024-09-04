@@ -17,6 +17,8 @@ using KNX_Virtual_Integrator.ViewModel;
         ------------------------------------------------------------------------------------------------ */
         private readonly MainViewModel _viewModel;
 
+        private readonly ConnectionWindow _connectionWindow;
+
         
         
         /// <summary>
@@ -32,14 +34,14 @@ using KNX_Virtual_Integrator.ViewModel;
         /* ------------------------------------------------------------------------------------------------
         --------------------------------------------- METHODES --------------------------------------------
         ------------------------------------------------------------------------------------------------ */
-        public MainWindow(MainViewModel viewModel)
+        public MainWindow(MainViewModel viewModel, ConnectionWindow cw)
         {
             InitializeComponent();
             
             _viewModel = viewModel;
             DataContext = _viewModel;
 
-            
+            _connectionWindow = cw;
         }
 
     public void ApplyScaling(float scaleFactor)
@@ -304,5 +306,10 @@ using KNX_Virtual_Integrator.ViewModel;
     {
         var groupAddress = new GroupAddress("2/1/3");
         _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
+    }
+    
+    private void OpenConnectionWindow(object sender, RoutedEventArgs e)
+    {
+        _connectionWindow.Show();
     }
 }
