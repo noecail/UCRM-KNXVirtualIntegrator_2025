@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
@@ -52,19 +53,33 @@ public class GroupAddressMerger( StringManagement stringManagement, Logger logge
     }
     
     /// <summary>
-    /// Retrieves a list of XElement objects from a list, sorted by their similarity to a given search string,
-    /// ignoring specific prefixe ("Ie") in the names of the elements.
+    /// Processes the name attribute of the provided 'cmdElement' XElement to extract a relevant search string, 
+    /// and then finds and sorts elements from the 'ieAddressesSet' based on their similarity to this search string.
     /// 
-    /// This method processes a list of XElement objects, removes the prefixe "Ie" from the element names,
-    /// and then sorts the elements based on their similarity to the provided search string. The similarity is calculated
-    /// using the modified names.
+    /// This method performs the following steps:
+    /// 1. Extracts the value of the "Name" attribute from the 'cmdElement' XElement and assigns it to 'searchString'.
+    /// 2. Removes the prefix "Cmd" from the beginning of 'searchString', if present.
+    /// 3. Uses a regular expression to strip off any trailing numeric segments from 'searchString', 
+    ///    leaving only the core part of the name for comparison.
+    /// 4. Sorts the elements in 'ieAddressesSet' by their similarity to the cleaned 'searchString', 
+    ///    in descending order of similarity. The similarity is computed using a custom similarity function.
     /// 
-    /// <param name="searchString">The string to compare against the element names after removing prefixes.</param>
-    /// <param name="ieAddressesSet">A list of XElement objects to be filtered and sorted.</param>
-    /// <returns>A sorted list of XElement objects based on their similarity to the search string.</returns>
+    /// <param name="cmdElement">The XElement representing the command from which the search string is derived.</param>
+    /// <param name="ieAddressesSet">The collection of XElement entries to be compared against the search string.</param>
+    /// <returns>Returns a list of elements from 'ieAddressesSet', sorted by their similarity to the cleaned 'searchString'.</returns>
     /// </summary>
-    public List<XElement> GetElementsBySimilarity(string searchString, List<XElement> ieAddressesSet)
+
+    public List<XElement> GetElementsBySimilarity(XElement cmdElement, List<XElement> ieAddressesSet)
     {
+        // Récupérer la valeur de l'attribut "Name" de l'élément 'cmdElement' et l'assigner à 'searchString'
+        var searchString = cmdElement.Attribute("Name")?.Value;
+
+        // Supprimer les premiers 3 caractères de 'searchString', généralement le préfixe "Cmd"
+        searchString = searchString?.Substring(3);
+
+        // Utiliser une expression régulière pour enlever l'adresse à la fin de 'searchString', laissant le reste de la chaîne intact
+        searchString = Regex.Replace(searchString, @"\d+(/\d+)*$", string.Empty);
+        
         // Trier les éléments de 'ieAddressesSet' en ordre décroissant de similarité avec 'searchString'
         var sortedElements = ieAddressesSet
             .OrderByDescending(element => 

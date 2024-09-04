@@ -292,7 +292,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             {
                 var address = cmd.Attribute("Address")?.Value;
                 
-                // Vérifie que l'adresse n'est pas nulle
+                // Vérifie que l'adresse n'est pas null
                 if (address != null)
                 {
                     // Initialiser le set pour les adresses "Cmd" déjà ajoutées si nécessaire
@@ -331,8 +331,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         // Appel optionnel, cela ajoute des Ie qui ressemble à 80% aux groupes de Cmd seules
         // A voir l'appel de la fonction est pertinent
         groupAddressMerger.MergeSingleElementGroups(GroupedAddresses, IeAddressesSet);
-        
-        groupAddressMerger.GetElementsBySimilarity("_VoletRoulant_Position_MaqKnxC_MaisonDupre_RezDeChaussee_Tgbt", IeAddressesSet);
     }
     
     /// <summary>
