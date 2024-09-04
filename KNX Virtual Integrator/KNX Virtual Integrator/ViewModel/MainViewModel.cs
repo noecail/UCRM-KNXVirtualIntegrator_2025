@@ -9,6 +9,7 @@ using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
+using Knx.Falcon.KnxnetIp;
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -67,11 +68,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             ConnectBusCommand?.RaiseCanExecuteChanged();
             DisconnectBusCommand?.RaiseCanExecuteChanged();
         };
+        _busConnection.SelectedConnectionType = "Type=IP";
         
         ProjectFolderPath = "";
 
-        // Définir le type de connexion initial
-        _busConnection.SelectedConnectionType = "Type=IP";
+        
 
         
         
@@ -209,21 +210,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     public ICommand FindZeroXmlCommand { get; private set; }
 
     public RelayCommand OpenConnectionWindowCommand { get; }
-    
-    /// <summary>
-    /// Command that connects to the bus asynchronously.
-    /// </summary>
-    public RelayCommand ConnectBusCommand { get; private set; }
-
-    /// <summary>
-    /// Command that disconnects from the bus asynchronously.
-    /// </summary>
-    public RelayCommand DisconnectBusCommand { get; private set; } 
-
-    /// <summary>
-    /// Command that refreshes the list of bus interfaces asynchronously.
-    /// </summary>
-    public RelayCommand RefreshInterfacesCommand { get; private set; }
+    public RelayCommand ConnectBusCommand { get; }
+    public RelayCommand DisconnectBusCommand { get; }
+    public RelayCommand RefreshInterfacesCommand { get; }
 
     /// <summary>
     /// Command that sends a group value write "on" command asynchronously.
