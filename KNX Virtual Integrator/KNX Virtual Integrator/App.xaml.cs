@@ -63,7 +63,7 @@ public partial class App
     /// for the main window and core application functionality.
     /// </summary>
     private static MainViewModel? MainViewModel { get; set; }
-
+    
     /// <summary>
     /// Manages the application's core data models and business logic, providing a central point for 
     /// interacting with and managing the data and services required by the application.
