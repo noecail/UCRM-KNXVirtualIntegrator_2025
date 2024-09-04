@@ -10,6 +10,7 @@ using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
 using Knx.Falcon.KnxnetIp;
+using Knx.Falcon;
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -129,6 +130,24 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             _ => modelManager.GroupCommunication.GroupValueWriteOffAsync()
         );
 
+
+        // Initialisation des commandes
+        GroupValueWriteCommand = new Commands.RelayCommand<(GroupAddress, GroupValue)>(
+            async parameters =>
+            {
+                await modelManager.GroupCommunication.GroupValueWriteAsync(parameters.Item1, parameters.Item2);
+            }
+        );
+
+        MaGroupValueReadCommand = new Commands.RelayCommand<GroupAddress>(
+            async groupAddress =>
+            {
+                var groupValue = await modelManager.GroupCommunication.MaGroupValueReadAsync(groupAddress);
+                // Vous pouvez faire quelque chose avec la valeur lue ici si nécessaire
+            }
+        );
+
+
         SaveSettingsCommand = new Commands.RelayCommand<object>(
             _ => modelManager.AppSettings.Save()
         );
@@ -223,6 +242,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// Command that sends a group value write "off" command asynchronously.
     /// </summary>
     public ICommand GroupValueWriteOffCommand { get; private set; }
+
+    public ICommand MaGroupValueReadCommand { get; private set; }
+    public ICommand GroupValueWriteCommand { get; private set; }
+
 
     /// <summary>
     /// Command that saves the current application settings.

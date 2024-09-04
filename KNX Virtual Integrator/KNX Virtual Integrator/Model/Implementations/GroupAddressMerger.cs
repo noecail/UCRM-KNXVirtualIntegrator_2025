@@ -2,7 +2,7 @@
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, StringManagement stringManagement, Logger logger) : IGroupAddressMerger
+public class GroupAddressMerger( StringManagement stringManagement, Logger logger) : IGroupAddressMerger
 {
     private readonly ILogger _logger = logger;
         
@@ -15,34 +15,39 @@ public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, Str
     /// If a similar entry is found, it is added to the corresponding group.
     /// 
     /// <param name="groupedAddresses">The dictionary of grouped addresses that will be modified and potentially merged with elements from IeAddressesSet.</param>
-    /// <param name="IeAddressesSet">A list of XElement entries that will be compared against single-element groups in groupedAddresses for potential merging.</param>
+    /// <param name="ieAddressesSet">A list of XElement entries that will be compared against single-element groups in groupedAddresses for potential merging.</param>
     /// <returns>Returns the modified dictionary of grouped addresses with merged entries.</returns>
     /// </summary>
-    public Dictionary<string, List<XElement>> MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses, List<XElement> IeAddressesSet)
+    public Dictionary<string, List<XElement>> MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses, List<XElement> ieAddressesSet)
     {
+        // Extraire les groupes de 'groupedAddresses' qui contiennent un seul élément
         var singleElementGroups = groupedAddresses.Where(g => g.Value.Count == 1).ToList();
 
         // Parcourir chaque groupe isolé dans groupedAddresses
         foreach (var group in singleElementGroups)
         {
             var groupName = group.Key;
-            var groupElement = group.Value.First();
 
-            // Rechercher dans IeAddressesSet les éléments similaires à au moins 80%
-            foreach (var ieElement in IeAddressesSet)
+            // Pour chaque groupe, parcourir les éléments de 'IeAddressesSet'
+            foreach (var ieElement in ieAddressesSet)
             {
-                var ieElementName = ieElement.Attribute("Name")?.Value; // Supposant que les éléments dans IeAddressesSet ont un élément "Name"
+                // Supposant que les éléments dans 'IeAddressesSet' ont un attribut "Name", on récupère cette valeur
+                var ieElementName = ieElement.Attribute("Name")?.Value;
 
+                // Si le nom de l'élément 'ieElementName' n'est pas nul,
+                // et que la similarité entre 'groupName' et 'ieElementName' est supérieure ou égale à 80%
                 if (ieElementName != null && stringManagement.CalculateSimilarity(groupName, ieElementName) >= 0.8)
                 {
+                    // Log l'ajout de l'élément 'ieElementName' au groupe 'groupName'
                     _logger.ConsoleAndLogWriteLine($"Adding '{ieElementName}' from IeAddressesSet to single-element group '{groupName}'.");
 
+                    // Ajouter l'élément 'ieElement' au groupe actuel
                     group.Value.Add(ieElement);
                 }
             }
         }
 
-        // Retourner le dictionnaire modifié
+        // Retourner le dictionnaire modifié avec les groupes potentiellement mis à jour
         return groupedAddresses;
     }
     
@@ -60,22 +65,25 @@ public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, Str
     /// </summary>
     public List<XElement> GetElementsBySimilarity(string searchString, List<XElement> ieAddressesSet)
     {
+        // Trier les éléments de 'ieAddressesSet' en ordre décroissant de similarité avec 'searchString'
         var sortedElements = ieAddressesSet
             .OrderByDescending(element => 
             {
+                // Récupérer la valeur de l'attribut "Name" de l'élément actuel
                 var name = element.Attribute("Name")?.Value;
 
-                // Remove the prefixe "Ie" if it exist
+                // Si le nom commence par "Ie", supprimer ce préfixe
                 if (name != null && name.StartsWith("Ie"))
                 {
-                    name = name.Substring(2); // Remove the first 2 characters
+                    name = name.Substring(2); // Supprimer les 2 premiers caractères ("Ie")
                 }
-                
-                // Calculate the similarity based on the modified name
+        
+                // Calculer la similarité entre 'searchString' et le nom modifié (sans le préfixe "Ie")
                 return stringManagement.CalculateSimilarity(searchString, name ?? string.Empty);
             })
-            .ToList();
+            .ToList(); // Convertir le résultat trié en liste
 
+        // Retourner la liste des éléments triés
         return sortedElements;
     }
         
