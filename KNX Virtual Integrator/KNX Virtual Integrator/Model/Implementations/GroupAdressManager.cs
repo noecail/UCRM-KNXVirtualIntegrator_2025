@@ -8,8 +8,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 {
     private readonly ILogger _logger = logger;
 
-    public static XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01";
+    /// <summary>
+    /// Dictionary where each Cmd addresses is grouped with the corresponding Ie adresses
+    /// </summary>
     public readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();
+    
+    /// <summary>
+    /// List of all the Ie addresses
+    /// </summary>
     public readonly List<XElement> IeAddressesSet = new();
 
     /// <summary>
@@ -37,12 +43,12 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         }
         else
         {
-            GlobalKnxNamespace = "http://knx.org/xml/ga-export/01";
+            namespaceResolver.GlobalKnxNamespace = "http://knx.org/xml/ga-export/01";
             ProcessStandardXmlFile(groupAddressFile);
         }
     }
 
-    /// <summary>
+   /// <summary>
     /// Processes an XML file in the Zero format to extract and group addresses.
     ///
     /// This method extracts device references and their links, processes group addresses, and 
@@ -62,17 +68,17 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         var groupAddressStructure = DetermineGroupAddressStructure(groupAddressFile);
         
         // Étape 1 : Extraire les références des appareils
-        var deviceRefs = groupAddressFile.Descendants(GlobalKnxNamespace + "DeviceInstance")
+        var deviceRefs = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace + "DeviceInstance")
             .Select(di => (
                 Id: di.Attribute("Id")?.Value,
-                Links: di.Descendants(GlobalKnxNamespace + "ComObjectInstanceRef")
+                Links: di.Descendants(namespaceResolver.GlobalKnxNamespace + "ComObjectInstanceRef")
                     .Where(cir => cir.Attribute("Links") != null)
                     .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? Array.Empty<string>())
                     .ToHashSet()
             ))
             .ToList();
 
-        var groupAddresses = groupAddressFile.Descendants(GlobalKnxNamespace + "GroupAddress").ToList();
+        var groupAddresses = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupAddress").ToList();
         var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId, string CmdAddress), HashSet<string>>();
 
         // Étape 2 : Regrouper les adresses par nom commun et ID de l'appareil
@@ -189,7 +195,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
        
         groupAddressMerger.MergeSingleElementGroups(GroupedAddresses, IeAddressesSet);
         
-        
     }
     
     /// <summary>
@@ -204,7 +209,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     {
         IeAddressesSet.Clear();
         GroupedAddresses.Clear();
-        var groupAddresses = groupAddressFile.Descendants(GlobalKnxNamespace + "GroupAddress").ToList();
+        var groupAddresses = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupAddress").ToList();
     
         var ieAddresses = new Dictionary<string, List<XElement>>(StringComparer.OrdinalIgnoreCase);
         var cmdAddresses = new Dictionary<string, List<XElement>>(StringComparer.OrdinalIgnoreCase);
@@ -307,10 +312,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         var allAddresses = new HashSet<int>();
 
         // Parcourir chaque GroupRange
-        foreach (var groupRange in doc.Descendants(GlobalKnxNamespace + "GroupRange"))
+        foreach (var groupRange in doc.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupRange"))
         {
             // Parcourir chaque GroupAddress du GroupRange
-            foreach (var groupAddress in groupRange.Descendants(GlobalKnxNamespace + "GroupAddress"))
+            foreach (var groupAddress in groupRange.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupAddress"))
             {
                 var address = int.Parse(groupAddress.Attribute("Address")!.Value);
 

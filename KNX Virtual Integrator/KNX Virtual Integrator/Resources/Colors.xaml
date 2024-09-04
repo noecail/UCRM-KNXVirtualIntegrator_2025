@@ -7,7 +7,8 @@
     <Color x:Key="GreenColor">#369026</Color>
     <Color x:Key="LightGreenColor">#4a9b3c</Color>
     <Color x:Key="BlueColor">#006BB4</Color>
-    <Color x:Key="RedColor">#B20000</Color>
+    <Color x:Key="RedColor">#C75150</Color>
+    <Color x:Key="AccentuatedRedColor">#B73B3B</Color>
     <Color x:Key="LightGrayColor">#F3F3F3</Color>
     <Color x:Key="GrayColor">#CDCDCD</Color>
     <Color x:Key="Gray2Color">#999999</Color>
@@ -27,11 +28,14 @@
     <SolidColorBrush x:Key="BorderGreen" Color="{StaticResource GreenColor}"/>
 
 
-    <!-- Accentuation -->
-    <SolidColorBrush x:Key="AccentuateGreen" Color="{StaticResource GreenColor}"/>
-    <SolidColorBrush x:Key="AccentuateGray" Color="{StaticResource Gray2Color}"/>
-    <SolidColorBrush x:Key="AccentuateBlue" Color="{StaticResource BlueColor}"/>
-    <SolidColorBrush x:Key="AccentuateRed" Color="{StaticResource RedColor}"/>
+    <!-- Button -->
+    <SolidColorBrush x:Key="ButtonGreen" Color="{StaticResource GreenColor}"/>
+    <SolidColorBrush x:Key="AccentuateButtonGreen" Color="{StaticResource LightGreenColor}"/>
+    <SolidColorBrush x:Key="ButtonGray" Color="{StaticResource Gray2Color}"/>
+    <SolidColorBrush x:Key="ButtonBlue" Color="{StaticResource BlueColor}"/>
+    <SolidColorBrush x:Key="ButtonRed" Color="{StaticResource RedColor}"/>
+    <SolidColorBrush x:Key="AccentuatedButtonRed" Color="{StaticResource AccentuatedRedColor}"/>
+    
 
     <!-- Textes -->
     <SolidColorBrush x:Key="TextBlack" Color="{StaticResource BlackColor}"/>

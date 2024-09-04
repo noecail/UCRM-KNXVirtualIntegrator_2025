@@ -18,7 +18,7 @@ namespace KNX_Virtual_Integrator.ViewModel;
 
 public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler PropertyChanged;
+    public new event PropertyChangedEventHandler? PropertyChanged;
 
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -26,7 +26,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
     
     private readonly IBusConnection _busConnection;
-    private readonly WindowManager? _windowManager;
     
     public IApplicationSettings AppSettings => _modelManager.AppSettings;
     private readonly ModelManager _modelManager;  // Référence à ModelManager
@@ -37,11 +36,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         get => _busConnection.SelectedConnectionType;
         set
         {
-            if (_busConnection.SelectedConnectionType != value)
-            {
-                _busConnection.SelectedConnectionType = value;
-                _busConnection.OnSelectedConnectionTypeChanged();
-            }
+            if (_busConnection.SelectedConnectionType == value) return;
+            _busConnection.SelectedConnectionType = value;
+            _busConnection.OnSelectedConnectionTypeChanged();
         }
     }
     public ConnectionInterfaceViewModel? SelectedInterface
@@ -49,10 +46,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         get => _busConnection.SelectedInterface;
         set
         {
-            if (_busConnection.SelectedInterface != value)
-            {
-                _busConnection.SelectedInterface = value;
-            }
+            if (_busConnection.SelectedInterface == value) return;
+            _busConnection.SelectedInterface = value;
         }
     }
     public bool IsConnected => _busConnection.IsConnected;
@@ -64,7 +59,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
         // Initialisation des attributs
         _modelManager = modelManager;
-        _windowManager = new WindowManager(this);
+        
         _busConnection = _modelManager.BusConnection;
         _busConnection.PropertyChanged += (sender, e) =>
         {
@@ -73,11 +68,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             ConnectBusCommand?.RaiseCanExecuteChanged();
             DisconnectBusCommand?.RaiseCanExecuteChanged();
         };
+        
         ProjectFolderPath = "";
 
         // Définir le type de connexion initial
         _busConnection.SelectedConnectionType = "Type=IP";
 
+        
+        
         // Initialisation des commandes
         ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
             parameter =>
@@ -117,21 +115,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        OpenConnectionWindowCommand = new RelayCommand(
-            () => _windowManager.ShowConnectionWindow()
-        );
+        ConnectBusCommand = new RelayCommand(ConnectBusTask);
 
-        ConnectBusCommand = new RelayCommand(
-            async () => await modelManager.BusConnection.ConnectBusAsync()
-        );
+        DisconnectBusCommand = new RelayCommand(DisconnectBusTask);
 
-        DisconnectBusCommand = new RelayCommand(
-            async () => await modelManager.BusConnection.DisconnectBusAsync()
-        );
-
-        RefreshInterfacesCommand = new RelayCommand(
-            async () => await modelManager.BusConnection.DiscoverInterfacesAsync()
-        );
+        RefreshInterfacesCommand = new RelayCommand(RefreshInterfacesTask);
 
         GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
@@ -178,17 +166,22 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         // Gestion des colonnes 
         HideModelColumnCommand = new RelayCommand(
-            () => HideModelColumn());
+            HideModelColumn);
 
         HideAdressColumnCommand = new RelayCommand(
-            () => HideAdressColumn());
+            HideAdressColumn);
 
         ShowModelColumnCommand = new RelayCommand(
-            () => ShowModelColumn());
+            ShowModelColumn);
 
         ShowAdressColumnCommand = new RelayCommand(
-            () => ShowAdressColumn());
+            ShowAdressColumn);
+        
+        return;
 
+        async void ConnectBusTask() => await modelManager.BusConnection.ConnectBusAsync();
+        async void DisconnectBusTask() => await modelManager.BusConnection.DisconnectBusAsync();
+        async void RefreshInterfacesTask() => await modelManager.BusConnection.DiscoverInterfacesAsync();
     }
 
 
@@ -317,40 +310,34 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data for the mouse button event.</param>
-    public void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
-    }
+    public void SliderMouseLeftButtonDown(object sender, MouseButtonEventArgs e) => _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonDown(sender, e);
 
     /// <summary>
     /// Handles the event when the left mouse button is released on the slider.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data for the mouse button event.</param>
-    public void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
-    }
+    public void SliderMouseLeftButtonUp(object sender, MouseButtonEventArgs e) => _modelManager.SettingsSliderClickHandler.SliderMouseLeftButtonUp(sender, e);
 
     /// <summary>
     /// Handles the event when the mouse is moved over the slider while dragging.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">Event data for the mouse movement event.</param>
-    public void SliderMouseMove(object sender, MouseEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
-    }
+    public void SliderMouseMove(object sender, MouseEventArgs e) => _modelManager.SettingsSliderClickHandler.SliderMouseMove(sender, e);
 
-    public void OnSliderClick(object sender, RoutedEventArgs e)
-    {
-        _modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
-    }
+    /// <summary>
+    /// Handles the event when the slider is clicked.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">Event data for the routed event.</param>
+    public void OnSliderClick(object sender, RoutedEventArgs e) => _modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
 
-    // Méthode pour déclencher l'événement PropertyChanged
-    protected void OnPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+    
+    /// <summary>
+    /// Triggers the PropertyChanged event for the specified property.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that changed.</param>
+    private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
 }

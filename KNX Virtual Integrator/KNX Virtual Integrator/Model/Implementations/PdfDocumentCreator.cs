@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using iTextSharp.text.pdf.draw;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
@@ -10,10 +11,20 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreator
 {
     public string LatestReportPath { get; private set; } = "";
+
+    
+    // POUR TESTER UNIQUEMENT
+    private List<string> _modelesFonctionnels = new();
     
     
     public void CreatePdf(string name)
     {
+        _modelesFonctionnels.Add("zizi");
+        _modelesFonctionnels.Add("zizi2");
+        _modelesFonctionnels.Add("zizi3");
+        _modelesFonctionnels.Add("zizi4");
+        _modelesFonctionnels.Add("zizi5");
+        
         // Génération d'un PDF format A4 sans marges
         var document = new Document(PageSize.A4, 0, 0, 0, 0);
         
@@ -25,7 +36,8 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
 
         // Ecriture du contenu du document PDF
         GeneratePdfHeader(document, writer); // Génération de la bannière d'en-tête
-        GenerateProjectInformationSection(document, writer); // Génération de la section d'infos du projet (nom, ...)
+        GenerateProjectInformationSection(document, "Maxou"); // Génération de la section d'infos du projet (nom, ...)
+        GenerateTreeStructure(document, writer);
 
         // Fermeture du document et du stream d'écriture
         document.Close();
@@ -44,11 +56,6 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     }
 
     public void ClosePdf()
-    {
-        
-    }
-
-    public void GenerateReport()
     {
         
     }
@@ -115,33 +122,153 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     
     
         // Titre du document
-        boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14);
+        boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
         var titleParagraph = new Paragraph("RAPPORT DE FONCTIONNEMENT DE L’INSTALLATION KNX", boldFont)
-            {
-                Alignment = Element.ALIGN_CENTER,
-                SpacingBefore = 25f,
-                SpacingAfter = 0f
-            };
+        {
+            Alignment = Element.ALIGN_CENTER,
+            SpacingBefore = 25f,
+            SpacingAfter = 0f
+        };
         document.Add(titleParagraph);
     }
 
-    private void GenerateProjectInformationSection(Document document, PdfWriter writer)
+    private void GenerateProjectInformationSection(Document document, string username = "")
     {
-        var cb = writer.DirectContent;
-        var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18);
+        var underlineFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12, Font.UNDERLINE);
+        var boldFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14);
+        var regularFont = FontFactory.GetFont(FontFactory.HELVETICA, 12);
+        
+        var separatorColor = new BaseColor(215, 215, 215); // RGB pour #D7D7D7
+
         
         
-        // Créer un nouveau paragraphe avec du texte et définir la police
-        var paragraph = new Paragraph($"\n\nInstallation évaluée : {manager.ProjectName}",
-            FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12))
+        // Ajout d'un trait de séparation avec la couleur définie
+        var separator = new LineSeparator(0.5f, 80f, separatorColor, Element.ALIGN_CENTER, 1); // Utilisez une épaisseur de 1 pour une ligne fine
+        document.Add(new Chunk(separator));
+    
+        
+        
+        var installationChunk = new Chunk("Installation évaluée :", underlineFont);
+        var projectNameChunk = new Chunk($" {manager.ProjectName}", boldFont);
+
+        // Combiner les deux Chunk dans un Paragraph
+        var projectInformationParagraph = new Paragraph
         {
-            IndentationRight = 5f
+            IndentationLeft = 5f, 
+            SpacingBefore = 10f
+        };
+        projectInformationParagraph.Add(installationChunk);
+        projectInformationParagraph.Add(projectNameChunk);
+        
+        // Ajouter le paragraphe au document
+        document.Add(projectInformationParagraph);
+
+        
+        
+        if (!string.IsNullOrWhiteSpace(username))
+        {
+            var evaluationChunk = new Chunk("Evaluation menée par :", underlineFont);
+            var usernameChunk = new Chunk($" {username}", regularFont);
+            
+            var evaluatorNameParagraph = new Paragraph
+            {
+                IndentationLeft = 5f,
+                SpacingBefore = 5f
+            };
+            evaluatorNameParagraph.Add(evaluationChunk);
+            evaluatorNameParagraph.Add(usernameChunk);
+
+            // Ajouter le paragraphe au document
+            document.Add(evaluatorNameParagraph);
+        }
+
+        
+
+        var projectStructureParagraph = new Paragraph("Structure de l'installation évaluée :", underlineFont)
+        {
+            SpacingBefore = 20f,
+            IndentationLeft = 5f
+        };
+        document.Add(projectStructureParagraph);
+        
+        
+        
+        var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
+        img.Alignment = Element.ALIGN_CENTER;
+        img.SpacingAfter = 5f;
+        img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
+        document.Add(img);
+        
+        
+        
+        // Ajout d'un trait de séparation avec la couleur définie
+        var separator2 = new LineSeparator(0.5f, 80f, separatorColor, Element.ALIGN_CENTER, 1); // Utilisez une épaisseur de 1 pour une ligne fine
+        document.Add(new Chunk(separator2));
+        
+        
+        
+        var conductedTests = new Paragraph("Tests réalisés :", underlineFont)
+        {
+            SpacingBefore = 15f,
+            IndentationLeft = 5f
+        };
+        document.Add(conductedTests);
+    }
+    
+    private void GenerateTreeStructure(Document document, PdfWriter writer)
+    {
+        // Font setup
+        Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
+        Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+        Font labelFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
+
+        // Example data structure for the tree
+        var treeStructure = new List<(string category, string command, string label, BaseColor color)>
+        {
+            ("ECLAIRAGE SIMPLE > ON/OFF", "Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon", "M2", BaseColor.GREEN),
+            ("ECLAIRAGE VARIABLE > ON/OFF", "Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree", "M2", BaseColor.GREEN),
+            ("ECLAIRAGE VARIABLE > VARIATIONS", "Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree", "M3", BaseColor.GREEN),
+            ("ECLAIRAGE VARIABLE > VALEURS VARIATION", "Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt", "M4", BaseColor.GREEN)
+            // Add more entries as needed
         };
 
-        // Ajouter le paragraphe au document
-        document.Add(paragraph);
+        // Add some introductory text
+        document.Add(new Paragraph("Voici l'arborescence des commandes :", boldFont));
 
+        foreach (var (category, command, label, color) in treeStructure)
+        {
+            // Create a paragraph for each command
+            Paragraph paragraph = new Paragraph();
+
+            // Add category (only once if it changes)
+            paragraph.Add(new Chunk(category + "\n", boldFont));
+
+            // Create a rectangle chunk
+            Chunk rectangleChunk = new Chunk(" " + label + " ", labelFont);
+            rectangleChunk.SetBackground(color, 2f, 2f, 2f, 2f); // Add padding
+
+            // Add the rectangle and command text
+            paragraph.Add(rectangleChunk);
+            paragraph.Add(new Chunk(" " + command + "\n", normalFont));
+
+            // Add the paragraph to the document
+            document.Add(paragraph);
+        }
+
+        // Add some text after the tree structure
+        document.Add(new Paragraph("Texte après l'arborescence pour vérifier la continuité du contenu.", normalFont));
     }
+
+
+
+    private void GenerateTestList(Document document, PdfWriter writer)
+    {
+        foreach (var st in _modelesFonctionnels)
+        {
+            
+        }
+    }
+
 
     public void OpenLatestReport()
     {

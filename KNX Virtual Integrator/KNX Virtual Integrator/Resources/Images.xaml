@@ -1,21 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Colors.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
     <!-- To convert SVG into XAML files : https://github.com/BerndK/SvgToXaml -->
-    <DrawingImage x:Key="plug_connect_svgrepo_comDrawingImage">
-        <DrawingImage.Drawing>
-            <DrawingGroup ClipGeometry="M0,0 V48 H48 V0 H0 Z">
-                <DrawingGroup Opacity="1">
-                    <DrawingGroup Opacity="1">
-                        <DrawingGroup Opacity="1">
-                            <GeometryDrawing Brush="{StaticResource TextWhite}" Geometry="F1 M48,48z M0,0z M25.6,25.6L22.2,29 19,25.8 22.4,22.4A2,2,0,0,0,19.6,19.6L16.2,23 14.9,21.7A1.9,1.9,0,0,0,12.1,21.7L9.1,24.7A9.8,9.8,0,0,0,6.1,31.7A9.1,9.1,0,0,0,7.9,37.3L4.6,40.6A1.9,1.9,0,0,0,4.6,43.4A1.9,1.9,0,0,0,7.4,43.4L10.6,40.2A10.1,10.1,0,0,0,16.5,42.1A10.2,10.2,0,0,0,23.6,39.2L26.6,36.2A2,2,0,0,0,27.2,34.8A1.7,1.7,0,0,0,26.6,33.4L25,31.8 28.4,28.4A2,2,0,0,0,25.6,25.6z M20.8,36.4A6.1,6.1,0,0,1,12.3,36.4L11.9,36A6.4,6.4,0,0,1,10.1,31.7A6,6,0,0,1,11.9,27.5L13.5,25.9 22.3,34.8z" />
-                            <GeometryDrawing Brush="{StaticResource TextWhite}" Geometry="F1 M48,48z M0,0z M43.4,4.6A1.9,1.9,0,0,0,40.6,4.6L37.2,8A10,10,0,0,0,24.2,8.9L21.2,11.9A2,2,0,0,0,20.6,13.3A1.7,1.7,0,0,0,21.2,14.7L32.9,26.4A1.9,1.9,0,0,0,35.7,26.4L38.7,23.5A9.9,9.9,0,0,0,41.6,16.4A10.4,10.4,0,0,0,40,10.9L43.4,7.4A1.9,1.9,0,0,0,43.4,4.6z M35.9,20.6L34.3,22.2 25.4,13.3 27,11.8A5.9,5.9,0,0,1,35.5,11.8L35.9,12.1A6.3,6.3,0,0,1,37.6,16.4A5.9,5.9,0,0,1,35.9,20.6z" />
-                        </DrawingGroup>
-                    </DrawingGroup>
-                </DrawingGroup>
-            </DrawingGroup>
-        </DrawingImage.Drawing>
-    </DrawingImage>
+
 
     <DrawingImage x:Key="DisconnectedDrawingImage">
         <DrawingImage.Drawing>
