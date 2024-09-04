@@ -221,6 +221,9 @@
                     BorderThickness="1"
                     Margin="0,0"
             />
+
+                <Button Content="Envoyer Trame" Click="OnWriteButtonClick" />
+                <Button Content="Lire Trame" Click="OnReadButtonClick" />
             </StackPanel>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
@@ -441,9 +444,9 @@
                     <TextBlock Grid.Row="1" Grid.Column="2" Text="ICI LES PARAMETRES DE LA COMMANDE QUAND ON CLIQUE SUR UNE ADRESSE ?" 
                             TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-       
+                    
 
-                    <!-- Quatrième colonne -->
+                <!-- Quatrième colonne -->
                     <!-- En-tête -->
                     <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource BackgroundLightGray}">
                         <Grid.ColumnDefinitions>
@@ -478,9 +481,9 @@
                                 Padding="5"
                                 Background="{StaticResource BackgroundWhite}"
                                 Height="30"
-                         />
-
-
+                        />
+                    
+                        
 
                     </Grid>
 

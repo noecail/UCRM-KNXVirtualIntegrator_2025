@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows;
+using Knx.Falcon;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
@@ -288,4 +289,16 @@ public partial class MainWindow
 
     }
 
+    private void OnWriteButtonClick(object sender, RoutedEventArgs e)
+    {
+        var groupAddress = new GroupAddress("0/1/1");
+        var groupValue = new GroupValue(0);
+        _viewModel.GroupValueWriteCommand.Execute((groupAddress, groupValue));
+    }
+
+    private void OnReadButtonClick(object sender, RoutedEventArgs e)
+    {
+        var groupAddress = new GroupAddress("2/1/3");
+        _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
+    }
 }
