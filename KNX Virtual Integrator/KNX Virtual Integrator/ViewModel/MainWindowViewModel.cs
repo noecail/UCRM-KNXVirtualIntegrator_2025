@@ -9,13 +9,15 @@ using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
+using System.Diagnostics;
 
 
 namespace KNX_Virtual_Integrator.ViewModel
 {
     public partial class MainViewModel
     {
-        private GridLength _modelColumnWidth = new GridLength(1, GridUnitType.Auto);
+        //Gestion des colonnes
+        private GridLength _modelColumnWidth = new GridLength(0);
         private GridLength _adressColumnWidth = new GridLength(1, GridUnitType.Auto);
 
         public GridLength ModelColumnWidth
@@ -66,5 +68,20 @@ namespace KNX_Virtual_Integrator.ViewModel
         {
             AdressColumnWidth = GridLength.Auto;
         }
+
+        //Gestion de la sauvegarde des modèles
+
+        public RelayCommand SaveCommand { get; }
+        private void ExecuteSaveCommand()
+        {
+            if (SelectedModel != null)
+            {
+                SelectedModel.Name = "nouveau nom"; // Met à jour le nom du modèle sélectionné
+
+                _functionalModelDictionary.UpdateModel(SelectedModel);
+                OnPropertyChanged(nameof(SelectedModel));
+            }
+        }
+
     }
 }

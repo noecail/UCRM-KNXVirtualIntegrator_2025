@@ -4,16 +4,20 @@ namespace KNXIntegrator.Models
 {
     public interface IFunctionalModelDictionary
     {
-        // Ajoute un modèle avec une clé générée automatiquement
+        // Ajouter un modèle au dictionnaire
         void Add_FunctionalModel(FunctionalModel functionalModel);
 
-        // Supprime un modèle en fonction de la clé
+        // Supprimer un modèle du dictionnaire par sa clé
         void Remove_FunctionalModel(int key);
 
-        // Récupère une liste de tous les modèles
+        // Récupérer tous les modèles
         List<FunctionalModel> GetAllModels();
 
-        // Récupère un modèle spécifique par clé
+        // Récupérer un modèle par sa clé
         FunctionalModel Get_FunctionalModel(int key);
+
+        // Mettre à jour un modèle existant dans le dictionnaire
+        void UpdateModel(FunctionalModel model);
     }
 }
+

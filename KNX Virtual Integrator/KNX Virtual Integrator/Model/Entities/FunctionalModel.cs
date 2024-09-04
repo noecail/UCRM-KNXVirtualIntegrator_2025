@@ -1,26 +1,28 @@
+using System.ComponentModel;
+
 namespace KNXIntegrator.Models
 {
     public class FunctionalModel : IEquatable<FunctionalModel>
     {
+        //Attributs
         private int dpt_value;
-
-        // Nouvelle propriété pour la clé
         public int Key { get; set; }
-
         public string Name { get; set; }
 
-        // Propriété calculée pour le format d'affichage
+        //Affichage dans la vue
         public string DisplayText => $"M{Key} | {Name}";
 
+        //Constructeur
         public FunctionalModel(int value, string name)
         {
             dpt_value = value;
             Name = name;
         }
 
+        //Methodes
         public override string ToString()
         {
-            return $"{Name} ({dpt_value})";
+            return $"M{Key} | {Name}";
         }
 
         public override bool Equals(object? obj)
@@ -42,6 +44,7 @@ namespace KNXIntegrator.Models
         {
             return HashCode.Combine(dpt_value, Name, Key);
         }
+
     }
 }
 

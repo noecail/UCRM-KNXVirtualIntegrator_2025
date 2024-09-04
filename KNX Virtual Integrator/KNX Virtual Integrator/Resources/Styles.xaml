@@ -51,11 +51,7 @@
                         Padding="{TemplateBinding Padding}"
                         Margin="{TemplateBinding Margin}"
                         CornerRadius="0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
                             <!-- Icon -->
                             <Image Source="{TemplateBinding Tag}"
@@ -66,14 +62,14 @@
                             />
 
                             <!-- Text -->
-                            <ContentPresenter Grid.Column="1"
+                            <ContentPresenter 
                                           HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
                                           Content="{TemplateBinding Content}"
                                           ContentTemplate="{TemplateBinding ContentTemplate}"
                             />
-                            
-                        </Grid>
+
+                        </StackPanel>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
@@ -185,8 +181,78 @@
         <Setter Property="Foreground" Value="{StaticResource TextBlack}" />
     </Style>
 
+    <!-- Style pour le listbox de modèles -->
+    <Style x:Key="ModelListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="{StaticResource BackgroundLightGray}"/>
+        <!-- Fond par défaut -->
+        <Setter Property="BorderBrush" Value="{StaticResource BorderGray}"/>
+        <!-- Couleur du contour -->
+        <Setter Property="BorderThickness" Value="0,0,1,1"/>
+        <!-- Contour supérieur et inférieur -->
+        <Setter Property="Height" Value="40"/>
+        <!-- Hauteur de l'élément -->
+        <Setter Property="Margin" Value="0"/>
+        <!-- Margin pour le ListBoxItem -->
+        <Setter Property="Padding" Value="10,0,10,0"/>
+        <!-- Padding pour l'icône -->
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <!-- Alignement du contenu -->
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <!-- Alignement du contenu vertical -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="Border"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        Padding="{TemplateBinding Padding}"
+                                        BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <!-- Contenu de l'élément -->
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                          Content="{TemplateBinding Content}"/>
+                            <StackPanel Orientation="Horizontal" 
+                                    HorizontalAlignment="Right" 
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,0,0">
+                            <!-- Icône alignée à droite -->
+                                <Image Source="{StaticResource LockedDrawingImage}" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Right" 
+                                       Margin="0,0,0,0" 
+                                       Width="16" 
+                                       Height="16"/>                
+                                <Image x:Name="SelectedImage"
+                                       Source="{StaticResource RightArrowDrawingImage}"
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Right" 
+                                       Margin="10,0,0,0"
+                                       Width="16" 
+                                       Height="16"
+                                       Visibility="Collapsed"/>
+                            </StackPanel>
 
-
+                        </Grid>
+                    </Border>
+                    <!-- Triggers pour changer l'apparence -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="#d3d3d3"/>
+                            <!-- Gris clair au survol -->
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="White"/>
+                            <!-- Blanc à la sélection -->
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,1"/>
+                            <!-- Contour noir à la sélection -->
+                            <Setter TargetName="SelectedImage" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 
 

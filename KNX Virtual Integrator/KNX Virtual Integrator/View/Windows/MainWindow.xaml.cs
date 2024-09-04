@@ -20,7 +20,7 @@ public partial class MainWindow
     /// True if the user choose to import a group addresses file, false if it's a project knx file 
     /// </summary>
     public bool UserChooseToImportGroupAddressFile { get; private set; }
-    
+
     /// <summary>
     /// The token source used to signal cancellation requests for ongoing tasks.
     /// </summary>
@@ -288,4 +288,8 @@ public partial class MainWindow
 
     }
 
+    private void ListBox_Selected(object sender, RoutedEventArgs e)
+    {
+
+    }
 }

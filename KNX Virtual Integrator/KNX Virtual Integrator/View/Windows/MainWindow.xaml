@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
-        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-        mc:Ignorable="d"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls" xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+                 mc:Ignorable="d"
         Title="MainWindow" 
         WindowState="Maximized"
         ResizeMode="CanResize"
@@ -74,9 +74,9 @@
                 <Button Style="{StaticResource IconButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}" 
                     Click="ImportGroupAddressFileButtonClick"
-                    Command="{Binding ShowModelColumnCommand}"
-                        
+                    Command="{Binding ShowModelColumnCommand}"                        
                     Margin="5,0,0,0"     
+                    
             />
 
                 <!-- Deuxième bouton Importation -->
@@ -135,9 +135,13 @@
                         <!-- Column for nested section 2 -->
                     </Grid.ColumnDefinitions>
 
-                    <!-- Première colonne -->
+                    <!-- Première colonne_____________________________________________________________________________________ -->
                     <!-- En-tête -->
-                    <Grid Grid.Row="0" Grid.Column="0" Background="{StaticResource BackgroundLightGray}">
+                    <Border BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,1"
+                            Background="{StaticResource BackgroundLightGray}"
+                            >           
+                    <Grid Grid.Row="0" Grid.Column="0"  >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <!-- Column for title -->
@@ -156,8 +160,7 @@
 
                         </StackPanel>
 
-
-                        <Button Grid.Column="1"
+                <Button Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                 Style="{StaticResource IconButtonStyle}"
@@ -172,11 +175,85 @@
 
 
                     </Grid>
+                </Border>
+                <!-- Contenue Colonne 1 -->
 
-                <ListBox ItemsSource="{Binding Models}" DisplayMemberPath="DisplayText" />
+                <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundLightGray}" >
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"  />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <!-- Column for title -->
+                        <RowDefinition Height="*" />
+                        <!-- Column for title -->
+                        <RowDefinition Height="Auto" MinHeight="30" />
+                        <!-- Column for button -->
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0"  BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,2"
+                            Padding="5"
+                            Background="{StaticResource BackgroundDarkGray}">
+                         <TextBlock FontWeight="Bold"
+                           FontSize="16"
+                           Foreground="{StaticResource TextBlack}"
+                           Text="{StaticResource LinkedModel}" />
+                        </Border>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ListBox ItemsSource="{Binding Models}"
+                                     SelectedItem="{Binding SelectedModel}"
+                                     DisplayMemberPath="DisplayText"
+                                     ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"/>
+                        
+                        </ScrollViewer>
+
+                    <Border Grid.Row="2"  BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,2"
+                            Padding="5"
+                            Background="{StaticResource BackgroundDarkGray}">
+                            <TextBlock FontWeight="Bold"
+                           FontSize="16"
+                           Foreground="{StaticResource TextBlack}"
+                           Text="{StaticResource UnlinkedModel}" />
+                        </Border>
+                        
+                        <!-- Crée une liste a part des modèles non liées -->
+                    <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Auto">
+                            <ListBox ItemsSource="{Binding Models}"
+                                     SelectedItem="{Binding SelectedModel}"
+                                     FontStyle="Italic"
+                                     DisplayMemberPath="DisplayText"
+                                     ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"/>
+                        </ScrollViewer>
+                        <Border Grid.Row="4"  BorderBrush="{StaticResource BorderGray}"
+                                BorderThickness="0,0,1,0"
+                                Padding="5"
+                                Background="{StaticResource BackgroundDarkGray}"/>
+
+
+ 
+                    <Button Grid.Row="5" HorizontalAlignment="Stretch"
+                            VerticalAlignment="Bottom"
+                            Style="{StaticResource IconTextButtonStyle}"
+                            Tag="{StaticResource AddDrawingImage}"
+                            Content="{StaticResource AddModel}"
+                            BorderThickness="0,0,1,0"
+                            BorderBrush="{StaticResource BorderGray}"
+                            Margin="0"
+                            Padding="0"
+                            Background="{StaticResource ButtonBlue}"
+                            Height="30"
+                            
+                     />
+                </Grid>
+
 
                 <!-- Deuxième colonne -->
                     <!-- En-tête -->
+                <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,0" >
                     <Grid Grid.Row="0" Grid.Column="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -202,7 +279,10 @@
                             Command="{Binding HideModelColumnCommand}"
                     />
                     </Grid>
-
+                </Border>
+                    
+                <Border Grid.Row="1" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,0" >
                     <Grid Margin="10,10,10,0" Grid.Row="1" Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
@@ -219,7 +299,8 @@
 
                                 <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                                     <TextBlock Text="{StaticResource Name:}" VerticalAlignment="Center" Grid.Row="0"/>
-                                    <TextBox x:Name="NomTextBox2" HorizontalAlignment="Left" Width="200" Grid.Row="0"/>
+                                    <TextBox x:Name="NomTextBox" HorizontalAlignment="Left" Width="200" Grid.Row="0"
+                                             Text="{Binding NewModelName, UpdateSourceTrigger=PropertyChanged}"/>
 
                                     <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
                                     <ComboBox x:Name="DptSortieComboBox" Width="200" HorizontalAlignment="Left" Grid.Row="1">
@@ -229,15 +310,15 @@
                                         <!-- Ajoutez d'autres options ici si nécessaire -->
                                     </ComboBox>
 
-                                <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
-                                <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left" Grid.Row="1">
-                                    <ComboBoxItem Content="1 bit" />
-                                    <ComboBoxItem Content="2 bits" />
-                                    <ComboBoxItem Content="4 bits" />
-                                    <!-- Ajoutez d'autres options ici si nécessaire -->
-                                </ComboBox>
+                                    <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
+                                    <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left" Grid.Row="1">
+                                        <ComboBoxItem Content="1 bit" />
+                                        <ComboBoxItem Content="2 bits" />
+                                        <ComboBoxItem Content="4 bits" />
+                                        <!-- Ajoutez d'autres options ici si nécessaire -->
+                                    </ComboBox>
 
-                                <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="Black" FocusVisualStyle="{x:Null}" 
+                                    <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="Black" FocusVisualStyle="{x:Null}" 
                                            Content="{StaticResource AdvancedSettings}" Grid.Row="2" Margin="0,10,0,0"/>
 
 
@@ -278,22 +359,26 @@
                                 Content="Filtrer" Margin="10,0"/>
                             <Button Style="{StaticResource IconTextButtonStyle}"
                                 Tag="{StaticResource CheckmarkDrawingImage}"
-                                Content="Enregistrer"/>
+                                Content="Enregistrer"
+                                Command="{Binding SaveCommand}"/>
                         </StackPanel>
                     </Grid>
+                </Border>
 
 
-                    <!-- Troisième colonne -->
+                <!-- Troisième colonne -->
                     <!-- En-tête -->
-                    <Grid Grid.Row="0" Grid.Column="2">
+                <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
+            BorderThickness="0,0,1,0" >
+                    <Grid >
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <!-- Column for title -->
-                            <ColumnDefinition Width="*" />
-                            <!-- Column for button -->
-                        </Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <!-- Column for title -->
+                        <ColumnDefinition Width="*" />
+                        <!-- Column for button -->
+                    </Grid.ColumnDefinitions>
 
-                        <TextBlock Grid.Column="0"
+                    <TextBlock Grid.Column="0"
                                Style="{StaticResource TitleTextStyle}"
                                Text="{StaticResource CommandeParametersTitle}"
                                VerticalAlignment="Center"
@@ -301,7 +386,7 @@
                                Margin="5,0"
                      />
 
-                        <Button Grid.Column="1"
+                    <Button Grid.Column="1"
                             Style="{StaticResource IconButtonStyle}"
                             Tag="{StaticResource CloseDrawingImage}"
                             HorizontalAlignment="Right"
@@ -310,37 +395,44 @@
                             Command="{Binding HideAdressColumnCommand}"
                     />
                     </Grid>
-
-                    <TextBlock Grid.Row="1" Grid.Column="2" Text="ICI LES PARAMETRES DE LA COMMANDE QUAND ON CLIQUE SUR UNE ADRESSE ?" 
-                            TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" />
-
-       
-
-                    <!-- Quatrième colonne -->
-                    <!-- En-tête -->
-                    <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource BackgroundLightGray}">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <!-- Column for title -->
-                            <ColumnDefinition Width="Auto" />
-                            <!-- Column for button -->
-                        </Grid.ColumnDefinitions>
+                </Border>
+                <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
+                        BorderThickness="0,0,1,0" >
+                    
+                    <TextBlock Text="ICI LES PARAMETRES DE LA COMMANDE QUAND ON CLIQUE SUR UNE ADRESSE ?" 
+                                TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                    
+                    </Border>
+                    
+                    
 
 
 
-                        <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <!-- Quatrième colonne -->
+            <!-- En-tête -->
+            <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource BackgroundLightGray}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <!-- Column for title -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Column for button -->
+                </Grid.ColumnDefinitions>
 
-                            <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
-                            <TextBlock 
+
+
+                <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+                    <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
+                    <TextBlock 
                                    Style="{StaticResource TitleTextStyle}"
                                    Text="{StaticResource GroupAdressesTitle}"
                             />
-                            
-
-                        </StackPanel>
 
 
-                        <Button Grid.Column="1"
+                </StackPanel>
+
+
+                <Button Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                 Style="{StaticResource IconButtonStyle}"
@@ -355,22 +447,77 @@
 
 
 
-                    </Grid>
+            </Grid>
+        
 
+        <!-- TreeView in the third column -->
+                <TreeView Grid.Row="1" Grid.Column="3">
+                    <TreeViewItem Header="ECLAIRAGE SIMPLE" IsExpanded="True">
+                                    <TreeViewItem Header="ON/OFF" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/1"/>
+                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/2"/>
+                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="1/1/0"/>
+                                    </TreeViewItem>
+                                </TreeViewItem>
 
-                    <!-- TreeView in the third column -->
-                    <TreeView Grid.Row="1" Grid.Column="3" >
-                        <TreeViewItem Header="Éclairage">
-                            <TreeViewItem Header="Marche/Arrêt">
-                                <TreeViewItem Header="Cmd_PlanDeTravail_Cuisine" />
-                            </TreeViewItem>
-                            <TreeViewItem Header="Indication d'état">
-                                <TreeViewItem Header="le_PlanDeTravail_Cuisine" />
-                            </TreeViewItem>
-                        </TreeViewItem>
-                    </TreeView>
+                                <TreeViewItem Header="ECLAIRAGE VARIABLE" IsExpanded="True">
+                                    <TreeViewItem Header="ON/OFF" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/1"/>
+                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/2"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="VARIATIONS" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/1"/>
+                                        <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/2"/>
+                                    </TreeViewItem>
+                                    <TreeViewItem Header="VALEURS VARIATION" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/1"/>
+                                        <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/2"/>
+                                    </TreeViewItem>
+                                </TreeViewItem>
 
-                </Grid>
+                                <TreeViewItem Header="COMMANDE PC" IsExpanded="True">
+                        <TreeViewItem Header="ON/OFF PC" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_CommandePc_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="3/1/1"/>
+                                    </TreeViewItem>
+                                </TreeViewItem>
+
+                                <TreeViewItem Header="COMMANDE CHAUFFAGE" IsExpanded="True">
+                        <TreeViewItem Header="ON/OFF CHAUFFAGE" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_Chauffage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="4/0/2"/>
+                                    </TreeViewItem>
+                                </TreeViewItem>
+
+                                <TreeViewItem Header="VOLET ROULANT" IsExpanded="True">
+                        <TreeViewItem Header="MONTEE/DESCENTE" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_VoletRoulant_MonteeDescente_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/1/1"/>
+                                    </TreeViewItem>
+                        <TreeViewItem Header="STOP" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_VoletRoulant_Stop_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/3/1"/>
+                                    </TreeViewItem>
+                        <TreeViewItem Header="POSITION" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_VoletRoulant_Position_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="5/4/1"/>
+                                    </TreeViewItem>
+                                </TreeViewItem>
+
+                                <TreeViewItem Header="COMPTEUR" IsExpanded="True">
+                        <TreeViewItem Header="ENERGIE CHAUFFAGE" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_Compteur_EnergieChauffage_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/3/1"/>
+                                    </TreeViewItem>
+                        <TreeViewItem Header="ENERGIE ECLAIRAGES" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_Compteur_EnergieEclairages_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/4/1"/>
+                                    </TreeViewItem>
+                                </TreeViewItem>
+
+                                <TreeViewItem Header="SCENARIO SALON" IsExpanded="True">
+                        <TreeViewItem Header="ON/OFF ECL SALON" IsExpanded="True">
+                                        <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/1"/>
+                                        <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/2"/>
+                                    </TreeViewItem>
+                                </TreeViewItem>
+
+                            </TreeView>
+
+            </Grid>
             </Border>
 
         </Grid>

@@ -158,7 +158,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        // Gestion des colonnes 
+        // Gestion des colonnes --------------------------------------------------------------------
         HideModelColumnCommand = new RelayCommand(
             () => HideModelColumn());
 
@@ -171,16 +171,27 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ShowAdressColumnCommand = new RelayCommand(
             () => ShowAdressColumn());
 
-        //Gestion des modèles
+
+        //Gestion des modèles -----------------------------------------------------------------------
         _functionalModelDictionary = new FunctionalModelDictionary();
 
         // Ajout de 3 modèles par défaut
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(1, "Patrick"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Patrick"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Patrick 2"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Model 3"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Patrick"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Patrick 2"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Model 3"));       
 
         // Chargement des modèles dans la collection observable
         Models = new ObservableCollection<FunctionalModel>(_functionalModelDictionary.GetAllModels());
+
+        //Sauvegarde des modèles --------------------------------------------------------------------
+        SaveCommand = new RelayCommand(
+          () => ExecuteSaveCommand()
+
+
+      );
     }
 
 
