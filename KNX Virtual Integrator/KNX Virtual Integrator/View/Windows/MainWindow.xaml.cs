@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Windows;
+using Knx.Falcon;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
@@ -15,8 +16,6 @@ public partial class MainWindow
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     private readonly MainViewModel _viewModel;
-
-    private readonly ConnectionWindow _connectionWindow;
     
     /// <summary>
     /// True if the user choose to import a group addresses file, false if it's a project knx file 
@@ -31,14 +30,12 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- METHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    public MainWindow(MainViewModel viewModel, ConnectionWindow cw)
+    public MainWindow(MainViewModel viewModel)
     {
         InitializeComponent();
         
         _viewModel = viewModel;
         DataContext = _viewModel;
-
-        _connectionWindow = cw;
     }
 
     public void ApplyScaling(float scaleFactor)
@@ -292,8 +289,16 @@ public partial class MainWindow
 
     }
 
-    private void OpenConnectionWindow(object sender, RoutedEventArgs e)
+    private void OnWriteButtonClick(object sender, RoutedEventArgs e)
     {
-        _connectionWindow.Show();
+        var groupAddress = new GroupAddress("0/1/1");
+        var groupValue = new GroupValue(0);
+        _viewModel.GroupValueWriteCommand.Execute((groupAddress, groupValue));
+    }
+
+    private void OnReadButtonClick(object sender, RoutedEventArgs e)
+    {
+        var groupAddress = new GroupAddress("2/1/3");
+        _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
     }
 }
