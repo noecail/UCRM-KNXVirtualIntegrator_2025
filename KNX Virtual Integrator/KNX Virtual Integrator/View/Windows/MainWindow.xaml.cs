@@ -1,48 +1,48 @@
-    using System.ComponentModel;
-    using System.Windows;
-    using Knx.Falcon;
+using System.ComponentModel;
+using System.Windows;
+using Knx.Falcon;
 using KNX_Virtual_Integrator.ViewModel;
-    using KNX_Virtual_Integrator.ViewModel.Commands;
-    using Microsoft.Win32;
+using KNX_Virtual_Integrator.ViewModel.Commands;
+using Microsoft.Win32;
 
-    namespace KNX_Virtual_Integrator.View.Windows;
+namespace KNX_Virtual_Integrator.View.Windows;
 
+/// <summary>
+/// Interaction logic for MainWindow.xaml
+/// </summary>
+public partial class MainWindow
+{
+    /* ------------------------------------------------------------------------------------------------
+    ------------------------------------------- ATTRIBUTS  --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    private readonly MainViewModel _viewModel;
+
+    private readonly ConnectionWindow _connectionWindow;
+
+        
+        
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// True if the user choose to import a group addresses file, false if it's a project knx file 
     /// </summary>
-    public partial class MainWindow
+    public bool UserChooseToImportGroupAddressFile { get; private set; }
+        
+    /// <summary>
+    /// The token source used to signal cancellation requests for ongoing tasks.
+    /// </summary>
+    private CancellationTokenSource _cancellationTokenSource;
+        
+    /* ------------------------------------------------------------------------------------------------
+    --------------------------------------------- METHODES --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    public MainWindow(MainViewModel viewModel, ConnectionWindow cw)
     {
-        /* ------------------------------------------------------------------------------------------------
-        ------------------------------------------- ATTRIBUTS  --------------------------------------------
-        ------------------------------------------------------------------------------------------------ */
-        private readonly MainViewModel _viewModel;
-
-        private readonly ConnectionWindow _connectionWindow;
-
-        
-        
-        /// <summary>
-        /// True if the user choose to import a group addresses file, false if it's a project knx file 
-        /// </summary>
-        public bool UserChooseToImportGroupAddressFile { get; private set; }
-        
-        /// <summary>
-        /// The token source used to signal cancellation requests for ongoing tasks.
-        /// </summary>
-        private CancellationTokenSource _cancellationTokenSource;
-        
-        /* ------------------------------------------------------------------------------------------------
-        --------------------------------------------- METHODES --------------------------------------------
-        ------------------------------------------------------------------------------------------------ */
-        public MainWindow(MainViewModel viewModel, ConnectionWindow cw)
-        {
-            InitializeComponent();
+        InitializeComponent();
             
-            _viewModel = viewModel;
-            DataContext = _viewModel;
+        _viewModel = viewModel;
+        DataContext = _viewModel;
 
-            _connectionWindow = cw;
-        }
+        _connectionWindow = cw;
+    }
 
     public void ApplyScaling(float scaleFactor)
     {
