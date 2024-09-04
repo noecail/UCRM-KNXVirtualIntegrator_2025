@@ -17,7 +17,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     private List<string> _modelesFonctionnels = new();
     
     
-    public void CreatePdf(string name)
+    public void CreatePdf(string fileName, string authorName)
     {
         _modelesFonctionnels.Add("zizi");
         _modelesFonctionnels.Add("zizi2");
@@ -29,14 +29,14 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         var document = new Document(PageSize.A4, 0, 0, 0, 0);
         
         // Création d'un writer pour écrire dans le PDF
-        var writer = PdfWriter.GetInstance(document, new FileStream(name, FileMode.Create));
+        var writer = PdfWriter.GetInstance(document, new FileStream(fileName, FileMode.Create));
 
         // Ouverture du document pour écrire dedans
         document.Open();
 
         // Ecriture du contenu du document PDF
         GeneratePdfHeader(document, writer); // Génération de la bannière d'en-tête
-        GenerateProjectInformationSection(document, "Maxou"); // Génération de la section d'infos du projet (nom, ...)
+        GenerateProjectInformationSection(document, authorName); // Génération de la section d'infos du projet (nom, ...)
         GenerateTreeStructure(document, writer);
 
         // Fermeture du document et du stream d'écriture
@@ -44,7 +44,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         writer.Close();
         
         // Mise à jour du path du dernier pdf généré
-        LatestReportPath = name;
+        LatestReportPath = fileName;
 
         // Ouverture du PDF dans Windows
         OpenLatestReport();

@@ -70,7 +70,7 @@ public partial class App
     /// </summary>
     private static ModelManager? ModelManager { get; set; }
 
-    private ReportCreationWindow w = new ReportCreationWindow();
+    private ReportCreationWindow _creationWindow;
         
         
     /* ------------------------------------------------------------------------------------------------
@@ -85,7 +85,9 @@ public partial class App
         InitializeApplicationComponents(); // Initialiser les composants de l'application
         OpenMainWindow(); // Ouvrir la fenêtre principale
         PerformStartupTasks(); // Exécuter les tâches de démarrage
-        w.Show();
+
+        _creationWindow = new ReportCreationWindow(MainViewModel);
+        _creationWindow.Show();
     }
 
     

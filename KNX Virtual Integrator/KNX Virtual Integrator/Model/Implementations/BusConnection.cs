@@ -1,5 +1,4 @@
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.CommandWpf;
 using Knx.Falcon;
 using System.Collections.ObjectModel;
 using System.ComponentModel;

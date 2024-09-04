@@ -1,5 +1,4 @@
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using KNX_Virtual_Integrator.ViewModel;
 using INotifyPropertyChanged = System.ComponentModel.INotifyPropertyChanged;
 

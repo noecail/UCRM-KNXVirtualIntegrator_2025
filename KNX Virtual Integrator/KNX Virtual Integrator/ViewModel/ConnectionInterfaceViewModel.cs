@@ -1,4 +1,3 @@
-using GalaSoft.MvvmLight;
 using Knx.Falcon.Configuration;
 
 namespace KNX_Virtual_Integrator.ViewModel;

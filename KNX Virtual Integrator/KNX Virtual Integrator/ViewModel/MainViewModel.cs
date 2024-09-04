@@ -5,7 +5,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
-using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
@@ -146,17 +145,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
 
         // Gestion des colonnes 
-        HideModelColumnCommand = new RelayCommand(
-            HideModelColumn);
+        HideModelColumnCommand = new RelayCommand(HideModelColumn);
+        HideAdressColumnCommand = new RelayCommand(HideAdressColumn);
+        ShowModelColumnCommand = new RelayCommand(ShowModelColumn);
+        ShowAdressColumnCommand = new RelayCommand(ShowAdressColumn);
 
-        HideAdressColumnCommand = new RelayCommand(
-            HideAdressColumn);
-
-        ShowModelColumnCommand = new RelayCommand(
-            ShowModelColumn);
-
-        ShowAdressColumnCommand = new RelayCommand(
-            ShowAdressColumn);
+        GenerateReportCommand =
+            new Commands.RelayCommand<(string fileName, string authorName)>(args =>
+                _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
         
         return;
 
@@ -239,6 +235,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// Command that saves the current application settings.
     /// </summary>
     public ICommand SaveSettingsCommand { get; private set; }
+    
+    /// <summary>
+    /// Command that generates the report for the latest opened project
+    /// </summary>
+    public ICommand GenerateReportCommand { get; private set; }
 
     /* ------------------------------------------------------------------------------------------------
     -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------
