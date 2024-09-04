@@ -2,7 +2,7 @@
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, StringManagement stringManagement, Logger logger) : IGroupAddressMerger
+public class GroupAddressMerger( StringManagement stringManagement, Logger logger) : IGroupAddressMerger
 {
     private readonly ILogger _logger = logger;
         
@@ -15,10 +15,10 @@ public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, Str
     /// If a similar entry is found, it is added to the corresponding group.
     /// 
     /// <param name="groupedAddresses">The dictionary of grouped addresses that will be modified and potentially merged with elements from IeAddressesSet.</param>
-    /// <param name="IeAddressesSet">A list of XElement entries that will be compared against single-element groups in groupedAddresses for potential merging.</param>
+    /// <param name="ieAddressesSet">A list of XElement entries that will be compared against single-element groups in groupedAddresses for potential merging.</param>
     /// <returns>Returns the modified dictionary of grouped addresses with merged entries.</returns>
     /// </summary>
-    public Dictionary<string, List<XElement>> MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses, List<XElement> IeAddressesSet)
+    public Dictionary<string, List<XElement>> MergeSingleElementGroups(Dictionary<string, List<XElement>> groupedAddresses, List<XElement> ieAddressesSet)
     {
         var singleElementGroups = groupedAddresses.Where(g => g.Value.Count == 1).ToList();
 
@@ -26,10 +26,9 @@ public class GroupAddressMerger(GroupAddressProcessor groupAddressProcessor, Str
         foreach (var group in singleElementGroups)
         {
             var groupName = group.Key;
-            var groupElement = group.Value.First();
 
             // Rechercher dans IeAddressesSet les éléments similaires à au moins 80%
-            foreach (var ieElement in IeAddressesSet)
+            foreach (var ieElement in ieAddressesSet)
             {
                 var ieElementName = ieElement.Attribute("Name")?.Value; // Supposant que les éléments dans IeAddressesSet ont un élément "Name"
 

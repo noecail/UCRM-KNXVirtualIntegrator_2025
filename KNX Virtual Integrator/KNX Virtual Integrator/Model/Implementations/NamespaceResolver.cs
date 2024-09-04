@@ -6,7 +6,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class NamespaceResolver(Logger logger) : INamespaceResolver 
 {
-    public XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01";
+    public XNamespace? GlobalKnxNamespace ;
     private readonly ILogger _logger = logger;
     
     // Method that retrieves the namespace to use for searching in .xml files from the zeroFilePath (since the namespace varies depending on the ETS version)

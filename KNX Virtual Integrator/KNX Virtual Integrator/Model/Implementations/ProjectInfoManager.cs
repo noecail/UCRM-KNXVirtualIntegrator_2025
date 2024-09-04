@@ -29,7 +29,7 @@ public class ProjectInfoManager(NamespaceResolver namespaceResolver) : IProjectI
     /// contains the names of the room, floor, building part, building, and distribution board.</returns>
     public dynamic ExtractLocationInfo(XDocument zeroXmlFile)
     {
-        var locationInfo = zeroXmlFile.Descendants(namespaceResolver.GlobalKnxNamespace + "Space")
+        var locationInfo = zeroXmlFile.Descendants(namespaceResolver.GlobalKnxNamespace! + "Space")
             .Where(s => 
             {
                 var type = s.Attribute("Type")?.Value;
@@ -38,13 +38,13 @@ public class ProjectInfoManager(NamespaceResolver namespaceResolver) : IProjectI
             .Select(room =>
             {
                 var getAncestorName = new Func<string, string>(type =>
-                    room.Ancestors(namespaceResolver.GlobalKnxNamespace + "Space")
+                    room.Ancestors(namespaceResolver.GlobalKnxNamespace! + "Space")
                         .FirstOrDefault(s => s.Attribute("Type")?.Value == type)
                         ?.Attribute("Name")?.Value ?? string.Empty
                 );
 
                 var getDescendantName = new Func<string, string>(type =>
-                    room.Descendants(namespaceResolver.GlobalKnxNamespace + "Space")
+                    room.Descendants(namespaceResolver.GlobalKnxNamespace! + "Space")
                         .FirstOrDefault(s => s.Attribute("Type")?.Value == type)
                         ?.Attribute("Name")?.Value ?? string.Empty
                 );

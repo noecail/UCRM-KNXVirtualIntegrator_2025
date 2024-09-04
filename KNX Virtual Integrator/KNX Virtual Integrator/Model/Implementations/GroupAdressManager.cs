@@ -1,5 +1,4 @@
-﻿using System.Xml;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
@@ -35,15 +34,17 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
         var groupAddressFile = loader.LoadXmlDocument(filePath);
         if (groupAddressFile == null) return;
+        
+        namespaceResolver.SetNamespaceFromXml(filePath);
+
+        if (namespaceResolver.GlobalKnxNamespace == null) return;
 
         if (filePath == manager.ZeroXmlPath)
         {
-            namespaceResolver.SetNamespaceFromXml(filePath);
             ProcessZeroXmlFile(groupAddressFile);
         }
         else
         {
-            namespaceResolver.GlobalKnxNamespace = "http://knx.org/xml/ga-export/01";
             ProcessStandardXmlFile(groupAddressFile);
         }
     }
@@ -59,7 +60,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// </summary>
     public void ProcessZeroXmlFile(XDocument groupAddressFile)
     {
-        /// Initialiser le dictionnaire pour les adresses qui commencent par "Ie" avec un HashSet pour éviter les doublons
+        // Initialiser le dictionnaire pour les adresses qui commencent par "Ie" avec un HashSet pour éviter les doublons
         var ieAddresses = new HashSet<string>();
         
         IeAddressesSet.Clear();
@@ -68,17 +69,17 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         var groupAddressStructure = DetermineGroupAddressStructure(groupAddressFile);
         
         // Étape 1 : Extraire les références des appareils
-        var deviceRefs = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace + "DeviceInstance")
+        var deviceRefs = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace! + "DeviceInstance")
             .Select(di => (
                 Id: di.Attribute("Id")?.Value,
-                Links: di.Descendants(namespaceResolver.GlobalKnxNamespace + "ComObjectInstanceRef")
+                Links: di.Descendants(namespaceResolver.GlobalKnxNamespace! + "ComObjectInstanceRef")
                     .Where(cir => cir.Attribute("Links") != null)
                     .SelectMany(cir => cir.Attribute("Links")?.Value.Split(' ') ?? Array.Empty<string>())
                     .ToHashSet()
             ))
             .ToList();
 
-        var groupAddresses = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupAddress").ToList();
+        var groupAddresses = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace! + "GroupAddress").ToList();
         var tempGroupedAddresses = new Dictionary<(string CommonName, string DeviceId, string CmdAddress), HashSet<string>>();
 
         // Étape 2 : Regrouper les adresses par nom commun et ID de l'appareil
@@ -114,12 +115,12 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 {
                     var key = (CommonName: commonName, DeviceId: device.Id, CmdAddress: address);
 
-                    if (!tempGroupedAddresses.ContainsKey(key))
+                    if (!tempGroupedAddresses.ContainsKey(key!))
                     {
-                        tempGroupedAddresses[key] = new HashSet<string>();
+                        tempGroupedAddresses[key!] = new HashSet<string>();
                     }
 
-                    tempGroupedAddresses[key].Add(id);
+                    tempGroupedAddresses[key!].Add(id);
                 }
                 else if (name.StartsWith("Ie", StringComparison.OrdinalIgnoreCase))
                 {
@@ -209,7 +210,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     {
         IeAddressesSet.Clear();
         GroupedAddresses.Clear();
-        var groupAddresses = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupAddress").ToList();
+        var groupAddresses = groupAddressFile.Descendants(namespaceResolver.GlobalKnxNamespace! + "GroupAddress").ToList();
     
         var ieAddresses = new Dictionary<string, List<XElement>>(StringComparer.OrdinalIgnoreCase);
         var cmdAddresses = new Dictionary<string, List<XElement>>(StringComparer.OrdinalIgnoreCase);
@@ -225,7 +226,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 {
                     var suffix = name.Substring(2);
                     // Vérifier si l'adresse est déjà présente dans la liste ieAddressesSet
-                    if (!IeAddressesSet.Any(x => x.Attribute("Address")?.Value == address))
+                    if (IeAddressesSet.All(x => x.Attribute("Address")?.Value != address))
                     {
                         IeAddressesSet.Add(ga);
 
@@ -312,10 +313,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         var allAddresses = new HashSet<int>();
 
         // Parcourir chaque GroupRange
-        foreach (var groupRange in doc.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupRange"))
+        foreach (var groupRange in doc.Descendants(namespaceResolver.GlobalKnxNamespace! + "GroupRange"))
         {
             // Parcourir chaque GroupAddress du GroupRange
-            foreach (var groupAddress in groupRange.Descendants(namespaceResolver.GlobalKnxNamespace + "GroupAddress"))
+            foreach (var groupAddress in groupRange.Descendants(namespaceResolver.GlobalKnxNamespace! + "GroupAddress"))
             {
                 var address = int.Parse(groupAddress.Attribute("Address")!.Value);
 
