@@ -95,7 +95,7 @@
                     Background="{StaticResource BackgroundWhite}"
                     BorderBrush="{StaticResource BorderGray}"
                     BorderThickness="1"
-                        Padding="0"
+                        Padding="5"
                     Margin="0,0"
             />
             </StackPanel>
@@ -244,7 +244,7 @@
                             Margin="0"
                             Padding="0"
                             Background="{StaticResource ButtonBlue}"
-                            Height="30"
+                            Height="40"
                             
                      />
                 </Grid>
@@ -359,7 +359,7 @@
                                 Content="Filtrer" Margin="10,0"/>
                             <Button Style="{StaticResource IconTextButtonStyle}"
                                 Tag="{StaticResource CheckmarkDrawingImage}"
-                                Content="Enregistrer"
+                                Content="{StaticResource Save}"
                                 Command="{Binding SaveCommand}"/>
                         </StackPanel>
                     </Grid>
@@ -397,12 +397,45 @@
                     </Grid>
                 </Border>
                 <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
-                        BorderThickness="0,0,1,0" >
-                    
-                    <TextBlock Text="ICI LES PARAMETRES DE LA COMMANDE QUAND ON CLIQUE SUR UNE ADRESSE ?" 
-                                TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                    
-                    </Border>
+                        BorderThickness="0,0,1,0"
+                        Padding="10,0">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <!-- Column for title -->
+                            <RowDefinition Height="Auto" />
+                            <!-- Column for button -->
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Vertical">
+                            <TextBlock Text="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,0,20"/>
+
+                            <StackPanel Grid.Row="0" Orientation="Horizontal">
+
+                                <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,10,0"/>
+                                <ComboBox Width="200" HorizontalAlignment="Left" Grid.Row="1">
+                                    <ComboBoxItem Content="1 bit" />
+                                    <ComboBoxItem Content="2 bits" />
+                                    <ComboBoxItem Content="4 bits" />
+                                    <!-- Ajoutez d'autres options ici si nécessaire -->
+                                </ComboBox>
+
+                            </StackPanel>
+
+                            <TextBlock Text="{StaticResource IEAccociated}" 
+                                       Style="{StaticResource TitleTextStyle}"
+                                       FontSize="14"
+                                       Padding="0,10"/>
+
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Row="1" Margin="10">
+
+                            <Button Grid.Row="1" Style="{StaticResource IconTextButtonStyle}" 
+                            Tag="{StaticResource CheckmarkDrawingImage}"
+                            Content="{StaticResource Save}"
+                            Command="{Binding SaveCommand}"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
                     
                     
 

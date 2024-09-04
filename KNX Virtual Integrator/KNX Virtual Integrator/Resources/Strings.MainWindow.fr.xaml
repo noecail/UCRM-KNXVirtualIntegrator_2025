@@ -19,6 +19,9 @@
     <sys:String x:Key="AddModel">Ajouter</sys:String>
     <sys:String x:Key="LinkedModel">Modèles Liés</sys:String>
     <sys:String x:Key="UnlinkedModel">Modèles Non Liés</sys:String>
+    <sys:String x:Key="Save">Enregistrer</sys:String>
+    <sys:String x:Key="IEAccociated">IE Associées :</sys:String>
+
 
 
 </ResourceDictionary>
