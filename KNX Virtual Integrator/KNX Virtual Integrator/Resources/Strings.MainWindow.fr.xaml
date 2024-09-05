@@ -16,5 +16,12 @@
     <sys:String x:Key="ExpectedDPT">DPT attendu :</sys:String>
     <sys:String x:Key="TableTitleSentExpected">Valeur Envoyé / Valeur Attendue :</sys:String>
     <sys:String x:Key="DPTsubtype">Sous-type du DPT :</sys:String>
+    <sys:String x:Key="AddModel">Ajouter</sys:String>
+    <sys:String x:Key="LinkedModel">Modèles Liés</sys:String>
+    <sys:String x:Key="UnlinkedModel">Modèles Non Liés</sys:String>
+    <sys:String x:Key="Save">Enregistrer</sys:String>
+    <sys:String x:Key="IEAccociated">IE Associées :</sys:String>
+
+
 
 </ResourceDictionary>

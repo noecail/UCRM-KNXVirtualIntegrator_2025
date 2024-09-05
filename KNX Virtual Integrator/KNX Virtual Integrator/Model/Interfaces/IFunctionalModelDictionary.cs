@@ -1,11 +1,23 @@
-namespace KNX_Virtual_Integrator.Model.Interfaces;
+using System.Collections.Generic;
 
-public interface IFunctionalModelDictionary{
-    // public void Add_FunctionalModel (string key, FunctionalModel functionalModel);
-    //
-    // public void Remove_FunctionalModel (string key);
-    //
-    // public List<FunctionalModel> GetAllModels();
-    //
-    // public FunctionalModel Get_FunctionalModel(string key);
+namespace KNXIntegrator.Models
+{
+    public interface IFunctionalModelDictionary
+    {
+        // Ajouter un modèle au dictionnaire
+        void Add_FunctionalModel(FunctionalModel functionalModel);
+
+        // Supprimer un modèle du dictionnaire par sa clé
+        void Remove_FunctionalModel(int key);
+
+        // Récupérer tous les modèles
+        List<FunctionalModel> GetAllModels();
+
+        // Récupérer un modèle par sa clé
+        FunctionalModel Get_FunctionalModel(int key);
+
+        // Mettre à jour un modèle existant dans le dictionnaire
+        void UpdateModel(FunctionalModel model);
+    }
 }
+

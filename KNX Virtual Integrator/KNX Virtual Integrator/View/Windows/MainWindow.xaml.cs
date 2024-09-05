@@ -315,9 +315,13 @@ public partial class MainWindow
         var groupAddress = new GroupAddress("1/4/1");
         _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
     }
-    
+
     private void OpenConnectionWindow(object sender, RoutedEventArgs e)
     {
         _connectionWindow.Show();
+    }
+    private void ListBox_Selected(object sender, RoutedEventArgs e)
+    {
+
     }
 }

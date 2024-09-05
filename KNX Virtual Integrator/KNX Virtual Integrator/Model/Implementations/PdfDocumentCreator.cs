@@ -263,11 +263,11 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         // TODO Portion de code à remplacer par la génération de deux arborescences:
         // TODO 1 pour montrer le lien entre les CMD, les IE et les modèles de tests
         // TODO 1 pour montrer la structure du bâtiment
-        var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
-        img.Alignment = Element.ALIGN_CENTER;
-        img.SpacingAfter = 5f;
-        img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
-        document.Add(img);
+        //var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
+        //img.Alignment = Element.ALIGN_CENTER;
+        //img.SpacingAfter = 5f;
+        //img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
+        //document.Add(img);
         
         
         
