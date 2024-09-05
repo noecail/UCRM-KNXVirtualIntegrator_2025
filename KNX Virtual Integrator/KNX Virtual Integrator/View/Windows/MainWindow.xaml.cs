@@ -67,12 +67,13 @@ public partial class MainWindow
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select KNX project file");
 
+        // Initialise la variable indiquant que l'utilisateur n'a pas choisi d'importer un fichier d'adresses de groupes
         UserChooseToImportGroupAddressFile = false;
         
-        // Créer une nouvelle instance de OpenFileDialog
+        // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
         OpenFileDialog openFileDialog = new()
         {
-            // Définir des propriétés optionnelles
+            // Définit le titre de la boîte de dialogue en fonction de la langue de l'application (pas encore implémenté) 
             Title = _viewModel.AppSettings.AppLang switch
             {
                 // Arabe
@@ -136,6 +137,7 @@ public partial class MainWindow
                 // Cas par défaut (français)
                 _ => "Sélectionnez un projet KNX à importer"
             },
+            // Définit le filtre de fichiers pour n'afficher que les fichiers de projet KNX (*.knxproj) et tous les fichiers
             Filter = _viewModel.AppSettings.AppLang switch
             {
                 // Arabe
@@ -199,33 +201,34 @@ public partial class MainWindow
                 // Cas par défaut (français)
                 _ => "Fichiers projet ETS|*.knxproj|Tous les fichiers|*.*"
             },
-            FilterIndex = 1,
-            Multiselect = false
+            FilterIndex = 1, // Définit l'index par défaut du filtre
+            Multiselect = false // Empêche la sélection de plusieurs fichiers à la fois
         };
 
         // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
         var result = openFileDialog.ShowDialog();
 
-        if (result == true)
+        if (result == true) // Si l'utilisateur a sélectionné un fichier
         {
             // Récupérer le chemin du fichier sélectionné
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
 
             // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-
             if (_viewModel.ExtractProjectFilesCommand is RelayCommandWithResult<string, bool> extractProjectFilesCommand &&
                 !extractProjectFilesCommand.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
            
         }
-        else
+        else // Si l'utilisateur annule la sélection de fichier
         {
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
 
         // Partie management des adresses de groupes
+        // Exécute la commande pour trouver les fichiers XML contenant les adresses de groupes dans le dossier du projet
         _viewModel.FindZeroXmlCommand.Execute(_viewModel.ProjectFolderPath);
+        // Exécute la commande pour extraire les adresses de groupe du projet
         _viewModel.ExtractGroupAddressCommand.Execute(null);
     }
     
@@ -240,15 +243,19 @@ public partial class MainWindow
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select group addresses file");
 
+        // Met à jour la variable indiquant que l'utilisateur a choisi d'importer un fichier d'adresses de groupe
         UserChooseToImportGroupAddressFile = true;
         
-        // Créer une nouvelle instance de OpenFileDialog
+        // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
             Title = "Sélectionnez un fichier d'adresses de groupe à importer",
+            // Applique un filtre pour n'afficher que les fichiers XML ou tous les fichiers
             Filter = "Fichiers d'adresses de groupes|*.xml|Tous les fichiers|*.*",
+            // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
             FilterIndex = 1,
+            // N'autorise pas la sélection de plusieurs fichiers à la fois
             Multiselect = false
         };
 
@@ -271,6 +278,7 @@ public partial class MainWindow
         {
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
+        // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
         _viewModel.ExtractGroupAddressCommand.Execute(null);
     }
 
