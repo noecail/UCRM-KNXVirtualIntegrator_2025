@@ -46,9 +46,9 @@ namespace KNX_Virtual_Integrator;
  * il peut créer lui-même des modèles de tests et les associer aux différentes adresses de groupe.
  *
  * Une fois tous les tests configurés, le technicien peut lancer le test. Le logiciel va alors
- * envoyer différentes trames aux adresses de groupes et réceptionner les IE pour vérifier
- * le fonctionnement de l'installation. Il génère par la suite un rapport de fonctionnement au
- * format PDF que le technicien peut exporter facilement et imprimer si besoin.
+ * envoyer différentes trames aux adresses de groupes des Cmd et lire les IE correspondant pour
+ * vérifier le fonctionnement de l'installation. Il génère par la suite un rapport de fonctionnement
+ * au format PDF que le technicien peut exporter facilement et imprimer si besoin.
  *
  *
  * -----------------------------------------------------------------------------------
@@ -110,7 +110,7 @@ namespace KNX_Virtual_Integrator;
  * mais en réalité la logique derrière est plutôt simple. Le back-end est lui contenu dans le fichier .xaml.cs.
  * Il agit comme une classe normale qui régit les comportements de la fenêtre. Attention cependant,
  * il faut à tout prix éviter d'effectuer du traitement dans ces fichiers. Dans une architecture MVVM, il
- * est largement conseilé de créer les fonctions de traitement dans Model, et d'utiliser le ViewModel pour
+ * est largement conseillé de créer les fonctions de traitement dans Model, et d'utiliser le ViewModel pour
  * appeler ces fonctions, mais nous reviendrons sur la notion de ViewModel juste après.
  *
  * Le WindowManager contient les instances de chaque fenêtre, ainsi que des fonctions permettant à App
@@ -147,6 +147,8 @@ namespace KNX_Virtual_Integrator;
  * - La fenêtre paramètres est terminée
  * - La connexion au bus fonctionne et la fenêtre associée est terminée
  * - La génération du PDF a été commencée, mais il reste des parties du rapport à générer
+ * - Les fonctions de regroupement des adresses de groupes en liant les commandes (Cmd) au indications
+ * d'états (Ie) principalement en fonction de leur nom (et en fonction du fichier importé) sont terminées
  * - 
  * [PARLER DE CE QU'IL RESTE A FAIRE SUR LE LOGICIEL ET DE CE QUI EST DEJA FAIT]
  *
@@ -166,7 +168,7 @@ namespace KNX_Virtual_Integrator;
  * collègues ont effectué quand vous faites un push.
  *
  * Hésitez pas à jeter un oeil au premier projet que l'on a développé avant celui-ci,
- * il est pas aussi bien structuré mais il fonctionne: https://github.com/Daichi9764/UCRM
+ * il n'est pas aussi bien structuré mais il fonctionne: https://github.com/Daichi9764/UCRM
  *
  * Bon courage 😉
  */
