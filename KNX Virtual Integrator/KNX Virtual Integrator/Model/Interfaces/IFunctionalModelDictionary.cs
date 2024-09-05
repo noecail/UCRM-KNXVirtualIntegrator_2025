@@ -2,22 +2,25 @@ using System.Collections.Generic;
 
 namespace KNXIntegrator.Models
 {
+    /// <summary>
+    /// Interface for managing a dictionary of functional models (FunctionalModel).
+    ///
+    /// Provides methods to add, remove, retrieve, and update models in the dictionary.
+    /// Each model is identified by a unique key (int). This interface enables centralized 
+    /// management of functional models, allowing standardized operations on the dictionary.
+    /// 
+    /// - Add_FunctionalModel: Adds a functional model to the dictionary.
+    /// - Remove_FunctionalModel: Removes a functional model using its key.
+    /// - GetAllModels: Retrieves all functional models from the dictionary.
+    /// </summary>
     public interface IFunctionalModelDictionary
     {
-        // Ajouter un modèle au dictionnaire
         void Add_FunctionalModel(FunctionalModel functionalModel);
 
-        // Supprimer un modèle du dictionnaire par sa clé
         void Remove_FunctionalModel(int key);
 
-        // Récupérer tous les modèles
         List<FunctionalModel> GetAllModels();
 
-        // Récupérer un modèle par sa clé
-        FunctionalModel Get_FunctionalModel(int key);
-
-        // Mettre à jour un modèle existant dans le dictionnaire
-        void UpdateModel(FunctionalModel model);
     }
 }
 

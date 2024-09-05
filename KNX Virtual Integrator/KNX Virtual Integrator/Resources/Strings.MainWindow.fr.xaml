@@ -1,4 +1,19 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<!-- 
+    <summary>
+    This resource dictionary stores UI text strings for buttons, titles, and labels in the application.
+
+    It provides a centralized way to manage user interface text, allowing for easy updates and localization.
+    Each string is associated with a unique key, which is referenced in the UI elements throughout the application.
+    
+    To switch the language of the application:
+    1. Create a new ResourceDictionary file with the same structure, but translate the values 
+       (e.g., for English: Strings.MainWindow.en.xaml).
+    2. In your XAML, replace the current dictionary with the new language-specific dictionary.
+    3. Optionally, use dynamic resources and bindings to switch dictionaries at runtime based on user preferences.
+    </summary>
+-->
+
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="ExportButton">Exporter le rapport de test</sys:String>
     <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>

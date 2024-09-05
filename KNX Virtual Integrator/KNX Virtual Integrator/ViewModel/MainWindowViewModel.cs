@@ -12,6 +12,20 @@ using System.Diagnostics;
 
 namespace KNX_Virtual_Integrator.ViewModel
 {
+    /// <summary>
+    /// ViewModel for managing the layout and commands in the MainWindow.
+    ///
+    /// This class handles:
+    /// - Column width settings for the model and address columns (`ModelColumnWidth` and `AdressColumnWidth`).
+    /// - Commands to show or hide these columns (`HideModelColumnCommand`, `HideAdressColumnCommand`, `ShowModelColumnCommand`, `ShowAdressColumnCommand`).
+    /// 
+    /// It provides properties to control the visibility and size of columns in the MainWindow,
+    /// and commands to toggle their visibility. Property changes are tracked using `INotifyPropertyChanged`,
+    /// allowing the UI to update dynamically based on user interactions.
+    /// 
+    /// Note: The `RelayCommand` instances are initialized in the constructor of `MainViewModel`.
+    /// </summary>
+
     public partial class MainViewModel
     {
         //Gestion des colonnes
@@ -63,19 +77,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             AdressColumnWidth = GridLength.Auto;
         }
 
-        //Gestion de la sauvegarde des modèles
-
-        public RelayCommand SaveCommand { get; }
-        private void ExecuteSaveCommand()
-        {
-            if (SelectedModel != null)
-            {
-                SelectedModel.Name = "nouveau nom"; // Met à jour le nom du modèle sélectionné
-
-                _functionalModelDictionary.UpdateModel(SelectedModel);
-                OnPropertyChanged(nameof(SelectedModel));
-            }
-        }
+        
 
     }
 }
