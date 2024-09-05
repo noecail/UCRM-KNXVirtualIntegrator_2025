@@ -19,24 +19,32 @@ public class SystemSettingsDetector (ILogger logger) : ISystemSettingsDetector
     {
         try
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize"))
-            {
-                var registryValue = key?.GetValue("AppsUseLightTheme");
+            // Ouverture de la clé de registre contenant les informations sur le thème Windows.
+            using var key = Registry.CurrentUser.OpenSubKey(@"Software\Microsoft\Windows\CurrentVersion\Themes\Personalize");
+        
+            // Récupérer la valeur du registre qui indique si le thème clair est utilisé par les applications.
+            var registryValue = key?.GetValue("AppsUseLightTheme");
 
-                if (registryValue is int value)
-                {
-                    return value == 1;
-                }
+            // Si la valeur récupérée est un entier, on vérifie si elle est égale à 1.
+            // Si c'est le cas, cela signifie que le thème clair est activé.
+            if (registryValue is int value)
+            {
+                return value == 1; // Retourne true si le thème clair est activé, false si le thème sombre est activé.
             }
         }
         catch (Exception ex)
         {
-            logger.ConsoleAndLogWriteLine($"Error: An error occured while trying to retrieve the windows theme : {ex.Message}. Thème par défaut : clair.");
-            return true; // Default to dark theme in case of error
+            // En cas d'erreur lors de l'accès à la clé de registre, on log l'erreur avec un message explicatif.
+            logger.ConsoleAndLogWriteLine($"Erreur : Une erreur s'est produite lors de la récupération du thème Windows : {ex.Message}. Thème par défaut : clair.");
+
+            // En cas d'erreur, on retourne true, ce qui signifie que le thème clair est utilisé par défaut.
+            return true; // Par défaut, on suppose que le thème clair est activé.
         }
 
+        // Si aucune information n'a pu être récupérée, on retourne true, indiquant que le thème clair est utilisé.
         return true;
     }
+
 
     
     // Fonction permettant de détecter la langue de Windows. Si elle est supportée par l'application,

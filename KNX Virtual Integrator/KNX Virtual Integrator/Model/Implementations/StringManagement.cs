@@ -17,13 +17,21 @@ public class StringManagement(GroupAddressProcessor groupAddressProcessor) : ISt
     /// </summary>
     public double CalculateSimilarity(string str1, string str2)
     {
+        // Récupération de la longueur des deux chaînes.
         var len1 = str1.Length;
         var len2 = str2.Length;
+    
+        // Calcul de la longueur maximale entre les deux chaînes.
         var maxLen = Math.Max(len1, len2);
 
-        if (maxLen == 0) return 1.0; // Both strings are empty
+        // Si les deux chaînes sont vides, elles sont considérées comme identiques (similarité maximale de 1).
+        if (maxLen == 0) return 1.0;
 
+        // Calcul de la distance de Levenshtein entre les deux chaînes.
         var distance = LevenshteinDistance(str1, str2);
+
+        // Retourner le ratio de similarité : 1 - (distance / longueur maximale).
+        // Plus la distance est petite, plus les chaînes sont similaires.
         return 1.0 - (double)distance / maxLen;
     }
 
@@ -40,21 +48,36 @@ public class StringManagement(GroupAddressProcessor groupAddressProcessor) : ISt
     /// </summary>
     public int LevenshteinDistance(string str1, string str2)
     {
+        // Longueur de la première chaîne.
         var n = str1.Length;
+        // Longueur de la deuxième chaîne.
         var m = str2.Length;
+        // Matrice pour stocker les distances entre les sous-chaînes de str1 et str2.
         var d = new int[n + 1, m + 1];
 
+        // Si la première chaîne est vide, la distance est la longueur de la deuxième chaîne (toutes les insertions).
         if (n == 0) return m;
+        // Si la deuxième chaîne est vide, la distance est la longueur de la première chaîne (toutes les suppressions).
         if (m == 0) return n;
 
+        // Initialisation de la première colonne (suppression de tous les caractères de str1).
         for (var i = 0; i <= n; i++) d[i, 0] = i;
+    
+        // Initialisation de la première ligne (insertion de tous les caractères de str2).
         for (var j = 0; j <= m; j++) d[0, j] = j;
 
+        // Parcourir chaque caractère des deux chaînes pour calculer les distances.
         for (var i = 1; i <= n; i++)
         {
             for (var j = 1; j <= m; j++)
             {
+                // Si les caractères sont identiques, le coût est 0, sinon 1.
                 var cost = (str1[i - 1] == str2[j - 1]) ? 0 : 1;
+
+                // Calcul de la distance minimale en tenant compte des trois opérations possibles :
+                // 1. Suppression (d[i-1, j] + 1)
+                // 2. Insertion (d[i, j-1] + 1)
+                // 3. Substitution (d[i-1, j-1] + cost)
                 d[i, j] = Math.Min(
                     Math.Min(d[i - 1, j] + 1, d[i, j - 1] + 1),
                     d[i - 1, j - 1] + cost
@@ -62,6 +85,7 @@ public class StringManagement(GroupAddressProcessor groupAddressProcessor) : ISt
             }
         }
 
+        // Retourner la distance de Levenshtein, c'est-à-dire le nombre minimal de modifications pour transformer str1 en str2.
         return d[n, m];
     }
     
