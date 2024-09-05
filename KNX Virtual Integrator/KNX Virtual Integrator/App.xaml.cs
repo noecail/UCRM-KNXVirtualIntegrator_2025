@@ -149,7 +149,9 @@ namespace KNX_Virtual_Integrator;
  * - La génération du PDF a été commencée, mais il reste des parties du rapport à générer
  * - Les fonctions de regroupement des adresses de groupes en liant les commandes (Cmd) au indications
  * d'états (Ie) principalement en fonction de leur nom (et en fonction du fichier importé) sont terminées
- * - 
+ * - Reste à faire: dans la ReportCreationWindow, afficher un aperçu du rapport en cours de création ?
+ * - GESTION DES EXCEPTIONS ! Très important (Sur Jetbrains Rider, si vous survolez une fonction, ça vous
+ * affiche les exceptions qu'elle peut lever
  * [PARLER DE CE QU'IL RESTE A FAIRE SUR LE LOGICIEL ET DE CE QUI EST DEJA FAIT]
  *
  *
@@ -169,6 +171,9 @@ namespace KNX_Virtual_Integrator;
  *
  * Hésitez pas à jeter un oeil au premier projet que l'on a développé avant celui-ci,
  * il n'est pas aussi bien structuré mais il fonctionne: https://github.com/Daichi9764/UCRM
+ *
+ * Pour faciliter la reprise de code et la coopération, faire des <summary> et bien commenter
+ * le code.
  *
  * Bon courage 😉
  */
@@ -215,7 +220,7 @@ public partial class App
     /// </summary>
     private static ModelManager? ModelManager { get; set; }
 
-    private ReportCreationWindow _creationWindow;
+    private ReportCreationWindow? _creationWindow;
         
         
     /* ------------------------------------------------------------------------------------------------
@@ -231,10 +236,10 @@ public partial class App
         OpenMainWindow(); // Ouvrir la fenêtre principale
         PerformStartupTasks(); // Exécuter les tâches de démarrage
 
-        _creationWindow = new ReportCreationWindow(MainViewModel);
-        _creationWindow.Show();
+        if (MainViewModel != null) _creationWindow = new ReportCreationWindow(MainViewModel);
+        _creationWindow?.Show();
         
-        ModelManager.PdfDocumentCreator.CreatePdf("test.pdf", "Boby Lapointe");
+        ModelManager?.PdfDocumentCreator.CreatePdf("test.pdf", "Boby Lapointe");
     }
 
     

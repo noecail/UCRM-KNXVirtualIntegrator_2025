@@ -4,7 +4,7 @@ public interface IPdfDocumentCreator
 {
     void CreatePdf(string fileName, string authorName);
 
-    void CreateAndOpenPdf(string name);
+    void CreateAndOpenPdf(string fileName, string authorName);
 
     void ClosePdf();
 

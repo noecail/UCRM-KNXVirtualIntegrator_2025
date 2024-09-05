@@ -64,7 +64,7 @@
 
                 <!-- Bouton Connexion -->
                 <Button 
-                    Command="{Binding OpenConnectionWindowCommand}"
+                    Click="OpenConnectionWindow"
                     Style="{StaticResource ConnectButton}"
                     Margin="0,0,5,0"
                     
@@ -73,8 +73,7 @@
                 <!-- Premier bouton Importation -->
                 <Button Style="{StaticResource IconButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}" 
-                    Click="ImportGroupAddressFileButtonClick"
-                    Command="{Binding ShowModelColumnCommand}"                        
+                    Click="ImportGroupAddressFileButtonClick"                       
                     Margin="5,0,0,0"     
                     
             />
@@ -85,7 +84,6 @@
                     Tag="{StaticResource ImportedDrawingImage}"
                     Click="ImportProjectButtonClick"
                     Background="{StaticResource ButtonBlue}"
-                    Command="{Binding ShowAdressColumnCommand}"
                     Margin="5,0"
             />
 
@@ -98,7 +96,11 @@
                         Padding="5"
                     Margin="0,0"
             />
-            </StackPanel>
+
+            <!-- Bouton Test trames -->
+            <Button Content="Envoyer Trame" Click="OnWriteButtonClick" />
+            <Button Content="Lire Trame" Click="OnReadButtonClick" />
+        </StackPanel>
 
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
 
