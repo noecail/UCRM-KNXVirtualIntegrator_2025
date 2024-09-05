@@ -13,11 +13,11 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     public string LatestReportPath { get; private set; } = "";
 
     
-    // POUR TESTER UNIQUEMENT
+    // POUR TESTER UNIQUEMENT ⚠️
     private List<string> _modelesFonctionnels = new();
     
     
-    public void CreatePdf(string name)
+    public void CreatePdf(string fileName, string authorName)
     {
         _modelesFonctionnels.Add("zizi");
         _modelesFonctionnels.Add("zizi2");
@@ -29,14 +29,14 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         var document = new Document(PageSize.A4, 0, 0, 0, 0);
         
         // Création d'un writer pour écrire dans le PDF
-        var writer = PdfWriter.GetInstance(document, new FileStream(name, FileMode.Create));
+        var writer = PdfWriter.GetInstance(document, new FileStream(fileName, FileMode.Create));
 
         // Ouverture du document pour écrire dedans
         document.Open();
 
         // Ecriture du contenu du document PDF
         GeneratePdfHeader(document, writer); // Génération de la bannière d'en-tête
-        GenerateProjectInformationSection(document, "Maxou"); // Génération de la section d'infos du projet (nom, ...)
+        GenerateProjectInformationSection(document, authorName); // Génération de la section d'infos du projet (nom, ...)
         GenerateTreeStructure(document, writer);
 
         // Fermeture du document et du stream d'écriture
@@ -44,7 +44,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         writer.Close();
         
         // Mise à jour du path du dernier pdf généré
-        LatestReportPath = name;
+        LatestReportPath = fileName;
 
         // Ouverture du PDF dans Windows
         OpenLatestReport();
@@ -77,13 +77,13 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         var cb = writer.DirectContent;
     
     
-        // // Logo du logiciel
-        // var logo = Image.GetInstance(@"C:\Users\maxim\Downloads\BOOST.png");
-        // logo.ScaleToFit(42f, 42f); // Ajuster la taille du logo
-        //     
-        // // Ajouter l'image à une position spécifique (x, y) sur la page
-        // logo.SetAbsolutePosition(0f, document.PageSize.Height - 42f); // Position en bas à gauche, ajustez selon vos besoins
-        // cb.AddImage(logo);
+        // Logo du logiciel
+        var logo = Image.GetInstance(@"C:\Users\maxim\Downloads\BOOST.png");
+        logo.ScaleToFit(42f, 42f); // Ajuster la taille du logo
+            
+        // Ajouter l'image à une position spécifique (x, y) sur la page
+        logo.SetAbsolutePosition(0f, document.PageSize.Height - 42f); // Position en bas à gauche, ajustez selon vos besoins
+        cb.AddImage(logo);
         
     
         // Nom du logiciel, à côté du logo
@@ -215,48 +215,51 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         document.Add(conductedTests);
     }
     
+    // TODO -- Cette fonction doit générer deux arborescences: une pour détailler les liens entre les CMD et les IE (voir screen actuellement dans le PDF)
+    // TODO -- Et un pour détailler la structure du bâtiment
+    // TODO -- En l'état le code fonctionne mais ne donne pas le résultat attendu sur le PDF
     private void GenerateTreeStructure(Document document, PdfWriter writer)
     {
-        // Font setup
-        Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
-        Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
-        Font labelFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
-
-        // Example data structure for the tree
-        var treeStructure = new List<(string category, string command, string label, BaseColor color)>
-        {
-            ("ECLAIRAGE SIMPLE > ON/OFF", "Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon", "M2", BaseColor.GREEN),
-            ("ECLAIRAGE VARIABLE > ON/OFF", "Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree", "M2", BaseColor.GREEN),
-            ("ECLAIRAGE VARIABLE > VARIATIONS", "Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree", "M3", BaseColor.GREEN),
-            ("ECLAIRAGE VARIABLE > VALEURS VARIATION", "Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt", "M4", BaseColor.GREEN)
-            // Add more entries as needed
-        };
-
-        // Add some introductory text
-        document.Add(new Paragraph("Voici l'arborescence des commandes :", boldFont));
-
-        foreach (var (category, command, label, color) in treeStructure)
-        {
-            // Create a paragraph for each command
-            Paragraph paragraph = new Paragraph();
-
-            // Add category (only once if it changes)
-            paragraph.Add(new Chunk(category + "\n", boldFont));
-
-            // Create a rectangle chunk
-            Chunk rectangleChunk = new Chunk(" " + label + " ", labelFont);
-            rectangleChunk.SetBackground(color, 2f, 2f, 2f, 2f); // Add padding
-
-            // Add the rectangle and command text
-            paragraph.Add(rectangleChunk);
-            paragraph.Add(new Chunk(" " + command + "\n", normalFont));
-
-            // Add the paragraph to the document
-            document.Add(paragraph);
-        }
-
-        // Add some text after the tree structure
-        document.Add(new Paragraph("Texte après l'arborescence pour vérifier la continuité du contenu.", normalFont));
+        // // Font setup
+        // Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
+        // Font boldFont = new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+        // Font labelFont = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.WHITE);
+        //
+        // // Example data structure for the tree
+        // var treeStructure = new List<(string category, string command, string label, BaseColor color)>
+        // {
+        //     ("ECLAIRAGE SIMPLE > ON/OFF", "Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon", "M2", BaseColor.GREEN),
+        //     ("ECLAIRAGE VARIABLE > ON/OFF", "Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree", "M2", BaseColor.GREEN),
+        //     ("ECLAIRAGE VARIABLE > VARIATIONS", "Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree", "M3", BaseColor.GREEN),
+        //     ("ECLAIRAGE VARIABLE > VALEURS VARIATION", "Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt", "M4", BaseColor.GREEN)
+        //     // Add more entries as needed
+        // };
+        //
+        // // Add some introductory text
+        // document.Add(new Paragraph("Voici l'arborescence des commandes :", boldFont));
+        //
+        // foreach (var (category, command, label, color) in treeStructure)
+        // {
+        //     // Create a paragraph for each command
+        //     Paragraph paragraph = new Paragraph();
+        //
+        //     // Add category (only once if it changes)
+        //     paragraph.Add(new Chunk(category + "\n", boldFont));
+        //
+        //     // Create a rectangle chunk
+        //     Chunk rectangleChunk = new Chunk(" " + label + " ", labelFont);
+        //     rectangleChunk.SetBackground(color, 2f, 2f, 2f, 2f); // Add padding
+        //
+        //     // Add the rectangle and command text
+        //     paragraph.Add(rectangleChunk);
+        //     paragraph.Add(new Chunk(" " + command + "\n", normalFont));
+        //
+        //     // Add the paragraph to the document
+        //     document.Add(paragraph);
+        // }
+        //
+        // // Add some text after the tree structure
+        // document.Add(new Paragraph("Texte après l'arborescence pour vérifier la continuité du contenu.", normalFont));
     }
 
 

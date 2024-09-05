@@ -1,0 +1,21 @@
+#!/bin/sh
+
+# Change directory to the root of the repository
+cd "$(git rev-parse --show-toplevel)"
+
+# Exécutez le script shell pour incrémenter la version
+sh IncrementationVersion.sh
+
+# Ajoutez le fichier modifié à l'index git
+git add KNX Virtual Integrator/KNX Virtual Integrator/app.xaml.cs
+
+# Vérifiez s'il y a des modifications à commettre
+if git diff --cached --quiet; then
+  echo "No changes to commit."
+else
+  # Commettez les modifications avec un message approprié
+  git commit -m "Incrémentation automatique de la version de build [auto]"
+
+  # Poussez les modifications automatiquement si souhaité
+  git push
+fi

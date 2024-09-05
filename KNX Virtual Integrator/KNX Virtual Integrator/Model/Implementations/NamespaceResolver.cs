@@ -6,7 +6,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class NamespaceResolver(Logger logger) : INamespaceResolver 
 {
-    public XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01";
+    public XNamespace? GlobalKnxNamespace ;
     private readonly ILogger _logger = logger;
     
     // Method that retrieves the namespace to use for searching in .xml files from the zeroFilePath (since the namespace varies depending on the ETS version)
@@ -24,10 +24,16 @@ public class NamespaceResolver(Logger logger) : INamespaceResolver
     {
         try
         {
+            // Tente d'ouvrir le fichier en lecture seule
             using var stream = File.OpenRead(filePath);
+
+            // Charge le contenu du fichier dans un objet XDocument
             var document = XDocument.Load(stream);
 
+            // Récupère l'espace de noms par défaut du document XML
             var defaultNamespace = document.Root?.GetDefaultNamespace();
+
+            // Si un espace de noms par défaut est trouvé, on l'assigne à la variable GlobalKnxNamespace
             if (defaultNamespace != null)
             {
                 GlobalKnxNamespace = defaultNamespace.NamespaceName;
@@ -35,7 +41,10 @@ public class NamespaceResolver(Logger logger) : INamespaceResolver
         }
         catch (Exception ex)
         {
+            // Si une exception est levée (par exemple, fichier introuvable, problème de lecture, XML mal formé),
+            // on logge l'erreur avec un message décrivant l'exception
             _logger.ConsoleAndLogWriteLine($"Error setting namespace from XML: {ex.Message}");
         }
+
     }
 }

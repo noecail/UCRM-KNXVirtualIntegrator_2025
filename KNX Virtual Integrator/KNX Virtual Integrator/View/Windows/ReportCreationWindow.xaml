@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         mc:Ignorable="d"
-        Title="ReportCreationWindow" Height="213" Width="500"
+        Title="ReportCreationWindow" Height="500" Width="500"
         ResizeMode="NoResize"
         WindowStyle="None"
         AllowsTransparency="True"
@@ -170,7 +170,11 @@
                                            Margin="10,10,0,0" />
                                 
                                 <TextBlock Text="Auteur du rapport" Margin="10,10,10,2" />
-                                <TextBox Margin="10, 5, 10, 10"/>
+                                <TextBox x:Name="authorNameTextBox" Margin="10, 5, 10, 10"/>
+                                
+                                <!-- ICI AJOUTER L'APERCU DU PDF AU FORMAT 339 x 479 Pixel -->
+
+
                             </StackPanel>
                         </ScrollViewer>
                         
