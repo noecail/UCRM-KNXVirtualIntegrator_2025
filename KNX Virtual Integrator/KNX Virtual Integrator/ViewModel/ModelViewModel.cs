@@ -1,50 +1,51 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using KNXIntegrator.Models;
 
-namespace KNX_Virtual_Integrator.ViewModel
-{
+namespace KNX_Virtual_Integrator.ViewModel;
+
+/// <summary>
+/// Represents the main view model for managing models and their properties in the application.
+/// </summary>
 public partial class MainViewModel
-    { 
+{
     private IFunctionalModelDictionary _functionalModelDictionary;
     private FunctionalModel _selectedModel;
     private string? _newModelName;
 
-        // Collection observable des modèles
-        public ObservableCollection<FunctionalModel> Models { get; }
+    /// <summary>
+    /// Gets the collection of functional models.
+    /// </summary>
+    public ObservableCollection<FunctionalModel> Models { get; }
 
-        public FunctionalModel SelectedModel
+    /// <summary>
+    /// Gets or sets the currently selected model.
+    /// </summary>
+    public FunctionalModel SelectedModel
+    {
+        get => _selectedModel;
+        set
         {
-            get => _selectedModel;
-            set
-            {
-                if (_selectedModel != value)
-                {
-                    _selectedModel = value;
-                    ShowModelColumn();
-                    OnPropertyChanged(nameof(SelectedModel));
-                    NewModelName = _selectedModel?.Name; // Met à jour le nom dans le TextBox
-                }
-            }
+            if (_selectedModel.Equals(value)) return;
+            _selectedModel = value;
+            ShowModelColumn();
+            OnPropertyChanged(nameof(SelectedModel));
+            NewModelName = _selectedModel.Name; // Updates the name in the TextBox
         }
-
-        public string? NewModelName
-        {
-            get => _newModelName;
-            set
-            {
-                if (_newModelName != value)
-                {
-                    _newModelName = value;
-                    OnPropertyChanged(nameof(NewModelName));
-                }
-            }
-        }
-
-
-
-
     }
 
+    /// <summary>
+    /// Gets or sets the name of the new model.
+    /// </summary>
+    public string? NewModelName
+    {
+        get => _newModelName;
+        set
+        {
+            if (_newModelName != value)
+            {
+                _newModelName = value;
+                OnPropertyChanged(nameof(NewModelName));
+            }
+        }
+    }
 }
-
