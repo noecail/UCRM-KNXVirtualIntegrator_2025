@@ -4,7 +4,7 @@
  * Auteurs       : MICHEL Hugo, COUSTON Emma, MALBRANCHE Daichi,
  *                 BRUGIERE Nathan, OLIVEIRA LOPES Maxime, TETAZ Louison
  * Date          : 07/08/2024
- * Version       : 1.1
+ * Version       : 1.2
  *
  * Description :
  * Fichier principal contenant la structure de l'application et toutes les
@@ -28,6 +28,20 @@ using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator;
 
+/*
+ *                          Explications sur le logiciel
+ * -----------------------------------------------------------------------------------
+ * [POINT SUR LE BUT DU LOGICIEL]
+ *
+ * [PARLER DE L'ARCHI]
+ *
+ * [PARLER DE LA STRUCTURATION DES FICHIERS]
+ *
+ * [PARLER DE WPF]
+ *
+ * [PARLER DE CE QU'IL RESTE A FAIRE SUR LE LOGICIEL ET DE CE QUI EST DEJA FAIT]
+ */
+
 public partial class App
 {
     /* ------------------------------------------------------------------------------------------------
@@ -48,7 +62,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 105;
+    public const int AppBuild = 106;
     
         
     
@@ -88,6 +102,8 @@ public partial class App
 
         _creationWindow = new ReportCreationWindow(MainViewModel);
         _creationWindow.Show();
+        
+        ModelManager.PdfDocumentCreator.CreatePdf("test.pdf", "Boby Lapointe");
     }
 
     
@@ -137,7 +153,8 @@ public partial class App
             appSettings, 
             parentFinder,
             sliderClickHandler,
-            pdfDocumentCreator);
+            pdfDocumentCreator,
+            projectInfoManager);
         
         // Enregistrer un message de démarrage dans la console et le journal
         ModelManager.Logger.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
@@ -204,10 +221,11 @@ public partial class App
         // Enregistrer un message indiquant que l'application est fermée
         ModelManager?.Logger.ConsoleAndLogWriteLine($"{AppName.ToUpper()} APP CLOSED !");
     
-        // Fermer l'écrivain de journal
+        // Fermer le flux d'écriture du logger
         ModelManager?.Logger.CloseLogWriter();
     }
     
 }
+
 
 
