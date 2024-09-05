@@ -18,31 +18,32 @@ namespace KNX_Virtual_Integrator.ViewModel
     /// </summary>
 
     public partial class MainViewModel
-    { 
-    private IFunctionalModelDictionary _functionalModelDictionary;
-    private FunctionalModel _selectedModel;
-
-
-    /// <summary>
-    /// Gets the collection of functional models.
-    /// </summary>
-    public ObservableCollection<FunctionalModel> Models { get; }
-
-    /// <summary>
-    /// Gets or sets the currently selected model.
-    /// </summary>  
-        //Utile pour connaitre le modèle a afficher en paramètre et potentiellement modifier ces attributs
-    public FunctionalModel SelectedModel
     {
-        get => _selectedModel;
-        set
-        {
-            if (_selectedModel.Equals(value)) return;
-            _selectedModel = value;
-            ShowModelColumn();
-            OnPropertyChanged(nameof(SelectedModel));
-        }
-                // ++ Ajouter nottement tout le mecanisme de sauvegarde des paramètres
+        private IFunctionalModelDictionary _functionalModelDictionary;
+        private FunctionalModel _selectedModel;
 
+
+        /// <summary>
+        /// Gets the collection of functional models.
+        /// </summary>
+        public ObservableCollection<FunctionalModel> Models { get; }
+
+        /// <summary>
+        /// Gets or sets the currently selected model.
+        /// </summary>  
+        //Utile pour connaitre le modèle a afficher en paramètre et potentiellement modifier ces attributs
+        public FunctionalModel SelectedModel
+        {
+            get => _selectedModel;
+            set
+            {
+                if (_selectedModel.Equals(value)) return;
+                _selectedModel = value;
+                ShowModelColumn();
+                OnPropertyChanged(nameof(SelectedModel));
+            }
+            // ++ Ajouter nottement tout le mecanisme de sauvegarde des paramètres
+
+        }
     }
 }
