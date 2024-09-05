@@ -21,21 +21,23 @@ namespace KNX_Virtual_Integrator.Model
         IProjectInfoManager projectInfoManager)
 
     {
-    public IFileLoader FileLoader { get; } = fileLoader;
-    public IFileFinder FileFinder { get; } = fileFinder;
-    public IProjectFileManager ProjectFileManager { get; } = projectFileManager;
-    public ILogger Logger { get; } = logger;
-    public IZipArchiveManager ZipArchiveManager { get; } = zipArchiveManager;
-    public IGroupAddressManager GroupAddressManager { get; } = groupAddressManager;
-    public ISystemSettingsDetector SystemSettingsDetector { get; } = systemSettingsDetector;
-    public IDebugArchiveGenerator DebugArchiveGenerator { get; } = debugArchiveGenerator;
-    public IApplicationFileManager ApplicationFileManager { get; } = applicationFileManager;
-    public IBusConnection BusConnection { get; } = busConnection;
-    public IGroupCommunication GroupCommunication { get; } = groupCommunication;
-    public IApplicationSettings AppSettings { get; } = appSettings;
-    public IParentFinder ParentFinder { get; } = parentFinder;
-    public ISliderClickHandler SettingsSliderClickHandler { get; } = settingsSliderClickHandler;
-    public IPdfDocumentCreator PdfDocumentCreator { get; } = pdfDocumentCreator;
-    public IProjectInfoManager ProjectInfoManager { get; } = projectInfoManager;
+        
+        // Instances de toutes les classes
+        public IFileLoader FileLoader { get; } = fileLoader;
+        public IFileFinder FileFinder { get; } = fileFinder;
+        public IProjectFileManager ProjectFileManager { get; } = projectFileManager;
+        public ILogger Logger { get; } = logger;
+        public IZipArchiveManager ZipArchiveManager { get; } = zipArchiveManager;
+        public IGroupAddressManager GroupAddressManager { get; } = groupAddressManager;
+        public ISystemSettingsDetector SystemSettingsDetector { get; } = systemSettingsDetector;
+        public IDebugArchiveGenerator DebugArchiveGenerator { get; } = debugArchiveGenerator;
+        public IApplicationFileManager ApplicationFileManager { get; } = applicationFileManager;
+        public IBusConnection BusConnection { get; } = busConnection;
+        public IGroupCommunication GroupCommunication { get; } = groupCommunication;
+        public IApplicationSettings AppSettings { get; } = appSettings;
+        public IParentFinder ParentFinder { get; } = parentFinder;
+        public ISliderClickHandler SettingsSliderClickHandler { get; } = settingsSliderClickHandler;
+        public IPdfDocumentCreator PdfDocumentCreator { get; } = pdfDocumentCreator;
+        public IProjectInfoManager ProjectInfoManager { get; } = projectInfoManager;
     }
 }
