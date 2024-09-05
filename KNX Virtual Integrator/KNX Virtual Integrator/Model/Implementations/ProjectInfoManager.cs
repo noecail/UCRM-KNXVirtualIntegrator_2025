@@ -29,7 +29,9 @@ public class ProjectInfoManager(NamespaceResolver namespaceResolver) : IProjectI
     /// contains the names of the room, floor, building part, building, and distribution board.</returns>
     public dynamic ExtractLocationInfo(XDocument zeroXmlFile)
     {
+        // Extraction des informations de localisation à partir du fichier XML.
         var locationInfo = zeroXmlFile.Descendants(namespaceResolver.GlobalKnxNamespace! + "Space")
+            // Filtrer les éléments ayant le type "Room" (pièce) ou "Corridor" (couloir).
             .Where(s => 
             {
                 var type = s.Attribute("Type")?.Value;
@@ -37,29 +39,36 @@ public class ProjectInfoManager(NamespaceResolver namespaceResolver) : IProjectI
             })
             .Select(room =>
             {
+                // Fonction pour récupérer le nom de l'ancêtre d'un certain type (par exemple, "Floor", "Building").
                 var getAncestorName = new Func<string, string>(type =>
-                    room.Ancestors(namespaceResolver.GlobalKnxNamespace! + "Space")
-                        .FirstOrDefault(s => s.Attribute("Type")?.Value == type)
-                        ?.Attribute("Name")?.Value ?? string.Empty
+                        room.Ancestors(namespaceResolver.GlobalKnxNamespace! + "Space")
+                            // Chercher le premier ancêtre du type spécifié et récupérer l'attribut "Name".
+                            .FirstOrDefault(s => s.Attribute("Type")?.Value == type)
+                            ?.Attribute("Name")?.Value ?? string.Empty // Retourner une chaîne vide si aucun ancêtre trouvé.
                 );
 
+                // Fonction pour récupérer le nom du descendant d'un certain type (par exemple, "DistributionBoard").
                 var getDescendantName = new Func<string, string>(type =>
-                    room.Descendants(namespaceResolver.GlobalKnxNamespace! + "Space")
-                        .FirstOrDefault(s => s.Attribute("Type")?.Value == type)
-                        ?.Attribute("Name")?.Value ?? string.Empty
+                        room.Descendants(namespaceResolver.GlobalKnxNamespace! + "Space")
+                            // Chercher le premier descendant du type spécifié et récupérer l'attribut "Name".
+                            .FirstOrDefault(s => s.Attribute("Type")?.Value == type)
+                            ?.Attribute("Name")?.Value ?? string.Empty // Retourner une chaîne vide si aucun descendant trouvé.
                 );
-                    
+
+                // Retourner un objet anonyme avec les différentes informations de localisation.
                 return new
                 {
-                    RoomName = room.Attribute("Name")?.Value,
-                    FloorName = getAncestorName("Floor"),
-                    BuildingPartName = getAncestorName("BuildingPart"),
-                    BuildingName = getAncestorName("Building"),
-                    DistributionBoardName = getDescendantName("DistributionBoard"),
+                    RoomName = room.Attribute("Name")?.Value, // Nom de la pièce ou du couloir.
+                    FloorName = getAncestorName("Floor"), // Nom de l'étage.
+                    BuildingPartName = getAncestorName("BuildingPart"), // Partie du bâtiment.
+                    BuildingName = getAncestorName("Building"), // Nom du bâtiment.
+                    DistributionBoardName = getDescendantName("DistributionBoard"), // Nom du tableau de distribution.
                 };
             })
-            .ToList();
+            .ToList(); // Convertir le résultat en liste.
 
+        // Retourner les informations de localisation extraites.
         return locationInfo;
     }
+
 }

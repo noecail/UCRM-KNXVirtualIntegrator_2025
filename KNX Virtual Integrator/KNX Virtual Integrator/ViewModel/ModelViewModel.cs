@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using KNXIntegrator.Models;
 
 namespace KNX_Virtual_Integrator.ViewModel
@@ -24,28 +23,26 @@ namespace KNX_Virtual_Integrator.ViewModel
     private FunctionalModel _selectedModel;
 
 
-        // Collection observable des modèles
-        public ObservableCollection<FunctionalModel> Models { get; }
+    /// <summary>
+    /// Gets the collection of functional models.
+    /// </summary>
+    public ObservableCollection<FunctionalModel> Models { get; }
 
+    /// <summary>
+    /// Gets or sets the currently selected model.
+    /// </summary>  
         //Utile pour connaitre le modèle a afficher en paramètre et potentiellement modifier ces attributs
-        public FunctionalModel SelectedModel
+    public FunctionalModel SelectedModel
+    {
+        get => _selectedModel;
+        set
         {
-            get => _selectedModel;
-            set
-            {
-                if (_selectedModel != value)
-                {
-                    _selectedModel = value;
-                    ShowModelColumn();
-                    OnPropertyChanged(nameof(SelectedModel));
-                }
-            }
-        } 
-
-        // ++ Ajouter nottement tout le mecanisme de sauvegarde des paramètres
-
+            if (_selectedModel.Equals(value)) return;
+            _selectedModel = value;
+            ShowModelColumn();
+            OnPropertyChanged(nameof(SelectedModel));
+        }
+                // ++ Ajouter nottement tout le mecanisme de sauvegarde des paramètres
 
     }
-
 }
-

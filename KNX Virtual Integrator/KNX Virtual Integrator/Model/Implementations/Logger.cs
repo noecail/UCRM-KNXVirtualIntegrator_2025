@@ -42,23 +42,27 @@ public class Logger : ILogger
     {
         try
         {
+            // Si le dossier logs n'existe pas, on le créée
             if (!Directory.Exists("./logs"))
             {
                 Directory.CreateDirectory("./logs");
             }
 
+            // Si le fichier de logs n'existe pas déjà, on le créée
             if (!File.Exists(LogPath))
             {
                 File.Create(LogPath).Close();
             }
+            
+            // Ouverture du stream d'écriture dans le fichier de logging
+            _writer = new StreamWriter(LogPath);
         }
         catch (Exception ex)
         {
+            // Affichage d'une fenêtre d'erreur et fermeture de l'application
             MessageBox.Show($"Error: Unable to create the log directory. {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            Environment.Exit(1); // Terminates the application with an exit code indicating an error
+            Environment.Exit(1);
         }
-        
-        _writer = new StreamWriter(LogPath);
     }
     
     // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les

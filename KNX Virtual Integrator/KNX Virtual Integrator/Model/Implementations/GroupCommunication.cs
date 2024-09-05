@@ -282,17 +282,6 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// <param name="e">Les arguments de l'événement contenant les détails du message reçu.</param>
     private void OnGroupMessageReceived(object sender, GroupEventArgs e)
     {
-        if (sender == null)
-        {
-            Console.WriteLine("Le sender est null.");
-        }
-
-        if (e == null)
-        {
-            Console.WriteLine("Les paramètres de l'événement sont null.");
-            return; // Arrêter l'exécution si e est null
-        }
-
         // Crée une nouvelle entrée pour le message reçu
         var newMessage = new GroupMessage
         {
