@@ -150,7 +150,8 @@ namespace KNX_Virtual_Integrator;
  * - Les fonctions de regroupement des adresses de groupes en liant les commandes (Cmd) au indications
  * d'états (Ie) principalement en fonction de leur nom (et en fonction du fichier importé) sont terminées
  * - Reste à faire: dans la ReportCreationWindow, afficher un aperçu du rapport en cours de création ?
- * - 
+ * - GESTION DES EXCEPTIONS ! Très important (Sur Jetbrains Rider, si vous survolez une fonction, ça vous
+ * affiche les exceptions qu'elle peut lever
  * [PARLER DE CE QU'IL RESTE A FAIRE SUR LE LOGICIEL ET DE CE QUI EST DEJA FAIT]
  *
  *
