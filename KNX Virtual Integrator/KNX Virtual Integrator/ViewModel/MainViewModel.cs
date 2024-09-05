@@ -10,6 +10,7 @@ using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
 using Knx.Falcon.KnxnetIp;
 using Knx.Falcon;
+using KNXIntegrator.Models;
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -179,6 +180,27 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         async void ConnectBusTask() => await modelManager.BusConnection.ConnectBusAsync();
         async void DisconnectBusTask() => await modelManager.BusConnection.DisconnectBusAsync();
         async void RefreshInterfacesTask() => await modelManager.BusConnection.DiscoverInterfacesAsync();
+
+        //Gestion des modèles -----------------------------------------------------------------------
+        _functionalModelDictionary = new FunctionalModelDictionary();
+
+        // Ajout de 3 modèles par défaut
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle par defaut 1"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle par defaut 2"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 3"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle 4"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Boby Lapointe"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 5"));       
+
+        // Chargement des modèles dans la collection observable
+        Models = new ObservableCollection<FunctionalModel>(_functionalModelDictionary.GetAllModels());
+
+        //Sauvegarde des modèles --------------------------------------------------------------------
+        SaveCommand = new RelayCommand(
+          () => ExecuteSaveCommand()
+
+
+      );
     }
 
 

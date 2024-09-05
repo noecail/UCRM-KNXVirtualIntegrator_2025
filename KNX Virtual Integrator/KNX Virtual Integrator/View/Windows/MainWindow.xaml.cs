@@ -319,5 +319,8 @@ public partial class MainWindow
     private void OpenConnectionWindow(object sender, RoutedEventArgs e)
     {
         _connectionWindow.Show();
+    private void ListBox_Selected(object sender, RoutedEventArgs e)
+    {
+
     }
 }
