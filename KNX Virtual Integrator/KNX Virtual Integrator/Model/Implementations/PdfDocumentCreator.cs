@@ -78,12 +78,12 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     
     
         // Logo du logiciel
-        var logo = Image.GetInstance(@"C:\Users\maxim\Downloads\BOOST.png");
-        logo.ScaleToFit(42f, 42f); // Ajuster la taille du logo
+        //var logo = Image.GetInstance(@"C:\Users\maxim\Downloads\BOOST.png");
+        //logo.ScaleToFit(42f, 42f); // Ajuster la taille du logo
             
         // Ajouter l'image à une position spécifique (x, y) sur la page
-        logo.SetAbsolutePosition(0f, document.PageSize.Height - 42f); // Position en bas à gauche, ajustez selon vos besoins
-        cb.AddImage(logo);
+        //logo.SetAbsolutePosition(0f, document.PageSize.Height - 42f); // Position en bas à gauche, ajustez selon vos besoins
+        //cb.AddImage(logo);
         
     
         // Nom du logiciel, à côté du logo
@@ -193,11 +193,11 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         
         
         
-        var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
-        img.Alignment = Element.ALIGN_CENTER;
-        img.SpacingAfter = 5f;
-        img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
-        document.Add(img);
+        //var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
+        //img.Alignment = Element.ALIGN_CENTER;
+        //img.SpacingAfter = 5f;
+        //img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
+        //document.Add(img);
         
         
         
