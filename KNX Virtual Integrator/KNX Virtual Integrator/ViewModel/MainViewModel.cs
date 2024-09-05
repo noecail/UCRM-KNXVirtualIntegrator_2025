@@ -171,15 +171,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ShowModelColumnCommand = new RelayCommand(ShowModelColumn);
         ShowAdressColumnCommand = new RelayCommand(ShowAdressColumn);
 
-        GenerateReportCommand =
-            new Commands.RelayCommand<(string fileName, string authorName)>(args =>
-                _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
-        
-        return;
-
-        async void ConnectBusTask() => await modelManager.BusConnection.ConnectBusAsync();
-        async void DisconnectBusTask() => await modelManager.BusConnection.DisconnectBusAsync();
-        async void RefreshInterfacesTask() => await modelManager.BusConnection.DiscoverInterfacesAsync();
 
         //Gestion des modèles -----------------------------------------------------------------------
         _functionalModelDictionary = new FunctionalModelDictionary();
@@ -190,17 +181,28 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 3"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle 4"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Boby Lapointe"));
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 5"));       
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 5"));
 
         // Chargement des modèles dans la collection observable
         Models = new ObservableCollection<FunctionalModel>(_functionalModelDictionary.GetAllModels());
 
         //Sauvegarde des modèles --------------------------------------------------------------------
-        SaveCommand = new RelayCommand(
-          () => ExecuteSaveCommand()
+        SaveCommand = new RelayCommand(ExecuteSaveCommand);
+
+        GenerateReportCommand =
+            new Commands.RelayCommand<(string fileName, string authorName)>(args =>
+                _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
+        
+        return;
+
+        async void ConnectBusTask() => await modelManager.BusConnection.ConnectBusAsync();
+        async void DisconnectBusTask() => await modelManager.BusConnection.DisconnectBusAsync();
+        async void RefreshInterfacesTask() => await modelManager.BusConnection.DiscoverInterfacesAsync();
+
+        
 
 
-      );
+      
     }
 
 
