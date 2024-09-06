@@ -37,10 +37,12 @@ namespace KNX_Virtual_Integrator.ViewModel
             get => _selectedModel;
             set
             {
-                if (_selectedModel.Equals(value)) return;
-                _selectedModel = value;
-                ShowModelColumn();
-                OnPropertyChanged(nameof(SelectedModel));
+                if (_selectedModel != value)
+                {
+                    _selectedModel = value;
+                    ShowModelColumn();
+                    OnPropertyChanged(nameof(SelectedModel));
+                }
             }
             // ++ Ajouter nottement tout le mecanisme de sauvegarde des paramètres
 
