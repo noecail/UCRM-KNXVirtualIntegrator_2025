@@ -1,7 +1,8 @@
 # KNX Virtual Integrator
 
 **KNX Virtual Integrator** is a project developed by fourth-year students from INSA Toulouse as part of a 3-month engineering internship at the UCRM Toulouse. The tool is designed to simplify the validation process of connected building installations using the KNX standard.
-![KNX Virtual Integrator Mockup Interface](https://github.com/Moliveiralo/UCRM-KNXVirtualIntegrator/tree/main/Mockup/MockUp_P7.png)
+
+![KNX Virtual Integrator Mockup Interface](https://raw.githubusercontent.com/Moliveiralo/UCRM-KNXVirtualIntegrator/main/Mockup/MockUp_P7.png)
 ## Features
 
 - **KNX Bus Connection**: Connect to the KNX bus either via USB or IP router.
