@@ -88,7 +88,7 @@ public class FileFinder(Logger logger, ProjectFileManager projectFileManager) : 
     
     
     // Fonction permettant de trouver le fichier 0.xml dans le projet exporté
-    // ATTENTION : Nécessite que le projet .knxproj ait déjà été extrait avec la fonction extractProjectFiles().
+    // ATTENTION : Nécessite que le projet .knxproj soit déjà extrait avec la fonction extractProjectFiles().
     /// <summary>
     /// Asynchronously searches for the '0.xml' file in the exported KNX project directory.
     /// </summary>
@@ -132,7 +132,7 @@ public class FileFinder(Logger logger, ProjectFileManager projectFileManager) : 
         }
         catch (DirectoryNotFoundException dirNotFoundEx)
         {
-            // Gérer les erreurs où le répertoire n'est pas trouvé
+            // Gérer les erreurs quand le répertoire n'est pas trouvé
             _logger.ConsoleAndLogWriteLine($"Directory not found while searching for '0.xml': {dirNotFoundEx.Message}");
         }
         catch (IOException ioEx)

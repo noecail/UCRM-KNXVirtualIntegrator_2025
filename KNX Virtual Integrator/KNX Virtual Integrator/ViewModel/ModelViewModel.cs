@@ -31,7 +31,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Gets or sets the currently selected model.
         /// </summary>  
-        //Utile pour connaitre le modèle a afficher en paramètre et potentiellement modifier ces attributs
+        //Utile pour connaitre le modèle à afficher en paramètre et potentiellement modifier ces attributs
         public FunctionalModel SelectedModel
         {
             get => _selectedModel;
@@ -44,7 +44,7 @@ namespace KNX_Virtual_Integrator.ViewModel
                     OnPropertyChanged(nameof(SelectedModel));
                 }
             }
-            // ++ Ajouter nottement tout le mecanisme de sauvegarde des paramètres
+            // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
 
         }
     }
