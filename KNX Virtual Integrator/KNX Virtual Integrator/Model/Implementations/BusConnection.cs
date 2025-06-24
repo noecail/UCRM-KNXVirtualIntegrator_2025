@@ -17,12 +17,12 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     public static XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01"; // Namespace utilisé pour les opérations KNX
 
     /// <summary>
-    /// Représente l'objet de connexion au bus KNX. Peut être nul si aucune connexion n'est établie.
+    /// Représente l'objet de connexion au bus KNX. Peut-être nul si aucune connexion n'est établie.
     /// </summary>
     public KnxBus? Bus;
 
     /// <summary>
-    /// Permet l'annulation d'opérations asynchrones en cours. Peut être nul si aucune opération n'est en cours.
+    /// Permet l'annulation d'opérations asynchrones en cours. Peut-être nul si aucune opération n'est en cours.
     /// </summary>
     public CancellationTokenSource? CancellationTokenSource;
     
@@ -103,7 +103,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
 
-    //GESTIONNAIRE EVENEMENT POUR GROUPCOMMUNICATIONVIEWMODEL
+    //GESTIONNAIRE ÉVÈNEMENT POUR GROUPCOMMUNICATIONVIEWMODEL
     
     /// <summary>
     /// Événement déclenché lorsque la connexion au bus KNX est prête.
