@@ -10,7 +10,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 /// <summary>
 /// Représente la communication avec le bus KNX pour gérer les adresses de groupe et les valeurs de groupe.
-/// Permet d'écrire des valeurs sur le bus KNX en fonction de l'état de connexion et de l'activité du bus.
+/// Permet d'écrire des valeurs sur le bus KNX en fonction de l'état de la connexion et de l'activité du bus.
 /// </summary>
 public class GroupCommunication : ObservableObject, IGroupCommunication
 {
@@ -181,7 +181,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
                 // Définis le résultat pour terminer la tâche
                 tcs.SetResult(e.Value);
 
-                // Désabonne l'handler une fois que la valeur est capturée
+                // Désabonne le handler une fois que la valeur est capturée
                 _busConnection.Bus.GroupMessageReceived -= handler;
             }
         };
@@ -275,7 +275,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     /// <summary>
-    /// Gestionnaire d'événement appelé lorsque un message de groupe est reçu.
+    /// Gestionnaire d'événement appelé lorsqu'un message de groupe est reçu.
     /// Crée une entrée pour le message reçu et met à jour la liste observable des messages.
     /// </summary>
     /// <param name="sender">L'objet source de l'événement.</param>

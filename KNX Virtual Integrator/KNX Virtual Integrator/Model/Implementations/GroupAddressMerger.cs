@@ -36,7 +36,7 @@ public class GroupAddressMerger( StringManagement stringManagement, Logger logge
                 var ieElementName = ieElement.Attribute("Name")?.Value;
 
                 // Si le nom de l'élément 'ieElementName' n'est pas nul,
-                // et que la similarité entre 'groupName' et 'ieElementName' est supérieure ou égale à 80%
+                // et que la similarité entre 'groupName' et 'ieElementName' est supérieure ou égale à 80%.
                 if (ieElementName != null && stringManagement.CalculateSimilarity(groupName, ieElementName) >= 0.8)
                 {
                     // Log l'ajout de l'élément 'ieElementName' au groupe 'groupName'

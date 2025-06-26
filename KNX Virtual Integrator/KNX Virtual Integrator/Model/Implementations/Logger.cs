@@ -30,25 +30,25 @@ public class Logger : ILogger
     /// <remarks>
     /// This writer is used for appending log messages to the file specified by <see cref="LogPath"/>.
     /// </remarks>
-    private readonly StreamWriter _writer; // Permet l'ecriture du fichier de logging
+    private readonly StreamWriter _writer; // Permet l'écriture du fichier de logging
     
     
     
     
     /* ------------------------------------------------------------------------------------------------
-    -------------------------------------------- METHODES  --------------------------------------------
+    -------------------------------------------- MÉTHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     public Logger()
     {
         try
         {
-            // Si le dossier logs n'existe pas, on le créée
+            // Si le dossier logs n'existe pas, on le crée
             if (!Directory.Exists("./logs"))
             {
                 Directory.CreateDirectory("./logs");
             }
 
-            // Si le fichier de logs n'existe pas déjà, on le créée
+            // Si le fichier de logs n'existe pas déjà, on le crée
             if (!File.Exists(LogPath))
             {
                 File.Create(LogPath).Close();
@@ -65,7 +65,7 @@ public class Logger : ILogger
         }
     }
     
-    // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
+    // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'écrivant dans les
     // logs sans sauter de ligne apres le message.
     /// <summary>
     /// Writes a message to the application console and log file without appending a newline after the message.
@@ -87,14 +87,14 @@ public class Logger : ILogger
     /// <param name="msg">The message to be written to the console and log file.</param>
     public void ConsoleAndLogWrite(string msg)
     {
-        Console.Write(msg); // Ecriture du message dans la console
-        _writer.Write(msg); // Ecriture du message dans le fichier logs
+        Console.Write(msg); // Écriture du message dans la console
+        _writer.Write(msg); // Écriture du message dans le fichier logs
         
         _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
 
     
-    // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'ecrivant dans les
+    // Fonction permettant l'affichage d'un message dans la console de l'application tout en l'écrivant dans les
     // logs. Ajoute la date et l'heure avant affichage. Saut d'une ligne en fin de message.
     /// <summary>
     /// Writes a message to the application console and log file, including the current date and time, and appends a newline after the message.
@@ -116,8 +116,8 @@ public class Logger : ILogger
     /// <param name="msg">The message to be written to the console and log file.</param>
     public void ConsoleAndLogWriteLine(string msg)
     {
-        Console.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans la console
-        _writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message dans le fichier logs
+        Console.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Écriture du message dans la console
+        _writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Écriture du message dans le fichier logs
         
         _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
@@ -129,7 +129,7 @@ public class Logger : ILogger
     /// <param name="msg">The message to be written to the log file.</param>
     public void LogWrite(string msg)
     {
-        _writer.Write(msg); // Ecriture du message dans le fichier logs
+        _writer.Write(msg); // Écriture du message dans le fichier logs
         
         _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
@@ -141,7 +141,7 @@ public class Logger : ILogger
     /// <param name="msg">The message to be written to the log file.</param>
     public void LogWriteLine(string msg)
     {
-        _writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Ecriture du message avec timestamp dans le fichier logs
+        _writer.WriteLine($"[{DateTime.Now:dd/MM/yyyy - HH:mm:ss}] " + msg); // Écriture du message avec timestamp dans le fichier logs
         
         _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }

@@ -55,7 +55,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
     
     
     /* ------------------------------------------------------------------------------------------------
-    --------------------------------------------- METHODES --------------------------------------------
+    --------------------------------------------- MÉTHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     /// <summary>
     /// Extracts project files from a .knxproj file. Continuously attempts to process the file until successful or the user cancels.
@@ -299,7 +299,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
         var managedToNormalizePaths = false;
         var cancelOperation = false;
 
-        // Tant que l'on n'a pas réussi à extraire le projet ou que l'on n'a pas demandé l'annulation de l'extraction
+        // Tant que l'on n'a pas réussi à extraire le projet ou que l'on n'a pas demandé l'annulation de l'extraction.
         while (!managedToExtractXml && !cancelOperation)
         {
             /* ------------------------------------------------------------------------------------------------

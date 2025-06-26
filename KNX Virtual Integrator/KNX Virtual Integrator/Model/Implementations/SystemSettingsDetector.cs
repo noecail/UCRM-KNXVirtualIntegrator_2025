@@ -34,7 +34,7 @@ public class SystemSettingsDetector (ILogger logger) : ISystemSettingsDetector
         }
         catch (Exception ex)
         {
-            // En cas d'erreur lors de l'accès à la clé de registre, on log l'erreur avec un message explicatif.
+            // En cas d'erreur lors de l'accès à la clé de registre, on écrit sur le log l'erreur avec un message explicatif.
             logger.ConsoleAndLogWriteLine($"Erreur : Une erreur s'est produite lors de la récupération du thème Windows : {ex.Message}. Thème par défaut : clair.");
 
             // En cas d'erreur, on retourne true, ce qui signifie que le thème clair est utilisé par défaut.

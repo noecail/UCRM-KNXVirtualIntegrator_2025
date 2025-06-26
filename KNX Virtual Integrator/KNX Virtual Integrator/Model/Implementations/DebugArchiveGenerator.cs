@@ -290,7 +290,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
     /// <param name="includeImportedProjects">Specifies whether to include imported projects in the archive.</param>
     public void CreateDebugArchive(bool includeOsInfo = true, bool includeHardwareInfo = true, bool includeImportedProjects = true)
     {
-        // Ecriture du fichier d'informations système
+        // Écriture du fichier d'informations système
         WriteSystemInformationDebugFile(includeOsInfo, includeHardwareInfo);
 
         try
@@ -703,7 +703,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
     }
        
       
-    // Fonction pour le formattage des dates de pilotes
+    // Fonction pour le formatage des dates de pilotes
     /// <summary>
     /// Formats driver date strings into a readable "DD/MM/YYYY" format.
     /// </summary>

@@ -52,7 +52,7 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
 
     }
     
-    // Inutile maintenant je pense mais je laisse au cas où
+    // Sûrement inutile maintenant, mais je laisse au cas où
     /// <summary>
     /// Filters a dictionary of XElement lists, retaining only those lists where all elements
     /// share the same first word in their "Name" attribute.
@@ -167,7 +167,7 @@ public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
             return $"{champ1}/{champ2}";
         }
 
-        // Si 'groupAddressStructure' n'est ni 2 ni 3, enregistrer un message d'erreur et retourner la chaîne d'origine
+        // Si 'groupAddressStructure' n'est ni 2 ni 3, enregistrer un message d'erreur et retourner la chaîne d'origine.
         logger.ConsoleAndLogWriteLine($"Impossible conversion for {valueString}");
         return valueString;
     }

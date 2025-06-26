@@ -28,7 +28,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     {
         if (projectFileManager is not { } manager) return;
         
-        // Prend le bon fichier xml en fonction de si l'user a importé le projet ou un fichier d'adresse de groupe
+        // Prend le bon fichier xml en fonction de si l'installateur a importé le projet ou un fichier d'adresse de groupe
         var filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile
             ? manager.GroupAddressFilePath
             : manager.ZeroXmlPath;
@@ -213,7 +213,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         }
        
         // Appel optionnel, cela ajoute des Ie qui ressemble à 80% aux groupes de Cmd seules
-        // A voir l'appel de la fonction est pertinent
+        // À voir l'appel de la fonction est pertinent
         groupAddressMerger.MergeSingleElementGroups(GroupedAddresses, IeAddressesSet);
         
     }
@@ -329,7 +329,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         }
 
         // Appel optionnel, cela ajoute des Ie qui ressemble à 80% aux groupes de Cmd seules
-        // A voir l'appel de la fonction est pertinent
+        // À voir l'appel de la fonction est pertinent
         groupAddressMerger.MergeSingleElementGroups(GroupedAddresses, IeAddressesSet);
     }
     
@@ -367,7 +367,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
         }
 
-        // Si aucun chevauchement n'est trouvé, retourne 2
+        // Si aucun chevauchement n'est trouvé, retourne 2.
         return 2;
     }
 
