@@ -32,7 +32,7 @@ public class ApplicationFileManager (ILogger logger) : IApplicationFileManager
     
     // Fonction d'archivage des logs
     // Fonctionnement : S'il y a plus de 50 fichiers logs.txt, ces fichiers sont rassemblés et compresses dans une archive zip
-    // S'il y a plus de 10 archives, ces dernieres sont supprimees avant la creation de la nouvelle archive
+    // S'il y a plus de 10 archives, ces dernières sont supprimées avant la creation de la nouvelle archive
     // Conséquence : on ne stocke les logs que des 50 derniers lancements de l'application
     /// <summary>
     /// Archives the log files in the log directory by compressing them into a ZIP archive when the number of log files exceeds 50.
@@ -54,7 +54,7 @@ public class ApplicationFileManager (ILogger logger) : IApplicationFileManager
             
         try
         {
-            // Verifier si le repertoire existe
+            // Vérifier si le repertoire existe
             if (!Directory.Exists(logDirectory))
             {
                 logger.ConsoleAndLogWriteLine($"--> The specified directory does not exist : {logDirectory}");
@@ -81,17 +81,17 @@ public class ApplicationFileManager (ILogger logger) : IApplicationFileManager
                     logger.ConsoleAndLogWriteLine("--> Deleted all existing archive files as they exceeded the limit of 10.");
                 }
 
-                // Creer le nom du fichier zip avec la date actuelle
+                // Créer le nom du fichier zip avec la date actuelle
                 var zipFileName = Path.Combine(logDirectory, $"LogsArchive-{DateTime.Now:yyyy-MM-dd_HH-mm-ss}.zip");
 
-                // Creer l'archive zip et y ajouter les fichiers log
+                // Créer l'archive zip et y ajouter les fichiers log
                 using (var zip = ZipFile.Open(zipFileName, ZipArchiveMode.Create))
                 {
                     foreach (var logFile in logFiles)
                     {
-                        if (logger is Logger log && logFile != log.LogPath) // Si le fichier logs n'est pas celui que l'on vient de creer pour le lancement actuel
+                        if (logger is Logger log && logFile != log.LogPath) // Si le fichier logs n'est pas celui que l'on vient de créer pour le lancement actuel
                         {
-                            zip.CreateEntryFromFile(logFile, Path.GetFileName(logFile)); // On l'ajoute e l'archive
+                            zip.CreateEntryFromFile(logFile, Path.GetFileName(logFile)); // On l'ajoute à l'archive
                             File.Delete(logFile); // Puis, on le supprime
                         }
                     }
@@ -112,7 +112,7 @@ public class ApplicationFileManager (ILogger logger) : IApplicationFileManager
 
     
     // Fonction permettant de supprimer tous les dossiers presents dans le dossier courant
-    // Sauf le fichier logs. Cela permet de supprimer tous les projets exportés à la session precedente.
+    // Sauf le fichier logs. Cela permet de supprimer tous les projets exportés à la session précédente.
     // Fonction pour supprimer tous les dossiers sauf le dossier 'logs'
     /// <summary>
     /// Deletes all directories in the application directory except for those named 'logs' and 'resources'.

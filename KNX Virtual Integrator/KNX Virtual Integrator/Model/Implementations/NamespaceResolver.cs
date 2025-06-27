@@ -42,7 +42,7 @@ public class NamespaceResolver(Logger logger) : INamespaceResolver
         catch (Exception ex)
         {
             // Si une exception est levée (par exemple, fichier introuvable, problème de lecture, XML mal formé),
-            // on logge l'erreur avec un message décrivant l'exception
+            // on écrit sur le logger l'erreur avec un message décrivant l'exception.
             _logger.ConsoleAndLogWriteLine($"Error setting namespace from XML: {ex.Message}");
         }
 

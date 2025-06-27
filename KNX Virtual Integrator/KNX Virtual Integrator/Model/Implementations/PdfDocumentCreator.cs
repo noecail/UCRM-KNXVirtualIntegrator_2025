@@ -24,7 +24,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     
     
     /* ------------------------------------------------------------------------------------------------
-    -------------------------------------------- METHODES  --------------------------------------------
+    -------------------------------------------- MÉTHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     /// <summary>
     /// Creates a PDF document at the specified file path, with the given author name.
@@ -51,7 +51,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         // Ouverture du document pour écrire dedans
         document.Open();
 
-        // Ecriture du contenu du document PDF
+        // Écriture du contenu du document PDF
         GeneratePdfHeader(document, writer); // Génération de la bannière d'en-tête
         GenerateProjectInformationSection(document, authorName); // Génération de la section d'infos du projet (nom, ...)
         GenerateTreeStructure(document, writer);
@@ -91,7 +91,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         // Ouverture du document pour écrire dedans
         document.Open();
 
-        // Ecriture du contenu du document PDF
+        // Écriture du contenu du document PDF
         GeneratePdfHeader(document, writer); // Génération de la bannière d'en-tête
         GenerateProjectInformationSection(document, authorName); // Génération de la section d'infos du projet (nom, ...)
         GenerateTreeStructure(document, writer);
@@ -284,7 +284,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         };
         document.Add(conductedTests);
         
-        // TODO ICI IL MANQUE DU COUP L'AFFICHAGE DE TOUS LES RESULTATS (Voir fonction GenerateTestList)
+        // TODO ICI IL MANQUE DU COUP L'AFFICHAGE DE TOUS LES RÉSULTATS (Voir fonction GenerateTestList)
     }
     
     
