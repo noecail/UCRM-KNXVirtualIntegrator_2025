@@ -81,6 +81,7 @@
                     <!-- Bouton Paramètres -->
                     <Button Style="{StaticResource IconButtonStyle}"
                         Tag="{StaticResource settingsDrawingImage}"
+                        Click="SettingsButtonClick"
                         Background="{StaticResource BackgroundWhite}"
                         BorderBrush="{StaticResource BorderGray}"
                         BorderThickness="1"

@@ -18,6 +18,7 @@ public partial class MainWindow
     private readonly MainViewModel _viewModel;
 
     private readonly ConnectionWindow _connectionWindow;
+    private readonly WindowManager _windowManager;
 
         
         
@@ -34,7 +35,7 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- METHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    public MainWindow(MainViewModel viewModel, ConnectionWindow cw)
+    public MainWindow(MainViewModel viewModel, ConnectionWindow cw, WindowManager wm)
     {
         InitializeComponent();
             
@@ -42,6 +43,7 @@ public partial class MainWindow
         DataContext = _viewModel;
 
         _connectionWindow = cw;
+        _windowManager = wm;
     }
 
     public void ApplyScaling(float scaleFactor)
@@ -288,9 +290,10 @@ public partial class MainWindow
         Application.Current.Shutdown();
     }
 
-    private void Button_Click(object sender, RoutedEventArgs e)
+    private void SettingsButtonClick(object sender, RoutedEventArgs e)
     {
-
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select KNX project file");
+        _windowManager.ShowSettingsWindow();
     }
 
     private void Button_Click_1(object sender, RoutedEventArgs e)

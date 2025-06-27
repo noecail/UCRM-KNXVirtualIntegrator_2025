@@ -19,7 +19,7 @@ public class WindowManager
         // Initialisation des fenêtres
         SettingsWindow = new SettingsWindow(_mainViewModel);
         ConnectionWindow = new ConnectionWindow(_mainViewModel);
-        MainWindow = new MainWindow(_mainViewModel, ConnectionWindow);
+        MainWindow = new MainWindow(_mainViewModel, ConnectionWindow, this);
     }
 
     public void ShowMainWindow() => MainWindow.Show();

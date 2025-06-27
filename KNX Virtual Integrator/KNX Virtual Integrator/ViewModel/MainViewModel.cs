@@ -32,9 +32,12 @@ namespace KNX_Virtual_Integrator.ViewModel;
 /// 
 public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
-    public new event PropertyChangedEventHandler? PropertyChanged;
 
-    
+    /// <summary>
+    /// Occurs when a property value changes.
+    /// </summary>
+    public event PropertyChangedEventHandler? PropertyChanged;
+
 
     /* ------------------------------------------------------------------------------------------------
     ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
@@ -48,16 +51,16 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         _busConnection.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName != nameof(_busConnection.IsConnected)) return;
-            RaisePropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
+            OnPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
             ConnectBusCommand?.RaiseCanExecuteChanged();
             DisconnectBusCommand?.RaiseCanExecuteChanged();
         };
-        _busConnection.SelectedConnectionType = "Type=IP";
+        _busConnection.SelectedConnectionType = "Type=USB";
         
         ProjectFolderPath = "";
 
         
-
+    
         
         
         // Initialisation des commandes
