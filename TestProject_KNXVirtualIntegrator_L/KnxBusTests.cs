@@ -28,13 +28,14 @@ namespace TestProject_KNXVirtualIntegrator_L
             _busConnection = new BusConnection();
             _groupCommunication = new GroupCommunication(_busConnection);
             // Initialisation des interfaces de la maquette 
-            // ATTENTION, IP n'est pas mis à jour pour avoir la bonne interface
+            // Pour modifier les interfaces de test (changement de maquette, rafraichissement,...), rajouter des lignes
+            // Console.Write au niveau de la fonction DiscoverInterfaceAsync dans les blocs if
             _selectedInterfaceUsb = new ConnectionInterfaceViewModel(ConnectorType.Usb, 
                 "SpaceLogic KNX USB Interface DIN Rail",
                 "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\"");
             _selectedInterfaceIp = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling, 
-                "SpaceLogic KNX USB Interface DIN Rail",
-                "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\"");
+                "IP-Interface Secure 192.168.10.132",
+                "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
         }
         
         [Fact]
