@@ -318,9 +318,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                     }
                 });
             }
-
             // Vérifie si le type de connexion sélectionné est "USB"
-            if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=USB" or "Type=USB")
+            else if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=USB" or "Type=USB")
             {
                 // Démarre une tâche pour découvrir les périphériques USB
                 var usbDiscoveryTask = Task.Run(() =>

@@ -117,7 +117,7 @@
                 <!-- En-tête de la fenêtre -->
                 <Viewbox HorizontalAlignment="Left" MouseLeftButtonDown="Header_MouseLeftButtonDown">
                     <StackPanel Orientation="Vertical" Background="Transparent" Width="500" Margin="0">
-                        <!-- Icone + titre paramètres -->
+                        <!-- Icône + titre paramètres -->
                         <StackPanel Orientation="Horizontal">
                             <Image Height="30" Width="30" Margin="14,10,5,0" VerticalAlignment="Center">
                                 <Image.Source>
@@ -172,7 +172,7 @@
                                 <TextBlock Text="Auteur du rapport" Margin="10,10,10,2" />
                                 <TextBox x:Name="authorNameTextBox" Margin="10, 5, 10, 10"/>
                                 
-                                <!-- ICI AJOUTER L'APERCU DU PDF AU FORMAT 339 x 479 Pixel -->
+                                <!-- ICI AJOUTER L'APERÇU DU PDF AU FORMAT 339 x 479 Pixel -->
 
 
                             </StackPanel>

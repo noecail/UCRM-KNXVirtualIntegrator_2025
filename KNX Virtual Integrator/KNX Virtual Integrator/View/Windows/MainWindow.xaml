@@ -48,12 +48,12 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
 
-        <!-- Bandeau  supérieur  avec tout les boutons  -->
-            <!-- Boutons de gauche  -->
+        <!-- Bandeau supérieur avec tous les boutons -->
+            <!-- Boutons de gauche -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
 
                     <!-- Bouton Connexion -->
-                    <!-- Note : Le style des boutons et tout les styles sont contenues dans le fichier styles.xaml -->
+                    <!-- Note : Le style des boutons et tous les styles sont contenues dans le fichier styles.xaml -->
                 <Button 
                         Click="OpenConnectionWindow"
                         Style="{StaticResource ConnectButton}"
@@ -93,7 +93,7 @@
                 <Button Content="Envoyer Trame" Click="OnWriteButtonClick" />
                 <Button Content="Lire Trame" Click="OnReadButtonClick" />
             </StackPanel>
-            <!-- Boutons de droite  -->
+            <!-- Boutons de droite -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
 
                 <!-- Bouton de Test -->
@@ -109,7 +109,7 @@
             />
             </StackPanel>
 
-        <!-- Contour principale incluant le tableaux avec les 4 colonnes  -->
+        <!-- Contour principal incluant le tableau avec les 4 colonnes -->
         <Border Grid.Row="1" BorderBrush="{StaticResource BorderGray}" BorderThickness="1" Margin="10,0,10,10">
                 <Grid>
                     <!-- Define rows and columns for the nested grid -->
@@ -119,14 +119,13 @@
                 </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                     <ColumnDefinition MinWidth="200"  Width="Auto" />    <!-- Modèles -->
-                    <ColumnDefinition  Width="{Binding ModelColumnWidth}" /> <!-- Param Modèles + Gestion de la visibilité de la colonne  -->
-                    <ColumnDefinition Width="{Binding AdressColumnWidth}" /> <!-- Param Adresses + Gestion de la visibilité de la colonne  -->
+                    <ColumnDefinition  Width="{Binding ModelColumnWidth}" /> <!-- Param Modèles + Gestion de la visibilité de la colonne -->
+                    <ColumnDefinition Width="{Binding AdressColumnWidth}" /> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
                     <ColumnDefinition MinWidth="200"  Width="*" /> <!-- Adresses -->
                     </Grid.ColumnDefinitions>
 
                 <!-- Première colonne : Modèles_____________________________________________________________________________________ -->
                 <!-- Bordure pour l'en-tête
-
                 Note : On applique des bordures droites sur chaque élément de la colonne pour donner
                 l'effet d'onglet sélectionné en lien avec les paramètres -->
 
@@ -170,15 +169,15 @@
 
                 <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundLightGray}" >
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/> <!-- Titre liées-->
+                        <RowDefinition Height="Auto"/> <!-- Titre lié-->
                         <RowDefinition Height="Auto"  /><!-- Listes liées-->
-                        <RowDefinition Height="Auto"/><!-- Titre non-liées-->
+                        <RowDefinition Height="Auto"/><!-- Titre non-lié-->
                         <RowDefinition Height="Auto"/><!-- Liste non-liées-->
                         <RowDefinition Height="*" /><!-- -->
-                        <RowDefinition Height="Auto" MinHeight="30" /><!-- Bouton d'ajout de modèes-->
+                        <RowDefinition Height="Auto" MinHeight="30" /><!-- Bouton d'ajout de modèles-->
                     </Grid.RowDefinitions>
 
-                    <!-- Titre liés-->
+                    <!-- Titre lié-->
                     <Border Grid.Row="0"  BorderBrush="{StaticResource BorderGray}"
                             BorderThickness="0,0,1,2"
                             Padding="5"
@@ -190,7 +189,7 @@
                            Text="{StaticResource LinkedModel}" />
                         </Border>
 
-                    <!-- Liste liés-->
+                    <!-- Listes liées-->
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                             <ListBox ItemsSource="{Binding Models}"
                                      SelectedItem="{Binding SelectedModel}"
@@ -209,7 +208,7 @@
                            Text="{StaticResource UnlinkedModel}" />
                         </Border>
                         
-                    <!-- Liste non-liés : Crée une liste a part des modèles non liées (different du dico general) -->
+                    <!-- Listes non-liées : Crée une liste à part des modèles non liées (different du dico general) -->
                     <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Auto">
                             <ListBox ItemsSource="{Binding Models}"
                                      SelectedItem="{Binding SelectedModel}"
@@ -217,14 +216,14 @@
                                      ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"/>
                     </ScrollViewer>
                     
-                    <!-- Commpler l'espace restant afin d'avoir une bordure droite -->
+                    <!-- Combler l'espace restant afin d'avoir une bordure droite -->
                     <Border Grid.Row="4"  BorderBrush="{StaticResource BorderGray}"
                             BorderThickness="0,0,1,0"
                             Padding="5"
                             Background="{StaticResource BackgroundDarkGray}"/>
 
 
-                    <!-- Bouton d'ajout de modèes-->
+                    <!-- Bouton d'ajout de modèles-->
                     <Button Grid.Row="5" HorizontalAlignment="Stretch"
                             VerticalAlignment="Bottom"
                             Style="{StaticResource IconTextButtonStyle}"
@@ -285,12 +284,12 @@
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" FocusVisualStyle="{x:Null}" BorderThickness="0">
                             <Grid>
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/> <!-- Paramètres Generaux -->
+                                    <RowDefinition Height="Auto"/> <!-- Paramètres Généraux -->
                                     <RowDefinition Height="Auto"/> <!-- Paramètres Avancées -->
                                     <RowDefinition Height="*"/> <!-- Tableaux des Envoies/Receptions-->
                                 </Grid.RowDefinitions>
 
-                                <!-- Paramètres Generaux -->
+                                <!-- Paramètres Généraux -->
                                 <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                                     
                                     <!--Nom-->
@@ -298,7 +297,7 @@
                                     <TextBox x:Name="NomTextBox" HorizontalAlignment="Left" Width="200" Grid.Row="0"
                                              Text="{Binding NewModelName, UpdateSourceTrigger=PropertyChanged}"/>
                                     
-                                    <!--DPT : Venir liées le ComboBox a un dictionnnaire de DPT traitées par le logiciel en back-->
+                                    <!--DPT : Venir liées le ComboBox a un dictionnaire de DPT traitées par le logiciel en back-->
                                     <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
                                     <ComboBox x:Name="DptSortieComboBox" Width="200" HorizontalAlignment="Left" Grid.Row="1">
                                         <ComboBoxItem Content="1 bit" />
@@ -306,7 +305,7 @@
                                         <ComboBoxItem Content="4 bits" />
                                     </ComboBox>
 
-                                    <!--DPT Subtype : Venir liées le ComboBox a un dictionnnaire de DPT Subtype en fcontion du DPT choisis ainsi que sa visibilité-->
+                                    <!--DPT Subtype : Venir liées le ComboBox a un dictionnaire de DPT Subtype en fonction du DPT choisis ainsi que sa visibilité-->
                                     <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
                                     <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left" Grid.Row="1">
                                         <ComboBoxItem Content="1 bit" />
@@ -320,7 +319,7 @@
 
                                 </StackPanel>
 
-                                <!--  Liste des Param Avancés : lié la visibilité a la checkbox précetente -->
+                                <!-- Liste des Param Avancés : lié la visibilité a la checkbox précédente -->
                                 <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,10,0,0">
                                     <!--DPT Attendu : Liée le ComboBox au dico de DPT-->
                                     <TextBlock Text="{StaticResource ExpectedDPT}" VerticalAlignment="Center" Grid.Row="3" Margin="0,10,0,0"/>
@@ -329,11 +328,11 @@
                                         <ComboBoxItem Content="16 bits" />
                                     </ComboBox>
                                     
-                                    <!-- + Ajouter le sous type de DPT Attendu en focntion du DPT choisis-->
+                                    <!-- + Ajouter le sous-type de DPT Attendu en fonction du DPT choisis-->
                                     
                                 </StackPanel>
 
-                                <!-- Tableaux des Envoies/Receptions : Mecanisme à mettre en place la suite n'est que de la figuration-->
+                                <!-- Tableaux des Envoies/Receptions : Mécanisme à mettre en place la suite n'est que de la figuration-->
                                 <StackPanel Grid.Row="2" Margin="0,10,0,0">
                                     <TextBlock Text="{StaticResource TableTitleSentExpected}" />
 
@@ -449,12 +448,12 @@
             <!-- En-tête -->
             <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource BackgroundLightGray}">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" /> <!--Titre avce son icon-->
+                    <ColumnDefinition Width="*" /> <!--Titre avec son icon-->
                     <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
                 </Grid.ColumnDefinitions>
 
 
-                <!--Titre avce son icon-->
+                <!--Titre avec son icon-->
                 <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
 
                     <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
@@ -481,7 +480,7 @@
             </Grid>
         
 
-        <!-- TreeView(figuratif) : A redesigner entièrement selon la maquette, ajouter les infos de liaison, et ouvrir les parametres sur clique -->
+        <!-- TreeView(figuratif) : à redesign entièrement selon la maquette, ajouter les infos de liaison, et ouvrir les paramètres sur clique -->
                 <TreeView Grid.Row="1" Grid.Column="3">
                     <TreeViewItem Header="ECLAIRAGE SIMPLE" IsExpanded="True">
                                     <TreeViewItem Header="ON/OFF" IsExpanded="True">

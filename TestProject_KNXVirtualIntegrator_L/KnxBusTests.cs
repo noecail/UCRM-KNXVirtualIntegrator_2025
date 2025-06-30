@@ -19,27 +19,51 @@ namespace TestProject_KNXVirtualIntegrator_L
     {
         private readonly BusConnection _busConnection;
         private readonly GroupCommunication _groupCommunication;
-
+        private readonly ConnectionInterfaceViewModel _selectedInterfaceUsb;
+        private readonly ConnectionInterfaceViewModel _selectedInterfaceIp;
+        
         public KnxBusTests()
         {
             // Initialisation de BusConnection et GroupCommunication
             _busConnection = new BusConnection();
             _groupCommunication = new GroupCommunication(_busConnection);
+            // Initialisation des interfaces de la maquette 
+            // ATTENTION, IP n'est pas mis à jour pour avoir la bonne interface
+            _selectedInterfaceUsb = new ConnectionInterfaceViewModel(ConnectorType.Usb, 
+                "SpaceLogic KNX USB Interface DIN Rail",
+                "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\"");
+            _selectedInterfaceIp = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling, 
+                "SpaceLogic KNX USB Interface DIN Rail",
+                "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\"");
         }
-
+        
         [Fact]
-        public async Task Test_KnxBus_Connect()
+        public async Task Test_KnxBus_IPConnect()
         {
             // Étape 1 : Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés
-            var connectorType = ConnectorType.Usb; // Remplacez ceci par le type de connecteur réel si différent
-            var displayName = "SpaceLogic KNX USB Interface DIN Rail";
-            var connectionString = "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\""; // Remplacez par la chaîne de connexion réelle
+            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+            // Assignez l'interface sélectionnée à la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceIp;
 
-            var selectedInterface = new ConnectionInterfaceViewModel(connectorType, displayName, connectionString);
-
-            // Assignez l'interface sélectionnée à la connexion bus
-            _busConnection.SelectedInterface = selectedInterface;
+            // Étape 2 : Connexion au bus KNX
+            await _busConnection.ConnectBusAsync();
+            bool isConnected = _busConnection.IsConnected;
+            
+            // Étape 3 : Déconnexion du bus KNX (optionnel)
+            await _busConnection.DisconnectBusAsync();
+            
+            // Assertion pour vérifier si la connexion a réussi
+            Assert.True(isConnected, "KNX IP Bus connection failed.");
+        }
+        
+        
+        [Fact]
+        public async Task Test_KnxBus_USBConnect()
+        {
+            // Étape 1 : Création et configuration de l'interface de connexion
+            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+            // Assignez l'interface sélectionnée à la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
             // Étape 2 : Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
@@ -51,19 +75,15 @@ namespace TestProject_KNXVirtualIntegrator_L
             // Assertion pour vérifier si la connexion a réussi
             Assert.True(isConnected, "KNX Bus connection failed.");
         }
+        
+        
         [Fact]
-        public async Task Test_KnxBus_Connect_Then_Disconnect()
+        public async Task Test_KnxBus_USBConnect_Disconnect()
         {
             // Étape 1 : Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés
-            var connectorType = ConnectorType.Usb; // Remplacez ceci par le type de connecteur réel si différent
-            var displayName = "SpaceLogic KNX USB Interface DIN Rail";
-            var connectionString = "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\""; // Remplacez par la chaîne de connexion réelle
-
-            var selectedInterface = new ConnectionInterfaceViewModel(connectorType, displayName, connectionString);
-
-            // Assignez l'interface sélectionnée à la connexion bus
-            _busConnection.SelectedInterface = selectedInterface;
+            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+            // Assignez l'interface sélectionnée à la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
             // Étape 2 : Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
@@ -77,18 +97,12 @@ namespace TestProject_KNXVirtualIntegrator_L
         }
         
         [Fact]
-        public async Task Test_KnxBus_SendFrame_ReadValue()
+        public async Task Test_KnxBus_USBConnectThenSendFrame_ReadValue()
         {
             // Étape 1 : Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés
-            var connectorType = ConnectorType.Usb; // Remplacez ceci par le type de connecteur réel si différent
-            var displayName = "SpaceLogic KNX USB Interface DIN Rail";
-            var connectionString = "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\""; // Remplacez par la chaîne de connexion réelle
-
-            var selectedInterface = new ConnectionInterfaceViewModel(connectorType, displayName, connectionString);
-
-            // Assignez l'interface sélectionnée à la connexion bus
-            _busConnection.SelectedInterface = selectedInterface;
+            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+            // Assignez l'interface sélectionnée à la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
             // Étape 2 : Connexion au bus KNX
             await _busConnection.ConnectBusAsync();

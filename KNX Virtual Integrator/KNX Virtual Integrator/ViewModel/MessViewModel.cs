@@ -53,11 +53,11 @@ namespace KNX_Virtual_Integrator.ViewModel
         /* ------------------------------------------------------------------------------------------------
   -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
   ------------------------------------------------------------------------------------------------ */
-        // Paterne d'utilisation :
+        // Pattern d'utilisation :
         // MaCommande.Execute(Args)
         //
         // Si la fonction n'a pas d'arguments, la déclarer en tant que commande dont les paramètres sont de type "object"
-        // et lors de l'utilisation, on écrira macommande.Execute(null);
+        // et lors de l'utilisation, on écrira MaCommande.Execute(null);
         // Pour un exemple, voir : ExtractGroupAddressCommand
 
 
@@ -123,8 +123,8 @@ namespace KNX_Virtual_Integrator.ViewModel
         /* ------------------------------------------------------------------------------------------------
         -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------
         ------------------------------------------------------------------------------------------------ */
-        // Paterne d'utilisation :
-        // if (_viewModel.LENOMDELACOMMANDE is RelayCommandWithResult<typeDuParametre, typeDeRetour> command)
+        // Pattern d'utilisation :
+        // if (_viewModel.NomDeLaCommande is RelayCommandWithResult<typeDuParamètre, typeDeRetour> command)
         // {
         //      [UTILISATION DE LA COMMANDE]
         // }
@@ -135,7 +135,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         //
         //
         // Ou sinon :
-        // var maCommande = _viewModel.NOMDELACOMMANDE as RelayCommandWithResult<typeDuParametre, typeDeRetour>;
+        // var maCommande = _viewModel.NomDeLaCommande as RelayCommandWithResult<typeDuParamètre, typeDeRetour>;
         //
         // if (maCommande != null) [UTILISATION DE maCommande DIRECTEMENT]
 

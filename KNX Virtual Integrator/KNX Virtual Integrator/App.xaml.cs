@@ -37,7 +37,7 @@ namespace KNX_Virtual_Integrator;
  * installation KNX. Pour cela, cet outil dispose d'une connexion au bus KNX via USB ou en
  * IP.
  * 
- * Le technicien importe le projet ETS en important un kxnproj ou en important le fichier
+ * Le technicien importe le projet ETS en important un knxproj ou en important le fichier
  * d'adresses de groupe, et le logiciel pré-configure des modèles de tests prédéfinis pour
  * vérifier qu'à l'envoi de certaines valeur de CMD, on reçoit certaines valeurs sur les IE.
  * 
@@ -72,7 +72,7 @@ namespace KNX_Virtual_Integrator;
  * Le fichier App.xaml.cs contient obligatoirement au moins deux fonctions: OnStartup qui gère
  * toutes les actions à effectuer au démarrage du logiciel, OnExit qui gère toutes les actions
  * à effectuer à la fermeture du logiciel (notamment par exemple lorsque l'on fait les commandes
- * Environement.Exit() ou Application.Current.Shutdown()). Nous avons également défini dans ce
+ * Environment.Exit() ou Application.Current.Shutdown()). Nous avons également défini dans ce
  * fichier des variables caractérisant l'application.
  *
  *
@@ -129,7 +129,7 @@ namespace KNX_Virtual_Integrator;
  * Nous avons défini une logique de versionnage de l'application. A chaque fois que l'on fait un
  * merge fonctionnel qui apporte une modification significative de l'application, on incrémente
  * AppVersion.
- * Pour différencier un peu plus les microversions, nous avons tous implémentés sur notre
+ * Pour différencier un peu plus les micro-versions, nous avons tous implémentés sur notre
  * clone du repository sur notre ordinateur un hook qui exécute le fichier IncrementationVersion.sh.
  * Ce script incrémente automatiquement AppBuild à chaque fois que l'on fait un merge.
  * C'est pas le top du top mais ça fonctionne correctement et c'est automatique.

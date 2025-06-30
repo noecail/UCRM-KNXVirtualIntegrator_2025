@@ -33,7 +33,7 @@ public partial class MainWindow
     private CancellationTokenSource _cancellationTokenSource;
         
     /* ------------------------------------------------------------------------------------------------
-    --------------------------------------------- METHODES --------------------------------------------
+    --------------------------------------------- MÉTHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     public MainWindow(MainViewModel viewModel, ConnectionWindow cw, WindowManager wm)
     {
@@ -219,19 +219,19 @@ public partial class MainWindow
             if (_viewModel.ExtractProjectFilesCommand is RelayCommandWithResult<string, bool> extractProjectFilesCommand &&
                 !extractProjectFilesCommand.ExecuteWithResult(openFileDialog.FileName)) return;
             
-            _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
-           
+            _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
+            // Partie management des adresses de groupes
+            // Exécute la commande pour trouver les fichiers XML contenant les adresses de groupes dans le dossier du projet
+            _viewModel.FindZeroXmlCommand.Execute(_viewModel.ProjectFolderPath);
+            // Exécute la commande pour extraire les adresses de groupe du projet
+            _viewModel.ExtractGroupAddressCommand.Execute(null);
         }
         else // Si l'utilisateur annule la sélection de fichier
         {
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
 
-        // Partie management des adresses de groupes
-        // Exécute la commande pour trouver les fichiers XML contenant les adresses de groupes dans le dossier du projet
-        _viewModel.FindZeroXmlCommand.Execute(_viewModel.ProjectFolderPath);
-        // Exécute la commande pour extraire les adresses de groupe du projet
-        _viewModel.ExtractGroupAddressCommand.Execute(null);
+
     }
     
     /// <summary>
@@ -273,15 +273,15 @@ public partial class MainWindow
             if (_viewModel.ExtractGroupAddressFileCommand is RelayCommandWithResult<string, bool> command &&
                 !command.ExecuteWithResult(openFileDialog.FileName)) return;
             
-            _cancellationTokenSource = new CancellationTokenSource(); // A VOIR SI UTILE ICI
-           
+            _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
+            // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
+            _viewModel.ExtractGroupAddressCommand.Execute(null);
         }
         else
         {
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
-        // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
-        _viewModel.ExtractGroupAddressCommand.Execute(null);
+
     }
 
     private void ClosingMainWindow(object? sender, CancelEventArgs e)

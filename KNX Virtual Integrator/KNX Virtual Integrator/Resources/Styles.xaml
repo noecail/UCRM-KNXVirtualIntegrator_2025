@@ -185,7 +185,7 @@
                 </Setter>
             </DataTrigger>
 
-            <!-- Quand IsConnected est False -->
+            <!-- Quand IsConnected est "False" -->
             <DataTrigger Binding="{Binding IsConnected}" Value="False">
                 <Setter Property="Background" Value="{StaticResource ButtonRed}"/>
                 <!-- Triggers pour les états de survol et de clic -->
