@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>net8.0-windows</TargetFramework>
+        <TargetFramework>net9.0-windows</TargetFramework>
         <RootNamespace>KNX_Virtual_Integrator</RootNamespace>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
@@ -16,6 +16,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
+      <PackageReference Include="itext" Version="9.2.0" />
       <PackageReference Include="iTextSharp" Version="5.5.13.4" />
       <PackageReference Include="Knx.Falcon.Sdk" Version="6.1.6264" />
       <PackageReference Include="MahApps.Metro" Version="2.4.10" />
