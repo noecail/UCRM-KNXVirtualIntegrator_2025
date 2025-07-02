@@ -21,8 +21,6 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 9.0.x
-        cache: 'true'
-        cache-dependency-path: './KNX Virtual Integrator/package-lock.json'
     - name: Restore dependencies
       run: dotnet restore
     - name: Build Project
