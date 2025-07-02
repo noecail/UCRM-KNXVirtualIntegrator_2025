@@ -5,7 +5,7 @@ name: Build and Test KNXVI .NET
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "ElDiabolotino-Solving-CI-issues" ]
   pull_request:
     branches: [ "main" ]
 

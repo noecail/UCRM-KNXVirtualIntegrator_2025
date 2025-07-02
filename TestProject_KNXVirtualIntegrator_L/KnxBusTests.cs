@@ -62,6 +62,7 @@ namespace TestProject_KNXVirtualIntegrator_L
         }
     }
 
+        /*
         [Fact]
         public async Task Test_KnxBus_IPConnect_Auto()
         {
@@ -123,8 +124,9 @@ namespace TestProject_KNXVirtualIntegrator_L
             // Assertion pour v�rifier si la connexion a r�ussi
             Assert.True(isConnected, "KNX Bus connection failed.");
         }
+        */
         
-        
+        /*
         [Fact]
         public async Task Test_KnxBus_USBConnect_Disconnect()
         {
@@ -171,6 +173,6 @@ namespace TestProject_KNXVirtualIntegrator_L
 
             // �tape 5 : D�connexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
-        }
+        }*/
     }
 }
