@@ -161,7 +161,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             // Vérifie si la chaîne de connexion est fournie
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                MessageBox.Show("Le type de connexion et la chaîne de connexion doivent être fournis.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show("Le type de connexion et la chaîne de connexion doivent être fournis.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return; // Interrompt la méthode si les informations de connexion sont manquantes
             }
 
@@ -188,7 +188,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
-                MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
@@ -198,7 +198,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -217,7 +217,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     {
         if (IsBusy || !IsConnected)
         {
-            MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+            //MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             return; // Retourne immédiatement si le bus est déjà déconnecté ou si une opération est en cours
         }
 
@@ -233,17 +233,17 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 Bus = null;
                 IsConnected = false;
                 UpdateConnectionState(); // Met à jour l'état de connexion
-                MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
             {
-                MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                //MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
     
@@ -348,7 +348,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Affiche un message d'erreur en cas d'exception
-            MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
+            //MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
         }
     }
     
