@@ -5,13 +5,18 @@ name: Build and Test KNXVI .NET
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "ElDiabolotino-Solving-CI-issues" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
   build: 
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: './KNX Virtual Integrator/'
+    env:
+      NUGET_PACKAGES: ${{ github.workspace }}/.nuget/packages
     steps:
     - uses: actions/checkout@v4
     - name: Setup .NET 9.0.x
@@ -19,8 +24,11 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore "KNX Virtual Integrator"
+      run: dotnet restore
     - name: Build Project
-      run: dotnet build --no-restore "KNX Virtual Integrator"
+      run: dotnet build --no-restore
+    - name: Workload Update
+      run: dotnet workload list
     - name: Test 
-      run: dotnet test --no-build --verbosity normal  '.\KNX Virtual Integrator\'
+      run: dotnet test --no-build --verbosity normal  
+    
