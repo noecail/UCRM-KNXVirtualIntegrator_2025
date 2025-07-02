@@ -259,9 +259,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         {
             // Crée une collection observable pour stocker les interfaces découvertes
             var discoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
-
             // Vérifie si le type de connexion sélectionné est "IP"
-            if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=IP" or "Type=IP")
+            if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=IP" or "Type=IP")
             {
                 // Démarre une tâche pour découvrir les interfaces IP
                 var ipDiscoveryTask = Task.Run(async () =>
@@ -283,6 +282,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                                 if (existing != null)
                                 {
                                     existing.ConnectionString = tunnelingServer.ToConnectionString();
+                                    
                                     continue;
                                 }
                             }
@@ -318,9 +318,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                     }
                 });
             }
-
             // Vérifie si le type de connexion sélectionné est "USB"
-            if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=USB" or "Type=USB")
+            else if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=USB" or "Type=USB")
             {
                 // Démarre une tâche pour découvrir les périphériques USB
                 var usbDiscoveryTask = Task.Run(() =>

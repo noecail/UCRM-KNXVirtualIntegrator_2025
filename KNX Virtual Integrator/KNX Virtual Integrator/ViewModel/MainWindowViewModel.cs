@@ -16,8 +16,8 @@ namespace KNX_Virtual_Integrator.ViewModel
     /// ViewModel for managing the layout and commands in the MainWindow.
     ///
     /// This class handles:
-    /// - Column width settings for the model and address columns (`ModelColumnWidth` and `AdressColumnWidth`).
-    /// - Commands to show or hide these columns (`HideModelColumnCommand`, `HideAdressColumnCommand`, `ShowModelColumnCommand`, `ShowAdressColumnCommand`).
+    /// - Column width settings for the model and address columns (`ModelColumnWidth` and `AddressColumnWidth`).
+    /// - Commands to show or hide these columns (`HideModelColumnCommand`, `HideAddressColumnCommand`, `ShowModelColumnCommand`, `ShowAddressColumnCommand`).
     /// 
     /// It provides properties to control the visibility and size of columns in the MainWindow,
     /// and commands to toggle their visibility. Property changes are tracked using `INotifyPropertyChanged`,

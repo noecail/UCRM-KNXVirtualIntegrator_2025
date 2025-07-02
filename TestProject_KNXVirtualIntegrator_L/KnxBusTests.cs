@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Knx.Falcon.Sdk;  // Par exemple pour BusConnection, GroupAddress
-using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de là.
+using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de lï¿½.
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.ViewModel;
 using System.Windows;
@@ -12,6 +12,8 @@ using Moq;
 using Xunit;
 
 using Knx.Falcon.Configuration;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace TestProject_KNXVirtualIntegrator_L
 {
@@ -19,95 +21,155 @@ namespace TestProject_KNXVirtualIntegrator_L
     {
         private readonly BusConnection _busConnection;
         private readonly GroupCommunication _groupCommunication;
-
+        private readonly ConnectionInterfaceViewModel _selectedInterfaceUsb;
+        private readonly ConnectionInterfaceViewModel _selectedInterfaceIp;
+        
         public KnxBusTests()
         {
             // Initialisation de BusConnection et GroupCommunication
             _busConnection = new BusConnection();
             _groupCommunication = new GroupCommunication(_busConnection);
+            // Initialisation des interfaces de la maquette 
+            // Pour modifier les interfaces de test (changement de maquette, rafraichissement,...), rajouter des lignes
+            // Console.Write au niveau de la fonction DiscoverInterfaceAsync dans les blocs if
+            _selectedInterfaceUsb = new ConnectionInterfaceViewModel(ConnectorType.Usb, 
+                "SpaceLogic KNX USB Interface DIN Rail",
+                "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\"");
+            _selectedInterfaceIp = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling, 
+                "IP-Interface Secure 192.168.10.132",
+                "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
+        }
+
+      [Fact]
+        public async Task Discover_KnxInterfaces()
+    {
+        // Ã‰tape 1 : RÃ©cupÃ©ration de toutes les interfaces dÃ©tectÃ©es par Falcon
+        var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+
+        // Ã‰tape 2 : VÃ©rifications basiques sur la liste d'interfaces
+        Assert.NotNull(interfaces);
+
+        // Ã‰tape 3 : Affichage console pour visualiser les interfaces disponibles
+        await foreach (var knxInterface in interfaces)
+        {
+            foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
+            {
+                var displayName = tunnelInterfaces.IndividualAddress.HasValue
+                    ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
+                    : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
+                Console.WriteLine($"[DETECTED] {displayName} â†’ {knxInterface.ToString()}");
+            }
+        }
+    }
+
+        [Fact]
+        public async Task Test_KnxBus_IPConnect_Auto()
+        {
+            // Ã‰tape 1 : RÃ©cupÃ©ration des interfaces disponibles
+            var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+            
+            await foreach (var knxInterface in interfaces)
+            {
+                foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
+                {
+                    // Ã‰tape 4 : Connexion au bus via l'interface dÃ©tectÃ©e
+                    _busConnection.SelectedInterface = new ConnectionInterfaceViewModel(tunnelInterfaces.Type, tunnelInterfaces.Name, tunnelInterfaces.ToConnectionString());
+                }
+            }
+            await _busConnection.ConnectBusAsync();
+
+            // Ã‰tape 5 : VÃ©rification de la connexion
+            Assert.True(_busConnection.IsConnected, "Connexion IP Ã©chouÃ©e.");
+
+            // Ã‰tape 6 : DÃ©connexion propre du bus
+            await _busConnection.DisconnectBusAsync();
         }
 
         [Fact]
-        public async Task Test_KnxBus_Connect()
+        public async Task Test_KnxBus_IPConnect()
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés
-            var connectorType = ConnectorType.Usb; // Remplacez ceci par le type de connecteur réel si différent
-            var displayName = "SpaceLogic KNX USB Interface DIN Rail";
-            var connectionString = "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\""; // Remplacez par la chaîne de connexion réelle
+            // ï¿½tape 1 : Crï¿½ation et configuration de l'interface de connexion
+            // Crï¿½ez une instance de ConnectionInterfaceViewModel avec les paramï¿½tres appropriï¿½s (ici, c'est dans le constructeur)
+            // Assignez l'interface sï¿½lectionnï¿½e ï¿½ la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceIp;
 
-            var selectedInterface = new ConnectionInterfaceViewModel(connectorType, displayName, connectionString);
+            // ï¿½tape 2 : Connexion au bus KNX
+            await _busConnection.ConnectBusAsync();
+            bool isConnected = _busConnection.IsConnected;
 
-            // Assignez l'interface sélectionnée à la connexion bus
-            _busConnection.SelectedInterface = selectedInterface;
+            // ï¿½tape 3 : Dï¿½connexion du bus KNX (optionnel)
+            await _busConnection.DisconnectBusAsync();
 
-            // Étape 2 : Connexion au bus KNX
+            // Assertion pour vï¿½rifier si la connexion a rï¿½ussi
+            Assert.True(isConnected, "KNX IP Bus connection failed.");
+        }
+        
+        
+        [Fact]
+        public async Task Test_KnxBus_USBConnect()
+        {
+            // ï¿½tape 1 : Crï¿½ation et configuration de l'interface de connexion
+            // Crï¿½ez une instance de ConnectionInterfaceViewModel avec les paramï¿½tres appropriï¿½s (ici, c'est dans le constructeur)
+            // Assignez l'interface sï¿½lectionnï¿½e ï¿½ la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceUsb;
+
+            // ï¿½tape 2 : Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
             bool isConnected = _busConnection.IsConnected;
             
-            // Étape 3 : Déconnexion du bus KNX (optionnel)
+            // ï¿½tape 3 : Dï¿½connexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
             
-            // Assertion pour vérifier si la connexion a réussi
+            // Assertion pour vï¿½rifier si la connexion a rï¿½ussi
             Assert.True(isConnected, "KNX Bus connection failed.");
         }
+        
+        
         [Fact]
-        public async Task Test_KnxBus_Connect_Then_Disconnect()
+        public async Task Test_KnxBus_USBConnect_Disconnect()
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés
-            var connectorType = ConnectorType.Usb; // Remplacez ceci par le type de connecteur réel si différent
-            var displayName = "SpaceLogic KNX USB Interface DIN Rail";
-            var connectionString = "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\""; // Remplacez par la chaîne de connexion réelle
+            // ï¿½tape 1 : Crï¿½ation et configuration de l'interface de connexion
+            // Crï¿½ez une instance de ConnectionInterfaceViewModel avec les paramï¿½tres appropriï¿½s (ici, c'est dans le constructeur)
+            // Assignez l'interface sï¿½lectionnï¿½e ï¿½ la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
-            var selectedInterface = new ConnectionInterfaceViewModel(connectorType, displayName, connectionString);
-
-            // Assignez l'interface sélectionnée à la connexion bus
-            _busConnection.SelectedInterface = selectedInterface;
-
-            // Étape 2 : Connexion au bus KNX
+            // ï¿½tape 2 : Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
             
-            // Étape 3 : Déconnexion du bus KNX (optionnel)
+            // ï¿½tape 3 : Dï¿½connexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
             var isDisconnected = _busConnection.IsConnected;
             
-            // Assertion pour vérifier si la connexion a réussi
+            // Assertion pour vï¿½rifier si la connexion a rï¿½ussi
             Assert.False(isDisconnected, "KNX Bus disconnection failed.");
         }
         
         [Fact]
-        public async Task Test_KnxBus_SendFrame_ReadValue()
+        public async Task Test_KnxBus_USBConnectThenSendFrame_ReadValue()
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés
-            var connectorType = ConnectorType.Usb; // Remplacez ceci par le type de connecteur réel si différent
-            var displayName = "SpaceLogic KNX USB Interface DIN Rail";
-            var connectionString = "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\""; // Remplacez par la chaîne de connexion réelle
+            // ï¿½tape 1 : Crï¿½ation et configuration de l'interface de connexion
+            // Crï¿½ez une instance de ConnectionInterfaceViewModel avec les paramï¿½tres appropriï¿½s (ici, c'est dans le constructeur)
+            // Assignez l'interface sï¿½lectionnï¿½e ï¿½ la connexion au bus
+            _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
-            var selectedInterface = new ConnectionInterfaceViewModel(connectorType, displayName, connectionString);
-
-            // Assignez l'interface sélectionnée à la connexion bus
-            _busConnection.SelectedInterface = selectedInterface;
-
-            // Étape 2 : Connexion au bus KNX
+            // ï¿½tape 2 : Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
 
-            // Étape 3 : Envoi d'une trame à une adresse de groupe définie
+            // ï¿½tape 3 : Envoi d'une trame ï¿½ une adresse de groupe dï¿½finie
             var testGroupAddress = new GroupAddress("0/1/1");
             var readGroupAddress = new GroupAddress("0/2/1");
             var testGroupValue = new GroupValue(true); // Valeur d'exemple (1 bit)
 
             await _groupCommunication.GroupValueWriteAsync(testGroupAddress, testGroupValue);
 
-            // Étape 4 : Lecture de la valeur de l'adresse de groupe
+            // ï¿½tape 4 : Lecture de la valeur de l'adresse de groupe
             var readGroupValue = await _groupCommunication.MaGroupValueReadAsync(readGroupAddress);
 
-            //Assertions pour vérifier si la valeur envoyée est bien celle lue
+            //Assertions pour vï¿½rifier si la valeur envoyï¿½e est bien celle lue
             Assert.NotNull(readGroupValue);
             //Assert.Equal(testGroupValue.Value, readGroupValue.Value);
 
-            // Étape 5 : Déconnexion du bus KNX (optionnel)
+            // ï¿½tape 5 : Dï¿½connexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
         }
     }

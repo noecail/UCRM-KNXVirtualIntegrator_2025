@@ -27,7 +27,7 @@ public partial class SettingsWindow
     
     
     /* ------------------------------------------------------------------------------------------------
-    -------------------------------------------- METHODES  --------------------------------------------
+    -------------------------------------------- MÉTHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     // Constructeur par défaut. Charge les paramètres contenus dans le fichier appSettings et les affiche également
     // dans la fenêtre de paramétrage de l'application. Si la valeur est incorrecte ou vide, une valeur par défaut
@@ -68,7 +68,7 @@ public partial class SettingsWindow
 
     // Fonction permettant de mettre à jour les champs dans la fenêtre de paramétrage
     /// <summary>
-    /// Updates the contents (texts, textboxes, checkboxes, ...) of the settingswindow accordingly to the application settings.
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
     /// </summary>
     private void UpdateWindowContents(bool langChanged = false, bool themeChanged = false)
     {
@@ -135,7 +135,7 @@ public partial class SettingsWindow
                                         $"\nThierry COPPOLA (UCRM)" +
                                         $"\nJean-François KLOTZ (LECS)" +
                                         $"\n" +
-                                        $"\nشراكة بين المعهد الوطني للعلوم التطبيقية (INSA) في تولوز واتحاد Cepière Robert Monnier (UCRM)." +
+                                        $"\nشراكة بين المعهد الوطني للعلوم التطبيقية (INSA) في تولوز واتحاد Cépière Robert Monnier (UCRM)." +
                                         $"\n" +
                                         $"\nإنشاء: 06/2024 - 07/2024\n";
                 SaveButtonText.Text = "حفظ";
@@ -177,7 +177,7 @@ public partial class SettingsWindow
                                         $"\nThierry COPPOLA (UCRM)" +
                                         $"\nJean-François KLOTZ (LECS)" +
                                         $"\n" +
-                                        $"\nПартньорство между Националния институт по приложни науки (INSA) в Тулуза и Съюза Cepière Robert Monnier (UCRM)." +
+                                        $"\nПартньорство между Националния институт по приложни науки (INSA) в Тулуза и Съюза Cépière Robert Monnier (UCRM)." +
                                         $"\n" +
                                         $"\nСъздаване: 06/2024 - 07/2024\n";
                 SaveButtonText.Text = "Запази";
@@ -1832,13 +1832,13 @@ public partial class SettingsWindow
         switch (e.Key)
         {
             // Si on appuie sur échap, on ferme la fenêtre et on annule les modifications
-            case Key.Escape:
+            case Key.Escape :
                 UpdateWindowContents(true, true); // Restauration des paramètres précédents dans la fenêtre de paramétrage
                 Hide(); // Masquage de la fenêtre de paramétrage
                 break;
 
             // Si on appuie sur entrée, on sauvegarde les modifications et on ferme
-            // case Key.Enter:
+            // case Key.Enter :
             //     SaveButtonClick(null!, null!);
             //     break;
         }

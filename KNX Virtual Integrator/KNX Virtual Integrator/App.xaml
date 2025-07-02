@@ -10,7 +10,7 @@
                 <!-- Ajouter le dictionnaire de ressources pour les styles -->
                 <ResourceDictionary Source="Resources/Styles.xaml" />
 
-                <!-- Ajouter le dictionnaire de ressources pour les icones -->
+                <!-- Ajouter le dictionnaire de ressources pour les icônes -->
                 <ResourceDictionary Source="Resources/Images.xaml" />
                 
                 <!-- Ajouter le dictionnaire de ressources pour les couleurs -->
