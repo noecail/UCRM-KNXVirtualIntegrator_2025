@@ -23,4 +23,4 @@ jobs:
     - name: Build Project
       run: dotnet build --no-restore "KNX Virtual Integrator"
     - name: Test 
-      run: dotnet test --no-build --verbosity normal 
+      run: dotnet test --no-build --verbosity normal  '.\KNX Virtual Integrator\'
