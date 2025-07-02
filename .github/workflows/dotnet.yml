@@ -19,7 +19,7 @@ jobs:
       with:
         dotnet-version: 9.0.x
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore "KNX Virtual Integrator"
     - name: Build Project
       run: dotnet build --no-restore "KNX Virtual Integrator"
     - name: Test 
