@@ -487,7 +487,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
                     break;
             }
                 
-            MessageBox.Show(errorText, title, MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show(errorText, title, MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 

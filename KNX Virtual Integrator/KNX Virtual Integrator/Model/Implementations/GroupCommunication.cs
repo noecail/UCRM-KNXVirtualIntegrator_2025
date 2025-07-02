@@ -79,12 +79,12 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             }
             else
             {
-                MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -109,12 +109,12 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             }
             else
             {
-                MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -140,13 +140,13 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             }
             else
             {
-                MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -163,8 +163,8 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     {
         if (_busConnection is { IsConnected: false, IsBusy: true })
         {
-            MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.",
-                            "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+            //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.",
+            //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
             return null;
         }
 
@@ -200,8 +200,8 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
-                            "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            //MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
+            //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
 
             _busConnection.Bus.GroupMessageReceived -= handler; // Assurez-vous de désabonner même en cas d'exception
             return null;
