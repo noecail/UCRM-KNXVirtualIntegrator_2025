@@ -11,6 +11,8 @@ using System.ComponentModel;
 using Knx.Falcon.KnxnetIp;
 using Knx.Falcon;
 using KNXIntegrator.Models;
+using KNX_Virtual_Integrator.Model.Entities;
+
 
 // ReSharper disable InvalidXmlDocComment
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -161,13 +163,13 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         //Gestion des modèles -----------------------------------------------------------------------
         _functionalModelDictionary = new FunctionalModelDictionary();
 
-        // Ajout de 3 modèles par défaut
+        /*// Ajout de 3 modèles par défaut
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle par défaut 1"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle par défaut 2"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 3"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle 4"));
         _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Boby Lapointe"));
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 5"));
+        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 5"));*/
 
         // Chargement des modèles dans la collection observable
         Models = new ObservableCollection<FunctionalModel>(_functionalModelDictionary.GetAllModels());

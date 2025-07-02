@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using KNXIntegrator.Models;
+using KNX_Virtual_Integrator.Model.Entities;
+
 
 namespace KNX_Virtual_Integrator.ViewModel
 {

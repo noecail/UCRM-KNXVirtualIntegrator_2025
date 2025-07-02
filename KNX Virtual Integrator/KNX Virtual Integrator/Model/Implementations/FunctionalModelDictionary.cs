@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using KNX_Virtual_Integrator.Model.Entities;
 
 
 namespace KNXIntegrator.Models
@@ -13,13 +14,16 @@ namespace KNXIntegrator.Models
         public FunctionalModelDictionary()
         {
             functionalModels = new Dictionary<int, FunctionalModel>();
-            _currentKey = 0; // Commence à 0 pour que la première clé soit 1
+            _currentKey = 0; // Commence ï¿½ 0 pour que la premiï¿½re clï¿½ soit 1
+            functionalModels.Add(++_currentKey,new FunctionalModel([new TestedElement(1,[1],[1])],"LumiÃ¨re ON/OFF")); //Adding On/Off light functional model
+            functionalModels.Add(++_currentKey,new FunctionalModel([new TestedElement(1,new List<ulong?>{1},[1]),new TestedElement
+                (3,[1],[null,null]),new TestedElement(5,[1,222],[1,222])],"LumiÃ¨re variation")); //Adding variable light functional model
         }
 
         public void Add_FunctionalModel(FunctionalModel functionalModel)
         {
             _currentKey++;
-            functionalModel.Key = _currentKey;  // Associer la clé au modèle
+            functionalModel.Key = _currentKey;  // Associer la clï¿½ au modï¿½le
             functionalModels.Add(_currentKey, functionalModel);
         }
 

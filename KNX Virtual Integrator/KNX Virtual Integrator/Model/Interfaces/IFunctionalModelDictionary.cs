@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using KNX_Virtual_Integrator.Model.Entities;
 
 namespace KNXIntegrator.Models
 {

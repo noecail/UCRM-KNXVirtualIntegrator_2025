@@ -28,15 +28,15 @@ namespace KNX_Virtual_Integrator.Model.Entities
         }
 
         private int _size; // Size of the DPT
-        public List<ulong> ToSend; // Values to send to the bus
-        public List<ulong> ExpectedResults; // Values expected to be sent back by the participant and read on the bus
+        public List<ulong?> ToSend; // Values to send to the bus
+        public List<ulong?> ExpectedResults; // Values expected to be sent back by the participant and read on the bus
 
         //Constructors
         public TestedElement(int type)
         {
             Type = type;
-            ToSend = new List<ulong>();
-            ExpectedResults = new List<ulong>();
+            ToSend = new List<ulong?>();
+            ExpectedResults = new List<ulong?>();
             ToSend.Add(1);
             ExpectedResults.Add(1);
         } 
@@ -47,11 +47,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
             ExpectedResults = dpt.ExpectedResults;
         }
         
-        public TestedElement(int type, List<ulong> toSend, List<ulong> expectedResults)
+        public TestedElement(int type, List<ulong?> toSend, List<ulong?> expectedResults)
         {
             Type = type;
-            ToSend = new List<ulong>();
-            ExpectedResults = new List<ulong>();
+            ToSend = new List<ulong?>();
+            ExpectedResults = new List<ulong?>();
             for (int i = 0; i < toSend.Count; i++)
             {
                 ToSend.Add(toSend[i]);
@@ -67,7 +67,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// </summary>
         public bool IsPossible()
         {
-            double max = Math.Pow(2, _size);
+            double max = 1 << _size;
             bool result = true;
             for (int i = 0; i < ToSend.Count; i++)
             {
