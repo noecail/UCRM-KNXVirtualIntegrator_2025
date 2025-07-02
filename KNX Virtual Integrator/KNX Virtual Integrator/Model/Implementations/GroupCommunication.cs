@@ -149,6 +149,23 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             //MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+    
+    
+    ///<summary>
+    /// Converts the ulong value into a byte[] to be able to write it in the bus.
+    ///</summary>
+    /// <param name="toSend">The ulong value to send.</param>
+    /// <param name="groupValue">The group value to send, in the right format.</param>
+    public void ConvertToGroupValue(ulong toSend, byte[] groupValue)
+    {
+        var intBytes = BitConverter.GetBytes(toSend);
+        if (BitConverter.IsLittleEndian)
+            Array.Reverse(intBytes);
+        for (var i = 0; i < intBytes.Length; i++)
+        {
+            groupValue[i] = intBytes[i];
+        }
+    }
 
 
     //TACHE LECTURE TRAME NORMALE

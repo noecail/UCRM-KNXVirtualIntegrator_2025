@@ -1,3 +1,5 @@
+using Knx.Falcon;
+
 namespace KNX_Virtual_Integrator.Model.Entities
 {
     /// <summary>
@@ -28,17 +30,15 @@ namespace KNX_Virtual_Integrator.Model.Entities
         }
 
         private int _size; // Size of the DPT
-        public List<ulong?> ToSend; // Values to send to the bus
-        public List<ulong?> ExpectedResults; // Values expected to be sent back by the participant and read on the bus
+        public List<GroupValue> ToSend; // Values to send to the bus
+        public List<GroupValue?> ExpectedResults; // Values expected to be sent back by the participant and read on the bus
 
         //Constructors
         public TestedElement(int type)
         {
             Type = type;
-            ToSend = new List<ulong?>();
-            ExpectedResults = new List<ulong?>();
-            ToSend.Add(1);
-            ExpectedResults.Add(1);
+            ToSend = [new GroupValue(true)];
+            ExpectedResults = [new GroupValue(true)];
         } 
         public TestedElement(TestedElement dpt)
         {
@@ -47,12 +47,12 @@ namespace KNX_Virtual_Integrator.Model.Entities
             ExpectedResults = dpt.ExpectedResults;
         }
         
-        public TestedElement(int type, List<ulong?> toSend, List<ulong?> expectedResults)
+        public TestedElement(int type, List<GroupValue> toSend, List<GroupValue?> expectedResults)
         {
             Type = type;
-            ToSend = new List<ulong?>();
-            ExpectedResults = new List<ulong?>();
-            for (int i = 0; i < toSend.Count; i++)
+            ToSend = [];
+            ExpectedResults = [];
+            for (var i = 0; i < toSend.Count; i++)
             {
                 ToSend.Add(toSend[i]);
                 ExpectedResults.Add(expectedResults[i]);
@@ -67,11 +67,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// </summary>
         public bool IsPossible()
         {
-            double max = 1 << _size;
-            bool result = true;
-            for (int i = 0; i < ToSend.Count; i++)
+            var max = Convert.ToUInt64(1 << _size);
+            var result = true;
+            for (var i = 0; i < ToSend.Count; i++)
             {
-                result = result && ToSend[i] < max && ExpectedResults[i] < max;
+                result = result && Convert.ToUInt64(ToSend[i]) < max && Convert.ToUInt64(ExpectedResults[i]) < max;
             }
             return  result;
         }
