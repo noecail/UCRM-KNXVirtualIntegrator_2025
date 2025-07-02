@@ -12,6 +12,8 @@ using Moq;
 using Xunit;
 
 using Knx.Falcon.Configuration;
+using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace TestProject_KNXVirtualIntegrator_L
 {
@@ -41,39 +43,39 @@ namespace TestProject_KNXVirtualIntegrator_L
       [Fact]
         public async Task Discover_KnxInterfaces()
     {
-            // Étape 1 : Récupération de toutes les interfaces détectées par Falcon
-            var interfaces = await BusConnection.GetAvailableInterfacesAsync();
+        // Étape 1 : Récupération de toutes les interfaces détectées par Falcon
+        var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
 
-            // Étape 2 : Vérifications basiques sur la liste d'interfaces
-            Assert.NotNull(interfaces);
-            Assert.NotEmpty(interfaces);
+        // Étape 2 : Vérifications basiques sur la liste d'interfaces
+        Assert.NotNull(interfaces);
 
-            // Étape 3 : Affichage console pour visualiser les interfaces disponibles
-            foreach (var knxInterface in interfaces)
+        // Étape 3 : Affichage console pour visualiser les interfaces disponibles
+        await foreach (var knxInterface in interfaces)
+        {
+            foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
             {
-                Console.WriteLine($"[DETECTED] {knxInterface.DisplayName} → {knxInterface.ConnectionString}");
+                var displayName = tunnelInterfaces.IndividualAddress.HasValue
+                    ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
+                    : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
+                Console.WriteLine($"[DETECTED] {displayName} → {knxInterface.ToString()}");
             }
         }
+    }
 
         [Fact]
         public async Task Test_KnxBus_IPConnect_Auto()
         {
             // Étape 1 : Récupération des interfaces disponibles
-            var interfaces = await BusConnection.GetAvailableInterfacesAsync();
-
-            // Étape 2 : Sélection automatique d'une interface IP compatible (mode tunneling)
-            var selectedInterface = interfaces.FirstOrDefault(i =>
-                i.ConnectorType == ConnectorType.IpTunneling ||
-                (i.ConnectorType == ConnectorType.Ip && i.ConnectionString.Contains("Tunnel=true")) ||
-                i.ConnectionString.Contains("Type=IpTunneling")
-            );
-
-            // Étape 3 : Vérification que l'interface IP a bien été trouvée
-            Assert.NotNull(selectedInterface);
-            Console.WriteLine("Interface IP détectée : " + selectedInterface.DisplayName);
-
-            // Étape 4 : Connexion au bus via l'interface détectée
-            _busConnection.SelectedInterface = selectedInterface;
+            var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+            
+            await foreach (var knxInterface in interfaces)
+            {
+                foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
+                {
+                    // Étape 4 : Connexion au bus via l'interface détectée
+                    _busConnection.SelectedInterface = new ConnectionInterfaceViewModel(tunnelInterfaces.Type, tunnelInterfaces.Name, tunnelInterfaces.ToConnectionString());
+                }
+            }
             await _busConnection.ConnectBusAsync();
 
             // Étape 5 : Vérification de la connexion
