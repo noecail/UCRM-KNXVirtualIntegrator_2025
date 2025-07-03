@@ -3,18 +3,21 @@ using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si 
 using KNX_Virtual_Integrator.ViewModel;
 using Knx.Falcon;
 using Knx.Falcon.Configuration;
+using Xunit.Abstractions;
 
 namespace TestProject_KNXVirtualIntegrator_L
 {
     public class KnxBusTests
     {
+        private readonly ITestOutputHelper _output;
         private readonly BusConnection _busConnection;
         private readonly GroupCommunication _groupCommunication;
         private readonly ConnectionInterfaceViewModel _selectedInterfaceUsb;
         private readonly ConnectionInterfaceViewModel _selectedInterfaceIp;
-        
-        public KnxBusTests()
+
+        public KnxBusTests(ITestOutputHelper output)
         {
+            _output = output;
             // Initialisation de BusConnection et GroupCommunication
             _busConnection = new BusConnection();
             _groupCommunication = new GroupCommunication(_busConnection);
@@ -29,7 +32,7 @@ namespace TestProject_KNXVirtualIntegrator_L
                 "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
         }
 
-      [Fact]
+   [Fact]
         public async Task Discover_KnxInterfaces()
     {
         // Étape 1 : Récupération de toutes les interfaces détectées par Falcon
@@ -46,12 +49,11 @@ namespace TestProject_KNXVirtualIntegrator_L
                 var displayName = tunnelInterfaces.IndividualAddress.HasValue
                     ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
                     : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
-                //Console.WriteLine($"[DETECTED] {displayName} → {knxInterface.ToString()}");
+                _output.WriteLine($"[DETECTED] {displayName} → {knxInterface.ToString()}");
             }
         }
     }
 
-        
         [Fact]
         public async Task Test_KnxBus_IPConnect_Auto()
         {
@@ -75,6 +77,61 @@ namespace TestProject_KNXVirtualIntegrator_L
             await _busConnection.DisconnectBusAsync();
         }
 
+       [Fact]
+        public async Task Test_KnxBus_USBConnect_Auto()
+        {
+            // Étape 1 : Récupère les périphériques USB connectés
+            var usbDevices = KnxBus.GetAttachedUsbDevices();
+
+            // Étape 2 : Transforme chaque périphérique en une interface de connexion utilisable
+            var selectedInterface = usbDevices.Select(device =>
+                new ConnectionInterfaceViewModel(
+                    ConnectorType.Usb,
+                    device.DisplayName,
+                    device.ToConnectionString()
+                )
+            ).FirstOrDefault();
+
+            // Étape 3 : Si aucun périphérique trouvé, échoue le test
+            if (selectedInterface == null)
+            {
+                Assert.Fail("Aucune interface USB détectée.");
+            }
+
+            // Étape 4 : Affiche l'interface sélectionnée
+            _output.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName);
+
+            // Étape 5 : Connexion au bus
+            _busConnection.SelectedInterface = selectedInterface;
+            await _busConnection.ConnectBusAsync();
+
+            // Étape 6 : Vérifie que la connexion a réussi
+            Assert.True(_busConnection.IsConnected, "Connexion USB échouée.");
+
+            // Étape 7 : Déconnexion
+            await _busConnection.DisconnectBusAsync();
+        }
+
+[Fact]
+        public async Task Test_KnxBus_ConnectionFails_WithInvalidInterface()
+        {
+            // Crée une fausse interface IP qui ne pointe vers aucun vrai appareil
+            var fakeInterface = new ConnectionInterfaceViewModel(
+                ConnectorType.IpTunneling,
+                "Interface IP Invalide",
+                "Type=IpTunneling;HostAddress=192.0.2.123"
+            );
+
+            // On utilise cette fausse interface pour la connexion
+            _busConnection.SelectedInterface = fakeInterface;
+
+            // Le test réussit si une exception est levée pendant la connexion
+            var exception = await Assert.ThrowsAsync<Exception>(() => _busConnection.ConnectBusAsync());
+
+            // Affiche l’erreur dans la console pour le suivi
+            _output.WriteLine("Connexion échouée comme prévu : " + exception.Message);
+        }
+        
         [Fact]
         public async Task Test_KnxBus_IPConnect()
         {
