@@ -36,21 +36,76 @@ namespace TestProject_KNXVirtualIntegrator_L
         var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
 
         // Étape 2 : Vérifications basiques sur la liste d'interfaces
-        Assert.NotNull(interfaces);
-
+        //Assert.NotNull(interfaces); (toujours non nulle)
+        var thereIsAnInterface = false;
         // Étape 3 : Affichage console pour visualiser les interfaces disponibles
         await foreach (var knxInterface in interfaces)
         {
             foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
             {
-                var displayName = tunnelInterfaces.IndividualAddress.HasValue
+                thereIsAnInterface = (tunnelInterfaces != null) || thereIsAnInterface;
+                /*var displayName = tunnelInterfaces.IndividualAddress.HasValue
                     ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
-                    : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
+                    : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";*/
                 //Console.WriteLine($"[DETECTED] {displayName} → {knxInterface.ToString()}");
+                Assert.True(thereIsAnInterface, "No Interfaces found");
             }
         }
     }
 
+        [Fact]
+        public async Task Test_KnxBus_USBConnect_Auto()
+        {
+            // Récupère la liste des interfaces disponibles (USB, IP, etc.)
+            var interfaces = KnxBus.GetAttachedUsbDevices();
+            
+            // Cherche la première interface USB détectée
+            var selectedInterface = interfaces.FirstOrDefault();
+            
+            // Si aucune interface USB n'est trouvée, le test échoue
+            if (selectedInterface == null)
+            {
+                Assert.Fail("Aucune interface USB détectée.");
+            }
+            else
+            {
+
+                // Affiche l'interface trouvée (éviter d'appeler Console.WriteLine dans les tests)
+                //Console.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName);
+
+                // Sélectionne l'interface pour la connexion
+                _busConnection.SelectedInterface = new ConnectionInterfaceViewModel(ConnectorType.Usb, selectedInterface.DisplayName, selectedInterface.ToConnectionString());
+
+                // Tente de se connecter au bus KNX
+                await _busConnection.ConnectBusAsync();
+
+                // Vérifie que la connexion a réussi
+                Assert.True(_busConnection.IsConnected, "Connexion USB échouée.");
+
+                // Déconnexion
+                await _busConnection.DisconnectBusAsync();
+            }
+        }
+
+        [Fact]
+        public async Task Test_KnxBus_ConnectionFails_WithInvalidInterface()
+        {
+            // Crée une fausse interface IP qui ne pointe vers aucun vrai appareil
+            var fakeInterface = new ConnectionInterfaceViewModel(
+                ConnectorType.IpTunneling,
+                "Interface IP Invalide",
+                "Type=IpTunneling;HostAddress=192.0.2.123"
+            );
+
+            // On utilise cette fausse interface pour la connexion
+            _busConnection.SelectedInterface = fakeInterface;
+
+            // Le test réussit si une exception est levée pendant la connexion
+            var exception = await Assert.ThrowsAsync<Exception>(() => _busConnection.ConnectBusAsync());
+            
+            // Affiche l’erreur dans la console pour le suivi (XUnit préfère une autre manière d'afficher)
+            // Console.WriteLine("Connexion échouée comme prévu : " + exception.Message);
+        }
         
         [Fact]
         public async Task Test_KnxBus_IPConnect_Auto()
