@@ -30,32 +30,32 @@ namespace KNX_Virtual_Integrator.Model.Entities
         }
 
         private int _size; // Size of the DPT
-        public List<GroupValue> ToSend; // Values to send to the bus
-        public List<GroupValue?> ExpectedResults; // Values expected to be sent back by the participant and read on the bus
+        public List<GroupValue?[]> Tests; // List of pairs : value to send to the bus and expected value to be read on the bus
 
         //Constructors
         public TestedElement(int type)
         {
             Type = type;
-            ToSend = [new GroupValue(true)];
-            ExpectedResults = [new GroupValue(true)];
+            Tests = [[new GroupValue(true),new GroupValue(true)]]; 
         } 
-        public TestedElement(TestedElement dpt)
+        public TestedElement(TestedElement element)
         {
-            Type = dpt.Type;
-            ToSend = dpt.ToSend;
-            ExpectedResults = dpt.ExpectedResults;
+            Type = element.Type;
+            Tests = [];
+            GroupValue[]? pair = [new GroupValue(false),new GroupValue(false)];
+            foreach (var test in element.Tests)
+            {
+                Tests.Add([test[0],test[1]]);
+            }
         }
         
-        public TestedElement(int type, List<GroupValue> toSend, List<GroupValue?> expectedResults)
+        public TestedElement(int type, List<GroupValue?[]> toTest)
         {
             Type = type;
-            ToSend = [];
-            ExpectedResults = [];
-            for (var i = 0; i < toSend.Count; i++)
+            Tests = [];
+            foreach (var test in toTest)
             {
-                ToSend.Add(toSend[i]);
-                ExpectedResults.Add(expectedResults[i]);
+                Tests.Add([test[0],test[1]]);
             }
             
         }
@@ -69,11 +69,36 @@ namespace KNX_Virtual_Integrator.Model.Entities
         {
             var max = Convert.ToUInt64(1 << _size);
             var result = true;
-            for (var i = 0; i < ToSend.Count; i++)
+            for (var i = 0; i < Tests.Count; i++)
             {
-                result = result && Convert.ToUInt64(ToSend[i]) < max && Convert.ToUInt64(ExpectedResults[i]) < max;
+                result = result && Convert.ToUInt64(Tests[i][0]) < max && Convert.ToUInt64(Tests[i][1]) < max;
             }
             return  result;
+        }
+
+        /// <summary>
+        /// This method adds a test pair (value to send, value to read) to the list of tests
+        /// </summary>
+        public void AddTest(GroupValue[] test)
+        {
+            Tests.Add([test[0],test[1]]);
+        }
+        
+        /// <summary>
+        /// This method removes a test pair (value to send, value to read) from the list of tests
+        /// </summary>
+        public void RemoveTest(int index)
+        {
+            Tests.RemoveAt(index);
+        }
+        
+        /// <summary>
+        /// This method modifies a test pair (value to send, value to read) in the list of tests
+        /// </summary>
+        public void ModifyTest(GroupValue[] test, int index)
+        {
+            Tests.RemoveAt(index);
+            Tests.Insert(index,[test[0],test[1]]);
         }
 
         /// <summary>
