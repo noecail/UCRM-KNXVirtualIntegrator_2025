@@ -189,6 +189,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
+                Console.WriteLine("Connexion réussie au bus.");
                 //MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -199,6 +200,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
+            Console.WriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
@@ -244,6 +246,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
+            Console.WriteLine($"Erreur lors de la déconnexion du bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -348,7 +351,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         }
         catch (Exception ex)
         {
-            // Affiche un message d'erreur en cas d'exception
+            //Affiche un message d'erreur en cas d'exception
+            Console.WriteLine($"Erreur lors de la découverte des interfaces : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
         }
     }

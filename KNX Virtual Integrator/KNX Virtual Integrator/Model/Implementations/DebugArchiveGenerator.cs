@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.IO;
 using System.Management;
-using System.Windows;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Microsoft.Win32;
 // ReSharper disable NullableWarningSuppressionIsUsed
@@ -486,7 +485,7 @@ public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManage
                     title = "ERREUR";
                     break;
             }
-                
+            logger.ConsoleAndLogWriteLine(title + " : " + errorText);
             //MessageBox.Show(errorText, title, MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }

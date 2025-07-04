@@ -84,6 +84,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
             //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -114,6 +115,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
             //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -140,12 +142,14 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             }
             else
             {
+                Console.WriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.");
                 //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
+                return; //Sensé retourner qqchose
             }
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Erreur lors de l'envoi de la trame : {ex.Message}");
             //MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -217,6 +221,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
             //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
 

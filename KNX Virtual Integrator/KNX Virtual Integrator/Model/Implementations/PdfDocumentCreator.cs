@@ -8,9 +8,6 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
-//using iTextSharp.text;
-//using iTextSharp.text.pdf;
-//using iTextSharp.text.pdf.draw;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;

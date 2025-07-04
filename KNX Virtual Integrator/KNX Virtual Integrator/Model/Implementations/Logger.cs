@@ -60,6 +60,7 @@ public class Logger : ILogger
         catch (Exception ex)
         {
             // Affichage d'une fenêtre d'erreur et fermeture de l'application
+            Console.WriteLine($"Error: Unable to create the log directory. {ex.Message}");
             //MessageBox.Show($"Error: Unable to create the log directory. {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             Environment.Exit(1);
         }
