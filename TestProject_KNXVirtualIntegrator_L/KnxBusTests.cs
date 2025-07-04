@@ -133,6 +133,26 @@ namespace TestProject_KNXVirtualIntegrator_L
         }
         
         [Fact]
+        public async Task Test_KnxBus_ConnectionTimeout()
+        {
+            // Crée une fausse interface IP avec une adresse qui ne répondra pas
+            var fakeInterface = new ConnectionInterfaceViewModel(
+                ConnectorType.IpTunneling,
+                "Interface Timeout",
+                "Type=IpTunneling;HostAddress=192.0.2.100" // Adresse réservée aux tests, ne répond pas
+            );
+
+            // On sélectionne cette fausse interface
+            _busConnection.SelectedInterface = fakeInterface;
+
+            // On essaye de se connecter, on s’attend à une erreur
+            var exception = await Assert.ThrowsAsync<Exception>(() => _busConnection.ConnectBusAsync());
+
+            // On affiche le message d’erreur dans la sortie du test
+            _output.WriteLine("Timeout ou erreur attendue : " + exception.Message);
+        }
+
+        [Fact]
         public async Task Test_KnxBus_IPConnect()
         {
             // Étape 1 : Création et configuration de l'interface de connexion
