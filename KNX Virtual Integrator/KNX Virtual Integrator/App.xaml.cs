@@ -198,7 +198,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 122;
+    public const int AppBuild = 124;
     
         
     
@@ -238,8 +238,6 @@ public partial class App
 
         if (MainViewModel != null) _creationWindow = new ReportCreationWindow(MainViewModel);
         _creationWindow?.Show();
-        
-        ModelManager?.PdfDocumentCreator.CreatePdf("test.pdf", "Boby Lapointe");
     }
 
     
@@ -362,6 +360,8 @@ public partial class App
     }
     
 }
+
+
 
 
 

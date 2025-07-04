@@ -18,10 +18,8 @@
     <ItemGroup>
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
       <PackageReference Include="itext" Version="9.2.0" />
-      <PackageReference Include="iTextSharp" Version="5.5.13.4" />
       <PackageReference Include="Knx.Falcon.Sdk" Version="6.3.7959" />
       <PackageReference Include="MahApps.Metro" Version="2.4.10" />
-      <PackageReference Include="MvvmLight" Version="5.4.1.1" />
       <PackageReference Include="System.Management" Version="9.0.6" />
     </ItemGroup>
 

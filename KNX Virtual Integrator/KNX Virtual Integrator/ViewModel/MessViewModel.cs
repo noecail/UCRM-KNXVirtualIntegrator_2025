@@ -1,16 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.Input;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Interfaces;
-using KNX_Virtual_Integrator.ViewModel.Commands;
 using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
-using Knx.Falcon.KnxnetIp;
-using Knx.Falcon;
-using KNXIntegrator.Models;
 
 
 namespace KNX_Virtual_Integrator.ViewModel
@@ -91,10 +86,10 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <param name="fileName">The name of the file to find.</param>
         public ICommand FindZeroXmlCommand { get; private set; }
 
-        public RelayCommand OpenConnectionWindowCommand { get; }
-        public RelayCommand ConnectBusCommand { get; }
-        public RelayCommand DisconnectBusCommand { get; }
-        public RelayCommand RefreshInterfacesCommand { get; }
+        public AsyncRelayCommand OpenConnectionWindowCommand { get; }
+        public AsyncRelayCommand ConnectBusCommand { get; }
+        public AsyncRelayCommand DisconnectBusCommand { get; }
+        public AsyncRelayCommand RefreshInterfacesCommand { get; }
 
         /// <summary>
         /// Command that sends a group value write "on" command asynchronously.
@@ -190,7 +185,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <param name="e">Event data for the routed event.</param>
         public void OnSliderClick(object sender, RoutedEventArgs e) => _modelManager.SettingsSliderClickHandler.OnSliderClick(sender, e);
 
-        private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        private void WhenPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     }
 

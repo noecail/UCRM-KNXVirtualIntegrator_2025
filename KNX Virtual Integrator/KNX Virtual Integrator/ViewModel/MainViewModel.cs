@@ -1,14 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using KNX_Virtual_Integrator.Model;
-using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.ViewModel.Commands;
-using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
 using System.ComponentModel;
-using Knx.Falcon.KnxnetIp;
 using Knx.Falcon;
 using KNXIntegrator.Models;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -38,7 +33,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// <summary>
     /// Occurs when a property value changes.
     /// </summary>
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public new event PropertyChangedEventHandler? PropertyChanged;
 
 
     /* ------------------------------------------------------------------------------------------------
@@ -53,9 +48,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         _busConnection.PropertyChanged += (sender, e) =>
         {
             if (e.PropertyName != nameof(_busConnection.IsConnected)) return;
-            OnPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
-            ConnectBusCommand?.RaiseCanExecuteChanged();
-            DisconnectBusCommand?.RaiseCanExecuteChanged();
+            WhenPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
+            ConnectBusCommand?.NotifyCanExecuteChanged(); //ATTENTION, PEUT CAUSER PROBLÈMES APRÈS L'UPGRADE
+            DisconnectBusCommand?.NotifyCanExecuteChanged();
         };
         _busConnection.SelectedConnectionType = "Type=USB";
         
@@ -104,11 +99,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        ConnectBusCommand = new RelayCommand(ConnectBusTask);
+        ConnectBusCommand = new AsyncRelayCommand(modelManager.BusConnection.ConnectBusAsync);
 
-        DisconnectBusCommand = new RelayCommand(DisconnectBusTask);
+        DisconnectBusCommand = new AsyncRelayCommand(modelManager.BusConnection.DisconnectBusAsync);
 
-        RefreshInterfacesCommand = new RelayCommand(RefreshInterfacesTask);
+        RefreshInterfacesCommand = new AsyncRelayCommand(modelManager.BusConnection.DiscoverInterfacesAsync);
 
         GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
@@ -181,10 +176,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
         
         return;
-
-        async void ConnectBusTask() => await modelManager.BusConnection.ConnectBusAsync();
-        async void DisconnectBusTask() => await modelManager.BusConnection.DisconnectBusAsync();
-        async void RefreshInterfacesTask() => await modelManager.BusConnection.DiscoverInterfacesAsync();
 
     }
 
