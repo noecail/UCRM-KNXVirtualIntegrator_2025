@@ -18,6 +18,15 @@ namespace KNX_Virtual_Integrator.Model.Entities
         {
             Tests = [[new DataPointType(1),new DataPointType(1)]]; 
         } 
+        
+        public TestedElement(int typeCmd, List<int[]> addressesCmd, GroupValue? valueCmd,int[] typeIe, List<int[]>[]  addressesIe, GroupValue?[] valueIe)
+        {
+            Tests = [[new DataPointType(typeCmd, addressesCmd, valueCmd)]];
+            for (var i = 1; i < typeIe.Length; i++)
+            {
+                Tests[^1][i] = new DataPointType(typeIe[i-1],addressesIe[i-1],valueIe[i-1]);
+            }
+        } 
         public TestedElement(TestedElement element)
         {
             Tests = [];
@@ -34,6 +43,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
 
         /// <summary>
         /// This method checks if all the selected values to send and to read can fit in the selected sizes
+        /// and if all the DPTs of each test have the same number of addresses
         /// <returns>Returns a boolean acknowledging whether the test is possible or not</returns>
         /// </summary>
         public bool IsPossible()
@@ -41,14 +51,18 @@ namespace KNX_Virtual_Integrator.Model.Entities
             var result = true;
             foreach (var test in Tests)
             {
-                foreach (var value in test)
-                    result = result && value.IsPossible();
+                for (var i = 0; i < test.Length; i++)
+                {
+                    result = result && test[i].IsPossible();
+                    if (i != 0)
+                        result = result && test[i].CompareAddressLength(test[i-1]);
+                }
             }
             return  result;
         }
         
         /// <summary>
-        /// This method checks if two elements have the same number of DPTs and if they are of the same size.
+        /// This method checks if two elements have the same number of DPTs and if they are of the same type.
         /// <returns>Returns a boolean acknowledging whether the Elements are equal or not</returns>
         /// </summary>
         public bool IsEqual(TestedElement? other)
@@ -60,7 +74,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 for (var j = 0; j < Tests[i].Length; j++)
                 {
-                    Tests[i][j].IsEqual(other.Tests[i][j]);
+                    result = result && Tests[i][j].IsEqual(other.Tests[i][j]);
                 }
             }
             return  result;
@@ -91,7 +105,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// <summary>
         /// This method modifies a test pair (value to send, value to read) in the list of tests
         /// </summary>
-        public void ModifyTest(DataPointType?[] pair, int index)
+        public void ModifyTest(DataPointType?[] pair, int index) // Effets de bords ? à tester
         {
             Tests.RemoveAt(index);
             Tests.Insert(index,pair);

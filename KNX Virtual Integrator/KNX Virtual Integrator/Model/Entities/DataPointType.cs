@@ -21,7 +21,7 @@ public class DataPointType
     
     public GroupValue? Value; // Value to send or expected to be read
 
-    public int[] Address = [0, 0, 0];
+    public List<int[]> Address = [[]];
     
     //Constructors
     public DataPointType(int type)
@@ -30,25 +30,31 @@ public class DataPointType
         Value = new GroupValue(true);
         GetSizeOf();
     }
-    public DataPointType(int type, int[]  address)
+    public DataPointType(int type, List<int[]>  addresses)
     {
         Type = type;
         Value = new GroupValue(true);
         GetSizeOf();
-        for (int i = 0; i < address.Length; i++)
+        for (int i = 0; i < addresses.Count; i++)
         {
-            Address[i] = address[i];
+            for (int j = 0; j < addresses[i].Length; j++)
+            {
+                Address[i][j] = addresses[i][j];
+            }
         }
     }
     
-    public DataPointType(int type, int[]  address, GroupValue? value)
+    public DataPointType(int type, List<int[]>  addresses, GroupValue? value)
     {
         Type = type;
         Value = value;
         GetSizeOf();
-        for (int i = 0; i < address.Length; i++)
+        for (int i = 0; i < addresses.Count; i++)
         {
-            Address[i] = address[i];
+            for (int j = 0; j < addresses[i].Length; j++)
+            {
+                Address[i][j] = addresses[i][j];
+            }
         }
     }
     public DataPointType(DataPointType dpt)
@@ -56,9 +62,12 @@ public class DataPointType
         Type = dpt.Type;
         Value = dpt.Value;
         GetSizeOf();
-        for (int i = 0; i < dpt.Address.Length; i++)
+        for (int i = 0; i < dpt.Address.Count; i++)
         {
-            Address[i] = dpt.Address[i];
+            for (int j = 0; j < dpt.Address[i].Length; j++)
+            {
+                Address[i][j] = dpt.Address[i][j];
+            }
         }
     }
     
@@ -149,6 +158,25 @@ public class DataPointType
     }
     
     /// <summary>
+    /// This method processes the number of addresses in a DPT.
+    /// </summary>
+    /// <returns>Returns the number of addresses in a DPT.</returns>
+    public int GetAddressLength()
+    {
+        return Address.Count;
+                
+    }
+    /// <summary>
+    /// This method compares the number of addresses of 2 DPT.
+    /// </summary>
+    /// <returns>Returns true when both DPTs have the same number of addresses.</returns>
+    public bool CompareAddressLength(DataPointType dpt)
+    {
+        return Address.Count == dpt.Address.Count;
+                
+    }
+    
+    /// <summary>
     /// This method checks if two DPTs have the same format.
     /// </summary>
     /// <param name="dpt">The DPT that we want to compare with. </param>
@@ -161,7 +189,7 @@ public class DataPointType
     
     
     /// <summary>
-    /// This method checks whether the selected values to send and to read can fit in the selected size
+    /// This method checks whether the selected values to send and to read can fit in the selected size.
     /// <returns>Returns a boolean acknowledging whether the test is possible or not</returns>
     /// </summary>
     public bool IsPossible()
@@ -169,5 +197,23 @@ public class DataPointType
         var max = Convert.ToUInt64(1 << _size);
         return  Convert.ToUInt64(Value) < max;
     }
+
+    /// <summary>
+    /// This method adds an address to a DPT.
+    /// </summary>
+    public void AddAddress(int[] address)
+    {
+        Address.Add(address);
+    }
+    
+    /// <summary>
+    /// This method deletes an address to a DPT.
+    /// </summary>
+    public void RemoveAddress(int index)
+    {
+        Address.RemoveAt(index);
+    }
+    
+    
 }
 
