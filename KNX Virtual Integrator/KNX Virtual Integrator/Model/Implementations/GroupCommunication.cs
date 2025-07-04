@@ -1,5 +1,5 @@
 using System.Windows;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
 using System.Collections.ObjectModel;
@@ -24,7 +24,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     public GroupAddress GroupAddress
     {
         get => _groupAddress;
-        set => Set(() => GroupAddress, ref _groupAddress, value);
+        set => SetProperty(ref _groupAddress, value);
     }
 
     private GroupValue? _groupValue;
@@ -35,7 +35,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     public GroupValue? GroupValue
     {
         get => _groupValue;
-        set => Set(() => GroupValue, ref _groupValue, value);
+        set => SetProperty(ref _groupValue, value);
     }
 
     /// <summary>

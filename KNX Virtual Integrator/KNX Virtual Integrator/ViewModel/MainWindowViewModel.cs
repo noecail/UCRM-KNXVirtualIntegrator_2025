@@ -1,13 +1,5 @@
 ﻿using System.Windows;
-using GalaSoft.MvvmLight.Command;
-using GalaSoft.MvvmLight;
-using KNX_Virtual_Integrator.Model;
-using KNX_Virtual_Integrator.Model.Interfaces;
-using KNX_Virtual_Integrator.View;
-using KNX_Virtual_Integrator.ViewModel.Commands;
-using ICommand = KNX_Virtual_Integrator.ViewModel.Commands.ICommand;
-using System.ComponentModel;
-using System.Diagnostics;
+using CommunityToolkit.Mvvm.Input;
 
 
 namespace KNX_Virtual_Integrator.ViewModel
@@ -42,7 +34,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             {
                 if (_modelColumnWidth == value) return;
                 _modelColumnWidth = value;
-                OnPropertyChanged(nameof(ModelColumnWidth)); // Notify of property change
+                WhenPropertyChanged(nameof(ModelColumnWidth)); // Notify of property change
             }
         }
 
@@ -56,7 +48,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             {
                 if (_adressColumnWidth == value) return;
                 _adressColumnWidth = value;
-                OnPropertyChanged(nameof(AdressColumnWidth)); // Notify of property change
+                WhenPropertyChanged(nameof(AdressColumnWidth)); // Notify of property change
             }
         }
 

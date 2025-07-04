@@ -43,7 +43,7 @@ namespace KNX_Virtual_Integrator.ViewModel
                 {
                     _selectedModel = value;
                     ShowModelColumn();
-                    OnPropertyChanged(nameof(SelectedModel));
+                    WhenPropertyChanged(nameof(SelectedModel));
                 }
             }
             // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
