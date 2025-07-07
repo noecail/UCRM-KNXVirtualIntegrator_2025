@@ -19,7 +19,7 @@ public class DataPointType
 
     private int _size; // Size of the DPT
     
-    public GroupValue? Value; // Value to send or expected to be read
+    private GroupValue? Value; // Value to send or expected to be read
 
     public List<int[]> Address = [[]];
     
@@ -213,7 +213,15 @@ public class DataPointType
     {
         Address.RemoveAt(index);
     }
-    
+
+    /// <summary>
+    /// This method checks if the group value of the DPT is the same as the one in parameter.
+    /// <returns>Returns true when the read(in parameter) and expected values are the same</returns>
+    /// </summary>
+    public bool CompareGroupValue(GroupValue value)
+    {
+        return value.Equals(Value);
+    }
     
 }
 
