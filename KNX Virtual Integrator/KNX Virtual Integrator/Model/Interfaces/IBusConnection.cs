@@ -34,6 +34,11 @@ public interface IBusConnection : INotifyPropertyChanged
     /// Cette propriété est vraie si le bus est connecté, sinon elle est fausse.
     /// </summary>
     bool IsConnected { get; }
+    
+    /// <summary>
+    /// Contient le nom de l'interface par laquelle la connexion au bus est actuellement établie.
+    /// </summary>
+    string CurrentInterface { get; }
 
     /// <summary>
     /// Établit une connexion asynchrone au bus KNX.

@@ -87,6 +87,25 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     /// <summary>
+    /// Interface de la connexion actuelle
+    /// </summary>
+    private string? _currentInterface = "Aucune interface connectée";
+
+    public string? CurrentInterface
+    {
+        get => _currentInterface;
+        set
+        {
+            if (_currentInterface == value) return; // Pas de changement si la valeur est la même 
+            _currentInterface = value;
+            WhenPropertyChanged(nameof(CurrentInterface)); // Notifie l'interface utilisateur du changement
+
+        }
+    }
+    
+    
+
+    /// <summary>
     /// Type de connexion sélectionné par l'utilisateur (par exemple, Ethernet, USB, WiFi). Les changements de cette propriété sont propagés à l'interface utilisateur.
     /// </summary>
     private string _selectedConnectionType;
@@ -170,6 +189,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             if (Bus != null)
             {
                 Bus.ConnectionStateChanged -= BusConnectionStateChanged!;
+                CurrentInterface = "Aucune interface connectée";
                 await Bus.DisposeAsync();
                 Bus = null;
                 UpdateConnectionState(); // Met à jour l'état de connexion
@@ -186,6 +206,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             if (Bus.ConnectionState == BusConnectionState.Connected)
             {
                 Bus.ConnectionStateChanged += BusConnectionStateChanged!;
+                CurrentInterface = SelectedInterface?.DisplayName;
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
@@ -234,6 +255,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 Bus.ConnectionStateChanged -= BusConnectionStateChanged!;
                 await Bus.DisposeAsync(); // Déconnecte et libère les ressources du bus
                 Bus = null;
+                CurrentInterface = "Aucune interface connectée";
                 IsConnected = false;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 //MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);

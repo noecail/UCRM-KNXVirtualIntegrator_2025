@@ -5,7 +5,7 @@
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                   mc:Ignorable="d"
-                  Title="Connexion au Bus KNX" Height="275" Width="300"
+                  Title="Connexion au Bus KNX" Height="500" Width="300"
                   TitleCharacterCasing="Normal"
                   ResizeMode="NoResize"
                   Background="White"
@@ -229,6 +229,7 @@
             </Setter>
         </Style>
         
+        <!-- Style pour la sélection de la liste déroulante-->
         <ControlTemplate x:Key="ComboBoxToggleButtonTemplateLight" TargetType="ToggleButton">
             <Grid>
                 <Grid.RowDefinitions>
@@ -256,6 +257,7 @@
             </Grid>
         </ControlTemplate>
         
+        <!-- Style pour la boîte combinée -->
         <Style x:Key="LightComboBoxStyle" TargetType="ComboBox">
             <Setter Property="Foreground" Value="{StaticResource LightForeground}"/>
             <Setter Property="Background" Value="{StaticResource LightBackground}"/>
@@ -344,6 +346,19 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <Style x:Key="InterfaceTextBlock" TargetType="TextBlock">
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=DisconnectButton, Path=IsEnabled}" Value="True">
+                    <Setter Property="Foreground" Value ="{StaticResource KnxGreen}"/>
+                </DataTrigger>
+                
+                <DataTrigger Binding="{Binding ElementName=DisconnectButton, Path=IsEnabled}" Value="False">
+                    <Setter Property="Foreground" Value ="Black"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
 
     
@@ -351,6 +366,7 @@
         <Grid>
             <!-- Define rows and columns for the grid -->
             <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
@@ -369,19 +385,39 @@
                 </ComboBox>
             </StackPanel>
 
+            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,5,20,5" Width="250">
+                
+                        
+                <TextBlock
+                    Margin="5,0,5,0"
+                    Text="Interface actuellement connectée :"
+                    TextAlignment="Left"
+                    />
+                <TextBlock
+                    Margin="5,0,5,0"
+                    Text="{Binding Path=CurrentInterface}"
+                    Style="{StaticResource InterfaceTextBlock}"
+                    TextAlignment="Left"/>
+            </StackPanel>
+            
+            <!--Text="{Binding Path=CurrentInterface}"-->
+            
             <!-- Discovered Interfaces Section -->
-            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,5,10,0">
-                <Grid Margin="0">
+            <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,5,10,0">
+                <Grid Margin="3,0,3,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Text="Interfaces disponibles :" VerticalAlignment="Center" Grid.Column="0" />
+                    
+                    
+                    <TextBlock Text="Interfaces disponibles :" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0" Grid.Column="0" />
 
                     <Button Grid.Column="1" Command="{Binding RefreshInterfacesCommand}"
                             Style="{StaticResource RefreshButton}"
-                            Padding="5,0">
+                            Padding="10,0"
+                            Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="⟲" FontSize="12" Height="20" Margin="0,2,5,0" VerticalAlignment="Center" />
                             <TextBlock Text="Rafraîchir" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
@@ -428,8 +464,10 @@
                 </ListBox>
             </StackPanel>
 
+            
+            
             <!-- Buttons for connection and disconnection -->
-            <Grid Grid.Row="2" Margin="20,0" VerticalAlignment="Center">
+            <Grid Grid.Row="3" Margin="20,0" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de déconnexion -->
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de connexion -->
