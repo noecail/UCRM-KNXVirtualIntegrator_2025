@@ -364,9 +364,8 @@
                           VerticalAlignment="Center"
                           FontSize="10" 
                           SelectedIndex="0" Padding="0"
-                          SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}">
-                    <ComboBoxItem Content="Type=IP" Style="{StaticResource LightComboBoxItemStyle}"/>
-                    <ComboBoxItem Content="Type=USB" Style="{StaticResource LightComboBoxItemStyle}"/>
+                          SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}"
+                          ItemsSource="{Binding ConnectionTypes}">
                 </ComboBox>
             </StackPanel>
 

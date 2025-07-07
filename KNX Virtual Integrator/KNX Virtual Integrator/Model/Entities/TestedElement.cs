@@ -10,7 +10,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
     public class TestedElement
     {
        
-        public List<DataPointType[]> Tests; // List of pairs : command to send to the bus and expected feedback to be read on the bus
+        public List<List<DataPointType?>> Tests; // List of pairs : command to send to the bus and expected feedback to be read on the bus
 
 
         //Constructors
@@ -22,9 +22,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public TestedElement(int typeCmd, List<int[]> addressesCmd, GroupValue? valueCmd,int[] typeIe, List<int[]>[]  addressesIe, GroupValue?[] valueIe)
         {
             Tests = [[new DataPointType(typeCmd, addressesCmd, valueCmd)]];
-            for (var i = 1; i < typeIe.Length; i++)
+            for (var i = 0; i < typeIe.Length; i++)
             {
-                Tests[^1].Append(new DataPointType(typeIe[i-1],addressesIe[i-1],valueIe[i-1]));
+                Tests[^1].Add(new DataPointType(typeIe[i],addressesIe[i],valueIe[i]));
             }
         } 
         public TestedElement(TestedElement element)
@@ -34,9 +34,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 Tests.Add([]);
 
-                for (var j = 0; j < element.Tests[i].Length; j++)
+                for (var j = 0; j < element.Tests[i].Count; j++)
                 {
-                    Tests[i][j] = element.Tests[i][j];
+                    Tests[i].Add(element.Tests[i][j]);
                 }
             }
         }
@@ -51,7 +51,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             var result = true;
             foreach (var test in Tests)
             {
-                for (var i = 0; i < test.Length; i++)
+                for (var i = 0; i < test.Count; i++)
                 {
                     result = result && test[i].IsPossible();
                     if (i != 0)
@@ -72,7 +72,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             var result = Tests.Count == other.Tests.Count;
             for (var i = 0; i < Tests.Count; i++)
             {
-                for (var j = 0; j < Tests[i].Length; j++)
+                for (var j = 0; j < Tests[i].Count; j++)
                 {
                     result = result && Tests[i][j].IsEqual(other.Tests[i][j]);
                 }
@@ -83,15 +83,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
         
 
         /// <summary>
-        /// This method adds a test pair (value to send, value to read) to the list of tests
+        /// This method adds a test pair (value to send, value(s) to read) to the list of tests
         /// </summary>
-        public void AddTest(DataPointType?[] pair)
+        public void AddTest(List<DataPointType?> pair)
         {
-            Tests.Add([]);
-            for (var j = 0; j < pair.Length; j++)
-            {
-                Tests.Last()[j] = pair[j];
-            }
+            Tests.Add(new List<DataPointType?>(pair));
         }
         
         /// <summary>
@@ -105,10 +101,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// <summary>
         /// This method modifies a test pair (value to send, value to read) in the list of tests
         /// </summary>
-        public void ModifyTest(DataPointType?[] pair, int index) // Effets de bords ? à tester
+        public void ModifyTest(List<DataPointType?> pair, int index) // Effets de bords ? à tester
         {
-            Tests.RemoveAt(index);
-            Tests.Insert(index,pair);
+            Tests[index] = new List<DataPointType?>(pair);
         }
         
     }

@@ -34,6 +34,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// Occurs when a property value changes.
     /// </summary>
     public new event PropertyChangedEventHandler? PropertyChanged;
+    public ObservableCollection<string> ConnectionTypes { get; } = new()
+    {
+        "Type=IP",
+        "Type=USB"
+    };
 
 
     /* ------------------------------------------------------------------------------------------------
@@ -52,6 +57,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             ConnectBusCommand?.NotifyCanExecuteChanged(); //ATTENTION, PEUT CAUSER PROBLÈMES APRÈS L'UPGRADE
             DisconnectBusCommand?.NotifyCanExecuteChanged();
         };
+        
         _busConnection.SelectedConnectionType = "Type=USB";
         
         ProjectFolderPath = "";

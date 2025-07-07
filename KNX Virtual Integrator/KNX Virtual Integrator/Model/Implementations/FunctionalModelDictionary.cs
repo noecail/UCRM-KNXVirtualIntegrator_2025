@@ -15,11 +15,11 @@ namespace KNXIntegrator.Models
         public FunctionalModelDictionary()
         {
             _functionalModels = new Dictionary<int, FunctionalModel>();
-            _currentKey = 0; // Commence � 0 pour que la premi�re cl� soit 1
+            _currentKey = 0; // Commence à 0 pour que la première clé soit 1
             _functionalModels.Add(++_currentKey,new FunctionalModel([new TestedElement()],"Lumière ON/OFF")); //Adding On/Off light functional model
             _functionalModels.Add(++_currentKey,new FunctionalModel([new TestedElement(1,[],new GroupValue(true),[1],[[]],[new GroupValue(true)]), // Variation functional model : First element : On/Off
-                new TestedElement(5,[],new GroupValue(0xF),[1,5],[[]],[new GroupValue(true),new GroupValue(0xF)]), //Second element : absolute change
-                new TestedElement(3,[],new GroupValue(0x8),[1,5],[[]],[new GroupValue(true),null])],"Lumière variation")); //Third element : relative change
+                new TestedElement(5,[],new GroupValue(0xF),[1,5],[[],[]],[new GroupValue(true),new GroupValue(0xF)]), //Second element : absolute change
+                new TestedElement(3,[],new GroupValue(0x8),[1,5],[[],[]],[new GroupValue(true),null])],"Lumière variation")); //Third element : relative change
         }
 
         public void Add_FunctionalModel(FunctionalModel functionalModel)
