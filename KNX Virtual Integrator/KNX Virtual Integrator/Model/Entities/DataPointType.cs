@@ -19,7 +19,7 @@ public class DataPointType
 
     private int _size; // Size of the DPT
     
-    private GroupValue? Value; // Value to send or expected to be read
+    private GroupValue? _value; // Value to send or expected to be read
 
     public List<int[]> Address = [[]];
     
@@ -27,13 +27,13 @@ public class DataPointType
     public DataPointType(int type)
     {
         Type = type;
-        Value = new GroupValue(true);
+        _value = new GroupValue(true);
         GetSizeOf();
     }
     public DataPointType(int type, List<int[]>  addresses)
     {
         Type = type;
-        Value = new GroupValue(true);
+        _value = new GroupValue(true);
         GetSizeOf();
         for (int i = 0; i < addresses.Count; i++)
         {
@@ -47,7 +47,7 @@ public class DataPointType
     public DataPointType(int type, List<int[]>  addresses, GroupValue? value)
     {
         Type = type;
-        Value = value;
+        _value = value;
         GetSizeOf();
         for (int i = 0; i < addresses.Count; i++)
         {
@@ -60,7 +60,7 @@ public class DataPointType
     public DataPointType(DataPointType dpt)
     {
         Type = dpt.Type;
-        Value = dpt.Value;
+        _value = dpt._value;
         GetSizeOf();
         for (int i = 0; i < dpt.Address.Count; i++)
         {
@@ -195,7 +195,7 @@ public class DataPointType
     public bool IsPossible()
     {
         var max = Convert.ToUInt64(1 << _size);
-        return  Convert.ToUInt64(Value) < max;
+        return  Convert.ToUInt64(_value) < max;
     }
 
     /// <summary>
@@ -220,7 +220,7 @@ public class DataPointType
     /// </summary>
     public bool CompareGroupValue(GroupValue value)
     {
-        return value.Equals(Value);
+        return value.Equals(_value);
     }
     
 }

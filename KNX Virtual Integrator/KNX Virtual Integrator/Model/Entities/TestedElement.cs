@@ -10,7 +10,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
     public class TestedElement
     {
        
-        public List<List<DataPointType?>> Tests; // List of pairs : command to send to the bus and expected feedback to be read on the bus
+        public List<List<DataPointType>> Tests; // List of pairs : command to send to the bus and expected feedback to be read on the bus
 
 
         //Constructors
@@ -53,9 +53,12 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 for (var i = 0; i < test.Count; i++)
                 {
-                    result = result && test[i].IsPossible();
-                    if (i != 0)
-                        result = result && test[i].CompareAddressLength(test[i-1]);
+                    if (test[i] != null)
+                    {
+                        result = result && test[i].IsPossible();
+                        if (i != 0)
+                            result = result && test[i].CompareAddressLength(test[i - 1]);
+                    }
                 }
             }
             return  result;
@@ -85,9 +88,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// <summary>
         /// This method adds a test pair (value to send, value(s) to read) to the list of tests
         /// </summary>
-        public void AddTest(List<DataPointType?> pair)
+        public void AddTest(List<DataPointType> pair)
         {
-            Tests.Add(new List<DataPointType?>(pair));
+            Tests.Add(new List<DataPointType>(pair));
         }
         
         /// <summary>
@@ -101,9 +104,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// <summary>
         /// This method modifies a test pair (value to send, value to read) in the list of tests
         /// </summary>
-        public void ModifyTest(List<DataPointType?> pair, int index) // Effets de bords ? à tester
+        public void ModifyTest(List<DataPointType> pair, int index) // Effets de bords ? à tester
         {
-            Tests[index] = new List<DataPointType?>(pair);
+            Tests[index] = new List<DataPointType>(pair);
         }
         
     }
