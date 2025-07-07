@@ -26,7 +26,7 @@ namespace TestProject_KNXVirtualIntegrator_L
             // Console.Write au niveau de la fonction DiscoverInterfaceAsync dans les blocs if
             _selectedInterfaceUsb = new ConnectionInterfaceViewModel(ConnectorType.Usb, 
                 "SpaceLogic KNX USB Interface DIN Rail",
-                "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#6&2d02dbc0&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\"");
+                "Type=Usb;DevicePath=\\\\?\\hid#vid_16de&pid_008e#7&2d02dbc0&1&0000#{4d1e55b2-f16f-11cf-88cb-001111000030};Name=\"SpaceLogic KNX USB Interface DIN Rail\"");
             _selectedInterfaceIp = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling, 
                 "IP-Interface Secure 192.168.10.132",
                 "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
@@ -37,21 +37,22 @@ namespace TestProject_KNXVirtualIntegrator_L
     {
         // Étape 1 : Récupération de toutes les interfaces détectées par Falcon
         var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+        var numberInterfaces = 0;
 
-        // Étape 2 : Vérifications basiques sur la liste d'interfaces
-        Assert.NotNull(interfaces);
-
-        // Étape 3 : Affichage console pour visualiser les interfaces disponibles
+        // Étape 2 : Affichage console pour visualiser les interfaces disponibles
         await foreach (var knxInterface in interfaces)
         {
             foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
             {
+                numberInterfaces++;
                 var displayName = tunnelInterfaces.IndividualAddress.HasValue
                     ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
                     : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
                 _output.WriteLine($"[DETECTED] {displayName} → {knxInterface.ToString()}");
             }
         }
+        // Étape 3 : Vérifications basiques sur la liste d'interfaces
+        Assert.True(numberInterfaces != 0,"No IP Tunneling Interface found");
     }
 
         [Fact]
@@ -99,7 +100,7 @@ namespace TestProject_KNXVirtualIntegrator_L
             }
 
             // Étape 4 : Affiche l'interface sélectionnée
-            _output.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName);
+            _output.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName + " " + selectedInterface.ConnectionString);
 
             // Étape 5 : Connexion au bus
             _busConnection.SelectedInterface = selectedInterface;
@@ -208,15 +209,17 @@ namespace TestProject_KNXVirtualIntegrator_L
 
             // Étape 2 : Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
+            var wasConnected = _busConnection.IsConnected;
             
             // Étape 3 : Déconnexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
             var isDisconnected = _busConnection.IsConnected;
             
             // Assertion pour vérifier si la connexion a réussi
-            Assert.False(isDisconnected, "KNX Bus disconnection failed.");
+            Assert.False((isDisconnected || !wasConnected), "KNX Bus disconnection failed.");
         }
         
+        // TODO Corriger l'envoi et réception : Pour le moment, on reçoit l'état passé et pas le nouvel état
         [Fact]
         public async Task Test_KnxBus_USBConnectThenSendFrame_ReadValue()
         {
@@ -238,10 +241,9 @@ namespace TestProject_KNXVirtualIntegrator_L
             // Étape 4 : Lecture de la valeur de l'adresse de groupe
             var readGroupValue = await _groupCommunication.MaGroupValueReadAsync(readGroupAddress);
 
-            //Assertions pour vérifier si la valeur envoyée est bien celle lue
-            Assert.NotNull(readGroupValue);
-            //Assert.Equal(testGroupValue.Value, readGroupValue.Value);
-
+            //Assertion pour vérifier si la valeur envoyée est bien celle lue
+            Assert.Equal(testGroupValue.Value, readGroupValue.Value);
+            _output.WriteLine(testGroupValue.ToString());
             // Étape 5 : Déconnexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
         }

@@ -314,11 +314,11 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         };
 
         // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
-        Application.Current.Dispatcher.Invoke(() =>
-        {
+        //Application.Current.Dispatcher.Invoke(() =>
+        //{
             // Ajoute la nouvelle entrée à la liste observable
             Messages.Add(newMessage);
-        });
+        //});
     }
 
 
