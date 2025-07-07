@@ -125,11 +125,14 @@ namespace TestProject_KNXVirtualIntegrator_L
             // On utilise cette fausse interface pour la connexion
             _busConnection.SelectedInterface = fakeInterface;
 
-            // Le test réussit si une exception est levée pendant la connexion
-            var exception = await Assert.ThrowsAsync<Exception>(() => _busConnection.ConnectBusAsync());
+            // On tente de se connecter
+            await _busConnection.ConnectBusAsync();
 
-            // Affiche l’erreur dans la console pour le suivi
-            _output.WriteLine("Connexion échouée comme prévu : " + exception.Message);
+            // Vérifie que la connexion a échoué
+            Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une interface invalide.");
+
+            // Nettoyage
+            await _busConnection.DisconnectBusAsync();
         }
         
         [Fact]
@@ -145,13 +148,15 @@ namespace TestProject_KNXVirtualIntegrator_L
             // On sélectionne cette fausse interface
             _busConnection.SelectedInterface = fakeInterface;
 
-            // On essaye de se connecter, on s’attend à une erreur
-            var exception = await Assert.ThrowsAsync<Exception>(() => _busConnection.ConnectBusAsync());
+            // Tentative de connexion
+    await _busConnection.ConnectBusAsync();
 
-            // On affiche le message d’erreur dans la sortie du test
-            _output.WriteLine("Timeout ou erreur attendue : " + exception.Message);
-        }
+    // Vérifie que la connexion a échoué
+    Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer (timeout).");
 
+    // Déconnexion si jamais c'était connecté (par précaution)
+    await _busConnection.DisconnectBusAsync();
+}
         [Fact]
         public async Task Test_KnxBus_IPConnect()
         {
