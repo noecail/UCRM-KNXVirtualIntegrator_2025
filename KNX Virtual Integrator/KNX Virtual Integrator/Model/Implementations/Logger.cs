@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Windows;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;

@@ -5,8 +5,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class GroupAddressManager(Logger logger, ProjectFileManager projectFileManager, FileLoader loader, NamespaceResolver namespaceResolver, GroupAddressProcessor groupAddressProcessor, GroupAddressMerger groupAddressMerger) : IGroupAddressManager
 {
-    private readonly ILogger _logger = logger;
-
     /// <summary>
     /// Dictionary where each Cmd addresses is grouped with the corresponding Ie adresses
     /// </summary>
@@ -103,7 +101,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
 
             // Si l'identifiant ou le nom est nul, passer à l'itération suivante
-            if (id == null || name == null) continue;;
+            if (id == null || name == null) continue;
 
             // Récupère l'identifiant GA (Group Address) en supprimant le préfixe s'il existe
             var gaId = id.Contains("GA-") ? id.Substring(id.IndexOf("GA-", StringComparison.Ordinal)) : id;
@@ -170,7 +168,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
             if (existingEntry.Value != null)
             {
-                _logger.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
+                logger.ConsoleAndLogWriteLine($"Matching or subset found for: {existingEntry.Key}. Adding missing IDs.");
 
                 // Ajouter les IDs manquants à l'entrée existante
                 foreach (var gaId in gaIds)
@@ -184,7 +182,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
             else
             {
-                _logger.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
+                logger.ConsoleAndLogWriteLine($"Creating a new entry for: {commonName}");
                 // Créer une nouvelle entrée pour les adresses "Cmd" et "Ie"
                 GroupedAddresses[commonName] = gaIds.Select(id => groupAddresses.First(x => x.Attribute("Id")?.Value == id)).ToList();
             }

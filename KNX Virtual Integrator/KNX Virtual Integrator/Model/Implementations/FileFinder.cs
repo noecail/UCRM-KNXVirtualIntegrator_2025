@@ -96,8 +96,8 @@ public class FileFinder(Logger logger, ProjectFileManager projectFileManager) : 
     /// This method:
     /// <list type="number">
     /// <item>Updates the loading window with progress messages in the application's selected language.</item>
-    /// <item>Calls the <see cref="FindFile"/> method to search for the '0.xml' file within the directory specified by <see cref="ProjectFolderPath"/>.</item>
-    /// <item>If the file is found, updates the <see cref="ZeroXmlPath"/> property and logs the result.</item>
+    /// <item>Calls the <see cref="FindFile"/> method to search for the '0.xml' file within the directory specified by <see cref="ProjectFileManager.ProjectFolderPath"/>.</item>
+    /// <item>If the file is found, updates the <see cref="ProjectFileManager.ZeroXmlPath"/> property and logs the result.</item>
     /// <item>If the file is not found, logs an error message and shuts down the application.</item>
     /// <item>Handles exceptions related to file access, directory not found, and general I/O errors.</item>
     /// </list>

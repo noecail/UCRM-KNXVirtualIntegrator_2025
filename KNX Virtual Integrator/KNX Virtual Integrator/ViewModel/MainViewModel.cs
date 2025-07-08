@@ -48,9 +48,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
         // Initialisation des attributs
         _modelManager = modelManager;
-        
+        _selectedModel = new FunctionalModel("NaN");
         _busConnection = _modelManager.BusConnection;
-        _busConnection.PropertyChanged += (sender, e) =>
+        _busConnection.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(_busConnection.IsConnected)) {
                 WhenPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
@@ -136,7 +136,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         MaGroupValueReadCommand = new Commands.RelayCommand<GroupAddress>(
             async groupAddress =>
             {
-                var groupValue = await modelManager.GroupCommunication.MaGroupValueReadAsync(groupAddress);
+                await modelManager.GroupCommunication.MaGroupValueReadAsync(groupAddress);
                 // Vous pouvez faire quelque chose avec la valeur lue ici si nécessaire
             }
         );
@@ -185,8 +185,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         GenerateReportCommand =
             new Commands.RelayCommand<(string fileName, string authorName)>(args =>
                 _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
-        
-        return;
 
     }
 

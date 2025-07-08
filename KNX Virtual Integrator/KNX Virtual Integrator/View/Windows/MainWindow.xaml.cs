@@ -41,9 +41,10 @@ public partial class MainWindow
             
         _viewModel = viewModel;
         DataContext = _viewModel;
-
+        
         _connectionWindow = cw;
         _windowManager = wm;
+        _cancellationTokenSource = new CancellationTokenSource();
     }
 
     public void ApplyScaling(float scaleFactor)
@@ -65,7 +66,7 @@ public partial class MainWindow
     /// </summary>
     /// <param name="sender">The object that raised the event.</param>
     /// <param name="e">The event data.</param>
-    private async void ImportProjectButtonClick(object sender, RoutedEventArgs e)
+    private void ImportProjectButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select KNX project file");
 
@@ -241,7 +242,7 @@ public partial class MainWindow
     /// </summary>
     /// <param name="sender">The object that raised the event.</param>
     /// <param name="e">The event data.</param>
-    private async void ImportGroupAddressFileButtonClick(object sender, RoutedEventArgs e)
+    private void ImportGroupAddressFileButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select group addresses file");
 
@@ -296,16 +297,6 @@ public partial class MainWindow
         _windowManager.ShowSettingsWindow();
     }
 
-    private void Button_Click_1(object sender, RoutedEventArgs e)
-    {
-
-    }
-
-    private void Button_Click_2(object sender, RoutedEventArgs e)
-    {
-
-    }
-
     private void OnWriteButtonClick(object sender, RoutedEventArgs e)
     {
         var groupAddress = new GroupAddress("1/3/1");
@@ -323,8 +314,8 @@ public partial class MainWindow
     {
         _connectionWindow.Show();
     }
-    private void ListBox_Selected(object sender, RoutedEventArgs e)
-    {
-
-    }
+    // private void ListBox_Selected(object sender, RoutedEventArgs e)
+    // {
+    //
+    // }
 }

@@ -54,9 +54,9 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         doc.SetMargins(72, 72, 72, 72);
         
         // Écriture du contenu du document PDF
-        GeneratePdfHeader(newPdf, _writer); // Génération de la bannière d'en-tête
+        GeneratePdfHeader(newPdf); // Génération de la bannière d'en-tête
         GenerateProjectInformationSection(doc, authorName); // Génération de la section d'infos du projet (nom, ...)
-        GenerateTreeStructure(doc, _writer);
+        GenerateTreeStructure();
 
         
         
@@ -94,9 +94,9 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         doc.SetMargins(0, 0, 0, 0);
         
         // Écriture du contenu du document PDF
-        GeneratePdfHeader(newPdf, _writer); // Génération de la bannière d'en-tête
+        GeneratePdfHeader(newPdf); // Génération de la bannière d'en-tête
         GenerateProjectInformationSection(doc, authorName); // Génération de la section d'infos du projet (nom, ...)
-        GenerateTreeStructure(doc, _writer);
+        GenerateTreeStructure();
 
         // Fermeture du document et du stream d'écriture
         doc.Close();
@@ -115,7 +115,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         // Non implémentée
     }
 
-    
+
     /// <summary>
     /// Generates the header section of the PDF, including a banner, logo, 
     /// software name, version information, current date, and the document title. 
@@ -123,8 +123,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     /// and version information and the current date on the right. A title is added below the header.
     /// </summary>
     /// <param name="document">The PDF document to which the header will be added.</param>
-    /// <param name="writer">The PdfWriter instance responsible for writing content into the document.</param>
-    private void GeneratePdfHeader(PdfDocument document, PdfWriter writer)
+    private void GeneratePdfHeader(PdfDocument document)
     {
         // Génération du rectangle d'en-tête (bannière)
         var doc = new Document(document);
@@ -203,7 +202,10 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         // Structure de l'installation
         var projectStructureParagraph = new Paragraph("Structure de l'installation évaluée :");
         document.Add(projectStructureParagraph);
-        
+        foreach (var modeles in _modelesFonctionnels)
+        {
+            document.Add(new Paragraph(modeles));
+        }
         
         // TODO Portion de code à remplacer par la génération de deux arborescences:
         // TODO 1 pour montrer le lien entre les CMD, les IE et les modèles de tests
@@ -234,9 +236,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     /// with a background color for the label, followed by the command text. Introductory and concluding 
     /// text is added to provide context for the structure.
     /// </summary>
-    /// <param name="document">The PDF document to which the tree structure will be added.</param>
-    /// <param name="writer">The PdfWriter instance responsible for writing content into the document.</param>
-    private void GenerateTreeStructure(Document document, PdfWriter writer)
+    private void GenerateTreeStructure()
     {
         // // Font setup
         // Font normalFont = new Font(Font.FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
@@ -282,13 +282,13 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
 
 
     // Fonction à implémenter, elle servira à générer les résultats de tests de manière générique
-    private void GenerateTestList(Document document, PdfWriter writer)
+    /*private void GenerateTestList(Document document, PdfWriter writer)
     {
         foreach (var st in _modelesFonctionnels)
         {
             
         }
-    }
+    }*/
 
 
     /// <summary>

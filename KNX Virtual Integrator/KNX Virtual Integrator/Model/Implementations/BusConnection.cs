@@ -108,17 +108,16 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Type de connexion sélectionné par l'utilisateur (par exemple, Ethernet, USB, WiFi). Les changements de cette propriété sont propagés à l'interface utilisateur.
     /// </summary>
-    private string _selectedConnectionType;
-    public string SelectedConnectionType
+    private string? _selectedConnectionType;
+    public string? SelectedConnectionType
     {
         get => _selectedConnectionType;
         set
         {
-            if (_selectedConnectionType != value)
-            {
-                _selectedConnectionType = value;
-                OnSelectedConnectionTypeChanged(); // Traite les changements de type de connexion
-            }
+            if (_selectedConnectionType == value) return;
+            
+            _selectedConnectionType = value;
+            OnSelectedConnectionTypeChanged(); // Traite les changements de type de connexion
         }
     }
 
@@ -128,7 +127,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Événement déclenché lorsque la connexion au bus KNX est prête.
     /// </summary>
-    public event EventHandler<KnxBus> BusConnectedReady;
+    public event EventHandler<KnxBus>? BusConnectedReady;               //Le mettre en "nullable" est bien correct?
 
     /// <summary>
     /// Méthode protégée qui déclenche l'événement <see cref="BusConnectedReady"/>.
@@ -136,7 +135,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <param name="bus">L'objet <see cref="KnxBus"/> qui représente la connexion au bus KNX.</param>
     private void OnBusConnectedReady(KnxBus bus)
     {
-        BusConnectedReady.Invoke(this, bus); // Déclenche l'événement si des abonnés existent
+        BusConnectedReady?.Invoke(this, bus); // Déclenche l'événement si des abonnés existent
     }
 
 

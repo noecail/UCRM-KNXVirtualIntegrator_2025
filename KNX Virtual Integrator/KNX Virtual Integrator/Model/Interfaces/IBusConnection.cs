@@ -27,7 +27,7 @@ public interface IBusConnection : INotifyPropertyChanged
     /// Obtient ou définit le type de connexion sélectionné sous forme de chaîne.
     /// Cette propriété indique le type de connexion sélectionné par l'utilisateur (par exemple, "IP", "USB").
     /// </summary>
-    string SelectedConnectionType { get; set; }
+    string? SelectedConnectionType { get; set; }
 
     /// <summary>
     /// Obtient un indicateur qui spécifie si le bus est actuellement connecté.

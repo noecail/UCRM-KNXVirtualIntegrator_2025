@@ -8,7 +8,7 @@ public interface IGroupCommunication
 
     Task GroupValueWriteOffAsync();
 
-    Task<GroupValue> MaGroupValueReadAsync(GroupAddress groupAddress);
+    Task<GroupValue?> MaGroupValueReadAsync(GroupAddress groupAddress);
     Task GroupValueWriteAsync(GroupAddress addr, GroupValue value);
 
 }

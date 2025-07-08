@@ -72,10 +72,10 @@ public class GroupAddressMerger( StringManagement stringManagement, Logger logge
     public List<XElement> GetElementsBySimilarity(XElement cmdElement, List<XElement> ieAddressesSet)
     {
         // Récupérer la valeur de l'attribut "Name" de l'élément 'cmdElement' et l'assigner à 'searchString'
-        var searchString = cmdElement.Attribute("Name")?.Value;
-
+        var searchStringTemp = cmdElement.Attribute("Name")?.Value;
+        var searchString = searchStringTemp ?? "   Adresse vide";
         // Supprimer les premiers 3 caractères de 'searchString', généralement le préfixe "Cmd"
-        searchString = searchString?.Substring(3);
+        searchString = searchString.Substring(3);
 
         // Utiliser une expression régulière pour enlever l'adresse à la fin de 'searchString', laissant le reste de la chaîne intact
         searchString = Regex.Replace(searchString, @"\d+(/\d+)*$", string.Empty);
