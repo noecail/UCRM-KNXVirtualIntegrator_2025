@@ -194,7 +194,6 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             // Vérifie si l'adresse correspond à l'adresse demandée
 
             if (e.DestinationAddress != groupAddress) return;
-            if (e.EventType != GroupEventType.ValueWrite) return;
 
             // Définis le résultat pour terminer la tâche
             tcs.SetResult(e.Value);
