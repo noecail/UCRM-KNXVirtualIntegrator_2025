@@ -237,8 +237,8 @@ namespace TestProject_KNXVirtualIntegrator_L
             var readGroupValue = await _groupCommunication.MaGroupValueReadAsync(readGroupAddress);
 
             //Assertion pour vérifier si la valeur envoyée est bien celle lue
-            Assert.Equal(testGroupValue, testGroupValue);
-            _output.WriteLine("test " + testGroupValue);
+            Assert.Equal(testGroupValue, readGroupValue);
+            _output.WriteLine("test value " + testGroupValue);
             _output.WriteLine("Read group value :" + readGroupValue);
             // Étape 5 : Déconnexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
