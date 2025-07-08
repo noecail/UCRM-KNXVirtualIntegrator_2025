@@ -52,10 +52,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         _busConnection = _modelManager.BusConnection;
         _busConnection.PropertyChanged += (sender, e) =>
         {
-            if (e.PropertyName != nameof(_busConnection.IsConnected)) return;
-            WhenPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
-            ConnectBusCommand?.NotifyCanExecuteChanged(); //ATTENTION, PEUT CAUSER PROBLÈMES APRÈS L'UPGRADE
-            DisconnectBusCommand?.NotifyCanExecuteChanged();
+            if (e.PropertyName == nameof(_busConnection.IsConnected)) {
+                WhenPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
+                ConnectBusCommand?.NotifyCanExecuteChanged(); //ATTENTION, PEUT CAUSER PROBLÈMES APRÈS L'UPGRADE
+                DisconnectBusCommand?.NotifyCanExecuteChanged();
+            }
+            else if (e.PropertyName == nameof(_busConnection.CurrentInterface))
+            {
+                WhenPropertyChanged(nameof(CurrentInterface)); // Mise à jour de la vue
+            }
         };
         
         _busConnection.SelectedConnectionType = "Type=USB";

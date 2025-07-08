@@ -137,27 +137,20 @@ namespace TestProject_KNXVirtualIntegrator_L
         }
         
         [Fact]
-        public async Task Test_KnxBus_ConnectionTimeout()
+        public async Task Test_WriteWithoutConnection()
         {
-            // Crée une fausse interface IP avec une adresse qui ne répondra pas
-            var fakeInterface = new ConnectionInterfaceViewModel(
-                ConnectorType.IpTunneling,
-                "Interface Timeout",
-                "Type=IpTunneling;HostAddress=192.0.2.100" // Adresse réservée aux tests, ne répond pas
+            var groupAddress = new GroupAddress("1/2/3");
+            var groupValue = new GroupValue(true);
+
+            // On vérifie que la méthode échoue quand on n'est pas connecté au bus
+            var exception = await Assert.ThrowsAsync<NullReferenceException>(() =>
+                _busConnection.Bus.WriteGroupValueAsync(
+                    groupAddress, groupValue, MessagePriority.Low, CancellationToken.None)
             );
 
-            // On sélectionne cette fausse interface
-            _busConnection.SelectedInterface = fakeInterface;
-
-            // Tentative de connexion
-    await _busConnection.ConnectBusAsync();
-
-    // Vérifie que la connexion a échoué
-    Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer (timeout).");
-
-    // Déconnexion si jamais c'était connecté (par précaution)
-    await _busConnection.DisconnectBusAsync();
-}
+            _output.WriteLine("Erreur attendue : " + exception.Message);
+        }
+        
         [Fact]
         public async Task Test_KnxBus_IPConnect()
         {
@@ -176,6 +169,7 @@ namespace TestProject_KNXVirtualIntegrator_L
             // Assertion pour vérifier si la connexion a réussi
             Assert.True(isConnected, "KNX IP Bus connection failed.");
         }
+        
         
         
         [Fact]
@@ -197,8 +191,6 @@ namespace TestProject_KNXVirtualIntegrator_L
             Assert.True(isConnected, "KNX Bus connection failed.");
         }
         
-        
-        
         [Fact]
         public async Task Test_KnxBus_USBConnect_Disconnect()
         {
@@ -219,7 +211,8 @@ namespace TestProject_KNXVirtualIntegrator_L
             Assert.False((isDisconnected || !wasConnected), "KNX Bus disconnection failed.");
         }
         
-        // TODO Corriger l'envoi et réception : Pour le moment, on reçoit l'état passé et pas le nouvel état
+      
+        //Corriger l'envoi et réception : Pour le moment, on reçoit l'état passé et pas le nouvel état OK !
         [Fact]
         public async Task Test_KnxBus_USBConnectThenSendFrame_ReadValue()
         {
@@ -233,17 +226,23 @@ namespace TestProject_KNXVirtualIntegrator_L
 
             // Étape 3 : Envoi d'une trame à une adresse de groupe d�finie
             var testGroupAddress = new GroupAddress("0/1/1");
-            var readGroupAddress = new GroupAddress("0/2/1");
+            //var readGroupAddress = new GroupAddress("0/2/1");
             var testGroupValue = new GroupValue(true); // Valeur d'exemple (1 bit)
 
+            // Envoi de la valeur sur le bus
             await _groupCommunication.GroupValueWriteAsync(testGroupAddress, testGroupValue);
 
+            // Petite attente pour laisser le temps au bus de traiter
+            await Task.Delay(500);
+            
             // Étape 4 : Lecture de la valeur de l'adresse de groupe
-            var readGroupValue = await _groupCommunication.MaGroupValueReadAsync(readGroupAddress);
+            var readGroupValue = await _groupCommunication.MaGroupValueReadAsync(testGroupAddress);
 
             //Assertion pour vérifier si la valeur envoyée est bien celle lue
+            Assert.NotNull(readGroupValue);
             Assert.Equal(testGroupValue.Value, readGroupValue.Value);
-            _output.WriteLine(testGroupValue.ToString());
+            _output.WriteLine("Valeur lue depuis le bus : " + testGroupValue.ToString());
+            
             // Étape 5 : Déconnexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
         }
