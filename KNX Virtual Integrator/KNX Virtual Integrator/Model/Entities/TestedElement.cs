@@ -19,7 +19,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             Tests = [[new DataPointType(1),new DataPointType(1)]]; 
         } 
         
-        public TestedElement(int typeCmd, List<int[]> addressesCmd, GroupValue? valueCmd,int[] typeIe, List<int[]>[]  addressesIe, GroupValue?[] valueIe)
+        public TestedElement(int typeCmd, List<string> addressesCmd, GroupValue? valueCmd,int[] typeIe, List<string>[]  addressesIe, GroupValue?[] valueIe)
         {
             Tests = [[new DataPointType(typeCmd, addressesCmd, valueCmd)]];
             for (var i = 0; i < typeIe.Length; i++)

@@ -21,7 +21,7 @@ public class DataPointType
     
     private GroupValue? _value; // Value to send or expected to be read
 
-    public List<int[]> Address = [[]];
+    public List<string> Address = [];
     
     //Constructors
     public DataPointType(int type)
@@ -30,31 +30,25 @@ public class DataPointType
         _value = new GroupValue(true);
         GetSizeOf();
     }
-    public DataPointType(int type, List<int[]>  addresses)
+    public DataPointType(int type, List<string>  addresses)
     {
         Type = type;
         _value = new GroupValue(true);
         GetSizeOf();
         for (int i = 0; i < addresses.Count; i++)
         {
-            for (int j = 0; j < addresses[i].Length; j++)
-            {
-                Address[i][j] = addresses[i][j];
-            }
+                Address[i] = addresses[i];
         }
     }
     
-    public DataPointType(int type, List<int[]>  addresses, GroupValue? value)
+    public DataPointType(int type, List<string>  addresses, GroupValue? value)
     {
         Type = type;
         _value = value;
         GetSizeOf();
         for (int i = 0; i < addresses.Count; i++)
         {
-            for (int j = 0; j < addresses[i].Length; j++)
-            {
-                Address[i][j] = addresses[i][j];
-            }
+            Address[i] = addresses[i];
         }
     }
     public DataPointType(DataPointType dpt)
@@ -64,10 +58,7 @@ public class DataPointType
         GetSizeOf();
         for (int i = 0; i < dpt.Address.Count; i++)
         {
-            for (int j = 0; j < dpt.Address[i].Length; j++)
-            {
-                Address[i][j] = dpt.Address[i][j];
-            }
+            Address[i] = dpt.Address[i];
         }
     }
     
@@ -201,7 +192,7 @@ public class DataPointType
     /// <summary>
     /// This method adds an address to a DPT.
     /// </summary>
-    public void AddAddress(int[] address)
+    public void AddAddress(string address)
     {
         Address.Add(address);
     }
