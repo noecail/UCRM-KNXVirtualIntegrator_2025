@@ -17,6 +17,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     private readonly BusConnection _busConnection;
 
     private GroupAddress _groupAddress;
+
     /// <summary>
     /// Obtient ou définit l'adresse de groupe utilisée pour la communication sur le bus KNX.
     /// Cette adresse spécifie l'adresse du groupe pour lequel les valeurs sont lues ou écrites.
@@ -28,6 +29,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     private GroupValue? _groupValue;
+
     /// <summary>
     /// Obtient ou définit la valeur de groupe à envoyer au bus KNX.
     /// Cette valeur représente l'état du groupe, par exemple, vrai ou faux pour un booléen.
@@ -46,15 +48,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     public GroupCommunication(BusConnection busConnection)
     {
         _busConnection = busConnection;
-
-        // Initialisation des valeurs par défaut pour l'adresse de groupe et la valeur de groupe (commentées ici)
-        //_groupAddress = new GroupAddress("0/1/1"); // Exemple d'adresse par défaut
-        //_groupValue = new GroupValue(true); // Initialisation par défaut
-
-        // Gérer l'événement lorsque le bus est détecté
         BusChanged(null, _busConnection.Bus);
-
-        // Abonnement à l'événement lorsque le bus est prêt
         _busConnection.BusConnectedReady += OnBusConnectedReady;
     }
 
@@ -77,15 +71,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
                         _busConnection.CancellationTokenSource.Token
                     );
             }
-            else
-            {
-                //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
-            //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -108,15 +97,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
                         _busConnection.CancellationTokenSource.Token
                     );
             }
-            else
-            {
-                //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-            }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
-            //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -143,23 +127,19 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             else
             {
                 Console.WriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.");
-                //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return; //Sensé retourner qqchose
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Erreur lors de l'envoi de la trame : {ex.Message}");
-            //MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
-    
-    
+
     ///<summary>
-    /// Converts the ulong value into a byte[] to be able to write it in the bus.
+    /// Convertit une valeur ulong en tableau de bytes pour l'écriture sur le bus.
     ///</summary>
-    /// <param name="toSend">The ulong value to send.</param>
-    /// <param name="groupValue">The group value to send, in the right format.</param>
+    /// <param name="toSend">La valeur à envoyer.</param>
+    /// <param name="groupValue">Le tableau à remplir.</param>
     public void ConvertToGroupValue(ulong toSend, byte[] groupValue)
     {
         var intBytes = BitConverter.GetBytes(toSend);
@@ -171,48 +151,35 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
     }
 
-
-    //TACHE LECTURE TRAME NORMALE
     /// <summary>
     /// Lit de manière asynchrone la valeur d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
     /// Vérifie la connexion et l'état du bus avant d'envoyer la requête.
     /// Utilise un <see cref="TaskCompletionSource{T}"/> pour capturer la valeur lue.
     /// </summary>
     /// <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-    /// <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+    /// <returns>Une tâche contenant la valeur lue.</returns>
     public async Task<GroupValue> MaGroupValueReadAsync(GroupAddress groupAddress)
     {
         if (_busConnection is { IsConnected: false, IsBusy: true })
         {
-            //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord.",
-            //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
             return null;
         }
 
-        // TaskCompletionSource pour capturer la valeur lue
         var tcs = new TaskCompletionSource<GroupValue>();
-
-        // Handler temporaire pour capturer la valeur lue
         EventHandler<GroupEventArgs> handler = null;
         handler = (sender, e) =>
         {
-            // Vérifie si l'adresse correspond à l'adresse demandée
             if (e.DestinationAddress == groupAddress)
             {
-                // Définis le résultat pour terminer la tâche
                 tcs.SetResult(e.Value);
-
-                // Désabonne le handler une fois que la valeur est capturée
                 _busConnection.Bus.GroupMessageReceived -= handler;
             }
         };
 
-        // S'abonner à l'événement
         _busConnection.Bus.GroupMessageReceived += handler;
 
         try
         {
-            // Envoie la requête pour lire la valeur du groupe
             if (_busConnection is { CancellationTokenSource: not null, Bus: not null })
                 await _busConnection.Bus.RequestGroupValueAsync(
                     groupAddress, MessagePriority.High,
@@ -222,14 +189,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         catch (Exception ex)
         {
             Console.WriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
-            //MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
-            //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-
-            _busConnection.Bus.GroupMessageReceived -= handler; // Assurez-vous de désabonner même en cas d'exception
+            _busConnection.Bus.GroupMessageReceived -= handler;
             return null;
         }
 
-        // Attendre la tâche de capture de la valeur
         return await tcs.Task;
     }
 
@@ -237,30 +200,25 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     public ObservableCollection<GroupMessage> Messages { get; private set; } = new ObservableCollection<GroupMessage>();
 
     private readonly ObservableCollection<GroupEventArgs> _groupEvents = new ObservableCollection<GroupEventArgs>();
+
     /// <summary>
     /// Obtient la collection observable des événements de groupe reçus.
     /// </summary>
     public ObservableCollection<GroupEventArgs> GroupEvents => _groupEvents;
 
     /// <summary>
-    /// Gestionnaire d'événement qui est appelé lorsque le bus KNX est prêt à être utilisé.
+    /// Gestionnaire d'événement appelé lorsque le bus KNX est prêt à être utilisé.
     /// Met à jour la connexion du bus et réinitialise la liste des événements de groupe.
     /// </summary>
-    /// <param name="sender">L'objet source de l'événement.</param>
-    /// <param name="newBus">Le nouveau bus KNX connecté.</param>
     private void OnBusConnectedReady(object sender, KnxBus newBus)
     {
-        // Appelle BusChanged avec le nouveau bus
         BusChanged(null, newBus);
-        // Attention potentiellement si je me connecte à un nouveau bus l'ancien ne se désabonne pas de l'événement dans BusChanged
     }
 
     /// <summary>
     /// Gère les changements de bus en désabonnant l'ancien bus et en abonnissant le nouveau bus aux événements.
     /// Réinitialise la liste des événements de groupe.
     /// </summary>
-    /// <param name="oldBus">L'ancien bus KNX.</param>
-    /// <param name="newBus">Le nouveau bus KNX.</param>
     internal void BusChanged(KnxBus oldBus, KnxBus newBus)
     {
         if (oldBus != null)
@@ -275,24 +233,9 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// </summary>
     public class GroupMessage
     {
-        /// <summary>
-        /// L'adresse de groupe à laquelle le message est destiné.
-        /// </summary>
         public GroupAddress DestinationAddress { get; set; }
-
-        /// <summary>
-        /// L'adresse individuelle de la source du message.
-        /// </summary>
         public IndividualAddress SourceAddress { get; set; }
-
-        /// <summary>
-        /// La valeur du groupe associée au message.
-        /// </summary>
         public GroupValue Value { get; set; }
-
-        /// <summary>
-        /// Le type d'événement associé au message, si nécessaire.
-        /// </summary>
         public GroupEventType EventType { get; set; }
     }
 
@@ -300,11 +243,8 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// Gestionnaire d'événement appelé lorsqu'un message de groupe est reçu.
     /// Crée une entrée pour le message reçu et met à jour la liste observable des messages.
     /// </summary>
-    /// <param name="sender">L'objet source de l'événement.</param>
-    /// <param name="e">Les arguments de l'événement contenant les détails du message reçu.</param>
     private void OnGroupMessageReceived(object sender, GroupEventArgs e)
     {
-        // Crée une nouvelle entrée pour le message reçu
         var newMessage = new GroupMessage
         {
             SourceAddress = e.SourceAddress,
@@ -313,13 +253,6 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             EventType = e.EventType
         };
 
-        // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
-        //Application.Current.Dispatcher.Invoke(() =>
-        //{
-            // Ajoute la nouvelle entrée à la liste observable
-            Messages.Add(newMessage);
-        //});
+        Messages.Add(newMessage);
     }
-
-
 }
