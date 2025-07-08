@@ -293,7 +293,6 @@ public partial class MainWindow
 
     private void SettingsButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select KNX project file");
         _windowManager.ShowSettingsWindow();
     }
 

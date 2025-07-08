@@ -90,7 +90,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// Interface de la connexion actuelle
     /// </summary>
     private string? _currentInterface = "Aucune interface connectée";
-
     public string? CurrentInterface
     {
         get => _currentInterface;
@@ -99,11 +98,53 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             if (_currentInterface == value) return; // Pas de changement si la valeur est la même 
             _currentInterface = value;
             WhenPropertyChanged(nameof(CurrentInterface)); // Notifie l'interface utilisateur du changement
-
         }
     }
     
+    /// <summary>
+    /// Adresse IP du routeur distant permettant la connexion distante au bus KNX
+    /// </summary>
+    private string? _natAddress;
+    public string? NatAddress
+    {
+        get => _natAddress;
+        set
+        {
+            if (_natAddress == value) return; // Pas de changement si la valeur est la même 
+            _natAddress = value;
+            WhenPropertyChanged(nameof(NatAddress)); // Notifie l'interface utilisateur du changement
+        }
+    }
     
+    /// <summary>
+    /// Mot de passe permettant l'accès au fichier de clé pour connexion IP Secure
+    /// </summary>
+    private string? _password;
+    public string? Password
+    {
+        get => _password;
+        set
+        {
+            if (_password == value) return; // Pas de changement si la valeur est la même 
+            _password = value;
+            WhenPropertyChanged(nameof(Password)); // Notifie l'interface utilisateur du changement
+        }
+    }  
+    
+    /// <summary>
+    /// Chemin du fichier de clés pour connexion IP Secure
+    /// /// </summary>
+    private string? _keysPath;
+    public string? KeysPath
+    {
+        get => _keysPath;
+        set
+        {
+            if (_keysPath == value) return; // Pas de changement si la valeur est la même 
+            _keysPath = value;
+            // WhenPropertyChanged(nameof(KeysPath)); // Notifie l'interface utilisateur du changement
+        }
+    }
 
     /// <summary>
     /// Type de connexion sélectionné par l'utilisateur (par exemple, Ethernet, USB, WiFi). Les changements de cette propriété sont propagés à l'interface utilisateur.
@@ -407,6 +448,15 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     public BusConnection()
     {
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
+    }
+
+    // Permet de s'assurer que le bouton connexion NAT fonctionne
+    // Appelée par TestRechercherCommand dans le VM
+    // Juste pour tester, à supprimer ensuite
+    public async Task ClearField()
+    {
+        Console.WriteLine("Found an IP Adress : " + NatAddress);
+        NatAddress="";
     }
 
     /// <summary>

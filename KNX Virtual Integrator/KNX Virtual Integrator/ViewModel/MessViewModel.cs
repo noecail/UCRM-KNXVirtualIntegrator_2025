@@ -18,7 +18,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             ------------------------------------------------------------------------------------------------ */
         public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
 
-        private readonly IBusConnection _busConnection;
+        public IBusConnection _busConnection { get; }
 
         public IApplicationSettings AppSettings => _modelManager.AppSettings;
         private readonly ModelManager _modelManager;  // Référence à ModelManager
@@ -47,8 +47,8 @@ namespace KNX_Virtual_Integrator.ViewModel
         public string CurrentInterface => _busConnection.CurrentInterface;
 
         /* ------------------------------------------------------------------------------------------------
-  -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
-  ------------------------------------------------------------------------------------------------ */
+         -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
+         ------------------------------------------------------------------------------------------------ */
         // Pattern d'utilisation :
         // MaCommande.Execute(Args)
         //
@@ -91,6 +91,9 @@ namespace KNX_Virtual_Integrator.ViewModel
         public AsyncRelayCommand ConnectBusCommand { get; }
         public AsyncRelayCommand DisconnectBusCommand { get; }
         public AsyncRelayCommand RefreshInterfacesCommand { get; }
+        
+        // Pour tester, à supprimer plus tard
+        public AsyncRelayCommand TestRechercherCommand { get; }
 
         /// <summary>
         /// Command that sends a group value write "on" command asynchronously.
@@ -115,6 +118,9 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// Command that generates the report for the latest opened project
         /// </summary>
         public ICommand GenerateReportCommand { get; private set; }
+
+        // à implémenter dans le VM
+        public ICommand ConnectRemotelyCommand { get; private set; }
 
         /* ------------------------------------------------------------------------------------------------
         -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------
