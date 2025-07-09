@@ -11,6 +11,9 @@ namespace KNX_Virtual_Integrator.Model.Interfaces;
 /// </summary>
 public interface IBusConnection : INotifyPropertyChanged
 { 
+    
+    // ------------------------------------ PROPRIÉTÉS ------------------------------------ 
+    
     /// <summary>
     /// Obtient la collection observable des interfaces découvertes.
     /// Cette collection contient les instances de <see cref="ConnectionInterfaceViewModel"/> représentant les interfaces disponibles.
@@ -38,8 +41,26 @@ public interface IBusConnection : INotifyPropertyChanged
     /// <summary>
     /// Contient le nom de l'interface par laquelle la connexion au bus est actuellement établie.
     /// </summary>
-    string? CurrentInterface { get; }
+    string CurrentInterface { get; }
+    
+    /// <summary>
+    /// Contient l'adresse du routeur IP distant permettant de se connecter à distance
+    /// </summary>
+    string NatAddress { get; set; }
+    
+    /// <summary>
+    /// Contient le mot de passe du fichier de clés sécurisant une connexion IP Secure
+    /// </summary>
+    string Password { get; set; }
+    
+    /// <summary>
+    /// Contient le chemin vers le fichier de clés permettant la connexion IP Secure. Ce fichier a été exporté par l'utilisateur au préalable depuis ETS
+    /// </summary>
+    string KeysPath { get; set; }
 
+    
+    // ------------------------------------ TACHES ------------------------------------
+    
     /// <summary>
     /// Établit une connexion asynchrone au bus KNX.
     /// Cette méthode initialise la connexion en utilisant les paramètres fournis, gère les erreurs éventuelles et met à jour l'état de connexion.
@@ -66,4 +87,11 @@ public interface IBusConnection : INotifyPropertyChanged
     /// Cette méthode est appelée lorsque la sélection du type de connexion change, entraînant la découverte des interfaces disponibles pour ce type.
     /// </summary>
     void OnSelectedConnectionTypeChanged();
+
+    
+    /// <summary>
+    /// TO BE DELETED LATER, FOR TEST
+    /// </summary>
+    /// <returns></returns>
+    Task ClearField();
 }

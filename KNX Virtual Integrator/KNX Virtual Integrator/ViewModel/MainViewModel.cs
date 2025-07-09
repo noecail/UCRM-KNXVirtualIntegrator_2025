@@ -61,6 +61,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 WhenPropertyChanged(nameof(CurrentInterface)); // Mise à jour de la vue
             }
+            // Pas besoin de WhenPropertyChanged(nameof(NatAddress)) car la View est directement bind à la propriété du Model
+            // Contrairement à CurrentInterface, la View est bind à une propriété du ViewModel et donc WhenPropertyChanged(nameof(CurrentInterface))
         };
         
         _busConnection.SelectedConnectionType = "Type=USB";
@@ -115,6 +117,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         DisconnectBusCommand = new AsyncRelayCommand(modelManager.BusConnection.DisconnectBusAsync);
 
         RefreshInterfacesCommand = new AsyncRelayCommand(modelManager.BusConnection.DiscoverInterfacesAsync);
+
+        // A implémenter, sera liée au bouton Connexion NAT
+        ConnectRemotelyCommand = new Commands.RelayCommand<object>(
+            _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
+        );
+
+        // A supprimer plus tard, utilisée pour tester
+        TestRechercherCommand = new AsyncRelayCommand(modelManager.BusConnection.ClearField);
+        
 
         GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()

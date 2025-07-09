@@ -4,8 +4,10 @@
                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                   xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
+                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                   mc:Ignorable="d"
-                  Title="Connexion au Bus KNX" Height="500" Width="300"
+                  Title="Connexion au Bus KNX" Height="550" Width="300"
                   TitleCharacterCasing="Normal"
                   ResizeMode="NoResize"
                   Background="White"
@@ -22,6 +24,9 @@
         <SolidColorBrush x:Key="ButtonRed" Color="#C75150"/>
         <SolidColorBrush x:Key="ButtonRedAccentuated" Color="#B73B3B"/>
         <SolidColorBrush x:Key="ForegroundButtonColour" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="ButtonGray" Color="Gray"/>
+        <SolidColorBrush x:Key="ButtonGrayAccentuated" Color="DimGray"/>
+        
 
         <SolidColorBrush x:Key="ComboBoxLightBorder" Color="#b8b8b8"/>
         <SolidColorBrush x:Key="LightHover" Color="#d3d3d3"/>
@@ -188,6 +193,79 @@
                             <!-- Clic -->
                             <Trigger Property="IsPressed" Value="True">
                                 <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource ButtonBlueAccentuated}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Style pour le bouton refresh -->
+        <Style x:Key="ResearchButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource ButtonGray}"/>
+            <Setter Property="Foreground" Value="{StaticResource ForegroundButtonColour}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="btnBorder" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Survol -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource ButtonGrayAccentuated}"/>
+                            </Trigger>
+                            <!-- Clic -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource ButtonGrayAccentuated}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <!-- Style pour le bouton refresh -->
+        <Style x:Key="ImportKeysButton" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="btnBorder" 
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <!-- Survol -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource ButtonGrayAccentuated}"/>
+                            </Trigger>
+                            <!-- Clic -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource ButtonGrayAccentuated}"/>
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -369,10 +447,12 @@
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="100"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
 
-            <!-- Bus Connection Type Selection -->
+            <!-- Bus Connection Type Selection Section -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,10,5">
                 <TextBlock Text="Type de connexion :" VerticalAlignment="Center" Margin="0,0,10,0"/>
                 <ComboBox Name="ConnectionTypeComboBox" Style="{StaticResource LightComboBoxStyle}"
@@ -385,9 +465,8 @@
                 </ComboBox>
             </StackPanel>
 
+            <!-- Current Interface Display Section -->
             <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,5,20,5" Width="250">
-                
-                        
                 <TextBlock
                     Margin="5,0,5,0"
                     Text="Interface actuellement connectée :"
@@ -400,17 +479,13 @@
                     TextAlignment="Left"/>
             </StackPanel>
             
-            <!--Text="{Binding Path=CurrentInterface}"-->
-            
             <!-- Discovered Interfaces Section -->
-            <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,5,10,0">
+            <StackPanel Grid.Row="2" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,5,10,10">
                 <Grid Margin="3,0,3,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-
-                    
                     
                     <TextBlock Text="Interfaces disponibles :" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0" Grid.Column="0" />
 
@@ -426,7 +501,7 @@
                 </Grid>
 
                 <!-- List of discovered interfaces -->
-                <ListBox Name="InterfaceListBox" Width="250" Height="100" 
+                <ListBox Name="InterfaceListBox" Width="250" Height="120" 
                          ItemsSource="{Binding DiscoveredInterfaces}" 
                          SelectedItem="{Binding SelectedInterface}" 
                          BorderThickness="1"
@@ -464,10 +539,88 @@
                 </ListBox>
             </StackPanel>
 
+            <!-- Section connexion à distance-->
+            <StackPanel Grid.Row="3" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,0,10,0">
+                <TextBlock
+                    Text="Connexion à distance (NAT)"
+                    TextAlignment="Center"
+                    Margin="0,0,0,5"
+                />
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,10,0">
+                    <TextBlock
+                           Text="IP publique du routeur"
+                           VerticalAlignment="Center"
+                           TextAlignment="Left"
+                           Margin="0,0,10,0"
+                           />
+                    <TextBox
+                             Width="80"
+                             Margin="10,0,0,0"
+                             VerticalAlignment="Center"
+                             Text="{Binding _busConnection.NatAddress}"
+                             />
+                </StackPanel>
+                <Button Command="{Binding Path=TestRechercherCommand}"
+                        Style="{StaticResource ResearchButton}"
+                        Padding="12,0"
+                        Margin="0,5">
+                        <TextBlock Text="Connexion (NAT)" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
+                   
+                </Button>
+            </StackPanel>
             
+            <!-- Section connexion IP Secure-->
+            <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Center" Margin="10,10,10,0" >
+                <TextBlock
+                    Text="Connexion via IP Secure"
+                    TextAlignment="Center"
+                />
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="30"/>
+                    </Grid.RowDefinitions>
+                
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,10,0">
+                        <TextBlock
+                            Text="Fichier de clés .knxkeys"
+                            VerticalAlignment="Center"
+                            TextAlignment="Left"
+                            Margin="0,0,42,0"
+                        />
+                        <Button
+                            Style="{StaticResource ImportKeysButton}"
+                            Click="ImportKeysFileButtonClick"                       
+                            Margin="10.5,0,0,0">
+                            <TextBlock Text="importer clés"
+                                       Width="78"
+                                       FontSize="10"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,0,0"/>
+
+                        </Button>
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,10,0">
+                        <TextBlock
+                            Text="Mot de passe du fichier de clés"
+                            VerticalAlignment="Center"
+                            TextAlignment="Left"
+                            Margin="0,0,10,0"
+                        />
+                        <TextBox
+                            Width="80"
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding _busConnection.Password}"
+                        />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
             
             <!-- Buttons for connection and disconnection -->
-            <Grid Grid.Row="3" Margin="20,0" VerticalAlignment="Center">
+            <Grid Grid.Row="5" Margin="20,0" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de déconnexion -->
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de connexion -->
