@@ -162,8 +162,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Chemin du fichier de clés pour connexion IP Secure
     /// /// </summary>
-    private string? _keysPath;
-    public string? KeysPath
+    private string _keysPath;
+    public string KeysPath
     {
         get => _keysPath;
         set
@@ -247,10 +247,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
 
             // Obtient la chaîne de connexion à partir de l'interface sélectionnée
             var connectionString = SelectedInterface?.ConnectionString;
-
             
-            Console.WriteLine("Test3");
-
             // Déconnecte le bus existant si nécessaire
             if (Bus != null)
             {
@@ -263,8 +260,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             
             if (NatAccess)
             {
-                Console.WriteLine("Test1");
-                var parameters = new IpTunnelingConnectorParameters(NatAddress, NatPort, IpProtocol.Auto, useNat: true) //Crée les paramètres de connexion
+                var parameters = new IpTunnelingConnectorParameters(NatAddress, NatPort, useNat: true) //Crée les paramètres de connexion
                 {
                     IndividualAddress = IndividualAddress.Parse(InterfaceAddress),
                     RequiresSecurity = true
@@ -395,20 +391,20 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         try
         {
             // Vérifie si la connexion est établie avec succès
-            if (Bus.ConnectionState == BusConnectionState.Connected)
+            if (Bus==null || Bus.ConnectionState != BusConnectionState.Connected)
             {
-                Bus.ConnectionStateChanged += BusConnectionStateChanged!;
+                throw new InvalidOperationException(
+                    "La connexion au bus a échoué."); // Lance une exception si la connexion échoue
+            }
+            else
+            {
+                Bus.ConnectionStateChanged += BusConnectionStateChanged!; 
                 CurrentInterface = SelectedInterface?.DisplayName;
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
                 Console.WriteLine("Connexion réussie au bus.");
                 //MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                throw new InvalidOperationException(
-                    "La connexion au bus a échoué."); // Lance une exception si la connexion échoue
             }
         }
         catch (Exception ex)
@@ -602,6 +598,9 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     public BusConnection()
     {
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
+        _password = "";
+        _natAddress = "";
+        _keysPath = "";
     }
 
     /// <summary>
