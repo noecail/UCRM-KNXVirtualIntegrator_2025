@@ -282,7 +282,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                    }
                    catch (Exception ex)
                    {
-                       Console.WriteLine($"Erreur : {ex.GetType().Name} - {ex.Message}");
+                       _logger.ConsoleAndLogWriteLine($"Erreur : {ex.GetType().Name} - {ex.Message}");
                        if (ex.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase)) //Si l'interface est sécurisée
                        {
                            try
@@ -291,7 +291,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                                Bus = new KnxBus(parameters);
                                await Bus.ConnectAsync(CancellationToken.None);
                                CheckBusConnection();
-                               Console.WriteLine("Connecté en NAT");
+                               _logger.ConsoleAndLogWriteLine("Connecté en NAT");
                            }
                            catch (Exception e)
                            {
@@ -349,7 +349,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            Console.WriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
@@ -363,20 +363,20 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
 
     private void CheckError(Exception e)
     {
-        Console.WriteLine($"Erreur : {e.GetType().Name} - {e.Message}");
+        _logger.ConsoleAndLogWriteLine($"Erreur : {e.GetType().Name} - {e.Message}");
         if (NatAccess)
             if (e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase))
             {
-                Console.WriteLine("Authentification KNX Secure échouée. Vérifie :");
-                Console.WriteLine("- Adresse individuelle");
-                Console.WriteLine("- Adresse NAT et numéro de port");
+                _logger.ConsoleAndLogWriteLine("Authentification KNX Secure échouée. Vérifie :");
+                _logger.ConsoleAndLogWriteLine("- Adresse individuelle");
+                _logger.ConsoleAndLogWriteLine("- Adresse NAT et numéro de port");
             }
         if (e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine("Mot de passe invalide.");
+            _logger.ConsoleAndLogWriteLine("Mot de passe invalide.");
         if (e.Message.Contains("Could not find a part of the path", StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine("Chemin d'accès au fichier *.keyrings invalide.");
+            _logger.ConsoleAndLogWriteLine("Chemin d'accès au fichier *.keyrings invalide.");
         if (e.Message.Contains("Could not find file", StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine("Nom du fichier *.keyrings invalide.");
+            _logger.ConsoleAndLogWriteLine("Nom du fichier *.keyrings invalide.");
     }
 /// <summary>
 /// Vérifie si la connexion a été faite, met à jour l'interface et l'état de connexion.
@@ -616,15 +616,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged;
-    
-    // Permet de s'assurer que le bouton connexion NAT fonctionne
-    // Appelée par TestRechercherCommand dans le VM
-    // Juste pour tester, à supprimer ensuite
-    public async Task ClearField()
-    {
-        Console.WriteLine("Found an IP Adress : " + NatAddress);
-        NatAddress="";
-    }
     
     private void WhenPropertyChanged(string propertyName)
     {
