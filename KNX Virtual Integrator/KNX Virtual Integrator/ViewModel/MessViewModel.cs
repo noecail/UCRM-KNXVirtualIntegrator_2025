@@ -91,6 +91,8 @@ namespace KNX_Virtual_Integrator.ViewModel
         public AsyncRelayCommand ConnectBusCommand { get; }
         public AsyncRelayCommand DisconnectBusCommand { get; }
         public AsyncRelayCommand RefreshInterfacesCommand { get; }
+        // à implémenter dans le VM
+        public AsyncRelayCommand ConnectBusRemotelyCommand { get; private set; }
         
         // Pour tester, à supprimer plus tard
         public AsyncRelayCommand TestRechercherCommand { get; }
@@ -119,8 +121,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// </summary>
         public ICommand GenerateReportCommand { get; private set; }
 
-        // à implémenter dans le VM
-        public ICommand ConnectRemotelyCommand { get; private set; }
+       
 
         /* ------------------------------------------------------------------------------------------------
         -------------------------------- COMMANDES AVEC VALEUR DE RETOUR  ---------------------------------

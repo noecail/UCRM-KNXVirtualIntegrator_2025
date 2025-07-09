@@ -41,22 +41,27 @@ public interface IBusConnection : INotifyPropertyChanged
     /// <summary>
     /// Contient le nom de l'interface par laquelle la connexion au bus est actuellement établie.
     /// </summary>
-    string? CurrentInterface { get; }
+    string CurrentInterface { get; }
     
     /// <summary>
     /// Contient l'adresse du routeur IP distant permettant de se connecter à distance
     /// </summary>
-    string? NatAddress { get; set; }
-    
+    string NatAddress { get; set; }
+
+    /// <summary>
+    /// Choix d'accès à distance via NAT.
+    /// </summary>
+    public bool NatAccess { get; set; }
+
     /// <summary>
     /// Contient le mot de passe du fichier de clés sécurisant une connexion IP Secure
     /// </summary>
-    string? Password { get; set; }
+    string Password { get; set; }
     
     /// <summary>
     /// Contient le chemin vers le fichier de clés permettant la connexion IP Secure. Ce fichier a été exporté par l'utilisateur au préalable depuis ETS
     /// </summary>
-    string? KeysPath { get; set; }
+    string KeysPath { get; set; }
 
     
     // ------------------------------------ TACHES ------------------------------------

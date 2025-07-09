@@ -560,7 +560,7 @@
                              Text="{Binding _busConnection.NatAddress}"
                              />
                 </StackPanel>
-                <Button Command="{Binding Path=TestRechercherCommand}"
+                <Button Command="{Binding Path=ConnectBusRemotelyCommand}"
                         Style="{StaticResource ResearchButton}"
                         Padding="12,0"
                         Margin="0,5">

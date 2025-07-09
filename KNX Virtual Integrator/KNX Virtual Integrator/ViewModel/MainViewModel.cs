@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using Knx.Falcon;
+using KNXIntegrator.Models;
 using KNX_Virtual_Integrator.Model.Entities;
 
 
@@ -112,18 +112,25 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        ConnectBusCommand = new AsyncRelayCommand(modelManager.BusConnection.ConnectBusAsync);
-
+        ConnectBusCommand = new AsyncRelayCommand(
+            async _ =>
+            {
+                _busConnection.NatAccess = false;
+                await modelManager.BusConnection.ConnectBusAsync();
+            });
         DisconnectBusCommand = new AsyncRelayCommand(modelManager.BusConnection.DisconnectBusAsync);
 
         RefreshInterfacesCommand = new AsyncRelayCommand(modelManager.BusConnection.DiscoverInterfacesAsync);
 
-        // À implémenter, sera liée au bouton Connexion NAT
-        ConnectRemotelyCommand = new Commands.RelayCommand<object>(
-            _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
-        );
+        // A implémenter, sera liée au bouton Connexion NAT
+        ConnectBusRemotelyCommand = new AsyncRelayCommand(
+           async _ =>
+        {
+            _busConnection.NatAccess = true;
+            await modelManager.BusConnection.ConnectBusAsync();
+        });
 
-        // À supprimer plus tard, utilisée pour tester
+        // A supprimer plus tard, utilisée pour tester
         TestRechercherCommand = new AsyncRelayCommand(modelManager.BusConnection.ClearField);
         
 
