@@ -7,7 +7,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 public class NamespaceResolver(Logger logger) : INamespaceResolver 
 {
     public XNamespace? GlobalKnxNamespace ;
-    private readonly ILogger _logger = logger;
     
     // Method that retrieves the namespace to use for searching in .xml files from the zeroFilePath (since the namespace varies depending on the ETS version)
     /// <summary>
@@ -43,7 +42,7 @@ public class NamespaceResolver(Logger logger) : INamespaceResolver
         {
             // Si une exception est levée (par exemple, fichier introuvable, problème de lecture, XML mal formé),
             // on écrit sur le logger l'erreur avec un message décrivant l'exception.
-            _logger.ConsoleAndLogWriteLine($"Error setting namespace from XML: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error setting namespace from XML: {ex.Message}");
         }
 
     }

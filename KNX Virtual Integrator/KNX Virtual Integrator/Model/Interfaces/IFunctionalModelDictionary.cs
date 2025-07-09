@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using KNX_Virtual_Integrator.Model.Entities;
 
-namespace KNXIntegrator.Models
+namespace KNX_Virtual_Integrator.Model.Interfaces
 {
     /// <summary>
     /// Interface for managing a dictionary of functional models (FunctionalModel).

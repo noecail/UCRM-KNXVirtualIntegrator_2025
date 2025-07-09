@@ -1,11 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using Knx.Falcon;
-using KNXIntegrator.Models;
 using KNX_Virtual_Integrator.Model.Entities;
 
 
@@ -118,12 +118,12 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         RefreshInterfacesCommand = new AsyncRelayCommand(modelManager.BusConnection.DiscoverInterfacesAsync);
 
-        // A implémenter, sera liée au bouton Connexion NAT
+        // À implémenter, sera liée au bouton Connexion NAT
         ConnectRemotelyCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
         );
 
-        // A supprimer plus tard, utilisée pour tester
+        // À supprimer plus tard, utilisée pour tester
         TestRechercherCommand = new AsyncRelayCommand(modelManager.BusConnection.ClearField);
         
 

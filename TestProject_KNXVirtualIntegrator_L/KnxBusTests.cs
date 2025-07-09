@@ -1,5 +1,6 @@
 using Knx.Falcon.Sdk;  // Par exemple pour BusConnection, GroupAddress
 using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de l�.
+using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.ViewModel;
 using Knx.Falcon;
 using Knx.Falcon.Configuration;
@@ -14,13 +15,14 @@ namespace TestProject_KNXVirtualIntegrator_L
         private readonly GroupCommunication _groupCommunication;
         private readonly ConnectionInterfaceViewModel _selectedInterfaceUsb;
         private readonly ConnectionInterfaceViewModel _selectedInterfaceIp;
+        private readonly ILogger _logger = new Logger();
 
         public KnxBusTests(ITestOutputHelper output)
         {
             _output = output;
             // Initialisation de BusConnection et GroupCommunication
-            _busConnection = new BusConnection();
-            _groupCommunication = new GroupCommunication(_busConnection);
+            _busConnection = new BusConnection(_logger);
+            _groupCommunication = new GroupCommunication(_busConnection, _logger);
             // Initialisation des interfaces de la maquette 
             // Pour modifier les interfaces de test (changement de maquette, rafraichissement,...), rajouter des lignes
             // Console.Write au niveau de la fonction DiscoverInterfaceAsync dans les blocs if

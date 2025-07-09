@@ -253,7 +253,7 @@ public partial class App
         var fileLoader = new FileLoader(logger);
         var applicationFileManager = new ApplicationFileManager(logger);
         var systemSettingsDetector = new SystemSettingsDetector(logger);
-        var appSettings = new ApplicationSettings(applicationFileManager, systemSettingsDetector);
+        var appSettings = new ApplicationSettings(applicationFileManager, systemSettingsDetector, logger);
         var projectFileManager = new ProjectFileManager(logger, appSettings);
         var fileFinder = new FileFinder(logger, projectFileManager);
         var zipArchiveManager = new ZipArchiveManager(logger);
@@ -264,8 +264,8 @@ public partial class App
         var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader, namespaceResolver, groupAddressProcessor, groupAddressMerger);
         var projectInfoManager = new ProjectInfoManager(namespaceResolver);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
-        var busConnection = new BusConnection();
-        var groupCommunication = new GroupCommunication(busConnection);
+        var busConnection = new BusConnection(logger);
+        var groupCommunication = new GroupCommunication(busConnection, logger);
         var parentFinder = new ParentFinder(logger);
         var sliderClickHandler = new SliderClickHandler(logger, parentFinder);
         var pdfDocumentCreator = new PdfDocumentCreator(projectFileManager);

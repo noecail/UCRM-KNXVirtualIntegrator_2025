@@ -18,6 +18,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
 {
     public static XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01"; // Namespace utilisé pour les opérations KNX
 
+    private readonly ILogger _logger;
+    
     /// <summary>
     /// Représente l'objet de connexion au bus KNX. Peut-être nul si aucune connexion n'est établie.
     /// </summary>
@@ -32,11 +34,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// Collection observable des interfaces de connexion découvertes.
     /// </summary>
     public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces { get; private set; }
-
-    /// <summary>
-    /// Indique si le bus est actuellement connecté. Utilisé pour lier l'état de connexion à l'interface utilisateur.
-    /// </summary>
-    public bool IsBusConnected => IsConnected;
 
     /// <summary>
     /// Propriété privée qui stocke l'interface actuellement sélectionnée.
@@ -195,7 +192,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la console
-            Console.WriteLine($"Erreur lors de la découverte des interfaces: {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la découverte des interfaces: {ex.Message}");
         }
     }
     
@@ -251,7 +248,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
-                Console.WriteLine("Connexion réussie au bus.");
+                _logger.ConsoleAndLogWrite("Connexion réussie au bus.");
                 //MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             else
@@ -262,7 +259,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            Console.WriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
@@ -309,7 +306,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            Console.WriteLine($"Erreur lors de la déconnexion du bus : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la déconnexion du bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -415,7 +412,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             //Affiche un message d'erreur en cas d'exception
-            Console.WriteLine($"Erreur lors de la découverte des interfaces : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la découverte des interfaces : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
         }
     }
@@ -446,9 +443,10 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// Initialise une nouvelle instance de la classe <see cref="BusConnection"/>.
     /// Crée une nouvelle instance d'ObservableCollection pour stocker les interfaces découvertes.
     /// </summary>
-    public BusConnection()
+    public BusConnection(ILogger logger)
     {
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
+        _logger = logger;
     }
 
     // Permet de s'assurer que le bouton connexion NAT fonctionne
@@ -456,7 +454,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     // Juste pour tester, à supprimer ensuite
     public async Task ClearField()
     {
-        Console.WriteLine("Found an IP Adress : " + NatAddress);
+        _logger.ConsoleAndLogWriteLine("Found an IP Adress : " + NatAddress);
         NatAddress="";
     }
 

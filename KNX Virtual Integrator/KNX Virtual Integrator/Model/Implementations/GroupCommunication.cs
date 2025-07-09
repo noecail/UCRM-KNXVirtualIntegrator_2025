@@ -19,6 +19,8 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
 {
     private readonly BusConnection _busConnection;
 
+    private readonly ILogger _logger;
+    
     private GroupAddress _groupAddress;
 
     /// <summary>
@@ -48,9 +50,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// S'abonne à l'événement <see cref="BusConnection.BusConnectedReady"/> pour être informé lorsque le bus est prêt.
     /// </summary>
     /// <param name="busConnection">L'objet <see cref="BusConnection"/> utilisé pour la communication avec le bus KNX.</param>
-    public GroupCommunication(BusConnection busConnection)
+    public GroupCommunication(BusConnection busConnection,ILogger logger)
     {
         _busConnection = busConnection;
+        _logger = logger;
         BusChanged(null, _busConnection.Bus);
         _busConnection.BusConnectedReady += OnBusConnectedReady;
     }

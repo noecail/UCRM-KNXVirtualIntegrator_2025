@@ -1,5 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using KNXIntegrator.Models;
+using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Entities;
 
 

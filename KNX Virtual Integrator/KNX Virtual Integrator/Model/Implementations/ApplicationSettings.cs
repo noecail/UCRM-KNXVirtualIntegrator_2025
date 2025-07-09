@@ -9,23 +9,24 @@ namespace KNX_Virtual_Integrator.Model.Implementations
     /// </summary>
     public class ApplicationSettings : IApplicationSettings
     {
+        private readonly ILogger? _logger;
         /// <summary>
-        /// Gets or sets a value indicating whether the light theme is enabled.
+        /// Gets or sets a value indicating whether the light theme is enabled. Default is true.
         /// </summary>
         public bool EnableLightTheme { get; set; } = true;
 
         /// <summary>
-        /// Gets or sets the language used by the application.
+        /// Gets or sets the language used by the application. Default is French.
         /// </summary>
         public string AppLang { get; set; } = "FR";
 
         /// <summary>
-        /// Gets or sets the scale factor of the application interface.
+        /// Gets or sets the scale factor of the application interface. Default is 100.
         /// </summary>
         public int AppScaleFactor { get; set; } = 100;
 
         /// <summary>
-        /// Path to the application settings file
+        /// Path to the application settings file. Default is ./settings.xml.
         /// </summary>
         private readonly string _settingsFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "settings.xml");
 
@@ -36,8 +37,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         /// Loads the settings from the XML file if it exists. If the file is not found or an error occurs during loading,
         /// the default settings are used.
         /// </remarks>
-        public ApplicationSettings(ApplicationFileManager manager, SystemSettingsDetector detector)
+        public ApplicationSettings(IApplicationFileManager manager, ISystemSettingsDetector detector,ILogger logger)
         {
+            _logger = logger; 
             // Si le fichier de paramétrage n'existe pas, on détecte les paramètres de windows
             if (!manager.EnsureSettingsFileExists(_settingsFilePath))
             {
@@ -49,7 +51,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 try
                 {
-                    var serializer = new XmlSerializer(typeof(ApplicationSettings));
+                    var serializer = new XmlSerializer(typeof(IApplicationSettings));
                     using var fileStream = new FileStream(_settingsFilePath, FileMode.Open);
                     var loadedSettings = (ApplicationSettings)serializer.Deserialize(fileStream)!;
 
@@ -60,7 +62,8 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 catch (Exception e)
                 {
                     // Handle the exception (e.g., log the error, notify the user, etc.)
-                    Console.WriteLine($"Error loading settings: {e.Message}");
+                    _logger.ConsoleAndLogWriteLine($"Error loading settings: {e.Message}");
+                    
                 }
             }
         }
@@ -70,7 +73,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         /// </summary>
         public ApplicationSettings()
         {
-            
+           
         }
 
         /// <summary>
@@ -91,7 +94,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             catch (Exception e)
             {
                 // Handle the exception (e.g., log the error, notify the user, etc.)
-                Console.WriteLine($"Error saving settings: {e.Message}");
+                _logger!.ConsoleAndLogWriteLine($"Error saving settings: {e.Message}");
             }
         }
     }

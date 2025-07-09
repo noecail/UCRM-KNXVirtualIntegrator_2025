@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
+using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
 
 
-namespace KNXIntegrator.Models
+namespace KNX_Virtual_Integrator.Model.Implementations
 {
     //Find Summary in the interface
     public class FunctionalModelDictionary : IFunctionalModelDictionary
