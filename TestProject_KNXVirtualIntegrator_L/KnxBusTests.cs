@@ -35,56 +35,67 @@ namespace TestProject_KNXVirtualIntegrator_L
         [Fact]
         public async Task Discover_KnxInterfaces()
         {
-            // Étape 1 : Récupération de toutes les interfaces détectées par Falcon
+            // Arrange
+            var numberOfInterfaces = 0;
+            
+            // Act
+            // Récupération de toutes les interfaces détectées par Falcon
             var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
-            var numberInterfaces = 0;
 
-            // Étape 2 : Affichage console pour visualiser les interfaces disponibles
+
+            // Assert
+            // Affichage console pour visualiser les interfaces disponibles
             await foreach (var knxInterface in interfaces)
             {
                 foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
                 {
-                    numberInterfaces++;
+                    numberOfInterfaces++;
                     var displayName = tunnelInterfaces.IndividualAddress.HasValue
                         ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
                         : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
                     _output.WriteLine($"[DETECTED] {displayName} → {knxInterface}");
                 }
             }
-            // Étape 3 : Vérifications basiques sur la liste d'interfaces
-            Assert.True(numberInterfaces != 0,"No IP Tunneling Interface found");
+            // Vérification qu'on a eut au moins une interface
+            Assert.True(numberOfInterfaces != 0,"No IP Tunneling Interface found");
         }
 
         [Fact]
-        public async Task Test_KnxBus_IPConnect_Auto()
+        public async Task Test_KnxBus_IPConnectLastDiscoveredInterface_Auto()
         {
-            // Étape 1 : Récupération des interfaces disponibles
-            var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+            // Arrange
             
+            // Act
+            // Récupération des interfaces disponibles
+            var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
             await foreach (var knxInterface in interfaces)
             {
                 foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
                 {
-                    // Étape 4 : Connexion au bus via l'interface détectée
                     _busConnection.SelectedInterface = new ConnectionInterfaceViewModel(tunnelInterfaces.Type, tunnelInterfaces.Name, tunnelInterfaces.ToConnectionString());
                 }
             }
+            // Connexion au bus via l'interface détectée
             await _busConnection.ConnectBusAsync();
 
-            // Étape 5 : Vérification de la connexion
+            // Assert
+            // Vérification de la connexion
             Assert.True(_busConnection.IsConnected, "Connexion IP échouée.");
 
-            // Étape 6 : Déconnexion propre du bus
+            // Cleanup
             await _busConnection.DisconnectBusAsync();
+            _busConnection.SelectedInterface ??= null;
         }
 
         [Fact]
-        public async Task Test_KnxBus_USBConnect_Auto()
+        public async Task Test_KnxBus_USBConnectFirstOrDefaultInterface_Auto()
         {
-            // Étape 1 : Récupère les périphériques USB connectés
+            // Arrange
+            
+            // Act 
+            // Récupère les périphériques USB connectés
             var usbDevices = KnxBus.GetAttachedUsbDevices();
-
-            // Étape 2 : Transforme chaque périphérique en une interface de connexion utilisable
+            // Transforme chaque périphérique en une interface de connexion utilisable
             var selectedInterface = usbDevices.Select(device =>
                 new ConnectionInterfaceViewModel(
                     ConnectorType.Usb,
@@ -92,56 +103,69 @@ namespace TestProject_KNXVirtualIntegrator_L
                     device.ToConnectionString()
                 )
             ).FirstOrDefault();
-
-            // Étape 3 : Si aucun périphérique trouvé, échoue le test
+            // Si aucun périphérique trouvé, échoue le test
             if (selectedInterface == null)
             {
                 Assert.Fail("Aucune interface USB détectée.");
             }
-
-            // Étape 4 : Affiche l'interface sélectionnée
+            // Affiche l'interface sélectionnée
             _output.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName + " " + selectedInterface.ConnectionString);
-
-            // Étape 5 : Connexion au bus
+            // Connexion au bus
             _busConnection.SelectedInterface = selectedInterface;
             await _busConnection.ConnectBusAsync();
 
-            // Étape 6 : Vérifie que la connexion a réussi
+            
+            // Assert
+            // Vérifie que la connexion a réussi
             Assert.True(_busConnection.IsConnected, "Connexion USB échouée.");
 
-            // Étape 7 : Déconnexion
+            // Cleanup
             await _busConnection.DisconnectBusAsync();
+            _busConnection.SelectedInterface ??= null;
         }
 
         [Fact]
         public async Task Test_KnxBus_ConnectionFails_WithInvalidInterface()
         {
+            // Arrange
             // Crée une fausse interface IP qui ne pointe vers aucun vrai appareil
             var fakeInterface = new ConnectionInterfaceViewModel(
                 ConnectorType.IpTunneling,
                 "Interface IP Invalide",
                 "Type=IpTunneling;HostAddress=192.0.2.123"
             );
-
             // On utilise cette fausse interface pour la connexion
             _busConnection.SelectedInterface = fakeInterface;
 
+            // Act
             // On tente de se connecter
             await _busConnection.ConnectBusAsync();
 
+            // Assert
             // Vérifie que la connexion a échoué
             Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une interface invalide.");
 
-            // Nettoyage
+            // Cleanup
             await _busConnection.DisconnectBusAsync();
+            _busConnection.SelectedInterface ??= null;
         }
         
         
         [Fact]
         public async Task Test_WriteWithoutConnection(){
+            
+            // Arrange
+            // Création d'une adresse de groupe et d'une valeur à écrire
             var groupAddress = new GroupAddress("1/2/3");
             var groupValue = new GroupValue(true);
+            // On vérifie que le bus n'est pas connecté
+            if (_busConnection.IsConnected)
+            {
+                await _busConnection.DisconnectBusAsync();
+            }
+            _busConnection.SelectedInterface ??= null;
 
+            // Act and Assert
             // On vérifie que la méthode échoue quand on n'est pas connecté au bus
             var exception = await Assert.ThrowsAsync<NullReferenceException>(() =>
                 _busConnection.Bus!.WriteGroupValueAsync(
@@ -153,79 +177,90 @@ namespace TestProject_KNXVirtualIntegrator_L
         [Fact]
         public async Task Test_KnxBus_IPConnect()
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
+            // Arrange
+            // Création et configuration de l'interface de connexion
             // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
             // Assignez l'interface sélectionnée à la connexion au bus
             _busConnection.SelectedInterface = _selectedInterfaceIp;
-
-            // Étape 2 : Connexion au bus KNX
+            
+            // Act
+            // Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
-            bool isConnected = _busConnection.IsConnected;
 
-            // Étape 3 : Déconnexion du bus KNX (optionnel)
+            // Assert
+            // Pour vérifier si la connexion a réussi
+            Assert.True(_busConnection.IsConnected, "KNX IP Bus connection failed.");
+            
+            // Cleanup
             await _busConnection.DisconnectBusAsync();
-
-            // Assertion pour vérifier si la connexion a réussi
-            Assert.True(isConnected, "KNX IP Bus connection failed.");
+            _busConnection.SelectedInterface ??= null;
         }
         
         
         [Fact]
         public async Task Test_KnxBus_USBConnect()
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
+            // Arrange
+            // Création et configuration de l'interface de connexion
             // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
-            // Assignez l'interface sélectionnée � la connexion au bus
+            // Assignez l'interface sélectionnée à la connexion au bus
             _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
-            // Étape 2 : Connexion au bus KNX
+            // Act
+            // Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
-            bool isConnected = _busConnection.IsConnected;
             
-            // Étape 3 : Déconnexion du bus KNX (optionnel)
+            // Assert
+            // Pour vérifier si la connexion a réussi
+            Assert.True(_busConnection.IsConnected, "KNX Bus connection failed.");
+            
+            // Cleanup
             await _busConnection.DisconnectBusAsync();
-            
-            // Assertion pour vérifier si la connexion a réussi
-            Assert.True(isConnected, "KNX Bus connection failed.");
+            _busConnection.SelectedInterface ??= null;
         }
         
         
         [Fact]
         public async Task Test_KnxBus_USBConnect_Disconnect()
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
+            // Arrange
             // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
             // Assignez l'interface sélectionnée à la connexion au bus
             _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
-            // Étape 2 : Connexion au bus KNX
+            // Act
+            // Connexion puis déconnexion du bus KNX
             await _busConnection.ConnectBusAsync();
             var wasConnected = _busConnection.IsConnected;
-            
-            // Étape 3 : Déconnexion du bus KNX (optionnel)
             await _busConnection.DisconnectBusAsync();
             var isDisconnected = _busConnection.IsConnected;
             
-            // Assertion pour vérifier si la connexion a réussi
+            // Assert
+            // Pour vérifier si la déconnexion a réussi
             Assert.False(isDisconnected || !wasConnected, "KNX Bus disconnection failed.");
+            //Cleanup
+            _busConnection.SelectedInterface ??= null;
         }
         
-        
-        [Fact]
-        public async Task Test_KnxBus_USBConnectThenSendFrame_ReadValue()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task Test_KnxBus_USBConnectThenSendBool_ReadFirstFrame(bool commuteValue)
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
+            // Arrange
+            // Création et configuration de l'interface de connexion
             // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
             // Assignez l'interface sélectionnée à la connexion au bus
             _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
-            // Étape 2 : Connexion au bus KNX
+            // Act
+            // Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
 
-            // Étape 3 : Envoi d'une trame à une adresse de groupe d�finie
+            // Envoi d'une trame à une adresse de groupe d�finie
             var testGroupAddress = new GroupAddress("0/1/1");
             var readGroupAddress = new GroupAddress("0/2/1");
-            var testGroupValue = new GroupValue(true); // Valeur d'exemple (1 bit)
+            var testGroupValue = new GroupValue(commuteValue); // Valeur d'exemple (1 bit/boolean)
 
             // Envoi de la valeur sur le bus
             await _groupCommunication.GroupValueWriteAsync(testGroupAddress, testGroupValue);
@@ -236,44 +271,51 @@ namespace TestProject_KNXVirtualIntegrator_L
             // Étape 4 : Lecture de la valeur de l'adresse de groupe
             var readGroupValue = await _groupCommunication.MaGroupValueReadAsync(readGroupAddress);
 
-            //Assertion pour vérifier si la valeur envoyée est bien celle lue
+            // Assert
+            // Pour vérifier si la valeur envoyée est bien celle lue
             Assert.Equal(testGroupValue, readGroupValue);
             _output.WriteLine("test value " + testGroupValue);
             _output.WriteLine("Read group value :" + readGroupValue);
-            // Étape 5 : Déconnexion du bus KNX (optionnel)
+            
+            // Cleanup
             await _busConnection.DisconnectBusAsync();
+            _busConnection.SelectedInterface ??= null;
         }
         
         
-        [Fact]
-        public async Task Test_KnxBus_USBConnectThenSendFrame_ReadAllValues()
+        [Theory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public async Task Test_KnxBus_USBConnectThenSendBool_ReadAllFrames(bool commuteValue)
         {
-            // Étape 1 : Création et configuration de l'interface de connexion
+            // Arrange
+            // Envoi d'une trame à une adresse de groupe d�finie
+            var testGroupAddress = new GroupAddress("0/1/1");
+            var readGroupAddress = new GroupAddress("0/2/1");
+            var testGroupValue = new GroupValue(commuteValue); // Valeur d'exemple (1 bit)
+            // Création et configuration de l'interface de connexion
             // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
             // Assignez l'interface sélectionnée à la connexion au bus
             _busConnection.SelectedInterface = _selectedInterfaceUsb;
 
-            // Étape 2 : Connexion au bus KNX
+            // Act
+            // Connexion au bus KNX puis écriture de la valeur
             await _busConnection.ConnectBusAsync();
-
-            // Étape 3 : Envoi d'une trame à une adresse de groupe d�finie
-            var testGroupAddress = new GroupAddress("0/1/1");
-            var readGroupAddress = new GroupAddress("0/2/1");
-            var testGroupValue = new GroupValue(false); // Valeur d'exemple (1 bit)
-
             await _groupCommunication.GroupValueWriteAsync(testGroupAddress, testGroupValue);
-
-            // Étape 4 : Lecture de la valeur de l'adresse de groupe
+            // Lecture des trames dans l'adresse de groupe pendant 2 secondes
             var readGroupValue = await _groupCommunication.GroupValuesWithinTimerAsync(readGroupAddress,2000 );
-            //Assertion pour vérifier si on reçoit bien des valeurs et les afficher
+            
+            // Assert
+            // Pour vérifier si on reçoit bien des valeurs et les afficher
             Assert.True(readGroupValue.Count >= 1, "No value was read from the bus");
             _output.WriteLine("test value : " + testGroupValue);
             foreach (var lValue in readGroupValue)
             {
-                _output.WriteLine("Read group value :" + lValue.Value);
+                _output.WriteLine("Read group value : " + lValue.Value);
             }
-            // Étape 5 : Déconnexion du bus KNX (optionnel)
+            // Cleanup
             await _busConnection.DisconnectBusAsync();
+            _busConnection.SelectedInterface ??= null;
         }
     }
 }

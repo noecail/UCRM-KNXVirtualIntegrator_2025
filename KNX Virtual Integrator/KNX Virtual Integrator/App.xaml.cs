@@ -23,7 +23,6 @@ using System.Windows;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.View;
-using KNX_Virtual_Integrator.View.Windows;
 using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator;
@@ -220,7 +219,7 @@ public partial class App
     /// </summary>
     private static ModelManager? ModelManager { get; set; }
 
-    private ReportCreationWindow? _creationWindow;
+    //private ReportCreationWindow? _creationWindow;
         
         
     /* ------------------------------------------------------------------------------------------------

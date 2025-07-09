@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using Knx.Falcon.Sdk;
 using System.Timers;
+using System.Windows.Threading;
 using Timer = System.Timers.Timer;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
@@ -317,7 +318,6 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         BusChanged(null, newBus);
         // Attention potentiellement si je me connecte à un nouveau bus l'ancien ne se désabonne pas de l'événement dans BusChanged
     }
-
     /// <summary>
     /// Gère les changements de bus en désabonnant l'ancien bus et en abonnissant le nouveau bus aux événements.
     /// Réinitialise la liste des événements de groupe.
@@ -379,10 +379,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         //TODO : Dé-commenter lorsque l'interface Dispatcher wrapper sera créée pour permettre de tester
         
         // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
-        //Application.Current.Dispatcher.Invoke(() =>
-        //{
+        Dispatcher.CurrentDispatcher.Invoke(() =>
+        {
             // Ajoute la nouvelle entrée à la liste observable
             Messages.Add(newMessage);
-        //});
+        });
     }
 }

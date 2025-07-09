@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Xml.Linq;
+using System.Windows.Threading;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.ViewModel;
 using Knx.Falcon.Configuration;
@@ -96,7 +97,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         get => _currentInterface;
         set
         {
-            if (_currentInterface == value) return; // Pas de changement si la valeur est la même 
+            if (_currentInterface == value) return ; // Pas de changement si la valeur est la même 
             _currentInterface = value;
             WhenPropertyChanged(nameof(CurrentInterface)); // Notifie l'interface utilisateur du changement
 
@@ -334,7 +335,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 await Task.WhenAll(ipDiscoveryTask);
 
                 // Met à jour la collection des interfaces découvertes sur l'interface utilisateur
-                Application.Current.Dispatcher.Invoke(() =>
+                Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
                     DiscoveredInterfaces.Clear();
                     foreach (var discoveredInterface in discoveredInterfaces)

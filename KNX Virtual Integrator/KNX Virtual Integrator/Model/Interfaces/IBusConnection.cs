@@ -38,7 +38,7 @@ public interface IBusConnection : INotifyPropertyChanged
     /// <summary>
     /// Contient le nom de l'interface par laquelle la connexion au bus est actuellement établie.
     /// </summary>
-    string CurrentInterface { get; }
+    string? CurrentInterface { get; }
 
     /// <summary>
     /// Établit une connexion asynchrone au bus KNX.

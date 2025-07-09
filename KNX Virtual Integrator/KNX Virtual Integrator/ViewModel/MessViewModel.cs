@@ -44,7 +44,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             }
         }
         public bool IsConnected => _busConnection.IsConnected;
-        public string CurrentInterface => _busConnection.CurrentInterface;
+        public string? CurrentInterface => _busConnection.CurrentInterface;
 
         /* ------------------------------------------------------------------------------------------------
   -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
