@@ -10,6 +10,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
     public class ApplicationSettings : IApplicationSettings
     {
         private readonly ILogger? _logger;
+        
         /// <summary>
         /// Gets or sets a value indicating whether the light theme is enabled. Default is true.
         /// </summary>
@@ -19,7 +20,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         /// Gets or sets the language used by the application. Default is French.
         /// </summary>
         public string AppLang { get; set; } = "FR";
-
+        
         /// <summary>
         /// Gets or sets the scale factor of the application interface. Default is 100.
         /// </summary>

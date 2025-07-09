@@ -21,6 +21,9 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// Représente l'objet de connexion au bus KNX. Peut-être nul si aucune connexion n'est établie.
     /// </summary>
     public KnxBus? Bus;
+    
+    private readonly ILogger _logger;
+
 
     /// <summary>
     /// Permet l'annulation d'opérations asynchrones en cours. Peut-être nul si aucune opération n'est en cours.
@@ -222,7 +225,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la console
-            Console.WriteLine($"Erreur lors de la découverte des interfaces: {ex.Message}");
+            _logger.ConsoleAndLogWrite($"Erreur lors de la découverte des interfaces: {ex.Message}");
         }
     }
     
@@ -234,7 +237,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <returns>Une tâche représentant l'opération de connexion asynchrone.</returns>
     public async Task ConnectBusAsync()
     {
-        Console.WriteLine("Found an IP Address : " + NatAddress);
+        _logger.ConsoleAndLogWrite("Found an IP Address : " + NatAddress);
         
         if (IsBusy)
             return; // Retourne immédiatement si une opération est déjà en cours
@@ -274,7 +277,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Erreur : {ex.GetType().Name} - {ex.Message}");
+                    _logger.ConsoleAndLogWrite($"Erreur : {ex.GetType().Name} - {ex.Message}");
                     if (ex.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase)) //Si l'interface est sécurisée
                     {
                         try
@@ -283,7 +286,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                             Bus = new KnxBus(parameters);
                             await Bus.ConnectAsync(CancellationToken.None);
                             CheckBusConnection();
-                            Console.WriteLine("Connecté en NAT");
+                            _logger.ConsoleAndLogWrite("Connecté en NAT");
                         }
                         catch (Exception e)
                         {
@@ -313,7 +316,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Erreur : {ex.GetType().Name} - {ex.Message}");
+                    _logger.ConsoleAndLogWrite($"Erreur : {ex.GetType().Name} - {ex.Message}");
                     // Si l'erreur est user login failed
                     if (ex.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase))
                     {
@@ -353,7 +356,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            Console.WriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
+            _logger.ConsoleAndLogWrite($"Erreur lors de la connexion au bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
@@ -367,20 +370,20 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
 
     private void CheckError(Exception e)
     {
-        Console.WriteLine($"Erreur : {e.GetType().Name} - {e.Message}");
+        _logger.ConsoleAndLogWrite($"Erreur : {e.GetType().Name} - {e.Message}");
         if (NatAccess)
             if (e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase))
             {
-                Console.WriteLine("Authentification KNX Secure échouée. Vérifie :");
-                Console.WriteLine("- Adresse individuelle");
-                Console.WriteLine("- Adresse NAT et numéro de port");
+                _logger.ConsoleAndLogWrite("Authentification KNX Secure échouée. Vérifie :");
+                _logger.ConsoleAndLogWrite("- Adresse individuelle");
+                _logger.ConsoleAndLogWrite("- Adresse NAT et numéro de port");
             }
         if (e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine("Mot de passe invalide.");
+            _logger.ConsoleAndLogWrite("Mot de passe invalide.");
         if (e.Message.Contains("Could not find a part of the path", StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine("Chemin d'accès au fichier *.keyrings invalide.");
+            _logger.ConsoleAndLogWrite("Chemin d'accès au fichier *.keyrings invalide.");
         if (e.Message.Contains("Could not find file", StringComparison.OrdinalIgnoreCase))
-            Console.WriteLine("Nom du fichier *.keyrings invalide.");
+            _logger.ConsoleAndLogWrite("Nom du fichier *.keyrings invalide.");
     }
 /// <summary>
 /// Vérifie si la connexion a été faite, met à jour l'interface et l'état de connexion.
@@ -403,14 +406,14 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
-                Console.WriteLine("Connexion réussie au bus.");
+                _logger.ConsoleAndLogWrite("Connexion réussie au bus.");
                 //MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
             }
         }
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            Console.WriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
+            _logger.ConsoleAndLogWrite($"Erreur lors de la connexion au bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
@@ -458,7 +461,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            Console.WriteLine($"Erreur lors de la déconnexion du bus : {ex.Message}");
+            _logger.ConsoleAndLogWrite($"Erreur lors de la déconnexion du bus : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -564,7 +567,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             //Affiche un message d'erreur en cas d'exception
-            Console.WriteLine($"Erreur lors de la découverte des interfaces : {ex.Message}");
+            _logger.ConsoleAndLogWrite($"Erreur lors de la découverte des interfaces : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la découverte des interfaces : {ex.Message}");
         }
     }
@@ -595,10 +598,11 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// Initialise une nouvelle instance de la classe <see cref="BusConnection"/>.
     /// Crée une nouvelle instance d'ObservableCollection pour stocker les interfaces découvertes.
     /// </summary>
-    public BusConnection()
+    public BusConnection(ILogger logger)
     {
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
         _password = "";
+        _logger = logger;
         _natAddress = "";
         _keysPath = "";
     }
@@ -620,7 +624,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     // Juste pour tester, à supprimer ensuite
     public async Task ClearField()
     {
-        Console.WriteLine("Found an IP Address : " + NatAddress);
+        _logger.ConsoleAndLogWrite("Found an IP Address : " + NatAddress);
         NatAddress="";
     }
     
