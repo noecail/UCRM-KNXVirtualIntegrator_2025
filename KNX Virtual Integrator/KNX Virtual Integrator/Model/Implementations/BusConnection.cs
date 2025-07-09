@@ -1,4 +1,3 @@
-
 using CommunityToolkit.Mvvm.ComponentModel;
 using Knx.Falcon;
 using System.Collections.ObjectModel;
@@ -6,11 +5,13 @@ using System.ComponentModel;
 using System.Windows;
 using System.Xml.Linq;
 using System.Windows.Threading;
+using System.Security;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.ViewModel;
 using Knx.Falcon.Configuration;
 using Knx.Falcon.KnxnetIp;
 using Knx.Falcon.Sdk;
+using System.Net;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
@@ -51,7 +52,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         get => _selectedInterface;
         set => SetProperty(ref _selectedInterface, value); // Notifie l'interface utilisateur des changements
     }
-
+    
     /// <summary>
     /// Indique si une tâche ou une opération est en cours (par exemple, une connexion). Utilisé pour désactiver l'interface utilisateur pendant les opérations.
     /// </summary>
@@ -91,6 +92,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// Interface de la connexion actuelle
     /// </summary>
     private string? _currentInterface = "Aucune interface connectée";
+
     public string? CurrentInterface
     {
         get => _currentInterface;
@@ -117,6 +119,25 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         }
     }
     
+    
+    /// <summary>
+    /// Choix d'accès à distance via NAT.
+    /// </summary>
+    public bool NatAccess = false;
+
+    /// <summary>
+    /// Port cible pour le NAT.
+    /// </summary>
+    public int NatPort = 3671;
+
+    /// <summary>
+    /// Adresse de l'interface IP;
+    /// </summary>
+    public string InterfaceAddress="1.1.255";
+
+
+
+    
     /// <summary>
     /// Mot de passe permettant l'accès au fichier de clé pour connexion IP Secure
     /// </summary>
@@ -128,10 +149,18 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         {
             if (_password == value) return; // Pas de changement si la valeur est la même 
             _password = value;
+            _securePassword.Clear();
+            foreach (var c in _password)
+                _securePassword.AppendChar(c);
             WhenPropertyChanged(nameof(Password)); // Notifie l'interface utilisateur du changement
         }
-    }  
-    
+    }
+
+    /// <summary>
+    /// Mot de passe sécurisé actuellement sélectionné.
+    /// </summary>
+    private SecureString _securePassword = new SecureString();
+
     /// <summary>
     /// Chemin du fichier de clés pour connexion IP Secure
     /// /// </summary>
@@ -235,14 +264,131 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 Bus = null;
                 UpdateConnectionState(); // Met à jour l'état de connexion
             }
+            
+            Password = "Demo2025#";
+            KeysPath = @"C:\Users\manui\Documents\Stage 4A\MCP-KNX-V2.knxkeys";
+            if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=IP" or "Type=IP")
+            {
+                if (NatAccess)
+                {
+                    var parameters = new IpTunnelingConnectorParameters(NatAddress, NatPort, IpProtocol.Auto, useNat: true) //Crée les paramètres de connexion
+                    {
+                        IndividualAddress = IndividualAddress.Parse(InterfaceAddress),
+                        RequiresSecurity = true 
+                    };
+                    // Crée un nouvel objet de bus avec les paramètres du NAT
+                   Bus = new KnxBus(parameters);
+                   try
+                   {
+                       await Bus.ConnectAsync(CancellationToken.None);
+                       CheckBusConnection();
+                   }
+                   catch (Exception ex)
+                   {
+                       Console.WriteLine($"Erreur : {ex.GetType().Name} - {ex.Message}");
+                       if (ex.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase)) //Si l'interface est sécurisée
+                       {
+                           try
+                           {
+                               await parameters.LoadSecurityDataAsync(KeysPath,_securePassword);
+                               Bus = new KnxBus(parameters);
+                               await Bus.ConnectAsync(CancellationToken.None);
+                               CheckBusConnection();
+                               Console.WriteLine("Connecté en NAT");
+                           }
+                           catch (Exception e)
+                           {
+                               CheckError(e);
+                           }           
+                       }
+                   }
+                }
+                else
+                {
+                   var parameters = IpTunnelingConnectorParameters.FromConnectionString(connectionString);
+                   
+                   // Crée un nouvel objet de bus avec les paramètres extraits de la chaîne de connexion
+                   Bus = new KnxBus(parameters);
+                   try
+                   {
+                       // Tentative de connexion au bus
+                       await Bus.ConnectAsync(CancellationToken.None);
+                       CheckBusConnection();
+                   }
+                   catch (Exception ex)
+                   {
+                       // Si l'erreur est user login failed
+                       if (ex.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase))
+                       {
+                           try
+                           {
+                               // Ajouter le mot de passe 
+                               await parameters.LoadSecurityDataAsync(KeysPath,_securePassword);
+                               
+                               // Créer un bus avec les mots de passe
+                               Bus = new KnxBus(parameters);
+                               await Bus.ConnectAsync(CancellationToken.None);
+                               CheckBusConnection();            
+                           }
+                           catch (Exception e)
+                           {
+                               CheckError(e);
+                           }           
+                       }
+                   }               
+                }
+            }
 
-            // Crée un nouvel objet de bus avec les paramètres extraits de la chaîne de connexion
-            var connectorParameters = ConnectorParameters.FromConnectionString(connectionString);
-            Bus = new KnxBus(connectorParameters);
 
-            // Établit la connexion au bus
-            await Bus.ConnectAsync(CancellationTokenSource.Token);
+            else // Dans le cas d'une connexion USB
+            {
+               var parameters = ConnectorParameters.FromConnectionString(connectionString);
+               Bus = new KnxBus(parameters);
+               // Établit la connexion au bus
+               await Bus.ConnectAsync(CancellationTokenSource.Token);
+               CheckBusConnection();
+            }
+        }
+        catch (Exception ex)
+        {
+            // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
+            Console.WriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
+            //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            IsBusy = false; // Réinitialise l'état d'occupation
+            ResetCancellationTokenSource(); // Réinitialise le token d'annulation
+        }
+    }
 
+
+
+    private void CheckError(Exception e)
+    {
+        Console.WriteLine($"Erreur : {e.GetType().Name} - {e.Message}");
+        if (NatAccess)
+            if (e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine("Authentification KNX Secure échouée. Vérifie :");
+                Console.WriteLine("- Adresse individuelle");
+                Console.WriteLine("- Adresse NAT et numéro de port");
+            }
+        if (e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine("Mot de passe invalide.");
+        if (e.Message.Contains("Could not find a part of the path", StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine("Chemin d'accès au fichier *.keyrings invalide.");
+        if (e.Message.Contains("Could not find file", StringComparison.OrdinalIgnoreCase))
+            Console.WriteLine("Nom du fichier *.keyrings invalide.");
+    }
+/// <summary>
+/// Vérifie si la connexion a été faite, met à jour l'interface et l'état de connexion.
+/// </summary>
+/// <exception cref="InvalidOperationException"></exception>
+    private void CheckBusConnection()
+    {
+        try
+        {
             // Vérifie si la connexion est établie avec succès
             if (Bus.ConnectionState == BusConnectionState.Connected)
             {
@@ -256,7 +402,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             }
             else
             {
-                throw new InvalidOperationException("La connexion au bus a échoué."); // Lance une exception si la connexion échoue
+                throw new InvalidOperationException(
+                    "La connexion au bus a échoué."); // Lance une exception si la connexion échoue
             }
         }
         catch (Exception ex)
@@ -376,7 +523,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 await Task.WhenAll(ipDiscoveryTask);
 
                 // Met à jour la collection des interfaces découvertes sur l'interface utilisateur
-                Dispatcher.CurrentDispatcher.Invoke(() =>
+                Application.Current.Dispatcher.Invoke(() =>
                 {
                     DiscoveredInterfaces.Clear();
                     foreach (var discoveredInterface in discoveredInterfaces)
@@ -451,15 +598,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
     }
 
-    // Permet de s'assurer que le bouton connexion NAT fonctionne
-    // Appelée par TestRechercherCommand dans le VM
-    // Juste pour tester, à supprimer ensuite
-    public async Task ClearField()
-    {
-        Console.WriteLine("Found an IP Adress : " + NatAddress);
-        NatAddress="";
-    }
-
     /// <summary>
     /// Réinitialise le token d'annulation en le disposant s'il existe, puis en créant un nouveau.
     /// Cette méthode est utilisée pour préparer un nouveau token d'annulation pour les opérations en cours.
@@ -471,6 +609,15 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged;
+    
+    // Permet de s'assurer que le bouton connexion NAT fonctionne
+    // Appelée par TestRechercherCommand dans le VM
+    // Juste pour tester, à supprimer ensuite
+    public async Task ClearField()
+    {
+        Console.WriteLine("Found an IP Adress : " + NatAddress);
+        NatAddress="";
+    }
     
     private void WhenPropertyChanged(string propertyName)
     {
