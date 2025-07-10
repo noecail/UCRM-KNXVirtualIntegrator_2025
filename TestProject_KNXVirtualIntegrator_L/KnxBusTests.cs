@@ -85,7 +85,7 @@ namespace TestProject_KNXVirtualIntegrator_L
 
             // Assert
             // Vérification de la connexion
-            Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface != null, "Connexion IP échouée avec des interfaces trouvées.");
+            Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null, "Connexion IP échouée avec des interfaces trouvées.");
             _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
             
             // Cleanup
