@@ -449,6 +449,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="50" />
             </Grid.RowDefinitions>
 
@@ -675,7 +676,8 @@
                    Margin="21,0,0,10" 
                    Text="{Binding _busConnection.KeysPath}"
                    TextAlignment="Left"
-                   FontSize="10">
+                   FontSize="10"
+                   TextWrapping="Wrap">
                 </TextBlock>
                 
                 <Grid HorizontalAlignment="Center" Height="30">
@@ -700,8 +702,22 @@
                 
             </StackPanel>
             
+            <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,0" Visibility="{Binding ErrorMessageVisibility}">
+                <TextBlock
+                    Text="Erreur lors de la connexion"
+                    FontWeight="Bold"
+                    Foreground="Red"
+                    />
+                <TextBlock
+                    Text="{Binding _busConnection.ConnectionErrorMessage}"
+                    FontWeight="SemiBold"
+                    Foreground="Red"
+                    TextWrapping="Wrap"
+                    />
+            </StackPanel>
+            
             <!-- Current Interface Display Section -->
-            <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,10" Width="250">
+            <StackPanel Grid.Row="5" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,10" Width="250">
                 <TextBlock
                     Margin="5,0,5,0"
                     Text="Interface actuellement connectée :"
@@ -720,7 +736,7 @@
 
 
             <!-- Section for connection and disconnection -->
-            <Grid Grid.Row="5" Margin="20,0" VerticalAlignment="Center">
+            <Grid Grid.Row="6" Margin="20,0" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de déconnexion -->
                     <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de connexion -->

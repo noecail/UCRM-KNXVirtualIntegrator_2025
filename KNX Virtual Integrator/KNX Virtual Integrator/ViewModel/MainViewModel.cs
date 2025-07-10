@@ -86,6 +86,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     SecureConnectionVisibility = Visibility.Collapsed;
                 }
             }
+            else if (e.PropertyName == nameof(_busConnection.ConnectionErrorMessage))
+            {
+                if (_busConnection.ConnectionErrorMessage == "") ErrorMessageVisibility = Visibility.Collapsed;
+                else ErrorMessageVisibility = Visibility.Visible;
+            }
         };
         
         _busConnection.SelectedConnectionType = "USB";
