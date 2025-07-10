@@ -85,7 +85,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
             //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -116,7 +116,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
             //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -143,14 +143,14 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             }
             else
             {
-                Console.WriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.");
+                _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.");
                 //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //inclure un "return", comme il faut renvoyer du "void"?
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors de l'envoi de la trame : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de l'envoi de la trame : {ex.Message}");
             //MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
@@ -183,7 +183,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     {
         if (_busConnection is { IsConnected: false, IsBusy: true, Bus: not null })
         {
-            Console.WriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
+            _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
             //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.",
             //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
             return null;
@@ -223,7 +223,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
             //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             if (_busConnection is {Bus: not null })
@@ -250,7 +250,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         Timer timer = new Timer(timerDuration);
         if (_busConnection is { IsConnected: false, IsBusy: true })
         {
-            Console.WriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
+            _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
             //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.",
             //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
             return [];
@@ -289,7 +289,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
             //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             return [];
