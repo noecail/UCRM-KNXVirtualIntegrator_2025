@@ -19,46 +19,46 @@ public class DataPointType
 
     private int _size; // Size of the DPT
     
-    private GroupValue? _value; // Value to send or expected to be read
+    public List<GroupValue?> Value; // Value to send or expected to be read
 
-    public List<string> Address = [];
+    public string Address = "0/1/1";
     
     //Constructors
     public DataPointType(int type)
     {
         Type = type;
-        _value = new GroupValue(true);
+        Value = [new GroupValue(true)];
         GetSizeOf();
     }
-    public DataPointType(int type, List<string>  addresses)
+
+    public DataPointType(int type, string address)
     {
         Type = type;
-        _value = new GroupValue(true);
+        Value = [new GroupValue(true)];
         GetSizeOf();
-        for (int i = 0; i < addresses.Count; i++)
-        {
-                Address[i] = addresses[i];
-        }
+        Address = address;
     }
-    
-    public DataPointType(int type, List<string>  addresses, GroupValue? value)
+
+    public DataPointType(int type, string  address, List<GroupValue?> values)
     {
         Type = type;
-        _value = value;
+        Address = address;
         GetSizeOf();
-        for (int i = 0; i < addresses.Count; i++)
+        Value = [];
+        for (int i = 0; i < values.Count; i++)
         {
-            Address[i] = addresses[i];
+            Value.Add(values[i]);
         }
     }
     public DataPointType(DataPointType dpt)
     {
         Type = dpt.Type;
-        _value = dpt._value;
+        Value = [];
+        Address = dpt.Address;
         GetSizeOf();
-        for (int i = 0; i < dpt.Address.Count; i++)
+        for (int i = 0; i < dpt.Value.Count; i++)
         {
-            Address[i] = dpt.Address[i];
+            Value[i] = dpt.Value[i];
         }
     }
     
@@ -148,22 +148,14 @@ public class DataPointType
         }
     }
     
-    /// <summary>
-    /// This method processes the number of addresses in a DPT.
-    /// </summary>
-    /// <returns>Returns the number of addresses in a DPT.</returns>
-    public int GetAddressLength()
-    {
-        return Address.Count;
-                
-    }
+    
     /// <summary>
     /// This method compares the number of addresses of 2 DPT.
     /// </summary>
     /// <returns>Returns true when both DPTs have the same number of addresses.</returns>
-    public bool CompareAddressLength(DataPointType dpt)
+    public bool CompareValuesLength(DataPointType dpt)
     {
-        return Address.Count == dpt.Address.Count;
+        return Value.Count == dpt.Value.Count;
                 
     }
     
@@ -186,32 +178,46 @@ public class DataPointType
     public bool IsPossible()
     {
         var max = Convert.ToUInt64(1 << _size);
-        return  Convert.ToUInt64(_value) < max;
+        var res = true;
+        foreach (var value in Value)
+        {
+            res = res && Convert.ToUInt64(value) < max;
+        }
+        return res;
     }
 
     /// <summary>
-    /// This method adds an address to a DPT.
+    /// This method adds a value to a DPT.
     /// </summary>
-    public void AddAddress(string address)
+    public void AddValue(GroupValue? value)
     {
-        Address.Add(address);
+        Value.Add(value);
+    }
+    
+    /// <summary>
+    /// This method Replaces a value with another.
+    /// </summary>
+    public void ReplaceValue(int index, GroupValue? value)
+    {
+        RemoveValue(index);
+        AddValue(value);
     }
     
     /// <summary>
     /// This method deletes an address to a DPT.
     /// </summary>
-    public void RemoveAddress(int index)
+    public void RemoveValue(int index)
     {
-        Address.RemoveAt(index);
+        Value.RemoveAt(index);
     }
 
     /// <summary>
     /// This method checks if the group value of the DPT is the same as the one in parameter.
     /// <returns>Returns true when the read(in parameter) and expected values are the same</returns>
     /// </summary>
-    public bool CompareGroupValue(GroupValue value)
+    public bool CompareGroupValue(GroupValue value, int index)
     {
-        return value.Equals(_value);
+        return value.Equals(Value[index]);
     }
     
 }
