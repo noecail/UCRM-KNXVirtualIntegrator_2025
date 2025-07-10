@@ -324,6 +324,211 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    
+    
+    <!--         -->
+    <!-- Tooltips-->
+    <!--         -->
+    
+    <!-- Black question mark / White circle fill -->
+    <DrawingImage x:Key="TooltipBlackOnWhiteDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
+                <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
+                    <GeometryDrawing>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#FF000000" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="115.17" RadiusY="113.17" Center="285.617,130.482" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                    <GlyphRunDrawing ForegroundBrush="#FF000000">
+                        <GlyphRunDrawing.GlyphRun>
+                            <GlyphRun PixelsPerDip="1.25" BaselineOrigin="259.787,206.71" FontRenderingEmSize="48" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="?" GlyphIndices="34" AdvanceWidths="21.024" GlyphOffsets="0,0" Language="en-us">
+                                <GlyphRun.GlyphTypeface>
+                                    <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUIB.TTF" StyleSimulations="None" />
+                                </GlyphRun.GlyphTypeface>
+                            </GlyphRun>
+                        </GlyphRunDrawing.GlyphRun>
+                    </GlyphRunDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <!-- Dim gray question mark / Light gray circle fill -->
+    <DrawingImage x:Key="TooltipDimGrayOnLightGrayDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
+                <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
+                    <GeometryDrawing Brush="#FFD3D3D3">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#FF696969" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="115.17" RadiusY="113.17" Center="285.617,130.482" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                    <GlyphRunDrawing ForegroundBrush="#FF696969">
+                        <GlyphRunDrawing.GlyphRun>
+                            <GlyphRun PixelsPerDip="1.25" BaselineOrigin="259.787,206.71" FontRenderingEmSize="48" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="?" GlyphIndices="34" AdvanceWidths="21.024" GlyphOffsets="0,0" Language="en-us">
+                                <GlyphRun.GlyphTypeface>
+                                    <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUIB.TTF" StyleSimulations="None" />
+                                </GlyphRun.GlyphTypeface>
+                            </GlyphRun>
+                        </GlyphRunDrawing.GlyphRun>
+                    </GlyphRunDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <!-- Dim gray question mark / White circle fill -->
+    <DrawingImage x:Key="TooltipDimGrayOnWhiteDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
+                <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
+                    <GeometryDrawing>
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#FF696969" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="115.17" RadiusY="113.17" Center="285.617,130.482" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                    <GlyphRunDrawing ForegroundBrush="#FF696969">
+                        <GlyphRunDrawing.GlyphRun>
+                            <GlyphRun PixelsPerDip="1.25" BaselineOrigin="259.787,206.71" FontRenderingEmSize="48" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="?" GlyphIndices="34" AdvanceWidths="21.024" GlyphOffsets="0,0" Language="en-us">
+                                <GlyphRun.GlyphTypeface>
+                                    <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUIB.TTF" StyleSimulations="None" />
+                                </GlyphRun.GlyphTypeface>
+                            </GlyphRun>
+                        </GlyphRunDrawing.GlyphRun>
+                    </GlyphRunDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <!-- White question mark / Dim gray circle fill -->
+    <DrawingImage x:Key="TooltipWhiteOnDimGrayDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
+                <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
+                    <GeometryDrawing Brush="#FF696969">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#FF696969" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="115.17" RadiusY="113.17" Center="285.617,130.482" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                    <GlyphRunDrawing ForegroundBrush="#FFFFFFFF">
+                        <GlyphRunDrawing.GlyphRun>
+                            <GlyphRun PixelsPerDip="1.25" BaselineOrigin="259.787,206.71" FontRenderingEmSize="48" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="?" GlyphIndices="34" AdvanceWidths="21.024" GlyphOffsets="0,0" Language="en-us">
+                                <GlyphRun.GlyphTypeface>
+                                    <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUIB.TTF" StyleSimulations="None" />
+                                </GlyphRun.GlyphTypeface>
+                            </GlyphRun>
+                        </GlyphRunDrawing.GlyphRun>
+                    </GlyphRunDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 
-
+    <!-- White question mark / Light gray circle fill -->
+    <DrawingImage x:Key="TooltipWhiteOnLightGrayDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
+                <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
+                    <GeometryDrawing Brush="#FFD3D3D3">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#FF696969" Thickness="3" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="115.17" RadiusY="113.17" Center="285.617,130.482" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                    <GlyphRunDrawing ForegroundBrush="#FFFFFFFF">
+                        <GlyphRunDrawing.GlyphRun>
+                            <GlyphRun PixelsPerDip="1.25" BaselineOrigin="259.787,206.71" FontRenderingEmSize="48" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="?" GlyphIndices="34" AdvanceWidths="21.024" GlyphOffsets="0,0" Language="en-us">
+                                <GlyphRun.GlyphTypeface>
+                                    <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUIB.TTF" StyleSimulations="None" />
+                                </GlyphRun.GlyphTypeface>
+                            </GlyphRun>
+                        </GlyphRunDrawing.GlyphRun>
+                    </GlyphRunDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="TooltipWhiteOnKNXGreenDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
+                <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
+                    <GeometryDrawing Brush="#FF369026">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#FF369026" Thickness="5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="115.17" RadiusY="113.17" Center="285.617,130.482" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                    <GlyphRunDrawing ForegroundBrush="#FFFFFFFF">
+                        <GlyphRunDrawing.GlyphRun>
+                            <GlyphRun PixelsPerDip="1.25" BaselineOrigin="259.787,206.71" FontRenderingEmSize="48" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="?" GlyphIndices="34" AdvanceWidths="21.024" GlyphOffsets="0,0" Language="en-us">
+                                <GlyphRun.GlyphTypeface>
+                                    <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUIB.TTF" StyleSimulations="None" />
+                                </GlyphRun.GlyphTypeface>
+                            </GlyphRun>
+                        </GlyphRunDrawing.GlyphRun>
+                    </GlyphRunDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="TooltipKNXGreenOnWhiteDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
+                <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
+                    <GeometryDrawing Brush="#FFFFFFFF">
+                        <GeometryDrawing.Pen>
+                            <Pen Brush="#FF369026" Thickness="5" StartLineCap="Flat" EndLineCap="Flat" LineJoin="Miter" />
+                        </GeometryDrawing.Pen>
+                        <GeometryDrawing.Geometry>
+                            <EllipseGeometry RadiusX="115.17" RadiusY="113.17" Center="285.617,130.482" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+                <DrawingGroup>
+                    <GlyphRunDrawing ForegroundBrush="#FF369026">
+                        <GlyphRunDrawing.GlyphRun>
+                            <GlyphRun PixelsPerDip="1.25" BaselineOrigin="259.787,206.71" FontRenderingEmSize="48" BidiLevel="0" IsSideways="False" CaretStops="1 1" ClusterMap="0" Characters="?" GlyphIndices="34" AdvanceWidths="21.024" GlyphOffsets="0,0" Language="en-us">
+                                <GlyphRun.GlyphTypeface>
+                                    <GlyphTypeface FontUri="C:\WINDOWS\FONTS\SEGOEUIB.TTF" StyleSimulations="None" />
+                                </GlyphRun.GlyphTypeface>
+                            </GlyphRun>
+                        </GlyphRunDrawing.GlyphRun>
+                    </GlyphRunDrawing>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+        
 </ResourceDictionary>

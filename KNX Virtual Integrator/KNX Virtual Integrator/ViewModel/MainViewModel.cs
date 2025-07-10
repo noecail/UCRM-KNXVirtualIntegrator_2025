@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
+using System.Windows;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -36,8 +37,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     public new event PropertyChangedEventHandler? PropertyChanged;
     public ObservableCollection<string> ConnectionTypes { get; } = new()
     {
-        "Type=IP",
-        "Type=USB"
+        "IP",
+        "IP à distance (NAT)",
+        "USB"
     };
 
 
@@ -63,9 +65,30 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
             // Pas besoin de WhenPropertyChanged(nameof(NatAddress)) car la View est directement bind à la propriété du Model
             // Contrairement à CurrentInterface, la View est bind à une propriété du ViewModel et donc WhenPropertyChanged(nameof(CurrentInterface))
+            else if (e.PropertyName == nameof(_busConnection.SelectedConnectionType))
+            {
+                if (_busConnection.SelectedConnectionType is "IP")
+                {
+                    DiscoveredInterfacesVisibility = Visibility.Visible;
+                    RemoteConnexionVisibility = Visibility.Collapsed;
+                    SecureConnectionVisibility = Visibility.Visible;
+                }
+                else if (_busConnection.SelectedConnectionType is "IP à distance (NAT)")
+                {
+                    DiscoveredInterfacesVisibility = Visibility.Collapsed;
+                    RemoteConnexionVisibility = Visibility.Visible;
+                    SecureConnectionVisibility = Visibility.Visible;
+                }
+                else if (_busConnection.SelectedConnectionType is "USB")
+                {
+                    DiscoveredInterfacesVisibility = Visibility.Visible;
+                    RemoteConnexionVisibility = Visibility.Collapsed;
+                    SecureConnectionVisibility = Visibility.Collapsed;
+                }
+            }
         };
         
-        _busConnection.SelectedConnectionType = "Type=USB";
+        _busConnection.SelectedConnectionType = "USB";
         
         ProjectFolderPath = "";
 
@@ -122,17 +145,12 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         RefreshInterfacesCommand = new AsyncRelayCommand(modelManager.BusConnection.DiscoverInterfacesAsync);
 
-        // À implémenter, sera liée au bouton Connexion NAT
         ConnectBusRemotelyCommand = new AsyncRelayCommand(
            async _ =>
         {
             _busConnection.NatAccess = true;
             await modelManager.BusConnection.ConnectBusAsync();
         });
-
-        // À supprimer plus tard, utilisée pour tester
-        TestRechercherCommand = new AsyncRelayCommand(modelManager.BusConnection.ClearField);
-        
 
         GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
             _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()

@@ -32,7 +32,7 @@ public partial class ConnectionWindow
     /// </summary>
     /// <param name="sender">The object that raised the event.</param>
     /// <param name="e">The event data.</param>
-    private async void ImportKeysFileButtonClick(object sender, RoutedEventArgs e)
+    private void ImportKeysFileButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select a keys file");
 

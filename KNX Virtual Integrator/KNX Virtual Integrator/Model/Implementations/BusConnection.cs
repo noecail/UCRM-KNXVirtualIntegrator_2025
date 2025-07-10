@@ -165,7 +165,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Chemin du fichier de clés pour connexion IP Secure
     /// /// </summary>
-    private string _keysPath;
+    private string _keysPath = "";
     public string KeysPath
     {
         get => _keysPath;
@@ -173,7 +173,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         {
             if (_keysPath == value) return; // Pas de changement si la valeur est la même 
             _keysPath = value;
-            // WhenPropertyChanged(nameof(KeysPath)); // Notifie l'interface utilisateur du changement
+            WhenPropertyChanged(nameof(KeysPath)); // Notifie l'interface utilisateur du changement
         }
     }
 
@@ -187,7 +187,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         set
         {
             if (_selectedConnectionType == value) return;
-            
             _selectedConnectionType = value;
             OnSelectedConnectionTypeChanged(); // Traite les changements de type de connexion
         }
@@ -220,6 +219,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     {
         try
         {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedConnectionType)));
             await DiscoverInterfacesAsync(); // Appel asynchrone pour découvrir les interfaces
         }
         catch (Exception ex)
@@ -261,7 +261,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 UpdateConnectionState(); // Met à jour l'état de connexion
             }
             
-            if (NatAccess)
+            if (SelectedConnectionType is "IP à distance (NAT)")
             {
                 var parameters = new IpTunnelingConnectorParameters(NatAddress, NatPort, useNat: true) //Crée les paramètres de connexion
                 {
@@ -295,7 +295,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                     }
                 }
             }
-            else if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=IP" or "Type=IP") //Si l'interface est IP locale
+            else if (SelectedConnectionType is "IP") //Si l'interface est IP locale
             {
                 // Vérifie si la chaîne de connexion est fournie
                 if (string.IsNullOrWhiteSpace(connectionString))
@@ -371,7 +371,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     private void CheckError(Exception e)
     {
         _logger.ConsoleAndLogWrite($"Erreur : {e.GetType().Name} - {e.Message}");
-        if (NatAccess)
+        if (SelectedConnectionType is "IP à distance (NAT)")
             if (e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase))
             {
                 _logger.ConsoleAndLogWrite("Authentification KNX Secure échouée. Vérifie :");
@@ -479,7 +479,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             // Crée une collection observable pour stocker les interfaces découvertes
             var discoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
             // Vérifie si le type de connexion sélectionné est "IP"
-            if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=IP" or "Type=IP")
+            if (SelectedConnectionType is "IP")
             {
                 // Démarre une tâche pour découvrir les interfaces IP
                 var ipDiscoveryTask = Task.Run(async () =>
@@ -538,7 +538,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 });
             }
             // Vérifie si le type de connexion sélectionné est "USB"
-            else if (SelectedConnectionType is "System.Windows.Controls.ComboBoxItem : Type=USB" or "Type=USB")
+            else if (SelectedConnectionType is "USB")
             {
                 // Démarre une tâche pour découvrir les périphériques USB
                 var usbDiscoveryTask = Task.Run(() =>
