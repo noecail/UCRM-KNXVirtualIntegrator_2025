@@ -8,6 +8,7 @@ using Knx.Falcon.Sdk;
 using System.Timers;
 using System.Windows.Threading;
 using Timer = System.Timers.Timer;
+using KNX_Virtual_Integrator.Model.Wrappers;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
@@ -315,7 +316,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// </summary>
     /// <param name="sender">L'objet source de l'événement.</param>
     /// <param name="newBus">Le nouveau bus KNX connecté.</param>
-    private void OnBusConnectedReady(object? sender, KnxBus newBus)
+    private void OnBusConnectedReady(object? sender, IKnxBusWrapper newBus)
     {
         // Appelle BusChanged avec le nouveau bus
         BusChanged(null, newBus);
@@ -327,7 +328,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// </summary>
     /// <param name="oldBus">L'ancien bus KNX.</param>
     /// <param name="newBus">Le nouveau bus KNX.</param>
-    internal void BusChanged(KnxBus? oldBus, KnxBus? newBus)
+    internal void BusChanged(IKnxBusWrapper? oldBus, IKnxBusWrapper? newBus)
     {
         if (oldBus != null)
             oldBus.GroupMessageReceived -= OnGroupMessageReceived;

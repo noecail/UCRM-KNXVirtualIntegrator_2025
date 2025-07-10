@@ -10,6 +10,7 @@ using KNX_Virtual_Integrator.ViewModel;
 using Knx.Falcon.Configuration;
 using Knx.Falcon.KnxnetIp;
 using Knx.Falcon.Sdk;
+using KNX_Virtual_Integrator.Model.Wrappers;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
@@ -20,7 +21,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Représente l'objet de connexion au bus KNX. Peut-être nul si aucune connexion n'est établie.
     /// </summary>
-    public KnxBus? Bus;
+    public IKnxBusWrapper Bus;
     
     private readonly ILogger _logger;
 
@@ -198,13 +199,13 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Événement déclenché lorsque la connexion au bus KNX est prête.
     /// </summary>
-    public event EventHandler<KnxBus>? BusConnectedReady;               //Le mettre en "nullable" est bien correct?
+    public event EventHandler<IKnxBusWrapper>? BusConnectedReady;               //Le mettre en "nullable" est bien correct?
 
     /// <summary>
     /// Méthode protégée qui déclenche l'événement <see cref="BusConnectedReady"/>.
     /// </summary>
     /// <param name="bus">L'objet <see cref="KnxBus"/> qui représente la connexion au bus KNX.</param>
-    private void OnBusConnectedReady(KnxBus bus)
+    private void OnBusConnectedReady(IKnxBusWrapper bus)
     {
         BusConnectedReady?.Invoke(this, bus); // Déclenche l'événement si des abonnés existent
     }
@@ -252,12 +253,12 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             var connectionString = SelectedInterface?.ConnectionString;
             
             // Déconnecte le bus existant si nécessaire
-            if (Bus != null)
+            if (!Bus.IsNull)
             {
                 Bus.ConnectionStateChanged -= BusConnectionStateChanged!;
                 CurrentInterface = "Aucune interface connectée";
                 await Bus.DisposeAsync();
-                Bus = null;
+                Bus.SetNull = null;
                 UpdateConnectionState(); // Met à jour l'état de connexion
             }
             
@@ -269,7 +270,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                     RequiresSecurity = true
                 };
                 // Crée un nouvel objet de bus avec les paramètres du NAT
-                Bus = new KnxBus(parameters);
+                Bus.NewKnxBusWrapper(parameters);
                 try
                 {
                     await Bus.ConnectAsync(CancellationToken.None);
@@ -283,7 +284,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                         try
                         {
                             await parameters.LoadSecurityDataAsync(KeysPath,_securePassword);
-                            Bus = new KnxBus(parameters);
+                            Bus.NewKnxBusWrapper(parameters);
                             await Bus.ConnectAsync(CancellationToken.None);
                             CheckBusConnection();
                             _logger.ConsoleAndLogWrite("Connecté en NAT");
@@ -307,7 +308,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 var parameters = IpTunnelingConnectorParameters.FromConnectionString(connectionString);
              
                 // Crée un nouvel objet de bus avec les paramètres extraits de la chaîne de connexion
-                Bus = new KnxBus(parameters);
+                Bus.NewKnxBusWrapper(parameters);
                 try
                 {
                   // Tentative de connexion au bus
@@ -326,7 +327,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                             await parameters.LoadSecurityDataAsync(KeysPath,_securePassword);
                          
                             // Créer un bus avec les mots de passe
-                            Bus = new KnxBus(parameters);
+                            Bus.NewKnxBusWrapper(parameters);
                             await Bus.ConnectAsync(CancellationToken.None);
                             CheckBusConnection();           
                         }
@@ -345,12 +346,12 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 {
                     //MessageBox.Show("Le type de connexion et la chaîne de connexion doivent être fournis.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return; // Interrompt la méthode si les informations de connexion sont manquantes
-                }
-               var parameters = ConnectorParameters.FromConnectionString(connectionString);
-               Bus = new KnxBus(parameters);
-               // Établit la connexion au bus
-               await Bus.ConnectAsync(CancellationTokenSource.Token);
-               CheckBusConnection();
+                } 
+                var parameters = ConnectorParameters.FromConnectionString(connectionString);
+                Bus.NewKnxBusWrapper(parameters);
+                // Établit la connexion au bus
+                await Bus.ConnectAsync(CancellationTokenSource.Token);
+                CheckBusConnection();
             }
         }
         catch (Exception ex)
@@ -394,7 +395,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         try
         {
             // Vérifie si la connexion est établie avec succès
-            if (Bus==null || Bus.ConnectionState != BusConnectionState.Connected)
+            if (Bus.IsNull || Bus.ConnectionState != BusConnectionState.Connected)
             {
                 throw new InvalidOperationException(
                     "La connexion au bus a échoué."); // Lance une exception si la connexion échoue
@@ -443,11 +444,11 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
 
         try
         {
-            if (Bus != null)
+            if (!Bus.IsNull)
             {
                 Bus.ConnectionStateChanged -= BusConnectionStateChanged!;
                 await Bus.DisposeAsync(); // Déconnecte et libère les ressources du bus
-                Bus = null;
+                Bus.SetNull = null;
                 CurrentInterface = "Aucune interface connectée";
                 IsConnected = false;
                 UpdateConnectionState(); // Met à jour l'état de connexion
@@ -598,9 +599,10 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// Initialise une nouvelle instance de la classe <see cref="BusConnection"/>.
     /// Crée une nouvelle instance d'ObservableCollection pour stocker les interfaces découvertes.
     /// </summary>
-    public BusConnection(ILogger logger)
+    public BusConnection(ILogger logger, IKnxBusWrapper  knxBusWrapper)
     {
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
+        Bus = knxBusWrapper;
         _password = "";
         _logger = logger;
         _natAddress = "";
@@ -625,6 +627,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     public async Task ClearField()
     {
         _logger.ConsoleAndLogWrite("Found an IP Address : " + NatAddress);
+        await Task.Delay(1);
         NatAddress="";
     }
     
