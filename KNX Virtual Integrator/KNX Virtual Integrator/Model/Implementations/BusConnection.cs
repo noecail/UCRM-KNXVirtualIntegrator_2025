@@ -402,7 +402,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             else
             {
                 Bus.ConnectionStateChanged += BusConnectionStateChanged!; 
-                CurrentInterface = SelectedInterface?.DisplayName;
+                CurrentInterface = (SelectedConnectionType is "IP à distance (NAT)") ? "À distance via l'IP publique " + NatAddress : SelectedInterface?.DisplayName;
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
