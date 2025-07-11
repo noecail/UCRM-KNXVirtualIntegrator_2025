@@ -13,8 +13,8 @@ using KNX_Virtual_Integrator.Model.Wrappers;
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
 /// <summary>
-/// Représente la communication avec le bus KNX pour gérer les adresses de groupe et les valeurs de groupe.
-/// Permet d'écrire des valeurs sur le bus KNX en fonction de l'état de la connexion et de l'activité du bus.
+/// Represents the communication with the bus in terms of group addresses and values.
+/// Allows writing and reading information from the bus while checking its state.
 /// </summary>
 public class GroupCommunication : ObservableObject, IGroupCommunication
 {
@@ -25,8 +25,8 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     private GroupAddress _groupAddress;
 
     /// <summary>
-    /// Obtient ou définit l'adresse de groupe utilisée pour la communication sur le bus KNX.
-    /// Cette adresse spécifie l'adresse du groupe pour lequel les valeurs sont lues ou écrites.
+    /// Gets or sets the address with which the program will communicate with the bus.
+    /// It specifies which Group Address will make use or read the <see cref="GroupValue"/>.
     /// </summary>
     public GroupAddress GroupAddress
     {
@@ -37,8 +37,8 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     private GroupValue? _groupValue;
 
     /// <summary>
-    /// Obtient ou définit la valeur de groupe à envoyer au bus KNX.
-    /// Cette valeur représente l'état du groupe, par exemple, vrai ou faux pour un booléen.
+    /// Gets the group value to send to the bus.
+    /// It represents which state the object will be in.
     /// </summary>
     public GroupValue? GroupValue
     {
@@ -47,10 +47,11 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     /// <summary>
-    /// Initialise une nouvelle instance de <see cref="GroupCommunication"/> avec la connexion au bus spécifiée.
-    /// S'abonne à l'événement <see cref="BusConnection.BusConnectedReady"/> pour être informé lorsque le bus est prêt.
+    /// Initializes an instance of <see cref="GroupCommunication"/> with the specified bus connection.
+    /// Subscribes to the event <see cref="BusConnection.BusConnectedReady"/> to be informed when the bus is ready.
     /// </summary>
-    /// <param name="busConnection">L'objet <see cref="BusConnection"/> utilisé pour la communication avec le bus KNX.</param>
+    /// <param name="busConnection">The object <see cref="BusConnection"/> used to communicate with the KNX Bus.</param>
+    /// <param name="logger">The object <see cref="Logger"/> used for logging events.</param>
     public GroupCommunication(BusConnection busConnection,ILogger logger)
     {
         _busConnection = busConnection;
@@ -129,17 +130,16 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// <param name="addr">L'adresse de groupe à laquelle la valeur est envoyée.</param>
     /// <param name="value">La valeur de groupe à envoyer.</param>
     /// <returns>Une tâche représentant l'opération d'écriture asynchrone.</returns>
-    public async Task GroupValueWriteAsync(GroupAddress addr, GroupValue value)
+    public async Task<bool> GroupValueWriteAsync(GroupAddress addr, GroupValue value)
     {
         try
         {
             if (_busConnection is { IsConnected: true, IsBusy: false })
             {
                 if (_busConnection is { CancellationTokenSource: not null, Bus: not null })
-                    await _busConnection.Bus.WriteGroupValueAsync(
+                    return await _busConnection.Bus.WriteGroupValueAsync(
                         addr, value, MessagePriority.High,
-                        _busConnection.CancellationTokenSource.Token
-                    );
+                        _busConnection.CancellationTokenSource.Token );
             }
             else
             {
@@ -147,12 +147,17 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
                 //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
                 //inclure un "return", comme il faut renvoyer du "void"?
             }
+
+            return false;
         }
         catch (Exception ex)
         {
             _logger.ConsoleAndLogWriteLine($"Erreur lors de l'envoi de la trame : {ex.Message}");
+            return false;
             //MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
+
+        return false;
     }
 
     ///<summary>
@@ -203,7 +208,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             // Définis le résultat pour terminer la tâche
             tcs.SetResult(e.Value);
             // Désabonne le handler une fois que la valeur est capturée
-            if (_busConnection is { Bus: not null })
+            if (!_busConnection.Bus.IsNull)
                 _busConnection.Bus.GroupMessageReceived -= handler;
 
         };

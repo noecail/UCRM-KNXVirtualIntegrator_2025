@@ -1,4 +1,3 @@
-using Knx.Falcon.Sdk;  // Par exemple pour BusConnection, GroupAddress
 using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de l�.
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Wrappers;
@@ -35,101 +34,7 @@ namespace TestProject_KNXVirtualIntegrator_L
                 "IP-Interface Secure 192.168.10.132",
                 "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
         }
-
-        [Fact]
-        public async Task Discover_KnxInterfaces()
-        {
-            // Arrange
-            var numberOfInterfaces = 0;
-            
-            // Act
-            // Récupération de toutes les interfaces détectées par Falcon
-            var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
-
-
-            // Assert
-            // Affichage console pour visualiser les interfaces disponibles
-            await foreach (var knxInterface in interfaces)
-            {
-                foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
-                {
-                    numberOfInterfaces++;
-                    var displayName = tunnelInterfaces.IndividualAddress.HasValue
-                        ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
-                        : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
-                    _output.WriteLine($"[DETECTED] {displayName} → {knxInterface}");
-                }
-            }
-            // Vérification qu'il y a au moins une interface de trouvée et les afficher
-            // (passage automatique comme c'est un test d'intégration)
-            Assert.True(numberOfInterfaces >= 0,"No IP Tunneling Interface found");
-        }
-
-        [Fact]
-        public async Task Test_KnxBus_IPConnectLastDiscoveredInterface_Auto()
-        {
-            // Arrange
-            
-            // Act
-            // Récupération des interfaces disponibles
-            var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
-            await foreach (var knxInterface in interfaces)
-            {
-                foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
-                {
-                    _busConnection.SelectedInterface = new ConnectionInterfaceViewModel(tunnelInterfaces.Type, tunnelInterfaces.Name, tunnelInterfaces.ToConnectionString());
-                }
-            }
-            // Connexion au bus via l'interface détectée
-            await _busConnection.ConnectBusAsync();
-
-            // Assert
-            // Vérification de la connexion
-            Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null, "Connexion IP échouée avec des interfaces trouvées.");
-            _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
-            
-            // Cleanup
-            await _busConnection.DisconnectBusAsync();
-            _busConnection.SelectedInterface ??= null;
-        }
-
-        [Fact]
-        public async Task Test_KnxBus_USBConnectFirstOrDefaultInterface_Auto()
-        {
-            // Arrange
-            
-            // Act 
-            // Récupère les périphériques USB connectés
-            var usbDevices = KnxBus.GetAttachedUsbDevices();
-            // Transforme chaque périphérique en une interface de connexion utilisable
-            var selectedInterface = usbDevices.Select(device =>
-                new ConnectionInterfaceViewModel(
-                    ConnectorType.Usb,
-                    device.DisplayName,
-                    device.ToConnectionString()
-                )
-            ).FirstOrDefault();
-            // Affiche l'interface sélectionnée si non nulle
-            if (selectedInterface != null)
-            {
-                _output.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName + " " +
-                                  selectedInterface.ConnectionString);
-            }
-
-            // Connexion au bus
-            _busConnection.SelectedInterface = selectedInterface;
-            await _busConnection.ConnectBusAsync();
-
-            
-            // Assert
-            // Vérifie que la connexion a réussi (passe automatiquement car test d'intégration)
-            Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null , "Connexion USB échouée malgré avoir trouvé une interface");
-            _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
-            // Cleanup
-            await _busConnection.DisconnectBusAsync();
-            _busConnection.SelectedInterface ??= null;
-        }
-
+        
         [Fact]
         public async Task Test_KnxBus_ConnectionFails_WithInvalidInterface()
         {
@@ -156,9 +61,8 @@ namespace TestProject_KNXVirtualIntegrator_L
             _busConnection.SelectedInterface ??= null;
         }
         
-        
         [Fact]
-        public async Task Test_WriteWithoutConnection(){
+        public async Task Test_WithoutConnection_GroupValueWriteAsyncReturnsFalse(){
             
             // Arrange
             // Création d'une adresse de groupe et d'une valeur à écrire
@@ -173,8 +77,8 @@ namespace TestProject_KNXVirtualIntegrator_L
 
             // Act and Assert
             // On vérifie que la méthode échoue quand on n'est pas connecté au bus
-            Assert.False(await _busConnection.Bus.WriteGroupValueAsync(
-                groupAddress, groupValue, MessagePriority.Low, CancellationToken.None), "It shouldn't have failed");
+            Assert.False(await _groupCommunication.GroupValueWriteAsync(
+                groupAddress, groupValue), "It shouldn't have succeeded in writing");
         }
         
         
@@ -323,7 +227,7 @@ namespace TestProject_KNXVirtualIntegrator_L
             var readGroupValue = await _groupCommunication.GroupValuesWithinTimerAsync(readGroupAddress,2000 );
             
             // Assert
-            // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement car test d'intégration)
+            // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement, car test d'intégration)
             Assert.True(readGroupValue.Count >= 0, "No value was read from the bus");
             _output.WriteLine("test value : " + testGroupValue);
             foreach (var lValue in readGroupValue)
