@@ -730,7 +730,8 @@
                         Text="{Binding Path=CurrentInterface}"
                         Style="{StaticResource InterfaceTextBlock}"
                         TextAlignment="Left"
-                        TextWrapping="Wrap"/>
+                        TextWrapping="Wrap"
+                        FontWeight="SemiBold"/>
                 </StackPanel>
             </StackPanel>
 
