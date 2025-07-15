@@ -108,6 +108,9 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand GroupValueWriteOffCommand { get; private set; }
 
         public ICommand MaGroupValueReadCommand { get; private set; }
+        
+        public ICommand MaGroupValueReadCommandWithinTimer { get; private set; }
+        
         public ICommand GroupValueWriteCommand { get; private set; }
 
 

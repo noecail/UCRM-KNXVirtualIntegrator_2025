@@ -181,6 +181,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 // Vous pouvez faire quelque chose avec la valeur lue ici si nécessaire
             }
         );
+        
+        //Crée une liste avec tous les messages reçus pendant 2 secondes
+        MaGroupValueReadCommandWithinTimer = new Commands.RelayCommand<GroupAddress>(
+            async groupAddress =>
+            {
+                var msglist = new List<GroupCommunication.GroupMessage>(await modelManager.GroupCommunication.GroupValuesWithinTimerAsync(groupAddress,2000));
+                // Vous pouvez faire quelque chose avec la valeur lue ici si nécessaire
+            }
+        );
 
 
         SaveSettingsCommand = new Commands.RelayCommand<object>(

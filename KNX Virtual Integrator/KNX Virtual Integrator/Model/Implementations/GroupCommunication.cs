@@ -247,7 +247,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// Utilise un <see cref="TaskCompletionSource{T}"/> pour capturer la valeur lue.
     /// </summary>
     /// <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-    ///  <param name="timerDuration">Le timer sous lequel les trames doivent être reçues</param>
+    ///  <param name="timerDuration">Le timer sous lequel les trames doivent être reçues, en ms</param>
     /// <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
     public async Task<List<GroupMessage>> GroupValuesWithinTimerAsync(GroupAddress groupAddress, int timerDuration)
     {
