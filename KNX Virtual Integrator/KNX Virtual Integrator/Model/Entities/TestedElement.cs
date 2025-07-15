@@ -1,3 +1,4 @@
+using iText.Commons.Bouncycastle.Crypto;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities
@@ -16,7 +17,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         //Constructors
         public TestedElement()
         {
-            Tests = [new DataPointType(1), new DataPointType(1)]; 
+            Tests = []; 
         } 
         
         
@@ -112,6 +113,10 @@ namespace KNX_Virtual_Integrator.Model.Entities
             for (var i = 0; i < Tests.Count; i++)
                 Tests[i].Value[index] = pair.Value[i];
         }
-        
+
+        public void AddDpt(int type, string address, List<GroupValue?> value)
+        {
+            Tests.Add(new DataPointType(type, address, value));
+        }
     }
 }

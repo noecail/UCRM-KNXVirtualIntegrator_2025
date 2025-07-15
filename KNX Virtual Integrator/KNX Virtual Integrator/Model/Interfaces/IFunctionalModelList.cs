@@ -14,5 +14,6 @@ namespace KNX_Virtual_Integrator.Model.Interfaces;
 /// </summary>
 public interface IFunctionalModelList
 {
-    
+    public void ExportDictionary(string path);
+
 }
