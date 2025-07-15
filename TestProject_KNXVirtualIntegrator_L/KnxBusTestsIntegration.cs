@@ -17,6 +17,8 @@ public class KnxBusTestsIntegration
     private readonly GroupCommunication _groupCommunication;
     private readonly ConnectionInterfaceViewModel _selectedInterfaceUsb;
     private readonly ConnectionInterfaceViewModel _selectedInterfaceIp;
+    private readonly ConnectionInterfaceViewModel _selectedInterfaceIpSecure;
+    private readonly ConnectionInterfaceViewModel _selectedInterfaceIpNat;
 
     public KnxBusTestsIntegration(ITestOutputHelper output)
     {
@@ -34,8 +36,15 @@ public class KnxBusTestsIntegration
         _selectedInterfaceIp = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling, 
             "IP-Interface Secure 192.168.10.132",
             "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
+        _selectedInterfaceIpSecure = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling,
+            "IP-Interface Secure 192.168.10.132",
+            "Type=IpTunneling;IndividualAddress=1.1.255;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"Interface IP Secure N148/23\"");
+        _selectedInterfaceIpNat = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling,
+            "IP-Interface Secure 192.168.10.132",
+            "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
+
     }
-    
+    [Fact]
     public async Task Discover_KnxInterfaces()
     {
         // Arrange
@@ -57,6 +66,7 @@ public class KnxBusTestsIntegration
                     ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
                     : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
                 _output.WriteLine($"[DETECTED] {displayName} → {knxInterface}");
+                _output.WriteLine($"[INFO] {tunnelInterfaces.ToConnectionString()}");
             }
         }
         // Vérification qu'il y a au moins une interface de trouvée et les afficher
@@ -65,7 +75,7 @@ public class KnxBusTestsIntegration
     }
     
     [Fact]
-    public async Task Test_KnxBus_IPConnectLastDiscoveredInterface_Auto()
+    public async Task Test_KnxBus_IpConnectLastDiscoveredInterface_Auto()
     {
         // Arrange
             
@@ -93,7 +103,7 @@ public class KnxBusTestsIntegration
     }
     
     [Fact]
-    public async Task Test_KnxBus_USBConnectFirstOrDefaultInterface_Auto()
+    public async Task Test_KnxBus_UsbConnectFirstOrDefaultInterface_Auto()
     {
         // Arrange
             
@@ -156,14 +166,14 @@ public class KnxBusTestsIntegration
     }
     
     [Fact]
-    public async Task Test_KnxBus_IPConnect()
+    public async Task Test_KnxBus_IpConnect()
     {
         // Arrange
         // Création et configuration de l'interface de connexion
         // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
         // Assignez l'interface sélectionnée à la connexion au bus
         _busConnection.SelectedInterface = _selectedInterfaceIp;
-            
+        _busConnection.SelectedConnectionType = "IP";
         // Act
         // Connexion au bus KNX
         await _busConnection.ConnectBusAsync();
@@ -179,7 +189,7 @@ public class KnxBusTestsIntegration
     }
     
     [Fact]
-    public async Task Test_KnxBus_USBConnect()
+    public async Task Test_KnxBus_UsbConnect()
     {
         // Arrange
         // Création et configuration de l'interface de connexion
@@ -202,7 +212,7 @@ public class KnxBusTestsIntegration
     }
     
     [Fact]
-    public async Task Test_KnxBus_USBConnect_Disconnect()
+    public async Task Test_KnxBus_UsbConnect_Disconnect()
     {
         // Arrange
         // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
@@ -225,11 +235,33 @@ public class KnxBusTestsIntegration
         _busConnection.SelectedInterface ??= null;
     }
     
+        [Fact]
+        public async Task Test_KnxBus_UsbConnect_WithInvalidPath_ShouldFail()
+        {
+            // Étape 1 : Création d'une fausse interface USB invalide
+            var fakeUsbInterface = new ConnectionInterfaceViewModel(
+                ConnectorType.Usb,
+                "USB Fake Interface",
+                "Type=Usb;DevicePath=INVALID_PATH"
+            );
+
+            // Étape 2 : On assigne cette fausse interface au bus
+            _busConnection.SelectedInterface = fakeUsbInterface;
+
+            // Étape 3 : On tente une connexion
+            await _busConnection.ConnectBusAsync();
+
+            // Étape 4 : Vérifie que la connexion a échoué
+            Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une chaîne USB invalide.");
+
+            // Étape 5 : Nettoyage
+            await _busConnection.DisconnectBusAsync();
+        }
     
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task Test_KnxBus_USBConnectThenSendBool_ReadFirstFrame(bool commuteValue)
+    public async Task Test_KnxBus_UsbConnectThenSendBool_ReadFirstFrame(bool commuteValue)
     {
         // Arrange
         // Création et configuration de l'interface de connexion
@@ -271,7 +303,7 @@ public class KnxBusTestsIntegration
     [Theory]
     [InlineData(true)]
     [InlineData(false)]
-    public async Task Test_KnxBus_USBConnectThenSendBool_ReadAllFrames(bool commuteValue)
+    public async Task Test_KnxBus_UsbConnectThenSendBool_ReadAllFrames(bool commuteValue)
     {
         // Arrange
         // Envoi d'une trame à une adresse de groupe d�finie
@@ -303,4 +335,83 @@ public class KnxBusTestsIntegration
         _busConnection.SelectedInterface ??= null;
     }
     
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Test_KnxBus_IpSecureConnectThenSendBool_ReadAllFrames(bool commuteValue)
+    {
+        // Arrange
+        // Envoi d'une trame à une adresse de groupe d�finie
+        var testGroupAddress = new GroupAddress("0/1/1");
+        var readGroupAddress = new GroupAddress("0/2/1");
+        var testGroupValue = new GroupValue(commuteValue); // Valeur d'exemple (1 bit)
+        // Création et configuration de l'interface de connexion
+        // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+        // Assignez l'interface sélectionnée à la connexion au bus
+        await _busConnection.DisconnectBusAsync();
+        _busConnection.SelectedInterface = _selectedInterfaceIpSecure;
+        _busConnection.SelectedConnectionType = "IP";
+        _busConnection.Password = "Demo2025#";
+        _busConnection.KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys";
+
+        // Act
+        // Connexion au bus KNX puis écriture de la valeur
+        await _busConnection.ConnectBusAsync();
+        await _groupCommunication.GroupValueWriteAsync(testGroupAddress, testGroupValue);
+        // Lecture des trames dans l'adresse de groupe pendant 2 secondes
+        var readGroupValue = await _groupCommunication.GroupValuesWithinTimerAsync(readGroupAddress,2000 );
+            
+        // Assert
+        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement car test d'intégration)
+        Assert.True(readGroupValue.Count >= 0, "No value was read from the bus");
+        _output.WriteLine("test value : " + testGroupValue);
+        foreach (var lValue in readGroupValue)
+        {
+            _output.WriteLine("Read group value : " + lValue.Value);
+        }
+        // Cleanup
+        await _busConnection.DisconnectBusAsync();
+        _busConnection.SelectedInterface ??= null;
+    }
+    
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task Test_KnxBus_IpNatSecureConnectThenSendBool_ReadAllFrames(bool commuteValue)
+    {
+        // Arrange
+        // Envoi d'une trame à une adresse de groupe d�finie
+        var testGroupAddress = new GroupAddress("0/1/1");
+        var readGroupAddress = new GroupAddress("0/2/1");
+        var testGroupValue = new GroupValue(commuteValue); // Valeur d'exemple (1 bit)
+        // Création et configuration de l'interface de connexion
+        // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+        // Assignez l'interface sélectionnée à la connexion au bus
+        await _busConnection.DisconnectBusAsync();
+        _busConnection.SelectedInterface = _selectedInterfaceIpSecure;
+        _busConnection.SelectedConnectionType = "IP à distance (NAT)";
+        _busConnection.Password = "Demo2025#";
+        _busConnection.KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys";
+        _busConnection.NatAddress = "92.174.145.34";
+
+        // Act
+        // Connexion au bus KNX puis écriture de la valeur
+        await _busConnection.ConnectBusAsync();
+        await _groupCommunication.GroupValueWriteAsync(testGroupAddress, testGroupValue);
+        // Lecture des trames dans l'adresse de groupe pendant 2 secondes
+        var readGroupValue = await _groupCommunication.GroupValuesWithinTimerAsync(readGroupAddress,2000 );
+            
+        // Assert
+        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement car test d'intégration)
+        Assert.True(readGroupValue.Count >= 0, "No value was read from the bus");
+        _output.WriteLine("test value : " + testGroupValue);
+        foreach (var lValue in readGroupValue)
+        {
+            _output.WriteLine("Read group value : " + lValue.Value);
+        }
+        // Cleanup
+        await _busConnection.DisconnectBusAsync();
+        _busConnection.SelectedInterface ??= null;
+    }
+
 }

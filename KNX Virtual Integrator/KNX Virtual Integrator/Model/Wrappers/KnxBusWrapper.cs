@@ -61,7 +61,7 @@ public class KnxBusWrapper : IKnxBusWrapper
 
     public event EventHandler<EventArgs>? ConnectionStateChanged;
 
-    private void StateChangedInvoker(object? sender, EventArgs args)
+    public void StateChangedInvoker(object? sender, EventArgs args)
     {
         ConnectionStateChanged?.Invoke(sender, args);
     }
@@ -73,14 +73,14 @@ public class KnxBusWrapper : IKnxBusWrapper
     }
 
     public async Task RequestGroupValueAsync(GroupAddress groupAddress, MessagePriority priority = MessagePriority.High,
-        CancellationToken cancellationToken = default(CancellationToken))
+        CancellationToken cancellationToken = default)
     {
         if (_knxBus != null)
             await _knxBus.RequestGroupValueAsync(groupAddress, priority, cancellationToken);
     }
     
     public event EventHandler<GroupEventArgs>? GroupMessageReceived;
-    private void GroupMessageInvoker(object? sender, GroupEventArgs args)
+    public void GroupMessageInvoker(object? sender, GroupEventArgs args)
     {
         GroupMessageReceived?.Invoke(sender, args);
     }

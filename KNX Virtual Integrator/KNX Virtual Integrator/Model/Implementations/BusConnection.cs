@@ -21,7 +21,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Représente l'objet de connexion au bus KNX. Peut-être nul si aucune connexion n'est établie.
     /// </summary>
-    public IKnxBusWrapper Bus;
+    public readonly IKnxBusWrapper Bus;
     
     private readonly ILogger _logger;
 
@@ -62,7 +62,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     public bool IsBusy
     {
         get => _isBusy;
-        private set => SetProperty(ref _isBusy, value); // Notifie l'interface utilisateur des changements
+        set => SetProperty(ref _isBusy, value); // Notifie l'interface utilisateur des changements
     }
 
     /// <summary>
@@ -369,7 +369,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 // Vérifie si la chaîne de connexion est fournie
                 if (string.IsNullOrWhiteSpace(connectionString))
                 {
-                    //MessageBox.Show("Le type de connexion et la chaîne de connexion doivent être fournis.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    _logger.ConsoleAndLogWriteLine("Connection type and string have to be set before connecting.");
                     return; // Interrompt la méthode si les informations de connexion sont manquantes
                 } 
                 var parameters = ConnectorParameters.FromConnectionString(connectionString);
@@ -383,7 +383,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
             _logger.ConsoleAndLogWrite($"Erreur lors de la connexion au bus : {ex.Message}");
-            //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -470,8 +469,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             }
             else
             {
-                Bus.ConnectionStateChanged += BusConnectionStateChanged!; 
-                CurrentInterface = (SelectedConnectionType is "IP à distance (NAT)") ? "À distance via l'IP publique " + NatAddress : SelectedInterface?.DisplayName;
+                Bus.ConnectionStateChanged += BusConnectionStateChanged!;
+                CurrentInterface = SelectedConnectionType is "IP à distance (NAT)" ? "À distance via l'IP publique " + NatAddress : SelectedInterface?.DisplayName is not null ? SelectedInterface.DisplayName : "" ;
                 IsConnected = true;
                 UpdateConnectionState(); // Met à jour l'état de connexion
                 OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
