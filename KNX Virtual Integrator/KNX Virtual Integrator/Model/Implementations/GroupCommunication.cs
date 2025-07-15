@@ -266,7 +266,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             NotifyCollectionChangedEventHandler messageHandler = (_, _) =>
             {
                 if (Messages.Last().DestinationAddress != groupAddress) return;
-                theList.Add(Messages.Last());
+                theList.Add(Messages.Last()); //TODO : Régler le problème de dédoublement des valeurs lues
             };
             
             Messages.CollectionChanged += messageHandler;

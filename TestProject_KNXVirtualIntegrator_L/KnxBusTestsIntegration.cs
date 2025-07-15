@@ -389,9 +389,10 @@ public class KnxBusTestsIntegration
         // Assignez l'interface sélectionnée à la connexion au bus
         await _busConnection.DisconnectBusAsync();
         _busConnection.SelectedInterface = _selectedInterfaceIpSecure;
-        _busConnection.SelectedConnectionType = "IP à Distance (NAT)";
+        _busConnection.SelectedConnectionType = "IP à distance (NAT)";
         _busConnection.Password = "Demo2025#";
         _busConnection.KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys";
+        _busConnection.NatAddress = "92.174.145.34";
 
         // Act
         // Connexion au bus KNX puis écriture de la valeur
