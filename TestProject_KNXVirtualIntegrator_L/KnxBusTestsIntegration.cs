@@ -235,6 +235,28 @@ public class KnxBusTestsIntegration
         _busConnection.SelectedInterface ??= null;
     }
     
+        [Fact]
+        public async Task Test_KnxBus_USBConnect_WithInvalidPath_ShouldFail()
+        {
+            // Étape 1 : Création d'une fausse interface USB invalide
+            var fakeUsbInterface = new ConnectionInterfaceViewModel(
+                ConnectorType.Usb,
+                "USB Fake Interface",
+                "Type=Usb;DevicePath=INVALID_PATH"
+            );
+
+            // Étape 2 : On assigne cette fausse interface au bus
+            _busConnection.SelectedInterface = fakeUsbInterface;
+
+            // Étape 3 : On tente une connexion
+            await _busConnection.ConnectBusAsync();
+
+            // Étape 4 : Vérifie que la connexion a échoué
+            Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une chaîne USB invalide.");
+
+            // Étape 5 : Nettoyage
+            await _busConnection.DisconnectBusAsync();
+        }
     
     [Theory]
     [InlineData(true)]
