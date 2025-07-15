@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Windows;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
+using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Entities;
 
 
@@ -35,12 +36,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /// Occurs when a property value changes.
     /// </summary>
     public new event PropertyChangedEventHandler? PropertyChanged;
-    public ObservableCollection<string> ConnectionTypes { get; } = new()
-    {
+    public ObservableCollection<string> ConnectionTypes { get; } = [
         "IP",
         "IP à distance (NAT)",
         "USB"
-    };
+    ];
 
 
     /* ------------------------------------------------------------------------------------------------
@@ -54,7 +54,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         _busConnection = _modelManager.BusConnection;
         _busConnection.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName == nameof(_busConnection.IsConnected)) {
+            if (e.PropertyName == nameof(_busConnection.IsConnected))
+            {
                 WhenPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
                 ConnectBusCommand?.NotifyCanExecuteChanged(); //ATTENTION, PEUT CAUSER PROBLÈMES APRÈS L'UPGRADE
                 DisconnectBusCommand?.NotifyCanExecuteChanged();
@@ -92,55 +93,101 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 else ErrorMessageVisibility = Visibility.Visible;
             }
         };
-        
+
         _busConnection.SelectedConnectionType = "USB";
-        
+
         ProjectFolderPath = "";
 
-        
-    
-        
-        
+
+
+
+
         // Initialisation des commandes
-        ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(
-            parameter =>
+        ConsoleAndLogWriteLineCommand = new Commands.RelayCommand<string>(parameter =>
             {
                 if (!string.IsNullOrWhiteSpace(parameter))
                     modelManager.Logger.ConsoleAndLogWriteLine(parameter);
             }
         );
 
-        ExtractGroupAddressCommand = new Commands.RelayCommand<object>(
-            _ => modelManager.GroupAddressManager.ExtractGroupAddress()
-        );
+        ExtractGroupAddressCommand =
+            new Commands.RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress()
+            );
 
-        EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(
-            parameter =>
+        EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(parameter =>
             {
                 if (!string.IsNullOrWhiteSpace(parameter))
                     modelManager.ApplicationFileManager.EnsureSettingsFileExists(parameter);
             }
         );
 
-        CreateDebugArchiveCommand = new Commands.RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects)>(
-            parameters =>
-            {
-                modelManager.DebugArchiveGenerator.CreateDebugArchive(
-                    parameters.IncludeOsInfo,
-                    parameters.IncludeHardwareInfo,
-                    parameters.IncludeImportedProjects
-                );
-            }
-        );
+        CreateDebugArchiveCommand =
+            new Commands.RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects
+                )>(parameters =>
+                {
+                    modelManager.DebugArchiveGenerator.CreateDebugArchive(
+                        parameters.IncludeOsInfo,
+                        parameters.IncludeHardwareInfo,
+                        parameters.IncludeImportedProjects
+                    );
+                }
+            );
 
-        FindZeroXmlCommand = new Commands.RelayCommand<string>(
-            fileName =>
+        FindZeroXmlCommand = new Commands.RelayCommand<string>(fileName =>
             {
                 if (fileName != null) modelManager.FileFinder.FindZeroXml(fileName);
             }
         );
 
-        ConnectBusCommand = new AsyncRelayCommand(
+        CreateFunctionalModelDictionaryCommand = new Commands.RelayCommand<object>(_ =>
+            {
+                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model"));
+            }
+        );
+
+        DeleteFunctionalModelDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
+            {
+                _functionalModelList?.DeleteFromDictionary(parameter);
+            }
+        );
+
+        AddTestedElementToModel = new Commands.RelayCommand<FunctionalModel>(model =>
+            {
+                model?.AddElement(new TestedElement());
+            }
+        );
+
+        RemoveTestedElementFromModel = new Commands.RelayCommand<(FunctionalModel model, int index)>(parameters =>
+            {
+                parameters.model.RemoveElement(parameters.index);
+            }
+        );
+        
+        AddTestToElement = new Commands.RelayCommand<TestedElement>(parameter =>
+            {
+                parameter?.AddTest();
+            }
+        );
+        
+        RemoveTestFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+            {
+                parameters.element.RemoveTest(parameters.index);
+            }
+        );
+        
+        AddDptToElement = new Commands.RelayCommand<TestedElement>(parameter =>
+            {
+                parameter?.AddDpt(1,"",[]);
+            }
+        );
+        
+        RemoveDptFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+            {
+                parameters.element.RemoveDpt(parameters.index);
+            }
+        );
+
+    ConnectBusCommand = new AsyncRelayCommand(
             async _ =>
             {
                 _busConnection.NatAccess = false;
@@ -217,18 +264,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
 
         //Gestion des modèles -----------------------------------------------------------------------
-        _functionalModelDictionary = new FunctionalModelDictionary();
+        _functionalModelList = new FunctionalModelList();
 
-        /*// Ajout de 3 modèles par défaut
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle par défaut 1"));
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle par défaut 2"));
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 3"));
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Modèle 4"));
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(2, "Boby Lapointe"));
-        _functionalModelDictionary.Add_FunctionalModel(new FunctionalModel(3, "Modèle 5"));*/
-
-        // Chargement des modèles dans la collection observable
-        Models = new ObservableCollection<FunctionalModel>(_functionalModelDictionary.GetAllModels());
+        // Chargement des modèles par défaut dans la collection observable
+        Models = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
 
         //Sauvegarde des modèles --------------------------------------------------------------------
 

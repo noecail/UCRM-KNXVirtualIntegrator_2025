@@ -1,3 +1,5 @@
+using KNX_Virtual_Integrator.Model.Entities;
+
 namespace KNX_Virtual_Integrator.Model.Interfaces;
 
 
@@ -15,5 +17,8 @@ namespace KNX_Virtual_Integrator.Model.Interfaces;
 public interface IFunctionalModelList
 {
     public void ExportDictionary(string path);
+    public List<FunctionalModel> GetAllModels();
+    public void AddToDictionary(FunctionalModel model);
+    public void DeleteFromDictionary(int index);
 
 }

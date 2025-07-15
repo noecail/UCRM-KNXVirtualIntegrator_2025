@@ -21,7 +21,7 @@ namespace KNX_Virtual_Integrator.ViewModel
 
     public partial class MainViewModel
     {
-        private IFunctionalModelDictionary _functionalModelDictionary;
+        private IFunctionalModelList _functionalModelList;
         private FunctionalModel _selectedModel;
 
 

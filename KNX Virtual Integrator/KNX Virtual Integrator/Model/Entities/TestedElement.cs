@@ -84,13 +84,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// <summary>
         /// This method adds a test pair (value to send, value(s) to read) to the list of tests
         /// </summary>
-        public void AddTest(List<GroupValue?> values)
+        public void AddTest()
         {
-            if (values.Count != Tests.Count)
-                return;
             for (var i = 0; i < Tests.Count; i++)
             {
-                Tests[i].AddValue(values[i]);
+                Tests[i].AddValue(new GroupValue(false));
             }
         }
         
@@ -117,6 +115,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public void AddDpt(int type, string address, List<GroupValue?> value)
         {
             Tests.Add(new DataPointType(type, address, value));
+        }
+
+        public void RemoveDpt(int index)
+        {
+            Tests.RemoveAt(index);
         }
     }
 }

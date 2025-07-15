@@ -97,6 +97,8 @@ public class DataPointType
             case 21:
             case 25:
             case 26:
+            case 236:
+            case 238:
                 _size = 8;
                 break;
             case 200:
@@ -112,6 +114,11 @@ public class DataPointType
             case 207:
             case 211:
             case 217:
+            case 234:
+            case 237:
+            case 239:
+            case 244:
+            case 246:
                 _size = 16;
                 break;
             case 10:
@@ -121,26 +128,80 @@ public class DataPointType
             case 205:
             case 206:
             case 209:
+            case 223:
+            case 225:
+            case 232:
+            case 240:
+            case 250:
+            case 254:
                 _size = 24;
                 break;
             case 215:
             case 216:
             case 218:
+            case 248:
+            case 252:
                 _size = 40;
+                break;
+            case 245:
+                _size = 44;
                 break;
             case 212:
             case 221:
             case 222:
+            case 224:
+            case 229:
+            case 235:
+            case 242:
+            case 251:
+            case 257:
+            case 274:
                 _size = 48;
+                break;
+            case 271: 
+            case 272:
+                _size = 56;
                 break;
             case 19:
             case 29:
             case 213:
             case 219:
+            case 230:
+            case 243:
+            case 255:
+            case 273:
                 _size = 64;
                 break;
+            case 265:
+                _size = 65;
+                break;
+            case 267:
+                _size = 66;
+                break;
+            case 268:
+                _size = 72;
+                break;
+            case 247:
+            case 266:
+                _size = 96;
+                break;
             case 16:
+            case 269:
+            case 277:
+            case 278:
+            case 279:  
+            case 280:
+            case 281:
+            case 282:
+            case 283:
+            case 284:
                 _size = 112;
+                break;
+            case 256:
+                _size = 128;
+                break;
+            case 270:
+                _size = 160;
                 break;
             default:
                 _size = 32;

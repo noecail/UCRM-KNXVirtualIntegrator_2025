@@ -2,11 +2,12 @@ using System.Windows.Automation;
 using System.Xml;
 using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
+using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class FunctionalModelList
+public class FunctionalModelList:IFunctionalModelList
 {
     public List<FunctionalModel> FunctionalModels = [];
     private FunctionalModelDictionary _functionalModelDictionary;
@@ -84,6 +85,15 @@ public class FunctionalModelList
     public void ImportDictionary(string path)
     {
         _functionalModelDictionary.ImportDictionary(path);
+    }
+
+    /// <summary>
+    /// Method to get all the models in the dictionary.
+    /// </summary>
+    /// <returns>Returns a list containing all the functional models. </returns>
+    public List<FunctionalModel> GetAllModels()
+    {
+        return _functionalModelDictionary.GetAllModels();
     }
 }
 
