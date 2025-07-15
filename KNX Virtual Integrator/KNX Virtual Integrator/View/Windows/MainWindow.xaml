@@ -7,7 +7,7 @@
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-                 mc:Ignorable="d"
+        mc:Ignorable="d"
         Title="MainWindow" 
         WindowState="Maximized"
         ResizeMode="CanResize"
@@ -55,47 +55,47 @@
             <!-- Boutons de gauche -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
 
-                    <!-- Bouton Connexion -->
-                    <!-- Note : Le style des boutons et tous les styles sont contenues dans le fichier styles.xaml -->
+                <!-- Bouton Connexion -->
+                <!-- Note : Le style des boutons et tous les styles sont contenues dans le fichier styles.xaml -->
                 <Button 
-                        Click="OpenConnectionWindow"
-                        Style="{StaticResource ConnectButton}"
-                        Margin="0,0,5,0"
+                    Click="OpenConnectionWindow"
+                    Style="{StaticResource ConnectButton}"
+                    Margin="0,0,5,0"
                     
                 />
 
-                    <!-- Premier bouton Importation -->
-                    <Button Style="{StaticResource IconButtonStyle}"
-                        Tag="{StaticResource ImportedDrawingImage}" 
-                        Click="ImportGroupAddressFileButtonClick"                       
-                        Margin="5,0,0,0"     
-                    
+                <!-- Premier bouton Importation -->
+                <Button Style="{StaticResource IconButtonStyle}"
+                    Tag="{StaticResource ImportedDrawingImage}" 
+                    Click="ImportGroupAddressFileButtonClick"                       
+                    Margin="5,0,0,0"
                 />
 
-                    <!-- Deuxième bouton Importation -->
-                    <Button Content="{StaticResource ImportButton}"
-                        Style="{StaticResource IconTextButtonStyle}"
-                        Tag="{StaticResource ImportedDrawingImage}"
-                        Click="ImportProjectButtonClick"
-                        Background="{StaticResource ButtonBlue}"
-                        Margin="5,0"
+                <!-- Deuxième bouton Importation -->
+                <Button Content="{StaticResource ImportButton}"
+                    Style="{StaticResource IconTextButtonStyle}"
+                    Tag="{StaticResource ImportedDrawingImage}"
+                    Click="ImportProjectButtonClick"
+                    Background="{StaticResource ButtonBlue}"
+                    Margin="5,0"
                 />
 
-                    <!-- Bouton Paramètres -->
-                    <Button Style="{StaticResource IconButtonStyle}"
-                        Tag="{StaticResource settingsDrawingImage}"
-                        Click="SettingsButtonClick"
-                        Background="{StaticResource BackgroundWhite}"
-                        BorderBrush="{StaticResource BorderGray}"
-                        BorderThickness="1"
-                            Padding="5"
-                        Margin="0,0"
+                <!-- Bouton Paramètres -->
+                <Button Style="{StaticResource IconButtonStyle}"
+                    Tag="{StaticResource settingsDrawingImage}"
+                    Click="SettingsButtonClick"
+                    Background="{StaticResource BackgroundWhite}"
+                    BorderBrush="{StaticResource BorderGray}"
+                    BorderThickness="1"
+                    Padding="5"
+                    Margin="0,0"
                 />
 
                 <!-- Bouton Test trames -->
                 <Button Content="Envoyer Trame" Click="OnWriteButtonClick" />
                 <Button Content="Lire Trame" Click="OnReadButtonClick" />
             </StackPanel>
+            
             <!-- Boutons de droite -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
 
@@ -104,12 +104,14 @@
                     Style="{StaticResource IconTextButtonStyle}"
                     Tag="{StaticResource playDrawingImage}"
                     Margin="5,0"
-            />
+                />
+                
                 <!-- Bouton d'Exportation -->
                 <Button Content="{StaticResource ExportButton}"
                     Style="{StaticResource IconTextButtonStyle}"
                     Tag="{StaticResource ExportedDrawingImage}"
-            />
+                />
+                
             </StackPanel>
 
         <!-- Contour principal incluant le tableau avec les 4 colonnes -->
@@ -117,357 +119,40 @@
                 <Grid>
                     <!-- Define rows and columns for the nested grid -->
                     <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />  <!-- Titres -->
-                    <RowDefinition Height="*" />   <!-- Contenu -->
-                </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                    <ColumnDefinition MinWidth="200"  Width="Auto" />    <!-- Modèles -->
-                    <ColumnDefinition  Width="{Binding ModelColumnWidth}" /> <!-- Param Modèles + Gestion de la visibilité de la colonne -->
-                    <ColumnDefinition Width="{Binding AdressColumnWidth}" /> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
-                    <ColumnDefinition MinWidth="200"  Width="*" /> <!-- Adresses -->
-                    </Grid.ColumnDefinitions>
-
-                <!-- Première colonne : Modèles_____________________________________________________________________________________ -->
-                <!-- Bordure pour l'en-tête
-                Note : On applique des bordures droites sur chaque élément de la colonne pour donner
-                l'effet d'onglet sélectionné en lien avec les paramètres -->
-
-                <Border BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,1"
-                            Background="{StaticResource BackgroundLightGray}"
-                            >
-                    <Grid Grid.Row="0" Grid.Column="0"  >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
-                            <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
-
-                            <Image Source="{StaticResource FonctionalModelDrawingImage}" Height="20"/>
-                            <TextBlock 
-                                   Style="{StaticResource TitleTextStyle}"
-                                   Text="{StaticResource ModelsTitle}"
-                            />
-                        </StackPanel>
-
-                        <!-- Bouton de recherche,(Non-implémenté)-->
-                        <Button Grid.Column="1"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                            Style="{StaticResource IconButtonStyle}"
-                            Tag="{StaticResource SearchDrawingImage}"
-                            BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="1"
-                            Margin="5"
-                            Padding="5"
-                            Background="{StaticResource BackgroundWhite}"
-                            Height="30"
-                        />
-
-
-                    </Grid>
-                </Border>
-                <!-- Contenue Colonne 1 : liste des modèles liés, Non-liés et Bouton d'ajout au projet -->
-
-                <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundLightGray}" >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/> <!-- Titre lié-->
-                        <RowDefinition Height="Auto"  /><!-- Listes liées-->
-                        <RowDefinition Height="Auto"/><!-- Titre non-lié-->
-                        <RowDefinition Height="Auto"/><!-- Liste non-liées-->
-                        <RowDefinition Height="*" /><!-- -->
-                        <RowDefinition Height="Auto" MinHeight="30" /><!-- Bouton d'ajout de modèles-->
+                        <RowDefinition Height="Auto" />  <!-- Titres -->
+                        <RowDefinition Height="*" />   <!-- Contenu -->
                     </Grid.RowDefinitions>
-
-                    <!-- Titre lié-->
-                    <Border Grid.Row="0"  BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,2"
-                            Padding="5"
-                            Background="{StaticResource BackgroundDarkGray}">
-                        
-                         <TextBlock FontWeight="Bold"
-                           FontSize="16"
-                           Foreground="{StaticResource TextBlack}"
-                           Text="{StaticResource LinkedModel}" />
-                        </Border>
-
-                    <!-- Listes liées-->
-                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                            <ListBox ItemsSource="{Binding Models}"
-                                     SelectedItem="{Binding SelectedModel}"
-                                     ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"/>
-                        
-                    </ScrollViewer>
-
-                    <!-- Titre non-liés-->
-                    <Border Grid.Row="2"  BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,2"
-                            Padding="5"
-                            Background="{StaticResource BackgroundDarkGray}">
-                            <TextBlock FontWeight="Bold"
-                           FontSize="16"
-                           Foreground="{StaticResource TextBlack}"
-                           Text="{StaticResource UnlinkedModel}" />
-                        </Border>
-                        
-                    <!-- Listes non-liées : Crée une liste à part des modèles non liées (different du dico general) -->
-                    <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Auto">
-                            <ListBox ItemsSource="{Binding Models}"
-                                     SelectedItem="{Binding SelectedModel}"
-                                     FontStyle="Italic"
-                                     ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"/>
-                    </ScrollViewer>
-                    
-                    <!-- Combler l'espace restant afin d'avoir une bordure droite -->
-                    <Border Grid.Row="4"  BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,0"
-                            Padding="5"
-                            Background="{StaticResource BackgroundDarkGray}"/>
-
-
-                    <!-- Bouton d'ajout de modèles-->
-                    <Button Grid.Row="5" HorizontalAlignment="Stretch"
-                            VerticalAlignment="Bottom"
-                            Style="{StaticResource IconTextButtonStyle}"
-                            Tag="{StaticResource AddDrawingImage}"
-                            Content="{StaticResource AddModel}"
-                            BorderThickness="0,0,1,0"
-                            BorderBrush="{StaticResource BorderGray}"
-                            Margin="0"
-                            Padding="0"
-                            Background="{StaticResource ButtonBlue}"
-                            Height="40"
-                            
-                     />
-                </Grid>
-
-
-                <!-- Deuxième colonne : Paramètres modèles_______________________________________________________________________________ -->
-                <!-- En-tête -->
-                <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,0" >
-                    <Grid Grid.Row="0" Grid.Column="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" /> <!-- Titre -->
-                            <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
-                        </Grid.ColumnDefinitions>
-
-                        <!-- Titre -->
-                        <TextBlock Grid.Column="0"
-                               Style="{StaticResource TitleTextStyle}"
-                               Text="{StaticResource ModelsParametersTitle}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="5,0"
-                        />
-
-                        <!--Bouton de Fermeture -->
-                        <Button Grid.Column="1"
-                            Style="{StaticResource IconButtonStyle}"
-                            Tag="{StaticResource CloseDrawingImage}"
-                            HorizontalAlignment="Right"
-                            Background="Transparent"
-                            Height="35"
-                            Command="{Binding HideModelColumnCommand}"
-                        />
-                    </Grid>
-                </Border>
-                
-                <!-- Contenue des paramètres des modèles -->
-                <Border Grid.Row="1" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,0" >
-                    <Grid Margin="10,10,10,0" Grid.Row="1" Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"  />  <!-- Ensemble des Paramètres -->
-                            <RowDefinition Height="Auto" /> <!-- Boutons Enregister et Filtrer-->
-                        </Grid.RowDefinitions>
-                        
-                        <!-- Ensemble des Paramètres -->
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" FocusVisualStyle="{x:Null}" BorderThickness="0">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/> <!-- Paramètres Généraux -->
-                                    <RowDefinition Height="Auto"/> <!-- Paramètres Avancées -->
-                                    <RowDefinition Height="*"/> <!-- Tableaux des Envoies/Receptions-->
-                                </Grid.RowDefinitions>
-
-                                <!-- Paramètres Généraux -->
-                                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
-                                    
-                                    <!--Nom-->
-                                    <TextBlock Text="{StaticResource Name:}" VerticalAlignment="Center" Grid.Row="0"/>
-                                    <TextBox x:Name="NomTextBox" HorizontalAlignment="Left" Width="200" Grid.Row="0"
-                                             Text="{Binding NewModelName, UpdateSourceTrigger=PropertyChanged}"/>
-                                    
-                                    <!--DPT : Venir liées le ComboBox a un dictionnaire de DPT traitées par le logiciel en back-->
-                                    <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
-                                    <ComboBox x:Name="DptSortieComboBox" Width="200" HorizontalAlignment="Left" Grid.Row="1">
-                                        <ComboBoxItem Content="1 bit" />
-                                        <ComboBoxItem Content="2 bits" />
-                                        <ComboBoxItem Content="4 bits" />
-                                    </ComboBox>
-
-                                    <!--DPT Subtype : Venir liées le ComboBox a un dictionnaire de DPT Subtype en fonction du DPT choisis ainsi que sa visibilité-->
-                                    <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
-                                    <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left" Grid.Row="1">
-                                        <ComboBoxItem Content="1 bit" />
-                                        <ComboBoxItem Content="2 bits" />
-                                        <ComboBoxItem Content="4 bits" />
-                                    </ComboBox>
-
-                                    <!-- Param Avancés -->
-                                    <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="Black" FocusVisualStyle="{x:Null}" 
-                                           Content="{StaticResource AdvancedSettings}" Grid.Row="2" Margin="0,10,0,0"/>
-
-                                </StackPanel>
-
-                                <!-- Liste des Param Avancés : lié la visibilité a la checkbox précédente -->
-                                <StackPanel Orientation="Vertical" Grid.Row="1" Margin="0,10,0,0">
-                                    <!--DPT Attendu : Liée le ComboBox au dico de DPT-->
-                                    <TextBlock Text="{StaticResource ExpectedDPT}" VerticalAlignment="Center" Grid.Row="3" Margin="0,10,0,0"/>
-                                    <ComboBox x:Name="DptRetourComboBox2" HorizontalAlignment="Left" Width="200" Grid.Row="3">
-                                        <ComboBoxItem Content="8 bit" />
-                                        <ComboBoxItem Content="16 bits" />
-                                    </ComboBox>
-                                    
-                                    <!-- + Ajouter le sous-type de DPT Attendu en fonction du DPT choisis-->
-                                    
-                                </StackPanel>
-
-                                <!-- Tableaux des Envoies/Receptions : Mécanisme à mettre en place la suite n'est que de la figuration-->
-                                <StackPanel Grid.Row="2" Margin="0,10,0,0">
-                                    <TextBlock Text="{StaticResource TableTitleSentExpected}" />
-
-                                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                        <Button Content="+" Width="30" Height="30" Margin="0,5,0,0"/>
-                                        <TextBox x:Name="ValeurEnvoye1TextBox" Width="50" Margin="10,0,0,0" />
-                                        <TextBox x:Name="ValeurAttendue1TextBox" Width="50" Margin="10,0,0,0" />
-                                    </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
-                                        <Button Content="-" Width="30" Height="29" Margin="0,5,0,0"/>
-                                        <TextBox x:Name="ValeurEnvoye2TextBox" Width="50" Margin="10,0,0,0" />
-                                        <TextBox x:Name="ValeurAttendue2TextBox" Width="50" Margin="10,0,0,0" />
-                                    </StackPanel>
-
-                                </StackPanel>
-                            </Grid>
-                        </ScrollViewer>
-
-                        <!-- Boutons Enregister et Filtrer-->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Row="1" Margin="10">
-                            <Button Style="{StaticResource IconTextButtonStyle}"
-                                Tag="{StaticResource FilterDrawingImage}"
-                                Content="Filtrer" Margin="10,0"/>
-                            <Button Style="{StaticResource IconTextButtonStyle}"
-                                Tag="{StaticResource CheckmarkDrawingImage}"
-                                Content="{StaticResource Save}"
-                                Command="{Binding SaveCommand}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-
-
-                <!-- Troisième colonne : Paramètres des Commandes _____________________________________________________________________________________________________________________ -->
-                    <!-- En-tête -->
-                <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
-                        BorderThickness="0,0,1,0" >
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />  <!-- Titre -->
-                            <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition MinWidth="200"  Width="Auto" /> <!-- Modèles -->
+                        <ColumnDefinition Width="{Binding ModelColumnWidth}" />  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition Width="{Binding AdressColumnWidth}" /> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition MinWidth="200"  Width="*" /> <!-- Adresses -->
                     </Grid.ColumnDefinitions>
 
-                    <!-- Titre -->
-                    <TextBlock Grid.Column="0"
-                               Style="{StaticResource TitleTextStyle}"
-                               Text="{StaticResource CommandeParametersTitle}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                               Margin="5,0"
-                     />
+                    <!-- Première colonne : Modèles_____________________________________________________________________________________ -->
+                    <!-- Bordure pour l'en-tête
+                    Note : On applique des bordures droites sur chaque élément de la colonne pour donner
+                    l'effet d'onglet sélectionné en lien avec les paramètres -->
 
-                    <!-- Bouton de fermeture-->
-                    <Button Grid.Column="1"
-                        Style="{StaticResource IconButtonStyle}"
-                        Tag="{StaticResource CloseDrawingImage}"
-                        HorizontalAlignment="Right"
-                        Background="Transparent"
-                        Height="35"
-                        Command="{Binding HideAdressColumnCommand}"
-                    />
-                    </Grid>
-                </Border>
-                    
-                <!--Contenue des paramètres : Voir Maquette-->
-                <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
-                        BorderThickness="0,0,1,0"
-                        Padding="10,0">
-                    <Grid >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*" /> <!-- Paramètres-->
-                            <RowDefinition Height="Auto" /> <!--Boutons enregister-->
-                        </Grid.RowDefinitions>
-                        
-                        <!-- Paramètres : Structure à revoir et contenue à completer-->
-                        <StackPanel Grid.Row="0" Orientation="Vertical">
-                            <TextBlock Text="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,0,20"/>
+                    <Border Grid.Row="0" Grid.Column="0" BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,1"
+                            Background="{StaticResource BackgroundLightGray}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
+                                <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                            </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Row="0" Orientation="Horizontal">
-
-                                <!-- DPT Envoyé : lié le ComboBox au dico de DPT en Back-->
-                                <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,10,0"/>
-                                <ComboBox Width="200" HorizontalAlignment="Left" Grid.Row="1">
-                                    <ComboBoxItem Content="1 bit" />
-                                    <ComboBoxItem Content="2 bits" />
-                                    <ComboBoxItem Content="4 bits" />
-                                </ComboBox>
-
-                            </StackPanel>
-                            
-                            <!--Titre du tableau -->
-                            <TextBlock Text="{StaticResource IEAccociated}" 
+                            <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
+                                <Image Source="{StaticResource FonctionalModelDrawingImage}" Height="20"/>
+                                <TextBlock 
                                        Style="{StaticResource TitleTextStyle}"
-                                       FontSize="14"
-                                       Padding="0,10"/>
-                            
-                            <!-- + Tableau d'association Modèle/CMD/IE a liée avec le Back-->
+                                       Text="{StaticResource ModelsTitle}"
+                                />
+                            </StackPanel>
 
-                        </StackPanel>
-
-                        <!--Boutons enregister-->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Row="1" Margin="10">
-                            <Button Grid.Row="1" Style="{StaticResource IconTextButtonStyle}" 
-                            Tag="{StaticResource CheckmarkDrawingImage}"
-                            Content="{StaticResource Save}"
-                            Command="{Binding SaveCommand}"/>
-                        </StackPanel>
-                    </Grid>
-                </Border>
-                    
-
-        <!-- Quatrième colonne___________________________________________________________________________________________________________________________________ -->
-            <!-- En-tête -->
-            <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource BackgroundLightGray}">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" /> <!--Titre avec son icon-->
-                    <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
-                </Grid.ColumnDefinitions>
-
-
-                <!--Titre avec son icon-->
-                <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-
-                    <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
-                    <TextBlock 
-                            Style="{StaticResource TitleTextStyle}"
-                            Text="{StaticResource GroupAdressesTitle}"
-                    />
-                    </StackPanel>
-
-                    <!--Bouton de recherche : Non-implementer-->
-                    <Button Grid.Column="1"
+                            <!-- Bouton de recherche,(Non-implémenté)-->
+                            <Button Grid.Column="1"
                                     HorizontalAlignment="Right"
                                     VerticalAlignment="Center"
                                 Style="{StaticResource IconButtonStyle}"
@@ -478,81 +163,393 @@
                                 Padding="5"
                                 Background="{StaticResource BackgroundWhite}"
                                 Height="30"
-                         />
+                            />
+                        </Grid>
+                    </Border>
+                        
+                    <!-- Contenu Colonne 1 : liste des modèles liés, Non-liés et Bouton d'ajout au projet -->
+                    <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundLightGray}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- Titre lié-->
+                            <RowDefinition Height="Auto"  /><!-- Listes liées-->
+                            <RowDefinition Height="Auto"/><!-- Titre non-lié-->
+                            <RowDefinition Height="Auto"/><!-- Liste non-liées-->
+                            <RowDefinition Height="*" /><!-- -->
+                            <RowDefinition Height="Auto" MinHeight="30" /><!-- Bouton d'ajout de modèles-->
+                        </Grid.RowDefinitions>
 
-            </Grid>
-        
+                        <!-- Titre modèles liés-->
+                        <Border Grid.Row="0"  BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,2"
+                            Padding="5"
+                            Background="{StaticResource BackgroundDarkGray}">
+                            
+                            <TextBlock FontWeight="Bold"
+                                       FontSize="16"
+                                       Foreground="{StaticResource TextBlack}"
+                                       Text="{StaticResource LinkedModels}"
+                            />
+                        </Border>
 
-        <!-- TreeView(figuratif) : à redesign entièrement selon la maquette, ajouter les infos de liaison, et ouvrir les paramètres sur clique -->
-                <TreeView Grid.Row="1" Grid.Column="3">
-                    <TreeViewItem Header="ECLAIRAGE SIMPLE" IsExpanded="True">
-                                    <TreeViewItem Header="ON/OFF" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/1"/>
-                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/2"/>
-                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="1/1/0"/>
-                                    </TreeViewItem>
-                                </TreeViewItem>
+                        <!-- Listes modèles liés-->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                <ListBox ItemsSource="{Binding Models}"
+                                         SelectedItem="{Binding SelectedModel}"
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"
+                                />
+                        </ScrollViewer>
 
-                                <TreeViewItem Header="ECLAIRAGE VARIABLE" IsExpanded="True">
-                                    <TreeViewItem Header="ON/OFF" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/1"/>
-                                        <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/2"/>
-                                    </TreeViewItem>
-                                    <TreeViewItem Header="VARIATIONS" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/1"/>
-                                        <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/2"/>
-                                    </TreeViewItem>
-                                    <TreeViewItem Header="VALEURS VARIATION" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/1"/>
-                                        <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/2"/>
-                                    </TreeViewItem>
-                                </TreeViewItem>
+                        <!-- Titre modèles non-liés-->
+                        <Border Grid.Row="2"  BorderBrush="{StaticResource BorderGray}"
+                                BorderThickness="0,0,1,2"
+                                Padding="5"
+                                Background="{StaticResource BackgroundDarkGray}">
+                                <TextBlock FontWeight="Bold"
+                                           FontSize="16"
+                                           Foreground="{StaticResource TextBlack}"
+                                           Text="{StaticResource UnlinkedModels}"
+                                />
+                            </Border>
+                            
+                        <!-- Listes modèles non-liés : Crée une liste à part des modèles non-liés (different du dico general) -->
+                        <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Auto">
+                                <ListBox ItemsSource="{Binding Models}"
+                                         SelectedItem="{Binding SelectedModel}"
+                                         FontStyle="Italic"
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"
+                                />
+                        </ScrollViewer>
+                        
+                        <!-- Combler l'espace restant afin d'avoir une bordure droite -->
+                        <Border Grid.Row="4"  BorderBrush="{StaticResource BorderGray}"
+                                BorderThickness="0,0,1,0"
+                                Padding="5"
+                                Background="{StaticResource BackgroundDarkGray}"
+                        />
 
-                                <TreeViewItem Header="COMMANDE PC" IsExpanded="True">
-                        <TreeViewItem Header="ON/OFF PC" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_CommandePc_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="3/1/1"/>
-                                    </TreeViewItem>
-                                </TreeViewItem>
 
-                                <TreeViewItem Header="COMMANDE CHAUFFAGE" IsExpanded="True">
-                        <TreeViewItem Header="ON/OFF CHAUFFAGE" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_Chauffage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="4/0/2"/>
-                                    </TreeViewItem>
-                                </TreeViewItem>
+                        <!-- Bouton d'ajout de modèles-->
+                        <Button Grid.Row="5" HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                Style="{StaticResource IconTextButtonStyle}"
+                                Tag="{StaticResource AddDrawingImage}"
+                                Content="{StaticResource AddModel}"
+                                BorderThickness="0,0,1,0"
+                                BorderBrush="{StaticResource BorderGray}"
+                                Margin="0"
+                                Padding="0"
+                                Background="{StaticResource ButtonBlue}"
+                                Height="40"
+                        />
+                    </Grid>
 
-                                <TreeViewItem Header="VOLET ROULANT" IsExpanded="True">
-                        <TreeViewItem Header="MONTEE/DESCENTE" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_VoletRoulant_MonteeDescente_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/1/1"/>
-                                    </TreeViewItem>
-                        <TreeViewItem Header="STOP" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_VoletRoulant_Stop_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/3/1"/>
-                                    </TreeViewItem>
-                        <TreeViewItem Header="POSITION" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_VoletRoulant_Position_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="5/4/1"/>
-                                    </TreeViewItem>
-                                </TreeViewItem>
 
-                                <TreeViewItem Header="COMPTEUR" IsExpanded="True">
-                        <TreeViewItem Header="ENERGIE CHAUFFAGE" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_Compteur_EnergieChauffage_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/3/1"/>
-                                    </TreeViewItem>
-                        <TreeViewItem Header="ENERGIE ECLAIRAGES" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_Compteur_EnergieEclairages_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/4/1"/>
-                                    </TreeViewItem>
-                                </TreeViewItem>
+                    <!-- Deuxième colonne : Paramètres modèles_______________________________________________________________________________ -->
+                    <!-- En-tête -->
+                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                                BorderThickness="0,0,1,0" >
+                        <Grid Grid.Row="0" Grid.Column="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" /> <!-- Titre -->
+                                <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
+                            </Grid.ColumnDefinitions>
 
-                                <TreeViewItem Header="SCENARIO SALON" IsExpanded="True">
-                        <TreeViewItem Header="ON/OFF ECL SALON" IsExpanded="True">
-                                        <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/1"/>
-                                        <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/2"/>
-                                    </TreeViewItem>
-                                </TreeViewItem>
+                            <!-- Titre -->
+                            <TextBlock Grid.Column="0"
+                                   Style="{StaticResource TitleTextStyle}"
+                                   Text="{StaticResource ModelsParametersTitle}"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Margin="5,0"
+                            />
 
-                            </TreeView>
+                            <!--Bouton de Fermeture -->
+                            <Button Grid.Column="1"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="{StaticResource CloseDrawingImage}"
+                                HorizontalAlignment="Right"
+                                Background="Transparent"
+                                Height="35"
+                                Command="{Binding HideModelColumnCommand}"
+                            />
+                        </Grid>
+                    </Border>
+                    
+                    <!-- Contenu des paramètres des modèles -->
+                    <Border Grid.Row="1" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                                BorderThickness="0,0,1,0" >
+                        <Grid Margin="10,10,10,0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"  />  <!-- Ensemble des Paramètres -->
+                                <RowDefinition Height="Auto" /> <!-- Boutons Enregister et Filtrer-->
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Ensemble des Paramètres -->
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" FocusVisualStyle="{x:Null}" BorderThickness="0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/> <!-- Paramètres Généraux -->
+                                        <RowDefinition Height="Auto"/> <!-- Paramètres Avancées -->
+                                        <RowDefinition Height="*"/> <!-- Tableaux des Envois/Receptions-->
+                                    </Grid.RowDefinitions>
 
-            </Grid>
+                                    <!-- Paramètres Généraux -->
+                                    <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,10,0,0">
+                                        
+                                        <!--Nom-->
+                                        <TextBlock Text="{StaticResource Name:}" VerticalAlignment="Center" Grid.Row="0"/>
+                                        <TextBox x:Name="NomTextBox" HorizontalAlignment="Left" Width="200" Grid.Row="0"
+                                                 Text="{Binding NewModelName, UpdateSourceTrigger=PropertyChanged}"/>
+                                        
+                                        <!--DPT : Venir liées le ComboBox a un dictionnaire de DPT traitées par le logiciel en back-->
+                                        <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
+                                        <ComboBox x:Name="DptSortieComboBox" Width="200" HorizontalAlignment="Left" Grid.Row="1">
+                                            <ComboBoxItem Content="1 bit" />
+                                            <ComboBoxItem Content="2 bits" />
+                                            <ComboBoxItem Content="4 bits" />
+                                        </ComboBox>
+
+                                        <!--DPT Subtype : Venir liées le ComboBox a un dictionnaire de DPT Subtype en fonction du DPT choisis ainsi que sa visibilité-->
+                                        <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
+                                        <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left" Grid.Row="1">
+                                            <ComboBoxItem Content="1 bit" />
+                                            <ComboBoxItem Content="2 bits" />
+                                            <ComboBoxItem Content="4 bits" />
+                                        </ComboBox>
+
+                                        <!-- Param Avancés -->
+                                        <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="Black" FocusVisualStyle="{x:Null}" 
+                                               Content="{StaticResource AdvancedSettings}" Grid.Row="2" Margin="0,10,0,0"/>
+
+                                    </StackPanel>
+
+                                    <!-- Liste des Param Avancés : lié la visibilité a la checkbox précédente -->
+                                    <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,10,0,0">
+                                        <!--DPT Attendu : Liée le ComboBox au dico de DPT-->
+                                        <TextBlock Text="{StaticResource ExpectedDPT}" VerticalAlignment="Center" Grid.Row="3" Margin="0,10,0,0"/>
+                                        <ComboBox x:Name="DptRetourComboBox2" HorizontalAlignment="Left" Width="200" Grid.Row="3">
+                                            <ComboBoxItem Content="8 bit" />
+                                            <ComboBoxItem Content="16 bits" />
+                                        </ComboBox>
+                                        <!-- + Ajouter le sous-type de DPT Attendu en fonction du DPT choisi-->
+                                    </StackPanel>
+
+                                    <!-- Tableaux des Envois/Receptions : Mécanisme à mettre en place la suite n'est que de la figuration-->
+                                    <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                                        <TextBlock Text="{StaticResource TableTitleSentExpected}" />
+
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                            <Button Content="+" Width="30" Height="30" Margin="0,5,0,0"/>
+                                            <TextBox x:Name="ValeurEnvoye1TextBox" Width="50" Margin="10,0,0,0" />
+                                            <TextBox x:Name="ValeurAttendue1TextBox" Width="50" Margin="10,0,0,0" />
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                                            <Button Content="-" Width="30" Height="29" Margin="0,5,0,0"/>
+                                            <TextBox x:Name="ValeurEnvoye2TextBox" Width="50" Margin="10,0,0,0" />
+                                            <TextBox x:Name="ValeurAttendue2TextBox" Width="50" Margin="10,0,0,0" />
+                                        </StackPanel>
+
+                                    </StackPanel>
+                                </Grid>
+                            </ScrollViewer>
+
+                            <!-- Boutons Enregister et Filtrer-->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Row="1" Margin="10">
+                                <Button Style="{StaticResource IconTextButtonStyle}"
+                                    Tag="{StaticResource FilterDrawingImage}"
+                                    Content="Filtrer" Margin="10,0"/>
+                                <Button Style="{StaticResource IconTextButtonStyle}"
+                                    Tag="{StaticResource CheckmarkDrawingImage}"
+                                    Content="{StaticResource Save}"
+                                    Command="{Binding SaveCommand}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+
+                    <!-- Troisième colonne : Paramètres des Commandes _____________________________________________________________________________________________________________________ -->
+                        <!-- En-tête -->
+                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,0" >
+                        <Grid >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />  <!-- Titre -->
+                                <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Titre -->
+                            <TextBlock Grid.Column="0"
+                                       Style="{StaticResource TitleTextStyle}"
+                                       Text="{StaticResource CommandeParametersTitle}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"
+                                       Margin="5,0"
+                            />
+
+                            <!-- Bouton de fermeture-->
+                            <Button Grid.Column="1"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="{StaticResource CloseDrawingImage}"
+                                HorizontalAlignment="Right"
+                                Background="Transparent"
+                                Height="35"
+                                Command="{Binding HideAdressColumnCommand}"
+                            />
+                        </Grid>
+                    </Border>
+                        
+                    <!--Contenu des paramètres : Voir Maquette-->
+                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,0"
+                            Padding="10,0">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" /> <!-- Paramètres-->
+                                <RowDefinition Height="Auto" /> <!--Boutons enregister-->
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Paramètres : Structure à revoir et contenue à completer-->
+                            <StackPanel Grid.Row="0" Orientation="Vertical">
+                                <TextBlock Text="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,0,20"/>
+
+                                <StackPanel Orientation="Horizontal">
+
+                                    <!-- DPT Envoyé : lier le ComboBox au dico de DPT en Back-->
+                                    <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,10,0"/>
+                                    <ComboBox Width="200" HorizontalAlignment="Left" Grid.Row="1">
+                                        <ComboBoxItem Content="1 bit" />
+                                        <ComboBoxItem Content="2 bits" />
+                                        <ComboBoxItem Content="4 bits" />
+                                    </ComboBox>
+
+                                </StackPanel>
+                                
+                                <!--Titre du tableau -->
+                                <TextBlock Text="{StaticResource IEAccociated}" 
+                                           Style="{StaticResource TitleTextStyle}"
+                                           FontSize="14"
+                                           Padding="0,10"
+                                />
+                                
+                                <!-- + Tableau d'association Modèle/CMD/IE a liée avec le Back-->
+
+                            </StackPanel>
+
+                            <!--Bouton enregister-->
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
+                                <Button Grid.Row="1" Style="{StaticResource IconTextButtonStyle}" 
+                                Tag="{StaticResource CheckmarkDrawingImage}"
+                                Content="{StaticResource Save}"
+                                Command="{Binding SaveCommand}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                        
+
+                    <!-- Quatrième colonne___________________________________________________________________________________________________________________________________ -->
+                    <!-- En-tête -->
+                    <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource BackgroundLightGray}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" /> <!--Titre avec son icon-->
+                            <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                        </Grid.ColumnDefinitions>
+
+
+                        <!--Titre avec son icon-->
+                        <StackPanel Grid.Column="0"  Background="Transparent" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
+                            <TextBlock 
+                                    Style="{StaticResource TitleTextStyle}"
+                                    Text="{StaticResource GroupAdressesTitle}"
+                            />
+                        </StackPanel>
+
+                        <!--Bouton de recherche : Non-implementer-->
+                        <Button Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="{StaticResource SearchDrawingImage}"
+                                BorderBrush="{StaticResource BorderGray}"
+                                BorderThickness="1"
+                                Margin="5"
+                                Padding="5"
+                                Background="{StaticResource BackgroundWhite}"
+                                Height="30"
+                        />
+
+                    </Grid>
+            
+
+                    <!-- TreeView(figuratif) : à redesign entièrement selon la maquette, ajouter les infos de liaison, et ouvrir les paramètres sur clique -->
+                    <TreeView Grid.Row="1" Grid.Column="3">
+                        <TreeViewItem Header="ECLAIRAGE SIMPLE" IsExpanded="True">
+                            <TreeViewItem Header="ON/OFF" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/1"/>
+                                <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/2"/>
+                                <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="1/1/0"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="ECLAIRAGE VARIABLE" IsExpanded="True">
+                            <TreeViewItem Header="ON/OFF" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/1"/>
+                                <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/2"/>
+                            </TreeViewItem>
+                            <TreeViewItem Header="VARIATIONS" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/1"/>
+                                <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/2"/>
+                            </TreeViewItem>
+                            <TreeViewItem Header="VALEURS VARIATION" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/1"/>
+                                <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/2"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="COMMANDE PC" IsExpanded="True">
+                            <TreeViewItem Header="ON/OFF PC" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_CommandePc_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="3/1/1"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="COMMANDE CHAUFFAGE" IsExpanded="True">
+                            <TreeViewItem Header="ON/OFF CHAUFFAGE" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_Chauffage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="4/0/2"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="VOLET ROULANT" IsExpanded="True">
+                            <TreeViewItem Header="MONTEE/DESCENTE" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_VoletRoulant_MonteeDescente_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/1/1"/>
+                            </TreeViewItem>
+                            <TreeViewItem Header="STOP" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_VoletRoulant_Stop_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/3/1"/>
+                            </TreeViewItem>
+                            <TreeViewItem Header="POSITION" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_VoletRoulant_Position_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="5/4/1"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="COMPTEUR" IsExpanded="True">
+                            <TreeViewItem Header="ENERGIE CHAUFFAGE" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_Compteur_EnergieChauffage_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/3/1"/>
+                            </TreeViewItem>
+                            <TreeViewItem Header="ENERGIE ECLAIRAGES" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_Compteur_EnergieEclairages_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/4/1"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+
+                        <TreeViewItem Header="SCENARIO SALON" IsExpanded="True">
+                            <TreeViewItem Header="ON/OFF ECL SALON" IsExpanded="True">
+                                <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/1"/>
+                                <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/2"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeView>
+
+                </Grid>
             </Border>
-
         </Grid>
 
 </mah:MetroWindow>

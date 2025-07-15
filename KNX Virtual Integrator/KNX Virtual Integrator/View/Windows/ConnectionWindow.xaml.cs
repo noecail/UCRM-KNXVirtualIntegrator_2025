@@ -42,7 +42,7 @@ public partial class ConnectionWindow
             // Définir des propriétés optionnelles
             Title = "Sélectionnez un fichier de clés à importer",
             // Applique un filtre pour n'afficher que les fichiers knxkeys ou tous les fichiers
-            Filter = "Fichiers de clés|*.knxkeys|Tous les fichiers|*.*",
+            Filter = "Fichiers de clés|*.knxkeys",
             // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
             FilterIndex = 1,
             // N'autorise pas la sélection de plusieurs fichiers à la fois

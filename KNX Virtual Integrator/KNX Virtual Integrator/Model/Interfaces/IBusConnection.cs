@@ -63,6 +63,11 @@ public interface IBusConnection : INotifyPropertyChanged
     /// </summary>
     string KeysPath { get; set; }
 
+    /// <summary>
+    /// Contient le message d'erreur à afficher dans la fenêtre de connexion après une connexion ratée
+    /// </summary>
+    string ConnectionErrorMessage { get; set; }
+
     
     // ------------------------------------ TACHES ------------------------------------
     
@@ -94,9 +99,4 @@ public interface IBusConnection : INotifyPropertyChanged
     void OnSelectedConnectionTypeChanged();
 
     
-    /// <summary>
-    /// TO BE DELETED LATER, FOR TEST
-    /// </summary>
-    /// <returns></returns>
-    Task ClearField();
 }

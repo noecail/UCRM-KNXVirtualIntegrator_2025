@@ -22,6 +22,7 @@ using System.Globalization;
 using System.Windows;
 using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.Model.Implementations;
+using KNX_Virtual_Integrator.Model.Wrappers;
 using KNX_Virtual_Integrator.View;
 using KNX_Virtual_Integrator.ViewModel;
 
@@ -197,7 +198,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 130;
+    public const int AppBuild = 132;
     
         
     
@@ -268,7 +269,7 @@ public partial class App
         var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader, namespaceResolver, groupAddressProcessor, groupAddressMerger);
         var projectInfoManager = new ProjectInfoManager(namespaceResolver);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
-        var busConnection = new BusConnection(logger);
+        var busConnection = new BusConnection(logger, new KnxBusWrapper());
         var groupCommunication = new GroupCommunication(busConnection, logger);
         var parentFinder = new ParentFinder(logger);
         var sliderClickHandler = new SliderClickHandler(logger, parentFinder);
@@ -363,8 +364,6 @@ public partial class App
     }
     
 }
-
-
 
 
 

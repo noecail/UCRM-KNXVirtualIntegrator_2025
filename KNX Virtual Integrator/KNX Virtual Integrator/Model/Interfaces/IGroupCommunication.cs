@@ -9,6 +9,6 @@ public interface IGroupCommunication
     Task GroupValueWriteOffAsync();
 
     Task<GroupValue?> MaGroupValueReadAsync(GroupAddress groupAddress);
-    Task GroupValueWriteAsync(GroupAddress addr, GroupValue value);
+    Task<bool> GroupValueWriteAsync(GroupAddress addr, GroupValue value);
 
 }
