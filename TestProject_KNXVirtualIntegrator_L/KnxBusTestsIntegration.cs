@@ -75,7 +75,7 @@ public class KnxBusTestsIntegration
     }
     
     [Fact]
-    public async Task Test_KnxBus_IPConnectLastDiscoveredInterface_Auto()
+    public async Task Test_KnxBus_IpConnectLastDiscoveredInterface_Auto()
     {
         // Arrange
             
@@ -94,7 +94,7 @@ public class KnxBusTestsIntegration
 
         // Assert
         // Vérification de la connexion
-        Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface != null, "Connexion IP échouée avec des interfaces trouvées.");
+        Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null, "Connexion IP échouée avec des interfaces trouvées.");
         _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
             
         // Cleanup
@@ -236,7 +236,7 @@ public class KnxBusTestsIntegration
     }
     
         [Fact]
-        public async Task Test_KnxBus_USBConnect_WithInvalidPath_ShouldFail()
+        public async Task Test_KnxBus_UsbConnect_WithInvalidPath_ShouldFail()
         {
             // Étape 1 : Création d'une fausse interface USB invalide
             var fakeUsbInterface = new ConnectionInterfaceViewModel(
