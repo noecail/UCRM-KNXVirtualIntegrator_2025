@@ -35,4 +35,6 @@ public interface IKnxBusWrapper
 
     event EventHandler<GroupEventArgs>? GroupMessageReceived;
 
+    void GroupMessageInvoker(object? sender, GroupEventArgs args);
+
 }

@@ -104,7 +104,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             if (_busConnection is { IsConnected: true, IsBusy: false })
             {
                 _groupValue = new GroupValue(false);
-                if (_busConnection is { CancellationTokenSource: not null, Bus: not null })
+                if (_busConnection is { CancellationTokenSource: not null, Bus.IsNull : false })
                     await _busConnection.Bus.WriteGroupValueAsync(
                         _groupAddress, _groupValue, MessagePriority.High,
                         _busConnection.CancellationTokenSource.Token
@@ -134,30 +134,22 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     {
         try
         {
-            if (_busConnection is { IsConnected: true, IsBusy: false })
-            {
-                if (_busConnection is { CancellationTokenSource: not null, Bus: not null })
-                    return await _busConnection.Bus.WriteGroupValueAsync(
-                        addr, value, MessagePriority.High,
-                        _busConnection.CancellationTokenSource.Token );
-            }
-            else
-            {
-                _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.");
-                //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
-                //inclure un "return", comme il faut renvoyer du "void"?
-            }
+            if (_busConnection is
+                { IsConnected: true, IsBusy: false, CancellationTokenSource: not null, Bus.IsNull: false })
+                return await _busConnection.Bus.WriteGroupValueAsync(
+                    addr, value, MessagePriority.High,
+                    _busConnection.CancellationTokenSource.Token);
 
+            _logger.ConsoleAndLogWriteLine(
+                "Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.");
             return false;
+
         }
         catch (Exception ex)
         {
             _logger.ConsoleAndLogWriteLine($"Erreur lors de l'envoi de la trame : {ex.Message}");
             return false;
-            //MessageBox.Show($"Erreur lors de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-
-        return false;
     }
 
     ///<summary>
@@ -189,8 +181,6 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         if (_busConnection is { IsConnected: false, IsBusy: true, Bus: not null })
         {
             _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
-            //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.",
-            //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
             return null;
         }
 
@@ -208,19 +198,19 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             // Définis le résultat pour terminer la tâche
             tcs.SetResult(e.Value);
             // Désabonne le handler une fois que la valeur est capturée
-            if (!_busConnection.Bus.IsNull)
+            if (_busConnection.Bus is { IsNull: false })
                 _busConnection.Bus.GroupMessageReceived -= handler;
 
         };
 
         // S'abonner à l'événement
-        if (_busConnection is { Bus: not null })
-            _busConnection.Bus!.GroupMessageReceived += handler;
+        if (_busConnection is { Bus.IsNull : false })
+            _busConnection.Bus.GroupMessageReceived += handler;
 
         try
         {
             // Envoie la requête pour lire la valeur du groupe
-            if (_busConnection is { CancellationTokenSource: not null, Bus: not null })
+            if (_busConnection is { CancellationTokenSource: not null, Bus.IsNull: false })
                 await _busConnection.Bus.RequestGroupValueAsync(
                     groupAddress, MessagePriority.High,
                     _busConnection.CancellationTokenSource.Token
@@ -231,7 +221,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             _logger.ConsoleAndLogWriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
             //MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
             //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
-            if (_busConnection is {Bus: not null })
+            if (_busConnection is { Bus.IsNull : false })
                 _busConnection.Bus.GroupMessageReceived -= handler; // Assurez-vous de désabonner même en cas d'exception
             return null;
         }
@@ -281,7 +271,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             
             Messages.CollectionChanged += messageHandler;
             
-            if (_busConnection is { CancellationTokenSource: not null, Bus: not null })
+            if (_busConnection is { CancellationTokenSource: not null, Bus.IsNull : false })
                 await _busConnection.Bus.RequestGroupValueAsync(
                     groupAddress, MessagePriority.High,
                     _busConnection.CancellationTokenSource.Token
@@ -388,10 +378,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         //TODO : Dé-commenter lorsque l'interface Dispatcher wrapper sera créée pour permettre de tester
         
         // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
-        Dispatcher.CurrentDispatcher.Invoke(() =>
-        {
+        //Dispatcher.CurrentDispatcher.Invoke(() =>
+        //{
             // Ajoute la nouvelle entrée à la liste observable
             Messages.Add(newMessage);
-        });
+        //});
     }
 }
