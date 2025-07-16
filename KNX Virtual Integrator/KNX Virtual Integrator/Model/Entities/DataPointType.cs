@@ -19,9 +19,15 @@ public class DataPointType
 
     private int _size; // Size of the DPT
     
-    public List<GroupValue?> Value; // Value to send or expected to be read
+    public List<GroupValue?> Value { get; } // Value to send or expected to be read
 
-    public string Address = "0/1/1";
+    private string _address = "0/1/1";
+
+    public string Address
+    {
+        get => _address;
+        set => _address = value;
+    }
     
     //Constructors
     public DataPointType(int type)

@@ -1,3 +1,4 @@
+using iText.Commons.Bouncycastle.Crypto;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities
@@ -9,9 +10,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
     /// </summary>
     public class TestedElement
     {
-       
-        public List<DataPointType> Tests; // List of pairs : command to send to the bus and expected feedback to be read on the bus
-        private int nb_Cmd = 1;
+        public List<DataPointType> Tests { get; } // List of pairs : command to send to the bus and expected feedback to be read on the bus
+
+        public int NbCmd = 1;
 
 
         //Constructors
@@ -24,7 +25,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd,int[] typeIe, string[]  addressesIe, List<GroupValue?>[] valueIe)
         {
             Tests = [];
-            nb_Cmd = typeCmd.Length;
+            NbCmd = typeCmd.Length;
             for (var i = 0; i < typeCmd.Length; i++)
             {
                 Tests.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
@@ -39,7 +40,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd)
         {
-            nb_Cmd = typeCmd.Length;
+            NbCmd = typeCmd.Length;
             Tests = [];
             for (var i = 0; i < typeCmd.Length; i++)
             {
@@ -50,7 +51,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public TestedElement(TestedElement element)
         {
             Tests = [];
-            nb_Cmd = element.nb_Cmd;
+            NbCmd = element.NbCmd;
             for (var i = 0; i < element.Tests.Count; i++)
             {
                 Tests.Add(element.Tests[i]);

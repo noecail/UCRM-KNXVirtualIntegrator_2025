@@ -301,6 +301,12 @@
         </Setter>
     </Style>
     
+    <Style x:Key="TestedElementListListBoxItemStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="{StaticResource BackgroundLightGray}"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="Margin" Value="0,5,0,0"/>
+    </Style>
+    
     <!--Style pour les info-bulles -->
     <Style x:Key="TooltipImage" TargetType="Image">
         <Setter Property="Source" Value="{StaticResource TooltipWhiteOnKNXGreenDrawingImage}"/>

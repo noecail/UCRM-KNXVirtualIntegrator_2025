@@ -7,7 +7,7 @@
                   xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                   d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                   mc:Ignorable="d"
-                  Title="Connexion au Bus KNX" Height="550" Width="300"
+                  Title="Connexion au Bus KNX" Height="650" Width="300"
                   TitleCharacterCasing="Normal"
                   ResizeMode="NoResize"
                   Background="White"
@@ -591,13 +591,21 @@
             
             <!-- Section connexion IP Secure-->
             <StackPanel Grid.Row="3" Orientation="Vertical" Visibility="{Binding SecureConnectionVisibility}">
+                <TextBlock 
+                           VerticalAlignment="Center"
+                           TextAlignment="Left"
+                           FontStyle="Italic"
+                           Margin="21,10,0,0" >
+                    À ne remplir que pour une connexion sécurisée
+                </TextBlock>
+                
                 <Grid HorizontalAlignment="Center" Width="255">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="90"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="20"/>
                         <RowDefinition Height="30"/>
                         <RowDefinition Height="15"/>
                     </Grid.RowDefinitions>
@@ -616,13 +624,6 @@
                             FontWeight="SemiBold"
                             VerticalAlignment="Center"/>
                     </StackPanel>
-                    
-                    <TextBlock Grid.Row="0" Grid.Column="1"
-                               VerticalAlignment="Center"
-                               TextAlignment="Left"
-                               FontStyle="Italic">
-                        (Facultatif)
-                    </TextBlock>
                     
                     <Image Grid.Row="0" Grid.Column="1"
                            Style="{StaticResource TooltipImage}"
@@ -673,14 +674,14 @@
                 </Grid>
                 
                 <TextBlock
-                   Margin="21,0,0,10" 
+                   Margin="21,0,0,5" 
                    Text="{Binding _busConnection.KeysPath}"
                    TextAlignment="Left"
                    FontSize="10"
                    TextWrapping="Wrap">
                 </TextBlock>
                 
-                <Grid HorizontalAlignment="Center" Height="30">
+                <Grid Margin="22,0" Height="30">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="90"/>
@@ -689,14 +690,14 @@
                     <TextBlock Grid.Column="0"
                                Text="Mot de passe du fichier de clés"
                                VerticalAlignment="Center"
-                               TextAlignment="Left"
+                               HorizontalAlignment="Left"
                     />
                     
                     <TextBox  Grid.Column="1"
-                    Width="80"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right"
-                    Text="{Binding _busConnection.Password}"
+                                Width="80"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Right"
+                                Text="{Binding _busConnection.KeysFilePassword}"
                     />
                 </Grid>
                 

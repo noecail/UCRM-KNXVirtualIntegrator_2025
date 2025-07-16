@@ -257,7 +257,7 @@
                             <!-- Titre -->
                             <TextBlock Grid.Column="0"
                                    Style="{StaticResource TitleTextStyle}"
-                                   Text="{StaticResource ModelsParametersTitle}"
+                                   Text="Paramètres du Modèle Fonctionnel"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
                                    Margin="5,0"
@@ -297,21 +297,112 @@
                                     <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,10,0,0">
                                         
                                         <!--Nom-->
-                                        <TextBlock Text="{StaticResource Name:}" VerticalAlignment="Center" Grid.Row="0"/>
-                                        <TextBox x:Name="NomTextBox" HorizontalAlignment="Left" Width="200" Grid.Row="0"
-                                                 Text="{Binding NewModelName, UpdateSourceTrigger=PropertyChanged}"/>
+                                        <TextBlock Text="{StaticResource Name:}" VerticalAlignment="Center"/>
+                                        <TextBox x:Name="NomTextBox" HorizontalAlignment="Left" Width="200"
+                                                 Text="{Binding SelectedModel.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                        
                                         
                                         <!--DPT : Venir liées le ComboBox a un dictionnaire de DPT traitées par le logiciel en back-->
-                                        <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
-                                        <ComboBox x:Name="DptSortieComboBox" Width="200" HorizontalAlignment="Left" Grid.Row="1">
-                                            <ComboBoxItem Content="1 bit" />
-                                            <ComboBoxItem Content="2 bits" />
-                                            <ComboBoxItem Content="4 bits" />
-                                        </ComboBox>
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <ListBox ItemsSource="{Binding SelectedModel.ElementList}"
+                                                     SelectedItem="{Binding SelectedTestedElement}"
+                                                     ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Vertical">
+                                                            
+                                                            <!-- Element à tester = Liste de DPTs {types des DPTs, adresses d'envoi et de retours, liste de valeurs}-->
+                                                            <TextBlock Text="Élément à tester" Margin="0,0,0,5" FontWeight="SemiBold"/>
+ 
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <TextBlock Text="Envoi" Margin="90,0,15,0"/>
+                                                                <TextBlock Text="Réception(s)"/>
+                                                            </StackPanel>
+                                                            
+                                                            <Grid>
+                                                                <Grid.RowDefinitions>
+                                                                    <RowDefinition Height="Auto"/>   <!--"Envoi" ou "Réception"-->
+                                                                    <RowDefinition Height="Auto"/>   <!--Type de DPT-->
+                                                                    <RowDefinition Height="Auto"/>   <!--Adresses-->
+                                                                    <RowDefinition Height="Auto"/>   <!--Valeurs-->
+                                                                </Grid.RowDefinitions>
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="80"/> <!--"Type du DPT" ou "Adresse liée"-->
+                                                                    <ColumnDefinition Width="*"/> <!--Colonne(s) d'envois et de réceptions-->
+                                                                </Grid.ColumnDefinitions>
+                                                               
+                                                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Type de DPT :"/>
+                                                                <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Tests}">
+                                                                    <ListBox.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <StackPanel Orientation="Horizontal" />
+                                                                        </ItemsPanelTemplate>
+                                                                    </ListBox.ItemsPanel>
+                                                                    <ListBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <TextBox Text="{Binding Type}"
+                                                                                Width="40"
+                                                                                HorizontalContentAlignment="Center"
+                                                                                />
+                                                                        </DataTemplate>
+                                                                    </ListBox.ItemTemplate>
+                                                                </ListBox>
+                                                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Adresse liée :"/>
+                                                                <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tests}">
+                                                                    <ListBox.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <StackPanel Orientation="Horizontal"
+                                                                                VerticalAlignment="Top"/>
+                                                                        </ItemsPanelTemplate>
+                                                                    </ListBox.ItemsPanel>
+                                                                    <ListBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <TextBox Text="{Binding Address}"
+                                                                                Width="40"
+                                                                                HorizontalContentAlignment="Center"
+                                                                                />
+                                                                        </DataTemplate>
+                                                                    </ListBox.ItemTemplate>
+                                                                </ListBox>
+                                                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Valeurs :"/>
+                                                                <ListBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Tests}">
+                                                                    <ListBox.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <StackPanel Orientation="Horizontal" />
+                                                                        </ItemsPanelTemplate>
+                                                                    </ListBox.ItemsPanel>
+                                                                    <ListBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Center">
+                                                                                <ListBox ItemsSource="{Binding Value}"
+                                                                                         Width="40"
+                                                                                         HorizontalContentAlignment="Center"
+                                                                                         />
+                                                                             </ScrollViewer>
+                                                                        </DataTemplate>
+                                                                    </ListBox.ItemTemplate>
+                                                                </ListBox>
+                                                            </Grid>
+                                                             
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                            <!--ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"-->
+                                        </ScrollViewer>
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        
 
                                         <!--DPT Subtype : Venir liées le ComboBox a un dictionnaire de DPT Subtype en fonction du DPT choisis ainsi que sa visibilité-->
-                                        <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Grid.Row="1" Margin="0,10,0,0"/>
-                                        <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left" Grid.Row="1">
+                                        <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left">
                                             <ComboBoxItem Content="1 bit" />
                                             <ComboBoxItem Content="2 bits" />
                                             <ComboBoxItem Content="4 bits" />
@@ -319,15 +410,15 @@
 
                                         <!-- Param Avancés -->
                                         <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="Black" FocusVisualStyle="{x:Null}" 
-                                               Content="{StaticResource AdvancedSettings}" Grid.Row="2" Margin="0,10,0,0"/>
+                                               Content="{StaticResource AdvancedSettings}" Margin="0,10,0,0"/>
 
                                     </StackPanel>
 
                                     <!-- Liste des Param Avancés : lié la visibilité a la checkbox précédente -->
                                     <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,10,0,0">
                                         <!--DPT Attendu : Liée le ComboBox au dico de DPT-->
-                                        <TextBlock Text="{StaticResource ExpectedDPT}" VerticalAlignment="Center" Grid.Row="3" Margin="0,10,0,0"/>
-                                        <ComboBox x:Name="DptRetourComboBox2" HorizontalAlignment="Left" Width="200" Grid.Row="3">
+                                        <TextBlock Text="{StaticResource ExpectedDPT}" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        <ComboBox x:Name="DptRetourComboBox2" HorizontalAlignment="Left" Width="200">
                                             <ComboBoxItem Content="8 bit" />
                                             <ComboBoxItem Content="16 bits" />
                                         </ComboBox>

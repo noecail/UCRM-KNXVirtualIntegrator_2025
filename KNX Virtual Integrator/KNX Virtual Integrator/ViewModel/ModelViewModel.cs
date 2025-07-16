@@ -40,14 +40,12 @@ namespace KNX_Virtual_Integrator.ViewModel
             set
             {
                 if (_selectedModel.Equals(value)) return;
-                
                 _selectedModel = value;
-                ShowModelColumn();
+                ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedModel));
                 
             }
             // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
-
         }
     }
 }

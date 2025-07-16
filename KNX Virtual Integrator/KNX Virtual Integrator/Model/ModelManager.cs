@@ -2,6 +2,25 @@
 
 namespace KNX_Virtual_Integrator.Model
 {
+    /// <summary>
+    ///     Manager which holds each and every instance of the model classes. The instances can be accessed but not set.
+    /// </summary>
+    /// <param name="fileLoader"><see cref="Implementations.FileLoader"/>, to import files</param>
+    /// <param name="fileFinder"><see cref="Implementations.FileFinder"/>, to import files</param>
+    /// <param name="projectFileManager"><see cref="Implementations.ProjectFileManager"/>, to manage the project</param>
+    /// <param name="logger"><see cref="Logger"/>, to log and print information</param>
+    /// <param name="zipArchiveManager"><see cref="Implementations.ZipArchiveManager"/>, to archive logs</param>
+    /// <param name="groupAddressManager"><see cref="Implementations.GroupAddressManager"/>, to manage group addresses</param>
+    /// <param name="systemSettingsDetector"><see cref="Implementations.SystemSettingsDetector"/>, to detect settings</param>
+    /// <param name="debugArchiveGenerator"><see cref="Implementations.DebugArchiveGenerator"/>, to create bug reports</param>
+    /// <param name="applicationFileManager"><see cref="Implementations.ApplicationFileManager"/>, to handle files</param>
+    /// <param name="busConnection"><see cref="Implementations.BusConnection"/>, to handle the KNX Bus</param>
+    /// <param name="groupCommunication"><see cref="Implementations.GroupCommunication"/>, to communicate with the bus</param>
+    /// <param name="appSettings"><see cref="Implementations.ApplicationSettings"/>, to manage the settings</param>
+    /// <param name="parentFinder"><see cref="Implementations.ParentFinder"/>, to organize groupe addresses</param>
+    /// <param name="settingsSliderClickHandler"><see cref="Implementations.SliderClickHandler"/>, to handle sliders</param>
+    /// <param name="pdfDocumentCreator"><see cref="Implementations.PdfDocumentCreator"/>, to create Test report PDF</param>
+    /// <param name="projectInfoManager"><see cref="Implementations.ProjectInfoManager"/>, to manage the project info</param>
     public class ModelManager(
         IFileLoader fileLoader,
         IFileFinder fileFinder,
