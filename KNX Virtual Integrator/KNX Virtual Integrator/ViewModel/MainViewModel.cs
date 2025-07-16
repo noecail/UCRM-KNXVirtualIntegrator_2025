@@ -187,7 +187,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-    ConnectBusCommand = new AsyncRelayCommand(
+        ConnectBusCommand = new AsyncRelayCommand(
             async _ =>
             {
                 _busConnection.NatAccess = false;

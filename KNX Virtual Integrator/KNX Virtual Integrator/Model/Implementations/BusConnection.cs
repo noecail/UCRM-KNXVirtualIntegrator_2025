@@ -143,25 +143,25 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <summary>
     /// Mot de passe permettant l'accès au fichier de clé pour connexion IP Secure
     /// </summary>bu
-    private string _password;
-    public string Password
+    private string _keysFilePassword;
+    public string KeysFilePassword
     {
-        get => _password;
+        get => _keysFilePassword;
         set
         {
-            if (_password == value) return; // Pas de changement si la valeur est la même 
-            _password = value;
-            _securePassword.Clear();
-            foreach (var c in _password)
-                _securePassword.AppendChar(c);
-            WhenPropertyChanged(nameof(Password)); // Notifie l'interface utilisateur du changement
+            if (_keysFilePassword == value) return; // Pas de changement si la valeur est la même 
+            _keysFilePassword = value;
+            _secureKeysFilePassword.Clear();
+            foreach (var c in _keysFilePassword)
+                _secureKeysFilePassword.AppendChar(c);
+            WhenPropertyChanged(nameof(KeysFilePassword)); // Notifie l'interface utilisateur du changement
         }
     }
 
     /// <summary>
     /// Mot de passe sécurisé actuellement sélectionné.
     /// </summary>
-    private SecureString _securePassword = new SecureString();
+    private SecureString _secureKeysFilePassword = new SecureString();
 
     /// <summary>
     /// Chemin du fichier de clés pour connexion IP Secure
@@ -304,7 +304,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                         ConnectionErrorMessage = "";
                         try
                         {
-                            await parameters.LoadSecurityDataAsync(KeysPath,_securePassword);
+                            await parameters.LoadSecurityDataAsync(KeysPath,_secureKeysFilePassword);
                             Bus.NewKnxBusWrapper(parameters);
                             await Bus.ConnectAsync(CancellationToken.None);
                             CheckBusConnection();
@@ -349,7 +349,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                         try
                         {
                             // Ajouter le mot de passe
-                            await parameters.LoadSecurityDataAsync(KeysPath,_securePassword);
+                            await parameters.LoadSecurityDataAsync(KeysPath,_secureKeysFilePassword);
                          
                             // Créer un bus avec les mots de passe
                             Bus.NewKnxBusWrapper(parameters);
@@ -400,16 +400,23 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         if (SelectedConnectionType is "IP")
         {
             // Connexion Secure mais pas de knxkeys fourni
-            if (e.Message.Contains("The value cannot be an empty string. (Parameter 'path')",
-                    StringComparison.OrdinalIgnoreCase))
+            if (e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase))
             {
                 ErrorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
             }
             // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
-            else if (e.Message.Contains("Not a valid keyring file (Invalid signature)",
-                         StringComparison.OrdinalIgnoreCase))
+            else if (e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase))
             {
                 ErrorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
+            }
+            // Connexion réussie mais le bus est déjà utilisé
+            else if (e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase))
+            {
+                ErrorMessage = "Un autre appareil est déjà connecté au bus KNX.";
+            }
+            else
+            {
+                ErrorMessage = "Erreur non reconnue, contactez les développeurs.";
             }
         }
         else if (SelectedConnectionType is "IP à distance (NAT)")
@@ -417,8 +424,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             // Connexion NAT mais pas d'IP fourni
             if (NatAddress == "")
             {
-                ErrorMessage =
-                    "Pour établir une connexion NAT, veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
+                ErrorMessage = "Pour établir une connexion NAT, veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
             }
             // Connexion NAT mais IP fourni n'est pas une adresse IP
             else if (!ValidateIPv4(NatAddress))
@@ -438,19 +444,22 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 ErrorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
             }
             // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
-            else if (e.Message.Contains("Not a valid keyring file (Invalid signature)",
-                         StringComparison.OrdinalIgnoreCase))
+            else if (e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase))
             {
                 ErrorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
+            }
+            // Connexion réussie mais le bus est déjà utilisé
+            else if (e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase))
+            {
+                ErrorMessage = "Un autre appareil est déjà connecté au bus KNX.";
             }
             else
             {
                 ErrorMessage = "Erreur non reconnue, contactez les développeurs.";
             }
-
-            _logger.ConsoleAndLogWriteLine(ErrorMessage);
-            ConnectionErrorMessage = ErrorMessage;
         }
+        _logger.ConsoleAndLogWriteLine(ErrorMessage);
+        ConnectionErrorMessage = ErrorMessage;
     }
 
     /// <summary>
@@ -670,7 +679,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     {
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
         Bus = knxBusWrapper;
-        _password = "";
+        _keysFilePassword = "";
         _logger = logger;
         _natAddress = "";
         _keysPath = "";

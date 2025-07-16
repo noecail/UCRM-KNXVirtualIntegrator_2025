@@ -56,7 +56,7 @@ public interface IBusConnection : INotifyPropertyChanged
     /// <summary>
     /// Contient le mot de passe du fichier de clés sécurisant une connexion IP Secure
     /// </summary>
-    string Password { get; set; }
+    string KeysFilePassword { get; set; }
     
     /// <summary>
     /// Contient le chemin vers le fichier de clés permettant la connexion IP Secure. Ce fichier a été exporté par l'utilisateur au préalable depuis ETS

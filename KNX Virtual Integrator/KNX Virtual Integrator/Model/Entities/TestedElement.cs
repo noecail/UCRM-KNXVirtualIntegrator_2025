@@ -11,7 +11,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
     public class TestedElement
     {
        
-        public List<DataPointType> Tests; // List of pairs : command to send to the bus and expected feedback to be read on the bus
+        public List<DataPointType> Tests { get; } // List of pairs : command to send to the bus and expected feedback to be read on the bus
 
 
         //Constructors
@@ -121,5 +121,6 @@ namespace KNX_Virtual_Integrator.Model.Entities
         {
             Tests.RemoveAt(index);
         }
+
     }
 }
