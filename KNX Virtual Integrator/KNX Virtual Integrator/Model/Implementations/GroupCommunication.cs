@@ -378,10 +378,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         //TODO : Dé-commenter lorsque l'interface Dispatcher wrapper sera créée pour permettre de tester
         
         // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
-        //Dispatcher.CurrentDispatcher.Invoke(() =>
-        //{
+        Dispatcher.CurrentDispatcher.Invoke(() =>
+        {
             // Ajoute la nouvelle entrée à la liste observable
             Messages.Add(newMessage);
-        //});
+        });
     }
 }

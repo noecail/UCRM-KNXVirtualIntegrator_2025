@@ -192,16 +192,16 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         foreach (var entry in GroupedAddresses)
         {
             // Trouver la première adresse "Cmd" dans le groupe
-            var cmdAddress = entry.Value.FirstOrDefault(x => (bool)x.Attribute("Name")?.Value.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase));
+            var cmdAddress = entry.Value.FirstOrDefault(x => x.Attribute("Name")?.Value.StartsWith("Cmd", StringComparison.OrdinalIgnoreCase) ?? false );
 
             if (cmdAddress != null)
             {
                 var commonName = entry.Key;
                 // Initialise une nouvelle liste avec l'adresse "Cmd"
-                GroupedAddresses[commonName] = new List<XElement> { cmdAddress };
+                GroupedAddresses[commonName] = new List<XElement> { cmdAddress } ;
 
                 // Ajouter toutes les adresses "Ie" correspondantes sous le même nom commun
-                GroupedAddresses[commonName].AddRange(entry.Value.Where(x => (bool)x.Attribute("Name")?.Value.StartsWith("Ie", StringComparison.OrdinalIgnoreCase)));
+                GroupedAddresses[commonName].AddRange(entry.Value.Where(x => x.Attribute("Name")?.Value.StartsWith("Ie", StringComparison.OrdinalIgnoreCase) ?? false));
             }
             else
             {
