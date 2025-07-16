@@ -13,7 +13,7 @@ namespace TestProject_KNXVirtualIntegrator_L;
 public class KnxBusTestsIntegration
 {
     private readonly ITestOutputHelper _output;
-    private BusConnection _busConnection;
+    private readonly BusConnection _busConnection;
     private readonly GroupCommunication _groupCommunication;
     private readonly ConnectionInterfaceViewModel _selectedInterfaceUsb;
     private readonly ConnectionInterfaceViewModel _selectedInterfaceIp;
@@ -41,7 +41,7 @@ public class KnxBusTestsIntegration
             "Type=IpTunneling;IndividualAddress=1.1.255;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"Interface IP Secure N148/23\"");
         _selectedInterfaceIpNat = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling,
             "IP-Interface Secure 192.168.10.132",
-            "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
+            "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Udp;UseNat=True;Name=\"IP-Interface Secure\"");
 
     }
     [Fact]
@@ -118,7 +118,7 @@ public class KnxBusTestsIntegration
                 device.ToConnectionString()
             )
         ).FirstOrDefault();
-        // Affiche l'interface sélectionnée si non nulle
+        // Affiche l'interface sélectionnée, si elle est non nulle
         if (selectedInterface != null)
         {
             _output.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName + " " +
@@ -131,7 +131,7 @@ public class KnxBusTestsIntegration
 
             
         // Assert
-        // Vérifie que la connexion a réussi (passe automatiquement car test d'intégration)
+        // Vérifie que la connexion a réussi (passe automatiquement, car test d'intégration)
         Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null , "Connexion USB échouée malgré avoir trouvé une interface");
         _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
         // Cleanup
@@ -323,7 +323,7 @@ public class KnxBusTestsIntegration
         var readGroupValue = await _groupCommunication.GroupValuesWithinTimerAsync(readGroupAddress,2000 );
             
         // Assert
-        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement car test d'intégration)
+        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement, car test d'intégration)
         Assert.True(readGroupValue.Count >= 0, "No value was read from the bus");
         _output.WriteLine("test value : " + testGroupValue);
         foreach (var lValue in readGroupValue)
@@ -351,7 +351,7 @@ public class KnxBusTestsIntegration
         await _busConnection.DisconnectBusAsync();
         _busConnection.SelectedInterface = _selectedInterfaceIpSecure;
         _busConnection.SelectedConnectionType = "IP";
-        _busConnection.Password = "Demo2025#";
+        _busConnection.KeysFilePassword = "Demo2025#";
         _busConnection.KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys";
 
         // Act
@@ -362,7 +362,7 @@ public class KnxBusTestsIntegration
         var readGroupValue = await _groupCommunication.GroupValuesWithinTimerAsync(readGroupAddress,2000 );
             
         // Assert
-        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement car test d'intégration)
+        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement, car test d'intégration)
         Assert.True(readGroupValue.Count >= 0, "No value was read from the bus");
         _output.WriteLine("test value : " + testGroupValue);
         foreach (var lValue in readGroupValue)
@@ -388,9 +388,9 @@ public class KnxBusTestsIntegration
         // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
         // Assignez l'interface sélectionnée à la connexion au bus
         await _busConnection.DisconnectBusAsync();
-        _busConnection.SelectedInterface = _selectedInterfaceIpSecure;
+        _busConnection.SelectedInterface = _selectedInterfaceIpNat;
         _busConnection.SelectedConnectionType = "IP à distance (NAT)";
-        _busConnection.Password = "Demo2025#";
+        _busConnection.KeysFilePassword = "Demo2025#";
         _busConnection.KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys";
         _busConnection.NatAddress = "92.174.145.34";
 
@@ -402,7 +402,7 @@ public class KnxBusTestsIntegration
         var readGroupValue = await _groupCommunication.GroupValuesWithinTimerAsync(readGroupAddress,2000 );
             
         // Assert
-        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement car test d'intégration)
+        // Pour vérifier si on reçoit bien des valeurs et les afficher (passe automatiquement, car test d'intégration)
         Assert.True(readGroupValue.Count >= 0, "No value was read from the bus");
         _output.WriteLine("test value : " + testGroupValue);
         foreach (var lValue in readGroupValue)

@@ -19,35 +19,37 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     public static XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01"; // Namespace utilisé pour les opérations KNX
 
     /// <summary>
-    /// Représente l'objet de connexion au bus KNX. Peut-être nul si aucune connexion n'est établie.
+    ///     The instance of the KNX bus.
+    ///     It is wrapped to reduce the code dependency on the Falcon library and allow testing.
+    ///     The actual KNX Bus can be null and is accessed through
+    ///     <see cref="IKnxBusWrapper.IsNull"/> and <see cref="IKnxBusWrapper.KnxBusSetter"/>
+    ///     The wrapper can possess more implementations in case more methods have to be used.
     /// </summary>
     public readonly IKnxBusWrapper Bus;
     
-    private readonly ILogger _logger;
-
-
     /// <summary>
-    /// Permet l'annulation d'opérations asynchrones en cours. Peut-être nul si aucune opération n'est en cours.
+    ///     The instance of the Logger. It is used to log and print to the console the application activity,
+    ///     while reducing code dependency on Console library.
+    /// </summary>
+    private readonly ILogger _logger;
+    
+    /// <summary>
+    ///     Allows cancelling of ongoing asynchronous tasks. Can be null when there is no ongoing task.
     /// </summary>
     public CancellationTokenSource? CancellationTokenSource;
     
     /// <summary>
-    /// Collection observable des interfaces de connexion découvertes.
+    ///     Observable collection of the discovered bus interfaces for the current connection type.
     /// </summary>
     public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces { get; private set; }
 
     /// <summary>
-    /// Indique si le bus est actuellement connecté. Utilisé pour lier l'état de connexion à l'interface utilisateur.
-    /// </summary>
-    public bool IsBusConnected => IsConnected;
-
-    /// <summary>
-    /// Propriété privée qui stocke l'interface actuellement sélectionnée.
+    ///     Private property that is handled with <see cref="SelectedInterface"/>.
     /// </summary>
     private ConnectionInterfaceViewModel? _selectedInterface;
 
     /// <summary>
-    /// Interface actuellement sélectionnée. La liaison avec l'interface utilisateur est mise à jour automatiquement.
+    ///     Currently selected bus interface. It is automatically updated and linked with the UI.
     /// </summary>
     public ConnectionInterfaceViewModel? SelectedInterface
     {
@@ -56,9 +58,14 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
     
     /// <summary>
-    /// Indique si une tâche ou une opération est en cours (par exemple, une connexion). Utilisé pour désactiver l'interface utilisateur pendant les opérations.
+    ///     Private property that is handled with <see cref="IsBusy"/>
     /// </summary>
     private bool _isBusy;
+    
+    /// <summary>
+    ///     Indicate whether there is an ongoing activity (like a connection).
+    ///     Used to deactivate the UI during the activity.
+    /// </summary>
     public bool IsBusy
     {
         get => _isBusy;
@@ -66,9 +73,13 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     /// <summary>
-    /// Indique si le bus est connecté ou non. Liaison à l'interface utilisateur pour afficher l'état de la connexion.
+    ///     Private property that is handled with <see cref="IsConnected"/>
     /// </summary>
     private bool _isConnected;
+    
+    /// <summary>
+    ///     Indicates whether the bus is connected or not. It is linked with the UI.
+    /// </summary>
     public bool IsConnected
     {
         get => _isConnected;
@@ -81,9 +92,13 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     /// <summary>
-    /// État actuel de la connexion (par exemple, "Connecté" ou "Déconnecté"). Mis à jour automatiquement.
+    ///     Private property that is handled with <see cref="ConnectionState"/>
     /// </summary>
     private string? _connectionState;
+    
+    /// <summary>
+    ///     Current connection state (i.e. : "Connected" ou "Disconnected"). Automatically updated
+    /// </summary>
     public string? ConnectionState
     {
         get => _connectionState;
@@ -91,10 +106,13 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     /// <summary>
-    /// Interface de la connexion actuelle
+    ///     Private property that is handled with <see cref="CurrentInterface"/>
     /// </summary>
     private string _currentInterface = "Aucune interface connectée";
 
+    /// <summary>
+    ///     Current connection interface
+    /// </summary>
     public string CurrentInterface
     {
         get => _currentInterface;
@@ -107,9 +125,13 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
     
     /// <summary>
-    /// Adresse IP du routeur distant permettant la connexion distante au bus KNX
+    ///     Private property that is handled with <see cref="NatAddress"/>
     /// </summary>
-    private string _natAddress;
+    private string _natAddress = "";
+    
+    /// <summary>
+    ///     IP address of the distant router to allow NAT connection
+    /// </summary>
     public string NatAddress
     {
         get => _natAddress;
@@ -123,27 +145,29 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     
     
     /// <summary>
-    /// Choix d'accès à distance via NAT.
+    ///     Property that indicates whether we use NAT to access the interface.
     /// </summary>
     public bool NatAccess { get; set; }
 
     /// <summary>
-    /// Port cible pour le NAT.
-    /// </summary>b
+    ///     Hardcoded default port for connection with NAT (3671 is the default for KNX)
+    /// </summary>
     public int NatPort = 3671;
 
     /// <summary>
-    /// Adresse de l'interface IP;
+    ///     Individual Address for the given IP Secure interface
     /// </summary>
+    // TODO : Do not hardcode it, use the connectionParameters to have it
     public string InterfaceAddress="1.1.255";
 
-
-
+    /// <summary>
+    ///     Private property that is handled by <see cref="Password"/>
+    /// </summary>
+    private string _keysFilePassword = "";
     
     /// <summary>
-    /// Mot de passe permettant l'accès au fichier de clé pour connexion IP Secure
-    /// </summary>bu
-    private string _keysFilePassword;
+    ///     Password that allows access to the file that holds the knxkeys. See <see cref="KeysPath"/>
+    /// </summary>
     public string KeysFilePassword
     {
         get => _keysFilePassword;
@@ -159,14 +183,18 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     /// <summary>
-    /// Mot de passe sécurisé actuellement sélectionné.
+    ///     Secure password that is currently selected
     /// </summary>
-    private SecureString _secureKeysFilePassword = new SecureString();
+    private SecureString _secureKeysFilePassword = new ();
 
     /// <summary>
-    /// Chemin du fichier de clés pour connexion IP Secure
-    /// /// </summary>
+    ///     Private property that is handled by <see cref="KeysPath"/>
+    /// </summary>
     private string _keysPath = "";
+    
+    /// <summary>
+    ///     The path to the file that holds the keys for the IP secure connection
+    /// </summary>
     public string KeysPath
     {
         get => _keysPath;
@@ -179,9 +207,13 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     /// <summary>
-    /// Type de connexion sélectionné par l'utilisateur (par exemple, Ethernet, USB, WiFi). Les changements de cette propriété sont propagés à l'interface utilisateur.
+    ///     Private property that is handled by <see cref="SelectedConnectionType"/>
     /// </summary>
     private string? _selectedConnectionType;
+    
+    /// <summary>
+    ///     Connection Type chosen by the user (IP, IP NAT, USB). Its changes are shared with the user interface
+    /// </summary>
     public string? SelectedConnectionType
     {
         get => _selectedConnectionType;
@@ -194,12 +226,15 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
     
     /// <summary>
-    /// Contient le message d'erreur à afficher dans la fenêtre de connexion après une connexion ratée
-    /// Différents cas :
-    /// -
-    /// - 
-    /// - </summary>
-    private string _connectionErrorMessage;
+    ///     Private property that is handled with <see cref="ConnectionErrorMessage"/>.
+    /// </summary>
+    private string _connectionErrorMessage = "";
+    
+    /// <summary>
+    ///     Property that possesses the error message to be printed to the user interface.
+    ///     It is collected through <see cref="CheckError"/>.
+    ///     Different cases : 
+    ///  </summary>
     public string ConnectionErrorMessage
     {
         get => _connectionErrorMessage;
@@ -215,14 +250,15 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     //GESTIONNAIRE ÉVÈNEMENT POUR GROUPCOMMUNICATIONVIEWMODEL
     
     /// <summary>
-    /// Événement déclenché lorsque la connexion au bus KNX est prête.
+    ///     Event raised when the bus is ready to be connected.
     /// </summary>
-    public event EventHandler<IKnxBusWrapper>? BusConnectedReady;               //Le mettre en "nullable" est bien correct?
+    public event EventHandler<IKnxBusWrapper>? BusConnectedReady; //Le mettre en "nullable" est bien correct?
 
     /// <summary>
-    /// Méthode protégée qui déclenche l'événement <see cref="BusConnectedReady"/>.
+    ///     Private handler of the update on the bus readiness to be connected
+    ///     through firing the event <see cref="BusConnectedReady"/>.
     /// </summary>
-    /// <param name="bus">L'objet <see cref="KnxBus"/> qui représente la connexion au bus KNX.</param>
+    /// <param name="bus">The object <see cref="IKnxBusWrapper"/> which represents the KNX Bus.</param>
     private void OnBusConnectedReady(IKnxBusWrapper bus)
     {
         BusConnectedReady?.Invoke(this, bus); // Déclenche l'événement si des abonnés existent
@@ -230,9 +266,9 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
 
 
     /// <summary>
-    /// Méthode asynchrone appelée lorsque le type de connexion sélectionné change.
-    /// Cette méthode tente de découvrir les interfaces disponibles en appelant <see cref="DiscoverInterfacesAsync"/>.
-    /// En cas d'erreur, elle capture l'exception et affiche un message dans la console.
+    ///     Asynchronous method called when then <see cref="SelectedConnectionType"/> changes.
+    ///     It tries to discover new interfaces with <see cref="DiscoverInterfacesAsync"/>.
+    ///     If there is an error, it catches it and prints it.
     /// </summary>
     public async void OnSelectedConnectionTypeChanged()
     {
@@ -244,16 +280,17 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la console
-            _logger.ConsoleAndLogWrite($"Erreur lors de la découverte des interfaces: {ex.Message}");
+            _logger.ConsoleAndLogWrite($"Error while discovering interfaces: {ex.Message}");
         }
     }
     
     /// <summary>
-    /// Établit une connexion au bus KNX de manière asynchrone.
-    /// Cette méthode vérifie d'abord si une connexion est déjà en cours. Si ce n'est pas le cas, elle procède à la connexion en utilisant les informations de connexion fournies.
-    /// En cas de succès, elle met à jour l'état de connexion et notifie les abonnés de la connexion établie. En cas d'échec, elle affiche un message d'erreur.
+    ///     Establishes a connection to the Knx Bus asynchronously
+    ///     It first verifies whether there is an ongoing operation. If not, it proceeds with the connection.
+    ///     When it succeeds, it updates the connection state and its subscribers.
+    ///     When it fails, it prints an error message.
     /// </summary>
-    /// <returns>Une tâche représentant l'opération de connexion asynchrone.</returns>
+    /// <returns>A task representing the completion to the connection.</returns>
     public async Task ConnectBusAsync()
     {
         if (IsBusy)
@@ -277,7 +314,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                 Bus.ConnectionStateChanged -= BusConnectionStateChanged!;
                 CurrentInterface = "Aucune interface connectée";
                 await Bus.DisposeAsync();
-                Bus.SetNull = null;
+                Bus.KnxBusSetter = null;
                 UpdateConnectionState(); // Met à jour l'état de connexion
             }
             
@@ -330,7 +367,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
                     return; // Interrompt la méthode si les informations de connexion sont manquantes
                 }
                 
-                var parameters = IpTunnelingConnectorParameters.FromConnectionString(connectionString);
+                var parameters = ConnectorParameters.FromConnectionString(connectionString);
              
                 // Crée un nouvel objet de bus avec les paramètres extraits de la chaîne de connexion
                 Bus.NewKnxBusWrapper(parameters);
@@ -392,163 +429,146 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
 
-
+    /// <summary>
+    ///     Handles every exception raised in the bus context that only needs to be printed out
+    /// </summary>
+    /// <param name="e"> The raised exception</param>
     private void CheckError(Exception e)
     {
-        string ErrorMessage = "";
+        var errorMessage = "";
         _logger.ConsoleAndLogWriteLine($"Erreur : {e.GetType().Name} - {e.Message}");
-        if (SelectedConnectionType is "IP")
+        switch (SelectedConnectionType)
         {
-            // Connexion Secure mais pas de knxkeys fourni
-            if (e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase))
-            {
-                ErrorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
-            }
-            // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
-            else if (e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase))
-            {
-                ErrorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
-            }
-            // Connexion réussie mais le bus est déjà utilisé
-            else if (e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase))
-            {
-                ErrorMessage = "Un autre appareil est déjà connecté au bus KNX.";
-            }
-            else
-            {
-                ErrorMessage = "Erreur non reconnue, contactez les développeurs.";
-            }
+            case "IP" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase) :
+                // Connexion Secure mais pas de knxkeys fourni
+                errorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys"; 
+                break;
+            
+            case "IP" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase) :
+                // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
+                errorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
+                break;
+            
+            case "IP" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase) :
+                // Connexion réussie, mais le bus est déjà utilisé
+                errorMessage = "Un autre appareil est déjà connecté au bus KNX.";
+                break;
+            
+            case "IP à distance (NAT)" when NatAddress == "" :
+                // Connexion NAT mais pas d'IP fourni
+                errorMessage = "Pour établir une connexion NAT, veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
+                break;
+            
+            case "IP à distance (NAT)" when !ValidateIPv4(NatAddress) :
+                // Connexion NAT mais IP fourni n'est pas une adresse IP
+                errorMessage = "Veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
+                break;
+            
+            case "IP à distance (NAT)" when e.Message.Contains("No reply from interface", StringComparison.OrdinalIgnoreCase) :
+            case "IP à distance (NAT)" when e.Message.Contains("Failed to read device description", StringComparison.OrdinalIgnoreCase) :
+                // Connexion NAT avec IP fourni valide mais ne permettant pas une connexion KNX
+                errorMessage = "L'adresse IP fournie n'a pas permis d'établir une connexion à un bus KNX.";
+                break;
+            
+            case "IP à distance (NAT)" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase) :
+                // Connexion Secure mais pas de knxkeys fourni
+                errorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
+                break;
+            
+            case "IP à distance (NAT)" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase) :
+                // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
+                errorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
+                break;
+            
+            case "IP à distance (NAT)" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase) :
+                // Connexion réussie, mais le bus est déjà utilisé
+                errorMessage = "Un autre appareil est déjà connecté au bus KNX.";
+                break;
+            
+            default :
+                errorMessage = "Erreur non reconnue, contactez les développeurs.";
+                break;
         }
-        else if (SelectedConnectionType is "IP à distance (NAT)")
-        {
-            // Connexion NAT mais pas d'IP fourni
-            if (NatAddress == "")
-            {
-                ErrorMessage = "Pour établir une connexion NAT, veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
-            }
-            // Connexion NAT mais IP fourni n'est pas une adresse IP
-            else if (!ValidateIPv4(NatAddress))
-            {
-                ErrorMessage = "Veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
-            }
-            // Connexion NAT avec IP fourni valide mais ne permettant pas une connexion KNX
-            else if (e.Message.Contains("No reply from interface", StringComparison.OrdinalIgnoreCase) |
-                     e.Message.Contains("Failed to read device description", StringComparison.OrdinalIgnoreCase))
-            {
-                ErrorMessage = "L'adresse IP fournie n'a pas permis d'établir une connexion à un bus KNX.";
-            }
-            // Connexion Secure mais pas de knxkeys fourni
-            else if (e.Message.Contains("The value cannot be an empty string. (Parameter 'path')",
-                         StringComparison.OrdinalIgnoreCase))
-            {
-                ErrorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
-            }
-            // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
-            else if (e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase))
-            {
-                ErrorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
-            }
-            // Connexion réussie mais le bus est déjà utilisé
-            else if (e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase))
-            {
-                ErrorMessage = "Un autre appareil est déjà connecté au bus KNX.";
-            }
-            else
-            {
-                ErrorMessage = "Erreur non reconnue, contactez les développeurs.";
-            }
-        }
-        _logger.ConsoleAndLogWriteLine(ErrorMessage);
-        ConnectionErrorMessage = ErrorMessage;
+        _logger.ConsoleAndLogWriteLine(errorMessage);
+        ConnectionErrorMessage = errorMessage;
     }
 
     /// <summary>
-    /// Vérifie si la connexion a été faite, met à jour l'interface et l'état de connexion.
+    ///     Verifies if the connection was successful and updates the user interface.
     /// </summary>
     /// <exception cref="InvalidOperationException"></exception>
     private void CheckBusConnection()
     {
         try
         {
-            // Vérifie si la connexion est établie avec succès
+            // Vérifie si la connexion est établie avec succès et lance une exception si elle a échoué
             if (Bus.IsNull || Bus.ConnectionState != BusConnectionState.Connected)
-            {
-                throw new InvalidOperationException(
-                    "La connexion au bus a échoué."); // Lance une exception si la connexion échoue
-            }
-            else
-            {
-                Bus.ConnectionStateChanged += BusConnectionStateChanged!;
-                CurrentInterface = SelectedConnectionType is "IP à distance (NAT)" ? "À distance via l'IP publique " + NatAddress : SelectedInterface?.DisplayName is not null ? SelectedInterface.DisplayName : "" ;
-                IsConnected = true;
-                UpdateConnectionState(); // Met à jour l'état de connexion
-                OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
-                _logger.ConsoleAndLogWrite("Connexion réussie au bus.");
-                //MessageBox.Show("Connexion réussie au bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+                throw new InvalidOperationException("La connexion au bus a échoué."); 
+            
+            Bus.ConnectionStateChanged += BusConnectionStateChanged!;
+            CurrentInterface = SelectedConnectionType is "IP à distance (NAT)" ? "À distance via l'IP publique " + NatAddress : SelectedInterface?.DisplayName is not null ? SelectedInterface.DisplayName : "" ;
+            IsConnected = true;
+            UpdateConnectionState(); // Met à jour l'état de connexion
+            OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
+            _logger.ConsoleAndLogWrite("Connexion réussie au bus.");
+            
         }
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
             _logger.ConsoleAndLogWrite($"Erreur lors de la connexion au bus : {ex.Message}");
-            //MessageBox.Show($"Erreur lors de la connexion au bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
             NatAccess = false;
-            IsBusy = false; // Réinitialise l'état d'occupation
             ResetCancellationTokenSource(); // Réinitialise le token d'annulation
+            IsBusy = false; // Réinitialise l'état d'occupation
         }
     }
 
     /// <summary>
-    /// Déconnecte de manière asynchrone du bus KNX.
-    /// Cette méthode vérifie d'abord si le bus est connecté et s'il y a une opération en cours. Si le bus est connecté, elle procède à la déconnexion.
-    /// En cas de succès, elle met à jour l'état de connexion et affiche un message de succès. En cas d'erreur, elle affiche un message d'erreur.
+    ///     Asynchronously disconnects from the KNX Bus.
+    ///     It first verifies whether the bus is connected or if there is an ongoing operation.
+    ///     If not, it starts the disconnection. When it succeeds, it updates the interface and prints a log.
     /// </summary>
     /// <returns>Une tâche représentant l'opération de déconnexion asynchrone.</returns>
     public async Task DisconnectBusAsync()
     {
-        if (IsBusy || !IsConnected)
-        {
-            //MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            return; // Retourne immédiatement si le bus est déjà déconnecté ou si une opération est en cours
-        }
-
-        await CancellationTokenSource?.CancelAsync()!; // Annule les opérations en cours
-        CancellationTokenSource = null; // Réinitialise le token d'annulation
-
         try
         {
-            if (!Bus.IsNull)
-            {
-                Bus.ConnectionStateChanged -= BusConnectionStateChanged!;
-                await Bus.DisposeAsync(); // Déconnecte et libère les ressources du bus
-                Bus.SetNull = null;
-                CurrentInterface = "Aucune interface connectée";
-                IsConnected = false;
-                UpdateConnectionState(); // Met à jour l'état de connexion
-                //MessageBox.Show("Déconnexion réussie du bus.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
-            else
-            {
-                //MessageBox.Show("Le bus est déjà déconnecté.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
+            if (!IsConnected)
+                throw new Exception("The bus is already disconnected.");
+
+            if (Bus.IsNull)
+                throw new Exception("There is no bus to disconnect.");
+
+            await CancellationTokenSource?.CancelAsync()!; // Annule les opérations en cours
+            CancellationTokenSource = null; // Réinitialise le token d'annulation
+
+            Bus.ConnectionStateChanged -= BusConnectionStateChanged!;
+            await Bus.DisposeAsync(); // Déconnecte et libère les ressources du bus
+            _logger.ConsoleAndLogWriteLine("Bus disconnection succeeded");
         }
         catch (Exception ex)
         {
-            // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            _logger.ConsoleAndLogWrite($"Erreur lors de la déconnexion du bus : {ex.Message}");
-            //MessageBox.Show($"Erreur lors de la déconnexion du bus : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            // Gestion des exceptions : affiche le message d'erreur
+            _logger.ConsoleAndLogWrite($"Bus disconnection error : {ex.Message}");
+        }
+        finally
+        {
+            Bus.KnxBusSetter = null;
+            CurrentInterface = "Aucune interface connectée";
+            IsConnected = false;
+            UpdateConnectionState(); // Met à jour l'état de connexion
         }
     }
     
     /// <summary>
-    /// Découvre les interfaces de connexion disponibles de manière asynchrone en fonction du type de connexion sélectionné.
-    /// Cette méthode identifie les interfaces IP et USB disponibles et les ajoute à la collection <see cref="DiscoveredInterfaces"/>.
-    /// Les résultats de la découverte sont mis à jour sur l'interface utilisateur une fois la découverte terminée.
+    ///     Discover asynchronously the available interfaces according to the <see cref="SelectedConnectionType"/>.
+    ///     This method discovers USB and IP interfaces and adds them to <see cref="DiscoveredInterfaces"/>.
+    ///     The results are updated to the user interface.
     /// </summary>
-    /// <returns>Une tâche représentant l'opération de découverte asynchrone.</returns>
+    /// <returns>A task representing the completion of the method</returns>
     public async Task DiscoverInterfacesAsync()
     {
         try
@@ -650,9 +670,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
     
     /// <summary>
-    /// Met à jour l'état de connexion en fonction de la valeur de la propriété <see cref="IsConnected"/>.
-    /// Définit la propriété <see cref="ConnectionState"/> sur "Connected" si <see cref="IsConnected"/> est vrai,
-    /// sinon sur "Disconnected".
+    ///     Updates the <see cref="ConnectionState"/> according to the value of <see cref="IsConnected"/>
+    ///     It is set to "Connected" if true and "Disconnected" if not
     /// </summary>
     private void UpdateConnectionState()
     {
@@ -660,34 +679,33 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     }
 
     /// <summary>
-    /// Méthode de gestionnaire d'événements pour les changements d'état de connexion du bus.
-    /// Cette méthode est appelée lorsque l'état de connexion du bus change et met à jour l'état de connexion
-    /// en appelant <see cref="UpdateConnectionState"/>.
+    ///     Handler that deals with changes in the bus connection state.
+    ///     It is called when the <see cref="KnxBusWrapper.ConnectionState"/> changes and updates the interface
+    ///     by calling <see cref="UpdateConnectionState"/>.
     /// </summary>
-    /// <param name="sender">L'objet qui a déclenché l'événement.</param>
-    /// <param name="e">Les arguments de l'événement.</param>
+    /// <param name="sender">The object that fired the event</param>
+    /// <param name="e">The argument of the event.</param>
     private void BusConnectionStateChanged(object sender, EventArgs e)
     {
         UpdateConnectionState();
     }
 
     /// <summary>
-    /// Initialise une nouvelle instance de la classe <see cref="BusConnection"/>.
-    /// Crée une nouvelle instance d'ObservableCollection pour stocker les interfaces découvertes.
+    ///     Initialises a new instance of <see cref="BusConnection"/>.
+    ///     It also creates a new instance of <see cref="ObservableCollection{T}"/> to store the discovered interfaces.
     /// </summary>
+    /// <param name="logger">The logger instance to log and print out messages</param>
+    /// <param name="knxBusWrapper">The KnxBus instance with which the class will communicate</param>
     public BusConnection(ILogger logger, IKnxBusWrapper  knxBusWrapper)
     {
         DiscoveredInterfaces = new ObservableCollection<ConnectionInterfaceViewModel>();
         Bus = knxBusWrapper;
-        _keysFilePassword = "";
         _logger = logger;
-        _natAddress = "";
-        _keysPath = "";
     }
 
     /// <summary>
-    /// Réinitialise le token d'annulation en le disposant s'il existe, puis en créant un nouveau.
-    /// Cette méthode est utilisée pour préparer un nouveau token d'annulation pour les opérations en cours.
+    ///     Resets the CancellationTokenSource if it exists with <see cref="CancellationTokenSource.Dispose"/>.
+    ///     It then creates a new CancellationTokenSource. It is used to create a new one for ongoing operations.
     /// </summary>
     private void ResetCancellationTokenSource()
     {
@@ -695,18 +713,29 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         CancellationTokenSource = new CancellationTokenSource();
     }
 
+    /// <summary>
+    ///     The event that is fired when a property has changed.
+    /// </summary>
     public new event PropertyChangedEventHandler? PropertyChanged;
     
+    /// <summary>
+    ///     Updates the interface when a property has been modified
+    /// </summary>
+    /// <param name="propertyName">The property that was modified.</param>
     private void WhenPropertyChanged(string propertyName)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
     
-    // Used for error handling in the case of NAT
-    // Check if given IP address is in fact a correctly written IPv4 address
+    /// <summary>
+    ///     Used for error handling in the case of NAT.
+    ///     Checks if given IP address is in fact a correctly written IPv4 address
+    /// </summary>
+    /// <param name="ipString"> The IP address to check.</param>
+    /// <returns> Returns true if the address has the form of an IPv4 address</returns>
     public bool ValidateIPv4(string ipString)
     {
-        if (String.IsNullOrWhiteSpace(ipString))
+        if (string.IsNullOrWhiteSpace(ipString))
         {
             return false;
         }
@@ -716,10 +745,8 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         {
             return false;
         }
-
-        byte tempForParsing;
-
-        return splitValues.All(r => byte.TryParse(r, out tempForParsing));
+        
+        return splitValues.All(r => byte.TryParse(r, out _));
     }
     
 }

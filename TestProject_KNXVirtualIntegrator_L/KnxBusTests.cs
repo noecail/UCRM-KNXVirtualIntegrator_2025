@@ -182,7 +182,7 @@ namespace TestProject_KNXVirtualIntegrator_L
                 SelectedInterface = _selectedInterfaceIpSecure,
                 SelectedConnectionType = "IP",
                 KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys",
-                Password = "Demo2025#"
+                KeysFilePassword = "Demo2025#"
             };
             Mock.Get(fakeKnxBus).Setup(x => x.ConnectionState).Returns(BusConnectionState.Connected);
             Mock.Get(fakeKnxBus).SetupSequence(x => x.IsNull).Returns(true).Returns(false);
@@ -218,7 +218,7 @@ namespace TestProject_KNXVirtualIntegrator_L
                 SelectedInterface = _selectedInterfaceIpNat,
                 SelectedConnectionType = "IP à distance (NAT)",
                 KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys",
-                Password = "Demo2025#"
+                KeysFilePassword = "Demo2025#"
             };
             Mock.Get(fakeKnxBus).Setup(x => x.ConnectionState).Returns(BusConnectionState.Connected);
             Mock.Get(fakeKnxBus).SetupSequence(x => x.IsNull).Returns(true).Returns(false);
