@@ -1,4 +1,3 @@
-using iText.Commons.Bouncycastle.Crypto;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities
