@@ -18,6 +18,10 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
 {
     public static XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01"; // Namespace utilisé pour les opérations KNX
 
+/*--------------------------------------------------------------------------------------------------------------------*/    
+/************************************** Properties and Instances ******************************************************/
+/*--------------------------------------------------------------------------------------------------------------------*/
+    
     /// <summary>
     ///     The instance of the KNX bus.
     ///     It is wrapped to reduce the code dependency on the Falcon library and allow testing.
@@ -143,7 +147,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         }
     }
     
-    
     /// <summary>
     ///     Property that indicates whether we use NAT to access the interface.
     /// </summary>
@@ -245,17 +248,35 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
             WhenPropertyChanged(nameof(ConnectionErrorMessage)); // Notifie l'interface utilisateur du changement
         }
     }
-
-
-    //GESTIONNAIRE ÉVÈNEMENT POUR GROUPCOMMUNICATIONVIEWMODEL
+/*--------------------------------------------------------------------------------------------------------------------*/    
+/**************************************** Events and Update Methods ***************************************************/
+/*--------------------------------------------------------------------------------------------------------------------*/
+    // Gestion de la Communication avec ViewModel
+    
+    /// <summary>
+    ///     The event that is fired when a property has changed.
+    /// </summary>
+    public new event PropertyChangedEventHandler? PropertyChanged;
     
     /// <summary>
     ///     Event raised when the bus is ready to be connected.
     /// </summary>
     public event EventHandler<IKnxBusWrapper>? BusConnectedReady; //Le mettre en "nullable" est bien correct?
+    
+    /// <summary>
+    ///     Handler that deals with changes in the bus connection state.
+    ///     It is called when the <see cref="KnxBusWrapper.ConnectionState"/> changes and updates the interface
+    ///     by calling <see cref="UpdateConnectionState"/>.
+    /// </summary>
+    /// <param name="sender">The object that fired the event</param>
+    /// <param name="e">The argument of the event.</param>
+    private void BusConnectionStateChanged(object sender, EventArgs e)
+    {
+        UpdateConnectionState();
+    }
 
     /// <summary>
-    ///     Private handler of the update on the bus readiness to be connected
+    ///     Private method which updates the bus readiness to be connected
     ///     through firing the event <see cref="BusConnectedReady"/>.
     /// </summary>
     /// <param name="bus">The object <see cref="IKnxBusWrapper"/> which represents the KNX Bus.</param>
@@ -263,7 +284,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     {
         BusConnectedReady?.Invoke(this, bus); // Déclenche l'événement si des abonnés existent
     }
-
 
     /// <summary>
     ///     Asynchronous method called when then <see cref="SelectedConnectionType"/> changes.
@@ -284,6 +304,19 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         }
     }
     
+    /// <summary>
+    ///     Updates the interface when a property has been modified
+    /// </summary>
+    /// <param name="propertyName">The property that was modified.</param>
+    private void WhenPropertyChanged(string propertyName)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    
+/*--------------------------------------------------------------------------------------------------------------------*/    
+/********************************************** Various Methods *******************************************************/
+/*--------------------------------------------------------------------------------------------------------------------*/
+
     /// <summary>
     ///     Establishes a connection to the Knx Bus asynchronously
     ///     It first verifies whether there is an ongoing operation. If not, it proceeds with the connection.
@@ -435,7 +468,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     /// <param name="e"> The raised exception</param>
     private void CheckError(Exception e)
     {
-        var errorMessage = "";
+        string errorMessage;
         _logger.ConsoleAndLogWriteLine($"Erreur : {e.GetType().Name} - {e.Message}");
         switch (SelectedConnectionType)
         {
@@ -677,19 +710,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
     {
         ConnectionState = IsConnected ? "Connected" : "Disconnected";
     }
-
-    /// <summary>
-    ///     Handler that deals with changes in the bus connection state.
-    ///     It is called when the <see cref="KnxBusWrapper.ConnectionState"/> changes and updates the interface
-    ///     by calling <see cref="UpdateConnectionState"/>.
-    /// </summary>
-    /// <param name="sender">The object that fired the event</param>
-    /// <param name="e">The argument of the event.</param>
-    private void BusConnectionStateChanged(object sender, EventArgs e)
-    {
-        UpdateConnectionState();
-    }
-
+    
     /// <summary>
     ///     Initialises a new instance of <see cref="BusConnection"/>.
     ///     It also creates a new instance of <see cref="ObservableCollection{T}"/> to store the discovered interfaces.
@@ -712,20 +733,6 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         CancellationTokenSource?.Dispose();
         CancellationTokenSource = new CancellationTokenSource();
     }
-
-    /// <summary>
-    ///     The event that is fired when a property has changed.
-    /// </summary>
-    public new event PropertyChangedEventHandler? PropertyChanged;
-    
-    /// <summary>
-    ///     Updates the interface when a property has been modified
-    /// </summary>
-    /// <param name="propertyName">The property that was modified.</param>
-    private void WhenPropertyChanged(string propertyName)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
     
     /// <summary>
     ///     Used for error handling in the case of NAT.
@@ -745,7 +752,7 @@ public sealed class BusConnection : ObservableObject ,IBusConnection
         {
             return false;
         }
-        
+
         return splitValues.All(r => byte.TryParse(r, out _));
     }
     
