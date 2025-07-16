@@ -15,88 +15,115 @@ public interface IBusConnection : INotifyPropertyChanged
     // ------------------------------------ PROPRIÉTÉS ------------------------------------ 
     
     /// <summary>
-    /// Obtient la collection observable des interfaces découvertes.
-    /// Cette collection contient les instances de <see cref="ConnectionInterfaceViewModel"/> représentant les interfaces disponibles.
+    ///     Observable collection of the discovered bus interfaces for the current connection type.
+    ///     It contains instances of <see cref="ConnectionInterfaceViewModel"/> of the discovered interfaces
     /// </summary>
     ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces { get; }
 
     /// <summary>
-    /// Obtient ou définit l'interface de connexion actuellement sélectionnée.
-    /// Cette propriété est une instance de <see cref="ConnectionInterfaceViewModel"/> qui représente l'interface de connexion sélectionnée par l'utilisateur.
+    ///    Currently selected bus interface. It is automatically updated and linked with the UI.
     /// </summary>
     ConnectionInterfaceViewModel? SelectedInterface { get; set; }
-
-    /// <summary>
-    /// Obtient ou définit le type de connexion sélectionné sous forme de chaîne.
-    /// Cette propriété indique le type de connexion sélectionné par l'utilisateur (par exemple, "IP", "USB").
-    /// </summary>
-    string? SelectedConnectionType { get; set; }
-
-    /// <summary>
-    /// Obtient un indicateur qui spécifie si le bus est actuellement connecté.
-    /// Cette propriété est vraie si le bus est connecté, sinon elle est fausse.
-    /// </summary>
-    bool IsConnected { get; }
     
     /// <summary>
-    /// Contient le nom de l'interface par laquelle la connexion au bus est actuellement établie.
+    ///     Indicate whether there is an ongoing activity (like a connection).
+    ///     Used to deactivate the UI during the activity.
+    /// </summary>
+    bool IsBusy { get; set; }
+
+    /// <summary>
+    ///     Indicates whether the bus is connected or not. It is linked with the UI.
+    /// </summary>
+    bool IsConnected { get; set; }
+    
+    /// <summary>
+    ///     Current connection state (i.e. : "Connected" ou "Disconnected"). Automatically updated
+    /// </summary>
+    string? ConnectionState { get; }
+    
+    /// <summary>
+    ///     Current connection interface
     /// </summary>
     string CurrentInterface { get; }
     
     /// <summary>
-    /// Contient l'adresse du routeur IP distant permettant de se connecter à distance
+    ///     IP address of the distant router to allow NAT connection
     /// </summary>
     string NatAddress { get; set; }
 
     /// <summary>
-    /// Choix d'accès à distance via NAT.
+    ///     Property that indicates whether we use NAT to access the interface.
     /// </summary>
     public bool NatAccess { get; set; }
 
     /// <summary>
-    /// Contient le mot de passe du fichier de clés sécurisant une connexion IP Secure
+    ///     Password that allows access to the file that holds the knxkeys. See <see cref="KeysPath"/>
     /// </summary>
     string KeysFilePassword { get; set; }
     
     /// <summary>
-    /// Contient le chemin vers le fichier de clés permettant la connexion IP Secure. Ce fichier a été exporté par l'utilisateur au préalable depuis ETS
+    ///      The path to the file that holds the keys for the IP secure connection
     /// </summary>
     string KeysPath { get; set; }
-
+    
     /// <summary>
-    /// Contient le message d'erreur à afficher dans la fenêtre de connexion après une connexion ratée
+    ///     Connection Type chosen by the user (IP, IP NAT, USB). Its changes are shared with the user interface
+    /// </summary>
+    string? SelectedConnectionType { get; set; }
+    
+    /// <summary>
+    /// Property that possesses the error message to be printed to the user interface.
+    ///     It is collected through <see cref="Implementations.BusConnection.CheckError"/>.
+    ///     Different cases : 
     /// </summary>
     string ConnectionErrorMessage { get; set; }
-
-    
-    // ------------------------------------ TACHES ------------------------------------
     
     /// <summary>
-    /// Établit une connexion asynchrone au bus KNX.
-    /// Cette méthode initialise la connexion en utilisant les paramètres fournis, gère les erreurs éventuelles et met à jour l'état de connexion.
+    ///     Asynchronous method called when then <see cref="SelectedConnectionType"/> changes.
+    ///     It tries to discover new interfaces with <see cref="DiscoverInterfacesAsync"/>.
+    ///     If there is an error, it catches it and prints it.
     /// </summary>
-    /// <returns>Une tâche représentant l'opération de connexion asynchrone.</returns>
+    void OnSelectedConnectionTypeChanged();
+       
+    
+/*--------------------------------------------------------------------------------------------------------------------*/
+/********************************************** Various Methods *******************************************************/
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+    
+    /// <summary>
+    ///     Establishes a connection to the Knx Bus asynchronously
+    ///     It first verifies whether there is an ongoing operation. If not, it proceeds with the connection.
+    ///     When it succeeds, it updates the connection state and its subscribers.
+    ///     When it fails, it prints an error message.
+    /// </summary>
+    /// <returns>A task representing the completion to the connection.</returns>
     Task ConnectBusAsync();
 
     /// <summary>
-    /// Déconnecte de manière asynchrone du bus KNX.
-    /// Cette méthode gère la déconnexion, libère les ressources associées et met à jour l'état de connexion.
+    ///     Asynchronously disconnects from the KNX Bus.
+    ///     It first verifies whether the bus is connected or if there is an ongoing operation.
+    ///     If not, it starts the disconnection. When it succeeds, it updates the interface and prints a log.
     /// </summary>
     /// <returns>Une tâche représentant l'opération de déconnexion asynchrone.</returns>
     Task DisconnectBusAsync();
 
     /// <summary>
-    /// Découvre les interfaces disponibles de manière asynchrone en fonction du type de connexion sélectionné.
-    /// Cette méthode met à jour la collection des interfaces découvertes et peut gérer différents types de connexions (comme IP ou USB).
+    ///     Discover asynchronously the available interfaces according to the <see cref="SelectedConnectionType"/>.
+    ///     This method discovers USB and IP interfaces and adds them to <see cref="DiscoveredInterfaces"/>.
+    ///     The results are updated to the user interface.
     /// </summary>
-    /// <returns>Une tâche représentant l'opération de découverte asynchrone des interfaces.</returns>
+    /// <returns>A task representing the completion of the method</returns>
     Task DiscoverInterfacesAsync();
 
     /// <summary>
-    /// Gère le changement du type de connexion sélectionné.
-    /// Cette méthode est appelée lorsque la sélection du type de connexion change, entraînant la découverte des interfaces disponibles pour ce type.
+    ///     Used for error handling in the case of NAT.
+    ///     Checks if given IP address is in fact a correctly written IPv4 address
     /// </summary>
-    void OnSelectedConnectionTypeChanged();
+    /// <param name="ipString"> The IP address to check.</param>
+    /// <returns> Returns true if the address has the form of an IPv4 address</returns>
+    bool ValidateIPv4(string ipString);
 
-    
+
+
 }

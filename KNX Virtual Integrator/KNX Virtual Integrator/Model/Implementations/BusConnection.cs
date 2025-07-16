@@ -45,6 +45,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
 
     /// <summary>
     ///     Observable collection of the discovered bus interfaces for the current connection type.
+    ///     It contains instances of <see cref="ConnectionInterfaceViewModel"/> of the discovered interfaces
     /// </summary>
     public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces { get; private set; }
 
@@ -264,7 +265,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
     /// <summary>
     ///     Event raised when the bus is ready to be connected.
     /// </summary>
-    public event EventHandler<IKnxBusWrapper>? BusConnectedReady; //Le mettre en "nullable" est bien correct?
+    public event EventHandler<IKnxBusWrapper>? BusConnectedReady; 
 
     /// <summary>
     ///     Handler that deals with changes in the bus connection state.
