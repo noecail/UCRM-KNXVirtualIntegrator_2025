@@ -1,4 +1,3 @@
-using iText.Commons.Bouncycastle.Crypto;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities
@@ -12,6 +11,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
     {
        
         public List<DataPointType> Tests; // List of pairs : command to send to the bus and expected feedback to be read on the bus
+        private int nb_Cmd = 1;
 
 
         //Constructors
@@ -21,9 +21,14 @@ namespace KNX_Virtual_Integrator.Model.Entities
         } 
         
         
-        public TestedElement(int typeCmd, string addressCmd, List<GroupValue?> valueCmd,int[] typeIe, string[]  addressesIe, List<GroupValue?>[] valueIe)
+        public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd,int[] typeIe, string[]  addressesIe, List<GroupValue?>[] valueIe)
         {
-            Tests = [new DataPointType(typeCmd, addressCmd, valueCmd)];
+            Tests = [];
+            nb_Cmd = typeCmd.Length;
+            for (var i = 0; i < typeCmd.Length; i++)
+            {
+                Tests.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
+            }
             for (var i = 0; i < typeIe.Length; i++)
             {
                 Tests.Add(new DataPointType(typeIe[i],addressesIe[i],valueIe[i]));
@@ -32,14 +37,20 @@ namespace KNX_Virtual_Integrator.Model.Entities
         
         
         
-        public TestedElement(int typeCmd, string addressCmd, List<GroupValue?> valueCmd)
+        public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd)
         {
-            Tests = [new DataPointType(typeCmd, addressCmd, valueCmd)];
+            nb_Cmd = typeCmd.Length;
+            Tests = [];
+            for (var i = 0; i < typeCmd.Length; i++)
+            {
+                Tests.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
+            }
         } 
         
         public TestedElement(TestedElement element)
         {
             Tests = [];
+            nb_Cmd = element.nb_Cmd;
             for (var i = 0; i < element.Tests.Count; i++)
             {
                 Tests.Add(element.Tests[i]);

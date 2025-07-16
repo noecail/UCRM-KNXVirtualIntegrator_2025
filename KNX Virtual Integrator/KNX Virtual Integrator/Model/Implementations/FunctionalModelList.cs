@@ -1,9 +1,5 @@
-using System.Windows.Automation;
-using System.Xml;
-using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
-using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
@@ -11,12 +7,12 @@ public class FunctionalModelList:IFunctionalModelList
 {
     public List<FunctionalModel> FunctionalModels = [];
     private FunctionalModelDictionary _functionalModelDictionary;
-    private int _nbmodels;
+    private int _nbModels;
 
     public FunctionalModelList()
     {
         _functionalModelDictionary = new FunctionalModelDictionary();
-        _nbmodels = _functionalModelDictionary.FunctionalModels.Count;
+        _nbModels = _functionalModelDictionary.FunctionalModels.Count;
 
     }
 
@@ -24,7 +20,7 @@ public class FunctionalModelList:IFunctionalModelList
     public FunctionalModelList(string path) //Takes the dictionary from a file's path
     {
         _functionalModelDictionary = new FunctionalModelDictionary(path);
-        _nbmodels = _functionalModelDictionary.FunctionalModels.Count;
+        _nbModels = _functionalModelDictionary.FunctionalModels.Count;
 
 
     }
@@ -64,13 +60,13 @@ public class FunctionalModelList:IFunctionalModelList
     /// <param name="index">Index of the Functional Model to delete from in the dictionary. </param>
     public void DeleteFromDictionary(int index)
     {
-        if (index < _nbmodels)
+        if (index < _nbModels)
             return;
         _functionalModelDictionary.Remove_FunctionalModel(index);
     }
     
     /// <summary>
-    /// Creates a XML file representing the dictionary.
+    /// Creates an XML file representing the dictionary.
     /// </summary>
     /// <param name="path">Path where the XML has to be exported </param>
     public void ExportDictionary(string path)
@@ -79,7 +75,7 @@ public class FunctionalModelList:IFunctionalModelList
     }
     
     /// <summary>
-    /// Imports a XML file representing the dictionary.
+    /// Imports an XML file representing the dictionary.
     /// </summary>
     /// <param name="path">Path of the xml. </param>
     public void ImportDictionary(string path)

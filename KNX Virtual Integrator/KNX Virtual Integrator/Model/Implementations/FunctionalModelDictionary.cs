@@ -1,10 +1,7 @@
-using System;
-using System.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
 using System.Xml;
-using System.Xml.Linq;
 
 
 namespace KNX_Virtual_Integrator.Model.Implementations
@@ -19,30 +16,45 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         {
             FunctionalModels = new Dictionary<int, FunctionalModel>();
             _currentKey = 0; // Commence à 0 pour que la première clé soit 1
-            Add_FunctionalModel(new FunctionalModel([new TestedElement(1,"0/1/1",[new GroupValue(true)],[1],["0/2/1"],[[new GroupValue(true)]])],
+            Add_FunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[null, new GroupValue(false)]])],
                 "Lumiere_ON_OFF")); //Adding On/Off light functional model
             Add_FunctionalModel(new FunctionalModel([
-                new TestedElement(1, "", [new GroupValue(true)], [1], [""],
-                    [[new GroupValue(true)]]), // Variation functional model : First element : On/Off
-                new TestedElement(5, "", [new GroupValue(0xF)], [1, 5], ["", ""],
-                    [[new GroupValue(true)], [new GroupValue(0xF)]]), //Second element : absolute change
-                new TestedElement(3, "", [new GroupValue(0x8)])
-            ], "Lumiere_variation")); //Third element : relative change, no IE
+                new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,5],["",""],
+                    [[null, new GroupValue(false)], [null,new GroupValue(0x00)]]), // Variation functional model : First element : On/Off
+                new TestedElement([5], [""], [[new GroupValue(0xFF), new GroupValue(0x4F)]], [5], ["", ""],
+                    [[new GroupValue(0xFF), new GroupValue(0x4F)]]), //Second element : absolute change
+                new TestedElement([3], [""], [[new GroupValue(0x4)]],[5],[""],[[new GroupValue([0x2E])]])
+            ], "Lumiere_variation")); //Third element : relative change
+            Add_FunctionalModel(new FunctionalModel([
+            new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,1,5],["","",""],
+                [[new GroupValue(true), new GroupValue(true)],[new GroupValue(false), new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]), //On/Off command 
+            new TestedElement([1,1],["",""],[[new GroupValue(true)],[new GroupValue(true)]],[1,1,5],["","",""],
+                [[new GroupValue(true)],[new GroupValue(false)],[null]]),//Stop
+            new TestedElement([5], [""],[[new GroupValue(0xFF),new GroupValue(0x00)]],[1,1,5],["","",""],//Absolute command
+                [[new GroupValue(true),new GroupValue(true)],[new GroupValue(false),new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]),
+            ],"Store"));
+            Add_FunctionalModel(new FunctionalModel([
+            new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])  //On/Off
+                ],"Convecteur"));
+            Add_FunctionalModel(new FunctionalModel([
+                new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])
+            ],"Prise"));
+            Add_FunctionalModel(new FunctionalModel([
+                new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])
+            ],"Arrosage"));
+            Add_FunctionalModel(new FunctionalModel([
+                new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])
+            ],"Ouvrant"));
+            
+            
         }
 
         public FunctionalModelDictionary(string path)
         {
             FunctionalModels = new Dictionary<int, FunctionalModel>();
             _currentKey = 0; // Commence à 0 pour que la première clé soit 1
-            Add_FunctionalModel(new FunctionalModel([new TestedElement()],
-                "Lumière ON/OFF")); //Adding On/Off light functional model
-            Add_FunctionalModel(new FunctionalModel([
-                new TestedElement(1, "", [new GroupValue(true)], [1], [""],
-                    [[new GroupValue(true)]]), // Variation functional model : First element : On/Off
-                new TestedElement(5, "", [new GroupValue(0xF)], [1, 5], ["", ""],
-                    [[new GroupValue(true)], [new GroupValue(0xF)]]), //Second element : absolute change
-                new TestedElement(3, "", [new GroupValue(0x8)])
-            ], "Lumière variation")); //Third element : relative change, no IE
+            ImportDictionary(path);
+
         }
 
 
@@ -60,11 +72,11 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         public List<FunctionalModel> GetAllModels()
         {
-            return new List<FunctionalModel>(FunctionalModels.Values);
+            return [..FunctionalModels.Values];
         }
 
         /// <summary>
-        /// Creates a XML file representing the dictionary.
+        /// Creates an XML file representing the dictionary.
         /// </summary>
         /// <param name="path">Path where the XML has to be exported </param>
         public void ExportDictionary(string path)
@@ -77,7 +89,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 var functionalModel = doc.CreateElement(model.Name);
                 foreach (var element in model.ElementList)
                 {
-                    var xelement = doc.CreateElement("Element_to_test");
+                    var xElement = doc.CreateElement("Element_to_test");
 
                     foreach (var dpt in element.Tests)
                     {
@@ -100,10 +112,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                                 xDpt.AppendChild(xValue);
                             }
                         }
-                        xelement.AppendChild(xDpt);
+                        xElement.AppendChild(xDpt);
                     }
 
-                    functionalModel.AppendChild(xelement);
+                    functionalModel.AppendChild(xElement);
                 }
 
                 project.AppendChild(functionalModel);
@@ -124,33 +136,35 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             _currentKey = 0;
             var doc = new XmlDocument();
             doc.Load(path);
-            var xnList = doc.DocumentElement.ChildNodes;
-            foreach (XmlNode model in xnList) // pour chaque modèle
-            {
-                var functionalmodel = new FunctionalModel(model.Name);
-                foreach (XmlNode element in model.ChildNodes)
+            var xnList = doc.DocumentElement?.ChildNodes;
+            if (xnList != null)
+                foreach (XmlNode model in xnList) // pour chaque modèle
                 {
-                    var elementtotest = new TestedElement();
-                    
-                    foreach (XmlNode dpt in element.ChildNodes)
+                    var functionalModel = new FunctionalModel(model.Name);
+                    foreach (XmlNode element in model.ChildNodes)
                     {
-                        var address = dpt.Attributes["Address"].Value;
-                        var type = int.Parse(dpt.Attributes["Type"].Value);
-                        List<GroupValue> tabvalues = [];
-                        foreach (XmlNode values in dpt.ChildNodes)
+                        var elementToTest = new TestedElement();
+                        
+                        foreach (XmlNode dpt in element.ChildNodes)
                         {
-                            if (values.Name == "Group_Value" && values.Attributes["Value"] != null)
+                            var address = dpt?.Attributes?["Address"]?.Value; 
+                            var type = int.Parse(dpt?.Attributes?["Type"]?.Value);
+                            List<GroupValue?> tabValues = [];
+                            foreach (XmlNode values in dpt.ChildNodes)
                             {
-                                tabvalues.Add(GroupValue.Parse(values.Attributes["Value"].Value));
+                                if (values.Name == "Group_Value")
+                                {
+                                    tabValues.Add(GroupValue.Parse(values.Attributes?["Value"]?.Value));
+                                }
+                                
                             }
-                            
+                            if (address != null )
+                                elementToTest.AddDpt(type,address, tabValues);
                         }
-                        elementtotest.AddDpt(type,address, tabvalues);
+                        functionalModel.ElementList.Add(elementToTest);
                     }
-                    functionalmodel.ElementList.Add(elementtotest);
+                    FunctionalModels.Add(++_currentKey,functionalModel);
                 }
-                FunctionalModels.Add(++_currentKey,functionalmodel);
-            }
         }
     }
 }
