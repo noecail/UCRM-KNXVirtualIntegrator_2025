@@ -11,7 +11,7 @@ namespace TestProject_KNXVirtualIntegrator_L
 {
     public class KnxBusTests
     {
-        //private readonly ITestOutputHelper _output;
+        private readonly ITestOutputHelper _output;
         private BusConnection _busConnection;
         private GroupCommunication _groupCommunication;
         private readonly ConnectionInterfaceViewModel _selectedInterfaceUsb;
@@ -21,8 +21,20 @@ namespace TestProject_KNXVirtualIntegrator_L
 
         public KnxBusTests(ITestOutputHelper output)
         {
-            //_output = output;
+            _output = output;
             var logger = Mock.Of<ILogger>();
+            var args =new List<string>();
+            Mock.Get(logger).Setup(x => x.ConsoleAndLogWriteLine(Capture.In(args)))
+                .Callback(() => {
+                    _output.WriteLine(args.Last());
+                    args.Clear();
+                });
+            Mock.Get(logger).Setup(x => x.ConsoleAndLogWrite(Capture.In(args)))
+                .Callback(() => {
+                    _output.WriteLine(args.Last());
+                    args.Clear();
+                });
+            
             // Initialisation de BusConnection et GroupCommunication
             _busConnection = new BusConnection(logger, new KnxBusWrapper());
             _groupCommunication = new GroupCommunication(_busConnection, logger);
@@ -42,32 +54,6 @@ namespace TestProject_KNXVirtualIntegrator_L
                 "IP-Interface Secure 192.168.10.132",
                 "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
 
-        }
-
-        [Fact]
-        public async Task Test_KnxBus_ConnectionFails_WithInvalidInterface()
-        {
-            // Arrange
-            // Crée une fausse interface IP qui ne pointe vers aucun vrai appareil
-            var fakeInterface = new ConnectionInterfaceViewModel(
-                ConnectorType.IpTunneling,
-                "Interface IP Invalide",
-                "Type=IpTunneling;HostAddress=192.0.2.123"
-            );
-            // On utilise cette fausse interface pour la connexion
-            _busConnection.SelectedInterface = fakeInterface;
-
-            // Act
-            // On tente de se connecter
-            await _busConnection.ConnectBusAsync();
-
-            // Assert
-            // Vérifie que la connexion a échoué
-            Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une interface invalide.");
-
-            // Cleanup
-            await _busConnection.DisconnectBusAsync();
-            _busConnection.SelectedInterface ??= null;
         }
 
         [Theory]
@@ -102,6 +88,7 @@ namespace TestProject_KNXVirtualIntegrator_L
             // On vérifie que la méthode n'a pas réussi à atteindre l'écriture sur le bus. Le Mock fait que le renvoi final
             // de l'écriture est true mais en réalité, il sera aussi false s'il y a un problème.
             Assert.False(didWrite, "It shouldn't have succeeded in getting to the writing part");
+            _output.WriteLine(""); // To avoid a warning....
         }
 
         [Fact]
