@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Keyring Project="MCP-KNX-V2" CreatedBy="6.3.1" Created="2025-07-17T06:47:45" Signature="FZuwiEnhWTTFUIybYgF/TA==" xmlns="http://knx.org/xml/keyring/1">
+  <Interface IndividualAddress="1.1.254" Type="Tunneling" Host="1.1.1" UserID="3" Password="mZZwpD8suKnay5jyGNjCFI6+T9sgeqQXusG0+UCGE/E=" Authentication="4Gfo/lnrToA++lYBpCBsUIrqAZOjaGN8jIIPqi+ivVg=" />
+  <Devices>
+    <Device IndividualAddress="1.1.1" SequenceNumber="236423431466" />
+  </Devices>
+</Keyring>
