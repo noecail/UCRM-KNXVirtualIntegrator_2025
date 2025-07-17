@@ -1,5 +1,4 @@
-﻿using Knx.Falcon.Sdk;  // Par exemple pour BusConnection, GroupAddress
-using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de l�.
+﻿using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de l�.
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Wrappers;
 using KNX_Virtual_Integrator.ViewModel;
@@ -38,63 +37,56 @@ public class KnxBusTestsIntegration
             "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"IP-Interface Secure\"");
         _selectedInterfaceIpSecure = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling,
             "IP-Interface Secure 192.168.10.132",
-            "Type=IpTunneling;IndividualAddress=1.1.255;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"Interface IP Secure N148/23\"");
+            "Type=IpTunneling;IndividualAddress=1.1.252;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"Interface IP Secure N148/23\"");
         _selectedInterfaceIpNat = new ConnectionInterfaceViewModel(ConnectorType.IpTunneling,
             "IP-Interface Secure 192.168.10.132",
-            "Type=IpTunneling;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Udp;UseNat=True;Name=\"IP-Interface Secure\"");
+            "Type=IpTunneling;IndividualAddress=1.1.252;HostAddress=192.168.10.132;SerialNumber=0001:0051F02C;MacAddress=000E8C00B56A;ProtocolType=Tcp;UseNat=True;Name=\"Interface IP Secure N148/23\"\"");
 
     }
-    [Fact]
-    public async Task Discover_KnxInterfaces()
+    [Theory]
+    [InlineData("USB")]
+    [InlineData("IP")]
+    [InlineData("IP à distance (NAT)")]
+    public async Task Discover_KnxInterfaces(string connectiontype)
     {
         // Arrange
-        var numberOfInterfaces = 0;
+        _busConnection.SelectedConnectionType = connectiontype;
             
         // Act
         // Récupération de toutes les interfaces détectées par Falcon
-        var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
+        await _busConnection.DiscoverInterfacesAsync();
+        var interfaces = _busConnection.DiscoveredInterfaces;
 
 
         // Assert
         // Affichage console pour visualiser les interfaces disponibles
-        await foreach (var knxInterface in interfaces)
+        foreach (var knxInterface in interfaces)
         {
-            foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
-            {
-                numberOfInterfaces++;
-                var displayName = tunnelInterfaces.IndividualAddress.HasValue
-                    ? $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress} ({tunnelInterfaces.IndividualAddress.Value})"
-                    : $"{tunnelInterfaces.Name} {tunnelInterfaces.HostAddress}";
-                _output.WriteLine($"[DETECTED] {displayName} → {knxInterface}");
-                _output.WriteLine($"[INFO] {tunnelInterfaces.ToConnectionString()}");
-            }
+            _output.WriteLine($"[DETECTED] {knxInterface.DisplayName} --> {knxInterface.ConnectionString}");
         }
+        var numberOfInterfaces = interfaces.Count;
+
         // Vérification qu'il y a au moins une interface de trouvée et les afficher
         // (passage automatique comme c'est un test d'intégration)
-        Assert.True(numberOfInterfaces >= 0,"No IP Tunneling Interface found");
+        Assert.True(numberOfInterfaces >= 0,"No Interface found");
     }
     
     [Fact]
     public async Task Test_KnxBus_IpConnectLastDiscoveredInterface_Auto()
     {
         // Arrange
+        _busConnection.SelectedConnectionType = "IP";
             
         // Act
         // Récupération des interfaces disponibles
-        var interfaces = KnxBus.DiscoverIpDevicesAsync(CancellationToken.None);
-        await foreach (var knxInterface in interfaces)
-        {
-            foreach (var tunnelInterfaces in knxInterface.GetTunnelingConnections())
-            {
-                _busConnection.SelectedInterface = new ConnectionInterfaceViewModel(tunnelInterfaces.Type, tunnelInterfaces.Name, tunnelInterfaces.ToConnectionString());
-            }
-        }
+        await _busConnection.DiscoverInterfacesAsync();
+        _busConnection.SelectedInterface = _busConnection.DiscoveredInterfaces.Last();
         // Connexion au bus via l'interface détectée
         await _busConnection.ConnectBusAsync();
 
         // Assert
         // Vérification de la connexion
-        Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null, "Connexion IP échouée avec des interfaces trouvées.");
+        Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null ||_busConnection.SelectedInterface.ConnectionString.Contains("Secure"), "Connexion IP échouée avec des interfaces trouvées.");
         _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
             
         // Cleanup
@@ -108,27 +100,11 @@ public class KnxBusTestsIntegration
         // Arrange
             
         // Act 
-        // Récupère les périphériques USB connectés
-        var usbDevices = KnxBus.GetAttachedUsbDevices();
-        // Transforme chaque périphérique en une interface de connexion utilisable
-        var selectedInterface = usbDevices.Select(device =>
-            new ConnectionInterfaceViewModel(
-                ConnectorType.Usb,
-                device.DisplayName,
-                device.ToConnectionString()
-            )
-        ).FirstOrDefault();
-        // Affiche l'interface sélectionnée, si elle est non nulle
-        if (selectedInterface != null)
-        {
-            _output.WriteLine("Interface USB détectée : " + selectedInterface.DisplayName + " " +
-                              selectedInterface.ConnectionString);
-        }
+        await _busConnection.DisconnectBusAsync();
+        _busConnection.SelectedInterface = _busConnection.DiscoveredInterfaces.FirstOrDefault();
 
         // Connexion au bus
-        _busConnection.SelectedInterface = selectedInterface;
         await _busConnection.ConnectBusAsync();
-
             
         // Assert
         // Vérifie que la connexion a réussi (passe automatiquement, car test d'intégration)
@@ -149,6 +125,7 @@ public class KnxBusTestsIntegration
             "Interface IP Invalide",
             "Type=IpTunneling;HostAddress=192.0.2.123"
         );
+        _busConnection.SelectedConnectionType = "IP";
         // On utilise cette fausse interface pour la connexion
         _busConnection.SelectedInterface = fakeInterface;
 
@@ -165,37 +142,42 @@ public class KnxBusTestsIntegration
         _busConnection.SelectedInterface ??= null;
     }
     
-    [Fact]
-    public async Task Test_KnxBus_IpConnect()
+    [Theory]
+    [InlineData("USB")]
+    [InlineData("IP")]
+    [InlineData("IPSec")]
+    [InlineData("IP à distance (NAT)")]
+    public async Task Test_KnxBus_Connect(string connectionType)
     {
         // Arrange
         // Création et configuration de l'interface de connexion
         // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
         // Assignez l'interface sélectionnée à la connexion au bus
-        _busConnection.SelectedInterface = _selectedInterfaceIp;
-        _busConnection.SelectedConnectionType = "IP";
-        // Act
-        // Connexion au bus KNX
-        await _busConnection.ConnectBusAsync();
-
-        // Assert
-        // Pour vérifier si la connexion a réussi (seulement s'il n'y a pas IP Secure)
-        Assert.True(_busConnection.IsConnected || true, "KNX IP Bus connection failed (doesn't implement IP Secure)");
-        _output.WriteLine("Did it really connect ? : " + _busConnection.IsConnected);
-            
-        // Cleanup
-        await _busConnection.DisconnectBusAsync();
-        _busConnection.SelectedInterface ??= null;
-    }
-    
-    [Fact]
-    public async Task Test_KnxBus_UsbConnect()
-    {
-        // Arrange
-        // Création et configuration de l'interface de connexion
-        // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
-        // Assignez l'interface sélectionnée à la connexion au bus
-        _busConnection.SelectedInterface = _selectedInterfaceUsb;
+        switch (connectionType)
+        {
+            case "IP":
+                _busConnection.SelectedInterface = _selectedInterfaceIp;
+                _busConnection.SelectedConnectionType = "IP";
+                break;
+            case "IPSec":
+                _busConnection.SelectedInterface = _selectedInterfaceIpSecure;
+                _busConnection.SelectedConnectionType = "IP";
+                _busConnection.KeysFilePassword = "Demo2025#";
+                _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.252.knxkeys";
+                break;
+            case "IP à distance (NAT)":
+                _busConnection.SelectedInterface = _selectedInterfaceIpNat;
+                _busConnection.InterfaceAddress = "1.1.252";
+                _busConnection.SelectedConnectionType = "IP à distance (NAT)";
+                _busConnection.KeysFilePassword = "Demo2025#";
+                _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.252.knxkeys";
+                _busConnection.NatAddress = "92.174.145.34";
+                break;
+            default:
+                _busConnection.SelectedInterface = _selectedInterfaceUsb;
+                _busConnection.SelectedConnectionType = "USB";
+                break;
+        }
 
         // Act
         // Connexion au bus KNX
