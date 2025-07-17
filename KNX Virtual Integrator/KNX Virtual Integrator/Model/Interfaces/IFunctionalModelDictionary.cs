@@ -10,15 +10,15 @@ namespace KNX_Virtual_Integrator.Model.Interfaces
     /// Each model is identified by a unique key (int). This interface enables centralized 
     /// management of functional models, allowing standardized operations on the dictionary.
     /// 
-    /// - Add_FunctionalModel: Adds a functional model to the dictionary.
-    /// - Remove_FunctionalModel: Removes a functional model using its key.
+    /// - AddFunctionalModel: Adds a functional model to the dictionary.
+    /// - RemoveFunctionalModel: Removes a functional model using its key.
     /// - GetAllModels: Retrieves all functional models from the dictionary.
     /// </summary>
     public interface IFunctionalModelDictionary
     {
-        void Add_FunctionalModel(FunctionalModel functionalModel);
+        void AddFunctionalModel(FunctionalModel functionalModel);
 
-        void Remove_FunctionalModel(int key);
+        void RemoveFunctionalModel(int key);
 
         List<FunctionalModel> GetAllModels();
 

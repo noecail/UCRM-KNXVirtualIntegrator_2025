@@ -217,6 +217,37 @@
             </DataTrigger>
         </Style.Triggers>
     </Style>
+    
+    <Style TargetType="Button" x:Key="CreateFunctionalModelButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource ButtonBlue}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            VerticalAlignment="Bottom"
+                            BorderThickness="0,0,1,0"
+                            BorderBrush="{StaticResource BorderGray}"
+                            >
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="{StaticResource AddDrawingImage}" Height="25" Width="25" Margin="0,5,5,5"/>
+                            <TextBlock Text="{StaticResource AddModel}" VerticalAlignment="Center" FontSize="14"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonBlue}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonBlue}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
     <!-- ______________________________________________________________________________________________________________________________ -->
     <!-- _____________________________________________________TEXTS___________________________________________________________________ -->
     <!-- Style pour les titres -->
@@ -236,7 +267,7 @@
         <!-- Couleur du contour -->
         <Setter Property="BorderThickness" Value="0,0,1,1"/>
         <!-- Contour supérieur et inférieur -->
-        <Setter Property="Height" Value="40"/>
+        <Setter Property="Height" Value="30"/>
         <!-- Hauteur de l'élément -->
         <Setter Property="Margin" Value="0"/>
         <!-- Margin pour le ListBoxItem -->
@@ -305,6 +336,12 @@
         <Setter Property="Background" Value="{StaticResource BackgroundLightGray}"/>
         <Setter Property="Height" Value="Auto"/>
         <Setter Property="Margin" Value="0,5,0,0"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderThickness" Value="5"/>
+                <Setter Property="BorderBrush" Value="Yellow"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     
     <!--Style pour les info-bulles -->

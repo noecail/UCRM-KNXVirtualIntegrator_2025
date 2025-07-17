@@ -17,6 +17,8 @@ namespace KNX_Virtual_Integrator.ViewModel
             ------------------------------------------- ATTRIBUTS  --------------------------------------------
             ------------------------------------------------------------------------------------------------ */
         public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
+        
+        public bool ScrollToEnd { get; set; } // pour demander à l'ui de scroller vers le bas des modèles prédéfinis
 
         public IBusConnection _busConnection { get; }
 

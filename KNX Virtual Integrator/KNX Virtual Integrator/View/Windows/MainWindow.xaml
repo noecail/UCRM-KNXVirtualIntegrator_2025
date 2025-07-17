@@ -171,11 +171,11 @@
                     <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundLightGray}" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/> <!-- Titre lié-->
-                            <RowDefinition Height="Auto"  /><!-- Listes liées-->
+                            <RowDefinition MaxHeight="250" /><!-- Listes liées-->
                             <RowDefinition Height="Auto"/><!-- Titre non-lié-->
-                            <RowDefinition Height="Auto"/><!-- Liste non-liées-->
+                            <RowDefinition MaxHeight="250"/><!-- Liste non-liées-->
                             <RowDefinition Height="*" /><!-- -->
-                            <RowDefinition Height="Auto" MinHeight="30" /><!-- Bouton d'ajout de modèles-->
+                            <RowDefinition Height="30" /><!-- Bouton d'ajout de modèles-->
                         </Grid.RowDefinitions>
 
                         <!-- Titre modèles liés-->
@@ -187,14 +187,15 @@
                             <TextBlock FontWeight="Bold"
                                        FontSize="16"
                                        Foreground="{StaticResource TextBlack}"
-                                       Text="{StaticResource LinkedModels}"
+                                       Text="{StaticResource PredefinedModels}"
                             />
                         </Border>
 
                         <!-- Listes modèles liés-->
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer x:Name="PredefinedModelsScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="Black" BorderThickness="10">
                                 <ListBox ItemsSource="{Binding Models}"
                                          SelectedItem="{Binding SelectedModel}"
+                                         Background="{StaticResource BackgroundLightGray}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"
                                 />
                         </ScrollViewer>
@@ -207,17 +208,20 @@
                                 <TextBlock FontWeight="Bold"
                                            FontSize="16"
                                            Foreground="{StaticResource TextBlack}"
-                                           Text="{StaticResource UnlinkedModels}"
+                                           Text="{StaticResource PersonalizedModels}"
                                 />
-                            </Border>
+                        </Border>
                             
                         <!-- Listes modèles non-liés : Crée une liste à part des modèles non-liés (different du dico general) -->
-                        <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Visible">
                                 <ListBox ItemsSource="{Binding Models}"
                                          SelectedItem="{Binding SelectedModel}"
                                          FontStyle="Italic"
+                                         Background="{StaticResource BackgroundLightGray}"
+                                         
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"
                                 />
+                                
                         </ScrollViewer>
                         
                         <!-- Combler l'espace restant afin d'avoir une bordure droite -->
@@ -230,16 +234,10 @@
 
                         <!-- Bouton d'ajout de modèles-->
                         <Button Grid.Row="5" HorizontalAlignment="Stretch"
-                                VerticalAlignment="Bottom"
-                                Style="{StaticResource IconTextButtonStyle}"
-                                Tag="{StaticResource AddDrawingImage}"
-                                Content="{StaticResource AddModel}"
-                                BorderThickness="0,0,1,0"
-                                BorderBrush="{StaticResource BorderGray}"
+                                Click="CreateFunctionalModelButtonClick"
+                                Style="{StaticResource CreateFunctionalModelButtonStyle}"
                                 Margin="0"
                                 Padding="0"
-                                Background="{StaticResource ButtonBlue}"
-                                Height="40"
                         />
                     </Grid>
 
@@ -306,7 +304,8 @@
                                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                                             <ListBox ItemsSource="{Binding SelectedModel.ElementList}"
                                                      SelectedItem="{Binding SelectedTestedElement}"
-                                                     ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}">
+                                                     ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}"
+                                                     >
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Vertical">
@@ -314,12 +313,12 @@
                                                             <!-- Element à tester = Liste de DPTs {types des DPTs, adresses d'envoi et de retours, liste de valeurs}-->
                                                             <TextBlock Text="Élément à tester" Margin="0,0,0,5" FontWeight="SemiBold"/>
  
-                                                            <StackPanel Orientation="Horizontal">
+                                                            <StackPanel Orientation="Horizontal" >
                                                                 <TextBlock Text="Envoi" Margin="90,0,15,0"/>
                                                                 <TextBlock Text="Réception(s)"/>
                                                             </StackPanel>
                                                             
-                                                            <Grid>
+                                                            <Grid >
                                                                 <Grid.RowDefinitions>
                                                                     <RowDefinition Height="Auto"/>   <!--"Envoi" ou "Réception"-->
                                                                     <RowDefinition Height="Auto"/>   <!--Type de DPT-->
@@ -332,7 +331,7 @@
                                                                 </Grid.ColumnDefinitions>
                                                                
                                                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Type de DPT :"/>
-                                                                <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Tests}">
+                                                                <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal" />
@@ -343,12 +342,13 @@
                                                                             <TextBox Text="{Binding Type}"
                                                                                 Width="40"
                                                                                 HorizontalContentAlignment="Center"
+                                                                                Background="{StaticResource BackgroundLightGray}"
                                                                                 />
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
                                                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Adresse liée :"/>
-                                                                <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tests}">
+                                                                <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal"
@@ -360,12 +360,13 @@
                                                                             <TextBox Text="{Binding Address}"
                                                                                 Width="40"
                                                                                 HorizontalContentAlignment="Center"
+                                                                                Background="{StaticResource BackgroundLightGray}"
                                                                                 />
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
                                                                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Valeurs :"/>
-                                                                <ListBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Tests}">
+                                                                <ListBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal" />
@@ -377,6 +378,7 @@
                                                                                 <ListBox ItemsSource="{Binding Value}"
                                                                                          Width="40"
                                                                                          HorizontalContentAlignment="Center"
+                                                                                         Background="{StaticResource BackgroundLightGray}"
                                                                                          />
                                                                              </ScrollViewer>
                                                                         </DataTemplate>

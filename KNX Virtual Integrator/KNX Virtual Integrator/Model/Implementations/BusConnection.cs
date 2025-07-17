@@ -93,7 +93,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
         {
             if (_isConnected == value) return; // Pas de changement si la valeur est la même
             _isConnected = value;
-            WhenPropertyChanged(nameof(IsConnected)); // Notifie l'interface utilisateur du changement
+            WhenPropertyChanged(nameof(IsConnected)); // Notifie le view model du changement
         }
     }
 
