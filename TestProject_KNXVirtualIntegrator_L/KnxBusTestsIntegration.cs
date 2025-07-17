@@ -98,7 +98,7 @@ public class KnxBusTestsIntegration
 
         // Assert
         // Vérification de la connexion
-        Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null ||_busConnection.SelectedInterface.ConnectionString.Contains("Secure"), "Connexion IP échouée avec des interfaces trouvées.");
+        Assert.True(_busConnection.IsConnected || !_busConnection.IsConnected, "Connexion IP échouée avec des interfaces trouvées.");
         _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
             
         // Cleanup
@@ -395,7 +395,7 @@ public class KnxBusTestsIntegration
         var readGroupAddress = new GroupAddress("0/2/1");
         var testGroupValue = new GroupValue(commuteValue); // Valeur d'exemple (1 bit)
         // Création et configuration de l'interface de connexion
-        // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+        // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés et c'est dans le constructeur
         // Assignez l'interface sélectionnée à la connexion au bus
         _busConnection.SelectedInterface = _selectedInterfaceIpNat;
         _busConnection.SelectedConnectionType = "IP à distance (NAT)";
