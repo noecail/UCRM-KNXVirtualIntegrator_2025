@@ -1,3 +1,4 @@
+using System.Xml.Linq;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
@@ -30,6 +31,13 @@ public class DataPointType
     }
     
     //Constructors
+    public DataPointType()
+    {
+        Type = 1;
+        Value = [new GroupValue(true)];
+        GetSizeOf();
+    }
+    
     public DataPointType(int type)
     {
         Type = type;
@@ -51,10 +59,8 @@ public class DataPointType
         Address = address;
         GetSizeOf();
         Value = [];
-        for (int i = 0; i < values.Count; i++)
-        {
-            Value.Add(values[i]);
-        }
+        foreach (var value in values)
+            Value.Add(value);
     }
     public DataPointType(DataPointType dpt)
     {
@@ -240,8 +246,8 @@ public class DataPointType
     
     /// <summary>
     /// This method checks whether the selected values to send and to read can fit in the selected size.
-    /// <returns>Returns a boolean acknowledging whether the test is possible or not</returns>
     /// </summary>
+    /// <returns>Returns a boolean acknowledging whether the test is possible or not</returns>
     public bool IsPossible()
     {
         var max = Convert.ToUInt64(1 << _size);
@@ -280,11 +286,21 @@ public class DataPointType
 
     /// <summary>
     /// This method checks if the group value of the DPT is the same as the one in parameter.
-    /// <returns>Returns true when the read(in parameter) and expected values are the same</returns>
     /// </summary>
+    /// <returns>Returns true when the read(in parameter) and expected values are the same</returns>
     public bool CompareGroupValue(GroupValue value, int index)
     {
         return value.Equals(Value[index]);
+    }
+
+    /// <summary>
+    /// Extracts the data from a XElement to put it into the DPT
+    /// </summary>
+    /// <param name="element">The XElement representing the address group we want to link the DPT with.</param>
+    public void ExtractDptFromXElement(XElement element)
+    {
+        Address = element.Attributes("Address").First().Value;
+        Type = int.Parse(element.Attributes("DPTs").First().Value);
     }
     
 }

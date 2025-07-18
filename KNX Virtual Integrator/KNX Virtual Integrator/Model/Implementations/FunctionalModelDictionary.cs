@@ -16,11 +16,11 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         {
             FunctionalModels = new Dictionary<int, FunctionalModel>();
             _currentKey = 0; // Commence à 0 pour que la première clé soit 1
-            Add_FunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[null, new GroupValue(false)]])],
+            Add_FunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
                 "Lumiere_ON_OFF")); //Adding On/Off light functional model
             Add_FunctionalModel(new FunctionalModel([
                 new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,5],["",""],
-                    [[null, new GroupValue(false)], [null,new GroupValue(0x00)]]), // Variation functional model : First element : On/Off
+                    [[new GroupValue(true), new GroupValue(false)], [new GroupValue(0xFF),new GroupValue(0x00)]]), // Variation functional model : First element : On/Off
                 new TestedElement([5], [""], [[new GroupValue(0xFF), new GroupValue(0x4F)]], [5], ["", ""],
                     [[new GroupValue(0xFF), new GroupValue(0x4F)]]), //Second element : absolute change
                 new TestedElement([3], [""], [[new GroupValue(0x4)]],[5],[""],[[new GroupValue([0x2E])]])
@@ -34,19 +34,8 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 [[new GroupValue(true),new GroupValue(true)],[new GroupValue(false),new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]),
             ],"Store"));
             Add_FunctionalModel(new FunctionalModel([
-            new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])  //On/Off
-                ],"Convecteur"));
-            Add_FunctionalModel(new FunctionalModel([
-                new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])
-            ],"Prise"));
-            Add_FunctionalModel(new FunctionalModel([
-                new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])
-            ],"Arrosage"));
-            Add_FunctionalModel(new FunctionalModel([
-                new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[null, new GroupValue(false)]])
-            ],"Ouvrant"));
-            
-            
+            new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[new GroupValue(true), new GroupValue(false)]])  //On/Off
+                ],"Commutation")); //Convection, Prise, Arrosage, Portail
         }
 
         public FunctionalModelDictionary(string path)

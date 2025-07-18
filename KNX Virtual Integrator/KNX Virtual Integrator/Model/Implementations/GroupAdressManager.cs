@@ -8,7 +8,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// <summary>
     /// Dictionary where each Cmd addresses is grouped with the corresponding Ie adresses
     /// </summary>
-    public readonly Dictionary<string, List<XElement>> GroupedAddresses = new ();
+    public Dictionary<string, List<XElement>> GroupedAddresses { get; } = new ();
     
     /// <summary>
     /// List of all the Ie addresses
