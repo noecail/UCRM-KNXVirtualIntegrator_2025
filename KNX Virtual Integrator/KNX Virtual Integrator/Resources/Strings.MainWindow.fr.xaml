@@ -22,8 +22,8 @@
     <sys:String x:Key="ModelsTitle">Modèles Fonctionnels</sys:String>
     <sys:String x:Key="ModelsParametersTitle">Paramètres du Modèle Fonctionnel</sys:String>
     <sys:String x:Key="CommandeParametersTitle">Paramètres Commande : </sys:String>
-    <sys:String x:Key="LinkedModels">Modèles Liés</sys:String>
-    <sys:String x:Key="UnlinkedModels">Modèles Non Liés</sys:String>
+    <sys:String x:Key="PredefinedModels">Modèles Prédéfinis</sys:String>
+    <sys:String x:Key="PersonalizedModels">Modèles Personnalisés</sys:String>
     <sys:String x:Key="AddModelsButton">Ajouter</sys:String>
     <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
     <sys:String x:Key="SentDPT">DPT envoyé :</sys:String>
@@ -31,7 +31,7 @@
     <sys:String x:Key="ExpectedDPT">DPT attendu :</sys:String>
     <sys:String x:Key="TableTitleSentExpected">Valeur Envoyé / Valeur Attendue :</sys:String>
     <sys:String x:Key="DPTsubtype">Sous-type du DPT :</sys:String>
-    <sys:String x:Key="AddModel">Ajouter</sys:String>
+    <sys:String x:Key="AddModel">Ajouter Modèle Fonctionnel</sys:String>
     <sys:String x:Key="LinkedModel">Modèle Lié</sys:String>
     <sys:String x:Key="UnlinkedModel">Modèle Non Lié</sys:String>
     <sys:String x:Key="Save">Enregistrer</sys:String>

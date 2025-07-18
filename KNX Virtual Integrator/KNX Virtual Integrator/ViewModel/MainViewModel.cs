@@ -9,6 +9,7 @@ using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Entities;
+using KNX_Virtual_Integrator.View;
 
 
 // ReSharper disable InvalidXmlDocComment
@@ -50,13 +51,12 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
         // Initialisation des attributs
         _modelManager = modelManager;
-        _selectedModel = new FunctionalModel("NaN");
         _busConnection = _modelManager.BusConnection;
         _busConnection.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(_busConnection.IsConnected))
             {
-                WhenPropertyChanged(nameof(IsConnected)); // Mise à jour de la vue
+                WhenPropertyChanged(nameof(IsConnected)); // Notification de la view
                 ConnectBusCommand?.NotifyCanExecuteChanged(); //ATTENTION, PEUT CAUSER PROBLÈMES APRÈS L'UPGRADE
                 DisconnectBusCommand?.NotifyCanExecuteChanged();
             }
@@ -91,6 +91,29 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 if (_busConnection.ConnectionErrorMessage == "") ErrorMessageVisibility = Visibility.Collapsed;
                 else ErrorMessageVisibility = Visibility.Visible;
+            }
+        };
+        
+        //Gestion des modèles -----------------------------------------------------------------------
+        _functionalModelList = new FunctionalModelList();
+        _functionalModelList.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(_functionalModelList.FunctionalModels))
+            {
+                // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
+                Models?.Clear();
+                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels);
+                foreach (var newModel in newModels)
+                {
+                    //Console.WriteLine("New model from fml  : " + newModel.Name);
+                    Models?.Add(newModel);
+                    //Console.WriteLine("New model in Models : " + Models?.Last());
+                }
+
+                // Also, selecting the newly created model and scrolling down to it
+                //SelectedModel = Models?.Last();
+                //Console.WriteLine("SelectedModel : " + SelectedModel);
+                WhenPropertyChanged(nameof(ScrollToEnd));
             }
         };
 
@@ -142,12 +165,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         CreateFunctionalModelDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
                 _functionalModelList?.AddToDictionary(new FunctionalModel("New Model"));
+                //ConsoleAndLogWriteLineCommand.Execute(Models?.Count);
             }
         );
 
         DeleteFunctionalModelDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
             {
                 _functionalModelList?.DeleteFromDictionary(parameter);
+                HideModelColumnCommand.Execute(null);
             }
         );
 
@@ -263,11 +288,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ShowAdressColumnCommand = new RelayCommand(ShowAdressColumn);
 
 
-        //Gestion des modèles -----------------------------------------------------------------------
-        _functionalModelList = new FunctionalModelList();
+        
 
         // Chargement des modèles par défaut dans la collection observable
-        Models = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
+        Models = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels);
 
         //Sauvegarde des modèles --------------------------------------------------------------------
 

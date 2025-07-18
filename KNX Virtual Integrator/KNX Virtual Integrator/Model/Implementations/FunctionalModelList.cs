@@ -1,19 +1,33 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Automation;
+using System.Xml;
+using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class FunctionalModelList:IFunctionalModelList
+public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
 {
-    public List<FunctionalModel> FunctionalModels = [];
-    private FunctionalModelDictionary _functionalModelDictionary;
-    private int _nbModels;
+    public List<FunctionalModel> FunctionalModels { get; set; }
+    private readonly FunctionalModelDictionary _functionalModelDictionary;
+    private readonly int _nbModels;
 
     public FunctionalModelList()
     {
         _functionalModelDictionary = new FunctionalModelDictionary();
         _nbModels = _functionalModelDictionary.FunctionalModels.Count;
+        FunctionalModels = _functionalModelDictionary.GetAllModels();
 
+        _functionalModelDictionary.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(_functionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
+            {
+                FunctionalModels = _functionalModelDictionary.GetAllModels(); //mettre à jour dans la liste
+                OnPropertyChanged(nameof(FunctionalModels)); //notifier le mainviewmodel
+            }
+        };
     }
 
 
@@ -51,7 +65,7 @@ public class FunctionalModelList:IFunctionalModelList
     /// <param name="model">The model to add to the dictionary</param>
     public void AddToDictionary(FunctionalModel model)
     {
-        _functionalModelDictionary.Add_FunctionalModel(model);
+        _functionalModelDictionary.AddFunctionalModel(model);
     }
 
     /// <summary>
@@ -60,9 +74,9 @@ public class FunctionalModelList:IFunctionalModelList
     /// <param name="index">Index of the Functional Model to delete from in the dictionary. </param>
     public void DeleteFromDictionary(int index)
     {
-        if (index < _nbModels)
+        if (index > _nbModels)
             return;
-        _functionalModelDictionary.Remove_FunctionalModel(index);
+        _functionalModelDictionary.RemoveFunctionalModel(index);
     }
     
     /// <summary>
@@ -91,5 +105,13 @@ public class FunctionalModelList:IFunctionalModelList
     {
         return _functionalModelDictionary.GetAllModels();
     }
+
+    public new event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
 }
 

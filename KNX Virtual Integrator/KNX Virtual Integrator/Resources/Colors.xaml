@@ -7,6 +7,7 @@
     <Color x:Key="GreenColor">#369026</Color>
     <Color x:Key="LightGreenColor">#4a9b3c</Color>
     <Color x:Key="BlueColor">#006BB4</Color>
+    <Color x:Key="AccentuateBlueColor">#005D9C</Color>
     <Color x:Key="RedColor">#C75150</Color>
     <Color x:Key="AccentuatedRedColor">#B73B3B</Color>
     <Color x:Key="LightGrayColor">#F3F3F3</Color>
@@ -33,6 +34,7 @@
     <SolidColorBrush x:Key="AccentuateButtonGreen" Color="{StaticResource LightGreenColor}"/>
     <SolidColorBrush x:Key="ButtonGray" Color="{StaticResource Gray2Color}"/>
     <SolidColorBrush x:Key="ButtonBlue" Color="{StaticResource BlueColor}"/>
+    <SolidColorBrush x:Key="AccentuateButtonBlue" Color="{StaticResource AccentuateBlueColor}" />
     <SolidColorBrush x:Key="ButtonRed" Color="{StaticResource RedColor}"/>
     <SolidColorBrush x:Key="AccentuatedButtonRed" Color="{StaticResource AccentuatedRedColor}"/>
     

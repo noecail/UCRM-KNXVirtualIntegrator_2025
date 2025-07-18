@@ -23,6 +23,18 @@ public class KnxBusTestsIntegration
     {
         _output = output;
         var logger = Mock.Of<ILogger>();
+        var args =new List<string>();
+        Mock.Get(logger).Setup(x => x.ConsoleAndLogWriteLine(Capture.In(args)))
+            .Callback(() => {
+                    _output.WriteLine(args.Last());
+                    args.Clear();
+            });
+        Mock.Get(logger).Setup(x => x.ConsoleAndLogWrite(Capture.In(args)))
+            .Callback(() => {
+                    _output.WriteLine(args.Last());
+                    args.Clear();
+            });
+        
         // Initialisation de BusConnection et GroupCommunication
         _busConnection = new BusConnection(logger, new KnxBusWrapper());
         _groupCommunication = new GroupCommunication(_busConnection, logger);
@@ -72,7 +84,7 @@ public class KnxBusTestsIntegration
     }
     
     [Fact]
-    public async Task Test_KnxBus_IpConnectLastDiscoveredInterface_Auto()
+    public async Task Test_KnxBus_IpConnectLastInterface_Auto()
     {
         // Arrange
         _busConnection.SelectedConnectionType = "IP";
@@ -80,13 +92,9 @@ public class KnxBusTestsIntegration
         // Act
         // Récupération des interfaces disponibles
         await _busConnection.DiscoverInterfacesAsync();
-        _busConnection.SelectedInterface = _busConnection.DiscoveredInterfaces.Last();
-        // Connexion au bus via l'interface détectée
-        await _busConnection.ConnectBusAsync();
-
-        // Assert
+        _busConnection.SelectedInterface = _busConnection.DiscoveredInterfaces.Count == 0 ?  null : _busConnection.DiscoveredInterfaces.Last();
         // Vérification de la connexion
-        Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null ||_busConnection.SelectedInterface.ConnectionString.Contains("Secure"), "Connexion IP échouée avec des interfaces trouvées.");
+        Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface is null || _busConnection.SelectedInterface.ConnectionString.Contains("Secure"), "Connexion IP échouée avec des interfaces trouvées.");
         _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
             
         // Cleanup
@@ -98,9 +106,9 @@ public class KnxBusTestsIntegration
     public async Task Test_KnxBus_UsbConnectFirstOrDefaultInterface_Auto()
     {
         // Arrange
-            
+        await _busConnection.DiscoverInterfacesAsync();
+        
         // Act 
-        await _busConnection.DisconnectBusAsync();
         _busConnection.SelectedInterface = _busConnection.DiscoveredInterfaces.FirstOrDefault();
 
         // Connexion au bus
@@ -110,33 +118,6 @@ public class KnxBusTestsIntegration
         // Vérifie que la connexion a réussi (passe automatiquement, car test d'intégration)
         Assert.True(_busConnection.IsConnected || _busConnection.SelectedInterface == null , "Connexion USB échouée malgré avoir trouvé une interface");
         _output.WriteLine("Did it really connect? : " + _busConnection.IsConnected);
-        // Cleanup
-        await _busConnection.DisconnectBusAsync();
-        _busConnection.SelectedInterface ??= null;
-    }
-    
-    [Fact]
-    public async Task Test_KnxBus_ConnectionFails_WithInvalidInterface()
-    {
-        // Arrange
-        // Crée une fausse interface IP qui ne pointe vers aucun vrai appareil
-        var fakeInterface = new ConnectionInterfaceViewModel(
-            ConnectorType.IpTunneling,
-            "Interface IP Invalide",
-            "Type=IpTunneling;HostAddress=192.0.2.123"
-        );
-        _busConnection.SelectedConnectionType = "IP";
-        // On utilise cette fausse interface pour la connexion
-        _busConnection.SelectedInterface = fakeInterface;
-
-        // Act
-        // On tente de se connecter
-        await _busConnection.ConnectBusAsync();
-
-        // Assert
-        // Vérifie que la connexion a échoué
-        Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une interface invalide.");
-
         // Cleanup
         await _busConnection.DisconnectBusAsync();
         _busConnection.SelectedInterface ??= null;
@@ -167,10 +148,10 @@ public class KnxBusTestsIntegration
                 break;
             case "IP à distance (NAT)":
                 _busConnection.SelectedInterface = _selectedInterfaceIpNat;
-                _busConnection.InterfaceAddress = "1.1.252";
+                _busConnection.InterfaceAddress = "1.1.255";
                 _busConnection.SelectedConnectionType = "IP à distance (NAT)";
                 _busConnection.KeysFilePassword = "Demo2025#";
-                _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.252.knxkeys";
+                _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.255.knxkeys";
                 _busConnection.NatAddress = "92.174.145.34";
                 break;
             default:
@@ -217,28 +198,71 @@ public class KnxBusTestsIntegration
         _busConnection.SelectedInterface ??= null;
     }
     
-        [Fact]
-        public async Task Test_KnxBus_UsbConnect_WithInvalidPath_ShouldFail()
+    [Theory]
+    [InlineData("IP")]
+    [InlineData("USB")]
+    public async Task Test_KnxBus_ConnectionFails_WithInvalidInterface(string connectionType)
+    {
+        // Arrange
+        // Crée une fausse interface IP qui ne pointe vers aucun vrai appareil
+        ConnectionInterfaceViewModel fakeInterface;
+        switch (connectionType)
         {
-            // Étape 1 : Création d'une fausse interface USB invalide
-            var fakeUsbInterface = new ConnectionInterfaceViewModel(
-                ConnectorType.Usb,
-                "USB Fake Interface",
-                "Type=Usb;DevicePath=INVALID_PATH"
-            );
-
-            // Étape 2 : On assigne cette fausse interface au bus
-            _busConnection.SelectedInterface = fakeUsbInterface;
-
-            // Étape 3 : On tente une connexion
-            await _busConnection.ConnectBusAsync();
-
-            // Étape 4 : Vérifie que la connexion a échoué
-            Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une chaîne USB invalide.");
-
-            // Étape 5 : Nettoyage
-            await _busConnection.DisconnectBusAsync();
+            case "IP":
+                fakeInterface = new ConnectionInterfaceViewModel(
+                    ConnectorType.IpTunneling,
+                    "Interface IP Invalide",
+                    "Type=IpTunneling;HostAddress=192.0.2.123"
+                );
+                break;
+            default :
+                fakeInterface = new ConnectionInterfaceViewModel(
+                    ConnectorType.Usb,
+                    "USB Fake Interface",
+                    "Type=Usb;DevicePath=INVALID_PATH"
+                );
+                break;
         }
+        // On utilise cette fausse interface pour la connexion
+        _busConnection.SelectedInterface = fakeInterface;
+
+        // Act
+        // On tente de se connecter
+        await _busConnection.ConnectBusAsync();
+
+        // Assert
+        // Vérifie que la connexion a échoué
+        Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une interface invalide.");
+
+        // Cleanup
+        await _busConnection.DisconnectBusAsync();
+        _busConnection.SelectedInterface ??= null;
+    }
+
+
+    [Fact]
+    public async Task Test_KnxBus_UsbConnect_WithInvalidPath_ShouldFail()
+    {
+        // Arrange
+        // Création d'une fausse interface USB invalide
+        var fakeUsbInterface = new ConnectionInterfaceViewModel(
+            ConnectorType.Usb,
+            "USB Fake Interface",
+            "Type=Usb;DevicePath=INVALID_PATH"
+        );
+        // On assigne cette fausse interface au bus
+        _busConnection.SelectedInterface = fakeUsbInterface;
+
+        // Act
+        // On tente une connexion
+        await _busConnection.ConnectBusAsync();
+
+        // Assert
+        Assert.False(_busConnection.IsConnected, "La connexion aurait dû échouer avec une chaîne USB invalide.");
+
+        // Cleanup
+        await _busConnection.DisconnectBusAsync();
+    }
     
     [Theory]
     [InlineData(true)]
@@ -296,6 +320,7 @@ public class KnxBusTestsIntegration
         // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
         // Assignez l'interface sélectionnée à la connexion au bus
         _busConnection.SelectedInterface = _selectedInterfaceUsb;
+        _busConnection.SelectedConnectionType = "USB";
 
         // Act
         // Connexion au bus KNX puis écriture de la valeur
@@ -330,11 +355,10 @@ public class KnxBusTestsIntegration
         // Création et configuration de l'interface de connexion
         // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
         // Assignez l'interface sélectionnée à la connexion au bus
-        await _busConnection.DisconnectBusAsync();
         _busConnection.SelectedInterface = _selectedInterfaceIpSecure;
         _busConnection.SelectedConnectionType = "IP";
         _busConnection.KeysFilePassword = "Demo2025#";
-        _busConnection.KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys";
+        _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.252.knxkeys";
 
         // Act
         // Connexion au bus KNX puis écriture de la valeur
@@ -367,13 +391,12 @@ public class KnxBusTestsIntegration
         var readGroupAddress = new GroupAddress("0/2/1");
         var testGroupValue = new GroupValue(commuteValue); // Valeur d'exemple (1 bit)
         // Création et configuration de l'interface de connexion
-        // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
+        // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés et c'est dans le constructeur
         // Assignez l'interface sélectionnée à la connexion au bus
-        await _busConnection.DisconnectBusAsync();
         _busConnection.SelectedInterface = _selectedInterfaceIpNat;
         _busConnection.SelectedConnectionType = "IP à distance (NAT)";
         _busConnection.KeysFilePassword = "Demo2025#";
-        _busConnection.KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys";
+        _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.255.knxkeys";
         _busConnection.NatAddress = "92.174.145.34";
 
         // Act

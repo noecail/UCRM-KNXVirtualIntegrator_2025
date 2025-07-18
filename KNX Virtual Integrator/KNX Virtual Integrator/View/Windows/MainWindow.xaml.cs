@@ -45,6 +45,12 @@ public partial class MainWindow
         _connectionWindow = cw;
         _windowManager = wm;
         _cancellationTokenSource = new CancellationTokenSource();
+
+        _viewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(_viewModel.ScrollToEnd))
+                PredefinedModelsScrollToEnd();
+        };
     }
 
     public void ApplyScaling(float scaleFactor)
@@ -317,4 +323,51 @@ public partial class MainWindow
     // {
     //
     // }
+
+    private void CreateFunctionalModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.CreateFunctionalModelDictionaryCommand.Execute(null);
+    }
+
+    private void DeleteFunctionalModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.DeleteFunctionalModelDictionaryCommand.Execute(_viewModel.SelectedModel?.Key);
+    }
+
+    private void AddTestedElementToModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.AddTestedElementToModel.Execute(_viewModel.SelectedModel);
+    }
+
+    /*private void RemoveTestedElementFromModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.RemoveTestedElementFromModel.Execute((_viewModel.SelectedModel, )); //Comment récupérer l'index du TestedElement
+    }*/
+
+    /*private void AddTestToElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.AddTestToElement(); //récupérer le selected element
+    }*/
+
+    /*private void RemoveTestFromElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.RemoveTestFromElement.Execute(); //récupérer le selected element et l'index du test
+    }*/
+
+    /*private void AddDptToElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.AddDptToElement.Execute(); //récupérer le selected element
+    }*/
+
+    /*private void RemoveDptFromElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.RemoveDptFromElement.Execute(); //récupérer le selected element et l'index du DPT    
+    }*/
+
+    // Used when adding a new model
+    // Scrolls to the end of the list of models
+    private void PredefinedModelsScrollToEnd()
+    {
+        PredefinedModelsScrollViewer.ScrollToEnd();
+    }
 }

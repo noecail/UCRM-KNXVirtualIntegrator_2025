@@ -93,7 +93,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
         {
             if (_isConnected == value) return; // Pas de changement si la valeur est la même
             _isConnected = value;
-            WhenPropertyChanged(nameof(IsConnected)); // Notifie l'interface utilisateur du changement
+            WhenPropertyChanged(nameof(IsConnected)); // Notifie le view model du changement
         }
     }
 
@@ -393,7 +393,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
                     throw new Exception(ex.Message);
                 
                 //Tentative de connexion en sécurisé
-                _logger.ConsoleAndLogWrite($"Erreur : {ex.GetType().Name} - {ex.Message}");
+                _logger.ConsoleAndLogWriteLine($"{ex.Message} : Tentative de connexion en sécurisé");
                 //Efface le message d'erreur dû à la tentative de connexion non sécurisée
                 ConnectionErrorMessage = "";
                 // Ajouter le mot de passe
@@ -426,16 +426,19 @@ public sealed class BusConnection : ObservableObject, IBusConnection
         switch (SelectedConnectionType)
         {
             case "IP" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase):
+            case "IP à distance (NAT)" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase):
                 // Connexion Secure mais pas de knxkeys fourni
                 errorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
                 break;
 
             case "IP" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase):
+            case "IP à distance (NAT)" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase):
                 // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
                 errorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
                 break;
 
             case "IP" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase):
+            case "IP à distance (NAT)" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase):
                 // Connexion réussie, mais le bus est déjà utilisé
                 errorMessage = "Un autre appareil est déjà connecté au bus KNX.";
                 break;
@@ -455,25 +458,22 @@ public sealed class BusConnection : ObservableObject, IBusConnection
                 // Connexion NAT avec IP fourni valide mais ne permettant pas une connexion KNX
                 errorMessage = "L'adresse IP fournie n'a pas permis d'établir une connexion à un bus KNX.";
                 break;
-
-            case "IP à distance (NAT)" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase):
-                // Connexion Secure mais pas de knxkeys fourni
-                errorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
+            
+            case "IP" when e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase):
+            case "IP à distance (NAT)" when e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase):
+                // User Login Failed 2 fois de suite
+                errorMessage = "Il y a une erreur dans le fichier ou le mot de passe";
                 break;
-
-            case "IP à distance (NAT)" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase):
-                // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
-                errorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
-                break;
-
-            case "IP à distance (NAT)" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase):
-                // Connexion réussie, mais le bus est déjà utilisé
-                errorMessage = "Un autre appareil est déjà connecté au bus KNX.";
-                break;
+            
             case "IP" when e.Message.Contains("Connection type and string have to be set before connecting.", StringComparison.OrdinalIgnoreCase):
             case "USB" when e.Message.Contains("Connection type and string have to be set before connecting.", StringComparison.OrdinalIgnoreCase):
                 errorMessage = "Veuillez choisir une interface pour vous connecter.";
                 break;
+            
+            case "USB" when e.Message.Contains("USB device", StringComparison.OrdinalIgnoreCase) ://&& e.Message.Contains("not found", StringComparison.OrdinalIgnoreCase):
+                errorMessage = "Interface non trouvée, veuillez vérifier la connexion";
+                break;
+            
             default:
                 errorMessage = "Erreur non reconnue, contactez les développeurs.";
                 break;
@@ -503,7 +503,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
             IsConnected = true;
             UpdateConnectionState(); // Met à jour l'état de connexion
             OnBusConnectedReady(Bus); // Notifie les abonnés que la connexion est prête
-            _logger.ConsoleAndLogWrite("Connexion réussie au bus en " + SelectedConnectionType switch
+            _logger.ConsoleAndLogWriteLine("Connexion réussie au bus en " + SelectedConnectionType switch
                 {
                     "IP" => "IP",
                     "IP à distance (NAT)" => "IP(NAT)",
@@ -516,7 +516,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
         catch (Exception ex)
         {
             // Gestion des exceptions : affiche le message d'erreur dans la fenêtre
-            _logger.ConsoleAndLogWrite($"Erreur lors de la connexion au bus : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la connexion au bus : {ex.Message}");
         }
         finally
         {

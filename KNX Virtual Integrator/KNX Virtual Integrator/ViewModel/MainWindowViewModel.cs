@@ -22,8 +22,6 @@ namespace KNX_Virtual_Integrator.ViewModel
     {
         // Column management
         private GridLength _modelColumnWidth = new GridLength(0);
-        private GridLength _adressColumnWidth = new GridLength(1, GridUnitType.Auto);
-
         /// <summary>
         /// Gets or sets the width of the model column.
         /// </summary>
@@ -38,6 +36,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             }
         }
 
+        private GridLength _adressColumnWidth = new GridLength(1, GridUnitType.Auto);
         /// <summary>
         /// Gets or sets the width of the address column.
         /// </summary>

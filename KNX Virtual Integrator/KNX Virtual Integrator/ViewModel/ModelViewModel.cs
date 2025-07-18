@@ -22,27 +22,46 @@ namespace KNX_Virtual_Integrator.ViewModel
     public partial class MainViewModel
     {
         private IFunctionalModelList _functionalModelList;
-        private FunctionalModel _selectedModel;
 
 
         /// <summary>
         /// Gets the collection of functional models.
         /// </summary>
-        public ObservableCollection<FunctionalModel> Models { get; }
+        public ObservableCollection<FunctionalModel> Models { get; set; }
 
         /// <summary>
         /// Gets or sets the currently selected model.
         /// </summary>  
-        //Utile pour connaitre le modèle à afficher en paramètre et potentiellement modifier ces attributs
-        public FunctionalModel SelectedModel
+        private FunctionalModel? _selectedModel;
+        public FunctionalModel? SelectedModel
         {
             get => _selectedModel;
             set
             {
-                if (_selectedModel.Equals(value)) return;
+                
+                if (_selectedModel != null && _selectedModel.Key == value?.Key)
+                    return;
                 _selectedModel = value;
                 ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedModel));
+                
+            }
+            // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
+        }
+        
+        /// <summary>
+        /// Gets or sets the currently selected model.
+        /// </summary>  
+        private FunctionalModel _selectedTestedElement;
+        public FunctionalModel SelectedTestedElement
+        {
+            get => _selectedTestedElement;
+            set
+            {
+                if (_selectedTestedElement.Equals(value)) return;
+                _selectedTestedElement = value;
+                //ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
+                WhenPropertyChanged(nameof(SelectedTestedElement));
                 
             }
             // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres

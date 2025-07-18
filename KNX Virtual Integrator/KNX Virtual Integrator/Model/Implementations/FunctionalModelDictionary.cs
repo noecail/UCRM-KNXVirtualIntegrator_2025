@@ -1,3 +1,5 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
@@ -9,7 +11,18 @@ namespace KNX_Virtual_Integrator.Model.Implementations
     //Find Summary in the interface
     public class FunctionalModelDictionary : IFunctionalModelDictionary
     {
-        public Dictionary<int, FunctionalModel> FunctionalModels;
+        private Dictionary<int, FunctionalModel> _functionalModels =[];
+
+        public Dictionary<int, FunctionalModel> FunctionalModels
+        {
+            get => _functionalModels;
+            set
+            {
+                if (_functionalModels.Equals(value)) return;
+                _functionalModels = value;
+            }
+        }
+
         private int _currentKey;
 
         public FunctionalModelDictionary()
@@ -50,18 +63,29 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void Add_FunctionalModel(FunctionalModel functionalModel)
         {
             _currentKey++;
+            if (functionalModel.Name == "New Model")
+                functionalModel.Name += " " + _currentKey;
             functionalModel.Key = _currentKey; // Associer la cl� au mod�le
             FunctionalModels.Add(_currentKey, functionalModel);
+            OnPropertyChanged(nameof(FunctionalModels));
         }
 
         public void Remove_FunctionalModel(int key)
         {
             FunctionalModels.Remove(key);
+            OnPropertyChanged(nameof(FunctionalModels));
         }
 
         public List<FunctionalModel> GetAllModels()
         {
-            return [..FunctionalModels.Values];
+            var liste = new List<FunctionalModel>();
+            for (int i = 0; i < _currentKey; i++)
+            {
+                if (FunctionalModels.ContainsKey(i))
+                    liste.Add(FunctionalModels[i]);
+            }
+
+            return liste;
         }
 
         /// <summary>
@@ -154,6 +178,13 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     }
                     FunctionalModels.Add(++_currentKey,functionalModel);
                 }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

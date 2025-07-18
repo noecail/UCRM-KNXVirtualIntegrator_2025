@@ -1,10 +1,8 @@
-using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Knx.Falcon.Sdk;
 using System.Timers;
 using System.Windows.Threading;
 using Timer = System.Timers.Timer;
@@ -243,11 +241,15 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     {
         var theList = new List<GroupMessage>();
         Timer timer = new Timer(timerDuration);
-        if (_busConnection is { IsConnected: false, IsBusy: true })
+        if (!_busConnection.IsConnected)
         {
             _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
-            //MessageBox.Show("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.",
-            //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return [];
+        }
+
+        if (_busConnection.IsBusy)
+        {
+            _logger.ConsoleAndLogWriteLine("Le bus est occupé");
             return [];
         }
  
@@ -265,12 +267,15 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             timer.Enabled = true;
             NotifyCollectionChangedEventHandler messageHandler = (_, _) =>
             {
-                if (Messages.Last().DestinationAddress != groupAddress) return;
-                theList.Add(Messages.Last()); //TODO : Régler le problème de dédoublement des valeurs lues
+                if (!Messages.Last().DestinationAddress.Equals(groupAddress)) return;
+                // La 2e vérification est nécessitée par le dédoublement des messages reçus ( influence du wrapper? )
+                if (theList.Count > 0 && theList.Last().Equals(Messages.Last())) return;
+                theList.Add(Messages.Last());
             };
             
             Messages.CollectionChanged += messageHandler;
             
+            // Possibilité (fine) que les messages de Response arrivent en même temps que les messages de Write
             if (_busConnection is { CancellationTokenSource: not null, Bus.IsNull : false })
                 await _busConnection.Bus.RequestGroupValueAsync(
                     groupAddress, MessagePriority.High,
@@ -280,13 +285,11 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             while (timer.Enabled) { }
             
             Messages.CollectionChanged -= messageHandler;
-            timer.Enabled = false;
+            timer.Enabled = false; // Juste au cas où il y a un problème avec le timer
         }
         catch (Exception ex)
         {
             _logger.ConsoleAndLogWriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
-            //MessageBox.Show($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}",
-            //                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
             return [];
         }
 
@@ -296,9 +299,9 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     
     
     // Liste observable pour les messages reçus
-    public ObservableCollection<GroupMessage> Messages { get; private set; } = new ObservableCollection<GroupMessage>();
+    private ObservableCollection<GroupMessage> Messages { get; } = new ();
 
-    private readonly ObservableCollection<GroupEventArgs> _groupEvents = new ObservableCollection<GroupEventArgs>();
+    private readonly ObservableCollection<GroupEventArgs> _groupEvents = new ();
 
     /// <summary>
     /// Obtient la collection observable des événements de groupe reçus.
@@ -323,7 +326,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     /// </summary>
     /// <param name="oldBus">L'ancien bus KNX.</param>
     /// <param name="newBus">Le nouveau bus KNX.</param>
-    internal void BusChanged(IKnxBusWrapper? oldBus, IKnxBusWrapper? newBus)
+    private void BusChanged(IKnxBusWrapper? oldBus, IKnxBusWrapper? newBus)
     {
         if (oldBus != null)
             oldBus.GroupMessageReceived -= OnGroupMessageReceived;
@@ -356,6 +359,22 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         /// Le type d'événement associé au message, si nécessaire.
         /// </summary>
         public GroupEventType EventType { get; init; }
+
+        public bool Equals(GroupMessage? obj)
+        {
+            if (obj is null) 
+                return false;
+            if (Value is null && obj.Value is null) 
+                return DestinationAddress.Equals(obj.DestinationAddress) 
+                       && SourceAddress.Equals(obj.SourceAddress) 
+                       && EventType.Equals(obj.EventType);
+            if (Value is null || obj.Value is null)
+                return false;
+            return Value.Equals(obj.Value) 
+                   && DestinationAddress.Equals(obj.DestinationAddress) 
+                   && SourceAddress.Equals(obj.SourceAddress) 
+                   && EventType.Equals(obj.EventType);
+        }
     }
 
     /// <summary>
@@ -374,8 +393,8 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
             Value = e.Value,
             EventType = e.EventType
         };
-
-        //TODO : Dé-commenter lorsque l'interface Dispatcher wrapper sera créée pour permettre de tester
+        
+        //TODO : Dé-commenter lorsque l'interface Dispatcher wrapper sera créée pour permettre de tester (si nécessaire?)
         
         // Assure-toi que l'ajout à la collection est fait sur le thread du Dispatcher
         Dispatcher.CurrentDispatcher.Invoke(() =>
