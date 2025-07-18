@@ -315,6 +315,40 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
+    
+    <DrawingImage x:Key="BinDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M-2.94,0 V31.716 H28.776 V0 H-2.94 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="2.94" Y="0" />
+                </DrawingGroup.Transform>
+                <DrawingGroup Opacity="1" Transform="1,0,0,1,-355.957,-579">
+                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M376.515,610.716L361.231,610.716A2.361,2.361,0,0,1,358.873,608.357L358.873,584.1A1,1,0,0,1,360.873,584.1L360.873,608.355A0.36,0.36,0,0,0,361.231,608.714L376.515,608.714A0.36,0.36,0,0,0,376.873,608.355L376.873,584.1A1,1,0,0,1,378.873,584.1L378.873,608.355A2.361,2.361,0,0,1,376.515,610.716z" />
+                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M365.457,604.917A1,1,0,0,1,364.457,603.917L364.457,589.917A1,1,0,0,1,366.457,589.917L366.457,603.917A1,1,0,0,1,365.457,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M372.29,604.917A1,1,0,0,1,371.29,603.917L371.29,589.917A1,1,0,0,1,373.29,589.917L373.29,603.917A1,1,0,0,1,372.29,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M380.79,585.1L356.957,585.1A1,1,0,0,1,356.957,583.1L380.79,583.1A1,1,0,0,1,380.79,585.1z" />
+                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M372.79,581L364.873,581A1,1,0,1,1,364.873,579L372.79,579A1,1,0,0,1,372.79,581z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="BlackBinDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M-2.94,0 V31.716 H28.776 V0 H-2.94 Z">
+                <DrawingGroup.Transform>
+                    <TranslateTransform X="2.94" Y="0" />
+                </DrawingGroup.Transform>
+                <DrawingGroup Opacity="1" Transform="1,0,0,1,-355.957,-579">
+                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M376.515,610.716L361.231,610.716A2.361,2.361,0,0,1,358.873,608.357L358.873,584.1A1,1,0,0,1,360.873,584.1L360.873,608.355A0.36,0.36,0,0,0,361.231,608.714L376.515,608.714A0.36,0.36,0,0,0,376.873,608.355L376.873,584.1A1,1,0,0,1,378.873,584.1L378.873,608.355A2.361,2.361,0,0,1,376.515,610.716z" />
+                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M365.457,604.917A1,1,0,0,1,364.457,603.917L364.457,589.917A1,1,0,0,1,366.457,589.917L366.457,603.917A1,1,0,0,1,365.457,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M372.29,604.917A1,1,0,0,1,371.29,603.917L371.29,589.917A1,1,0,0,1,373.29,589.917L373.29,603.917A1,1,0,0,1,372.29,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M380.79,585.1L356.957,585.1A1,1,0,0,1,356.957,583.1L380.79,583.1A1,1,0,0,1,380.79,585.1z" />
+                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M372.79,581L364.873,581A1,1,0,1,1,364.873,579L372.79,579A1,1,0,0,1,372.79,581z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
 
     <DrawingImage x:Key="RightArrowDrawingImage">
         <DrawingImage.Drawing>

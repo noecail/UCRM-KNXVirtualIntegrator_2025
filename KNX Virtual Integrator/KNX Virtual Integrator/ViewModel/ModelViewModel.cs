@@ -38,14 +38,9 @@ namespace KNX_Virtual_Integrator.ViewModel
             get => _selectedModel;
             set
             {
-                Console.WriteLine("-------------------------------------------------");
-                Console.WriteLine("Trying to set a new value of Selected Model");
-                Console.WriteLine("_selectedModel.Key : " + _selectedModel?.Key);
-                Console.WriteLine("value?.Key : " + value?.Key);
-                Console.WriteLine("-------------------------------------------------");
-                if (_selectedModel != null && _selectedModel.Key == value?.Key) return;
                 
-                //Console.WriteLine("Selected Model est update à : " + value?.Key);
+                if (_selectedModel != null && _selectedModel.Key == value?.Key)
+                    return;
                 _selectedModel = value;
                 ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedModel));

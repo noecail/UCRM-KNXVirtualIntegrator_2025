@@ -218,6 +218,19 @@
         </Style.Triggers>
     </Style>
     
+    <Style x:Key="DeleteFunctionalModelButtonStyle" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Tag" Value="{StaticResource BlackBinDrawingImage}"/>
+                <Setter Property="Background" Value="{StaticResource BackgroundLightGray}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource BackgroundDarkGray}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
     <Style TargetType="Button" x:Key="CreateFunctionalModelButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
         <Setter Property="Background" Value="{StaticResource ButtonBlue}"/>
         <Setter Property="Template">
@@ -295,12 +308,12 @@
                                     VerticalAlignment="Center"
                                     Margin="0,0,0,0">
                             <!-- Icône alignée à droite -->
-                                <Image Source="{StaticResource LockedDrawingImage}" 
+                                <!--<Image Source="{StaticResource LockedDrawingImage}" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Right" 
                                        Margin="0,0,0,0" 
                                        Width="16" 
-                                       Height="16"/>                
+                                       Height="16"/>-->                
                                 <Image x:Name="SelectedImage"
                                        Source="{StaticResource RightArrowDrawingImage}"
                                        VerticalAlignment="Center" 

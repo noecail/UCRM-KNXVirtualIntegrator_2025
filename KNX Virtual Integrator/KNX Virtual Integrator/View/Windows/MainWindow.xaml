@@ -171,9 +171,9 @@
                     <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundLightGray}" >
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/> <!-- Titre lié-->
-                            <RowDefinition MaxHeight="250" /><!-- Listes liées-->
+                            <RowDefinition Height="250" /><!-- Listes liées-->
                             <RowDefinition Height="Auto"/><!-- Titre non-lié-->
-                            <RowDefinition MaxHeight="250"/><!-- Liste non-liées-->
+                            <RowDefinition Height="250"/><!-- Liste non-liées-->
                             <RowDefinition Height="*" /><!-- -->
                             <RowDefinition Height="30" /><!-- Bouton d'ajout de modèles-->
                         </Grid.RowDefinitions>
@@ -249,6 +249,7 @@
                         <Grid Grid.Row="0" Grid.Column="1">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" /> <!-- Titre -->
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
                             </Grid.ColumnDefinitions>
 
@@ -261,8 +262,19 @@
                                    Margin="5,0"
                             />
 
-                            <!--Bouton de Fermeture -->
+                            <!--Bouton de suppression -->
                             <Button Grid.Column="1"
+                                    Style="{StaticResource DeleteFunctionalModelButtonStyle}"
+                                    Tag="{StaticResource BinDrawingImage}"
+                                    HorizontalAlignment="Right"
+                                    Height="35"
+                                    BorderThickness="1"
+                                    BorderBrush="{StaticResource BorderGray}"
+                                    Click="DeleteFunctionalModelButtonClick"
+                                    />
+                            
+                            <!--Bouton de Fermeture -->
+                            <Button Grid.Column="2"
                                 Style="{StaticResource IconButtonStyle}"
                                 Tag="{StaticResource CloseDrawingImage}"
                                 HorizontalAlignment="Right"

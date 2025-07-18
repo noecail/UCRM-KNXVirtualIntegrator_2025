@@ -172,6 +172,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         DeleteFunctionalModelDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
             {
                 _functionalModelList?.DeleteFromDictionary(parameter);
+                HideModelColumnCommand.Execute(null);
             }
         );
 

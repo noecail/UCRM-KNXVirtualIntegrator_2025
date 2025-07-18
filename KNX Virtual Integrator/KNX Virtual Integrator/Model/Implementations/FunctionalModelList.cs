@@ -74,7 +74,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="index">Index of the Functional Model to delete from in the dictionary. </param>
     public void DeleteFromDictionary(int index)
     {
-        if (index < _nbModels)
+        if (index > _nbModels)
             return;
         _functionalModelDictionary.RemoveFunctionalModel(index);
     }

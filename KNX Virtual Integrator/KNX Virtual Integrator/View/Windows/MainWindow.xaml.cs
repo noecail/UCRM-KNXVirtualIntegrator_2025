@@ -331,7 +331,7 @@ public partial class MainWindow
 
     private void DeleteFunctionalModelButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.DeleteFunctionalModelDictionaryCommand.Execute(_viewModel.SelectedModel);
+        _viewModel.DeleteFunctionalModelDictionaryCommand.Execute(_viewModel.SelectedModel?.Key);
     }
 
     private void AddTestedElementToModelButtonClick(object sender, RoutedEventArgs e)
