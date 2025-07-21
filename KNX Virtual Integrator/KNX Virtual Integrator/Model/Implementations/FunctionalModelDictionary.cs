@@ -79,7 +79,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public List<FunctionalModel> GetAllModels()
         {
             var liste = new List<FunctionalModel>();
-            for (int i = 0; i < _currentKey; i++)
+            for (int i = 0; i <= _currentKey; i++)
             {
                 if (FunctionalModels.ContainsKey(i))
                     liste.Add(FunctionalModels[i]);

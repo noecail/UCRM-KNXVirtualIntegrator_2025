@@ -20,7 +20,7 @@ public class DataPointType
 
     private int _size; // Size of the DPT
     
-    public List<GroupValue?> Value { get; } // Value to send or expected to be read
+    public List<GroupValue?> Value { get; set; } // Value to send or expected to be read
 
     private string _address = "0/1/1";
 

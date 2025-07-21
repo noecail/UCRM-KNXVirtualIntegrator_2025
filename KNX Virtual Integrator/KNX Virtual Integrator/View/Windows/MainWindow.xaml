@@ -246,7 +246,7 @@
                     <!-- En-tête -->
                     <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
                                 BorderThickness="0,0,1,0" >
-                        <Grid Grid.Row="0" Grid.Column="1">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" /> <!-- Titre -->
                                 <ColumnDefinition Width="*"/>
@@ -314,22 +314,42 @@
                                         
                                         <!--DPT : Venir liées le ComboBox a un dictionnaire de DPT traitées par le logiciel en back-->
                                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                            <ListBox ItemsSource="{Binding SelectedModel.ElementList}"
+                                            <ListBox Name="SelectedElementsListBox"
+                                                     ItemsSource="{Binding SelectedModel.ElementList}"
                                                      SelectedItem="{Binding SelectedTestedElement}"
                                                      ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}"
+                                                     AlternationCount="100"
                                                      >
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
                                                         <StackPanel Orientation="Vertical">
                                                             
                                                             <!-- Element à tester = Liste de DPTs {types des DPTs, adresses d'envoi et de retours, liste de valeurs}-->
-                                                            <TextBlock Text="Élément à tester" Margin="0,0,0,5" FontWeight="SemiBold"/>
- 
+                                                            <Grid Margin="0,0,0,5">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="*"/>
+                                                                    <ColumnDefinition Width="Auto"/>
+                                                                </Grid.ColumnDefinitions>
+                                                                <TextBlock Grid.Column="0" Text="Élément à tester" FontWeight="SemiBold"/>
+                                                                <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AlternationIndex}"/>
+                                                                <!--Bouton de suppression -->
+                                                                <Button Grid.Column="1" 
+                                                                        Style="{StaticResource DeleteTestedElementButtonStyle}"
+                                                                        Tag="{StaticResource BinDrawingImage}"
+                                                                        HorizontalAlignment="Right"
+                                                                        Height="35"
+                                                                        BorderThickness="1"
+                                                                        BorderBrush="{StaticResource BorderGray}"
+                                                                        Click="RemoveTestedElementFromModelButtonClick"
+                                                                />
+                                                            </Grid>
+                                                                
                                                             <StackPanel Orientation="Horizontal" >
                                                                 <TextBlock Text="Envoi" Margin="90,0,15,0"/>
                                                                 <TextBlock Text="Réception(s)"/>
                                                             </StackPanel>
                                                             
+                                                            <!-- Contenu de l'élément à tester -->
                                                             <Grid >
                                                                 <Grid.RowDefinitions>
                                                                     <RowDefinition Height="Auto"/>   <!--"Envoi" ou "Réception"-->
@@ -342,6 +362,7 @@
                                                                     <ColumnDefinition Width="*"/> <!--Colonne(s) d'envois et de réceptions-->
                                                                 </Grid.ColumnDefinitions>
                                                                
+                                                                <!-- Liste des types de DPT (envoi (1) et réception (0+))-->
                                                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Type de DPT :"/>
                                                                 <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
@@ -359,6 +380,8 @@
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
+                                                                
+                                                                <!-- Liste des adresses liées aux DPTs (envoi (1) et réception (0+)) -->
                                                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Adresse liée :"/>
                                                                 <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
@@ -377,17 +400,19 @@
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
+                                                                
+                                                                <!-- Valeurs à envoyer et à recevoir sur les adresses précédentes (envoi (1) et réception (0+)) -->
                                                                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Valeurs :"/>
                                                                 <ListBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
-                                                                            <StackPanel Orientation="Horizontal" />
+                                                                            <StackPanel Orientation="Horizontal"/>
                                                                         </ItemsPanelTemplate>
                                                                     </ListBox.ItemsPanel>
                                                                     <ListBox.ItemTemplate>
                                                                         <DataTemplate>
                                                                             <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Center">
-                                                                                <ListBox ItemsSource="{Binding Value}"
+                                                                                <TextBox Text="{Binding Value}"
                                                                                          Width="40"
                                                                                          HorizontalContentAlignment="Center"
                                                                                          Background="{StaticResource BackgroundLightGray}"
@@ -402,11 +427,16 @@
                                                     </DataTemplate>
                                                 </ListBox.ItemTemplate>
                                             </ListBox>
-                                            <!--ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"-->
                                         </ScrollViewer>
                                         
                                         
-                                        
+                                        <!-- Bouton d'ajout d'élément à tester-->
+                                        <Button HorizontalAlignment="Stretch"
+                                                Click="AddTestedElementToModelButtonClick"
+                                                Style="{StaticResource AddTestedElementToModelButtonStyle}"
+                                                Margin="0"
+                                                Padding="0"
+                                        />
                                         
                                         
                                         
