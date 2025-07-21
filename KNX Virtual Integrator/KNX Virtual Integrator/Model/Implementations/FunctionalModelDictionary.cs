@@ -79,7 +79,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public List<FunctionalModel> GetAllModels()
         {
             var liste = new List<FunctionalModel>();
-            for (int i = 0; i < _currentKey; i++)
+            for (int i = 0; i <= _currentKey; i++)
             {
                 if (FunctionalModels.ContainsKey(i))
                     liste.Add(FunctionalModels[i]);
@@ -103,8 +103,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 foreach (var element in model.ElementList)
                 {
                     var xElement = doc.CreateElement("Element_to_test");
+                    var xCmd =  doc.CreateElement("Command");
+                    var xIe = doc.CreateElement("State_information");
 
-                    foreach (var dpt in element.Tests)
+                    foreach (var dpt in element.TestsCmd)
                     {
                         var xDpt = doc.CreateElement("Data_Point_Type");
                         var addr = doc.CreateAttribute("Address");
@@ -125,9 +127,34 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                                 xDpt.AppendChild(xValue);
                             }
                         }
-                        xElement.AppendChild(xDpt);
+                        xCmd.AppendChild(xDpt);
                     }
 
+                    foreach (var dpt in element.TestsIe)
+                    {
+                        var xDpt = doc.CreateElement("Data_Point_Type");
+                        var addr = doc.CreateAttribute("Address");
+                        addr.Value = dpt.Address;
+                        xDpt.Attributes.Append(addr);
+                        var type = doc.CreateAttribute("Type");
+                        type.Value = dpt.Type.ToString();
+                        xDpt.Attributes.Append(type);
+
+                        foreach (var value in dpt.Value)
+                        {
+                            if (value != null)
+                            {
+                                var xValue = doc.CreateElement("Group_Value");
+                                var val = doc.CreateAttribute("Value");
+                                val.Value = value.ToString();
+                                xValue.Attributes.Append(val);
+                                xDpt.AppendChild(xValue);
+                            }
+                        }
+                        xIe.AppendChild(xDpt);
+                    }
+                    xElement.AppendChild(xCmd);
+                    xElement.AppendChild(xIe);
                     functionalModel.AppendChild(xElement);
                 }
 
@@ -154,30 +181,50 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 foreach (XmlNode model in xnList) // pour chaque modèle
                 {
                     var functionalModel = new FunctionalModel(model.Name);
+                    Console.WriteLine(model.Name);
                     foreach (XmlNode element in model.ChildNodes)
                     {
                         var elementToTest = new TestedElement();
-                        
-                        foreach (XmlNode dpt in element.ChildNodes)
+                        List<DataPointType> listeCmd = [];
+                        List<DataPointType> listeIe = [];
+                        foreach (XmlNode node in element.ChildNodes)
                         {
-                            var address = dpt?.Attributes?["Address"]?.Value; 
-                            var type = int.Parse(dpt?.Attributes?["Type"]?.Value);
-                            List<GroupValue?> tabValues = [];
-                            foreach (XmlNode values in dpt.ChildNodes)
+                            foreach (XmlNode dpt in node.ChildNodes)
                             {
-                                if (values.Name == "Group_Value")
+                                var address = dpt?.Attributes?["Address"]?.Value;
+                                var type = int.Parse(dpt?.Attributes?["Type"]?.Value);
+                                List<GroupValue?> tabValues = [];
+                                foreach (XmlNode values in dpt.ChildNodes)
                                 {
-                                    tabValues.Add(GroupValue.Parse(values.Attributes?["Value"]?.Value));
+                                    if (values.Name == "Group_Value")
+                                    {
+                                        tabValues.Add(GroupValue.Parse(values.Attributes?["Value"]?.Value));
+                                    }
                                 }
-                                
+
+                                if (address != null)
+                                {
+                                    if (node.Name == "Command")
+                                    {
+                                        elementToTest.AddDptToCmd(type, address, tabValues);
+                                    }
+                                    else if (node.Name == "State_information")
+                                    {
+                                        Console.WriteLine("J'ai trouvé un Ie");
+                                        elementToTest.AddDptToIe(type, address, tabValues);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("Je sais pas pourquoi on est là");
+                                    }
+                                }
                             }
-                            if (address != null )
-                                elementToTest.AddDpt(type,address, tabValues);
                         }
                         functionalModel.ElementList.Add(elementToTest);
                     }
                     FunctionalModels.Add(++_currentKey,functionalModel);
                 }
+            Console.WriteLine("Il y a " + FunctionalModels.Count + " elements importés");
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

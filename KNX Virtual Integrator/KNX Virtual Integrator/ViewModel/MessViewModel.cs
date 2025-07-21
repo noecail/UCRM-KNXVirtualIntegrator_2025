@@ -101,8 +101,10 @@ namespace KNX_Virtual_Integrator.ViewModel
         
         public ICommand RemoveTestFromElement { get; private set; }
         
-        public ICommand AddDptToElement {get; private set; }
-            
+        public ICommand AddDptCmdToElement {get; private set; }
+
+        public ICommand AddDptIeToElement {get; private set; }
+        
         public ICommand RemoveDptFromElement  { get; private set; }
 
         //public AsyncRelayCommand OpenConnectionWindowCommand { get; }

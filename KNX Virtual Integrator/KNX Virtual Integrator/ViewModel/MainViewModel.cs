@@ -102,11 +102,17 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
                 Models?.Clear();
-                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels);
-                foreach (var newModel in newModels)
+                var newModels = new ObservableCollection<List<FunctionalModel>>(_functionalModelList.FunctionalModels);
+                foreach (var newModelList in newModels)
                 {
                     //Console.WriteLine("New model from fml  : " + newModel.Name);
-                    Models?.Add(newModel);
+                    Models?.Add([]);
+                    foreach (var newModel in newModelList)
+                    {
+                        //Console.WriteLine("New model from fml  : " + newModel.Name);
+                        Models?[^1].Add(newModel);
+                        //Console.WriteLine("New model in Models : " + Models?.Last());
+                    }
                     //Console.WriteLine("New model in Models : " + Models?.Last());
                 }
 
@@ -200,9 +206,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
-        AddDptToElement = new Commands.RelayCommand<TestedElement>(parameter =>
+        AddDptCmdToElement = new Commands.RelayCommand<TestedElement>(parameter =>
             {
-                parameter?.AddDpt(1,"",[]);
+                parameter?.AddDptToCmd(1,"",[]);
+            }
+        );
+        
+        AddDptIeToElement = new Commands.RelayCommand<TestedElement>(parameter =>
+            {
+                parameter?.AddDptToIe(1,"",[]);
             }
         );
         
@@ -291,7 +303,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
 
         // Chargement des modèles par défaut dans la collection observable
-        Models = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels);
+        Models = new ObservableCollection<List<FunctionalModel>>(_functionalModelList.FunctionalModels);
 
         //Sauvegarde des modèles --------------------------------------------------------------------
 

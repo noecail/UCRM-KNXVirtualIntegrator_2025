@@ -27,7 +27,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Gets the collection of functional models.
         /// </summary>
-        public ObservableCollection<FunctionalModel> Models { get; set; }
+        public ObservableCollection<List<FunctionalModel>> Models { get; set; }
 
         /// <summary>
         /// Gets or sets the currently selected model.

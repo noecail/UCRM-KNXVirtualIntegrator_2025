@@ -194,7 +194,7 @@
                         <!-- Listes modèles liés-->
                         <ScrollViewer x:Name="PredefinedModelsScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="Black" BorderThickness="10">
                                 <ListBox ItemsSource="{Binding Models}"
-                                         SelectedItem="{Binding SelectedModel}"
+                                         SelectedItem="{Binding SelectedStructure}"
                                          Background="{StaticResource BackgroundLightGray}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"
                                 />

@@ -9,29 +9,30 @@ namespace KNX_Virtual_Integrator.Model.Entities
     /// </summary>
     public class TestedElement
     {
-        public List<DataPointType> Tests { get; } // List of pairs : command to send to the bus and expected feedback to be read on the bus
+        public List<DataPointType> TestsCmd { get; } // List of commands to send to the bus and 
 
-        public int NbCmd = 1;
-
+        public List<DataPointType> TestsIe { get; } // List of expected feedback to be read on the bus
+        
 
         //Constructors
         public TestedElement()
         {
-            Tests = []; 
+            TestsCmd = []; 
+            TestsIe = []; 
         } 
         
         
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd,int[] typeIe, string[]  addressesIe, List<GroupValue?>[] valueIe)
         {
-            Tests = [];
-            NbCmd = typeCmd.Length;
+            TestsCmd = []; 
+            TestsIe = [];
             for (var i = 0; i < typeCmd.Length; i++)
             {
-                Tests.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
+                TestsCmd.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
             }
             for (var i = 0; i < typeIe.Length; i++)
             {
-                Tests.Add(new DataPointType(typeIe[i],addressesIe[i],valueIe[i]));
+                TestsIe.Add(new DataPointType(typeIe[i],addressesIe[i],valueIe[i]));
             }
         } 
         
@@ -39,21 +40,25 @@ namespace KNX_Virtual_Integrator.Model.Entities
         
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd)
         {
-            NbCmd = typeCmd.Length;
-            Tests = [];
+            TestsCmd = []; 
+            TestsIe = [];
             for (var i = 0; i < typeCmd.Length; i++)
             {
-                Tests.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
+                TestsCmd.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
             }
         } 
         
         public TestedElement(TestedElement element)
         {
-            Tests = [];
-            NbCmd = element.NbCmd;
-            for (var i = 0; i < element.Tests.Count; i++)
+            TestsCmd = []; 
+            TestsIe = [];
+            for (var i = 0; i < element.TestsCmd.Count; i++)
             {
-                Tests.Add(element.Tests[i]);
+                TestsCmd.Add(element.TestsCmd[i]);
+            }
+            for (var i = 0; i < element.TestsIe.Count; i++)
+            {
+                TestsIe.Add(element.TestsIe[i]);
             }
         }
 
@@ -65,11 +70,17 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public bool IsPossible()
         {
             var result = true;
-            for (var i = 0; i < Tests.Count; i++)
+            for (var i = 0; i < TestsCmd.Count; i++)
             {
-                result = result && Tests[i].IsPossible();
+                result = result && TestsCmd[i].IsPossible();
                 if (i != 0)
-                    result = result && Tests[i].CompareValuesLength(Tests[i - 1]);
+                    result = result && TestsCmd[i].CompareValuesLength(TestsCmd[i - 1]);
+            }
+            for (var i = 0; i < TestsIe.Count; i++)
+            {
+                result = result && TestsIe[i].IsPossible();
+                if (i != 0)
+                    result = result && TestsIe[i].CompareValuesLength(TestsIe[i - 1]);
             }
             return  result;
         }
@@ -82,10 +93,15 @@ namespace KNX_Virtual_Integrator.Model.Entities
         {
             if (other == null)
                 return false;
-            var result = Tests.Count == other.Tests.Count;
-            for (var i = 0; i < Tests.Count; i++)
+            var result = TestsCmd.Count == other.TestsCmd.Count;
+            for (var i = 0; i < TestsCmd.Count; i++)
             {
-                result = result && Tests[i].IsEqual(other.Tests[i]);
+                result = result && TestsCmd[i].IsEqual(other.TestsCmd[i]);
+            }
+            result = result && TestsIe.Count == other.TestsIe.Count;
+            for (var i = 0; i < TestsIe.Count; i++)
+            {
+                result = result && TestsIe[i].IsEqual(other.TestsIe[i]);
             }
             return  result;
         }
@@ -97,10 +113,14 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// </summary>
         public void AddTest()
         {
-            for (var i = 0; i < Tests.Count; i++)
+            foreach (var dpt in TestsCmd)
             {
-                Tests[i].AddValue(new GroupValue(false));
+                dpt.AddValue(new GroupValue(false));
             }
+            foreach (var dpt in TestsIe)
+            {
+                dpt.AddValue(new GroupValue(false));
+            }   
         }
         
         /// <summary>
@@ -108,29 +128,31 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// </summary>
         public void RemoveTest(int index)
         {
-            foreach(var dpt in Tests) 
+            foreach(var dpt in TestsCmd) 
+            {
+                dpt.RemoveValue(index);
+            }
+            foreach(var dpt in TestsIe) 
             {
                 dpt.RemoveValue(index);
             }
         }
         
-        /// <summary>
-        /// This method modifies a test pair (value to send, value to read) in the list of tests
-        /// </summary>
-        public void ModifyTest(DataPointType pair, int index) // Effets de bords ? à tester
-        {
-            for (var i = 0; i < Tests.Count; i++)
-                Tests[i].Value[index] = pair.Value[i];
-        }
 
-        public void AddDpt(int type, string address, List<GroupValue?> value)
+        public void AddDptToCmd(int type, string address, List<GroupValue?> value)
         {
-            Tests.Add(new DataPointType(type, address, value));
+            TestsCmd.Add(new DataPointType(type, address, value));
+        }
+        
+        public void AddDptToIe(int type, string address, List<GroupValue?> value)
+        {
+            TestsIe.Add(new DataPointType(type, address, value));
         }
 
         public void RemoveDpt(int index)
         {
-            Tests.RemoveAt(index);
+            TestsCmd.RemoveAt(index);
+            TestsIe.RemoveAt(index);
         }
     }
 }

@@ -249,8 +249,9 @@ public partial class App
         // Définir la priorité du processus à un niveau inférieur pour réduire l'utilisation des ressources
         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
         //var list = new FunctionalModelList();
-        //list.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray2.xml");
+        //list.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
         //list.ExportDictionary(@"C:\Users\caill\Desktop\INSA\4A\Stage");
+        //list.ExportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray2");
         
 
         // Instancier les dépendances nécessaires

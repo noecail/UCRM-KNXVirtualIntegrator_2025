@@ -7,8 +7,8 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class Analyze(FunctionalModelList liste, GroupCommunication communication) : IAnalyze
 {
-    public readonly List<FunctionalModel> FunctionalModels = liste.FunctionalModels;
-    public List<List<List<bool>>> Results { get; set; } = []; //Table of results sorted by Tests, in TestedElements, in functionalModels
+    public readonly List<List<FunctionalModel>> FunctionalModels = liste.FunctionalModels;
+    public List<List<List<List<List<bool>>>>> Results { get; set; } = []; //Table of results sorted by Tests, in TestedElements, in functionalModels
     public GroupCommunication Communication = communication;
 
     
@@ -18,10 +18,15 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
     public async Task TestAll()
     {
         Results = [];
-        foreach (var model in FunctionalModels)
+        foreach (var functionalModelStructure in FunctionalModels) //
         {
-            var res = await TestModel(model);
-            Results.Add(res);
+            List<List<List<List<bool>>>> resList = [];
+            foreach (var model in functionalModelStructure)
+            {
+                var res = await TestModel(model);
+                resList.Add(res);
+            }
+            Results.Add(resList);
         }
     }
 
@@ -30,9 +35,9 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
     /// </summary>
     /// <param name="functionalModel">FunctionalModel to test</param>
     /// <returns></returns>
-    private async Task<List<List<bool>>> TestModel(FunctionalModel functionalModel)
+    private async Task<List<List<List<bool>>>> TestModel(FunctionalModel functionalModel)
     {
-        var result = new List<List<bool>>();
+        var result = new List<List<List<bool>>>();
         foreach (var element in functionalModel.ElementList)
         {
             var res = await TestElement(element);
@@ -47,49 +52,52 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
     /// </summary>
     /// <param name="element">Element to be tested</param>
     /// <returns></returns>
-    private async Task<List<bool>> TestElement(TestedElement element)
+    private async Task<List<List<bool>>> TestElement(TestedElement element)
     {
-        var tests = element.Tests;
-        var nbCmd = element.NbCmd;
-        List<bool> result = []; //List containing results of each of the tests
-        var time = 1000;
-        if (tests[0].Type == 5) 
-            time = 5000;
-        for (var i = 0; i < tests?[0].Value.Count; i++) //For each of the tests
+        var testsCmd = element.TestsCmd;
+        var testsIe = element.TestsIe;
+        List<List<bool>> result = []; //List containing results of each of the tests
+        for (var i = 0; i < testsCmd[0].Value.Count; i++) //For each of the tests
         {
+            var time = 1000;
+            if (testsCmd[i].Type == 5) 
+                time = 5000;
             var testResult = false; //Result of the test
             List<bool> resList=[]; //List to check each expected dpt initialized at 0
-            for (var j = nbCmd; j < (tests[0].Value.Count); j++)
+            for (var j = 0; j < (testsIe?[0].Value.Count); j++)
             {
                 resList.Add(false);
             }
             //var cts = new CancellationTokenSource();
-            var readTask = Communication.GroupValuesWithinTimerAsync(tests[nbCmd].Address,time);
-            for (var j = 0; j < nbCmd; j++) //Send all the commands
+            List<Task<List<GroupCommunication.GroupMessage>>> readTaskList = [];
+            if (testsIe != null)
             {
-                if (tests != null && tests[j].Value.Count > i && tests[j].Value[i] != null)
-                    await Communication.GroupValueWriteAsync(tests[j].Address, tests[j].Value[i]!);
+                foreach (var ie in testsIe) //Start all the tasks to read 
+                    readTaskList.Add(Communication.GroupValuesWithinTimerAsync(ie.Address, time));
             }
-            while (!readTask.IsCompleted || testResult) //While the timer hasn't expired and the test hasn't succeeded
+
+            foreach(var test in testsCmd) //Send all the commands
             {
-                var readValues = readTask.Result; //Updates readValues, the list of messages read on the bus
-                for (var j = nbCmd; j < (tests?[0].Value.Count); j++) //Goes through all the expected returns
+                await Communication.GroupValueWriteAsync(test.Address, test.Value[i]!);
+            }
+            while (!readTaskList[0].IsCompleted || testResult) //While the timer hasn't expired and the test hasn't succeeded
+            {
+                for (var j = 0; j < testsIe?[0].Value.Count; j++) //Goes through all the expected returns
                 {
-                    if (tests[i].Value[j] != null && !resList[j])  //If the message hasn't been found yet.
-                        resList[j - nbCmd] = CheckResult(ref readValues, tests[i], j); //Check if the message has arrived
-                    testResult = true;
-                    foreach (var res in resList) //Check if all the messages of the test expected to be read have been read
+                    if (testsIe[j].Value[i] != null && !resList[j])
                     {
-                        testResult = testResult && res;
+                        //If the message hasn't been found yet.
+                        var readValues = readTaskList[j].Result; //Updates readValues, the list of messages read on the bus
+                        resList[j] = CheckResult(ref readValues, testsIe[j], i); //Check if the message has arrived
                     }
                 }
             }
 
-            if (!readTask.IsCompleted) //If the test succeeded before the end of the timer
+            if (!readTaskList[0].IsCompleted) //If the test succeeded before the end of the timer
             {
-                //TO DO :Arrêter la tâche
+                //TO DO :Arrêter les tâches
             }
-            result.Add(testResult); //Adds the result of the test to the list of results of tests
+            result.Add(resList); //Adds the result of the test to the list of results of tests
         }
         return result;
     }
