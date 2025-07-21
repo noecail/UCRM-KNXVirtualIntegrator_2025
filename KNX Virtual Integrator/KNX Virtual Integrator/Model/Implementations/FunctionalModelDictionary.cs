@@ -29,16 +29,16 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         {
             FunctionalModels = new Dictionary<int, FunctionalModel>();
             _currentKey = 0; // Commence à 0 pour que la première clé soit 1
-            Add_FunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
+            AddFunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
                 "Lumiere_ON_OFF")); //Adding On/Off light functional model
-            Add_FunctionalModel(new FunctionalModel([
+            AddFunctionalModel(new FunctionalModel([
                 new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,5],["",""],
                     [[new GroupValue(true), new GroupValue(false)], [new GroupValue(0xFF),new GroupValue(0x00)]]), // Variation functional model : First element : On/Off
                 new TestedElement([5], [""], [[new GroupValue(0xFF), new GroupValue(0x4F)]], [5], ["", ""],
                     [[new GroupValue(0xFF), new GroupValue(0x4F)]]), //Second element : absolute change
                 new TestedElement([3], [""], [[new GroupValue(0x4)]],[5],[""],[[new GroupValue([0x2E])]])
             ], "Lumiere_variation")); //Third element : relative change
-            Add_FunctionalModel(new FunctionalModel([
+            AddFunctionalModel(new FunctionalModel([
             new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,1,5],["","",""],
                 [[new GroupValue(true), new GroupValue(true)],[new GroupValue(false), new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]), //On/Off command 
             new TestedElement([1,1],["",""],[[new GroupValue(true)],[new GroupValue(true)]],[1,1,5],["","",""],
@@ -46,7 +46,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             new TestedElement([5], [""],[[new GroupValue(0xFF),new GroupValue(0x00)]],[1,1,5],["","",""],//Absolute command
                 [[new GroupValue(true),new GroupValue(true)],[new GroupValue(false),new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]),
             ],"Store"));
-            Add_FunctionalModel(new FunctionalModel([
+            AddFunctionalModel(new FunctionalModel([
             new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[new GroupValue(true), new GroupValue(false)]])  //On/Off
                 ],"Commutation")); //Convection, Prise, Arrosage, Portail
         }
@@ -60,7 +60,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         }
 
 
-        public void Add_FunctionalModel(FunctionalModel functionalModel)
+        public void AddFunctionalModel(FunctionalModel functionalModel)
         {
             _currentKey++;
             if (functionalModel.Name == "New Model")
@@ -70,7 +70,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             OnPropertyChanged(nameof(FunctionalModels));
         }
 
-        public void Remove_FunctionalModel(int key)
+        public void RemoveFunctionalModel(int key)
         {
             FunctionalModels.Remove(key);
             OnPropertyChanged(nameof(FunctionalModels));
