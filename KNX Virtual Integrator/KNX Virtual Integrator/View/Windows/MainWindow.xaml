@@ -322,17 +322,23 @@
                                                      >
                                                 <ListBox.ItemTemplate>
                                                     <DataTemplate>
+                                                        
+                                                        <!-- Element à tester = Liste de DPTs {types des DPTs, adresses d'envoi et de retours, liste de valeurs}-->
                                                         <StackPanel Orientation="Vertical">
                                                             
-                                                            <!-- Element à tester = Liste de DPTs {types des DPTs, adresses d'envoi et de retours, liste de valeurs}-->
+                                                            <!-- Bandeau supérieur -->
                                                             <Grid Margin="0,0,0,5">
                                                                 <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="*"/>
-                                                                    <ColumnDefinition Width="Auto"/>
+                                                                    <ColumnDefinition Width="*"/>    <!-- Titre : "Élément à tester" -->
+                                                                    <ColumnDefinition Width="Auto"/> <!-- Bouton de suppression -->
                                                                 </Grid.ColumnDefinitions>
+                                                                
+                                                                <!-- Titre -->
                                                                 <TextBlock Grid.Column="0" Text="Élément à tester" FontWeight="SemiBold"/>
+                                                                
+                                                                <!-- Pour l'index de l'élément à tester -->
                                                                 <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AlternationIndex}"/>
-                                                                <!--Bouton de suppression -->
+                                                                <!-- Bouton de suppression -->
                                                                 <Button Grid.Column="1" 
                                                                         Style="{StaticResource DeleteTestedElementButtonStyle}"
                                                                         Tag="{StaticResource BinDrawingImage}"
@@ -343,7 +349,8 @@
                                                                         Click="RemoveTestedElementFromModelButtonClick"
                                                                 />
                                                             </Grid>
-                                                                
+                                                            
+                                                            <!-- Bandeau suivant -->
                                                             <StackPanel Orientation="Horizontal" >
                                                                 <TextBlock Text="Envoi" Margin="90,0,15,0"/>
                                                                 <TextBlock Text="Réception(s)"/>
@@ -358,7 +365,7 @@
                                                                     <RowDefinition Height="Auto"/>   <!--Valeurs-->
                                                                 </Grid.RowDefinitions>
                                                                 <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="80"/> <!--"Type du DPT" ou "Adresse liée"-->
+                                                                    <ColumnDefinition Width="80"/> <!--"Type du DPT" ou "Adresse liée" ou "Valeurs"-->
                                                                     <ColumnDefinition Width="*"/> <!--Colonne(s) d'envois et de réceptions-->
                                                                 </Grid.ColumnDefinitions>
                                                                
@@ -434,7 +441,7 @@
                                         <Button HorizontalAlignment="Stretch"
                                                 Click="AddTestedElementToModelButtonClick"
                                                 Style="{StaticResource AddTestedElementToModelButtonStyle}"
-                                                Margin="0"
+                                                Margin="0,10,0,0"
                                                 Padding="0"
                                         />
                                         
