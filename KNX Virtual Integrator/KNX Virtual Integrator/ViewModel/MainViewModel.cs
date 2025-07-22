@@ -5,6 +5,7 @@ using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media.Media3D;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Interfaces;
@@ -102,22 +103,13 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
                 Models?.Clear();
-                var newModels = new ObservableCollection<List<FunctionalModel>>(_functionalModelList.FunctionalModels);
-                foreach (var newModelList in newModels)
+                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
+                foreach (var newmodel in newModels)
                 {
-                    //Console.WriteLine("New model from fml  : " + newModel.Name);
-                    Models?.Add([]);
-                    foreach (var newModel in newModelList)
-                    {
-                        //Console.WriteLine("New model from fml  : " + newModel.Name);
-                        Models?[^1].Add(newModel);
-                        //Console.WriteLine("New model in Models : " + Models?.Last());
-                    }
-                    //Console.WriteLine("New model in Models : " + Models?.Last());
+                    Models?.Add(newmodel);
                 }
-
                 // Also, selecting the newly created model and scrolling down to it
-                //SelectedModel = Models?.Last();
+                SelectedModel = Models?.Last();
                 //Console.WriteLine("SelectedModel : " + SelectedModel);
                 WhenPropertyChanged(nameof(ScrollToEnd));
             }
@@ -168,9 +160,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
+        SelectStructureCommand = new Commands.RelayCommand<object>(_ =>
+        {
+            
+        });
+
         CreateFunctionalModelDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model"));
+                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model "));
                 //ConsoleAndLogWriteLineCommand.Execute(Models?.Count);
             }
         );
@@ -303,8 +300,12 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
 
         // Chargement des modèles par défaut dans la collection observable
-        Models = new ObservableCollection<List<FunctionalModel>>(_functionalModelList.FunctionalModels);
-
+        Models = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModelDictionary.FunctionalModels);
+        SelectedModels = [];
+        /*foreach (var model in Models)
+            SelectedModels?.Add(model);
+        Console.WriteLine("SelectedModels.Count " + SelectedModels?.Count);*/
+        
         //Sauvegarde des modèles --------------------------------------------------------------------
 
         GenerateReportCommand =

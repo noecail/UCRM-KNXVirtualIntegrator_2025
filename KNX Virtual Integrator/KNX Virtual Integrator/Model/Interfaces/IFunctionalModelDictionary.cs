@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using KNX_Virtual_Integrator.Model.Entities;
 
 namespace KNX_Virtual_Integrator.Model.Interfaces
@@ -18,9 +20,18 @@ namespace KNX_Virtual_Integrator.Model.Interfaces
     {
         void AddFunctionalModel(FunctionalModel functionalModel);
 
-        void RemoveFunctionalModel(int key);
+        void RemoveFunctionalModel(int index);
 
         List<FunctionalModel> GetAllModels();
+        
+        public ObservableCollection<FunctionalModel> FunctionalModels {get;set;}
+        
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        
+        public void ImportDictionary(string path);
+        
+        public void ExportDictionary(string path);
 
     }
 }

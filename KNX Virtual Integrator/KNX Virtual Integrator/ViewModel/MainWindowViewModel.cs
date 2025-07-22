@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using CommunityToolkit.Mvvm.Input;
+using KNX_Virtual_Integrator.Model.Entities;
 
 
 namespace KNX_Virtual_Integrator.ViewModel
@@ -50,7 +51,7 @@ namespace KNX_Virtual_Integrator.ViewModel
                 WhenPropertyChanged(nameof(AdressColumnWidth)); // Notify of property change
             }
         }
-
+        
         /// <summary>
         /// Gets the command to hide the model column.
         /// </summary>

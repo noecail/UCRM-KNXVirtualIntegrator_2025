@@ -18,6 +18,9 @@ namespace KNX_Virtual_Integrator.Model.Interfaces;
 public interface IFunctionalModelList : INotifyPropertyChanged
 {
     public List<List<FunctionalModel>> FunctionalModels { get; set; }
+    
+    public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
+
     public void ExportDictionary(string path);
     public List<FunctionalModel> GetAllModels();
     public void AddToDictionary(FunctionalModel model);

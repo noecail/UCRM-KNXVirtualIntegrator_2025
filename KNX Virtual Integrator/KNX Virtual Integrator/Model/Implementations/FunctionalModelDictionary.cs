@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -11,9 +12,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
     //Find Summary in the interface
     public class FunctionalModelDictionary : IFunctionalModelDictionary
     {
-        private Dictionary<int, FunctionalModel> _functionalModels =[];
+        private ObservableCollection<FunctionalModel> _functionalModels =[];
 
-        public Dictionary<int, FunctionalModel> FunctionalModels
+        public ObservableCollection<FunctionalModel> FunctionalModels
         {
             get => _functionalModels;
             set
@@ -23,12 +24,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             }
         }
 
-        private int _currentKey;
 
         public FunctionalModelDictionary()
         {
-            FunctionalModels = new Dictionary<int, FunctionalModel>();
-            _currentKey = 0; // Commence à 0 pour que la première clé soit 1
+            FunctionalModels = [];
             AddFunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
                 "Lumiere_ON_OFF")); //Adding On/Off light functional model
             AddFunctionalModel(new FunctionalModel([
@@ -53,8 +52,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         public FunctionalModelDictionary(string path)
         {
-            FunctionalModels = new Dictionary<int, FunctionalModel>();
-            _currentKey = 0; // Commence à 0 pour que la première clé soit 1
+            FunctionalModels = [];
             ImportDictionary(path);
 
         }
@@ -62,29 +60,26 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         public void AddFunctionalModel(FunctionalModel functionalModel)
         {
-            _currentKey++;
             if (functionalModel.Name == "New Model")
-                functionalModel.Name += " " + _currentKey;
-            functionalModel.Key = _currentKey; // Associer la cl� au mod�le
-            FunctionalModels.Add(_currentKey, functionalModel);
+                functionalModel.Name += " " + FunctionalModels.Count;
+            FunctionalModels.Add(functionalModel);
+            FunctionalModels.Last().Key = FunctionalModels.Count;
             OnPropertyChanged(nameof(FunctionalModels));
         }
 
-        public void RemoveFunctionalModel(int key)
+        public void RemoveFunctionalModel(int index)
         {
-            FunctionalModels.Remove(key);
+            FunctionalModels.RemoveAt(index);
             OnPropertyChanged(nameof(FunctionalModels));
         }
 
         public List<FunctionalModel> GetAllModels()
         {
             var liste = new List<FunctionalModel>();
-            for (int i = 0; i <= _currentKey; i++)
+            foreach (var model in FunctionalModels) 
             {
-                if (FunctionalModels.ContainsKey(i))
-                    liste.Add(FunctionalModels[i]);
+                liste.Add(model);
             }
-
             return liste;
         }
 
@@ -173,7 +168,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void ImportDictionary(string path)
         {
             FunctionalModels.Clear();
-            _currentKey = 0;
             var doc = new XmlDocument();
             doc.Load(path);
             var xnList = doc.DocumentElement?.ChildNodes;
@@ -189,6 +183,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         List<DataPointType> listeIe = [];
                         foreach (XmlNode node in element.ChildNodes)
                         {
+                            
                             foreach (XmlNode dpt in node.ChildNodes)
                             {
                                 var address = dpt?.Attributes?["Address"]?.Value;
@@ -213,16 +208,12 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                                         Console.WriteLine("J'ai trouvé un Ie");
                                         elementToTest.AddDptToIe(type, address, tabValues);
                                     }
-                                    else
-                                    {
-                                        Console.WriteLine("Je sais pas pourquoi on est là");
-                                    }
                                 }
                             }
                         }
                         functionalModel.ElementList.Add(elementToTest);
                     }
-                    FunctionalModels.Add(++_currentKey,functionalModel);
+                    FunctionalModels.Add(functionalModel);
                 }
             Console.WriteLine("Il y a " + FunctionalModels.Count + " elements importés");
         }

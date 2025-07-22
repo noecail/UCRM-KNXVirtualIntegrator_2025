@@ -124,8 +124,8 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition MinWidth="200"  Width="Auto" /> <!-- Modèles -->
-                        <ColumnDefinition Width="{Binding ModelColumnWidth}" />  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
-                        <ColumnDefinition Width="{Binding AdressColumnWidth}" /> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
                         <ColumnDefinition MinWidth="200"  Width="*" /> <!-- Adresses -->
                     </Grid.ColumnDefinitions>
 
@@ -193,11 +193,13 @@
 
                         <!-- Listes modèles liés-->
                         <ScrollViewer x:Name="PredefinedModelsScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="Black" BorderThickness="10">
+                               
                                 <ListBox ItemsSource="{Binding Models}"
                                          SelectedItem="{Binding SelectedStructure}"
                                          Background="{StaticResource BackgroundLightGray}"
-                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"
-                                />
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                    
+                                </ListBox>
                         </ScrollViewer>
 
                         <!-- Titre modèles non-liés-->
@@ -241,10 +243,94 @@
                         />
                     </Grid>
 
+                    <!-- Troisième colonne : Paramètres des Commandes _____________________________________________________________________________________________________________________ -->
+                        <!-- En-tête -->
+                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,1"
+                            Background="{StaticResource BackgroundLightGray}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
+                                <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
+                                <Image Source="{StaticResource FonctionalModelDrawingImage}" Height="20"/>
+                                <TextBlock 
+                                    Style="{StaticResource TitleTextStyle}"
+                                    Text="{StaticResource ModelsTitle}"
+                                />
+                            </StackPanel>
+
+                            <!-- Bouton de recherche,(Non-implémenté)-->
+                            <Button Grid.Column="1"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Tag="{StaticResource SearchDrawingImage}"
+                                    BorderBrush="{StaticResource BorderGray}"
+                                    BorderThickness="1"
+                                    Margin="5"
+                                    Padding="5"
+                                    Background="{StaticResource BackgroundWhite}"
+                                    Height="30"
+                            />
+                        </Grid>
+                    </Border>
+                        
+                    <!-- Contenu Colonne 1 : liste des modèles liés, Non-liés et Bouton d'ajout au projet -->
+                    <Grid Grid.Row="1" Grid.Column="1" Background="{StaticResource BackgroundLightGray}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- Titre lié-->
+                            <RowDefinition Height="250" /><!-- Listes liées-->
+                            <RowDefinition Height="*" /><!-- -->
+                            <RowDefinition Height="30" /><!-- Bouton d'ajout de modèles-->
+                        </Grid.RowDefinitions>
+
+                        <!-- Titre modèles liés-->
+                        <Border Grid.Row="0"  BorderBrush="{StaticResource BorderGray}"
+                            BorderThickness="0,0,1,2"
+                            Padding="5"
+                            Background="{StaticResource BackgroundDarkGray}">
+                            
+                            <TextBlock FontWeight="Bold"
+                                       FontSize="16"
+                                       Foreground="{StaticResource TextBlack}"
+                                       Text="{StaticResource PredefinedModels}"
+                            />
+                        </Border>
+
+                        <!-- Listes modèles liés-->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="Black" BorderThickness="10">
+                               
+                                <ListBox ItemsSource="{Binding SelectedModels}"
+                                         SelectedItem="{Binding SelectedModel}"
+                                         Background="{StaticResource BackgroundLightGray}"
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                </ListBox>
+                        </ScrollViewer>
+                        
+                        <!-- Combler l'espace restant afin d'avoir une bordure droite -->
+                        <Border Grid.Row="4"  BorderBrush="{StaticResource BorderGray}"
+                                BorderThickness="0,0,1,0"
+                                Padding="5"
+                                Background="{StaticResource BackgroundDarkGray}"
+                        />
+
+
+                        <!-- Bouton d'ajout de modèles-->
+                        <Button Grid.Row="5" HorizontalAlignment="Stretch"
+                                Click="CreateFunctionalModelButtonClick"
+                                Style="{StaticResource CreateFunctionalModelButtonStyle}"
+                                Margin="0"
+                                Padding="0"
+                        />
+                    </Grid>
+                    
 
                     <!-- Deuxième colonne : Paramètres modèles_______________________________________________________________________________ -->
                     <!-- En-tête -->
-                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
                                 BorderThickness="0,0,1,0" >
                         <Grid Grid.Row="0" Grid.Column="1">
                             <Grid.ColumnDefinitions>
@@ -286,7 +372,7 @@
                     </Border>
                     
                     <!-- Contenu des paramètres des modèles -->
-                    <Border Grid.Row="1" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
                                 BorderThickness="0,0,1,0" >
                         <Grid Margin="10,10,10,0">
                             <Grid.RowDefinitions>
@@ -332,18 +418,19 @@
                                                             
                                                             <Grid >
                                                                 <Grid.RowDefinitions>
-                                                                    <RowDefinition Height="Auto"/>   <!--"Envoi" ou "Réception"-->
                                                                     <RowDefinition Height="Auto"/>   <!--Type de DPT-->
                                                                     <RowDefinition Height="Auto"/>   <!--Adresses-->
                                                                     <RowDefinition Height="Auto"/>   <!--Valeurs-->
                                                                 </Grid.RowDefinitions>
                                                                 <Grid.ColumnDefinitions>
                                                                     <ColumnDefinition Width="80"/> <!--"Type du DPT" ou "Adresse liée"-->
-                                                                    <ColumnDefinition Width="*"/> <!--Colonne(s) d'envois et de réceptions-->
+                                                                    <ColumnDefinition Width="*"/> <!--Colonne d'envoi(s) -->
+                                                                    <ColumnDefinition Width="*"/> <!--Colonne de réception(s)-->
                                                                 </Grid.ColumnDefinitions>
                                                                
-                                                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Type de DPT :"/>
-                                                                <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
+                                                                <TextBlock Grid.Row="0" Grid.Column="0" Text="Type de DPT :"/>
+                                                                <!--Type de DPT de l'envoi-->
+                                                                <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal" />
@@ -359,8 +446,27 @@
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
-                                                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Adresse liée :"/>
-                                                                <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
+                                                                <!--Type de DPT à recevoir-->
+                                                                <ListBox Grid.Row="0" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource BackgroundLightGray}">
+                                                                    <ListBox.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <StackPanel Orientation="Horizontal" />
+                                                                        </ItemsPanelTemplate>
+                                                                    </ListBox.ItemsPanel>
+                                                                    <ListBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <TextBox Text="{Binding Type}"
+                                                                                Width="40"
+                                                                                HorizontalContentAlignment="Center"
+                                                                                Background="{StaticResource BackgroundLightGray}"
+                                                                            />
+                                                                        </DataTemplate>
+                                                                    </ListBox.ItemTemplate>
+                                                                </ListBox>
+                                                                
+                                                                <TextBlock Grid.Row="1" Grid.Column="0" Text="Adresse liée :"/>
+                                                                <!--Adresses de l'envoi-->
+                                                                <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal"
@@ -377,8 +483,28 @@
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
-                                                                <TextBlock Grid.Row="3" Grid.Column="0" Text="Valeurs :"/>
-                                                                <ListBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Tests}" Background="{StaticResource BackgroundLightGray}">
+                                                                <!--Adresses de la réception-->
+                                                                <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource BackgroundLightGray}">
+                                                                    <ListBox.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <StackPanel Orientation="Horizontal"
+                                                                                VerticalAlignment="Top"/>
+                                                                        </ItemsPanelTemplate>
+                                                                    </ListBox.ItemsPanel>
+                                                                    <ListBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <TextBox Text="{Binding Address}"
+                                                                                Width="40"
+                                                                                HorizontalContentAlignment="Center"
+                                                                                Background="{StaticResource BackgroundLightGray}"
+                                                                            />
+                                                                        </DataTemplate>
+                                                                    </ListBox.ItemTemplate>
+                                                                </ListBox>
+                                                                
+                                                                <TextBlock Grid.Row="2" Grid.Column="0" Text="Valeurs :"/>
+                                                                <!--Valeurs de l'envoi-->
+                                                                <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource BackgroundLightGray}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal" />
@@ -393,6 +519,25 @@
                                                                                          Background="{StaticResource BackgroundLightGray}"
                                                                                          />
                                                                              </ScrollViewer>
+                                                                        </DataTemplate>
+                                                                    </ListBox.ItemTemplate>
+                                                                </ListBox>
+                                                                <!--Valeurs de la réception-->
+                                                                <ListBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource BackgroundLightGray}">
+                                                                    <ListBox.ItemsPanel>
+                                                                        <ItemsPanelTemplate>
+                                                                            <StackPanel Orientation="Horizontal" />
+                                                                        </ItemsPanelTemplate>
+                                                                    </ListBox.ItemsPanel>
+                                                                    <ListBox.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Center">
+                                                                                <ListBox ItemsSource="{Binding Value}"
+                                                                                    Width="40"
+                                                                                    HorizontalContentAlignment="Center"
+                                                                                    Background="{StaticResource BackgroundLightGray}"
+                                                                                />
+                                                                            </ScrollViewer>
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
@@ -473,83 +618,7 @@
                     </Border>
 
 
-                    <!-- Troisième colonne : Paramètres des Commandes _____________________________________________________________________________________________________________________ -->
-                        <!-- En-tête -->
-                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,0" >
-                        <Grid >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />  <!-- Titre -->
-                                <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
-                            </Grid.ColumnDefinitions>
-
-                            <!-- Titre -->
-                            <TextBlock Grid.Column="0"
-                                       Style="{StaticResource TitleTextStyle}"
-                                       Text="{StaticResource CommandeParametersTitle}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Left"
-                                       Margin="5,0"
-                            />
-
-                            <!-- Bouton de fermeture-->
-                            <Button Grid.Column="1"
-                                Style="{StaticResource IconButtonStyle}"
-                                Tag="{StaticResource CloseDrawingImage}"
-                                HorizontalAlignment="Right"
-                                Background="Transparent"
-                                Height="35"
-                                Command="{Binding HideAdressColumnCommand}"
-                            />
-                        </Grid>
-                    </Border>
-                        
-                    <!--Contenu des paramètres : Voir Maquette-->
-                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
-                            BorderThickness="0,0,1,0"
-                            Padding="10,0">
-                        <Grid >
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" /> <!-- Paramètres-->
-                                <RowDefinition Height="Auto" /> <!--Boutons enregister-->
-                            </Grid.RowDefinitions>
-                            
-                            <!-- Paramètres : Structure à revoir et contenue à completer-->
-                            <StackPanel Grid.Row="0" Orientation="Vertical">
-                                <TextBlock Text="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,0,20"/>
-
-                                <StackPanel Orientation="Horizontal">
-
-                                    <!-- DPT Envoyé : lier le ComboBox au dico de DPT en Back-->
-                                    <TextBlock Text="{StaticResource SentDPT}" VerticalAlignment="Center" Grid.Row="0" Margin="0,0,10,0"/>
-                                    <ComboBox Width="200" HorizontalAlignment="Left" Grid.Row="1">
-                                        <ComboBoxItem Content="1 bit" />
-                                        <ComboBoxItem Content="2 bits" />
-                                        <ComboBoxItem Content="4 bits" />
-                                    </ComboBox>
-
-                                </StackPanel>
-                                
-                                <!--Titre du tableau -->
-                                <TextBlock Text="{StaticResource IEAccociated}" 
-                                           Style="{StaticResource TitleTextStyle}"
-                                           FontSize="14"
-                                           Padding="0,10"
-                                />
-                                
-                                <!-- + Tableau d'association Modèle/CMD/IE a liée avec le Back-->
-
-                            </StackPanel>
-
-                            <!--Bouton enregister-->
-                            <StackPanel Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="10">
-                                <Button Grid.Row="1" Style="{StaticResource IconTextButtonStyle}" 
-                                Tag="{StaticResource CheckmarkDrawingImage}"
-                                Content="{StaticResource Save}"
-                                Command="{Binding SaveCommand}"/>
-                            </StackPanel>
-                        </Grid>
-                    </Border>
+                    
                         
 
                     <!-- Quatrième colonne___________________________________________________________________________________________________________________________________ -->

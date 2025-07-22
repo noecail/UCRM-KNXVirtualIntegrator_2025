@@ -89,6 +89,8 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <param name="../FileFinder.fileName">The name of the file to find.</param>
         public ICommand FindZeroXmlCommand { get; private set; }
 
+        public ICommand SelectStructureCommand { get; private set; }
+        
         public ICommand CreateFunctionalModelDictionaryCommand { get; private set; }
         
         public ICommand DeleteFunctionalModelDictionaryCommand  { get; private set; }

@@ -27,8 +27,26 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Gets the collection of functional models.
         /// </summary>
-        public ObservableCollection<List<FunctionalModel>> Models { get; set; }
+        public ObservableCollection<FunctionalModel> Models { get; set; }
+        
+        
 
+        private ObservableCollection<FunctionalModel> _selectedModels;
+        public ObservableCollection<FunctionalModel>? SelectedModels
+        {
+            get => _selectedModels;
+            set
+            {
+                if (_selectedModels != null)
+                    if (_selectedModels.Equals(value) || value == null)
+                        return;
+                _selectedModels = value;
+                ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
+                WhenPropertyChanged(nameof(SelectedModels));
+                
+            }
+        }
+        
         /// <summary>
         /// Gets or sets the currently selected model.
         /// </summary>  
@@ -46,11 +64,39 @@ namespace KNX_Virtual_Integrator.ViewModel
                 WhenPropertyChanged(nameof(SelectedModel));
                 
             }
-            // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
         }
         
         /// <summary>
-        /// Gets or sets the currently selected model.
+        /// Gets or sets the currently selected model structure.
+        /// </summary>  
+        private FunctionalModel? _selectedStructure;
+        public FunctionalModel? SelectedStructure
+        {
+            get => _selectedStructure;
+            set
+            {
+                
+                if (_selectedStructure != null && _selectedStructure.Key == value?.Key)
+                    return;
+                _selectedStructure = value;
+                Console.WriteLine("Ajout du modèle : " + SelectedStructure?.Key + "Nom : " + SelectedStructure?.Name+ "Index = " + _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure!));
+
+                SelectedModels?.Clear();
+                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels[_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure!)]);
+                foreach (var newModel in newModels)
+                {
+                    Console.WriteLine("Ajout du modèle : " + newModel.Key + "Nom : " + newModel.Name);
+                    SelectedModels?.Add(newModel);
+                }
+
+                ShowModelColumn(); // Affiche le panneau avec la liste de modèles fonctionnels
+                WhenPropertyChanged(nameof(SelectedStructure));
+                
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the currently selected tested element.
         /// </summary>  
         private FunctionalModel _selectedTestedElement;
         public FunctionalModel SelectedTestedElement

@@ -324,6 +324,12 @@ public partial class MainWindow
     //
     // }
 
+    private void SelectStructureButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.SelectStructureCommand.Execute(null);
+    }
+    
+
     private void CreateFunctionalModelButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.CreateFunctionalModelDictionaryCommand.Execute(null);

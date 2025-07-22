@@ -8,26 +8,26 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
 {
     public List<List<FunctionalModel>> FunctionalModels { get; set; } = [];
-    private readonly FunctionalModelDictionary _functionalModelDictionary;
+    public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
     private readonly int _nbModels;
 
     public FunctionalModelList()
     {
-        _functionalModelDictionary = new FunctionalModelDictionary();
-        _nbModels = _functionalModelDictionary.FunctionalModels.Count;
-        foreach (var model in _functionalModelDictionary.GetAllModels())
+        FunctionalModelDictionary = new FunctionalModelDictionary();
+        _nbModels = FunctionalModelDictionary.FunctionalModels.Count;
+        foreach (var model in FunctionalModelDictionary.GetAllModels())
         {
-            FunctionalModels.Add([model]);
+            FunctionalModels.Add([new FunctionalModel(model,1)]);
         }
 
-        _functionalModelDictionary.PropertyChanged += (_, e) =>
+        FunctionalModelDictionary.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName == nameof(_functionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
+            if (e.PropertyName == nameof(FunctionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
             {
-                if (FunctionalModels.Count != _functionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
+                if (FunctionalModels.Count != FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
                 {
                     FunctionalModels.Add([]);
-                    AddToList(_functionalModelDictionary.FunctionalModels.Count - 1);
+                    AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
                 }; 
                 OnPropertyChanged(nameof(FunctionalModels)); //notifier le mainviewmodel
             }
@@ -37,8 +37,8 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
 
     public FunctionalModelList(string path) //Takes the dictionary from a file's path
     {
-        _functionalModelDictionary = new FunctionalModelDictionary(path);
-        _nbModels = _functionalModelDictionary.FunctionalModels.Count;
+        FunctionalModelDictionary = new FunctionalModelDictionary(path);
+        _nbModels = FunctionalModelDictionary.FunctionalModels.Count;
 
 
     }
@@ -50,8 +50,8 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="index">Index in the dictionary of the Functional Model to copy in the list</param>
     public void AddToList(int index)
     {
-        var model = new FunctionalModel(_functionalModelDictionary.FunctionalModels[index]);
-        FunctionalModels[index].Add(model);
+        Console.WriteLine("Clé : " + FunctionalModels[index].Count);
+        FunctionalModels[index].Add(new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],FunctionalModels[index].Count+1));
     }
 
     /// <summary>
@@ -79,7 +79,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="model">The model to add to the dictionary</param>
     public void AddToDictionary(FunctionalModel model)
     {
-        _functionalModelDictionary.AddFunctionalModel(model);
+        FunctionalModelDictionary.AddFunctionalModel(model);
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     {
         if (index > _nbModels)
             return;
-        _functionalModelDictionary.RemoveFunctionalModel(index);
+        FunctionalModelDictionary.RemoveFunctionalModel(index);
     }
     
     /// <summary>
@@ -99,7 +99,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="path">Path where the XML has to be exported </param>
     public void ExportDictionary(string path)
     {
-        _functionalModelDictionary.ExportDictionary(path);
+        FunctionalModelDictionary.ExportDictionary(path);
     }
     
     /// <summary>
@@ -108,8 +108,8 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="path">Path of the xml. </param>
     public void ImportDictionary(string path)
     {
-        _functionalModelDictionary.ImportDictionary(path);
-        foreach (var model in _functionalModelDictionary.GetAllModels())
+        FunctionalModelDictionary.ImportDictionary(path);
+        foreach (var model in FunctionalModelDictionary.GetAllModels())
         {
             FunctionalModels.Add([model]);
         }
@@ -121,7 +121,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <returns>Returns a list containing all the functional models. </returns>
     public List<FunctionalModel> GetAllModels()
     {
-        return _functionalModelDictionary.GetAllModels();
+        return FunctionalModelDictionary.GetAllModels();
     }
 
     public new event PropertyChangedEventHandler? PropertyChanged;
