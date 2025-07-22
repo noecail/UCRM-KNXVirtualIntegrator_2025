@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -203,7 +204,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                                     }
                                     else if (node.Name == "State_information")
                                     {
-                                        Console.WriteLine("J'ai trouvé un Ie");
                                         elementToTest.AddDptToIe(type, address, tabValues);
                                     }
                                 }

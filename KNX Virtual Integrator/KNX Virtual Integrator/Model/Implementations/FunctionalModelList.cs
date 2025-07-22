@@ -50,7 +50,6 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="index">Index in the dictionary of the Functional Model to copy in the list</param>
     public void AddToList(int index)
     {
-        Console.WriteLine("Clé : " + FunctionalModels[index].Count);
         FunctionalModels[index].Add(new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],FunctionalModels[index].Count+1));
     }
 

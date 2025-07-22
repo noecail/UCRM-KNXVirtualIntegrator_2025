@@ -372,8 +372,7 @@ public partial class MainWindow
         if (dep == null) return;
         var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        Console.WriteLine("Suppression du tested element d'index : " + index);
-        _viewModel.RemoveTestedElementFromModel.Execute((_viewModel.SelectedModel, index)); //Comment récupérer l'index du TestedElement
+        _viewModel.RemoveTestedElementFromModel.Execute((_viewModel.SelectedModel, index)); 
     }
 
     /*private void AddTestToElementButtonClick(object sender, RoutedEventArgs e)

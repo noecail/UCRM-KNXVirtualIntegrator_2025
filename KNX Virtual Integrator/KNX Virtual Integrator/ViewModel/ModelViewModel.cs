@@ -79,13 +79,11 @@ namespace KNX_Virtual_Integrator.ViewModel
                 if (_selectedStructure != null && _selectedStructure.Key == value?.Key)
                     return;
                 _selectedStructure = value;
-                Console.WriteLine("Ajout du modèle : " + SelectedStructure?.Key + "Nom : " + SelectedStructure?.Name+ "Index = " + _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure!));
 
                 SelectedModels?.Clear();
                 var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels[_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure!)]);
                 foreach (var newModel in newModels)
                 {
-                    Console.WriteLine("Ajout du modèle : " + newModel.Key + "Nom : " + newModel.Name);
                     SelectedModels?.Add(newModel);
                 }
 

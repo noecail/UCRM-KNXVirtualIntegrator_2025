@@ -559,7 +559,7 @@
                                                                     <ListBox.ItemTemplate>
                                                                         <DataTemplate>
                                                                             <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalAlignment="Center">
-                                                                                <ListBox ItemsSource="{Binding Value}"
+                                                                                <TextBox Text="{Binding Value}"
                                                                                     Width="40"
                                                                                     HorizontalContentAlignment="Center"
                                                                                     Background="{StaticResource BackgroundLightGray}"
