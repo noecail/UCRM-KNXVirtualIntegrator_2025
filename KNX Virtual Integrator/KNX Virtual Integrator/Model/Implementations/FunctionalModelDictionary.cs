@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -175,7 +174,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 foreach (XmlNode model in xnList) // pour chaque modèle
                 {
                     var functionalModel = new FunctionalModel(model.Name);
-                    Console.WriteLine(model.Name);
                     foreach (XmlNode element in model.ChildNodes)
                     {
                         var elementToTest = new TestedElement();
@@ -215,7 +213,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     }
                     FunctionalModels.Add(functionalModel);
                 }
-            Console.WriteLine("Il y a " + FunctionalModels.Count + " elements importés");
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;

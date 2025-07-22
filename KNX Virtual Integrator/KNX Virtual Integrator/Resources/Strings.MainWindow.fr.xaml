@@ -31,7 +31,8 @@
     <sys:String x:Key="ExpectedDPT">DPT attendu :</sys:String>
     <sys:String x:Key="TableTitleSentExpected">Valeur Envoyé / Valeur Attendue :</sys:String>
     <sys:String x:Key="DPTsubtype">Sous-type du DPT :</sys:String>
-    <sys:String x:Key="AddModel">Ajouter Modèle Fonctionnel</sys:String>
+    <sys:String x:Key="CreateModel">Créer Modèle Fonctionnel</sys:String>
+    <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
     <sys:String x:Key="LinkedModel">Modèle Lié</sys:String>
     <sys:String x:Key="UnlinkedModel">Modèle Non Lié</sys:String>
     <sys:String x:Key="Save">Enregistrer</sys:String>

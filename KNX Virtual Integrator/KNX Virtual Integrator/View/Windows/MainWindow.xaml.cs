@@ -1,5 +1,7 @@
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
@@ -330,25 +332,49 @@ public partial class MainWindow
     }
     
 
+    
+    /// <summary>
+    /// Handles the button click event to create a Functional Model.
+    /// Adds a Functional Model to the Dictionary of Functional Model Structures.
+    /// </summary>
     private void CreateFunctionalModelButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.CreateFunctionalModelDictionaryCommand.Execute(null);
     }
 
+    /// <summary>
+    /// Handles the button click event to delete a Functional Model.
+    /// </summary>
     private void DeleteFunctionalModelButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.DeleteFunctionalModelDictionaryCommand.Execute(_viewModel.SelectedModel?.Key);
     }
 
+    /// <summary>
+    /// Handles the button click event to add a Tested Element to an already existing Functional Model.
+    /// Adds a Functional Model to the Dictionary of Functional Model Structures.
+    /// </summary>
     private void AddTestedElementToModelButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.AddTestedElementToModel.Execute(_viewModel.SelectedModel);
     }
-
-    /*private void RemoveTestedElementFromModelButtonClick(object sender, RoutedEventArgs e)
+    
+    /// <summary>
+    /// Handles the button click event to remove a Tested Element from a Functional Model.
+    /// </summary>
+    private void RemoveTestedElementFromModelButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.RemoveTestedElementFromModel.Execute((_viewModel.SelectedModel, )); //Comment récupérer l'index du TestedElement
-    }*/
+        // Code que je ne comprends pas qui sert à récupérer l'index de l'item depuis lequel le clic a été effectué
+        // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
+        // Pour utiliser ce segment de code, il faut avoir une référence
+        var dep = (DependencyObject)e.OriginalSource;
+        while (dep != null && !(dep is ListBoxItem)) { dep = VisualTreeHelper.GetParent(dep); }
+        if (dep == null) return;
+        var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+
+        Console.WriteLine("Suppression du tested element d'index : " + index);
+        _viewModel.RemoveTestedElementFromModel.Execute((_viewModel.SelectedModel, index)); //Comment récupérer l'index du TestedElement
+    }
 
     /*private void AddTestToElementButtonClick(object sender, RoutedEventArgs e)
     {
