@@ -79,9 +79,8 @@ namespace KNX_Virtual_Integrator.ViewModel
                 if (_selectedStructure != null && _selectedStructure.Key == value?.Key)
                     return;
                 _selectedStructure = value;
-
                 SelectedModels?.Clear();
-                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels[_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure!)]);
+                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels[SelectedStructure!.Key-1]);
                 foreach (var newModel in newModels)
                 {
                     SelectedModels?.Add(newModel);

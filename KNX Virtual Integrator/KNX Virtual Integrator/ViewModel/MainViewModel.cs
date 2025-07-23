@@ -94,7 +94,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         //Gestion des modèles -----------------------------------------------------------------------
         _functionalModelList = new FunctionalModelList();
-        _functionalModelList.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
+        //_functionalModelList.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
 
         _functionalModelList.PropertyChanged += (_, e) =>
         {
@@ -239,9 +239,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 if (SelectedStructure!=null)
                     if (model is FunctionalModel myModel)
-                        _functionalModelList.AddToList(_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure),myModel);
+                        _functionalModelList.AddToList(SelectedStructure.Key+1,myModel);
                     else
-                        _functionalModelList.AddToList(_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure));
+                        _functionalModelList.AddToList(SelectedStructure.Key+1);
 
             }
         );
@@ -259,7 +259,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 if (model != null && SelectedStructure != null)
                 {
-                    var indexStructure = _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure);
+                    var indexStructure = SelectedStructure.Key + 1;
                     _functionalModelList.DeleteFromList(indexStructure, _functionalModelList.FunctionalModels[indexStructure].IndexOf(model));
                 }
             }
