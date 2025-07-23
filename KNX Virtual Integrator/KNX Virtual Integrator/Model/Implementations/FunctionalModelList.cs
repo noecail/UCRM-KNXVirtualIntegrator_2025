@@ -19,6 +19,8 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
             FunctionalModels.Add([new FunctionalModel(model,1,false)]);
         }
 
+        //FunctionalModels[0][0].Name = "Lumière_ON_OFF_Salon";
+
         FunctionalModelDictionary.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(FunctionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire

@@ -21,6 +21,7 @@
     <Color x:Key="BlueLogo">#0c4b9d</Color>
     <Color x:Key="BlueNormal">#006BB4</Color>
     <Color x:Key="BlueAccent">#005D9C</Color>
+    <Color x:Key="BlueAccentMore">#004d80</Color>
     <Color x:Key="RedNormal">#C75150</Color>
     <Color x:Key="RedAccent">#B73B3B</Color>
     
@@ -34,6 +35,7 @@
     <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource BlackNormal}"/>
     <SolidColorBrush x:Key="BlueBrush" Color="{StaticResource BlueNormal}"/>
     <SolidColorBrush x:Key="BlueAccentBrush" Color="{StaticResource BlueAccent}" />
+    <SolidColorBrush x:Key="BlueAccentMoreBrush" Color="{StaticResource BlueAccentMore}"/>
     <SolidColorBrush x:Key="RedBrush" Color="{StaticResource RedNormal}"/>
     <SolidColorBrush x:Key="RedAccentBrush" Color="{StaticResource RedAccent}"/>
     <SolidColorBrush x:Key="KnxGreenBrush" Color="{StaticResource KnxGreenNormal}"/>

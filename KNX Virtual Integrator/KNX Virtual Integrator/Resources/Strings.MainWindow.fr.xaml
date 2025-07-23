@@ -19,11 +19,12 @@
     <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>
     <sys:String x:Key="TestButton">Lancer le test</sys:String>
     <sys:String x:Key="GroupAdressesTitle">Adresses de Groupe</sys:String>
+    <sys:String x:Key="Library">Bibliothèque</sys:String>
     <sys:String x:Key="ModelsTitle">Modèles Fonctionnels</sys:String>
     <sys:String x:Key="ModelsParametersTitle">Paramètres du Modèle Fonctionnel</sys:String>
     <sys:String x:Key="CommandeParametersTitle">Paramètres Commande : </sys:String>
-    <sys:String x:Key="PredefinedModels">Modèles Prédéfinis</sys:String>
-    <sys:String x:Key="PersonalizedModels">Modèles Personnalisés</sys:String>
+    <sys:String x:Key="PredefinedStructures">Structures Prédéfinies</sys:String>
+    <sys:String x:Key="PersonalizedStructures">Structures Personnalisées</sys:String>
     <sys:String x:Key="AddModelsButton">Ajouter</sys:String>
     <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
     <sys:String x:Key="SentDpt">DPT envoyé :</sys:String>

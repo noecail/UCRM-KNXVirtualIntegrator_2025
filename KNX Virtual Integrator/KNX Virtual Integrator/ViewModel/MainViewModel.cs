@@ -112,6 +112,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 //Console.WriteLine("SelectedModel : " + SelectedModel);
                 WhenPropertyChanged(nameof(ScrollToEnd));
             }
+            
         };
 
         _busConnection.SelectedConnectionType = "USB";
@@ -259,7 +260,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 if (model != null && SelectedStructure != null)
                 {
-                    var indexStructure = SelectedStructure.Key + 1;
+                    var indexStructure = SelectedStructure.Key - 1;
                     _functionalModelList.DeleteFromList(indexStructure, _functionalModelList.FunctionalModels[indexStructure].IndexOf(model));
                 }
             }

@@ -238,7 +238,7 @@
     </Style>
     
 
-        <!-- Style pour le bouton refresh -->
+    <!-- Style pour le bouton refresh -->
     <Style x:Key="RefreshButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource BlueBrush }"/>
         <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
@@ -268,7 +268,7 @@
                         <!-- Clic -->
                         <Trigger Property="IsPressed" Value="True">
                             <Setter TargetName="btnBorder" Property="Background"
-                                    Value="{StaticResource BlueAccentBrush}" />
+                                    Value="{StaticResource BlueAccentMoreBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -287,9 +287,14 @@
                             BorderThickness="0,0,1,0"
                             BorderBrush="{StaticResource GrayBorderBrush}"
                             >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="{StaticResource AddDrawingImage}" Height="25" Width="25" Margin="0,5,5,5"/>
-                            <TextBlock Text="{StaticResource CreateModel}" VerticalAlignment="Center" FontSize="14"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                    Margin="10">
+                            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"
+                                   Source="{StaticResource AddDrawingImage}"
+                                   Height="15"
+                                   Width="15"
+                                   Margin="0,0,5,0"/>
+                            <TextBlock Text="{StaticResource CreateModel}" VerticalAlignment="Center" FontSize="12"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -297,7 +302,7 @@
                             <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentMoreBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -326,7 +331,7 @@
                             <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentMoreBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -467,8 +472,6 @@
         </Style.Triggers>
     </Style>
     
-    
-
     <!-- ______________________________________________________________________________________________________________________________ -->
     
 </ResourceDictionary>

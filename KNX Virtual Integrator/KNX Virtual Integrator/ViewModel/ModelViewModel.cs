@@ -80,11 +80,11 @@ namespace KNX_Virtual_Integrator.ViewModel
                     return;
                 _selectedStructure = value;
                 SelectedModels?.Clear();
-                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels[SelectedStructure!.Key-1]);
-                foreach (var newModel in newModels)
+                SelectedModels = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModels[SelectedStructure!.Key-1]);
+               /* foreach (var newModel in newModels)
                 {
                     SelectedModels?.Add(newModel);
-                }
+                }*/
 
                 ShowModelColumn(); // Affiche le panneau avec la liste de modèles fonctionnels
                 WhenPropertyChanged(nameof(SelectedStructure));
