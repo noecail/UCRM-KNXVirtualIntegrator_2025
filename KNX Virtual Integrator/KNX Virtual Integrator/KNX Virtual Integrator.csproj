@@ -14,19 +14,35 @@
       <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
       <Page Remove="Resources\Styles.xaml" />
     </ItemGroup>
+    
+    <ItemGroup>
+        <None Remove="Resources\resources\logoUCRM.png" />
+        <None Remove="Resources\resources\logo-ucrm.svg" />
+        <None Remove="Resources\resources\logo-ucrm-blanc.svg" />
+        <Resource Include="Resources\resources\logoUCRM.png" />
+        <Resource Include="Resources\resources\logo-ucrm.svg" />
+        <Resource Include="Resources\resources\logo-ucrm-blanc.svg" />
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
       <PackageReference Include="itext" Version="9.2.0" />
       <PackageReference Include="Knx.Falcon.Sdk" Version="6.3.7959" />
       <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+      <PackageReference Include="SharpVectors" Version="1.8.4.2" />
       <PackageReference Include="System.Management" Version="9.0.6" />
     </ItemGroup>
 
     <ItemGroup>
-      <Resource Include="Resources\Images.xaml" />
-      <Resource Include="Resources\Strings.MainWindow.fr.xaml" />
-      <Resource Include="Resources\Styles.xaml" />
+      <Resource Include="Resources\Images.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Resource>
+      <Resource Include="Resources\Strings.MainWindow.fr.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Resource>
+      <Resource Include="Resources\Styles.xaml">
+        <Generator>MSBuild:Compile</Generator>
+      </Resource>
     </ItemGroup>
 
     <ItemGroup>

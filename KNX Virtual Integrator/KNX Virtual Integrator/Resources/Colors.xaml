@@ -2,50 +2,73 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!-- Couleurs -->
-    <Color x:Key="BlackColor">Black</Color>
-    <Color x:Key="WhiteColor">White</Color>
-    <Color x:Key="GreenColor">#369026</Color>
-    <Color x:Key="LightGreenColor">#4a9b3c</Color>
-    <Color x:Key="BlueColor">#006BB4</Color>
-    <Color x:Key="AccentuateBlueColor">#005D9C</Color>
-    <Color x:Key="RedColor">#C75150</Color>
-    <Color x:Key="AccentuatedRedColor">#B73B3B</Color>
-    <Color x:Key="LightGrayColor">#F3F3F3</Color>
-    <Color x:Key="GrayColor">#CDCDCD</Color>
-    <Color x:Key="Gray2Color">#999999</Color>
-    <Color x:Key="DarkGrayColor">#979797</Color>
+    <Color x:Key="WhiteNormal">White</Color>
+    <Color x:Key="WhiteDarker">#f5f5f5</Color>
+    <Color x:Key="WhiteMouseOver">#eaeaea</Color> 
+    <Color x:Key="LightGrayColor">#cdcdcd</Color>
+    <Color x:Key="GraySeparator">#cccccc</Color>
+    <Color x:Key="GrayColor">#999999</Color>
+    <Color x:Key="BitDarkGrayColor">#979797</Color>
+    <Color x:Key="GrayLogo">#808384</Color>
+    <Color x:Key="PressedGrayColor">#666666</Color>
+    <Color x:Key="DarkGrayColor">#444444</Color>
+    <Color x:Key="DarkerGrayColor">#333333</Color>
+    <Color x:Key="BlackNormal">Black</Color>  
     
-
-    <!-- Fond -->
-    <SolidColorBrush x:Key="BackgroundWhite" Color="{StaticResource WhiteColor}"/>
-    <SolidColorBrush x:Key="BackgroundBlack" Color="{StaticResource BlackColor}"/>
-    <SolidColorBrush x:Key="BackgroundGreen" Color="{StaticResource GreenColor}"/>
-    <SolidColorBrush x:Key="BackgroundLightGreen" Color="{StaticResource LightGreenColor}"/>
-    <SolidColorBrush x:Key="BackgroundLightGray" Color="{StaticResource LightGrayColor}"/>
-    <SolidColorBrush x:Key="BackgroundDarkGray" Color="{StaticResource GrayColor}"/>
-
-    <!-- Bordure -->
-    <SolidColorBrush x:Key="BorderGray" Color="{StaticResource DarkGrayColor}"/>
-    <SolidColorBrush x:Key="BorderGreen" Color="{StaticResource GreenColor}"/>
-
-
-    <!-- Button -->
-    <SolidColorBrush x:Key="ButtonGreen" Color="{StaticResource GreenColor}"/>
-    <SolidColorBrush x:Key="AccentuateButtonGreen" Color="{StaticResource LightGreenColor}"/>
-    <SolidColorBrush x:Key="ButtonGray" Color="{StaticResource Gray2Color}"/>
-    <SolidColorBrush x:Key="ButtonBlue" Color="{StaticResource BlueColor}"/>
-    <SolidColorBrush x:Key="AccentuateButtonBlue" Color="{StaticResource AccentuateBlueColor}" />
-    <SolidColorBrush x:Key="ButtonRed" Color="{StaticResource RedColor}"/>
-    <SolidColorBrush x:Key="AccentuatedButtonRed" Color="{StaticResource AccentuatedRedColor}"/>
+    <Color x:Key="KnxGreenNormal">#369226</Color>
+    <Color x:Key="KnxGreenDarker">#308322</Color> <!-- Mouse Over-->
+    <Color x:Key="KnxGreenLighter">#4a9d3c</Color>
+    <Color x:Key="BlueLogo">#0c4b9d</Color>
+    <Color x:Key="BlueNormal">#006BB4</Color>
+    <Color x:Key="BlueAccent">#005D9C</Color>
+    <Color x:Key="RedNormal">#C75150</Color>
+    <Color x:Key="RedAccent">#B73B3B</Color>
     
-
-    <!-- Textes -->
-    <SolidColorBrush x:Key="TextBlack" Color="{StaticResource BlackColor}"/>
-    <SolidColorBrush x:Key="TextWhite" Color="{StaticResource WhiteColor}"/>
-    <SolidColorBrush x:Key="TextGreen" Color="{StaticResource GreenColor}"/>
-
-
-
-
-
+    <Color x:Key="NoColor">Transparent</Color>
+    
+    <!-- Pinceaux -->
+    <SolidColorBrush x:Key="NoColorBrush" Color="{StaticResource NoColor}"/>
+    
+    <SolidColorBrush x:Key="WhiteBrush" Color="{StaticResource WhiteNormal}"/>
+    <SolidColorBrush x:Key="GrayBrush" Color="{StaticResource GrayColor}"/>
+    <SolidColorBrush x:Key="BlackBrush" Color="{StaticResource BlackNormal}"/>
+    <SolidColorBrush x:Key="BlueBrush" Color="{StaticResource BlueNormal}"/>
+    <SolidColorBrush x:Key="BlueAccentBrush" Color="{StaticResource BlueAccent}" />
+    <SolidColorBrush x:Key="RedBrush" Color="{StaticResource RedNormal}"/>
+    <SolidColorBrush x:Key="RedAccentBrush" Color="{StaticResource RedAccent}"/>
+    <SolidColorBrush x:Key="KnxGreenBrush" Color="{StaticResource KnxGreenNormal}"/>
+    <SolidColorBrush x:Key="KnxLightGreenBrush" Color="{StaticResource KnxGreenLighter}"/>
+    <SolidColorBrush x:Key="KnxDarkGreenBrush" Color="{StaticResource KnxGreenDarker}"/>
+    
+    <SolidColorBrush x:Key="DarkForegroundBrush" Color="{StaticResource WhiteNormal}"/>
+    <SolidColorBrush x:Key="DarkOffWhiteForegroundBrush" Color="{StaticResource WhiteDarker}"/>
+    <SolidColorBrush x:Key="LightForegroundBrush" Color="{StaticResource BlackNormal}"/>
+    <SolidColorBrush x:Key="LightGrayForegroundBrush" Color="{StaticResource DarkGrayColor}"/>
+    
+    <SolidColorBrush x:Key="WhiteBackgroundBrush" Color="{StaticResource WhiteNormal}"/>
+    <SolidColorBrush x:Key="OffWhiteBackgroundBrush" Color="{StaticResource WhiteDarker}"/>
+    <SolidColorBrush x:Key="GrayBackgroundBrush" Color="{StaticResource GrayColor}"/>
+    <SolidColorBrush x:Key="DarkGrayBackgroundBrush" Color="{StaticResource DarkGrayColor}"/>
+    <SolidColorBrush x:Key="DarkerGrayBackgroundBrush" Color="{StaticResource DarkerGrayColor}"/>
+    <SolidColorBrush x:Key="BlackBackgroundBrush" Color="{StaticResource BlackNormal}"/>
+    
+    <SolidColorBrush x:Key="LightGrayBorderBrush" Color="{StaticResource GraySeparator}"/>
+    <SolidColorBrush x:Key="GrayBorderBrush" Color="{StaticResource GrayColor}"/>
+    <SolidColorBrush x:Key="DarkGrayBorderBrush" Color="{StaticResource DarkGrayColor}"/>
+    
+    <SolidColorBrush x:Key="LightGrayMouseOverBrush" Color="{StaticResource WhiteMouseOver}"/>
+    <SolidColorBrush x:Key="DarkGrayMouseOverBrush" Color="{StaticResource DarkGrayColor}"/>
+    <SolidColorBrush x:Key="DarkBlueMouseOverBrush" Color="{StaticResource BlueAccent}"/>
+    <SolidColorBrush x:Key="GreenMouseOverBrush" Color="{StaticResource KnxGreenDarker}"/>
+    
+    <SolidColorBrush x:Key="SelectedBrush" Color="{StaticResource PressedGrayColor}"/>
+    
+    <SolidColorBrush x:Key="LightCheckedBackgroundBrush" Color="{StaticResource LightGrayColor}" />
+    <SolidColorBrush x:Key="LightUncheckedBackgroundBrush" Color="{StaticResource WhiteNormal}" />
+    <SolidColorBrush x:Key="LightCheckMarkBrush" Color="{StaticResource BlueAccent}" />
+    
+    <SolidColorBrush x:Key="DarkUncheckedBackgroundBrush" Color="{StaticResource DarkerGrayColor}" />
+    <SolidColorBrush x:Key="DarkCheckedBackgroundBrush" Color="{StaticResource BlueNormal}" />
+    <SolidColorBrush x:Key="DarkCheckMarkBrush" Color="{StaticResource LightGrayColor}" />
+    
 </ResourceDictionary>

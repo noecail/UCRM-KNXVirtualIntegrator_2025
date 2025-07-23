@@ -7,15 +7,16 @@
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:windows="clr-namespace:KNX_Virtual_Integrator.View.Windows"
         mc:Ignorable="d"
         Title="MainWindow" 
         WindowState="Maximized"
         ResizeMode="CanResize"
         WindowStyle="None"
         Width="1366" Height="786"
-        WindowTitleBrush="{StaticResource BackgroundGreen}"
-        NonActiveWindowTitleBrush="{StaticResource BackgroundLightGreen}"
-        Background="{StaticResource BackgroundWhite}"
+        WindowTitleBrush="{StaticResource KnxGreenBrush}"
+        NonActiveWindowTitleBrush="{StaticResource KnxGreenBrush}"
+        Background="{StaticResource WhiteBackgroundBrush}"
         TitleCharacterCasing="Normal"
         ShowIconOnTitleBar="False"
         Closing="ClosingMainWindow">
@@ -76,16 +77,16 @@
                     Style="{StaticResource IconTextButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}"
                     Click="ImportProjectButtonClick"
-                    Background="{StaticResource ButtonBlue}"
+                    Background="{StaticResource BlueBrush}"
                     Margin="5,0"
                 />
 
                 <!-- Bouton Paramètres -->
                 <Button Style="{StaticResource IconButtonStyle}"
-                    Tag="{StaticResource settingsDrawingImage}"
+                    Tag="{StaticResource SettingsDrawingImage}"
                     Click="SettingsButtonClick"
-                    Background="{StaticResource BackgroundWhite}"
-                    BorderBrush="{StaticResource BorderGray}"
+                    Background="{StaticResource WhiteBackgroundBrush}"
+                    BorderBrush="{StaticResource GrayBorderBrush}"
                     BorderThickness="1"
                     Padding="5"
                     Margin="0,0"
@@ -102,7 +103,7 @@
                 <!-- Bouton de Test -->
                 <Button Content="{StaticResource TestButton}"
                     Style="{StaticResource IconTextButtonStyle}"
-                    Tag="{StaticResource playDrawingImage}"
+                    Tag="{StaticResource PlayDrawingImage}"
                     Margin="5,0"
                 />
                 
@@ -115,7 +116,7 @@
             </StackPanel>
 
         <!-- Contour principal incluant le tableau avec les 4 colonnes -->
-        <Border Grid.Row="1" BorderBrush="{StaticResource BorderGray}" BorderThickness="1" Margin="10,0,10,10">
+        <Border Grid.Row="1" BorderBrush="{StaticResource GrayBorderBrush}" BorderThickness="1" Margin="10,0,10,10">
                 <Grid>
                     <!-- Define rows and columns for the nested grid -->
                     <Grid.RowDefinitions>
@@ -135,13 +136,13 @@
                     <!-- Première colonne
                     Bibliothèque des Structures de Modèle Fonctionnel
                     Contient toutes les Structures de Modèle Fonctionnel (çàd non instanciées), prédéfinies ou crées (ou suggérées (IA))
-                    ex : Structure de Modèle Fonctionnel pour les lampes                    
+                    ex : Structure de Modèle Fonctionnel pour les lampes
                     -->
                     
                     <!-- En-tête colonne 1 -->
-                    <Border Grid.Row="0" Grid.Column="0" BorderBrush="{StaticResource BorderGray}"
+                    <Border Grid.Row="0" Grid.Column="0" BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,1,1"
-                            Background="{StaticResource BackgroundLightGray}">
+                            Background="{StaticResource OffWhiteBackgroundBrush}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
@@ -160,61 +161,60 @@
                             <!-- Bouton de recherche,(Non-implémenté)-->
                             <Button Grid.Column="1"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
                                 Style="{StaticResource IconButtonStyle}"
                                 Tag="{StaticResource SearchDrawingImage}"
-                                BorderBrush="{StaticResource BorderGray}"
+                                BorderBrush="{StaticResource GrayBrush}"
                                 BorderThickness="1"
                                 Margin="5"
                                 Padding="5"
-                                Background="{StaticResource BackgroundWhite}"
+                                Background="{StaticResource WhiteBackgroundBrush}"
                                 Height="30"
                             />
                         </Grid>
                     </Border>
                         
                     <!-- Contenu colonne 1 : liste des Structures de Modèles Fonctionnels : prédéfinis, créés et suggérés -->
-                    <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource BackgroundLightGray}" >
+                    <Grid Grid.Row="1" Grid.Column="0" Background="{StaticResource OffWhiteBackgroundBrush}" >
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>    <!-- Titre prédéfinis-->
-                            <RowDefinition Height="250"/>     <!-- Listes prédéfinis-->
-                            <RowDefinition Height="Auto"/>    <!-- Titre créés-->
-                            <RowDefinition Height="250"/>     <!-- Liste créés-->
+                            <RowDefinition Height="Auto"/>    <!-- Titre prédéfini-->
+                            <RowDefinition Height="250"/>     <!-- Listes prédéfinies-->
+                            <RowDefinition Height="Auto"/>    <!-- Titre créé-->
+                            <RowDefinition Height="250"/>     <!-- Listes créées-->
                             <RowDefinition Height="*"/>       <!-- Espace pour combler-->
                             <RowDefinition Height="30"/>      <!-- Bouton d'ajout de Structures de Modèles Fonctionnels-->
                         </Grid.RowDefinitions>
 
-                        <!-- Titre Modèles prédéfinis-->
-                        <Border Grid.Row="0"  BorderBrush="{StaticResource BorderGray}"
+                        <!-- Titre des Modèles prédéfinis-->
+                        <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,1,2"
                             Padding="5"
-                            Background="{StaticResource BackgroundDarkGray}">
+                            Background="{StaticResource GrayBackgroundBrush}">
                             
                             <TextBlock FontWeight="Bold"
                                        FontSize="16"
-                                       Foreground="{StaticResource TextBlack}"
+                                       Foreground="{StaticResource LightForegroundBrush}"
                                        Text="{StaticResource PredefinedModels}"
                             />
                         </Border>
 
-                        <!-- Listes Modèles prédéfinis-->
-                        <ScrollViewer x:Name="PredefinedModelsScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="Black" BorderThickness="10">
+                        <!-- Listes des Modèles prédéfinis-->
+                        <ScrollViewer x:Name="PredefinedModelsScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="{StaticResource DarkGrayBorderBrush}" BorderThickness="10">
                                 <ListBox ItemsSource="{Binding Models}"
                                          SelectedItem="{Binding SelectedStructure}"
-                                         Background="{StaticResource BackgroundLightGray}"
+                                         Background="{StaticResource OffWhiteBackgroundBrush}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
                                     
                                 </ListBox>
                         </ScrollViewer>
 
-                        <!-- Titre Modèles créés-->
-                        <Border Grid.Row="2"  BorderBrush="{StaticResource BorderGray}"
+                        <!-- Titre des Modèles créés-->
+                        <Border Grid.Row="2"  BorderBrush="{StaticResource GrayBorderBrush}"
                                 BorderThickness="0,0,1,2"
                                 Padding="5"
-                                Background="{StaticResource BackgroundDarkGray}">
+                                Background="{StaticResource GrayBackgroundBrush}">
                                 <TextBlock FontWeight="Bold"
                                            FontSize="16"
-                                           Foreground="{StaticResource TextBlack}"
+                                           Foreground="{StaticResource LightForegroundBrush}"
                                            Text="{StaticResource PersonalizedModels}"
                                 />
                         </Border>
@@ -224,17 +224,17 @@
                                 <ListBox ItemsSource="{Binding Models}"
                                          SelectedItem="{Binding SelectedModel}"
                                          FontStyle="Italic"
-                                         Background="{StaticResource BackgroundLightGray}"
+                                         Background="{StaticResource OffWhiteBackgroundBrush}"
                                          
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}"
                                 />
                         </ScrollViewer>
                         
-                        <!-- Combler l'espace restant afin d'avoir une bordure droite-->
-                        <Border Grid.Row="4"  BorderBrush="{StaticResource BorderGray}"
+                        <!-- Combler l'espace restant afin d'avoir une bordure droite -->
+                        <Border Grid.Row="4"  BorderBrush="{StaticResource GrayBorderBrush}"
                                 BorderThickness="0,0,1,0"
                                 Padding="5"
-                                Background="{StaticResource BackgroundDarkGray}"
+                                Background="{StaticResource GrayBackgroundBrush}"
                         />
 
                         <!-- Bouton d'ajout de Modèles-->
@@ -249,21 +249,21 @@
 <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Deuxième colonne
                     Liste des Modèles Fonctionnels correspondant à la Structure Sélectionnée
-                    Contient tous les Modèles Fonctionnels qui ont été crées à partir de la Structure sélectionnée
-                    ex : tous les Modèles Fonctionnels pour toutes les lampes de l'installation                    
+                    Contient tous les Modèles Fonctionnels qui ont été créés à partir de la Structure sélectionnée
+                    ex : tous les Modèles Fonctionnels pour toutes les lampes de l'installation
                     -->
 
                     <!-- En-tête colonne 2-->
-                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource BorderGray}"
+                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,1,1"
-                            Background="{StaticResource BackgroundLightGray}">
+                            Background="{StaticResource OffWhiteBackgroundBrush}">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
                                 <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
+                            <StackPanel Background="{StaticResource NoColorBrush}" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                                 <Image Source="{StaticResource FonctionalModelDrawingImage}" Height="20"/>
                                 <TextBlock 
                                     Style="{StaticResource TitleTextStyle}"
@@ -274,21 +274,20 @@
                             <!-- Bouton de recherche,(Non-implémenté)-->
                             <Button Grid.Column="1"
                                     HorizontalAlignment="Right"
-                                    VerticalAlignment="Center"
                                     Style="{StaticResource IconButtonStyle}"
                                     Tag="{StaticResource SearchDrawingImage}"
-                                    BorderBrush="{StaticResource BorderGray}"
+                                    BorderBrush="{StaticResource GrayBorderBrush}"
                                     BorderThickness="1"
                                     Margin="5"
                                     Padding="5"
-                                    Background="{StaticResource BackgroundWhite}"
+                                    Background="{StaticResource WhiteBackgroundBrush}"
                                     Height="30"
                             />
                         </Grid>
                     </Border>
                         
                     <!-- Contenu colonne 2 : liste des Modèles Fonctionnels correspondant à la Structure sélectionnée-->
-                    <Grid Grid.Row="1" Grid.Column="1" Background="{StaticResource BackgroundLightGray}">
+                    <Grid Grid.Row="1" Grid.Column="1" Background="{StaticResource OffWhiteBackgroundBrush}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/> <!-- Titre lié-->
                             <RowDefinition Height="250" /><!-- Listes liées-->
@@ -297,33 +296,33 @@
                         </Grid.RowDefinitions>
 
                         <!-- Titre Structure-->
-                        <Border Grid.Row="0"  BorderBrush="{StaticResource BorderGray}"
+                        <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,1,2"
                             Padding="5"
-                            Background="{StaticResource BackgroundDarkGray}">
+                            Background="{StaticResource GrayBackgroundBrush}">
                             
                             <TextBlock FontWeight="Bold"
                                        FontSize="16"
-                                       Foreground="{StaticResource TextBlack}"
+                                       Foreground="{StaticResource LightForegroundBrush}"
                                        Text="{StaticResource PredefinedModels}"
                             />
                         </Border>
 
-                        <!-- Listes Modèles Fontionnels liés-->
+                        <!-- Listes Modèles Fonctionnels liés-->
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="Black" BorderThickness="10">
                                
                                 <ListBox ItemsSource="{Binding SelectedModels}"
                                          SelectedItem="{Binding SelectedModel}"
-                                         Background="{StaticResource BackgroundLightGray}"
+                                         Background="{StaticResource OffWhiteBackgroundBrush}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
                                 </ListBox>
                         </ScrollViewer>
                         
                         <!-- Combler l'espace restant afin d'avoir une bordure droite -->
-                        <Border Grid.Row="4"  BorderBrush="{StaticResource BorderGray}"
+                        <Border Grid.Row="4"  BorderBrush="{StaticResource GrayBorderBrush}"
                                 BorderThickness="0,0,1,0"
                                 Padding="5"
-                                Background="{StaticResource BackgroundDarkGray}"
+                                Background="{StaticResource GrayBackgroundBrush}"
                         />
 
                     </Grid>
@@ -332,11 +331,11 @@
                     <!-- Troisième colonne
                     Liste des Éléments à Tester d'un Modèle Fonctionnel
                     Permet d'instancier (adresses et valeurs) tous les Éléments à Tester de la Structure du Modèle Fonctionnel Sélectionné
-                    ex : Pour la lampe du salon, tous les Éléments à Tester                    
+                    ex : Pour la lampe du salon, tous les Éléments à Tester
                     -->
                     
                     <!-- En-tête colonne 3 -->
-                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
+                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
                                 BorderThickness="0,0,1,0" >
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -361,7 +360,7 @@
                                     HorizontalAlignment="Right"
                                     Height="35"
                                     BorderThickness="1"
-                                    BorderBrush="{StaticResource BorderGray}"
+                                    BorderBrush="{StaticResource GrayBorderBrush}"
                                     Click="DeleteFunctionalModelButtonClick"
                                     />
                             
@@ -370,15 +369,14 @@
                                 Style="{StaticResource IconButtonStyle}"
                                 Tag="{StaticResource CloseDrawingImage}"
                                 HorizontalAlignment="Right"
-                                Background="Transparent"
-                                Height="35"
+                                Background="{StaticResource NoColorBrush}"
                                 Command="{Binding HideModelColumnCommand}"
                             />
                         </Grid>
                     </Border>
                     
                     <!-- Contenu colonne 3 : liste des Éléments à Tester -->
-                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource BorderGray}"
+                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
                                 BorderThickness="0,0,1,0" >
                         <Grid Margin="10,10,10,0">
                             <Grid.RowDefinitions>
@@ -437,7 +435,7 @@
                                                                         HorizontalAlignment="Right"
                                                                         Height="35"
                                                                         BorderThickness="1"
-                                                                        BorderBrush="{StaticResource BorderGray}"
+                                                                        BorderBrush="{StaticResource GrayBorderBrush}"
                                                                         Click="RemoveTestedElementFromModelButtonClick"
                                                                 />
                                                             </Grid>
@@ -463,7 +461,7 @@
                                                                
                                                                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Type de DPT :"/>
                                                                 <!--Type de DPT de l'envoi-->
-                                                                <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource BackgroundLightGray}">
+                                                                <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal" />
@@ -474,13 +472,13 @@
                                                                             <TextBox Text="{Binding Type}"
                                                                                 Width="40"
                                                                                 HorizontalContentAlignment="Center"
-                                                                                Background="{StaticResource BackgroundLightGray}"
+                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                 />
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
                                                                 <!--Type de DPT à recevoir-->
-                                                                <ListBox Grid.Row="0" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource BackgroundLightGray}">
+                                                                <ListBox Grid.Row="0" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal" />
@@ -491,15 +489,15 @@
                                                                             <TextBox Text="{Binding Type}"
                                                                                 Width="40"
                                                                                 HorizontalContentAlignment="Center"
-                                                                                Background="{StaticResource BackgroundLightGray}"
-                                                                            />
+                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                                />
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
                                                                 
                                                                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Adresse liée :"/>
                                                                 <!--Adresses de l'envoi-->
-                                                                <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource BackgroundLightGray}">
+                                                                <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal"
@@ -511,13 +509,13 @@
                                                                             <TextBox Text="{Binding Address}"
                                                                                 Width="40"
                                                                                 HorizontalContentAlignment="Center"
-                                                                                Background="{StaticResource BackgroundLightGray}"
+                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                 />
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
                                                                 <!--Adresses de la réception-->
-                                                                <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource BackgroundLightGray}">
+                                                                <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal"
@@ -529,7 +527,7 @@
                                                                             <TextBox Text="{Binding Address}"
                                                                                 Width="40"
                                                                                 HorizontalContentAlignment="Center"
-                                                                                Background="{StaticResource BackgroundLightGray}"
+                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                             />
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
@@ -537,7 +535,7 @@
                                                                 
                                                                 <TextBlock Grid.Row="2" Grid.Column="0" Text="Valeurs :"/>
                                                                 <!--Valeurs de l'envoi-->
-                                                                <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource BackgroundLightGray}">
+                                                                <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal"/>
@@ -549,14 +547,14 @@
                                                                                 <TextBox Text="{Binding Value}"
                                                                                          Width="40"
                                                                                          HorizontalContentAlignment="Center"
-                                                                                         Background="{StaticResource BackgroundLightGray}"
+                                                                                         Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                          />
                                                                              </ScrollViewer>
                                                                         </DataTemplate>
                                                                     </ListBox.ItemTemplate>
                                                                 </ListBox>
                                                                 <!--Valeurs de la réception-->
-                                                                <ListBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource BackgroundLightGray}">
+                                                                <ListBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                     <ListBox.ItemsPanel>
                                                                         <ItemsPanelTemplate>
                                                                             <StackPanel Orientation="Horizontal" />
@@ -568,7 +566,7 @@
                                                                                 <TextBox Text="{Binding Value}"
                                                                                     Width="40"
                                                                                     HorizontalContentAlignment="Center"
-                                                                                    Background="{StaticResource BackgroundLightGray}"
+                                                                                    Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                 />
                                                                             </ScrollViewer>
                                                                         </DataTemplate>
@@ -593,10 +591,10 @@
                                         
                                         
                                         <!-- A SUPPRIMER -->
-                                        <!-- Peut être utile -->
+                                        <!-- Peut-être utile -->
                                         
                                         <!--DPT Subtype : Venir liées le ComboBox a un dictionnaire de DPT Subtype en fonction du DPT choisis ainsi que sa visibilité-->
-                                        <TextBlock Text="{StaticResource DPTsubtype}" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        <TextBlock Text="{StaticResource DptSubtype}" VerticalAlignment="Center" Margin="0,10,0,0"/>
                                         <ComboBox x:Name="DptSortieComboBox2" Width="200" HorizontalAlignment="Left">
                                             <ComboBoxItem Content="1 bit" />
                                             <ComboBoxItem Content="2 bits" />
@@ -604,7 +602,7 @@
                                         </ComboBox>
 
                                         <!-- Param Avancés -->
-                                        <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="Black" FocusVisualStyle="{x:Null}" 
+                                        <CheckBox x:Name="ParametresAvancesCheckBox2" Foreground="{StaticResource LightForegroundBrush}" FocusVisualStyle="{x:Null}" 
                                                Content="{StaticResource AdvancedSettings}" Margin="0,10,0,0"/>
 
                                     </StackPanel>
@@ -612,7 +610,7 @@
                                     <!-- Liste des Param Avancés : lié la visibilité a la checkbox précédente -->
                                     <StackPanel Grid.Row="1" Orientation="Vertical" Margin="0,10,0,0">
                                         <!--DPT Attendu : Liée le ComboBox au dico de DPT-->
-                                        <TextBlock Text="{StaticResource ExpectedDPT}" VerticalAlignment="Center" Margin="0,10,0,0"/>
+                                        <TextBlock Text="{StaticResource ExpectedDpt}" VerticalAlignment="Center" Margin="0,10,0,0"/>
                                         <ComboBox x:Name="DptRetourComboBox2" HorizontalAlignment="Left" Width="200">
                                             <ComboBoxItem Content="8 bit" />
                                             <ComboBoxItem Content="16 bits" />
@@ -659,11 +657,11 @@
 <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Quatrième colonne
                     Adresses de groupe à tester
-                    ex : 0/1/1 Lampe salon etc                   
+                    ex : 0/1/1 Lampe salon etc
                     -->
                     
                     <!-- En-tête -->
-                    <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource BackgroundLightGray}">
+                    <Grid Grid.Row="0" Grid.Column="3"  Background="{StaticResource OffWhiteBackgroundBrush}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" /> <!--Titre avec son icon-->
                             <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
@@ -682,14 +680,13 @@
                         <!--Bouton de recherche : Non-implementer-->
                         <Button Grid.Column="1"
                                 HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
                                 Style="{StaticResource IconButtonStyle}"
                                 Tag="{StaticResource SearchDrawingImage}"
-                                BorderBrush="{StaticResource BorderGray}"
+                                BorderBrush="{StaticResource GrayBorderBrush}"
                                 BorderThickness="1"
                                 Margin="5"
                                 Padding="5"
-                                Background="{StaticResource BackgroundWhite}"
+                                Background="{StaticResource WhiteBackgroundBrush}"
                                 Height="30"
                         />
 

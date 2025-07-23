@@ -43,9 +43,6 @@ public partial class SettingsWindow
         _viewModel = viewModel;
         DataContext = _viewModel;
         
-        //_viewModel.SaveSettingsCommand.Execute(null);
-            
-        // A enlever ? ⬇️
         UpdateWindowContents(true, true); // Affichage des paramètres dans la fenêtre
         
         ScaleSlider.AddHandler(MouseLeftButtonDownEvent, new MouseButtonEventHandler(_viewModel.SliderMouseLeftButtonDown), true);
@@ -74,7 +71,7 @@ public partial class SettingsWindow
     {
         if (_viewModel.AppSettings.AppLang != "FR")
         {
-            FrAppLanguageComboBoxItem.IsSelected = (_viewModel.AppSettings.AppLang == "FR"); // Sélection/Désélection
+            FrAppLanguageComboBoxItem.IsSelected = _viewModel.AppSettings.AppLang == "FR"; // Sélection/Désélection
 
             // Sélection du langage de l'application (même fonctionnement que le code ci-dessus)
             foreach (ComboBoxItem item in AppLanguageComboBox.Items)
@@ -1510,6 +1507,8 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nLogiciel réalisé dans le cadre d'un stage d'ingénierie par des étudiants de l'INSA Toulouse :" +
                     $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE et Maxime OLIVEIRA LOPES" +
+                    $"\nPuis par" +
+                    $"\nFatine AZZABI, Noé CAILLET, Manuel IBARLUCIA et Raphaël MARQUES" +
                     $"\n" +
                     $"\nSous la supervision de :" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1518,7 +1517,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartenariat entre l'Institut National des Sciences Appliquées (INSA) de Toulouse et l'Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRéalisation: 06/2024 - 07/2024\n";
+                    $"\nRéalisation: De Juillet à Septembre 2024 et de Juin à Septembre 2025\n";
 
                 NoteImportante.Text = "\nNote importante:";
                 NoteImportanteContenu.Text =
@@ -1544,21 +1543,22 @@ public partial class SettingsWindow
     /// </summary>
     private void ApplyThemeToWindow()
     {
-        string textColor;
-        string darkBackgroundColor;
-        string deepDarkBackgroundColor;
-        string pathColor;
+        
 
         var checkboxStyle = (Style)FindResource("CheckboxLightThemeStyle");
+        Brush textColorBrush;
+        Brush backgroundColorBrush;
+        Brush deepBackgroundColorBrush;
+        Brush pathColorBrush;
         Brush borderBrush;
 
         if (_viewModel.AppSettings.EnableLightTheme) // Si le thème clair est actif,
         {
-            textColor = "#000000";
-            darkBackgroundColor = "#F5F5F5";
-            deepDarkBackgroundColor = "#FFFFFF";
-            pathColor = "#D7D7D7";
-            borderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#b8b8b8"));
+            textColorBrush = (Brush)FindResource("LightForegroundBrush");
+            backgroundColorBrush = (Brush)FindResource("OffWhiteBackgroundBrush");
+            deepBackgroundColorBrush = (Brush)FindResource("WhiteBackgroundBrush");
+            pathColorBrush = (Brush)FindResource("LightGrayBorderBrush");
+            borderBrush = (Brush)FindResource("LightGrayBorderBrush");
 
             ThemeComboBox.Style = (Style)FindResource("LightComboBoxStyle");
             AppLanguageComboBox.Style = (Style)FindResource("LightComboBoxStyle");
@@ -1570,17 +1570,15 @@ public partial class SettingsWindow
             OngletDebug.Style = (Style)FindResource("LightOnglet");
             OngletInformations.Style = (Style)FindResource("LightOnglet");
             OngletParametresApplication.Style = (Style)FindResource("LightOnglet");
-            HyperlinkInfo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4071B4"));
         }
         else // Sinon, on met le thème sombre
         {
-            textColor = "#E3DED4";
-            darkBackgroundColor = "#313131";
-            deepDarkBackgroundColor = "#262626";
-            pathColor = "#434343";
+            textColorBrush = (Brush)FindResource("DarkOffWhiteForegroundBrush");
+            backgroundColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            deepBackgroundColorBrush = (Brush)FindResource("DarkerGrayBackgroundBrush");
+            pathColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
             checkboxStyle = (Style)FindResource("CheckboxDarkThemeStyle");
-            borderBrush = (Brush)FindResource("DarkThemeCheckBoxBorderBrush");
-
+            borderBrush = (Brush)FindResource("GrayBorderBrush");
             ThemeComboBox.Style = (Style)FindResource("DarkComboBoxStyle");
             AppLanguageComboBox.Style = (Style)FindResource("DarkComboBoxStyle");
             ScaleSlider.Style = (Style)FindResource("DarkSlider");
@@ -1590,34 +1588,27 @@ public partial class SettingsWindow
             OngletDebug.Style = (Style)FindResource("DarkOnglet");
             OngletInformations.Style = (Style)FindResource("DarkOnglet");
             OngletParametresApplication.Style = (Style)FindResource("DarkOnglet");
-            HyperlinkInfo.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#4071B4"));
-
-
         }
-
-        // Définition des brush pour les divers éléments
-        var textColorBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(textColor));
-
         // Arrière plan de la fenêtre
-        Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(darkBackgroundColor));
+        Background = backgroundColorBrush;
 
         // En-tête de la fenêtre
         SettingsIconPath1.Brush = textColorBrush;
         SettingsIconPath2.Brush = textColorBrush;
         SettingsWindowTopTitle.Foreground = textColorBrush;
-        HeaderPath.Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString(pathColor));
+        HeaderPath.Stroke = pathColorBrush;
 
         // Corps de la fenêtre
-        MainContentBorder.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(pathColor));
-        GeneralSettingsTab.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(deepDarkBackgroundColor));
+        MainContentBorder.BorderBrush = pathColorBrush;
+        GeneralSettingsTab.Background = deepBackgroundColorBrush;
         AppSettingsTitle.Foreground = textColorBrush;
         ThemeTextBox.Foreground = textColorBrush;
         AppLanguageTextBlock.Foreground = textColorBrush;
             
 
         // Pied de page avec les boutons save et cancel
-        SettingsWindowFooter.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(deepDarkBackgroundColor));
-        FooterPath.Stroke = new SolidColorBrush((Color)ColorConverter.ConvertFromString(pathColor));
+        SettingsWindowFooter.Background = deepBackgroundColorBrush;
+        FooterPath.Stroke = pathColorBrush;
         CancelButtonDrawing.Brush = textColorBrush;
         CancelButtonText.Foreground = textColorBrush;
         SaveButtonDrawing.Brush = textColorBrush;
@@ -1626,38 +1617,36 @@ public partial class SettingsWindow
 
         // Menu debug
         ControlOnglet.BorderBrush = borderBrush;
-        DebugPanel.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(deepDarkBackgroundColor));
-        InformationsGrid.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(deepDarkBackgroundColor));
+        DebugPanel.Background = deepBackgroundColorBrush;
+        InformationsGrid.Background = deepBackgroundColorBrush;
         AddInfosOsCheckBox.Style = checkboxStyle;
         AddInfosHardCheckBox.Style = checkboxStyle;
         AddImportedFilesCheckBox.Style = checkboxStyle;
         AddInfosOsCheckBox.Foreground = textColorBrush;
         AddInfosHardCheckBox.Foreground = textColorBrush;
         AddImportedFilesCheckBox.Foreground = textColorBrush;
-
-
-
         OngletParametresApplication.BorderBrush = borderBrush;
         OngletDebug.Foreground = textColorBrush;
         OngletParametresApplication.Foreground = textColorBrush;
         DebugBrush1.Brush = textColorBrush;
         DebugBrush2.Brush = textColorBrush;
+        
+        // Menu Informations
         OngletInformations.Foreground = textColorBrush;
         InformationsText.Foreground = textColorBrush;
         
         
-
         foreach (ComboBoxItem item in ThemeComboBox.Items)
         {
             item.Foreground = item.IsSelected ? new SolidColorBrush(Colors.White) : textColorBrush;
-            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : new SolidColorBrush((Color)ColorConverter.ConvertFromString(darkBackgroundColor));
+            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : backgroundColorBrush;
         }
 
 
         foreach (ComboBoxItem item in AppLanguageComboBox.Items)
         {
             item.Foreground = item.IsSelected ? new SolidColorBrush(Colors.White) : textColorBrush;
-            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : new SolidColorBrush((Color)ColorConverter.ConvertFromString(darkBackgroundColor));
+            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : backgroundColorBrush;
         }
     }
 
@@ -1717,9 +1706,9 @@ public partial class SettingsWindow
         
         // Mise à jour de la fenêtre principale
         App.WindowManager?.MainWindow.UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, previousAppScaleFactor == _viewModel.AppSettings.AppScaleFactor);
-
+        App.WindowManager?.ConnectionWindow?.UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, previousAppScaleFactor == _viewModel.AppSettings.AppScaleFactor);
         // Masquage de la fenêtre de paramètres
-        Hide();
+        //Hide();
     }
 
 

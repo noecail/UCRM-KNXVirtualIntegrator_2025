@@ -84,7 +84,7 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
-    <DrawingImage x:Key="settingsDrawingImage">
+    <DrawingImage x:Key="SettingsDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V54 H54 V0 H0 Z">
                 <DrawingGroup Opacity="1">
@@ -95,7 +95,7 @@
         </DrawingImage.Drawing>
     </DrawingImage>
 
-    <DrawingImage x:Key="playDrawingImage">
+    <DrawingImage x:Key="PlayDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V24 H24 V0 H0 Z">
                 <GeometryDrawing Geometry="F1 M24,24z M0,0z M16.6582,9.28638C18.098,10.1862 18.8178,10.6361 19.0647,11.2122 19.2803,11.7152 19.2803,12.2847 19.0647,12.7878 18.8178,13.3638 18.098,13.8137 16.6582,14.7136L9.896,18.94C8.29805,19.9387 7.49907,20.4381 6.83973,20.385 6.26501,20.3388 5.73818,20.0469 5.3944,19.584 5,19.053 5,18.1108 5,16.2264L5,7.77357C5,5.88919 5,4.94701 5.3944,4.41598 5.73818,3.9531 6.26501,3.66111 6.83973,3.6149 7.49907,3.5619 8.29805,4.06126 9.896,5.05998L16.6582,9.28638z">
@@ -129,12 +129,12 @@
                 </DrawingGroup.Transform>
                 <GeometryDrawing Geometry="F1 M25,25z M0,0z M3,21.32L21,3.32001">
                     <GeometryDrawing.Pen>
-                        <Pen Brush="{StaticResource BorderGray}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+                        <Pen Brush="{StaticResource GrayBorderBrush}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
                 <GeometryDrawing Geometry="F1 M25,25z M0,0z M3,3.32001L21,21.32">
                     <GeometryDrawing.Pen>
-                        <Pen Brush="{StaticResource BorderGray}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+                        <Pen Brush="{StaticResource GrayBorderBrush}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
             </DrawingGroup>
@@ -323,11 +323,11 @@
                     <TranslateTransform X="2.94" Y="0" />
                 </DrawingGroup.Transform>
                 <DrawingGroup Opacity="1" Transform="1,0,0,1,-355.957,-579">
-                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M376.515,610.716L361.231,610.716A2.361,2.361,0,0,1,358.873,608.357L358.873,584.1A1,1,0,0,1,360.873,584.1L360.873,608.355A0.36,0.36,0,0,0,361.231,608.714L376.515,608.714A0.36,0.36,0,0,0,376.873,608.355L376.873,584.1A1,1,0,0,1,378.873,584.1L378.873,608.355A2.361,2.361,0,0,1,376.515,610.716z" />
-                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M365.457,604.917A1,1,0,0,1,364.457,603.917L364.457,589.917A1,1,0,0,1,366.457,589.917L366.457,603.917A1,1,0,0,1,365.457,604.917z" />
-                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M372.29,604.917A1,1,0,0,1,371.29,603.917L371.29,589.917A1,1,0,0,1,373.29,589.917L373.29,603.917A1,1,0,0,1,372.29,604.917z" />
-                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M380.79,585.1L356.957,585.1A1,1,0,0,1,356.957,583.1L380.79,583.1A1,1,0,0,1,380.79,585.1z" />
-                    <GeometryDrawing Brush="{StaticResource BorderGray}" Geometry="F1 M31.716,31.716z M0,0z M372.79,581L364.873,581A1,1,0,1,1,364.873,579L372.79,579A1,1,0,0,1,372.79,581z" />
+                    <GeometryDrawing Brush="{StaticResource GrayBorderBrush}" Geometry="F1 M31.716,31.716z M0,0z M376.515,610.716L361.231,610.716A2.361,2.361,0,0,1,358.873,608.357L358.873,584.1A1,1,0,0,1,360.873,584.1L360.873,608.355A0.36,0.36,0,0,0,361.231,608.714L376.515,608.714A0.36,0.36,0,0,0,376.873,608.355L376.873,584.1A1,1,0,0,1,378.873,584.1L378.873,608.355A2.361,2.361,0,0,1,376.515,610.716z" />
+                    <GeometryDrawing Brush="{StaticResource GrayBorderBrush}" Geometry="F1 M31.716,31.716z M0,0z M365.457,604.917A1,1,0,0,1,364.457,603.917L364.457,589.917A1,1,0,0,1,366.457,589.917L366.457,603.917A1,1,0,0,1,365.457,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource GrayBorderBrush}" Geometry="F1 M31.716,31.716z M0,0z M372.29,604.917A1,1,0,0,1,371.29,603.917L371.29,589.917A1,1,0,0,1,373.29,589.917L373.29,603.917A1,1,0,0,1,372.29,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource GrayBorderBrush}" Geometry="F1 M31.716,31.716z M0,0z M380.79,585.1L356.957,585.1A1,1,0,0,1,356.957,583.1L380.79,583.1A1,1,0,0,1,380.79,585.1z" />
+                    <GeometryDrawing Brush="{StaticResource GrayBorderBrush}" Geometry="F1 M31.716,31.716z M0,0z M372.79,581L364.873,581A1,1,0,1,1,364.873,579L372.79,579A1,1,0,0,1,372.79,581z" />
                 </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
@@ -340,11 +340,11 @@
                     <TranslateTransform X="2.94" Y="0" />
                 </DrawingGroup.Transform>
                 <DrawingGroup Opacity="1" Transform="1,0,0,1,-355.957,-579">
-                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M376.515,610.716L361.231,610.716A2.361,2.361,0,0,1,358.873,608.357L358.873,584.1A1,1,0,0,1,360.873,584.1L360.873,608.355A0.36,0.36,0,0,0,361.231,608.714L376.515,608.714A0.36,0.36,0,0,0,376.873,608.355L376.873,584.1A1,1,0,0,1,378.873,584.1L378.873,608.355A2.361,2.361,0,0,1,376.515,610.716z" />
-                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M365.457,604.917A1,1,0,0,1,364.457,603.917L364.457,589.917A1,1,0,0,1,366.457,589.917L366.457,603.917A1,1,0,0,1,365.457,604.917z" />
-                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M372.29,604.917A1,1,0,0,1,371.29,603.917L371.29,589.917A1,1,0,0,1,373.29,589.917L373.29,603.917A1,1,0,0,1,372.29,604.917z" />
-                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M380.79,585.1L356.957,585.1A1,1,0,0,1,356.957,583.1L380.79,583.1A1,1,0,0,1,380.79,585.1z" />
-                    <GeometryDrawing Brush="{StaticResource BackgroundBlack}" Geometry="F1 M31.716,31.716z M0,0z M372.79,581L364.873,581A1,1,0,1,1,364.873,579L372.79,579A1,1,0,0,1,372.79,581z" />
+                    <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M31.716,31.716z M0,0z M376.515,610.716L361.231,610.716A2.361,2.361,0,0,1,358.873,608.357L358.873,584.1A1,1,0,0,1,360.873,584.1L360.873,608.355A0.36,0.36,0,0,0,361.231,608.714L376.515,608.714A0.36,0.36,0,0,0,376.873,608.355L376.873,584.1A1,1,0,0,1,378.873,584.1L378.873,608.355A2.361,2.361,0,0,1,376.515,610.716z" />
+                    <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M31.716,31.716z M0,0z M365.457,604.917A1,1,0,0,1,364.457,603.917L364.457,589.917A1,1,0,0,1,366.457,589.917L366.457,603.917A1,1,0,0,1,365.457,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M31.716,31.716z M0,0z M372.29,604.917A1,1,0,0,1,371.29,603.917L371.29,589.917A1,1,0,0,1,373.29,589.917L373.29,603.917A1,1,0,0,1,372.29,604.917z" />
+                    <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M31.716,31.716z M0,0z M380.79,585.1L356.957,585.1A1,1,0,0,1,356.957,583.1L380.79,583.1A1,1,0,0,1,380.79,585.1z" />
+                    <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M31.716,31.716z M0,0z M372.79,581L364.873,581A1,1,0,1,1,364.873,579L372.79,579A1,1,0,0,1,372.79,581z" />
                 </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
@@ -509,7 +509,7 @@
         </DrawingImage.Drawing>
     </DrawingImage>
     
-    <DrawingImage x:Key="TooltipWhiteOnKNXGreenDrawingImage">
+    <DrawingImage x:Key="TooltipWhiteOnKnxGreenDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
                 <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">
@@ -537,7 +537,7 @@
         </DrawingImage.Drawing>
     </DrawingImage>
     
-    <DrawingImage x:Key="TooltipKNXGreenOnWhiteDrawingImage">
+    <DrawingImage x:Key="TooltipKnxGreenOnWhiteDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V570 H1080 V0 H0 Z">
                 <DrawingGroup Transform="0.316951,-0.0281339,-0.0281339,-0.316951,184.363,239.277">

@@ -26,17 +26,17 @@
     <sys:String x:Key="PersonalizedModels">Modèles Personnalisés</sys:String>
     <sys:String x:Key="AddModelsButton">Ajouter</sys:String>
     <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
-    <sys:String x:Key="SentDPT">DPT envoyé :</sys:String>
+    <sys:String x:Key="SentDpt">DPT envoyé :</sys:String>
     <sys:String x:Key="Name:">Nom :</sys:String>
-    <sys:String x:Key="ExpectedDPT">DPT attendu :</sys:String>
+    <sys:String x:Key="ExpectedDpt">DPT attendu :</sys:String>
     <sys:String x:Key="TableTitleSentExpected">Valeur Envoyé / Valeur Attendue :</sys:String>
-    <sys:String x:Key="DPTsubtype">Sous-type du DPT :</sys:String>
+    <sys:String x:Key="DptSubtype">Sous-type du DPT :</sys:String>
     <sys:String x:Key="CreateModel">Créer Modèle Fonctionnel</sys:String>
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
     <sys:String x:Key="LinkedModel">Modèle Lié</sys:String>
     <sys:String x:Key="UnlinkedModel">Modèle Non Lié</sys:String>
     <sys:String x:Key="Save">Enregistrer</sys:String>
-    <sys:String x:Key="IEAccociated">IE Associées :</sys:String>
+    <sys:String x:Key="IeAssociated">IE Associées :</sys:String>
 
 
 

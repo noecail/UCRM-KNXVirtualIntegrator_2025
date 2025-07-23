@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Media;
 using KNX_Virtual_Integrator.ViewModel;
-using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.View.Windows;
@@ -10,18 +10,107 @@ public partial class ConnectionWindow
 {
     private readonly MainViewModel _viewModel;
     
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ConnectionWindow"/> class,
+    /// loading and applying settings from the appSettings file, and setting default values where necessary.
+    /// </summary>
     public ConnectionWindow(MainViewModel viewModel)
     {
         InitializeComponent();
 
         _viewModel = viewModel;
         DataContext = viewModel;
+        
+        UpdateWindowContents(true, true, true);
+        
     }
 
+    /// <summary>
+    /// Handles the Connection window closing event by canceling the closure, restoring previous settings, and hiding the window.
+    /// </summary>
     private void ClosingConnectionWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
+        UpdateWindowContents(true, true, true);
         Hide();
+    }
+
+    /// <summary>
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
+    /// </summary>
+    public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
+    {
+        if (langChanged) TranslateWindowContents();
+        if (themeChanged) ApplyThemeToWindow();
+        if (scaleChanged) ApplyScaling();
+    }
+
+    private void TranslateWindowContents()
+    {
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Connection Translation not implemented");
+    }
+
+    private void ApplyThemeToWindow()
+    {
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Apply Theme To Window not implemented");
+        Brush textColorBrush;
+        Brush backgroundColorBrush;
+        Brush deepBackgroundColorBrush;
+        
+        if (_viewModel.AppSettings.EnableLightTheme)
+        {
+            textColorBrush = (Brush)FindResource("LightForegroundBrush");
+            backgroundColorBrush = (Brush)FindResource("OffWhiteBackgroundBrush");
+            deepBackgroundColorBrush = (Brush)FindResource("WhiteBackgroundBrush");
+            
+            NatAddressTextBox.Style = (Style)FindResource("TextBoxLight");
+            ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxLight");
+            ImportKnxKeys.Style = (Style)FindResource("ImportKeysButtonLight");
+            ConnectionTypeComboBox.Style = (Style)FindResource("LightComboBoxStyle");
+            InterfaceListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerLight");
+            InterfaceListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
+            InterfaceListBox.BorderBrush = (Brush)FindResource("GrayBorderBrush");
+            CurrCoInterfaceText.Style = (Style)FindResource("InterfaceTextBlockLight");
+        }
+        else
+        {
+            textColorBrush = (Brush)FindResource("DarkOffWhiteForegroundBrush");
+            backgroundColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            deepBackgroundColorBrush = (Brush)FindResource("DarkerGrayBackgroundBrush");
+            NatAddressTextBox.Style = (Style)FindResource("TextBoxDark");
+            ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxDark");
+            ImportKnxKeys.Style = (Style)FindResource("ImportKeysButtonDark");   
+            ConnectionTypeComboBox.Style = (Style)FindResource("DarkComboBoxStyle");
+            InterfaceListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerDark");
+            InterfaceListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemDark");
+            InterfaceListBox.BorderBrush = (Brush)FindResource("LightGrayBorderBrush");
+            CurrCoInterfaceText.Style = (Style)FindResource("InterfaceTextBlockDark");
+        }
+        
+        Background = backgroundColorBrush;
+        
+        ConnectionTypeText.Foreground = textColorBrush;
+        DiscoveredInterfacesText.Foreground = textColorBrush;
+        IpRouterText.Foreground = textColorBrush;
+        SecurisedConectionText.Foreground = textColorBrush;
+        ConnectionIpSecText.Foreground = textColorBrush;
+        ImportedKeysFileText.Foreground = textColorBrush;
+        ImportKeyPathText.Foreground = textColorBrush;
+        PwdKeysFileText.Foreground = textColorBrush;
+        
+        CurrentInterfaceText.Foreground = textColorBrush;
+        FileKeysText.Foreground = textColorBrush;
+        NatConnectionText.Foreground = textColorBrush;
+        LockIconText.Foreground = textColorBrush;
+        CurrCoInterfaceText.Foreground = textColorBrush;
+        NatIconText.Foreground = textColorBrush;
+        InterfaceListBox.Background = deepBackgroundColorBrush;
+        
+    }
+
+    private void ApplyScaling()
+    {
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Apply Scaling not implemented");
     }
     
     

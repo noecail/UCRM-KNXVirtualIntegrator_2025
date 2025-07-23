@@ -60,9 +60,33 @@ public partial class MainWindow
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyScaling is not implemented");
     }
 
-    public void UpdateWindowContents(bool b, bool b1, bool b2)
+    private void ApplyThemeToWindow()
+    {
+        
+        if (_viewModel.AppSettings.EnableLightTheme) 
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute(""); // Si le thème clair est actif
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyThemeToWindow is not implemented");
+
+    }
+
+    public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.UpdateWindowContents is not implemented");
+
+        if (langChanged)
+        {
+            return;
+        }
+        if (themeChanged)
+        {
+            ApplyThemeToWindow();
+        }
+        if (scaleChanged)
+        {
+            ApplyScaling(1);
+        }
+
+
     }
     
     
@@ -296,6 +320,7 @@ public partial class MainWindow
     private void ClosingMainWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
+        _cancellationTokenSource.Cancel();
         Application.Current.Shutdown();
     }
 
