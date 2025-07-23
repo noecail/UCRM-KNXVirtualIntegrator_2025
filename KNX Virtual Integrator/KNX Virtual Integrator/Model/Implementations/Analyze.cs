@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
@@ -7,7 +8,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class Analyze(FunctionalModelList liste, GroupCommunication communication) : IAnalyze
 {
-    public readonly List<List<FunctionalModel>> FunctionalModels = liste.FunctionalModels;
+    public readonly List<ObservableCollection<FunctionalModel>> FunctionalModels = liste.FunctionalModels;
     public List<List<List<List<List<bool>>>>> Results { get; set; } = []; //Table of results sorted by Tests, in TestedElements, in functionalModels
     public GroupCommunication Communication = communication;
 

@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using KNX_Virtual_Integrator.Model.Entities;
 
@@ -17,7 +18,7 @@ namespace KNX_Virtual_Integrator.Model.Interfaces;
 /// </summary>
 public interface IFunctionalModelList : INotifyPropertyChanged
 {
-    public List<List<FunctionalModel>> FunctionalModels { get; set; }
+    public List<ObservableCollection<FunctionalModel>> FunctionalModels { get; set; }
     
     public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
 

@@ -372,8 +372,6 @@ public partial class MainWindow
     /// </summary>
     private void DeleteFunctionalModelButtonClick(object sender, RoutedEventArgs e)
     {
-        Console.WriteLine("On est iciiiiiii");
-
         _viewModel.DeleteFunctionalModelFromList.Execute(_viewModel.SelectedModel);
     }
 

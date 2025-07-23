@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Xml;
@@ -8,7 +9,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
 {
-    public List<List<FunctionalModel>> FunctionalModels { get; set; } = [];
+    public List<ObservableCollection<FunctionalModel>> FunctionalModels { get; set; } = [];
     public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
 
     public FunctionalModelList()

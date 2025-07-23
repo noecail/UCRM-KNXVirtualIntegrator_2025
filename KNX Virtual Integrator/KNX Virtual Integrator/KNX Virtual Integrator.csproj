@@ -13,6 +13,11 @@
       <Page Remove="Resources\Images.xaml" />
       <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
       <Page Remove="Resources\Styles.xaml" />
+      <Page Update="View\Utils\TestWindow.xaml">
+        <Generator>MSBuild:Compile</Generator>
+        <XamlRuntime>Wpf</XamlRuntime>
+        <SubType>Designer</SubType>
+      </Page>
     </ItemGroup>
     
     <ItemGroup>
