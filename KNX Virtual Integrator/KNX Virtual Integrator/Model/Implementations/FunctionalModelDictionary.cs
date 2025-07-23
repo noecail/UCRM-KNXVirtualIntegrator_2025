@@ -90,69 +90,11 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void ExportDictionary(string path)
         {
             var doc = new XmlDocument();
-            var project = doc.CreateElement("Project");
+            var project = doc.CreateElement("Dictionary");
 
             foreach (var model in GetAllModels())
             {
-                var functionalModel = doc.CreateElement(model.Name);
-                foreach (var element in model.ElementList)
-                {
-                    var xElement = doc.CreateElement("Element_to_test");
-                    var xCmd =  doc.CreateElement("Command");
-                    var xIe = doc.CreateElement("State_information");
-
-                    foreach (var dpt in element.TestsCmd)
-                    {
-                        var xDpt = doc.CreateElement("Data_Point_Type");
-                        var addr = doc.CreateAttribute("Address");
-                        addr.Value = dpt.Address;
-                        xDpt.Attributes.Append(addr);
-                        var type = doc.CreateAttribute("Type");
-                        type.Value = dpt.Type.ToString();
-                        xDpt.Attributes.Append(type);
-
-                        foreach (var value in dpt.Value)
-                        {
-                            if (value != null)
-                            {
-                                var xValue = doc.CreateElement("Group_Value");
-                                var val = doc.CreateAttribute("Value");
-                                val.Value = value.ToString();
-                                xValue.Attributes.Append(val);
-                                xDpt.AppendChild(xValue);
-                            }
-                        }
-                        xCmd.AppendChild(xDpt);
-                    }
-
-                    foreach (var dpt in element.TestsIe)
-                    {
-                        var xDpt = doc.CreateElement("Data_Point_Type");
-                        var addr = doc.CreateAttribute("Address");
-                        addr.Value = dpt.Address;
-                        xDpt.Attributes.Append(addr);
-                        var type = doc.CreateAttribute("Type");
-                        type.Value = dpt.Type.ToString();
-                        xDpt.Attributes.Append(type);
-
-                        foreach (var value in dpt.Value)
-                        {
-                            if (value != null)
-                            {
-                                var xValue = doc.CreateElement("Group_Value");
-                                var val = doc.CreateAttribute("Value");
-                                val.Value = value.ToString();
-                                xValue.Attributes.Append(val);
-                                xDpt.AppendChild(xValue);
-                            }
-                        }
-                        xIe.AppendChild(xDpt);
-                    }
-                    xElement.AppendChild(xCmd);
-                    xElement.AppendChild(xIe);
-                    functionalModel.AppendChild(xElement);
-                }
-
+                var functionalModel = model.ExportFunctionalModel(doc);
                 project.AppendChild(functionalModel);
             }
 
@@ -174,44 +116,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             if (xnList != null)
                 foreach (XmlNode model in xnList) // pour chaque modèle
                 {
-                    var functionalModel = new FunctionalModel(model.Name);
-                    foreach (XmlNode element in model.ChildNodes)
-                    {
-                        var elementToTest = new TestedElement();
-                        List<DataPointType> listeCmd = [];
-                        List<DataPointType> listeIe = [];
-                        foreach (XmlNode node in element.ChildNodes)
-                        {
-                            
-                            foreach (XmlNode dpt in node.ChildNodes)
-                            {
-                                var address = dpt?.Attributes?["Address"]?.Value;
-                                var type = int.Parse(dpt?.Attributes?["Type"]?.Value);
-                                List<GroupValue?> tabValues = [];
-                                foreach (XmlNode values in dpt.ChildNodes)
-                                {
-                                    if (values.Name == "Group_Value")
-                                    {
-                                        tabValues.Add(GroupValue.Parse(values.Attributes?["Value"]?.Value));
-                                    }
-                                }
-
-                                if (address != null)
-                                {
-                                    if (node.Name == "Command")
-                                    {
-                                        elementToTest.AddDptToCmd(type, address, tabValues);
-                                    }
-                                    else if (node.Name == "State_information")
-                                    {
-                                        elementToTest.AddDptToIe(type, address, tabValues);
-                                    }
-                                }
-                            }
-                        }
-                        functionalModel.ElementList.Add(elementToTest);
-                    }
-                    FunctionalModels.Add(functionalModel);
+                    AddFunctionalModel(FunctionalModel.ImportFunctionalModel(model));
                 }
         }
 

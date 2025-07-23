@@ -149,9 +149,13 @@ namespace KNX_Virtual_Integrator.Model.Entities
             TestsIe.Add(new DataPointType(type, address, value));
         }
 
-        public void RemoveDpt(int index)
+        public void RemoveDptFromCmd(int index)
         {
             TestsCmd.RemoveAt(index);
+        }
+        
+        public void RemoveDptFromIe(int index)
+        {
             TestsIe.RemoveAt(index);
         }
     }

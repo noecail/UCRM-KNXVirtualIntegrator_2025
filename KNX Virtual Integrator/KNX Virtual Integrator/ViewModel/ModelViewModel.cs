@@ -31,15 +31,15 @@ namespace KNX_Virtual_Integrator.ViewModel
         
         
 
-        private ObservableCollection<FunctionalModel> _selectedModels;
+        private ObservableCollection<FunctionalModel> _selectedModels = [];
         public ObservableCollection<FunctionalModel>? SelectedModels
         {
             get => _selectedModels;
             set
             {
-                if (_selectedModels != null)
-                    if (_selectedModels.Equals(value) || value == null)
-                        return;
+                    
+                if (_selectedModels.Equals(value) || value == null)
+                    return;
                 _selectedModels = value;
                 ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedModels));

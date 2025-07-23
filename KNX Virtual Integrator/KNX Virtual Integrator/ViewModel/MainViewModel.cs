@@ -5,12 +5,9 @@ using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Media.Media3D;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
-using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Entities;
-using KNX_Virtual_Integrator.View;
 
 
 // ReSharper disable InvalidXmlDocComment
@@ -97,6 +94,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         //Gestion des modèles -----------------------------------------------------------------------
         _functionalModelList = new FunctionalModelList();
+        _functionalModelList.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
+
         _functionalModelList.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(_functionalModelList.FunctionalModels))
@@ -167,15 +166,22 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         CreateFunctionalModelDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model "));
+                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model " + (Models?.Count+1)));
                 //ConsoleAndLogWriteLineCommand.Execute(Models?.Count);
+            }
+        );
+
+        DuplicateFunctionalModelDictionaryCommand = new Commands.RelayCommand<object>(_ =>
+            {
+                if (SelectedStructure!=null && Models!=null)
+                    _functionalModelList?.AddToDictionary(new FunctionalModel(SelectedStructure,Models.Count+1,false));
             }
         );
 
         DeleteFunctionalModelDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
             {
-                _functionalModelList?.DeleteFromDictionary(parameter);
-                HideModelColumnCommand.Execute(null);
+                _functionalModelList.DeleteFromDictionary(parameter);
+                HideModelColumnCommand?.Execute(null);
             }
         );
 
@@ -217,11 +223,48 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
-        RemoveDptFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+        RemoveCmdDptFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
             {
-                parameters.element.RemoveDpt(parameters.index);
+                parameters.element.RemoveDptFromCmd(parameters.index);
             }
         );
+        
+        RemoveIeDptFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+            {
+                parameters.element.RemoveDptFromIe(parameters.index);
+            }
+        );
+
+        AddFunctionalModelToList = new Commands.RelayCommand<object>(model =>
+            {
+                if (SelectedStructure!=null)
+                    if (model is FunctionalModel myModel)
+                        _functionalModelList.AddToList(_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure),myModel);
+                    else
+                        _functionalModelList.AddToList(_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure));
+
+            }
+        );
+        
+        DuplicateFunctionalModelListCommand = new Commands.RelayCommand<object>(_ =>
+            {
+                if (SelectedStructure!=null && Models!=null)
+                    _functionalModelList?.AddToDictionary(new FunctionalModel(SelectedStructure,Models.Count+1,true));
+            }
+        );
+        
+       
+        
+        DeleteFunctionalModelFromList = new Commands.RelayCommand<FunctionalModel>(model =>
+            {
+                if (model != null && SelectedStructure != null)
+                {
+                    var indexStructure = _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(SelectedStructure);
+                    _functionalModelList.DeleteFromList(indexStructure, _functionalModelList.FunctionalModels[indexStructure].IndexOf(model));
+                }
+            }
+        );
+
 
         ConnectBusCommand = new AsyncRelayCommand(
             async _ =>

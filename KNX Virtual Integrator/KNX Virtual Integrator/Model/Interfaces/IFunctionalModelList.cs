@@ -25,5 +25,12 @@ public interface IFunctionalModelList : INotifyPropertyChanged
     public List<FunctionalModel> GetAllModels();
     public void AddToDictionary(FunctionalModel model);
     public void DeleteFromDictionary(int index);
+    public void AddToList(int index);
+    public void AddToList(int index,FunctionalModel model);
+    public void DeleteFromList(int indexOfStructure, int indexOfModel);
+    public void ImportDictionary(string path);
+
+
+
 
 }

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Xml;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
@@ -17,7 +18,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         _nbModels = FunctionalModelDictionary.FunctionalModels.Count;
         foreach (var model in FunctionalModelDictionary.GetAllModels())
         {
-            FunctionalModels.Add([new FunctionalModel(model,1)]);
+            FunctionalModels.Add([new FunctionalModel(model,1,false)]);
         }
 
         FunctionalModelDictionary.PropertyChanged += (_, e) =>
@@ -28,7 +29,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
                 {
                     FunctionalModels.Add([]);
                     AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
-                }; 
+                } 
                 OnPropertyChanged(nameof(FunctionalModels)); //notifier le mainviewmodel
             }
         };
@@ -50,16 +51,28 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="index">Index in the dictionary of the Functional Model to copy in the list</param>
     public void AddToList(int index)
     {
-        FunctionalModels[index].Add(new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],FunctionalModels[index].Count+1));
+        FunctionalModels[index].Add(new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],FunctionalModels[index].Count+1,false));
+    }
+    
+    /// <summary>
+    /// Copies a functional model to the list.
+    /// </summary>
+    /// <param name="functionalModel">FunctionalModel to add</param>
+    /// <param name="index"> Index of the structure</param>
+    public void AddToList(int index, FunctionalModel functionalModel)
+    {
+        FunctionalModels[index].Add(new FunctionalModel(functionalModel,FunctionalModels[index].Count+1,true));
     }
 
     /// <summary>
     /// Deletes a functional model in the list at the desired index.
     /// </summary>
-    /// <param name="index">Index of the Functional Model to delete in the list</param>
-    public void DeleteFromList(int index)
+    /// <param name="indexOfStructure">Index of the structure of the Functional Model to delete in the list</param>
+    /// <param name="indexOfModel">Index of the Functional Model to delete in the list</param>
+    
+    public void DeleteFromList(int indexOfStructure,int indexOfModel)
     {
-        FunctionalModels.RemoveAt(index);
+        FunctionalModels[indexOfStructure].RemoveAt(indexOfModel);
     }
 
     /// <summary>
@@ -90,6 +103,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         if (index > _nbModels)
             return;
         FunctionalModelDictionary.RemoveFunctionalModel(index);
+        FunctionalModels.RemoveAt(index);
     }
     
     /// <summary>
@@ -110,7 +124,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         FunctionalModelDictionary.ImportDictionary(path);
         foreach (var model in FunctionalModelDictionary.GetAllModels())
         {
-            FunctionalModels.Add([model]);
+            FunctionalModels.Add([new FunctionalModel(model,1,false)]);
         }
     }
 
@@ -128,6 +142,43 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    
+    /// <summary>
+    /// Creates an XML file representing the list of list.
+    /// </summary>
+    /// <param name="path">Path where the XML has to be exported </param>
+    public void ExportList(string path)
+    {
+        var doc = new XmlDocument();
+        var project = doc.CreateElement("Project");
+        foreach (var modelStructure in FunctionalModels)
+        {
+            var structure = doc.CreateElement(FunctionalModelDictionary.FunctionalModels[FunctionalModels.FindIndex(l => l == modelStructure)].Name);
+            foreach (var model in modelStructure)
+            {
+                var functionalModel = model.ExportFunctionalModel(doc);
+                structure.AppendChild(functionalModel);
+            }
+
+            project.AppendChild(structure);
+        }
+        doc.AppendChild(project);
+        doc.Save(path + ".xml");
+    }
+
+    public void ImportList(string path)
+    {
+        FunctionalModels.Clear();
+        var doc = new XmlDocument();
+        doc.Load(path);
+        var xnList = doc.DocumentElement?.ChildNodes;
+        for (var i = 0;i<xnList?.Count;i++) // pour chaque structure
+        {
+            FunctionalModels.Add([]);
+            foreach (XmlNode model in xnList[i]?.ChildNodes!) // pour chaque modèle
+                FunctionalModels[i].Add(FunctionalModel.ImportFunctionalModel(model));
+        }
     }
 
 }
