@@ -55,9 +55,9 @@
 -->
     <!-- Style de base pour le bouton -->
     <Style x:Key="BaseButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="{StaticResource ButtonGray}" />
-        <Setter Property="Foreground" Value="{StaticResource TextWhite}" />
-        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Background" Value="{StaticResource GrayBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource NoColorBrush}" />
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="HorizontalAlignment" Value="Center" />
@@ -156,7 +156,7 @@
         <Style.Triggers>
             <!-- Quand IsConnected est True -->
             <DataTrigger Binding="{Binding IsConnected}" Value="True">
-                <Setter Property="Background" Value="{StaticResource ButtonGreen}"/>
+                <Setter Property="Background" Value="{StaticResource KnxGreenBrush}"/>
                 <!-- Triggers pour les états de survol et de clic -->
                 <Setter Property="Template">
                     <Setter.Value>
@@ -174,10 +174,10 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonGreen}"/>
+                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource KnxLightGreenBrush}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonGreen}"/>
+                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource KnxLightGreenBrush}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -187,7 +187,7 @@
 
             <!-- Quand IsConnected est "False" -->
             <DataTrigger Binding="{Binding IsConnected}" Value="False">
-                <Setter Property="Background" Value="{StaticResource ButtonRed}"/>
+                <Setter Property="Background" Value="{StaticResource RedBrush}"/>
                 <!-- Triggers pour les états de survol et de clic -->
                 <Setter Property="Template">
                     <Setter.Value>
@@ -205,10 +205,10 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuatedButtonRed}"/>
+                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource RedAccentBrush}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="True">
-                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuatedButtonRed}"/>
+                                    <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource RedAccentBrush}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -220,26 +220,64 @@
     
     <!-- Style pour le bouton de suppression de Modèle Fonctionnel -->
     <Style x:Key="DeleteFunctionalModelButtonStyle" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Background" Value="{StaticResource NoColorBrush}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Tag" Value="{StaticResource BlackBinDrawingImage}"/>
-                <Setter Property="Background" Value="{StaticResource BackgroundLightGray}"/>
+                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource BackgroundDarkGray}"/>
+                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     
     <!-- Style pour le bouton de suppression d'Élément à Tester-->
     <Style x:Key="DeleteTestedElementButtonStyle" TargetType="Button" BasedOn="{StaticResource DeleteFunctionalModelButtonStyle}">
-        <!-- A completer, notamment pour réduire la taille du bouton-->
+        <!-- À completer, notamment pour réduire la taille du bouton-->
     </Style>
     
+
+        <!-- Style pour le bouton refresh -->
+    <Style x:Key="RefreshButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource BlueBrush }"/>
+        <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Survol -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource BlueAccentBrush}" />
+                        </Trigger>
+                        <!-- Clic -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource BlueAccentBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>    
     
     <Style TargetType="Button" x:Key="CreateFunctionalModelButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
-        <Setter Property="Background" Value="{StaticResource ButtonBlue}"/>
+        <Setter Property="Background" Value="{StaticResource BlueBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -247,7 +285,7 @@
                             Background="{TemplateBinding Background}"
                             VerticalAlignment="Bottom"
                             BorderThickness="0,0,1,0"
-                            BorderBrush="{StaticResource BorderGray}"
+                            BorderBrush="{StaticResource GrayBorderBrush}"
                             >
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="{StaticResource AddDrawingImage}" Height="25" Width="25" Margin="0,5,5,5"/>
@@ -256,10 +294,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonBlue}"/>
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonBlue}"/>
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -268,7 +306,7 @@
     </Style>
     
     <Style TargetType="Button" x:Key="AddTestedElementToModelButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
-        <Setter Property="Background" Value="{StaticResource ButtonBlue}"/>
+        <Setter Property="Background" Value="{StaticResource BlueBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -276,7 +314,7 @@
                             Background="{TemplateBinding Background}"
                             VerticalAlignment="Bottom"
                             BorderThickness="0,0,1,0"
-                            BorderBrush="{StaticResource BorderGray}"
+                            BorderBrush="{StaticResource GrayBorderBrush}"
                     >
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="{StaticResource AddDrawingImage}" Height="25" Width="25" Margin="0,5,5,5"/>
@@ -285,16 +323,17 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonBlue}"/>
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource AccentuateButtonBlue}"/>
+                            <Setter TargetName="btnBorder" Property="Background" Value="{StaticResource BlueAccentBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    
     
     <!-- ______________________________________________________________________________________________________________________________ -->
     <!-- _____________________________________________________TEXTS___________________________________________________________________ -->
@@ -303,15 +342,15 @@
         <Setter Property="FontWeight" Value="Bold" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="Padding" Value="5" />
-        <Setter Property="Foreground" Value="{StaticResource TextBlack}" />
+        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}" />
     </Style>
     <!-- ______________________________________________________________________________________________________________________________ -->
     <!-- _____________________________________________________OTHER ELEMENTS___________________________________________________________ -->
     <!-- Style pour le listbox de modèles -->
     <Style x:Key="ModelListBoxItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Background" Value="{StaticResource BackgroundLightGray}"/>
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
         <!-- Fond par défaut -->
-        <Setter Property="BorderBrush" Value="{StaticResource BorderGray}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}"/>
         <!-- Couleur du contour -->
         <Setter Property="BorderThickness" Value="0,0,1,1"/>
         <!-- Contour supérieur et inférieur -->
@@ -364,11 +403,11 @@
                     <!-- Triggers pour changer l'apparence -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="#d3d3d3"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource LightGrayBorderBrush}"/>
                             <!-- Gris clair au survol -->
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Border" Property="Background" Value="White"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource WhiteBackgroundBrush}"/>
                             <!-- Blanc à la sélection -->
                             <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,1"/>
                             <!-- Contour noir à la sélection -->
@@ -381,26 +420,55 @@
     </Style>
     
     <Style x:Key="TestedElementListListBoxItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Background" Value="{StaticResource BackgroundLightGray}"/>
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
         <Setter Property="Height" Value="Auto"/>
         <Setter Property="Margin" Value="0,5,0,0"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="BorderThickness" Value="5"/>
-                <Setter Property="BorderBrush" Value="Yellow"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BlueAccentBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
     
-    <!--Style pour les info-bulles -->
+    <!--Style pour les infobulles -->
     <Style x:Key="TooltipImage" TargetType="Image">
-        <Setter Property="Source" Value="{StaticResource TooltipWhiteOnKNXGreenDrawingImage}"/>
+        <Setter Property="Source" Value="{StaticResource TooltipWhiteOnKnxGreenDrawingImage}"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Source" Value="{StaticResource TooltipKNXGreenOnWhiteDrawingImage}"/>
+                <Setter Property="Source" Value="{StaticResource TooltipKnxGreenOnWhiteDrawingImage}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
-    <!-- ______________________________________________________________________________________________________________________________ -->
+    
+    
+    <Style x:Key="ListBoxLight" TargetType="ListBox">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DarkGrayBorderBrush}"/>
+        <Setter Property="Margin" Value="0,5,0,0"/>
+    </Style>
+    
+    <Style x:Key="ListBoxContainerLight" TargetType="ListBoxItem">
+        <!-- Style de base du ListBoxItem -->
+        <Setter Property="Background" Value="{StaticResource NoColorBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        
+        <!-- Définir le Trigger pour IsMouseOver -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource LightGrayMouseOverBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource GrayBackgroundBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    
 
+    <!-- ______________________________________________________________________________________________________________________________ -->
+    
 </ResourceDictionary>

@@ -168,7 +168,7 @@ namespace TestProject_KNXVirtualIntegrator_L
             {
                 SelectedInterface = _selectedInterfaceIpSecure,
                 SelectedConnectionType = "IP",
-                KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys",
+                KeysPath = @"..\..\..\..\.github\workflows\1.1.255.knxkeys",
                 KeysFilePassword = "Demo2025#"
             };
             Mock.Get(fakeKnxBus).Setup(x => x.ConnectionState).Returns(BusConnectionState.Connected);
