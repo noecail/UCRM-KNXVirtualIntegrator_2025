@@ -266,6 +266,34 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
+        ExportDictionaryCommand = new Commands.RelayCommand<string>(path =>
+            {
+                if (path != null)
+                    _functionalModelList.ExportDictionary(path);
+            }
+        );
+        
+        ImportDictionaryCommand = new Commands.RelayCommand<string>(path =>
+            {
+                if (path != null)
+                    _functionalModelList.ImportDictionary(path);
+            }
+        );
+        
+        ExportListCommand = new Commands.RelayCommand<string>(path =>
+            {
+                if (path != null)
+                    _functionalModelList.ExportList(path);
+            }
+        );
+        
+        ImportListCommand = new Commands.RelayCommand<string>(path =>
+            {
+                if (path != null)
+                    _functionalModelList.ImportList(path);
+            }
+        );
+
 
         ConnectBusCommand = new AsyncRelayCommand(
             async _ =>

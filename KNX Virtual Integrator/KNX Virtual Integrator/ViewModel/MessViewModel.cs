@@ -118,6 +118,14 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand DuplicateFunctionalModelListCommand {get; private set; }
             
         public ICommand DeleteFunctionalModelFromList { get; private set; }
+        
+        public ICommand ImportDictionaryCommand  { get; private set; }
+
+        public ICommand ExportDictionaryCommand  { get; private set; }
+
+        public ICommand ImportListCommand  { get; private set; }
+
+        public ICommand ExportListCommand  { get; private set; }
 
         //public AsyncRelayCommand OpenConnectionWindowCommand { get; }
         public AsyncRelayCommand ConnectBusCommand { get; }
