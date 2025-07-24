@@ -55,35 +55,31 @@ public partial class ConnectionWindow
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("Apply Theme To Window not implemented");
         Brush textColorBrush;
         Brush backgroundColorBrush;
-        Brush deepBackgroundColorBrush;
         
         if (_viewModel.AppSettings.EnableLightTheme)
         {
             textColorBrush = (Brush)FindResource("LightForegroundBrush");
             backgroundColorBrush = (Brush)FindResource("OffWhiteBackgroundBrush");
-            deepBackgroundColorBrush = (Brush)FindResource("WhiteBackgroundBrush");
-            
             NatAddressTextBox.Style = (Style)FindResource("TextBoxLight");
             ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxLight");
             ImportKnxKeys.Style = (Style)FindResource("ImportKeysButtonLight");
             ConnectionTypeComboBox.Style = (Style)FindResource("LightComboBoxStyle");
             InterfaceListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerLight");
             InterfaceListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
-            InterfaceListBox.BorderBrush = (Brush)FindResource("GrayBorderBrush");
+            InterfaceListBox.Style = (Style)FindResource("StandardListBoxLight");
             CurrCoInterfaceText.Style = (Style)FindResource("InterfaceTextBlockLight");
         }
         else
         {
             textColorBrush = (Brush)FindResource("DarkOffWhiteForegroundBrush");
             backgroundColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
-            deepBackgroundColorBrush = (Brush)FindResource("DarkerGrayBackgroundBrush");
             NatAddressTextBox.Style = (Style)FindResource("TextBoxDark");
             ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxDark");
             ImportKnxKeys.Style = (Style)FindResource("ImportKeysButtonDark");   
             ConnectionTypeComboBox.Style = (Style)FindResource("DarkComboBoxStyle");
             InterfaceListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerDark");
             InterfaceListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemDark");
-            InterfaceListBox.BorderBrush = (Brush)FindResource("LightGrayBorderBrush");
+            InterfaceListBox.Style = (Style)FindResource("StandardListBoxDark");
             CurrCoInterfaceText.Style = (Style)FindResource("InterfaceTextBlockDark");
         }
         
@@ -91,6 +87,7 @@ public partial class ConnectionWindow
         
         ConnectionTypeText.Foreground = textColorBrush;
         DiscoveredInterfacesText.Foreground = textColorBrush;
+        
         IpRouterText.Foreground = textColorBrush;
         SecurisedConectionText.Foreground = textColorBrush;
         ConnectionIpSecText.Foreground = textColorBrush;
@@ -104,7 +101,6 @@ public partial class ConnectionWindow
         LockIconText.Foreground = textColorBrush;
         CurrCoInterfaceText.Foreground = textColorBrush;
         NatIconText.Foreground = textColorBrush;
-        InterfaceListBox.Background = deepBackgroundColorBrush;
         
     }
 

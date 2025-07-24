@@ -69,7 +69,7 @@ public partial class SettingsWindow
     /// </summary>
     private void UpdateWindowContents(bool langChanged = false, bool themeChanged = false)
     {
-        if (_viewModel.AppSettings.AppLang != "FR")
+        if (_viewModel.AppSettings.AppLang != AppLanguageComboBox.Text.Split([" - "], StringSplitOptions.None)[0])
         {
             FrAppLanguageComboBoxItem.IsSelected = _viewModel.AppSettings.AppLang == "FR"; // Sélection/Désélection
 
@@ -1545,7 +1545,7 @@ public partial class SettingsWindow
     {
         
 
-        var checkboxStyle = (Style)FindResource("CheckboxLightThemeStyle");
+        Style checkboxStyle;
         Brush textColorBrush;
         Brush backgroundColorBrush;
         Brush deepBackgroundColorBrush;
@@ -1559,7 +1559,7 @@ public partial class SettingsWindow
             deepBackgroundColorBrush = (Brush)FindResource("WhiteBackgroundBrush");
             pathColorBrush = (Brush)FindResource("LightGrayBorderBrush");
             borderBrush = (Brush)FindResource("LightGrayBorderBrush");
-
+            checkboxStyle = (Style)FindResource("StandardCheckBoxLight");
             ThemeComboBox.Style = (Style)FindResource("LightComboBoxStyle");
             AppLanguageComboBox.Style = (Style)FindResource("LightComboBoxStyle");
             ScaleSlider.Style = (Style)FindResource("LightSlider");
@@ -1577,7 +1577,7 @@ public partial class SettingsWindow
             backgroundColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
             deepBackgroundColorBrush = (Brush)FindResource("DarkerGrayBackgroundBrush");
             pathColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
-            checkboxStyle = (Style)FindResource("CheckboxDarkThemeStyle");
+            checkboxStyle = (Style)FindResource("StandardCheckBoxDark");
             borderBrush = (Brush)FindResource("GrayBorderBrush");
             ThemeComboBox.Style = (Style)FindResource("DarkComboBoxStyle");
             AppLanguageComboBox.Style = (Style)FindResource("DarkComboBoxStyle");
@@ -1636,18 +1636,7 @@ public partial class SettingsWindow
         InformationsText.Foreground = textColorBrush;
         
         
-        foreach (ComboBoxItem item in ThemeComboBox.Items)
-        {
-            item.Foreground = item.IsSelected ? new SolidColorBrush(Colors.White) : textColorBrush;
-            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : backgroundColorBrush;
-        }
-
-
-        foreach (ComboBoxItem item in AppLanguageComboBox.Items)
-        {
-            item.Foreground = item.IsSelected ? new SolidColorBrush(Colors.White) : textColorBrush;
-            item.Background = _viewModel.AppSettings.EnableLightTheme ? new SolidColorBrush(Colors.White) : backgroundColorBrush;
-        }
+        
     }
 
 
@@ -1702,13 +1691,18 @@ public partial class SettingsWindow
             {
                 ApplyScaling(scaleFactor - 0.2f);
             }
-            App.WindowManager!.MainWindow.ApplyScaling(scaleFactor); }
+        }
         
         // Mise à jour de la fenêtre principale
-        App.WindowManager?.MainWindow.UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, previousAppScaleFactor == _viewModel.AppSettings.AppScaleFactor);
-        App.WindowManager?.ConnectionWindow?.UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, previousAppScaleFactor == _viewModel.AppSettings.AppScaleFactor);
-        // Masquage de la fenêtre de paramètres
-        //Hide();
+        App.WindowManager?.MainWindow.UpdateWindowContents(
+            previousAppLang != _viewModel.AppSettings.AppLang, 
+            previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
+            previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
+        App.WindowManager?.ConnectionWindow?.UpdateWindowContents(
+            previousAppLang != _viewModel.AppSettings.AppLang, 
+            previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
+            previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
+        
     }
 
 
@@ -1720,7 +1714,7 @@ public partial class SettingsWindow
     /// <param name="e">The event data.</param>
     private void CancelButtonClick(object sender, RoutedEventArgs e)
     {
-        UpdateWindowContents(true, true); // Restauration des paramètres précédents dans la fenêtre de paramétrage
+        UpdateWindowContents(); // Restauration des paramètres précédents dans la fenêtre de paramétrage
         Hide(); // Masquage de la fenêtre de paramétrage
     }
 

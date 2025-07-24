@@ -19,6 +19,7 @@
     <Color x:Key="KnxGreenDarker">#308322</Color> <!-- Mouse Over-->
     <Color x:Key="KnxGreenLighter">#4a9d3c</Color>
     <Color x:Key="BlueLogo">#0c4b9d</Color>
+    <Color x:Key="LightBlue">#729CD5</Color>
     <Color x:Key="BlueNormal">#006BB4</Color>
     <Color x:Key="BlueAccent">#005D9C</Color>
     <Color x:Key="BlueAccentMore">#004d80</Color>

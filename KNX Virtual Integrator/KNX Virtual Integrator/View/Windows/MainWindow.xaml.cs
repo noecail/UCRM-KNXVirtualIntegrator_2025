@@ -55,7 +55,7 @@ public partial class MainWindow
         };
     }
 
-    public void ApplyScaling(float scaleFactor)
+    private void ApplyScaling()
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyScaling is not implemented");
     }
@@ -83,7 +83,7 @@ public partial class MainWindow
         }
         if (scaleChanged)
         {
-            ApplyScaling(1);
+            ApplyScaling();
         }
 
 

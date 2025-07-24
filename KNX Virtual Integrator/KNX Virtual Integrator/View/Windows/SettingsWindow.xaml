@@ -6,132 +6,15 @@
         WindowStyle="None"
         Title="Paramètres"
         AllowsTransparency="True"
-        Background="#F5F5F5"
+        Background="{StaticResource OffWhiteBackgroundBrush}"
         Closing="ClosingSettingsWindow"
         PreviewKeyDown="SettingsWindow_PreviewKeyDown">
 
     <Window.Resources>
         
-        <!-- ************************ Style pour les checkbox (cases à cocher) ************************ -->
-      
-        <Style x:Key="CheckboxLightThemeStyle" TargetType="CheckBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Grid Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,5,0">
-                                <Border x:Name="Border"
-                                        BorderBrush="{StaticResource DarkGrayBorderBrush}"
-                                        BorderThickness="1"
-                                        Background="{StaticResource LightUncheckedBackgroundBrush}">
-                                    <Path x:Name="CheckMark"
-                                          Data="M 0 0.5 L 0.2 0.8 L 0.7 0.2"
-                                          Stretch="Uniform"
-                                          Margin="2"
-                                          Stroke="{StaticResource LightCheckMarkBrush}"
-                                          StrokeThickness="2"
-                                           />
-                                </Border>
-                            </Grid>
-                            <ContentPresenter VerticalAlignment="Center" />
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="{StaticResource LightCheckedBackgroundBrush}" />
-                                <Setter TargetName="Border" Property="BorderBrush"
-                                        Value="{StaticResource LightCheckedBackgroundBrush}" />
-                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="{StaticResource LightUncheckedBackgroundBrush}" />
-                                <Setter TargetName="Border" Property="BorderBrush"
-                                        Value="{StaticResource DarkGrayBorderBrush}" />
-                                <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="{StaticResource LightGrayMouseOverBrush}" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="CheckboxDarkThemeStyle" TargetType="CheckBox">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="CheckBox">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <Grid Width="15" Height="15" VerticalAlignment="Center" Margin="0,0,5,0">
-                                <Border x:Name="Border"
-                                        BorderBrush="{StaticResource LightGrayBorderBrush}"
-                                        BorderThickness="1"
-                                        Background="{StaticResource DarkUncheckedBackgroundBrush}">
-                                    <Path x:Name="CheckMark"
-                                          Data="M 0 0.5 L 0.2 0.8 L 0.7 0.2"
-                                          Stretch="Uniform"
-                                          Margin="2"
-                                          Stroke="{StaticResource DarkCheckMarkBrush}"
-                                          StrokeThickness="2"
-                                           />
-                                </Border>
-                            </Grid>
-                            <ContentPresenter VerticalAlignment="Center" />
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="{StaticResource DarkCheckedBackgroundBrush}" />
-                                <Setter TargetName="Border" Property="BorderBrush"
-                                        Value="{StaticResource DarkCheckedBackgroundBrush}" />
-                                <Setter TargetName="CheckMark" Property="Visibility" Value="Visible" />
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="{StaticResource DarkUncheckedBackgroundBrush}" />
-                                <Setter TargetName="Border" Property="BorderBrush"
-                                        Value="{StaticResource LightGrayBorderBrush}" />
-                                <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="#404040" />
-                                <Setter TargetName="Border" Property="BorderBrush"
-                                        Value="{StaticResource LightGrayBorderBrush}" />
-                            </Trigger>
-                            <!-- MultiTrigger for mouse over when checked -->
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsChecked" Value="True" />
-                                    <Condition Property="IsMouseOver" Value="True" />
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="{StaticResource DarkBlueMouseOverBrush}" />
-                            </MultiTrigger>
-                            <!-- MultiTrigger for mouse over when unchecked -->
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsChecked" Value="False" />
-                                    <Condition Property="IsMouseOver" Value="True" />
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="Border" Property="Background"
-                                        Value="{StaticResource DarkGrayMouseOverBrush}" />
-                            </MultiTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-
-        
-        
         <!-- ************************ Style pour le bouton de fermeture de la fenêtre ************************ -->
-        <Style x:Key="CloseButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="#B73B3B" />
+        <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource RedBrush}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -157,7 +40,7 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#B73B3B" />
+                                <Setter Property="Background" Value="{StaticResource RedAccentBrush}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -165,14 +48,10 @@
             </Setter>
         </Style>
 
-
-        
         
         <!-- ************************ Style pour les boutons en bas de la fenêtre ************************ -->
-        <Style x:Key="BottomButtonLight" TargetType="Button">
+        <Style x:Key="BottomButtonLight" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource NoColorBrush}"/>
-            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Template">
@@ -198,11 +77,9 @@
             </Setter>
         </Style>
 
-
-        <Style x:Key="BottomButtonDark" TargetType="Button">
+        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <Style x:Key="BottomButtonDark" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="{StaticResource DarkerGrayBackgroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource NoColorBrush}"/>
-            <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
             <Setter Property="Padding" Value="5"/>
             <Setter Property="Template">
@@ -227,267 +104,6 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
-        
-       
-
-        <!-- ************************ Style pour les menus déroulants (Combobox) ************************ -->
-        <Style x:Key="DarkComboBoxItemStyle" TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="{StaticResource NoColorBrush}"/>
-            <Setter Property="Foreground" Value="{StaticResource DarkOffWhiteForegroundBrush}"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBoxItem">
-                        <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{StaticResource DarkBlueMouseOverBrush}" TargetName="Border"/>
-                                <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource LightCheckMarkBrush}" TargetName="Border"/>
-                                <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <ControlTemplate x:Key="ComboBoxToggleButtonTemplate2" TargetType="ToggleButton">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Border x:Name="templateRoot"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{StaticResource GrayBorderBrush}" 
-                        BorderThickness="1"
-                        Grid.RowSpan="2"
-                        CornerRadius="2"/>
-                <Border x:Name="border" 
-                        BorderBrush="{StaticResource GrayBorderBrush}"
-                        BorderThickness="1" 
-                        Background="{TemplateBinding Background}" 
-                        Grid.RowSpan="2" 
-                        CornerRadius="0"/>
-                <Path x:Name="Arrow"
-                      HorizontalAlignment="Right"
-                      Margin="0,0,10,0"
-                      VerticalAlignment="Center"
-                      Data="M 0 0 L 4 4 L 8 0 Z"
-                      Fill="{StaticResource DarkForegroundBrush}"/>
-            </Grid>
-        </ControlTemplate>
-        
-        <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
-            <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/> <!-- Adjust border thickness here -->
-            <Setter Property="Padding" Value="5,3"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboBoxItemStyle}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton Name="ToggleButton"
-                                          Template="{StaticResource ComboBoxToggleButtonTemplate2}"
-                                          Grid.Column="2"
-                                          Focusable="False"
-                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          ClickMode="Press">
-                                <ToggleButton.Background>
-                                    <StaticResource ResourceKey="DarkGrayBackgroundBrush"/>
-                                </ToggleButton.Background>
-                                <ToggleButton.Foreground>
-                                    <StaticResource ResourceKey="DarkForegroundBrush"/>
-                                </ToggleButton.Foreground>
-                            </ToggleButton>
-                            <ContentPresenter Name="ContentSite"
-                                              IsHitTestVisible="False"
-                                              Content="{TemplateBinding SelectionBoxItem}"
-                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                              Margin="7,3,23,3"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Left"/>
-                            <Popup Name="Popup"
-                                   Placement="Bottom"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}"
-                                   AllowsTransparency="True"
-                                   Focusable="False"
-                                   PopupAnimation="Slide">
-                                <Grid Name="DropDown"
-                                      SnapsToDevicePixels="True"
-                                      MinWidth="{TemplateBinding ActualWidth}"
-                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border x:Name="DropDownBorder"
-                                            Background="{StaticResource DarkGrayBackgroundBrush}"
-                                            BorderThickness="1"
-                                            BorderBrush="{StaticResource GrayBorderBrush}"/>
-                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
-                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
-                                    </ScrollViewer>
-                                </Grid>
-                            </Popup>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="HasDropShadow" SourceName="Popup" Value="True">
-                                <Setter Property="Margin" TargetName="DropDown" Value="0,0,5,5"/>
-                                <Setter Property="SnapsToDevicePixels" TargetName="DropDown" Value="True"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" TargetName="ToggleButton" Value="{StaticResource DarkBlueMouseOverBrush}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="Gray"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        
-        
-        <Style x:Key="LightComboBoxItemStyle" TargetType="ComboBoxItem">
-            <Setter Property="Background" Value="{StaticResource NoColorBrush}"/>
-            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBoxItem">
-                        <Border x:Name="Border"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="0"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#729CD5" TargetName="Border"/>
-                                <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
-                            </Trigger>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Background" Value="{StaticResource LightCheckMarkBrush}" TargetName="Border"/>
-                                <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <ControlTemplate x:Key="ComboBoxToggleButtonTemplateLight" TargetType="ToggleButton">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <Border x:Name="templateRoot"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{StaticResource GrayBorderBrush}" 
-                        BorderThickness="1"
-                        Grid.RowSpan="2"
-                        CornerRadius="2"/>
-                <Border x:Name="border" 
-                        BorderBrush="{StaticResource GrayBorderBrush}"
-                        BorderThickness="1" 
-                        Background="{TemplateBinding Background}" 
-                        Grid.RowSpan="2" 
-                        CornerRadius="0"/>
-                <Path x:Name="Arrow"
-                      HorizontalAlignment="Right"
-                      Margin="0,0,10,0"
-                      VerticalAlignment="Center"
-                      Data="M 0 0 L 4 4 L 8 0 Z"
-                      Fill="{StaticResource LightForegroundBrush}"/>
-            </Grid>
-        </ControlTemplate>
-        
-        <Style x:Key="LightComboBoxStyle" TargetType="ComboBox">
-            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
-            <Setter Property="Background" Value="{StaticResource LightUncheckedBackgroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}"/>
-            <Setter Property="BorderThickness" Value="1"/> <!-- Adjust border thickness here -->
-            <Setter Property="Padding" Value="5,3"/>
-            <Setter Property="ItemContainerStyle" Value="{StaticResource LightComboBoxItemStyle}"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ComboBox">
-                        <Grid>
-                            <ToggleButton Name="ToggleButton"
-                                          Template="{StaticResource ComboBoxToggleButtonTemplateLight}"
-                                          Grid.Column="2"
-                                          Focusable="False"
-                                          IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
-                                          ClickMode="Press">
-                                <ToggleButton.Background>
-                                    <StaticResource ResourceKey="LightUncheckedBackgroundBrush"/>
-                                </ToggleButton.Background>
-                                <ToggleButton.Foreground>
-                                    <StaticResource ResourceKey="LightForegroundBrush"/>
-                                </ToggleButton.Foreground>
-                            </ToggleButton>
-                            <ContentPresenter Name="ContentSite"
-                                              IsHitTestVisible="False"
-                                              Content="{TemplateBinding SelectionBoxItem}"
-                                              ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
-                                              ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
-                                              Margin="7,3,23,3"
-                                              VerticalAlignment="Center"
-                                              HorizontalAlignment="Left"/>
-                            <Popup Name="Popup"
-                                   Placement="Bottom"
-                                   IsOpen="{TemplateBinding IsDropDownOpen}"
-                                   AllowsTransparency="True"
-                                   Focusable="False"
-                                   PopupAnimation="Slide">
-                                <Grid Name="DropDown"
-                                      SnapsToDevicePixels="True"
-                                      MinWidth="{TemplateBinding ActualWidth}"
-                                      MaxHeight="{TemplateBinding MaxDropDownHeight}">
-                                    <Border x:Name="DropDownBorder"
-                                            Background="{StaticResource LightUncheckedBackgroundBrush}"
-                                            BorderThickness="1"
-                                            BorderBrush="{StaticResource GrayBorderBrush}"/>
-                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
-                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
-                                    </ScrollViewer>
-                                </Grid>
-                            </Popup>
-                        </Grid>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="HasDropShadow" SourceName="Popup" Value="True">
-                                <Setter Property="Margin" TargetName="DropDown" Value="0,0,5,5"/>
-                                <Setter Property="SnapsToDevicePixels" TargetName="DropDown" Value="True"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" TargetName="ToggleButton" Value="{StaticResource LightGrayMouseOverBrush}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter Property="Foreground" Value="{StaticResource LightGrayMouseOverBrush}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        
-        
-        
-        
         
         <!-- ************************ Style pour les onglets ************************ -->
         <Style x:Key="LightOnglet" TargetType="TabItem">
@@ -531,6 +147,7 @@
             </Setter>
         </Style>
         
+        <!-- ReSharper disable once Xaml.RedundantResource -->
         <Style x:Key="DarkOnglet" TargetType="TabItem">
                 <Setter Property="Template">
                 <Setter.Value>
@@ -582,7 +199,7 @@
                     <ControlTemplate TargetType="Thumb">
                         <Canvas>
                             <Ellipse Fill="#3E70B4" 
-                                     Stroke="#FFFFFF" 
+                                     Stroke="{StaticResource WhiteBrush}" 
                                      Width="15" 
                                      Height="15" />
                             <TextBlock x:Name="ValueText"
@@ -701,6 +318,8 @@
             </Setter>
         </Style>
         
+        
+        <!-- ReSharper disable once Xaml.RedundantResource -->
         <Style x:Key="DarkSlider" TargetType="Slider">
             <Setter Property="Template">
                 <Setter.Value>
@@ -755,12 +374,6 @@
             </Setter>
         </Style>
         
-        <Style x:Key="FontAwesomeIconStyleDark" TargetType="TextBlock">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-
-
-
     </Window.Resources>
 
     <Border BorderBrush="{StaticResource KnxGreenBrush}" 
@@ -801,8 +414,8 @@
                
                                    <!-- Bouton de fermeture de la fenêtre -->
                                    <Canvas>
-                                       <Button x:Name="CloseButton" Style="{StaticResource CloseButtonStyle}" Height="30" Width="50"
-                                               FontFamily="Aptos" BorderThickness="0" Click="CancelButtonClick" Canvas.Top="-45"
+                                       <Button Style="{StaticResource CloseButtonStyle}" Height="30" Width="50"
+                                               FontFamily="Aptos" Click="CancelButtonClick" Canvas.Top="-45"
                                                Canvas.Left="450" />
                                    </Canvas>
                
@@ -839,13 +452,13 @@
                                                               Margin="10,10,0,0" />
 
                                                    <TextBlock x:Name="ThemeTextBox" Margin="10,0,10,2" />
-                                                   <ComboBox x:Name="ThemeComboBox" Margin="10,0,10,10" BorderBrush="{StaticResource GrayBorderBrush}"> 
+                                                   <ComboBox x:Name="ThemeComboBox" Margin="10,0,10,10" Style="{StaticResource LightComboBoxStyle}"> 
                                                        <ComboBoxItem x:Name="LightThemeComboBoxItem" IsSelected="True" />
                                                        <ComboBoxItem x:Name="DarkThemeComboBoxItem" />
                                                    </ComboBox>
 
                                                    <TextBlock x:Name="AppLanguageTextBlock" Margin="10,0,10,2" />
-                                                   <ComboBox x:Name="AppLanguageComboBox" Margin="10,0,10,20" BorderBrush="{StaticResource GrayBorderBrush}">
+                                                   <ComboBox x:Name="AppLanguageComboBox" Margin="10,0,10,20" Style="{StaticResource LightComboBoxStyle}">
                                                        <ComboBoxItem Content="AR - العربية" />
                                                        <ComboBoxItem Content="BG - Български" />
                                                        <ComboBoxItem Content="CS - Čeština" />
@@ -924,13 +537,13 @@
                                                    <TextBlock x:Name="MenuDebug" FontFamily="Aptos" FontSize="17" FontWeight="SemiBold"
                                                               Margin="10,10,0,10" />
                        
-                                                   <CheckBox x:Name="AddInfosOsCheckBox" Style="{StaticResource CheckboxLightThemeStyle}"
+                                                   <CheckBox x:Name="AddInfosOsCheckBox" Style="{StaticResource StandardCheckBoxLight}"
                                                              Margin="10,5,0,10" />
 
-                                                   <CheckBox x:Name="AddInfosHardCheckBox" Style="{StaticResource CheckboxLightThemeStyle}"
+                                                   <CheckBox x:Name="AddInfosHardCheckBox" Style="{StaticResource StandardCheckBoxLight}"
                                                              Margin="10,5,0,10" />
 
-                                                   <CheckBox x:Name="AddImportedFilesCheckBox" Style="{StaticResource CheckboxLightThemeStyle}"
+                                                   <CheckBox x:Name="AddImportedFilesCheckBox" Style="{StaticResource StandardCheckBoxLight}"
                                                              Margin="10,5,0,10" />
 
                                                </StackPanel>

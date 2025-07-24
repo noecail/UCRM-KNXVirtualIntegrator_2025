@@ -6,8 +6,6 @@
         xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:windows="clr-namespace:KNX_Virtual_Integrator.View.Windows"
         mc:Ignorable="d"
         Title="MainWindow" 
         WindowState="Maximized"
@@ -60,7 +58,7 @@
                 <!-- Note : Le style des boutons et tous les styles sont contenues dans le fichier styles.xaml -->
                 <Button 
                     Click="OpenConnectionWindow"
-                    Style="{StaticResource ConnectButton}"
+                    Style="{StaticResource ConnectWindowButton}"
                     Margin="0,0,5,0"
                     
                 />
@@ -158,7 +156,7 @@
                         <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                             <Image Source="{StaticResource LibraryDrawingImage}" Height="20"/>
                             <TextBlock 
-                                   Style="{StaticResource TitleTextStyle}"
+                                   Style="{StaticResource TitleTextLight}"
                                    Text="{StaticResource Library}"
                             />
                         </StackPanel>
@@ -293,7 +291,7 @@
                         <StackPanel Background="{StaticResource NoColorBrush}" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                             <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
                             <TextBlock 
-                                Style="{StaticResource TitleTextStyle}"
+                                Style="{StaticResource TitleTextLight}"
                                 Text="{StaticResource ModelsTitle}"
                             />
                         </StackPanel>
@@ -396,7 +394,7 @@
 
                             <!-- Titre -->
                             <TextBlock Grid.Column="0"
-                                   Style="{StaticResource TitleTextStyle}"
+                                   Style="{StaticResource TitleTextLight}"
                                    Text="Paramètres du Modèle Fonctionnel"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"
@@ -675,7 +673,7 @@
                         <StackPanel Grid.Column="0"  Background="Transparent" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
                             <TextBlock 
-                                    Style="{StaticResource TitleTextStyle}"
+                                    Style="{StaticResource TitleTextLight}"
                                     Text="{StaticResource GroupAdressesTitle}"
                             />
                         </StackPanel>
