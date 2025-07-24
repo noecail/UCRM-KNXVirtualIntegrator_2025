@@ -167,8 +167,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
+                ConsoleAndLogWriteLineCommand.Execute(Models?.Count+1);
                 _functionalModelList?.AddToDictionary(new FunctionalModel("New Model " + (Models?.Count+1)));
-                //ConsoleAndLogWriteLineCommand.Execute(Models?.Count);
             }
         );
 
