@@ -48,11 +48,6 @@ public partial class MainWindow
         _windowManager = wm;
         _cancellationTokenSource = new CancellationTokenSource();
 
-        _viewModel.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(_viewModel.ScrollToEnd))
-                PredefinedModelsScrollToEnd();
-        };
     }
 
     private void ApplyScaling()
@@ -91,6 +86,21 @@ public partial class MainWindow
     
     
     //--------------------- Gestion des boutons -----------------------------------------------------//
+    
+    
+    // <<<<<<<<<<<<<<<<<<<< BANDEAU SUPÉRIEUR >>>>>>>>>>>>>>>>>>>>
+    
+    /// <summary>
+    /// Handles the button click event to open the connection window.
+    /// Opens an instance of ConnectionWindow
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event data.</param>
+    private void OpenConnectionWindow(object sender, RoutedEventArgs e)
+    {
+        _connectionWindow.Show();
+    }
+    
     /// <summary>
     /// Handles the button click event to import a KNX project file.
     /// Displays an OpenFileDialog for the user to select the project file,
@@ -317,6 +327,50 @@ public partial class MainWindow
 
     }
 
+    /// <summary>
+    /// Handles the button click event to open the settings window.
+    /// Opens an instance of SettingsWindow
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event data.</param>
+    private void SettingsButtonClick(object sender, RoutedEventArgs e)
+    {
+        _windowManager.ShowSettingsWindow();
+    }
+
+    // TEMPORAIRE
+    /// <summary>
+    /// Runs a test by sending a frame on the bus
+    /// Used to test the application
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnWriteButtonClick(object sender, RoutedEventArgs e)
+    {
+        var groupAddress = new GroupAddress("1/3/1");
+        var groupValue = new GroupValue(Convert.ToByte(255));
+        _viewModel.GroupValueWriteCommand.Execute((groupAddress, groupValue));
+    }
+    
+    // TEMPORAIRE
+    /// <summary>
+    /// Runs a test by receiving a frame from the bus
+    /// Used to test the application
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    private void OnReadButtonClick(object sender, RoutedEventArgs e)
+    {
+        var groupAddress = new GroupAddress("1/4/1");
+        _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
+    }
+    
+    /// <summary>
+    /// Handles the event of closing the main window.
+    /// Shuts the application down.
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void ClosingMainWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
@@ -324,76 +378,77 @@ public partial class MainWindow
         Application.Current.Shutdown();
     }
 
-    private void SettingsButtonClick(object sender, RoutedEventArgs e)
-    {
-        _windowManager.ShowSettingsWindow();
-    }
-
-    private void OnWriteButtonClick(object sender, RoutedEventArgs e)
-    {
-        var groupAddress = new GroupAddress("1/3/1");
-        var groupValue = new GroupValue(Convert.ToByte(255));
-        _viewModel.GroupValueWriteCommand.Execute((groupAddress, groupValue));
-    }
-
-    private void OnReadButtonClick(object sender, RoutedEventArgs e)
-    {
-        var groupAddress = new GroupAddress("1/4/1");
-        _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
-    }
-
-    private void OpenConnectionWindow(object sender, RoutedEventArgs e)
-    {
-        _connectionWindow.Show();
-    }
-    // private void ListBox_Selected(object sender, RoutedEventArgs e)
-    // {
-    //
-    // }
-
-    private void SelectStructureButtonClick(object sender, RoutedEventArgs e)
-    {
-        _viewModel.SelectStructureCommand.Execute(null);
-    }
     
-
+    // <<<<<<<<<<<<<<<<<<<< COLONNE 1 >>>>>>>>>>>>>>>>>>>>
     
     /// <summary>
-    /// Handles the button click event to create a Functional Model.
-    /// Adds a Functional Model to the Dictionary of Functional Model Structures.
+    /// Handles the button click event to create a Structure.
+    /// Adds a Structure to the Dictionary of Functional Model Structures.
     /// </summary>
     private void CreateStructureButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.CreateStructureDictionaryCommand.Execute(null);
+        
+        // Also, selecting the newly created model and scrolling down to it
+        _viewModel.SelectedStructure = _viewModel.Structures?.Last();
+        PredefinedStructuresScrollViewer.ScrollToEnd();
+        // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
+    }
+    
+    /// <summary>
+    /// Handles the button click event to duplicate a Structure.
+    /// Adds a Structure to the Dictionary of Functional Model Structures by copying the selected one.
+    /// </summary>
+    private void DuplicateStructureButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.DuplicateStructureDictionaryCommand.Execute(null);
         // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
     }
 
+    private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
+    {
+        //_viewModel.DeleteStructureDictionaryCommand.Execute();
+        _viewModel.SelectedStructure = null; // ou alors []
+        // TODO : récupérer l'index de la structure
+    }
+    
+    // <<<<<<<<<<<<<<<<<<<< COLONNE 2 >>>>>>>>>>>>>>>>>>>>
+
+    /// <summary>
+    /// Handles the button click event to add a Functional Model to the list corresponding to the selected structure.
+    /// </summary>
     private void AddFunctionalModelToListButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.AddFunctionalModelToList.Execute(null);
+        FunctionalModelsScrollViewer.ScrollToEnd();
+        /*var cb = (CheckBox)StructureBox.Template.FindName("DeleteStructureCheckBox", StructureBox);
+        Console.WriteLine(cb.IsChecked);*/
     }
+
+    
+    // <<<<<<<<<<<<<<<<<<<< COLONNE 3 >>>>>>>>>>>>>>>>>>>>
     
     /// <summary>
     /// Handles the button click event to delete a Functional Model.
     /// </summary>
-    private void DeleteFunctionalModelButtonClick(object sender, RoutedEventArgs e)
+    private void DeleteFunctionalModelFromListButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.DeleteFunctionalModelFromList.Execute(_viewModel.SelectedModel);
     }
-
+    
     /// <summary>
     /// Handles the button click event to add a Tested Element to an already existing Functional Model.
     /// Adds a Functional Model to the Dictionary of Functional Model Structures.
     /// </summary>
-    private void AddTestedElementToModelButtonClick(object sender, RoutedEventArgs e)
+    private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddTestedElementToModel.Execute(_viewModel.SelectedModel);
+        _viewModel.AddTestedElementToStructure.Execute(_viewModel.SelectedModel);
     }
     
     /// <summary>
     /// Handles the button click event to remove a Tested Element from a Functional Model.
     /// </summary>
-    private void RemoveTestedElementFromModelButtonClick(object sender, RoutedEventArgs e)
+    private void RemoveTestedElementFromStructureButtonClick(object sender, RoutedEventArgs e)
     {
         // Code que je ne comprends pas qui sert à récupérer l'index de l'item depuis lequel le clic a été effectué
         // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
@@ -403,33 +458,79 @@ public partial class MainWindow
         if (dep == null) return;
         var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        _viewModel.RemoveTestedElementFromModel.Execute((_viewModel.SelectedModel, index)); 
+        _viewModel.RemoveTestedElementFromStructure.Execute((_viewModel.SelectedModel, index)); 
+    }
+    
+
+    /// <summary>
+    /// Handles the button click event to add a Test to a Tested Element
+    /// Adds a line of values to the Tested Element
+    /// The number of fields added is equal to the number of DPTs in the Tested Element
+    /// </summary>
+    private void AddTestToElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        //_viewModel.AddTestToElement.Execute();
+        // TODO : récupérer le selected element
+    }
+    
+    /// <summary>
+    /// Handles the button click event to remove a Test from a Tested Element
+    /// Deletes a full line of values to the Tested Element
+    /// </summary>
+    private void RemoveTestFromElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        //_viewModel.RemoveTestFromElement.Execute();
+        // TODO : récupérer le selected element et l'index du test
+    }
+    
+    
+    // <<<<<<<<<<<<<<<<<<<< FENÊTRE ÉDITION >>>>>>>>>>>>>>>>>>>>
+
+    /// <summary>
+    /// Handles the button click event to add a DPT to send to a tested element
+    /// </summary>
+    private void AddDptCmdToElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        //_viewModel.AddDptCmdToElement.Execute();
+        // TODO : récupérer le selected element
     }
 
-    /*private void AddTestToElementButtonClick(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Handles the button click event to remove a DPT to send from a tested element
+    /// </summary>
+    private void RemoveCmdDptFromElementButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddTestToElement(); //récupérer le selected element
-    }*/
+        //_viewModel.RemoveCmdDptFromElement.Execute();
+        // TODO : récupérer le selected element et l'index du DPT    
+    }
+    
+    /// <summary>
+    /// Handles the button click event to add a DPT to send to a tested element
+    /// </summary>
+    private void AddDptIeToElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        //_viewModel.AddDptIeToElement.Execute();
+        // TODO : récupérer le selected element
+    }
 
-    /*private void RemoveTestFromElementButtonClick(object sender, RoutedEventArgs e)
+    /// <summary>
+    /// Handles the button click event to remove a DPT to send from a tested element
+    /// </summary>
+    private void RemoveIeDptFromElementButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.RemoveTestFromElement.Execute(); //récupérer le selected element et l'index du test
-    }*/
+        //_viewModel.RemoveIeDptFromElement.Execute();
+        // TODO : récupérer le selected element et l'index du DPT    
+    }
 
-    /*private void AddDptToElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        _viewModel.AddDptToElement.Execute(); //récupérer le selected element
-    }*/
+    //public bool ScrollToEnd { get; set; } // pour demander à l'ui de scroller vers le bas des modèles prédéfinis
 
-    /*private void RemoveDptFromElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        _viewModel.RemoveDptFromElement.Execute(); //récupérer le selected element et l'index du DPT    
-    }*/
 
     // Used when adding a new model
     // Scrolls to the end of the list of models
-    private void PredefinedModelsScrollToEnd()
+    private void PredefinedStructuresScrollToEnd()
     {
-        PredefinedModelsScrollViewer.ScrollToEnd();
+        PredefinedStructuresScrollViewer.ScrollToEnd();
     }
+    
+    //private void
 }

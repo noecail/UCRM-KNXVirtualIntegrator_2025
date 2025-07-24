@@ -35,7 +35,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
                     FunctionalModels.Add([]);
                     AddToList(FunctionalModels.Count - 1);
                 } 
-                OnPropertyChanged(nameof(FunctionalModels)); //notifier le mainviewmodel
+                OnPropertyChanged(nameof(FunctionalModelDictionary)); //notifier le mainviewmodel
             }
         };
     }
@@ -130,9 +130,9 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Copies a functional model from the dictionary to the list.
+    /// Deletes a Structure from the dictionary .
     /// </summary>
-    /// <param name="index">Index of the Functional Model to delete from in the dictionary. </param>
+    /// <param name="index">Index of the Structure to delete from in the dictionary. </param>
     public void DeleteFromDictionary(int index)
     {
         if (index > FunctionalModelDictionary.FunctionalModels.Count)

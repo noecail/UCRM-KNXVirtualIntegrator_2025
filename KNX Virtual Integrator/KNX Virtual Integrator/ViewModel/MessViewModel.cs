@@ -18,8 +18,6 @@ namespace KNX_Virtual_Integrator.ViewModel
             ------------------------------------------------------------------------------------------------ */
         public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
         
-        public bool ScrollToEnd { get; set; } // pour demander à l'ui de scroller vers le bas des modèles prédéfinis
-
         public IBusConnection _busConnection { get; }
 
         public IApplicationSettings AppSettings => _modelManager.AppSettings;
@@ -88,18 +86,16 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// </summary>
         /// <param name="../FileFinder.fileName">The name of the file to find.</param>
         public ICommand FindZeroXmlCommand { get; private set; }
-
-        public ICommand SelectStructureCommand { get; private set; }
         
         public ICommand CreateStructureDictionaryCommand { get; private set; }
 
-        public ICommand DuplicateFunctionalModelDictionaryCommand { get;private set; }
+        public ICommand DuplicateStructureDictionaryCommand { get;private set; }
         
-        public ICommand DeleteFunctionalModelDictionaryCommand  { get; private set; }
+        public ICommand DeleteStructureDictionaryCommand { get; private set; }
         
-        public ICommand AddTestedElementToModel  { get; private set; }
+        public ICommand AddTestedElementToStructure  { get; private set; }
         
-        public ICommand RemoveTestedElementFromModel  { get; private set; }
+        public ICommand RemoveTestedElementFromStructure  { get; private set; }
         
         public ICommand AddTestToElement { get; private set; }
         

@@ -126,7 +126,7 @@
                         <RowDefinition Height="*" />     <!-- Contenu -->
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition MinWidth="200"  Width="Auto" /> <!-- Modèles -->
+                        <ColumnDefinition Width="250" /> <!-- Modèles -->
                         <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
                         <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
                         <ColumnDefinition MinWidth="200"  Width="*" /> <!-- Adresses -->
@@ -203,15 +203,17 @@
                         </Border>
 
                         <!-- Listes des Modèles prédéfinis-->
-                        <ScrollViewer x:Name="PredefinedModelsScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" BorderBrush="Black" BorderThickness="10">
+                        <ScrollViewer x:Name="PredefinedStructuresScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 
-                                <ListBox Grid.Row="0" ItemsSource="{Binding Models}"
-                                         SelectedItem="{Binding SelectedStructure}"
+                                <ListBox Grid.Row="0"
+                                         x:Name="StructureBox"
+                                         ItemsSource="{Binding Structures}"
+                                         SelectedItem="{Binding SelectedStructure,Mode=TwoWay}"
                                          Background="{StaticResource OffWhiteBackgroundBrush}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
                                 </ListBox>
@@ -238,18 +240,17 @@
                         </Border>
                             
                         <!-- Listes modèles créés-->
-                        <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Visible">
+                        <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 
-                                <ListBox Grid.Row="0" ItemsSource="{Binding Models}"
+                                <ListBox Grid.Row="0" ItemsSource="{Binding Structures}"
                                          SelectedItem="{Binding SelectedModel}"
                                          FontStyle="Italic"
-                                         Background="{StaticResource OffWhiteBackgroundBrush}"
-                                         
+                                         Background="{StaticResource GrayBorderBrush}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
                                 </ListBox>
                                 
@@ -337,7 +338,7 @@
                         </Border>
 
                         <!-- Listes Modèles Fonctionnels liés-->
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" BorderBrush="Black" BorderThickness="10">
+                        <ScrollViewer Grid.Row="1" x:Name="FunctionalModelsScrollViewer" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
                             <Grid>    
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/> <!--Liste des Modèles Fonctionnels-->
@@ -409,7 +410,7 @@
                                 Height="35"
                                 BorderThickness="1"
                                 BorderBrush="{StaticResource GrayBorderBrush}"
-                                Click="DeleteFunctionalModelButtonClick"
+                                Click="DeleteFunctionalModelFromListButtonClick"
                                 />
                         
                         <!--Bouton de fermeture -->
@@ -479,7 +480,7 @@
                                                                 Height="35"
                                                                 BorderThickness="1"
                                                                 BorderBrush="{StaticResource GrayBorderBrush}"
-                                                                Click="RemoveTestedElementFromModelButtonClick"
+                                                                Click="RemoveTestedElementFromStructureButtonClick"
                                                         />
                                                     </Grid>
                                                     
@@ -625,7 +626,7 @@
                                 
                                 <!-- Bouton d'ajout d'élément à tester-->
                                 <Button HorizontalAlignment="Stretch"
-                                        Click="AddTestedElementToModelButtonClick"
+                                        Click="AddTestedElementToStructureButtonClick"
                                         Style="{StaticResource NewSomethingButtonStyle}"
                                         Tag="{StaticResource AddTestedElement}"
                                         Margin="0,10,0,0"

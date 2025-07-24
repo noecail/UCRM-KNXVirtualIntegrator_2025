@@ -98,19 +98,16 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         _functionalModelList.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName == nameof(_functionalModelList.FunctionalModels))
+            if (e.PropertyName == nameof(_functionalModelList.FunctionalModelDictionary))
             {
                 // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
-                Models?.Clear();
-                var newModels = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
-                foreach (var newmodel in newModels)
+                Structures?.Clear();
+                var newStructures = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
+                foreach (var newstructure in newStructures)
                 {
-                    Models?.Add(newmodel);
+                    Structures?.Add(newstructure);
                 }
-                // Also, selecting the newly created model and scrolling down to it
-                SelectedModel = Models?.Last();
-                //Console.WriteLine("SelectedModel : " + SelectedModel);
-                WhenPropertyChanged(nameof(ScrollToEnd));
+                
             }
             
         };
@@ -159,42 +156,37 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 if (fileName != null) modelManager.FileFinder.FindZeroXml(fileName);
             }
         );
-
-        SelectStructureCommand = new Commands.RelayCommand<object>(_ =>
-        {
-            
-        });
+        
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                ConsoleAndLogWriteLineCommand.Execute(Models?.Count+1);
-                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model " + (Models?.Count+1)));
+                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model " + (Structures?.Count+1)));
             }
         );
 
-        DuplicateFunctionalModelDictionaryCommand = new Commands.RelayCommand<object>(_ =>
+        DuplicateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                if (SelectedStructure!=null && Models!=null)
-                    _functionalModelList?.AddToDictionary(new FunctionalModel(SelectedStructure,Models.Count+1,false));
+                if (SelectedStructure!=null && Structures!=null)
+                    _functionalModelList?.AddToDictionary(new FunctionalModel(SelectedStructure,Structures.Count+1,false));
             }
         );
 
-        DeleteFunctionalModelDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
+        DeleteStructureDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
             {
                 _functionalModelList.DeleteFromDictionary(parameter);
                 HideModelColumnCommand?.Execute(null);
             }
         );
 
-        AddTestedElementToModel = new Commands.RelayCommand<FunctionalModel>(model =>
+        AddTestedElementToStructure = new Commands.RelayCommand<FunctionalModel>(model =>
             {
                 model?.AddElement(new TestedElement([1], [""], [[new GroupValue(true)]], [1], [""], [[new GroupValue(true)]]));
                 //_functionalModelList.FunctionalModels[0].AddElement(new TestedElement());
-                WhenPropertyChanged(nameof(Models));
+                WhenPropertyChanged(nameof(Structures));
             }
         );
 
-        RemoveTestedElementFromModel = new Commands.RelayCommand<(FunctionalModel model, int index)>(parameters =>
+        RemoveTestedElementFromStructure = new Commands.RelayCommand<(FunctionalModel model, int index)>(parameters =>
             {
                 parameters.model.RemoveElement(parameters.index);
             }
@@ -365,7 +357,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
 
         // Chargement des modèles par défaut dans la collection observable
-        Models = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModelDictionary.FunctionalModels);
+        Structures = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModelDictionary.FunctionalModels);
         SelectedModels = [];
         /*foreach (var model in Models)
             SelectedModels?.Add(model);

@@ -700,32 +700,35 @@
                                         BorderBrush="{TemplateBinding BorderBrush}"
                                         Padding="{TemplateBinding Padding}"
                                         BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid>
+                        <Grid VerticalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/> 
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- CheckBox de suppression -->
+                            <CheckBox Grid.Column="0"
+                                      x:Name="DeleteStructureCheckBox"
+                                      Margin="0,0,5,0">
+                            </CheckBox>
+                            
                             <!-- Contenu de l'élément -->
-                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                          Content="{TemplateBinding Content}"/>
-                            <StackPanel Orientation="Horizontal" 
-                                    HorizontalAlignment="Right" 
-                                    VerticalAlignment="Center"
-                                    Margin="0,0,0,0">
-                            <!-- Icône alignée à droite -->
-                                <!--<Image Source="{StaticResource LockedDrawingImage}" 
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Right" 
-                                       Margin="0,0,0,0" 
-                                       Width="16" 
-                                       Height="16"/>-->                
-                                <Image x:Name="SelectedImage"
-                                       Source="{StaticResource RightArrowDrawingImage}"
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Right" 
-                                       Margin="10,0,0,0"
-                                       Width="16" 
-                                       Height="16"
-                                       Visibility="Collapsed"/>
-                            </StackPanel>
-
+                            <ContentPresenter Grid.Column="1"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding Content}">
+                            </ContentPresenter>
+                            <!-- Icône de sélection -->
+                            <Image Grid.Column="2"
+                                   x:Name="SelectedImage"
+                                   Source="{StaticResource RightArrowDrawingImage}"
+                                   VerticalAlignment="Center" 
+                                   HorizontalAlignment="Right" 
+                                   Margin="10,0,0,0"
+                                   Width="16" 
+                                   Height="16"
+                                   Visibility="Collapsed"/>
                         </Grid>
                     </Border>
                     <!-- Triggers pour changer l'apparence -->

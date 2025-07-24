@@ -27,10 +27,12 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Gets the collection of functional models.
         /// </summary>
-        public ObservableCollection<FunctionalModel> Models { get; set; }
+        public ObservableCollection<FunctionalModel> Structures { get; set; }
         
-        
-
+        /// <summary>
+        /// Not seen on the UI
+        /// List of Models that corresponds to the Selected Structure
+        /// </summary>
         private ObservableCollection<FunctionalModel> _selectedModels = [];
         public ObservableCollection<FunctionalModel>? SelectedModels
         {
@@ -48,7 +50,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         }
         
         /// <summary>
-        /// Gets or sets the currently selected model.
+        /// Column 2. Selected Model among the Selected Models
         /// </summary>  
         private FunctionalModel? _selectedModel;
         public FunctionalModel? SelectedModel
@@ -67,7 +69,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         }
         
         /// <summary>
-        /// Gets or sets the currently selected model structure.
+        /// Column 1. Selected model structure.
         /// </summary>  
         private FunctionalModel? _selectedStructure;
         public FunctionalModel? SelectedStructure
@@ -104,5 +106,6 @@ namespace KNX_Virtual_Integrator.ViewModel
             }
             // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
         }
+        
     }
 }
