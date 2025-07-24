@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -74,7 +75,8 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
             newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],1,false);
         }
 
-        newModel.Name = "New model";
+        if (newModel.Name.Contains("New Structure"))
+            newModel.Name = "New Model " + newModel.Name.Substring(14);
         FunctionalModels[index].Add(newModel);
 
     }
