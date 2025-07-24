@@ -33,7 +33,7 @@
     <!-- Paramètres du logo dans la barre de titre, le logo est à modifier -->
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
-            <StackPanel Background="Transparent"  HorizontalAlignment="Center" VerticalAlignment="Center">
+            <StackPanel Background="{StaticResource NoColorBrush}"  HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Image Source="{StaticResource LogoDrawingImage}" Height="15" Margin="10"/>
             </StackPanel>
         </mah:WindowCommands>
@@ -68,6 +68,7 @@
                 <!-- Premier bouton Importation -->
                 <Button Style="{StaticResource IconButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}" 
+                    Foreground="{StaticResource DarkForegroundBrush}"
                     Click="ImportGroupAddressFileButtonClick"                       
                     Margin="5,0,0,0"
                 />
@@ -75,6 +76,7 @@
                 <!-- Deuxième bouton Importation -->
                 <Button Content="{StaticResource ImportButton}"
                     Style="{StaticResource IconTextButtonStyle}"
+                    Foreground="{StaticResource DarkForegroundBrush}"
                     Tag="{StaticResource ImportedDrawingImage}"
                     Click="ImportProjectButtonClick"
                     Background="{StaticResource BlueBrush}"
@@ -103,6 +105,7 @@
                 <!-- Bouton de Test -->
                 <Button Content="{StaticResource TestButton}"
                     Style="{StaticResource IconTextButtonStyle}"
+                    Foreground="{StaticResource DarkForegroundBrush}"
                     Tag="{StaticResource PlayDrawingImage}"
                     Margin="5,0"
                 />
@@ -110,6 +113,7 @@
                 <!-- Bouton d'Exportation -->
                 <Button Content="{StaticResource ExportButton}"
                     Style="{StaticResource IconTextButtonStyle}"
+                    Foreground="{StaticResource DarkForegroundBrush}"
                     Tag="{StaticResource ExportedDrawingImage}"
                 />
                 
@@ -184,14 +188,14 @@
                             <RowDefinition Height="*"/>         <!-- Liste modèles prédéfinis-->
                             <RowDefinition Height="Auto"/>      <!-- Titre modèles créés-->
                             <RowDefinition Height="*"/>         <!-- Liste modèles créés-->
-                            <RowDefinition Height="30"/>        <!-- Bouton d'ajout de Structures de Modèles Fonctionnels-->
+                            <RowDefinition Height="Auto"/>      <!-- Bouton d'ajout de Structures de Modèles Fonctionnels-->
                         </Grid.RowDefinitions>
 
                         <!-- Titre Modèles prédéfinis-->
                         <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,0,2"
                             Padding="5"
-                            Background="{StaticResource GrayBackgroundBrush}">
+                            Background="{StaticResource LightGrayBackgroundBrush}">
                             
                             <TextBlock FontWeight="Bold"
                                        FontSize="16"
@@ -227,7 +231,7 @@
                         <Border Grid.Row="2"  BorderBrush="{StaticResource GrayBorderBrush}"
                                 BorderThickness="0,1,0,2"
                                 Padding="5"
-                                Background="{StaticResource GrayBackgroundBrush}">
+                                Background="{StaticResource LightGrayBackgroundBrush}">
                                 <TextBlock FontWeight="Bold"
                                            FontSize="16"
                                            Foreground="{StaticResource LightForegroundBrush}"
@@ -262,11 +266,10 @@
 
                         <!-- Bouton d'ajout de Modèles-->
                         <Button Grid.Row="4" HorizontalAlignment="Stretch"
-                                Click="CreateFunctionalModelButtonClick"
-                                Style="{StaticResource CreateFunctionalModelButtonStyle}"
-                                Margin="0"
-                                Padding="0"
-                        />
+                                Click="CreateStructureButtonClick"
+                                Style="{StaticResource NewSomethingButtonStyle}"
+                                Tag="{StaticResource NewStructure}"
+                                />
                     </Grid>
                 </Border>
 
@@ -326,7 +329,7 @@
                         <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,0,2"
                             Padding="5"
-                            Background="{StaticResource GrayBackgroundBrush}">
+                            Background="{StaticResource LightGrayBackgroundBrush}">
                             
                             <TextBlock FontWeight="Bold"
                                        FontSize="16"
@@ -339,7 +342,8 @@
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled" BorderBrush="Black" BorderThickness="10">
                             <Grid>    
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/> <!--Liste des Modèles Fonctionnels-->
+                                    <RowDefinition Height="Auto"/> <!--Bouton d'ajout de Modèle Fonctionnel-->
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 
@@ -349,8 +353,21 @@
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
                                 </ListBox>
                                 
-                                <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
+                                <!-- Bouton d'ajout d'élément à tester-->
                                 <Border Grid.Row="1"
+                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        BorderThickness="0,0,1,0">
+                                    <Button HorizontalAlignment="Stretch"
+                                            Click="AddFunctionalModelToListButtonClick"
+                                            Style="{StaticResource NewSomethingButtonStyle}"
+                                            Tag="{StaticResource CreateFunctionalModel}"
+                                            Margin="10,10,10,0"
+                                            Padding="0"/>
+                                </Border>
+                                
+                                <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
+                                <Border Grid.Row="2"
                                         Background="{StaticResource OffWhiteBackgroundBrush}"
                                         BorderBrush="{StaticResource GrayBorderBrush}"
                                         BorderThickness="0,0,1,0">
@@ -419,14 +436,15 @@
                         </Grid.RowDefinitions>
                         
                         <!-- Conteneur principal -->
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" Grid.Row="0" FocusVisualStyle="{x:Null}">
+                        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
                             <!-- Modèle Fonctionnel -->
-                            <StackPanel Grid.Row="0" Orientation="Vertical" Margin="0,10,0,0">
+                            <StackPanel Orientation="Vertical" Margin="0,10,0,0">
                                 
                                 <!--Nom du Modèle Fonctionnel-->
                                 <TextBlock Text="{StaticResource Name:}" VerticalAlignment="Center"/>
                                 <TextBox x:Name="NomTextBox" HorizontalAlignment="Left" Width="200"
-                                         Text="{Binding SelectedModel.Name, UpdateSourceTrigger=PropertyChanged}"/>
+                                         Text="{Binding SelectedModel.Name, UpdateSourceTrigger=PropertyChanged}"
+                                         />
                                 
                                 
                                 <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
@@ -610,21 +628,26 @@
                                 <!-- Bouton d'ajout d'élément à tester-->
                                 <Button HorizontalAlignment="Stretch"
                                         Click="AddTestedElementToModelButtonClick"
-                                        Style="{StaticResource AddTestedElementToModelButtonStyle}"
+                                        Style="{StaticResource NewSomethingButtonStyle}"
+                                        Tag="{StaticResource AddTestedElement}"
                                         Margin="0,10,0,0"
                                         Padding="0"/>
                             </StackPanel>
-                    </ScrollViewer>
+                        </ScrollViewer>
 
                         <!-- Boutons Enregister et Filtrer-->
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Row="1" Margin="10">
+                        <StackPanel Grid.Row="1" Orientation="Horizontal"
+                                    VerticalAlignment="Top" HorizontalAlignment="Right"
+                                    Margin="10">
                             <Button Style="{StaticResource IconTextButtonStyle}"
-                                Tag="{StaticResource FilterDrawingImage}"
-                                Content="Filtrer" Margin="10,0"/>
+                                    Foreground="{StaticResource DarkForegroundBrush}"
+                                    Tag="{StaticResource FilterDrawingImage}"
+                                    Content="Filtrer" Margin="10,0"/>
                             <Button Style="{StaticResource IconTextButtonStyle}"
-                                Tag="{StaticResource CheckmarkDrawingImage}"
-                                Content="{StaticResource Save}"
-                                Command="{Binding SaveCommand}"/>
+                                    Foreground="{StaticResource DarkForegroundBrush}"
+                                    Tag="{StaticResource CheckmarkDrawingImage}"
+                                    Content="{StaticResource Save}"
+                                    Command="{Binding SaveCommand}"/>
                         </StackPanel>
                     </Grid>
                 </Border>

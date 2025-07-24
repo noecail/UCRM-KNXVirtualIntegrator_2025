@@ -276,25 +276,22 @@
         </Setter>
     </Style>    
     
-    <Style TargetType="Button" x:Key="CreateFunctionalModelButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
+    <Style TargetType="Button" x:Key="CreateStructureButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
         <Setter Property="Background" Value="{StaticResource BlueBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="btnBorder"
                             Background="{TemplateBinding Background}"
-                            VerticalAlignment="Bottom"
-                            BorderThickness="0,0,1,0"
-                            BorderBrush="{StaticResource GrayBorderBrush}"
-                            >
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
-                                    Margin="10">
+                            VerticalAlignment="Bottom">
+                        
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"
                                    Source="{StaticResource AddDrawingImage}"
-                                   Height="15"
-                                   Width="15"
-                                   Margin="0,0,5,0"/>
-                            <TextBlock Text="{StaticResource CreateModel}" VerticalAlignment="Center" FontSize="12"/>
+                                   Margin="0,5,5,5"
+                                   Height="25" Width="25"
+                                   />
+                            <TextBlock Text="{StaticResource NewStructure}" VerticalAlignment="Center" FontSize="12" Foreground="{StaticResource DarkForegroundBrush}"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
@@ -310,20 +307,21 @@
         </Setter>
     </Style>
     
-    <Style TargetType="Button" x:Key="AddTestedElementToModelButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
+    <Style TargetType="Button" x:Key="NewSomethingButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
         <Setter Property="Background" Value="{StaticResource BlueBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border x:Name="btnBorder"
                             Background="{TemplateBinding Background}"
-                            VerticalAlignment="Bottom"
-                            BorderThickness="0,0,1,0"
-                            BorderBrush="{StaticResource GrayBorderBrush}"
-                    >
+                            VerticalAlignment="Bottom">
+                        
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Source="{StaticResource AddDrawingImage}" Height="25" Width="25" Margin="0,5,5,5"/>
-                            <TextBlock Text="{StaticResource AddTestedElement}" VerticalAlignment="Center" FontSize="10"/>
+                            <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"
+                                   Source="{StaticResource AddDrawingImage}"
+                                   Margin="0,5,5,5"
+                                   Height="25" Width="25" />
+                            <TextBlock Text="{TemplateBinding Tag}" VerticalAlignment="Center" FontSize="12" Foreground="{StaticResource DarkForegroundBrush}"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>

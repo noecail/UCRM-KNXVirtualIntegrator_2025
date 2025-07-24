@@ -91,7 +91,7 @@ namespace KNX_Virtual_Integrator.ViewModel
 
         public ICommand SelectStructureCommand { get; private set; }
         
-        public ICommand CreateFunctionalModelDictionaryCommand { get; private set; }
+        public ICommand CreateStructureDictionaryCommand { get; private set; }
 
         public ICommand DuplicateFunctionalModelDictionaryCommand { get;private set; }
         
@@ -114,8 +114,6 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand RemoveIeDptFromElement  { get; private set; }
         
         public ICommand AddFunctionalModelToList { get; private set; }
-
-        public ICommand DuplicateFunctionalModelListCommand {get; private set; }
             
         public ICommand DeleteFunctionalModelFromList { get; private set; }
 
