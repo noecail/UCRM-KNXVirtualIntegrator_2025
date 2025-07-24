@@ -16,9 +16,12 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     public FunctionalModelList()
     {
         FunctionalModelDictionary = new FunctionalModelDictionary();
+        var index = 0; 
         foreach (var model in FunctionalModelDictionary.GetAllModels())
         {
-            FunctionalModels.Add([new FunctionalModel(model,1,false)]);
+            FunctionalModels.Add([]);
+            AddToList(index);
+            index++;
         }
 
         //FunctionalModels[0][0].Name = "Lumière_ON_OFF_Salon";
@@ -75,8 +78,18 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
             newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],1,false);
         }
 
-        if (newModel.Name.Contains("New Structure"))
-            newModel.Name = "New Model " + newModel.Name.Substring(14);
+        if (newModel.Name.Contains("Structure"))
+        {
+            if (newModel.Name.Contains("New Structure"))
+                newModel.Name = "New Model " + newModel.Key;
+            else
+            {
+                newModel.Name = newModel.Name[..^10];
+            }
+            
+            
+        }
+
         FunctionalModels[index].Add(newModel);
 
     }
