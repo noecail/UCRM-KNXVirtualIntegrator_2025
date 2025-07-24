@@ -13,11 +13,7 @@
       <Page Remove="Resources\Images.xaml" />
       <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
       <Page Remove="Resources\Styles.xaml" />
-      <Page Update="View\Utils\TestWindow.xaml">
-        <Generator>MSBuild:Compile</Generator>
-        <XamlRuntime>Wpf</XamlRuntime>
-        <SubType>Designer</SubType>
-      </Page>
+      <Page Remove="View\Utils\XamlDump.xaml" />
     </ItemGroup>
     
     <ItemGroup>
@@ -70,6 +66,11 @@
 
     <ItemGroup>
       <Compile Remove="Model\Implementations\pourdaihi.cs" />
+      <Compile Remove="View\Utils\NotConverter.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="View\Utils\" />
     </ItemGroup>
 
 </Project>

@@ -79,7 +79,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                 if (_selectedStructure != null && _selectedStructure.Key == value?.Key)
                     return;
                 _selectedStructure = value;
-                SelectedModels?.Clear();
                 SelectedModels = _functionalModelList.FunctionalModels[SelectedStructure!.Key-1];
                
                 ShowModelColumn(); // Affiche le panneau avec la liste de modèles fonctionnels

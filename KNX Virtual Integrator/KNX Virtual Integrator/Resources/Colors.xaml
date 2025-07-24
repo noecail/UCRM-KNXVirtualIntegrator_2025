@@ -49,6 +49,7 @@
     
     <SolidColorBrush x:Key="WhiteBackgroundBrush" Color="{StaticResource WhiteNormal}"/>
     <SolidColorBrush x:Key="OffWhiteBackgroundBrush" Color="{StaticResource WhiteDarker}"/>
+    <SolidColorBrush x:Key="LightGrayBackgroundBrush" Color="{StaticResource LightGrayColor}"/>
     <SolidColorBrush x:Key="GrayBackgroundBrush" Color="{StaticResource GrayColor}"/>
     <SolidColorBrush x:Key="DarkGrayBackgroundBrush" Color="{StaticResource DarkGrayColor}"/>
     <SolidColorBrush x:Key="DarkerGrayBackgroundBrush" Color="{StaticResource DarkerGrayColor}"/>

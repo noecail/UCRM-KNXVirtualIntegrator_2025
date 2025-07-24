@@ -165,10 +165,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             
         });
 
-        CreateFunctionalModelDictionaryCommand = new Commands.RelayCommand<object>(_ =>
+        CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
+                ConsoleAndLogWriteLineCommand.Execute(Models?.Count+1);
                 _functionalModelList?.AddToDictionary(new FunctionalModel("New Model " + (Models?.Count+1)));
-                //ConsoleAndLogWriteLineCommand.Execute(Models?.Count);
             }
         );
 
@@ -240,21 +240,12 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 if (SelectedStructure!=null)
                     if (model is FunctionalModel myModel)
-                        _functionalModelList.AddToList(SelectedStructure.Key+1,myModel);
+                        _functionalModelList.AddToList(SelectedStructure.Key-1,myModel);
                     else
-                        _functionalModelList.AddToList(SelectedStructure.Key+1);
-
+                        _functionalModelList.AddToList(SelectedStructure.Key-1);
             }
         );
         
-        DuplicateFunctionalModelListCommand = new Commands.RelayCommand<object>(_ =>
-            {
-                if (SelectedStructure!=null && Models!=null)
-                    _functionalModelList?.AddToDictionary(new FunctionalModel(SelectedStructure,Models.Count+1,true));
-            }
-        );
-        
-       
         
         DeleteFunctionalModelFromList = new Commands.RelayCommand<FunctionalModel>(model =>
             {

@@ -362,11 +362,17 @@ public partial class MainWindow
     /// Handles the button click event to create a Functional Model.
     /// Adds a Functional Model to the Dictionary of Functional Model Structures.
     /// </summary>
-    private void CreateFunctionalModelButtonClick(object sender, RoutedEventArgs e)
+    private void CreateStructureButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.CreateFunctionalModelDictionaryCommand.Execute(null);
+        _viewModel.CreateStructureDictionaryCommand.Execute(null);
+        // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
     }
 
+    private void AddFunctionalModelToListButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.AddFunctionalModelToList.Execute(null);
+    }
+    
     /// <summary>
     /// Handles the button click event to delete a Functional Model.
     /// </summary>
