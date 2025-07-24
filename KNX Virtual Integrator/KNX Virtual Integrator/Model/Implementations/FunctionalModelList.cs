@@ -67,31 +67,24 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     public void AddToList(int index)
     {
         FunctionalModel newModel;
-
         if (FunctionalModels[index].Count > 0)
         {
-            newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],
-                FunctionalModels[index][^1].Key + 1, false);
+            newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index], FunctionalModels[index][^1].Key + 1, false);
         }
         else
         {
             newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],1,false);
         }
-
         if (newModel.Name.Contains("Structure"))
         {
-            if (newModel.Name.Contains("New Structure"))
-                newModel.Name = "New Model " + newModel.Key;
+            if (newModel.Name.Contains("New_Structure"))
+                newModel.Name = "New_Model_" + newModel.Key;
             else
             {
                 newModel.Name = newModel.Name[..^10];
             }
-            
-            
         }
-
         FunctionalModels[index].Add(newModel);
-
     }
     
     /// <summary>
@@ -132,7 +125,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     public void AddToDictionary(FunctionalModel model)
     {
         var newModel = model;
-        newModel.Name = "New Structure";
+        newModel.Name = "New_Structure";
         FunctionalModelDictionary.AddFunctionalModel(model);
     }
 

@@ -60,10 +60,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         public void AddFunctionalModel(FunctionalModel functionalModel)
         {
-            if (functionalModel.Name == "New Structure")
-                functionalModel.Name += " " + FunctionalModels.Count;
+            if (functionalModel.Name == "New_Structure")
+                functionalModel.Name += "_" + (FunctionalModels.Count+1);
             else 
-                functionalModel.Name += " Structure";
+                functionalModel.Name += "_Structure";
             FunctionalModels.Add(functionalModel);
             FunctionalModels.Last().Key = FunctionalModels.Count;
             OnPropertyChanged(nameof(FunctionalModels));
