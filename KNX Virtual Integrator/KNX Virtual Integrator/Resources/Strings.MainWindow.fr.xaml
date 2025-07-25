@@ -17,7 +17,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
     <sys:String x:Key="ExportButton">Exporter le rapport de test</sys:String>
     <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>
-    <sys:String x:Key="TestButton">Lancer le test</sys:String>
+    <sys:String x:Key="TestButton">Paramètres de test</sys:String>
     <sys:String x:Key="GroupAdressesTitle">Adresses de Groupe</sys:String>
     <sys:String x:Key="Library">Bibliothèque</sys:String>
     <sys:String x:Key="ModelsTitle">Modèles Fonctionnels</sys:String>

@@ -98,7 +98,7 @@ public partial class MainWindow
     /// <param name="e">The event data.</param>
     private void OpenConnectionWindow(object sender, RoutedEventArgs e)
     {
-        _connectionWindow.Show();
+        _windowManager.ShowConnectionWindow();
     }
     
     /// <summary>
@@ -363,6 +363,11 @@ public partial class MainWindow
     {
         var groupAddress = new GroupAddress("1/4/1");
         _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
+    }
+
+    private void OnTestConfigButtonClick(object sender, RoutedEventArgs e)
+    {
+        _windowManager.ShowTestConfigWindow();
     }
     
     /// <summary>

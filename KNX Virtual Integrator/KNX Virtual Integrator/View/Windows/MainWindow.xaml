@@ -105,6 +105,7 @@
                     Style="{StaticResource IconTextButtonStyle}"
                     Foreground="{StaticResource DarkForegroundBrush}"
                     Tag="{StaticResource PlayDrawingImage}"
+                    Click="OnTestConfigButtonClick"
                     Margin="5,0"
                 />
                 

@@ -1,388 +1,385 @@
-<mah:MetroWindow  x:Class="KNX_Virtual_Integrator.View.Windows.ConnectionWindow"
-                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
-                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
-                  mc:Ignorable="d"
-                  Title="Connexion au Bus KNX" Height="650" Width="300"
-                  TitleCharacterCasing="Normal"
-                  ResizeMode="NoResize"
-                  Background="White"
-                  BorderThickness="0"
-                  WindowTitleBrush="#369026"
-                  NonActiveWindowTitleBrush="#4a9b3c"
-                  Closing="ClosingConnectionWindow">
-    
+<mah:MetroWindow x:Class="KNX_Virtual_Integrator.View.Windows.ConnectionWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                 xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+                 xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
+                 d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
+                 mc:Ignorable="d"
+                 Title="Connexion au Bus KNX" Height="650" Width="300"
+                 TitleCharacterCasing="Normal"
+                 ResizeMode="NoResize"
+                 Background="{StaticResource WhiteBackgroundBrush}"
+                 BorderThickness="1.5"
+                 BorderBrush="{StaticResource KnxGreenBrush}"
+                 WindowTitleBrush="{StaticResource KnxGreenBrush}"
+                 NonActiveWindowTitleBrush="{StaticResource KnxLightGreenBrush}"
+                 Closing="ClosingConnectionWindow">
+
     <Window.Resources>
-        
+
         <!-- Style pour les interfaces découvertes -->
         <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type viewmodel:ConnectionInterfaceViewModel}">
-            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}" 
-                       Style="{StaticResource ItalicTextBlockLight}"
-            />
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}"
+                       Style="{StaticResource ItalicTextBlockLight}" />
         </DataTemplate>
-        
+
         <DataTemplate x:Key="ListBoxItemDark" DataType="{x:Type viewmodel:ConnectionInterfaceViewModel}">
-            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}" 
-                       Style="{StaticResource ItalicTextBlockDark}"
-            />
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}"
+                       Style="{StaticResource ItalicTextBlockDark}" />
         </DataTemplate>
-        
+
         <!-- Styles pour l'interface découverte liée au DisconnectButton -->
         <Style x:Key="InterfaceTextBlockLight" TargetType="TextBlock" BasedOn="{StaticResource ItalicTextBlockLight}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=DisconnectButton, Path=IsEnabled}" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource KnxGreenBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource KnxGreenBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding ElementName=DisconnectButton, Path=IsEnabled}" Value="False">
-                    <Setter Property="Foreground" Value ="{StaticResource LightForegroundBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        
+
         <!-- ReSharper disable once Xaml.RedundantResource -->
         <Style x:Key="InterfaceTextBlockDark" TargetType="TextBlock" BasedOn="{StaticResource ItalicTextBlockDark}">
             <Style.Triggers>
                 <DataTrigger Binding="{Binding ElementName=DisconnectButton, Path=IsEnabled}" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource KnxGreenBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource KnxGreenBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding ElementName=DisconnectButton, Path=IsEnabled}" Value="False">
-                    <Setter Property="Foreground" Value ="{StaticResource DarkForegroundBrush}"/>
+                    <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        
+
         <!-- Styles pour les textes de la fenêtre -->
         <Style x:Key="TextBoxLight" TargetType="TextBox" BasedOn="{StaticResource StandardTextBoxLight}">
-            <Setter Property="Width" Value="80"/>
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="FontSize" Value="12" />
         </Style>
-        
+
+
         <!-- ReSharper disable once Xaml.RedundantResource -->
         <Style x:Key="TextBoxDark" TargetType="TextBox" BasedOn="{StaticResource StandardTextBoxDark}">
-            <Setter Property="Width" Value="80"/>
-            <Setter Property="Height" Value="20"/>
-            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Width" Value="80" />
+            <Setter Property="Height" Value="20" />
+            <Setter Property="FontSize" Value="12" />
         </Style>
-        
+
     </Window.Resources>
 
-    
-    <Border BorderBrush="{StaticResource KnxGreenBrush}" BorderThickness="1.5">
-        <Grid>
-            <!-- Define rows and columns for the grid -->
+
+    <Grid>
+        <!-- Define rows and columns for the grid -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="50" />
+        </Grid.RowDefinitions>
+
+        <!-- Bus Connection Type Selection Section -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
+            <TextBlock Name="ConnectionTypeText" Text="Type de connexion :" VerticalAlignment="Center"
+                       Margin="0,0,10,0" />
+            <ComboBox Name="ConnectionTypeComboBox"
+                      Style="{StaticResource LightComboBoxStyle}"
+                      Width="120" Height="25"
+                      VerticalAlignment="Center"
+                      FontSize="10"
+                      SelectedIndex="0" Padding="0"
+                      SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}"
+                      ItemsSource="{Binding ConnectionTypes}">
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Discovered Interfaces Section -->
+        <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10"
+                    Visibility="{Binding DiscoveredInterfacesVisibility}">
+            <Grid Margin="3,0,3,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Name="DiscoveredInterfacesText" Text="Interfaces disponibles :" HorizontalAlignment="Left"
+                           VerticalAlignment="Center" Margin="0,0,0,0" Grid.Column="0" />
+
+                <Button Grid.Column="1" Command="{Binding RefreshInterfacesCommand}"
+                        Style="{StaticResource RefreshButton}"
+                        Padding="10,0"
+                        Margin="0,0,0,0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="⟲" FontSize="12" Height="20" Margin="0,2,5,0" VerticalAlignment="Center" />
+                        <TextBlock Text="Rafraîchir" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- List of discovered interfaces -->
+            <ListBox Name="InterfaceListBox" Width="250" Height="120"
+                     Style="{StaticResource StandardListBoxLight}"
+                     ItemsSource="{Binding DiscoveredInterfaces}"
+                     SelectedItem="{Binding SelectedInterface}"
+                     SelectionMode="Single"
+                     ItemContainerStyle="{StaticResource ListBoxContainerLight}"
+                     ItemTemplate="{StaticResource ListBoxItemLight}">
+                <!-- ItemTemplate pour afficher les données -->
+            </ListBox>
+        </StackPanel>
+
+        <!-- Section connexion à distance-->
+        <Grid Grid.Row="2" HorizontalAlignment="Center" Visibility="{Binding RemoteConnexionVisibility}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="90" />
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="50" />
+                <RowDefinition Height="30" />
+                <RowDefinition Height="40" />
             </Grid.RowDefinitions>
 
-            <!-- Bus Connection Type Selection Section -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
-                <TextBlock Name="ConnectionTypeText" Text="Type de connexion :" VerticalAlignment="Center" Margin="0,0,10,0"/>
-                <ComboBox Name="ConnectionTypeComboBox" 
-                          Style="{StaticResource LightComboBoxStyle}"
-                          Width="120" Height="25"
-                          VerticalAlignment="Center"
-                          FontSize="10" 
-                          SelectedIndex="0" Padding="0"
-                          SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}"
-                          ItemsSource="{Binding ConnectionTypes}">
-                </ComboBox>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock
+                    Name="NatIconText"
+                    Text="🖧"
+                    Foreground="{StaticResource LightForegroundBrush}"
+                    TextAlignment="Left"
+                    VerticalAlignment="Center" />
+                <TextBlock
+                    Name="NatConnectionText"
+                    Text="Connexion à distance (NAT)"
+                    Foreground="{StaticResource LightForegroundBrush}"
+                    Margin="5,0,0,0"
+                    TextAlignment="Left"
+                    FontWeight="SemiBold"
+                    VerticalAlignment="Center" />
             </StackPanel>
 
-            <!-- Discovered Interfaces Section -->
-            <StackPanel Grid.Row="1" Orientation="Vertical" HorizontalAlignment="Center" Margin="10" Visibility="{Binding DiscoveredInterfacesVisibility}">
-                <Grid Margin="3,0,3,0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" />
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Name="DiscoveredInterfacesText" Text="Interfaces disponibles :" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,0,0" Grid.Column="0" />
 
-                    <Button Grid.Column="1" Command="{Binding RefreshInterfacesCommand}"
-                            Style="{StaticResource RefreshButton}"
-                            Padding="10,0"
-                            Margin="0,0,0,0">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="⟲" FontSize="12" Height="20" Margin="0,2,5,0" VerticalAlignment="Center" />
-                            <TextBlock Text="Rafraîchir" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0"/>
+            <Image Grid.Row="0" Grid.Column="1"
+                   Style="{StaticResource TooltipImage}"
+                   Height="15"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Right">
+                <ToolTipService.ToolTip>
+                    <ToolTip HorizontalOffset="10" VerticalOffset="20" Background="White"
+                             BorderBrush="{StaticResource KnxGreenBrush}">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                Aide - Connexion à distance (NAT)
+                            </TextBlock>
+                            <TextBlock>
+                                Cette section permet de se connecter au bus KNX à distance depuis un autre réseau IP.
+                                <LineBreak />
+                                Renseignez l'adresse IPv4 publique du routeur permettant l'accès au réseau privé sur lequel le bus est connecté.
+                                <LineBreak />
+                                Cliquez sur Connexion.
+                            </TextBlock>
                         </StackPanel>
-                    </Button>
-                </Grid>
+                    </ToolTip>
+                </ToolTipService.ToolTip>
+            </Image>
 
-                <!-- List of discovered interfaces -->
-                <ListBox Name="InterfaceListBox" Width="250" Height="120" 
-                         Style="{StaticResource StandardListBoxLight}"
-                         ItemsSource="{Binding DiscoveredInterfaces}" 
-                         SelectedItem="{Binding SelectedInterface}" 
-                         SelectionMode="Single"
-                         ItemContainerStyle="{StaticResource ListBoxContainerLight}"
-                         ItemTemplate="{StaticResource ListBoxItemLight}">
-                    <!-- ItemTemplate pour afficher les données -->
-                </ListBox>
-            </StackPanel>
+            <TextBlock Name="IpRouterText" Grid.Row="1" Grid.Column="0"
+                       Foreground="{StaticResource LightForegroundBrush}"
+                       Text="IP publique du routeur"
+                       VerticalAlignment="Center"
+                       TextAlignment="Left" />
 
-            <!-- Section connexion à distance-->
-            <Grid Grid.Row="2" HorizontalAlignment="Center" Visibility="{Binding RemoteConnexionVisibility}">
+            <TextBox Name="NatAddressTextBox" Grid.Row="1" Grid.Column="1"
+                     Style="{StaticResource TextBoxLight}"
+                     Width="90"
+                     Text="{Binding _busConnection.NatAddress}" />
+
+        </Grid>
+
+        <!-- Section connexion IP Secure-->
+        <StackPanel Grid.Row="3" Orientation="Vertical" Visibility="{Binding SecureConnectionVisibility}">
+            <TextBlock Name="SecurisedConectionText"
+                       Foreground="{StaticResource LightForegroundBrush}"
+                       VerticalAlignment="Center"
+                       TextAlignment="Left"
+                       FontStyle="Italic"
+                       Margin="21,10,0,0"
+                       Text="À ne remplir que pour une connexion sécurisée" />
+
+            <Grid HorizontalAlignment="Center" Width="255">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="90" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="20" />
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="15" />
                 </Grid.RowDefinitions>
-                
+
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock 
-                               Name="NatIconText"
-                               Text="🖧"
+                    <TextBlock Name="LockIconText"
+                               Text="🔒"
                                Foreground="{StaticResource LightForegroundBrush}"
+                               FontWeight="SemiBold"
                                TextAlignment="Left"
-                               VerticalAlignment="Center"
-                    />
-                    <TextBlock 
-                        Name="NatConnectionText"
-                        Text="Connexion à distance (NAT)"
-                        Foreground="{StaticResource LightForegroundBrush}"
-                        Margin="5,0,0,0"
-                        TextAlignment="Left"
-                        FontWeight="SemiBold"
-                        VerticalAlignment="Center"/>
+                               VerticalAlignment="Center" />
+                    <TextBlock Name="ConnectionIpSecText"
+                               Text="Connexion via IP Secure"
+                               Foreground="{StaticResource LightForegroundBrush}"
+                               Margin="5,0,0,0"
+                               TextAlignment="Left"
+                               FontWeight="SemiBold"
+                               VerticalAlignment="Center" />
                 </StackPanel>
-                
-                
+
                 <Image Grid.Row="0" Grid.Column="1"
-                    Style="{StaticResource TooltipImage}"
-                    Height="15"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Right">
+                       Style="{StaticResource TooltipImage}"
+                       Height="15"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right">
                     <ToolTipService.ToolTip>
-                        <ToolTip HorizontalOffset="10" VerticalOffset="20" Background="White" BorderBrush="{StaticResource KnxGreenBrush}">
+                        <ToolTip HorizontalOffset="10" VerticalOffset="20"
+                                 Background="{StaticResource WhiteBackgroundBrush}"
+                                 BorderBrush="{StaticResource KnxGreenBrush}">
                             <StackPanel Orientation="Vertical">
                                 <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
-                                    Aide - Connexion à distance (NAT)
+                                    Aide - Connexion via IP secure
                                 </TextBlock>
                                 <TextBlock>
-                                Cette section permet de se connecter au bus KNX à distance depuis un autre réseau IP. <LineBreak/>
-                                Renseignez l'adresse IPv4 publique du routeur permettant l'accès au réseau privé sur lequel le bus est connecté. <LineBreak/>
-                                Cliquez sur Connexion.
+                                    Cette section permet de se connecter à un bus protégé par une interface IP Secure.
+                                    <LineBreak />
+                                    Sélectionnez dans la liste ci-dessus l'interface IP Secure. <LineBreak />
+                                    Sélectionnez le fichier de clés exporté au préalable depuis ETS (Propriétés > IP Secure).
+                                    <LineBreak />
+                                    Renseignez le mot de passe correspondant au fichier de clés. <LineBreak />
+                                    Cliquez sur Connexion.
                                 </TextBlock>
                             </StackPanel>
                         </ToolTip>
                     </ToolTipService.ToolTip>
                 </Image>
-                
-                <TextBlock Name="IpRouterText" Grid.Row="1" Grid.Column="0"
-                           Foreground="{StaticResource LightForegroundBrush}"
-                           Text="IP publique du routeur"
+
+                <TextBlock Grid.Row="1" Grid.Column="0"
+                           Name="FileKeysText"
+                           Text="Fichier de clés .knxkeys"
                            VerticalAlignment="Center"
-                           TextAlignment="Left"
-                           />
-                
-                <TextBox Name="NatAddressTextBox" Grid.Row="1" Grid.Column="1"
-                    Style="{StaticResource TextBoxLight}"
-                    Width="90"
-                    Text="{Binding _busConnection.NatAddress}"
-                    />
-                
-            </Grid>
-            
-            <!-- Section connexion IP Secure-->
-            <StackPanel Grid.Row="3" Orientation="Vertical" Visibility="{Binding SecureConnectionVisibility}">
-                <TextBlock Name="SecurisedConectionText"
-                           Foreground="{StaticResource LightForegroundBrush}"
-                           VerticalAlignment="Center"
-                           TextAlignment="Left"
-                           FontStyle="Italic"
-                           Margin="21,10,0,0" 
-                           Text = "À ne remplir que pour une connexion sécurisée"
-                           />
-                
-                <Grid HorizontalAlignment="Center" Width="255">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="90"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="20"/>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="15"/>
-                    </Grid.RowDefinitions>
-                    
-                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Name="LockIconText"
-                                   Text="🔒"
-                                   Foreground="{StaticResource LightForegroundBrush}"
-                                   FontWeight="SemiBold"
-                                   TextAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   />
-                        <TextBlock Name="ConnectionIpSecText"
-                                   Text="Connexion via IP Secure"
-                                   Foreground="{StaticResource LightForegroundBrush}"
-                                   Margin="5,0,0,0"
-                                   TextAlignment="Left"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center"
-                                   />
-                    </StackPanel>
-                    
-                    <Image Grid.Row="0" Grid.Column="1"
-                           Style="{StaticResource TooltipImage}"
-                           Height="15"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right">
-                        <ToolTipService.ToolTip>
-                            <ToolTip HorizontalOffset="10" VerticalOffset="20" Background="{StaticResource WhiteBackgroundBrush}" BorderBrush="{StaticResource KnxGreenBrush}">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
-                                        Aide - Connexion via IP secure
-                                    </TextBlock>
-                                    <TextBlock>
-                                        Cette section permet de se connecter à un bus protégé par une interface IP Secure. <LineBreak/>
-                                        Sélectionnez dans la liste ci-dessus l'interface IP Secure. <LineBreak/>
-                                        Sélectionnez le fichier de clés exporté au préalable depuis ETS (Propriétés > IP Secure). <LineBreak/>
-                                        Renseignez le mot de passe correspondant au fichier de clés. <LineBreak/>
-                                        Cliquez sur Connexion.
-                                    </TextBlock>
-                                </StackPanel>
-                            </ToolTip>
-                        </ToolTipService.ToolTip>
-                    </Image>
-                    
-                    <TextBlock Grid.Row="1" Grid.Column="0"
-                               Name="FileKeysText"
-                        Text="Fichier de clés .knxkeys"
-                        VerticalAlignment="Center"
-                        TextAlignment="Left"
-                    />
-                    
-                    <Button Grid.Row="1" Grid.Column="1" Name="ImportKnxKeys"
+                           TextAlignment="Left" />
+
+                <Button Grid.Row="1" Grid.Column="1" Name="ImportKnxKeys"
                         Style="{StaticResource ImportKeysButtonLight}"
                         Click="ImportKeysFileButtonClick">
-                        <TextBlock Text="importer clés"
-                                   Width="78"
-                                   FontSize="10"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center"
-                        />
-                    </Button>
-                    
-                    <TextBlock Grid.Row="2" Grid.Column="0"
-                               Name="ImportedKeysFileText"
+                    <TextBlock Text="importer clés"
+                               Width="78"
+                               FontSize="10"
+                               TextAlignment="Center"
+                               VerticalAlignment="Center" />
+                </Button>
+
+                <TextBlock Grid.Row="2" Grid.Column="0"
+                           Name="ImportedKeysFileText"
                            Margin="0,0,0,0"
                            FontStyle="Italic"
                            FontSize="10">
                     Fichier de clés importé :
-                    </TextBlock>
-                </Grid>
-                
-                <TextBlock
-                    Name="ImportKeyPathText"
-                   Margin="21,0,0,5" 
-                   Text="{Binding _busConnection.KeysPath}"
-                   TextAlignment="Left"
-                   FontSize="10"
-                   TextWrapping="Wrap">
                 </TextBlock>
-                
-                <Grid Margin="22,0" Height="30">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="90"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <TextBlock Grid.Column="0"
-                               Name="PwdKeysFileText"
-                               Text="Mot de passe du fichier de clés"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"
-                    />
-                    
-                    <TextBox  Grid.Column="1"
-                              Name="ActualPwdKeysFileTextBox"
-                              Style="{StaticResource TextBoxLight}"
-                              Text="{Binding _busConnection.KeysFilePassword}"
-                    />
-                </Grid>
-                
-            </StackPanel>
-            
-            <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,0" Visibility="{Binding ErrorMessageVisibility}">
-                <TextBlock
-                    Text="Erreur lors de la connexion"
-                    FontWeight="Bold"
-                    Foreground="Red"
-                    />
-                <TextBlock
-                    Text="{Binding _busConnection.ConnectionErrorMessage}"
-                    FontWeight="SemiBold"
-                    Foreground="Red"
-                    TextWrapping="Wrap"
-                    />
-            </StackPanel>
-            
-            <!-- Current Interface Display Section -->
-            <StackPanel Grid.Row="5" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,10" Width="250" Name="CurIntText">
-                <TextBlock
-                    Name="CurrentInterfaceText"
-                    Margin="5,0,5,0"
-                    Text="Interface actuellement connectée :"
-                    TextAlignment="Left"
-                    FontWeight="SemiBold"
-                />
-                <StackPanel Orientation="Vertical">
-                    <TextBlock
-                        Name="CurrCoInterfaceText"
-                        Margin="5,0,5,0"
-                        Text="{Binding Path=CurrentInterface}"
-                        Foreground="White"
-                        Style="{StaticResource InterfaceTextBlockLight}"
-                        TextAlignment="Left"
-                        TextWrapping="Wrap"
-                        FontWeight="SemiBold"/>
-                </StackPanel>
-            </StackPanel>
-
-
-            <!-- Section for connection and disconnection -->
-            <Grid Grid.Row="6" Margin="20,0" VerticalAlignment="Center">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de déconnexion -->
-                    <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de connexion -->
-                </Grid.ColumnDefinitions>
-            
-                <!-- Bouton Déconnexion, collé à gauche -->
-                <Button Grid.Column="0" Name="DisconnectButton" Content="Déconnexion" 
-                        Style="{StaticResource DisconnectButton}"
-                        Margin="5" Padding="5,2"
-                        Command="{Binding DisconnectBusCommand}" 
-                        IsEnabled="{Binding IsConnected}"
-                        HorizontalAlignment="Left" />
-            
-                <!-- Bouton Connexion, collé à droite -->
-                <Button Grid.Column="1" Name="ConnectButton" Content="Connexion" 
-                        Style="{StaticResource ConnectButton}"
-                        Margin="5" Padding="5,2"
-                        Foreground="{StaticResource DarkForegroundBrush}"
-                        Command="{Binding ConnectBusCommand}"
-                        HorizontalAlignment="Right" />
             </Grid>
 
-            
-        </Grid>
-    </Border>
+            <TextBlock
+                Name="ImportKeyPathText"
+                Margin="21,0,0,5"
+                Text="{Binding _busConnection.KeysPath}"
+                TextAlignment="Left"
+                FontSize="10"
+                TextWrapping="Wrap">
+            </TextBlock>
 
-    
+            <Grid Margin="22,0" Height="30">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="90" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Name="PwdKeysFileText"
+                           Text="Mot de passe du fichier de clés"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left" />
+
+                <TextBox Grid.Column="1"
+                         Name="ActualPwdKeysFileTextBox"
+                         Style="{StaticResource TextBoxLight}"
+                         Text="{Binding _busConnection.KeysFilePassword}" />
+            </Grid>
+
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,0"
+                    Visibility="{Binding ErrorMessageVisibility}">
+            <TextBlock
+                Text="Erreur lors de la connexion"
+                FontWeight="Bold"
+                Foreground="Red" />
+            <TextBlock
+                Text="{Binding _busConnection.ConnectionErrorMessage}"
+                FontWeight="SemiBold"
+                Foreground="Red"
+                TextWrapping="Wrap" />
+        </StackPanel>
+
+        <!-- Current Interface Display Section -->
+        <StackPanel Grid.Row="5" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,10" Width="250"
+                    Name="CurIntText">
+            <TextBlock
+                Name="CurrentInterfaceText"
+                Margin="5,0,5,0"
+                Text="Interface actuellement connectée :"
+                TextAlignment="Left"
+                FontWeight="SemiBold" />
+            <StackPanel Orientation="Vertical">
+                <TextBlock
+                    Name="CurrCoInterfaceText"
+                    Margin="5,0,5,0"
+                    Text="{Binding Path=CurrentInterface}"
+                    Foreground="White"
+                    Style="{StaticResource InterfaceTextBlockLight}"
+                    TextAlignment="Left"
+                    TextWrapping="Wrap"
+                    FontWeight="SemiBold" />
+            </StackPanel>
+        </StackPanel>
+
+
+        <!-- Section for connection and disconnection -->
+        <Grid Grid.Row="6" Margin="20,0" VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de déconnexion -->
+                <ColumnDefinition Width="*" /> <!-- Colonne pour le bouton de connexion -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Bouton Déconnexion, collé à gauche -->
+            <Button Grid.Column="0" Name="DisconnectButton" Content="Déconnexion"
+                    Style="{StaticResource DisconnectButton}"
+                    Margin="5" Padding="5,2"
+                    Command="{Binding DisconnectBusCommand}"
+                    IsEnabled="{Binding IsConnected}"
+                    HorizontalAlignment="Left" />
+
+            <!-- Bouton Connexion, collé à droite -->
+            <Button Grid.Column="1" Name="ConnectButton" Content="Connexion"
+                    Style="{StaticResource ConnectButton}"
+                    Margin="5" Padding="5,2"
+                    Foreground="{StaticResource DarkForegroundBrush}"
+                    Command="{Binding ConnectBusCommand}"
+                    HorizontalAlignment="Right" />
+        </Grid>
+
+
+    </Grid>
+
+
 </mah:MetroWindow>

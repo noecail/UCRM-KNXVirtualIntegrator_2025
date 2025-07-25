@@ -1,0 +1,352 @@
+﻿<mah:MetroWindow x:Class="KNX_Virtual_Integrator.View.Windows.TestConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
+        mc:Ignorable="d"
+        Title="Configuration du test" Height="800" Width="1200"
+        TitleCharacterCasing="Normal"
+        ResizeMode="NoResize"
+        Background="{StaticResource WhiteBackgroundBrush}"
+        BorderThickness="2"
+        BorderBrush="{StaticResource KnxGreenBrush}"
+        WindowTitleBrush="{StaticResource KnxGreenBrush}"
+        NonActiveWindowTitleBrush="{StaticResource KnxLightGreenBrush}"
+        Closing="ClosingTestConfigWindow">
+    
+    <Window.Resources>
+        
+        <!-- Style pour les Modèles Fonctionnels choisis -->
+        <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type viewmodel:ConnectionInterfaceViewModel}">
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}"
+                       Style="{StaticResource ItalicTextBlockLight}" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="ListBoxItemDark" DataType="{x:Type viewmodel:ConnectionInterfaceViewModel}">
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}"
+                       Style="{StaticResource ItalicTextBlockDark}" />
+        </DataTemplate>
+        
+        <Style x:Key="LaunchTestButtonStyleLight" TargetType="Button" BasedOn="{StaticResource IconTextButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource GrayBackgroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource DarkGrayBackgroundBrush}"/>
+            <Setter Property="BorderThickness" Value=" 1"/>
+        </Style>
+        
+        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <Style x:Key="LaunchTestButtonStyleDark" TargetType="Button" BasedOn="{StaticResource IconTextButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource BlueBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource LightGrayBorderBrush}"/>
+            <Setter Property="BorderThickness" Value=" 1"/>
+        </Style>
+        
+        
+    </Window.Resources>
+    
+    
+    
+    
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="850" Width="Auto"/>
+            <ColumnDefinition MinWidth="250" Width="*"/>
+        </Grid.ColumnDefinitions>
+        
+        
+        
+        <Border Grid.Column="0" Name="AllModelsAndElementsColumn"
+            BorderBrush="{StaticResource LightGrayBorderBrush}"
+            BorderThickness="0,0,1,0"
+            Background="{StaticResource OffWhiteBackgroundBrush}">
+            
+            <Grid><!-- Define rows and columns for the nested grid -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />  <!-- Titres  -->
+                    <RowDefinition Height="*" />     <!-- Contenu -->
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="250" /> <!-- Modèles -->
+                    <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
+                    <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
+                </Grid.ColumnDefinitions>
+            
+            
+            <!-- Première colonne
+                    Bibliothèque des Structures de Modèle Fonctionnel
+                    Contient toutes les Structures de Modèle Fonctionnel (çàd non instanciées), prédéfinies ou crées (ou suggérées (IA))
+                    ex : Structure de Modèle Fonctionnel pour les lampes
+                    -->
+                    
+                    <!-- En-tête colonne 1 -->
+                    <Border Grid.Row="0" Grid.Column="0"
+                            BorderBrush="{StaticResource GrayBorderBrush}"
+                            BorderThickness="0,0,1,1"
+                            Background="{StaticResource OffWhiteBackgroundBrush}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
+                                <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                            </Grid.ColumnDefinitions>
+
+                        <!-- Bandeau supérieur -->
+                        <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
+                            <Image Source="{StaticResource LibraryDrawingImage}" Height="20"/>
+                            <TextBlock 
+                                   Style="{StaticResource TitleTextLight}"
+                                   Text="{StaticResource Library}"
+                            />
+                        </StackPanel>
+
+                        <!-- Bouton de recherche,(Non-implémenté)-->
+                        <Button Grid.Column="1"
+                                HorizontalAlignment="Right"
+                            Style="{StaticResource IconButtonStyle}"
+                            Tag="{StaticResource SearchDrawingImage}"
+                            BorderBrush="{StaticResource GrayBrush}"
+                            BorderThickness="1"
+                            Margin="5"
+                            Padding="5"
+                            Background="{StaticResource WhiteBackgroundBrush}"
+                            Height="30"
+                        />
+                    </Grid>
+                </Border>
+                    
+                <!-- Contenu colonne 1 : liste des Structures de Modèles Fonctionnels : prédéfinis, créés et suggérés -->
+                <Border Grid.Row="1" Grid.Column="0"
+                        BorderBrush="{StaticResource GrayBorderBrush}"
+                        BorderThickness="0,0,1,0">
+                    <Grid Background="{StaticResource OffWhiteBackgroundBrush}" >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>      <!-- Titre modèles prédéfinis-->
+                            <RowDefinition Height="*"/>         <!-- Liste modèles prédéfinis-->
+                            <RowDefinition Height="Auto"/>      <!-- Titre modèles créés-->
+                            <RowDefinition Height="*"/>         <!-- Liste modèles créés-->
+                            <RowDefinition Height="Auto"/>      <!-- Bouton d'ajout de Structures de Modèles Fonctionnels-->
+                        </Grid.RowDefinitions>
+
+                        <!-- Titre Modèles prédéfinis-->
+                        <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
+                            BorderThickness="0,0,0,2"
+                            Padding="5"
+                            Background="{StaticResource LightGrayBackgroundBrush}">
+                            
+                            <TextBlock FontWeight="Bold"
+                                       FontSize="16"
+                                       Foreground="{StaticResource LightForegroundBrush}"
+                                       Text="{StaticResource PredefinedStructures}"
+                            />
+                        </Border>
+
+                        <!-- Listes des Modèles prédéfinis-->
+                        <ScrollViewer x:Name="PredefinedStructuresScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                
+                                <ListBox Grid.Row="0"
+                                         x:Name="StructureBox"
+                                         ItemsSource="{Binding Structures}"
+                                         SelectedItem="{Binding SelectedStructure,Mode=TwoWay}"
+                                         Background="{StaticResource OffWhiteBackgroundBrush}"
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                </ListBox>
+                                
+                                <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
+                                <Border Grid.Row="1"
+                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        BorderThickness="0,0,1,0">
+                                </Border>
+                            </Grid>
+                        </ScrollViewer>
+
+                        <!-- Titre des Modèles créés-->
+                        <Border Grid.Row="2"  BorderBrush="{StaticResource GrayBorderBrush}"
+                                BorderThickness="0,1,0,2"
+                                Padding="5"
+                                Background="{StaticResource LightGrayBackgroundBrush}">
+                                <TextBlock FontWeight="Bold"
+                                           FontSize="16"
+                                           Foreground="{StaticResource LightForegroundBrush}"
+                                           Text="{StaticResource PersonalizedStructures}"
+                                />
+                        </Border>
+                            
+                        <!-- Listes modèles créés-->
+                        <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                
+                                <ListBox Grid.Row="0" ItemsSource="{Binding Structures}"
+                                         SelectedItem="{Binding SelectedModel}"
+                                         FontStyle="Italic"
+                                         Background="{StaticResource GrayBorderBrush}"
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                </ListBox>
+                                
+                                <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
+                                <Border Grid.Row="1"
+                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        BorderThickness="0,0,1,0">
+                                </Border>
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+                
+            <!-- Deuxième colonne
+                    Liste des Modèles Fonctionnels correspondant à la Structure Sélectionnée
+                    Contient tous les Modèles Fonctionnels qui ont été créés à partir de la Structure sélectionnée
+                    ex : tous les Modèles Fonctionnels pour toutes les lampes de l'installation
+                    -->
+
+                    <!-- En-tête colonne 2-->
+                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource GrayBorderBrush}"
+                            BorderThickness="0,0,1,1"
+                            Background="{StaticResource OffWhiteBackgroundBrush}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
+                                <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                            </Grid.ColumnDefinitions>
+
+                        <StackPanel Background="{StaticResource NoColorBrush}" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
+                            <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
+                            <TextBlock 
+                                Style="{StaticResource TitleTextLight}"
+                                Text="{StaticResource ModelsTitle}"
+                            />
+                        </StackPanel>
+
+                        <!-- Bouton de recherche,(Non-implémenté)-->
+                        <Button Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource IconButtonStyle}"
+                                Tag="{StaticResource SearchDrawingImage}"
+                                BorderBrush="{StaticResource GrayBorderBrush}"
+                                BorderThickness="1"
+                                Margin="5"
+                                Padding="5"
+                                Background="{StaticResource WhiteBackgroundBrush}"
+                                Height="30"
+                        />
+                    </Grid>
+                </Border>
+                    
+                <!-- Contenu colonne 2 : liste des Modèles Fonctionnels correspondant à la Structure sélectionnée-->
+                <Border Grid.Row="1" Grid.Column="1"
+                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                        BorderBrush="{StaticResource GrayBorderBrush}"
+                        BorderThickness="0,0,1,0">
+                    
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- Titre structure -->
+                            <RowDefinition Height="*" /><!-- Listes modèles-->
+                        </Grid.RowDefinitions>
+
+                        <!-- Titre Structure-->
+                        <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
+                            BorderThickness="0,0,0,2"
+                            Padding="5"
+                            Background="{StaticResource LightGrayBackgroundBrush}">
+                            
+                            <TextBlock FontWeight="Bold"
+                                       FontSize="16"
+                                       Foreground="{StaticResource LightForegroundBrush}"
+                                       Text="{Binding SelectedStructure.Name}"
+                            />
+                        </Border>
+
+                        <!-- Listes Modèles Fonctionnels liés-->
+                        <ScrollViewer Grid.Row="1" x:Name="FunctionalModelsScrollViewer" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Disabled">
+                            <Grid>    
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/> <!--Liste des Modèles Fonctionnels-->
+                                    <RowDefinition Height="Auto"/> <!--Bouton d'ajout de Modèle Fonctionnel-->
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                
+                                <ListBox Grid.Row="0" ItemsSource="{Binding SelectedModels}"
+                                         SelectedItem="{Binding SelectedModel}"
+                                         Background="{StaticResource OffWhiteBackgroundBrush}"
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                </ListBox>
+                                
+                                <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
+                                <Border Grid.Row="2"
+                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        BorderThickness="0,0,1,0">
+                                </Border>
+                            </Grid>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
+            
+            </Grid>
+        </Border>
+        
+        
+        
+        
+        <Border Grid.Column="1" Name="ChosenModelsColumn"
+                BorderBrush="{StaticResource LightGrayBorderBrush}"
+                BorderThickness="1,0,0,0"
+                Background="{StaticResource OffWhiteBackgroundBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition MinHeight="25" Height="Auto"/>      <!-- Titre Modèles Fonctionnels sélectionnés-->
+                    <RowDefinition MinHeight="600" Height="*"/>  
+                    <!-- TextBox avec les modèles -->
+                    <RowDefinition Height="Auto"/>      <!-- Bouton de Lancement de Tests-->
+                </Grid.RowDefinitions>
+                
+                <TextBlock 
+                    Name="ChosenTestModelesTitle"
+                    Style="{StaticResource TitleTextLight}"
+                    FontSize="17"
+                    HorizontalAlignment="Center"
+                    Text="Modèles Fonctionnels Choisis"
+                />
+                
+                <ListBox Grid.Row="1" Name="ChosenTestModelesListBox" Width="200" Height="320"
+                         Style="{StaticResource StandardListBoxLight}"
+                         ItemsSource="{Binding DiscoveredInterfaces}"
+                         SelectedItem="{Binding SelectedInterface}"
+                         SelectionMode="Single"
+                         ItemContainerStyle="{StaticResource ListBoxContainerLight}"
+                         ItemTemplate="{StaticResource ListBoxItemLight}">
+                    <!-- ItemTemplate pour afficher les données -->
+                </ListBox>
+                
+                <Button Grid.Row="2" Name="LaunchTestButton"
+                        Content="{StaticResource TestButton}"
+                        Style="{StaticResource LaunchTestButtonStyleLight}"
+                        Foreground="{StaticResource DarkForegroundBrush}"
+                        Tag="{StaticResource PlayDrawingImage}"
+                        Margin="7,7"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                />
+                
+                
+            </Grid>
+        </Border>
+        
+        
+    </Grid>
+    
+    
+</mah:MetroWindow>

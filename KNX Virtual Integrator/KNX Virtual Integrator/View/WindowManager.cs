@@ -9,6 +9,8 @@ public class WindowManager
     public MainWindow MainWindow { get; }
     public SettingsWindow? SettingsWindow { get; }
     public ConnectionWindow? ConnectionWindow { get; private set; }
+    
+    public TestConfigWindow? TestConfigWindow { get; private set; }
 
     public WindowManager(MainViewModel mainViewModel)
     {
@@ -20,9 +22,11 @@ public class WindowManager
         SettingsWindow = new SettingsWindow(_mainViewModel);
         ConnectionWindow = new ConnectionWindow(_mainViewModel);
         MainWindow = new MainWindow(_mainViewModel, ConnectionWindow, this);
+        TestConfigWindow = new TestConfigWindow(_mainViewModel);
     }
 
     public void ShowMainWindow() => MainWindow.Show();
     public void ShowSettingsWindow() => SettingsWindow?.Show();
     public void ShowConnectionWindow() => ConnectionWindow?.Show();
+    public void ShowTestConfigWindow() => TestConfigWindow?.Show();
 }
