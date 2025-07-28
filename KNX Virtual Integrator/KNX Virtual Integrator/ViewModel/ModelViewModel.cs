@@ -33,16 +33,17 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// Not seen on the UI
         /// List of Models that corresponds to the Selected Structure
         /// </summary>
-        private ObservableCollection<FunctionalModel> _selectedModels = [];
+        private ObservableCollection<FunctionalModel>? _selectedModels = [];
         public ObservableCollection<FunctionalModel>? SelectedModels
         {
             get => _selectedModels;
             set
             {
                     
-                if (_selectedModels.Equals(value) || value == null)
+                if (_selectedModels != null && _selectedModels.Equals(value))
                     return;
                 _selectedModels = value;
+                SelectedModel = null; // reset the selected model if selectedmodels has changed
                 ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedModels));
                 
@@ -68,6 +69,8 @@ namespace KNX_Virtual_Integrator.ViewModel
             }
         }
         
+        private string _previouslySelectedStructureName;
+
         /// <summary>
         /// Column 1. Selected model structure.
         /// </summary>  
@@ -77,14 +80,14 @@ namespace KNX_Virtual_Integrator.ViewModel
             get => _selectedStructure;
             set
             {
-                
-                if (_selectedStructure != null && _selectedStructure.Key == value?.Key)
+                if (_selectedStructure?.Key == value?.Key)
                     return;
                 _selectedStructure = value;
-                SelectedModels = _functionalModelList.FunctionalModels[SelectedStructure!.Key-1];
-               
-                ShowModelColumn(); // Affiche le panneau avec la liste de modèles fonctionnels
                 WhenPropertyChanged(nameof(SelectedStructure));
+                
+                // updating the second column
+                SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;
+                ShowModelColumn(); // Affiche le panneau avec la liste de modèles fonctionnels
                 
             }
         }

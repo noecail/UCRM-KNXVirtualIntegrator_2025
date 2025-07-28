@@ -187,7 +187,7 @@
                             <RowDefinition Height="*"/>         <!-- Liste modèles prédéfinis-->
                             <RowDefinition Height="Auto"/>      <!-- Titre modèles créés-->
                             <RowDefinition Height="*"/>         <!-- Liste modèles créés-->
-                            <RowDefinition Height="Auto"/>      <!-- Bouton d'ajout de Structures de Modèles Fonctionnels-->
+                            <RowDefinition Height="Auto"/>      <!-- Bandeau inférieur : ajouter/supprimer Structures-->
                         </Grid.RowDefinitions>
 
                         <!-- Titre Modèles prédéfinis-->
@@ -264,12 +264,30 @@
                             </Grid>
                         </ScrollViewer>
 
-                        <!-- Bouton d'ajout de Modèles-->
-                        <Button Grid.Row="4" HorizontalAlignment="Stretch"
-                                Click="CreateStructureButtonClick"
-                                Style="{StaticResource NewSomethingButtonStyle}"
-                                Tag="{StaticResource NewStructure}"
-                                />
+                        <!-- Bandeau inférieur -->
+                        <Grid Grid.Row="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!--Bouton de suppression -->
+                            <Button Grid.Column="0"
+                                    Style="{StaticResource DeleteStructureButtonStyle}"
+                                    Tag="{StaticResource BinDrawingImage}"
+                                    Height="35"
+                                    BorderThickness="1"
+                                    BorderBrush="{StaticResource GrayBorderBrush}"
+                                    Click="DeleteStructuresButtonClick"
+                            />
+                            
+                            <!--Bouton de création-->
+                            <Button Grid.Column="1" HorizontalAlignment="Stretch"
+                                    Click="CreateStructureButtonClick"
+                                    Style="{StaticResource NewSomethingButtonStyle}"
+                                    Tag="{StaticResource NewStructure}"
+                            />
+                        </Grid>
                     </Grid>
                 </Border>
 
@@ -345,10 +363,11 @@
                                     <RowDefinition Height="Auto"/> <!--Liste des Modèles Fonctionnels-->
                                     <RowDefinition Height="Auto"/> <!--Bouton d'ajout de Modèle Fonctionnel-->
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/> <!--Bouton de suppression de Modèle Fonctionnel-->
                                 </Grid.RowDefinitions>
                                 
                                 <ListBox Grid.Row="0" ItemsSource="{Binding SelectedModels}"
-                                         SelectedItem="{Binding SelectedModel}"
+                                         SelectedItem="{Binding SelectedModel, Mode=TwoWay}"
                                          Background="{StaticResource OffWhiteBackgroundBrush}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
                                 </ListBox>
@@ -372,6 +391,17 @@
                                         BorderBrush="{StaticResource GrayBorderBrush}"
                                         BorderThickness="0,0,1,0">
                                 </Border>
+                                
+                                <!--Bouton de suppression -->
+                                <Button Grid.Row="3"
+                                        Style="{StaticResource DeleteStructureButtonStyle}"
+                                        Tag="{StaticResource BinDrawingImage}"
+                                        HorizontalAlignment="Left"
+                                        Height="35"
+                                        BorderThickness="1"
+                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        Click="DeleteFunctionalModelFromListButtonClick"
+                                />
                             </Grid>
                         </ScrollViewer>
                     </Grid>
@@ -390,7 +420,6 @@
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" /> <!-- Titre -->
-                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
                             </Grid.ColumnDefinitions>
 
@@ -403,19 +432,8 @@
                                    Margin="5,0"
                             />
 
-                        <!--Bouton de suppression -->
-                        <Button Grid.Column="1"
-                                Style="{StaticResource DeleteFunctionalModelButtonStyle}"
-                                Tag="{StaticResource BinDrawingImage}"
-                                HorizontalAlignment="Right"
-                                Height="35"
-                                BorderThickness="1"
-                                BorderBrush="{StaticResource GrayBorderBrush}"
-                                Click="DeleteFunctionalModelFromListButtonClick"
-                                />
-                        
                         <!--Bouton de fermeture -->
-                        <Button Grid.Column="2"
+                        <Button Grid.Column="1"
                             Style="{StaticResource IconButtonStyle}"
                             Tag="{StaticResource CloseDrawingImage}"
                             HorizontalAlignment="Right"

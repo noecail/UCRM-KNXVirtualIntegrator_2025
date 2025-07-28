@@ -30,10 +30,10 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         {
             if (e.PropertyName == nameof(FunctionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
             {
-                if (FunctionalModels.Count != FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
+                if (FunctionalModels.Count <= FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
                 {
                     FunctionalModels.Add([]);
-                    AddToList(FunctionalModels.Count - 1);
+                    AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
                 } 
                 OnPropertyChanged(nameof(FunctionalModelDictionary)); //notifier le mainviewmodel
             }
@@ -48,7 +48,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         {
             if (e.PropertyName == nameof(FunctionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
             {
-                if (FunctionalModels.Count != FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
+                if (FunctionalModels.Count <= FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
                 {
                     FunctionalModels.Add([]);
                     AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
@@ -137,8 +137,11 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     {
         if (index > FunctionalModelDictionary.FunctionalModels.Count)
             return;
+        for (var i = FunctionalModelDictionary.FunctionalModels[index].Key; i < FunctionalModelDictionary.FunctionalModels[^1].Key; i++)
+            FunctionalModelDictionary.FunctionalModels[i].Key--;
         FunctionalModelDictionary.RemoveFunctionalModel(index);
         FunctionalModels.RemoveAt(index);
+        OnPropertyChanged(nameof(FunctionalModels)); //notifier l'ui
     }
     
     /// <summary>

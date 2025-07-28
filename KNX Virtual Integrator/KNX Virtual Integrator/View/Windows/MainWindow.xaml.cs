@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
@@ -410,11 +411,39 @@ public partial class MainWindow
         // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
     }
 
-    private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
+    private void DeleteStructuresButtonClick(object sender, RoutedEventArgs e)
     {
-        //_viewModel.DeleteStructureDictionaryCommand.Execute();
-        _viewModel.SelectedStructure = null; // ou alors []
-        // TODO : récupérer l'index de la structure
+        // Store all indexes to delete
+        var indexesToDelete = new HashSet<int>();
+            
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < StructureBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = StructureBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+            if (itemContainer == null)
+                continue;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer.Template.FindName("DeleteStructureCheckBox", itemContainer) is CheckBox checkBox)
+            {
+                var structure = StructureBox.Items[i] as FunctionalModel; // La Structure
+
+                // Si la case est cochée on supprime la structure
+                if (checkBox.IsChecked == true)
+                    if (structure != null)
+                    {
+                        indexesToDelete.Add(structure.Key-1); // supprimer la structure
+                    }
+            }
+        }
+        
+        // toutes les supprimer dans l'ordre inverse pour éviter que les structures changent d'index avant d'avoir été supprimées
+        foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
+            _viewModel.DeleteStructureDictionaryCommand.Execute(indexToDelete); 
+        
     }
     
     // <<<<<<<<<<<<<<<<<<<< COLONNE 2 >>>>>>>>>>>>>>>>>>>>
@@ -426,8 +455,7 @@ public partial class MainWindow
     {
         _viewModel.AddFunctionalModelToList.Execute(null);
         FunctionalModelsScrollViewer.ScrollToEnd();
-        /*var cb = (CheckBox)StructureBox.Template.FindName("DeleteStructureCheckBox", StructureBox);
-        Console.WriteLine(cb.IsChecked);*/
+        StructureBox.ApplyTemplate();
     }
 
     

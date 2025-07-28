@@ -109,7 +109,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 }
                 
             }
-            
         };
 
         _busConnection.SelectedConnectionType = "USB";
@@ -173,8 +172,24 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         DeleteStructureDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
             {
+                // save the previously selected structure and model
+                var previouslySelectedStructure = SelectedStructure;
+                var previouslySelectedModel = SelectedModel;
+                // unselect the structure and model
+                SelectedStructure = null;
+                SelectedModel = null;
+                
+                
+                // delete the structure
                 _functionalModelList.DeleteFromDictionary(parameter);
                 HideModelColumnCommand?.Execute(null);
+                
+                // restore (or not) the previously selected structure and model
+                if (_functionalModelList.FunctionalModelDictionary.FunctionalModels.Contains(previouslySelectedStructure) && _functionalModelList.FunctionalModelDictionary.FunctionalModels[_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(previouslySelectedStructure)].Name == previouslySelectedStructure.Name)
+                {
+                    SelectedStructure =  previouslySelectedStructure;
+                    SelectedModel = previouslySelectedModel;
+                }
             }
         );
 
@@ -237,7 +252,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                         _functionalModelList.AddToList(SelectedStructure.Key-1);
             }
         );
-        
         
         DeleteFunctionalModelFromList = new Commands.RelayCommand<FunctionalModel>(model =>
             {

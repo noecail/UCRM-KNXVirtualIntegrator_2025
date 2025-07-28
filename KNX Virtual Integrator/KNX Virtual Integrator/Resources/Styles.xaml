@@ -232,6 +232,20 @@
         </Style.Triggers>
     </Style>
     
+    <!-- Style pour le bouton de suppression de Modèle Fonctionnel -->
+    <Style x:Key="DeleteStructureButtonStyle" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Tag" Value="{StaticResource BlackBinDrawingImage}"/>
+                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
     <!-- Style pour le bouton de suppression d'Élément à Tester-->
     <Style x:Key="DeleteTestedElementButtonStyle" TargetType="Button" BasedOn="{StaticResource DeleteFunctionalModelButtonStyle}">
         <!-- À completer, notamment pour réduire la taille du bouton-->
@@ -743,6 +757,13 @@
                             <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,1"/>
                             <!-- Contour noir à la sélection -->
                             <Setter TargetName="SelectedImage" Property="Visibility" Value="Visible"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                            <!-- Blanc à la sélection -->
+                            <Setter TargetName="Border" Property="BorderThickness" Value="0,0,1,1"/>
+                            <!-- Contour noir à la sélection -->
+                            <Setter TargetName="SelectedImage" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
