@@ -97,12 +97,12 @@ namespace KNX_Virtual_Integrator.Model.Entities
             for (var i = 0; i < TestsCmd.Count; i++)
             {
                 result = result && TestsCmd[i].IsEqual(other.TestsCmd[i]);
-            }
-            result = result && TestsIe.Count == other.TestsIe.Count;
+            } 
+            /* result = result && TestsIe.Count == other.TestsIe.Count;
             for (var i = 0; i < TestsIe.Count; i++)
             {
                 result = result && TestsIe[i].IsEqual(other.TestsIe[i]);
-            }
+            }*/
             return  result;
         }
         

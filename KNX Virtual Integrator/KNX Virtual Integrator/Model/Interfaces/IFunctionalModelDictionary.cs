@@ -25,6 +25,9 @@ namespace KNX_Virtual_Integrator.Model.Interfaces
         List<FunctionalModel> GetAllModels();
         
         public ObservableCollection<FunctionalModel> FunctionalModels {get;set;}
+
+        public int? HasSameStructure(FunctionalModel functionalModel);
+
         
         public event PropertyChangedEventHandler? PropertyChanged;
 

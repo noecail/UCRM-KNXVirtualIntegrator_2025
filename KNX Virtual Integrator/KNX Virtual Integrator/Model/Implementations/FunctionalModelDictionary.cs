@@ -13,6 +13,8 @@ namespace KNX_Virtual_Integrator.Model.Implementations
     public class FunctionalModelDictionary : IFunctionalModelDictionary
     {
         private ObservableCollection<FunctionalModel> _functionalModels =[];
+        
+        private List<List<string>> _keywordsDictionary = [];
 
         public ObservableCollection<FunctionalModel> FunctionalModels
         {
@@ -48,6 +50,25 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             AddFunctionalModel(new FunctionalModel([
             new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[new GroupValue(true), new GroupValue(false)]])  //On/Off
                 ],"Commutation")); //Convection, Prise, Arrosage, Portail
+            _keywordsDictionary.Add([]);
+            _keywordsDictionary[0].Add("Lumiere on/off");
+            _keywordsDictionary[0].Add("Lumiere on-off");
+            _keywordsDictionary[0].Add("Lumiere on_off");
+            _keywordsDictionary[0].Add("Light on/off");
+
+            _keywordsDictionary.Add([]);
+            _keywordsDictionary[1].Add("Lumiere variation");
+            _keywordsDictionary[1].Add("variation");
+            _keywordsDictionary[1].Add("Lumiere_variation");
+            _keywordsDictionary[1].Add("Light variation");
+            
+            _keywordsDictionary.Add([]);
+            _keywordsDictionary[2].Add("store");
+            _keywordsDictionary[2].Add("blind");
+            
+            _keywordsDictionary.Add([]);
+            _keywordsDictionary[3].Add("Commute");
+            _keywordsDictionary[3].Add("Commutation");
         }
 
         public FunctionalModelDictionary(string path)
@@ -62,7 +83,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         {
             if (functionalModel.Name == "New_Structure")
                 functionalModel.Name += "_" + (FunctionalModels.Count+1);
-            else 
+            else if (!functionalModel.Name.Contains("Structure"))
                 functionalModel.Name += "_Structure";
             FunctionalModels.Add(functionalModel);
             FunctionalModels.Last().Key = FunctionalModels.Count;
@@ -93,10 +114,17 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         {
             var doc = new XmlDocument();
             var project = doc.CreateElement("Dictionary");
-
             foreach (var model in GetAllModels())
             {
                 var functionalModel = model.ExportFunctionalModel(doc);
+                var keywords = doc.CreateElement("Keywords");
+                foreach (var keyword in _keywordsDictionary[model.Key - 1])
+                {
+                    var xKeyword = doc.CreateElement("Keyword");
+                    xKeyword.InnerText = keyword;
+                    keywords.AppendChild(xKeyword);
+                }
+                functionalModel.AppendChild(keywords);
                 project.AppendChild(functionalModel);
             }
 
@@ -112,14 +140,47 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void ImportDictionary(string path)
         {
             FunctionalModels.Clear();
+            _keywordsDictionary.Clear();
             var doc = new XmlDocument();
             doc.Load(path);
             var xnList = doc.DocumentElement?.ChildNodes;
-            if (xnList != null)
-                foreach (XmlNode model in xnList) // pour chaque modèle
-                {
+            if (xnList == null)
+                return;
+            for (var i = 0; i < xnList.Count;i++) // pour chaque modèle
+            {
+                var model = xnList[i];
+                if (model != null)
                     AddFunctionalModel(FunctionalModel.ImportFunctionalModel(model));
+                _keywordsDictionary.Add([]);
+                foreach (XmlNode element in model?.ChildNodes!)
+                {
+                    if (element.Name == "Keywords")
+                    {
+                        foreach (XmlNode keyword in element.ChildNodes)
+                        {
+                            _keywordsDictionary[i].Add(keyword.InnerText);
+                        }
+                    }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Checks if a Functional Model hase the same structure as the ones in the dictionary
+        /// </summary>
+        /// <param name="functionalModel">Structure to find in the dictionary</param>
+        /// <returns>Index of the corresponding structure, or null if not found</returns>
+        public int? HasSameStructure(FunctionalModel functionalModel)
+        {
+            int? result = null;
+            var i = 0;
+            while (i < FunctionalModels.Count && result == null)
+            {
+                if (FunctionalModels[i].HasSameStructure(functionalModel))
+                    result = i;
+                i++;
+            }
+            return result;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
