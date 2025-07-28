@@ -216,9 +216,9 @@
                                 </Grid.RowDefinitions>
                                 
                                 <ListBox Grid.Row="0"
-                                         x:Name="StructureBox"
+                                         x:Name="StructuresBox"
                                          ItemsSource="{Binding Structures}"
-                                         SelectedItem="{Binding SelectedStructure,Mode=TwoWay}"
+                                         SelectedItem="{Binding SelectedStructure, Mode=TwoWay}"
                                          ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
                                 </ListBox>
                                 
@@ -439,7 +439,6 @@
                             Tag="{StaticResource CloseDrawingImage}"
                             HorizontalAlignment="Right"
                             Background="{StaticResource NoColorBrush}"
-                            
                             Command="{Binding HideModelColumnCommand}"
                         />
                     </Grid>

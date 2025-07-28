@@ -24,8 +24,6 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
             index++;
         }
 
-        //FunctionalModels[0][0].Name = "Lumière_ON_OFF_Salon";
-
         FunctionalModelDictionary.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(FunctionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
@@ -81,7 +79,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
                 newModel.Name = "New_Model_" + newModel.Key;
             else
             {
-                newModel.Name = newModel.Name[..^10];
+                newModel.Name = newModel.Name[..^10] + "_" + newModel.Key;
             }
         }
         FunctionalModels[index].Add(newModel);
@@ -102,10 +100,12 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// </summary>
     /// <param name="indexOfStructure">Index of the structure of the Functional Model to delete in the list</param>
     /// <param name="indexOfModel">Index of the Functional Model to delete in the list</param>
-    
-    public void DeleteFromList(int indexOfStructure,int indexOfModel)
+    public void DeleteFromList(int indexOfStructure, int indexOfModel)
     {
         FunctionalModels[indexOfStructure].RemoveAt(indexOfModel);
+        foreach (var model in FunctionalModels[indexOfStructure])
+            if (model.Key > indexOfModel + 1) 
+                model.Key--;
     }
 
     /// <summary>

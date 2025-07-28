@@ -125,7 +125,7 @@ public partial class MainWindow
         StructModelButton.Style = supprButtonStyle;
         
         StructBox.ItemContainerStyle = boxItemStyle;
-        StructureBox.ItemContainerStyle = boxItemStyle;
+        StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyThemeToWindow is not implemented");
@@ -486,17 +486,17 @@ public partial class MainWindow
         // On cherche à récupérer l'index des structures à supprimer
         // les index sont disponibles à partir des checkbox associées au listbox items
         // on parcourt tous les listbox items
-        for (var i = 0; i < StructureBox.Items.Count; i++)
+        for (var i = 0; i < StructuresBox.Items.Count; i++)
         {
             // Récupère le ListBoxItem correspondant
-            var itemContainer = StructureBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+            var itemContainer = StructuresBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
             if (itemContainer == null)
                 continue;
 
             // Récupère la CheckBox dans le template
-            if (itemContainer.Template.FindName("DeleteStructureCheckBox", itemContainer) is CheckBox checkBox)
+            if (itemContainer.Template.FindName("DeleteCheckBox", itemContainer) is CheckBox checkBox)
             {
-                var structure = StructureBox.Items[i] as FunctionalModel; // La Structure
+                var structure = StructuresBox.Items[i] as FunctionalModel; // La Structure
 
                 // Si la case est cochée on supprime la structure
                 if (checkBox.IsChecked == true)
@@ -520,21 +520,54 @@ public partial class MainWindow
     /// </summary>
     private void AddFunctionalModelToListButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddFunctionalModelToList.Execute(null);
+        _viewModel.AddFunctionalModelToListCommand.Execute(null);
         FunctionalModelsScrollViewer.ScrollToEnd();
-        StructureBox.ApplyTemplate();
+        StructuresBox.ApplyTemplate();
     }
 
-    
-    // <<<<<<<<<<<<<<<<<<<< COLONNE 3 >>>>>>>>>>>>>>>>>>>>
-    
     /// <summary>
     /// Handles the button click event to delete a Functional Model.
     /// </summary>
     private void DeleteFunctionalModelFromListButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.DeleteFunctionalModelFromList.Execute(_viewModel.SelectedModel);
+        // Store all indexes to delete
+        var indexesToDelete = new HashSet<int>();
+            
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < ModelsBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = ModelsBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+            if (itemContainer == null)
+                continue;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer.Template.FindName("DeleteCheckBox", itemContainer) is CheckBox checkBox)
+            {
+                var model = ModelsBox.Items[i] as FunctionalModel; // Le Modèle Fonctionnel
+
+                // Si la case est cochée on supprime lae modèle fonctionnel
+                if (checkBox.IsChecked == true)
+                    if (model != null)
+                    {
+                        indexesToDelete.Add(model.Key-1); // supprimer le modèle
+                    }
+            }
+        }
+        
+        // tous les supprimer dans l'ordre inverse pour éviter que les modèles changent d'index avant d'avoir été supprimés
+        foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
+            _viewModel.DeleteFunctionalModelFromListCommand.Execute(indexToDelete);
+        
+        Console.WriteLine("selected : " + _viewModel.SelectedModel);
+        foreach (var model in _viewModel.SelectedModels)
+            Console.WriteLine(model);
     }
+    
+    
+    // <<<<<<<<<<<<<<<<<<<< COLONNE 3 >>>>>>>>>>>>>>>>>>>>
     
     /// <summary>
     /// Handles the button click event to add a Tested Element to an already existing Functional Model.
@@ -542,7 +575,7 @@ public partial class MainWindow
     /// </summary>
     private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddTestedElementToStructure.Execute(_viewModel.SelectedModel);
+        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedModel);
     }
     
     /// <summary>
@@ -558,7 +591,7 @@ public partial class MainWindow
         if (dep == null) return;
         var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        _viewModel.RemoveTestedElementFromStructure.Execute((_viewModel.SelectedModel, index)); 
+        _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedModel, index)); 
     }
     
 

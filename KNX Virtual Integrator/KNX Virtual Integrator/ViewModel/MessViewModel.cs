@@ -93,25 +93,25 @@ namespace KNX_Virtual_Integrator.ViewModel
         
         public ICommand DeleteStructureDictionaryCommand { get; private set; }
         
-        public ICommand AddTestedElementToStructure  { get; private set; }
+        public ICommand AddTestedElementToStructureCommand  { get; private set; }
         
-        public ICommand RemoveTestedElementFromStructure  { get; private set; }
+        public ICommand RemoveTestedElementFromStructureCommand  { get; private set; }
         
-        public ICommand AddTestToElement { get; private set; }
+        public ICommand AddTestToElementCommand { get; private set; }
         
-        public ICommand RemoveTestFromElement { get; private set; }
+        public ICommand RemoveTestFromElementCommand{ get; private set; }
         
-        public ICommand AddDptCmdToElement {get; private set; }
+        public ICommand AddDptCmdToElementCommand {get; private set; }
 
-        public ICommand AddDptIeToElement {get; private set; }
+        public ICommand AddDptIeToElementCommand {get; private set; }
         
-        public ICommand RemoveCmdDptFromElement  { get; private set; }
+        public ICommand RemoveCmdDptFromElementCommand  { get; private set; }
 
-        public ICommand RemoveIeDptFromElement  { get; private set; }
+        public ICommand RemoveIeDptFromElementCommand  { get; private set; }
         
-        public ICommand AddFunctionalModelToList { get; private set; }
+        public ICommand AddFunctionalModelToListCommand { get; private set; }
             
-        public ICommand DeleteFunctionalModelFromList { get; private set; }
+        public ICommand DeleteFunctionalModelFromListCommand { get; private set; }
         
         public ICommand ImportDictionaryCommand  { get; private set; }
 
@@ -127,9 +127,6 @@ namespace KNX_Virtual_Integrator.ViewModel
         public AsyncRelayCommand RefreshInterfacesCommand { get; }
         // à implémenter dans le VM
         public AsyncRelayCommand ConnectBusRemotelyCommand { get; private set; }
-        
-        // Pour tester, à supprimer plus tard
-        public AsyncRelayCommand TestRechercherCommand { get; }
 
         /// <summary>
         /// Command that sends a group value write "on" command asynchronously.

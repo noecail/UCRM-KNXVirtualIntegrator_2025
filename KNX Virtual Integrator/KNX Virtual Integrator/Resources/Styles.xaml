@@ -913,7 +913,7 @@
 
                             <!-- CheckBox de suppression -->
                             <CheckBox Grid.Column="0"
-                                      x:Name="DeleteStructureCheckBox"
+                                      x:Name="DeleteCheckBox"
                                       Style="{StaticResource StandardCheckBoxLight}"
                                       Margin="0,0,5,0">
                             </CheckBox>
@@ -1002,7 +1002,7 @@
 
                             <!-- CheckBox de suppression -->
                             <CheckBox Grid.Column="0"
-                                      x:Name="DeleteStructureCheckBox"
+                                      x:Name="DeleteCheckBox"
                                       Style="{StaticResource StandardCheckBoxDark}"
                                       Margin="0,0,5,0">
                             </CheckBox>

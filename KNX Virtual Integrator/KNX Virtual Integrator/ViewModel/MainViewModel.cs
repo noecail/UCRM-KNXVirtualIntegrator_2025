@@ -170,7 +170,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        DeleteStructureDictionaryCommand = new Commands.RelayCommand<int>(parameter =>
+        DeleteStructureDictionaryCommand = new Commands.RelayCommand<int>(index =>
             {
                 // save the previously selected structure and model
                 var previouslySelectedStructure = SelectedStructure;
@@ -181,7 +181,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 
                 
                 // delete the structure
-                _functionalModelList.DeleteFromDictionary(parameter);
+                _functionalModelList.DeleteFromDictionary(index);
                 HideModelColumnCommand?.Execute(null);
                 
                 // restore (or not) the previously selected structure and model
@@ -193,7 +193,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        AddTestedElementToStructure = new Commands.RelayCommand<FunctionalModel>(model =>
+        AddTestedElementToStructureCommand = new Commands.RelayCommand<FunctionalModel>(model =>
             {
                 model?.AddElement(new TestedElement([1], [""], [[new GroupValue(true)]], [1], [""], [[new GroupValue(true)]]));
                 //_functionalModelList.FunctionalModels[0].AddElement(new TestedElement());
@@ -201,49 +201,49 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        RemoveTestedElementFromStructure = new Commands.RelayCommand<(FunctionalModel model, int index)>(parameters =>
+        RemoveTestedElementFromStructureCommand = new Commands.RelayCommand<(FunctionalModel model, int index)>(parameters =>
             {
                 parameters.model.RemoveElement(parameters.index);
             }
         );
         
-        AddTestToElement = new Commands.RelayCommand<TestedElement>(parameter =>
+        AddTestToElementCommand = new Commands.RelayCommand<TestedElement>(parameter =>
             {
                 parameter?.AddTest();
             }
         );
         
-        RemoveTestFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+        RemoveTestFromElementCommand = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
             {
                 parameters.element.RemoveTest(parameters.index);
             }
         );
         
-        AddDptCmdToElement = new Commands.RelayCommand<TestedElement>(parameter =>
+        AddDptCmdToElementCommand = new Commands.RelayCommand<TestedElement>(parameter =>
             {
                 parameter?.AddDptToCmd(1,"",[]);
             }
         );
         
-        AddDptIeToElement = new Commands.RelayCommand<TestedElement>(parameter =>
+        AddDptIeToElementCommand = new Commands.RelayCommand<TestedElement>(parameter =>
             {
                 parameter?.AddDptToIe(1,"",[]);
             }
         );
         
-        RemoveCmdDptFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+        RemoveCmdDptFromElementCommand = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
             {
                 parameters.element.RemoveDptFromCmd(parameters.index);
             }
         );
         
-        RemoveIeDptFromElement = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+        RemoveIeDptFromElementCommand = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
             {
                 parameters.element.RemoveDptFromIe(parameters.index);
             }
         );
 
-        AddFunctionalModelToList = new Commands.RelayCommand<object>(model =>
+        AddFunctionalModelToListCommand = new Commands.RelayCommand<object>(model =>
             {
                 if (SelectedStructure!=null)
                     if (model is FunctionalModel myModel)
@@ -253,16 +253,30 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
-        DeleteFunctionalModelFromList = new Commands.RelayCommand<FunctionalModel>(model =>
+        DeleteFunctionalModelFromListCommand = new Commands.RelayCommand<int>(indexModel =>
             {
-                if (model != null && SelectedStructure != null)
+                // save the previously selected model 
+                var previouslySelectedModel = SelectedModel;
+                // unselect the structure and model
+                SelectedModel = null;
+                SelectedModels = null;
+                
+                if (SelectedStructure != null)
                 {
-                    var indexStructure = SelectedStructure.Key - 1;
-                    _functionalModelList.DeleteFromList(indexStructure, _functionalModelList.FunctionalModels[indexStructure].IndexOf(model));
+                    var indexStructure = SelectedStructure.Key-1;
+                    _functionalModelList.DeleteFromList(indexStructure,indexModel);
+                }
+                
+                SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;
+               
+                // restore (or not) the previously selected model
+                if (SelectedModels.Contains(previouslySelectedModel) && SelectedModels[_functionalModelList.FunctionalModels[SelectedStructure.Key-1].IndexOf(previouslySelectedModel)].Name == previouslySelectedModel.Name)
+                {
+                    SelectedModel = previouslySelectedModel;
                 }
             }
         );
-
+        
         ExportDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
                 if (path != null)
@@ -366,16 +380,12 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         HideAdressColumnCommand = new RelayCommand(HideAdressColumn);
         ShowModelColumnCommand = new RelayCommand(ShowModelColumn);
         ShowAdressColumnCommand = new RelayCommand(ShowAdressColumn);
-
-
         
 
         // Chargement des modèles par défaut dans la collection observable
         Structures = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModelDictionary.FunctionalModels);
         SelectedModels = [];
-        /*foreach (var model in Models)
-            SelectedModels?.Add(model);
-        Console.WriteLine("SelectedModels.Count " + SelectedModels?.Count);*/
+        
         
         //Sauvegarde des modèles --------------------------------------------------------------------
 
