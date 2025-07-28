@@ -58,9 +58,76 @@ public partial class MainWindow
 
     private void ApplyThemeToWindow()
     {
+        Style titleStyles;
+        Style borderStyles;
+        Style borderTitleStyles;
+        Style searchbuttonStyle;
+        Style boxItemStyle;
+        Style supprButtonStyle;
+        Brush backgrounds;
         
-        if (_viewModel.AppSettings.EnableLightTheme) 
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute(""); // Si le thème clair est actif
+        if (_viewModel.AppSettings.EnableLightTheme)
+        {
+            NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
+            NameTextBlock.Style= (Style)FindResource("StandardTextBlockLight");
+            
+            titleStyles = (Style)FindResource("TitleTextLight");
+            borderStyles = (Style)FindResource("BorderLight");
+            borderTitleStyles = (Style)FindResource("BorderTitleLight");
+            searchbuttonStyle = (Style)FindResource("SearchButtonLight");
+            boxItemStyle = (Style)FindResource("ModelListBoxItemStyleLight");
+            supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleLight");
+            backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
+
+        }
+        else
+        {
+            NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
+            NameTextBlock.Style= (Style)FindResource("StandardTextBlockDark");
+            
+            titleStyles = (Style)FindResource("TitleTextDark");
+            borderStyles = (Style)FindResource("BorderDark");
+            borderTitleStyles = (Style)FindResource("BorderTitleDark");
+            searchbuttonStyle = (Style)FindResource("SearchButtonDark");
+            boxItemStyle = (Style)FindResource("ModelListBoxItemStyleDark");
+            supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleDark");
+
+            backgrounds = (Brush)FindResource("DarkGrayBackgroundBrush");
+
+        }
+        
+        Background = backgrounds;
+        StructBibTitleText.Style = titleStyles;
+        BorderDefStructTitleText.Style = titleStyles;
+        BorderStructTitleText.Style = titleStyles;
+        BorderModelsTitleText.Style = titleStyles;
+        ModelBibText.Style = titleStyles;
+        ModelSettingsText.Style = titleStyles;
+        AddressTitleText.Style = titleStyles;
+        
+        BorderAllStruct.Style = borderStyles;
+        BorderDefStructTitle.Style = borderTitleStyles;
+        BorderDefStruct.Style = borderStyles;
+        BorderStructTitle.Style = borderTitleStyles;
+        BorderStruct.Style = borderStyles;
+        BorderAllModels.Style = borderStyles;
+        BorderModelTitle.Style = borderTitleStyles;
+        BorderModels.Style = borderStyles;
+        BorderAddModel.Style = borderStyles;
+        BorderModelBib.Style = borderStyles;
+        BorderStructBib.Style = borderStyles;
+        
+        
+        SearchDefStructButton.Style = searchbuttonStyle;
+        SearchModelButton.Style = searchbuttonStyle;
+        SearchAddressButton.Style = searchbuttonStyle;
+        StructSupprButton.Style = supprButtonStyle;
+        StructModelButton.Style = supprButtonStyle;
+        
+        StructBox.ItemContainerStyle = boxItemStyle;
+        StructureBox.ItemContainerStyle = boxItemStyle;
+        ModelsBox.ItemContainerStyle = boxItemStyle;
+        
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyThemeToWindow is not implemented");
 
     }

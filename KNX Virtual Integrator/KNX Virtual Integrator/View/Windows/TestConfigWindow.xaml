@@ -5,8 +5,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
+        xmlns:entities="clr-namespace:KNX_Virtual_Integrator.Model.Entities"
+        d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         mc:Ignorable="d"
-        Title="Configuration du test" Height="800" Width="1200"
+        Title="Configuration du test" Height="700" Width="1200"
         TitleCharacterCasing="Normal"
         ResizeMode="NoResize"
         Background="{StaticResource WhiteBackgroundBrush}"
@@ -19,19 +21,25 @@
     <Window.Resources>
         
         <!-- Style pour les Modèles Fonctionnels choisis -->
-        <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type viewmodel:ConnectionInterfaceViewModel}">
-            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}"
+        <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type entities:FunctionalModel}">
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=Name}"
                        Style="{StaticResource ItalicTextBlockLight}" />
         </DataTemplate>
 
-        <DataTemplate x:Key="ListBoxItemDark" DataType="{x:Type viewmodel:ConnectionInterfaceViewModel}">
-            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=DisplayName}"
+        <DataTemplate x:Key="ListBoxItemDark" DataType="{x:Type entities:FunctionalModel}">
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=Name}"
                        Style="{StaticResource ItalicTextBlockDark}" />
         </DataTemplate>
+        
+        <!-- ReSharper disable once Xaml.RedundantResource -->
+        <Style x:Key="ListBoxStyleDark" TargetType="ListBox" BasedOn="{StaticResource StandardListBoxDark}">
+            <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}"/> 
+        </Style>
         
         <Style x:Key="LaunchTestButtonStyleLight" TargetType="Button" BasedOn="{StaticResource IconTextButtonStyle}">
             <Setter Property="Background" Value="{StaticResource GrayBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{StaticResource DarkGrayBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
             <Setter Property="BorderThickness" Value=" 1"/>
         </Style>
         
@@ -59,9 +67,8 @@
         
         
         <Border Grid.Column="0" Name="AllModelsAndElementsColumn"
-            BorderBrush="{StaticResource LightGrayBorderBrush}"
-            BorderThickness="0,0,1,0"
-            Background="{StaticResource OffWhiteBackgroundBrush}">
+                Style="{StaticResource BorderLight}"
+                BorderThickness="0,0,1,0">
             
             <Grid><!-- Define rows and columns for the nested grid -->
                 <Grid.RowDefinitions>
@@ -70,12 +77,12 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250" /> <!-- Modèles -->
-                    <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
-                    <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
+                    <ColumnDefinition MinWidth="200" Width="Auto"/>
+                    <ColumnDefinition MinWidth="200" Width="Auto"/> 
                 </Grid.ColumnDefinitions>
             
             
-            <!-- Première colonne
+                    <!-- Première colonne
                     Bibliothèque des Structures de Modèle Fonctionnel
                     Contient toutes les Structures de Modèle Fonctionnel (çàd non instanciées), prédéfinies ou crées (ou suggérées (IA))
                     ex : Structure de Modèle Fonctionnel pour les lampes
@@ -83,9 +90,9 @@
                     
                     <!-- En-tête colonne 1 -->
                     <Border Grid.Row="0" Grid.Column="0"
-                            BorderBrush="{StaticResource GrayBorderBrush}"
-                            BorderThickness="0,0,1,1"
-                            Background="{StaticResource OffWhiteBackgroundBrush}">
+                            x:Name="BorderStructBib"
+                            Style="{StaticResource BorderLight}"
+                            BorderThickness="0,0,1,1">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
@@ -93,57 +100,61 @@
                             </Grid.ColumnDefinitions>
 
                         <!-- Bandeau supérieur -->
-                        <StackPanel Background="Transparent" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
+                        <StackPanel Grid.Column="0"
+                                    Background="{StaticResource NoColorBrush}" 
+                                    Orientation="Horizontal" 
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" 
+                                    Margin="10,0">
                             <Image Source="{StaticResource LibraryDrawingImage}" Height="20"/>
-                            <TextBlock 
-                                   Style="{StaticResource TitleTextLight}"
-                                   Text="{StaticResource Library}"
+                            <TextBlock x:Name="StructBibTitleText"
+                                       Style="{StaticResource TitleTextLight}"
+                                       Text="{StaticResource Library}"
                             />
                         </StackPanel>
 
                         <!-- Bouton de recherche,(Non-implémenté)-->
                         <Button Grid.Column="1"
+                                x:Name="SearchDefStructButton"
                                 HorizontalAlignment="Right"
-                            Style="{StaticResource IconButtonStyle}"
-                            Tag="{StaticResource SearchDrawingImage}"
-                            BorderBrush="{StaticResource GrayBrush}"
-                            BorderThickness="1"
-                            Margin="5"
-                            Padding="5"
-                            Background="{StaticResource WhiteBackgroundBrush}"
-                            Height="30"
+                                Style="{StaticResource SearchButtonLight}"
+                                BorderThickness="1"
+                                Margin="5"
+                                Padding="5"
+                                Height="30"
                         />
                     </Grid>
                 </Border>
                     
                 <!-- Contenu colonne 1 : liste des Structures de Modèles Fonctionnels : prédéfinis, créés et suggérés -->
                 <Border Grid.Row="1" Grid.Column="0"
-                        BorderBrush="{StaticResource GrayBorderBrush}"
+                        x:Name="BorderAllStruct"
+                        Style="{StaticResource BorderLight}"
                         BorderThickness="0,0,1,0">
-                    <Grid Background="{StaticResource OffWhiteBackgroundBrush}" >
+                    <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>      <!-- Titre modèles prédéfinis-->
-                            <RowDefinition Height="*"/>         <!-- Liste modèles prédéfinis-->
-                            <RowDefinition Height="Auto"/>      <!-- Titre modèles créés-->
-                            <RowDefinition Height="*"/>         <!-- Liste modèles créés-->
+                            <RowDefinition Height="Auto"/>      <!-- Titre des modèles prédéfinis-->
+                            <RowDefinition Height="*"/>         <!-- Liste des modèles prédéfinis-->
+                            <RowDefinition Height="Auto"/>      <!-- Titre des modèles créés-->
+                            <RowDefinition Height="*"/>         <!-- Liste des modèles créés-->
                             <RowDefinition Height="Auto"/>      <!-- Bouton d'ajout de Structures de Modèles Fonctionnels-->
                         </Grid.RowDefinitions>
 
-                        <!-- Titre Modèles prédéfinis-->
-                        <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
-                            BorderThickness="0,0,0,2"
-                            Padding="5"
-                            Background="{StaticResource LightGrayBackgroundBrush}">
-                            
-                            <TextBlock FontWeight="Bold"
-                                       FontSize="16"
-                                       Foreground="{StaticResource LightForegroundBrush}"
+                        <!-- Titre Structures prédéfinies-->
+                        <Border Grid.Row="0"  
+                                x:Name="BorderDefStructTitle"
+                                Style="{StaticResource BorderTitleLight}"
+                                BorderThickness="0,0,0,2"
+                                Padding="5">
+                            <TextBlock x:Name="BorderDefStructTitleText"
+                                       Style="{StaticResource TitleTextLight}"
                                        Text="{StaticResource PredefinedStructures}"
                             />
                         </Border>
 
-                        <!-- Listes des Modèles prédéfinis-->
-                        <ScrollViewer x:Name="PredefinedStructuresScrollViewer" Grid.Row="1" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+                        <!-- Liste des Structures prédéfinies-->
+                        <ScrollViewer x:Name="PredefinedStructuresScrollViewer" Grid.Row="1" 
+                                      VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -151,53 +162,54 @@
                                 </Grid.RowDefinitions>
                                 
                                 <ListBox Grid.Row="0"
-                                         x:Name="StructureBox"
+                                         x:Name="DefStructureBox"
                                          ItemsSource="{Binding Structures}"
                                          SelectedItem="{Binding SelectedStructure,Mode=TwoWay}"
-                                         Background="{StaticResource OffWhiteBackgroundBrush}"
-                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
                                 </ListBox>
                                 
                                 <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
                                 <Border Grid.Row="1"
-                                        Background="{StaticResource OffWhiteBackgroundBrush}"
-                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        x:Name="BorderDefStruct"
+                                        Style="{StaticResource BorderLight}"
                                         BorderThickness="0,0,1,0">
                                 </Border>
                             </Grid>
                         </ScrollViewer>
 
-                        <!-- Titre des Modèles créés-->
-                        <Border Grid.Row="2"  BorderBrush="{StaticResource GrayBorderBrush}"
+                        <!-- Titre des Structures créées-->
+                        <Border Grid.Row="2"  
+                                x:Name="BorderStructTitle"
+                                Style="{StaticResource BorderTitleLight}"
                                 BorderThickness="0,1,0,2"
-                                Padding="5"
-                                Background="{StaticResource LightGrayBackgroundBrush}">
-                                <TextBlock FontWeight="Bold"
-                                           FontSize="16"
-                                           Foreground="{StaticResource LightForegroundBrush}"
+                                Padding="5">
+                                <TextBlock x:Name="BorderStructTitleText"
+                                           Style="{StaticResource TitleTextLight}"
                                            Text="{StaticResource PersonalizedStructures}"
                                 />
                         </Border>
                             
-                        <!-- Listes modèles créés-->
-                        <ScrollViewer Grid.Row="3"  VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+                        <!-- Listes des structures créées-->
+                        <ScrollViewer Grid.Row="3"  
+                                      VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 
-                                <ListBox Grid.Row="0" ItemsSource="{Binding Structures}"
+                                <ListBox Grid.Row="0" 
+                                         x:Name="StructureBox"
+                                         ItemsSource="{Binding Structures}"
                                          SelectedItem="{Binding SelectedModel}"
                                          FontStyle="Italic"
-                                         Background="{StaticResource GrayBorderBrush}"
-                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
                                 </ListBox>
                                 
                                 <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
                                 <Border Grid.Row="1"
-                                        Background="{StaticResource OffWhiteBackgroundBrush}"
-                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        x:Name="BorderStruct"
+                                        Style="{StaticResource BorderLight}"
                                         BorderThickness="0,0,1,0">
                                 </Border>
                             </Grid>
@@ -205,16 +217,17 @@
                     </Grid>
                 </Border>
                 
-            <!-- Deuxième colonne
+                    <!-- Deuxième colonne
                     Liste des Modèles Fonctionnels correspondant à la Structure Sélectionnée
                     Contient tous les Modèles Fonctionnels qui ont été créés à partir de la Structure sélectionnée
                     ex : tous les Modèles Fonctionnels pour toutes les lampes de l'installation
                     -->
 
                     <!-- En-tête colonne 2-->
-                    <Border Grid.Row="0" Grid.Column="1" BorderBrush="{StaticResource GrayBorderBrush}"
-                            BorderThickness="0,0,1,1"
-                            Background="{StaticResource OffWhiteBackgroundBrush}">
+                    <Border Grid.Row="0" Grid.Column="1" 
+                            x:Name="BorderModelBib"
+                            Style="{StaticResource BorderLight}"
+                            BorderThickness="0,0,1,1">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
@@ -223,22 +236,20 @@
 
                         <StackPanel Background="{StaticResource NoColorBrush}" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                             <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
-                            <TextBlock 
-                                Style="{StaticResource TitleTextLight}"
-                                Text="{StaticResource ModelsTitle}"
+                            <TextBlock x:Name="ModelBibText"
+                                       Style="{StaticResource TitleTextLight}"
+                                       Text="{StaticResource ModelsTitle}"
                             />
                         </StackPanel>
 
                         <!-- Bouton de recherche,(Non-implémenté)-->
                         <Button Grid.Column="1"
+                                x:Name="SearchModelButton"
                                 HorizontalAlignment="Right"
-                                Style="{StaticResource IconButtonStyle}"
-                                Tag="{StaticResource SearchDrawingImage}"
-                                BorderBrush="{StaticResource GrayBorderBrush}"
+                                Style="{StaticResource SearchButtonLight}"
                                 BorderThickness="1"
                                 Margin="5"
                                 Padding="5"
-                                Background="{StaticResource WhiteBackgroundBrush}"
                                 Height="30"
                         />
                     </Grid>
@@ -246,8 +257,8 @@
                     
                 <!-- Contenu colonne 2 : liste des Modèles Fonctionnels correspondant à la Structure sélectionnée-->
                 <Border Grid.Row="1" Grid.Column="1"
-                        Background="{StaticResource OffWhiteBackgroundBrush}"
-                        BorderBrush="{StaticResource GrayBorderBrush}"
+                        x:Name="BorderAllModels"
+                        Style="{StaticResource BorderLight}"
                         BorderThickness="0,0,1,0">
                     
                     <Grid>
@@ -257,14 +268,14 @@
                         </Grid.RowDefinitions>
 
                         <!-- Titre Structure-->
-                        <Border Grid.Row="0"  BorderBrush="{StaticResource GrayBorderBrush}"
-                            BorderThickness="0,0,0,2"
-                            Padding="5"
-                            Background="{StaticResource LightGrayBackgroundBrush}">
+                        <Border Grid.Row="0"  
+                                x:Name="BorderModelTitle"
+                                Style="{StaticResource BorderTitleLight}"
+                                BorderThickness="0,0,0,2"
+                                Padding="5">
                             
-                            <TextBlock FontWeight="Bold"
-                                       FontSize="16"
-                                       Foreground="{StaticResource LightForegroundBrush}"
+                            <TextBlock Style="{StaticResource TitleTextLight}"
+                                       x:Name="BorderModelsTitleText"
                                        Text="{Binding SelectedStructure.Name}"
                             />
                         </Border>
@@ -278,16 +289,17 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 
-                                <ListBox Grid.Row="0" ItemsSource="{Binding SelectedModels}"
-                                         SelectedItem="{Binding SelectedModel}"
-                                         Background="{StaticResource OffWhiteBackgroundBrush}"
-                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyle}">
+                                <ListBox Grid.Row="0" 
+                                         x:Name="ModelsBox"
+                                         ItemsSource="{Binding SelectedModels}"
+                                         SelectedItem="{Binding SelectedModel, Mode=TwoWay}"
+                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
                                 </ListBox>
                                 
                                 <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
                                 <Border Grid.Row="2"
-                                        Background="{StaticResource OffWhiteBackgroundBrush}"
-                                        BorderBrush="{StaticResource GrayBorderBrush}"
+                                        x:Name="BorderModels"
+                                        Style="{StaticResource BorderLight}"
                                         BorderThickness="0,0,1,0">
                                 </Border>
                             </Grid>
@@ -299,18 +311,15 @@
         </Border>
         
         
-        
-        
         <Border Grid.Column="1" Name="ChosenModelsColumn"
-                BorderBrush="{StaticResource LightGrayBorderBrush}"
-                BorderThickness="1,0,0,0"
-                Background="{StaticResource OffWhiteBackgroundBrush}">
+                Style="{StaticResource BorderTitleLight}"
+                BorderThickness="1,0,0,0">
+            
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition MinHeight="25" Height="Auto"/>      <!-- Titre Modèles Fonctionnels sélectionnés-->
-                    <RowDefinition MinHeight="600" Height="*"/>  
-                    <!-- TextBox avec les modèles -->
-                    <RowDefinition Height="Auto"/>      <!-- Bouton de Lancement de Tests-->
+                    <RowDefinition MinHeight="25" Height="Auto"/>       <!-- Titre Modèles Fonctionnels sélectionnés-->
+                    <RowDefinition MinHeight="400" Height="*"/>         <!-- TextBox avec les modèles -->
+                    <RowDefinition Height="Auto"/>                      <!-- Bouton de Lancement de Tests-->
                 </Grid.RowDefinitions>
                 
                 <TextBlock 
@@ -323,8 +332,8 @@
                 
                 <ListBox Grid.Row="1" Name="ChosenTestModelesListBox" Width="200" Height="320"
                          Style="{StaticResource StandardListBoxLight}"
-                         ItemsSource="{Binding DiscoveredInterfaces}"
-                         SelectedItem="{Binding SelectedInterface}"
+                         ItemsSource="{Binding SelectedModels}"
+                         SelectedItem="{Binding SelectedModel}"
                          SelectionMode="Single"
                          ItemContainerStyle="{StaticResource ListBoxContainerLight}"
                          ItemTemplate="{StaticResource ListBoxItemLight}">
@@ -332,13 +341,13 @@
                 </ListBox>
                 
                 <Button Grid.Row="2" Name="LaunchTestButton"
-                        Content="{StaticResource TestButton}"
+                        Content="Lancer le test"
                         Style="{StaticResource LaunchTestButtonStyleLight}"
-                        Foreground="{StaticResource DarkForegroundBrush}"
                         Tag="{StaticResource PlayDrawingImage}"
                         Margin="7,7"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
+                        MinHeight="50"
                 />
                 
                 
