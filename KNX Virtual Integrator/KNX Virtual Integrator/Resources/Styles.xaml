@@ -221,20 +221,6 @@
     </Style>
 
     <!-- Style pour le bouton de suppression de Modèle Fonctionnel -->
-    <Style x:Key="DeleteFunctionalModelButtonStyle" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
-        <Setter Property="Background" Value="{StaticResource NoColorBrush}" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Tag" Value="{StaticResource BlackBinDrawingImage}" />
-                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
-            </Trigger>
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-    <!-- Style pour le bouton de suppression de Modèle Fonctionnel -->
     <Style x:Key="DeleteStructureButtonStyleLight" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
         <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}" />
         <Setter Property="Tag" Value="{StaticResource BinDrawingImage}"/>
@@ -264,12 +250,6 @@
                 <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}" />
             </Trigger>
         </Style.Triggers>
-    </Style>
-
-    <!-- Style pour le bouton de suppression d'Élément à Tester-->
-    <Style x:Key="DeleteTestedElementButtonStyle" TargetType="Button"
-           BasedOn="{StaticResource DeleteFunctionalModelButtonStyle}">
-        <!-- À completer, notamment pour réduire la taille du bouton-->
     </Style>
     
 

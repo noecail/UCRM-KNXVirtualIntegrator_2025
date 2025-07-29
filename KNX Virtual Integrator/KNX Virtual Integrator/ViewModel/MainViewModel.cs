@@ -116,7 +116,54 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ProjectFolderPath = "";
 
 
-
+        ModelConsoleWriteCommand = new Commands.RelayCommand<FunctionalModel>(model =>
+            {
+                Console.WriteLine("Starting SelectedModelConsoleWriteCommand");
+                Console.WriteLine("Accessing the selected model : " + model.Name);
+                var i = 1;
+                foreach (var testedelement in model.ElementList)
+                {
+                    Console.WriteLine("--- Tested Element : " + i + "---");
+                    
+                    Console.Write("DPT(s) to send         : ");
+                    foreach (var dpttosend in testedelement.TestsCmd)
+                        Console.Write(dpttosend.Type + "|");
+                    Console.WriteLine();
+                    Console.Write("Address(es) to send    : ");
+                    foreach (var dpttosend in testedelement.TestsCmd)
+                        Console.Write(dpttosend.Address + "|");
+                    Console.WriteLine();
+                    Console.Write("Value(s) to send       : ");
+                    foreach (var dpttosend in testedelement.TestsCmd)
+                    {
+                        foreach (var value in dpttosend.Value)
+                            Console.Write(value + ",");
+                        Console.Write("|");
+                    }
+                    Console.WriteLine();
+                    
+                    Console.Write("DPT(s) to receive      : ");
+                    foreach (var dpttoreceive in testedelement.TestsIe)
+                        Console.Write(dpttoreceive.Type + "|");
+                    Console.WriteLine();
+                    Console.Write("Address(es) to receive : ");
+                    foreach (var dpttoreceive in testedelement.TestsCmd)
+                        Console.Write(dpttoreceive.Address + "|");
+                    Console.WriteLine();
+                    Console.Write("Value(s) to receive    : ");
+                    foreach (var dpttoreceive in testedelement.TestsIe) 
+                    {
+                        foreach (var value in dpttoreceive.Value) 
+                            Console.Write(value);
+                        Console.Write("|"); 
+                    } 
+                    Console.WriteLine();
+                    Console.WriteLine("----------------------------");
+                    Console.WriteLine();
+                    i++;
+                }
+            }
+        );
 
 
         // Initialisation des commandes

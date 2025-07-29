@@ -121,8 +121,8 @@ public partial class MainWindow
         SearchDefStructButton.Style = searchbuttonStyle;
         SearchModelButton.Style = searchbuttonStyle;
         SearchAddressButton.Style = searchbuttonStyle;
-        StructSupprButton.Style = supprButtonStyle;
-        StructModelButton.Style = supprButtonStyle;
+        ModelSupprButton.Style = supprButtonStyle;
+        ModelSupprButton.Style = supprButtonStyle;
         
         StructBox.ItemContainerStyle = boxItemStyle;
         StructuresBox.ItemContainerStyle = boxItemStyle;
@@ -561,7 +561,6 @@ public partial class MainWindow
         foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
             _viewModel.DeleteFunctionalModelFromListCommand.Execute(indexToDelete);
         
-        Console.WriteLine("selected : " + _viewModel.SelectedModel);
         foreach (var model in _viewModel.SelectedModels)
             Console.WriteLine(model);
     }
@@ -614,6 +613,12 @@ public partial class MainWindow
     {
         //_viewModel.RemoveTestFromElement.Execute();
         // TODO : récupérer le selected element et l'index du test
+    }
+
+
+    private void SaveModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ModelConsoleWriteCommand.Execute(_viewModel.SelectedModel);
     }
     
     
