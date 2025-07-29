@@ -1,5 +1,7 @@
+using System.Collections.ObjectModel;
 using System.Xml.Linq;
 using Knx.Falcon;
+using System.Numerics;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 /// <summary>
@@ -22,6 +24,14 @@ public class DataPointType
     
     public List<GroupValue?> Value { get; set; } // Value to send or expected to be read
 
+    private ObservableCollection<BigInteger?> _intValue = [];
+    
+    public ObservableCollection<BigInteger?> IntValue
+    {
+        get => _intValue;
+        set => _intValue = value; 
+    }
+
     private string _address = "0/1/1";
 
     public string Address
@@ -35,6 +45,7 @@ public class DataPointType
     {
         Type = 1;
         Value = [new GroupValue(true)];
+        IntValue = [new BigInteger(Value[0]!.Value)];//[BitConverter.ToUInt128(Value[0]!.Value)];
         GetSizeOf();
     }
     
@@ -42,6 +53,7 @@ public class DataPointType
     {
         Type = type;
         Value = [new GroupValue(true)];
+        IntValue = [new BigInteger(Value[0]!.Value)];
         GetSizeOf();
     }
 
@@ -49,6 +61,7 @@ public class DataPointType
     {
         Type = type;
         Value = [new GroupValue(true)];
+        IntValue = [new BigInteger(Value[0]!.Value)];
         GetSizeOf();
         Address = address;
     }
@@ -59,18 +72,26 @@ public class DataPointType
         Address = address;
         GetSizeOf();
         Value = [];
+        IntValue = [];
         foreach (var value in values)
+        {
             Value.Add(value);
+            if (Value[^1] != null)
+                IntValue.Add(new BigInteger(Value[^1]!.Value));
+        }
     }
+
     public DataPointType(DataPointType dpt)
     {
         Type = dpt.Type;
         Value = [];
+        IntValue = [];
         Address = dpt.Address;
         GetSizeOf();
         for (int i = 0; i < dpt.Value.Count; i++)
         {
-            Value[i] = dpt.Value[i];
+            Value.Add(dpt.Value[i]);
+            IntValue.Add(dpt.IntValue[i]);
         }
     }
     
@@ -250,11 +271,12 @@ public class DataPointType
     /// <returns>Returns a boolean acknowledging whether the test is possible or not</returns>
     public bool IsPossible()
     {
-        var max = Convert.ToUInt64(1 << _size);
+        var min = -(BigInteger.One << (_size - 1)); // -2^(n-1)
+        var max = (BigInteger.One << (_size - 1)) - 1; // 2^(n-1) - 1
         var res = true;
-        foreach (var value in Value)
+        foreach (var value in IntValue)
         {
-            res = res && Convert.ToUInt64(value) < max;
+            res = res && value <= max && value >= min;
         }
         return res;
     }
@@ -268,20 +290,24 @@ public class DataPointType
     }
     
     /// <summary>
-    /// This method Replaces a value with another.
-    /// </summary>
-    public void ReplaceValue(int index, GroupValue? value)
-    {
-        RemoveValue(index);
-        AddValue(value);
-    }
-    
-    /// <summary>
     /// This method deletes an address to a DPT.
     /// </summary>
     public void RemoveValue(int index)
     {
         Value.RemoveAt(index);
+    }
+
+    /// <summary>
+    /// Updates the GroupValue array by copying the intValue array and turning it into group values
+    /// </summary>
+    public void UpdateValue()
+    {
+        IntValue.Clear();
+        foreach (var value in Value)
+        {
+            if (value != null)
+                IntValue.Add(new BigInteger(value.Value));
+        }
     }
 
     /// <summary>

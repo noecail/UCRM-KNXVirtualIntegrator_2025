@@ -407,9 +407,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         newElement.AddDptToIe(newType, newAddress, []);
                                     }
                                 }
-                                else // If there is a command of the same type or if the cmd is of type 3 and the ie of type 5, add it to the ie list
+                                else // If there is a command of the same type or the ie is of type 5, adds it to the ie list
                                 {
-                                    if (newElement.CmdContains(newType)>0 || (newElement.CmdContains(3) > 0 && newType == 5))
+                                    if (newElement.CmdContains(newType)>0 || (newType == 5))
                                     {
                                         newElement.AddDptToIe(newType, newAddress, []);
                                     }
@@ -423,7 +423,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 {
                     index = functionalModelList.FunctionalModelDictionary.FunctionalModels.Count;
                     functionalModelList.AddToDictionary(newFunctionalModels[0]);
-                    Console.WriteLine("Index : " + index + ", Taille : " + functionalModelList.FunctionalModels.Count);
                     functionalModelList.FunctionalModels[(int) index].Clear();
                 }
                 foreach (var newFunctionalModel in newFunctionalModels)

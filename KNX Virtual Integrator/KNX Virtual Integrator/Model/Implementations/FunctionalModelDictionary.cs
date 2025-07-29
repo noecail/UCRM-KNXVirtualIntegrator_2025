@@ -54,6 +54,11 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 ],"Commutation")); //Convection, Prise, Arrosage, Portail
             for(var i =0;i<4;i++)
                 _keywordsDictionary.Add([]);
+
+            foreach (var value in FunctionalModels[0].ElementList[0].TestsIe[0].IntValue)
+            {
+                Console.WriteLine("La valeeeeeeeeuuuuuuuuuuuuuuuuuuuuuuuuur est : " + value);
+            }
             
             AddKeyword(0, "Lumiere on/off");
             AddKeyword(0, "Lumiere on-off");
@@ -182,14 +187,13 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         }
 
         /// <summary>
-        /// Checks if a Functional Model hase the same structure as the ones in the dictionary
+        /// Checks if a Functional Model has the same structure as the ones in the dictionary
         /// </summary>
         /// <param name="functionalModel">Structure to find in the dictionary</param>
         /// <returns>Index of the corresponding structure, or null if not found</returns>
         public int? HasSameStructure(FunctionalModel functionalModel)
         {
             int? result = null;
-            Console.WriteLine("The model name isssssssssssss : " + functionalModel.Name);
             foreach (var list in _keywordsDictionary)
             {
                 foreach (var keyword in list)
