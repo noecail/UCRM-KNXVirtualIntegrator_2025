@@ -52,8 +52,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 try
                 {
-                    var serializer = new XmlSerializer(typeof(IApplicationSettings));
                     using var fileStream = new FileStream(_settingsFilePath, FileMode.Open);
+                    
+                    var serializer = new XmlSerializer(typeof(ApplicationSettings));
                     var loadedSettings = (ApplicationSettings)serializer.Deserialize(fileStream)!;
 
                     EnableLightTheme = loadedSettings.EnableLightTheme;

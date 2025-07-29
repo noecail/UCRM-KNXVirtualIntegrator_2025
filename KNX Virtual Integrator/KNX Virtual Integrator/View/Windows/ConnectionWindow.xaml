@@ -71,7 +71,8 @@
 
     </Window.Resources>
 
-
+    <Border BorderBrush="{StaticResource KnxGreenBrush}"
+            BorderThickness="0" x:Name="ConnectionWindowBorder">
     <Grid>
         <!-- Define rows and columns for the grid -->
         <Grid.RowDefinitions>
@@ -380,6 +381,6 @@
 
 
     </Grid>
-
+    </Border>
 
 </mah:MetroWindow>

@@ -94,6 +94,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         //Gestion des modèles -----------------------------------------------------------------------
         _functionalModelList = new FunctionalModelList();
+        Structures = [];
+        
         //_functionalModelList.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
 
         _functionalModelList.PropertyChanged += (_, e) =>
@@ -109,6 +111,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 }
                 
             }
+        };
+        
+        Structures.CollectionChanged += (_, _) =>
+        {
+            StructuresTestWindow = new ObservableCollection<FunctionalModel>(Structures);
         };
 
         _busConnection.SelectedConnectionType = "USB";

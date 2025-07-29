@@ -42,14 +42,14 @@
     </mah:MetroWindow.TaskbarItemInfo>
 
     <!-- Conteneur principal -->
-    <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled">
-
-    <Grid>
-        <!-- Découpage en 2 Lignes : Boutons et tableaux -->
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" /> <!--Bandeau supérieur-->
-            <RowDefinition Height="*" />    <!--Panneaux principaux-->
-        </Grid.RowDefinitions>
+    <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" BorderBrush="{StaticResource KnxGreenBrush}"
+            BorderThickness="0" x:Name="MainWindowBorder">
+        <Grid>
+            <!-- Découpage en 2 Lignes : Boutons et tableaux -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />     <!--Bandeau supérieur-->
+                <RowDefinition Height="*" />        <!--Panneaux principaux-->
+            </Grid.RowDefinitions>
 
         <!-- Bandeau supérieur avec tous les boutons -->
         <!-- Boutons de gauche -->
@@ -119,7 +119,6 @@
             
         </StackPanel>
 
-        <!--ICI-->
         <!-- Contour principal incluant le tableau avec les 4 colonnes -->
         <Border Grid.Row="1" BorderBrush="{StaticResource GrayBorderBrush}" BorderThickness="1" Margin="10,0,10,10">
             <Grid>
@@ -191,8 +190,6 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>      <!-- Titre modèles prédéfinis-->
                             <RowDefinition Height="*"/>         <!-- Liste modèles prédéfinis-->
-                            <RowDefinition Height="Auto"/>      <!-- Titre modèles créés-->
-                            <RowDefinition Height="*"/>         <!-- Liste modèles créés-->
                             <RowDefinition Height="Auto"/>      <!-- Bandeau inférieur : ajouter/supprimer Structures-->
                         </Grid.RowDefinitions>
 
@@ -227,44 +224,6 @@
                                 <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
                                 <Border Grid.Row="1"
                                         x:Name="BorderDefStruct"
-                                        Style="{StaticResource BorderLight}"
-                                        BorderThickness="0,0,1,0">
-                                </Border>
-                            </Grid>
-                        </ScrollViewer>
-
-                        <!-- Titre des Modèles créés-->
-                        <Border Grid.Row="2"  
-                                x:Name="BorderStructTitle"
-                                Style="{StaticResource BorderTitleLight}"
-                                BorderThickness="0,1,0,2"
-                                Padding="5">
-                                <TextBlock x:Name="BorderStructTitleText"
-                                           Style="{StaticResource TitleTextLight}"
-                                           Text="{StaticResource PersonalizedStructures}"
-                                />
-                        </Border>
-                            
-                        <!-- Listes modèles créés-->
-                        <ScrollViewer Grid.Row="3"  
-                                      VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="*"/>
-                                </Grid.RowDefinitions>
-                                
-                                <ListBox Grid.Row="0" 
-                                         x:Name="StructBox"
-                                         ItemsSource="{Binding Structures}"
-                                         SelectedItem="{Binding SelectedModel}"
-                                         FontStyle="Italic"
-                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
-                                </ListBox>
-                                
-                                <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
-                                <Border Grid.Row="1"
-                                        x:Name="BorderStruct"
                                         Style="{StaticResource BorderLight}"
                                         BorderThickness="0,0,1,0">
                                 </Border>

@@ -7,6 +7,7 @@ using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
 using Knx.Falcon;
+using MahApps.Metro.Controls;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
@@ -53,7 +54,20 @@ public partial class MainWindow
 
     private void ApplyScaling()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyScaling is not implemented");
+        var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
+        float scale;
+        if (scaleFactor <= 1f)
+        {
+            scale = scaleFactor - 0.1f;
+        }
+        else
+        {
+            scale = scaleFactor - 0.2f;
+        }
+        MainWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
+            
+        Height = 1366 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 1366 * scale;
+        Width = 786 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 786 * scale;
     }
 
     private void ApplyThemeToWindow()
@@ -99,7 +113,6 @@ public partial class MainWindow
         Background = backgrounds;
         StructBibTitleText.Style = titleStyles;
         BorderDefStructTitleText.Style = titleStyles;
-        BorderStructTitleText.Style = titleStyles;
         BorderModelsTitleText.Style = titleStyles;
         ModelBibText.Style = titleStyles;
         ModelSettingsText.Style = titleStyles;
@@ -108,8 +121,6 @@ public partial class MainWindow
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
         BorderDefStruct.Style = borderStyles;
-        BorderStructTitle.Style = borderTitleStyles;
-        BorderStruct.Style = borderStyles;
         BorderAllModels.Style = borderStyles;
         BorderModelTitle.Style = borderTitleStyles;
         BorderModels.Style = borderStyles;
@@ -123,8 +134,6 @@ public partial class MainWindow
         SearchAddressButton.Style = searchbuttonStyle;
         ModelSupprButton.Style = supprButtonStyle;
         ModelSupprButton.Style = supprButtonStyle;
-        
-        StructBox.ItemContainerStyle = boxItemStyle;
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
@@ -134,11 +143,9 @@ public partial class MainWindow
 
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.UpdateWindowContents is not implemented");
-
         if (langChanged)
         {
-            return;
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.Translate is not implemented");
         }
         if (themeChanged)
         {

@@ -67,7 +67,7 @@ public partial class SettingsWindow
     /// <summary>
     /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
     /// </summary>
-    private void UpdateWindowContents(bool langChanged = false, bool themeChanged = false)
+    private void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
         if (_viewModel.AppSettings.AppLang != AppLanguageComboBox.Text.Split([" - "], StringSplitOptions.None)[0])
         {
@@ -94,6 +94,22 @@ public partial class SettingsWindow
             
         // Application du thème
         if (themeChanged) ApplyThemeToWindow();
+        
+        // Application des modifications d'échelle
+        if (scaleChanged)
+        {
+            // Mise à jour de l'échelle de toutes les fenêtres
+            var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
+            if (scaleFactor <= 1f)
+            {
+                ApplyScaling(scaleFactor - 0.1f);
+            }
+            else
+            {
+                ApplyScaling(scaleFactor - 0.2f);
+            }
+        }
+
     }
 
 
@@ -1676,23 +1692,8 @@ public partial class SettingsWindow
         }
 
         // Mise à jour éventuellement du contenu pour update la langue du menu
-        UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme);
+        UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, _viewModel.AppSettings.AppScaleFactor != previousAppScaleFactor);
 
-        // Si on a modifié l'échelle dans les paramètres
-        if (_viewModel.AppSettings.AppScaleFactor != previousAppScaleFactor)
-        {
-            // Mise à jour de l'échelle de toutes les fenêtres
-            var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
-            if (scaleFactor <= 1f)
-            {
-                ApplyScaling(scaleFactor - 0.1f);
-            }
-            else
-            {
-                ApplyScaling(scaleFactor - 0.2f);
-            }
-        }
-        
         // Mise à jour de la fenêtre principale
         App.WindowManager?.MainWindow.UpdateWindowContents(
             previousAppLang != _viewModel.AppSettings.AppLang, 
@@ -1852,8 +1853,9 @@ public partial class SettingsWindow
     /// Applies scaling to the window by adjusting the layout transform and resizing the window based on the specified scale factor.
     /// </summary>
     /// <param name="scale">The scale factor to apply.</param>
-    private void ApplyScaling(double scale)
+    private void ApplyScaling(float scale)
     {
+        
         SettingsWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
             
         Height = 605 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 605 * scale;

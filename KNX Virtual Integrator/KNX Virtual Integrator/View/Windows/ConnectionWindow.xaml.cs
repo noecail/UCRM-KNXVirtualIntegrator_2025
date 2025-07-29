@@ -47,12 +47,11 @@ public partial class ConnectionWindow
 
     private void TranslateWindowContents()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Connection Translation not implemented");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("ConnectionWindow.Translate is not implemented");
     }
 
     private void ApplyThemeToWindow()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Apply Theme To Window not implemented");
         Brush textColorBrush;
         Brush backgroundColorBrush;
         
@@ -106,7 +105,20 @@ public partial class ConnectionWindow
 
     private void ApplyScaling()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Apply Scaling not implemented");
+        var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
+        float scale;
+        if (scaleFactor <= 1f)
+        {
+            scale = scaleFactor - 0.1f;
+        }
+        else
+        {
+            scale = scaleFactor - 0.2f;
+        }
+        ConnectionWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
+            
+        Height = 605 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 650 * scale;
+        Width = 300 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 300 * scale;
     }
     
     

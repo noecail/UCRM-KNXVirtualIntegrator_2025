@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
+using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
-using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
@@ -19,7 +21,10 @@ public partial class TestConfigWindow
         DataContext = viewModel;
         
         UpdateWindowContents(true, true, true);
-
+        
+        ModelsBox.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(CheckedModelsHandler));
+        ModelsBox.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(UncheckedModelsHandler));
+        ModelsBox.LayoutUpdated += CheckIfModelsWasCheckedHandler;
     }
     
     /// <summary>
@@ -45,7 +50,7 @@ public partial class TestConfigWindow
 
     private void TranslateWindowContents()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Connection Translation not implemented");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("TestConfigWindow.Translate is not implemented");
     }
 
     private void ApplyThemeToWindow()
@@ -63,6 +68,7 @@ public partial class TestConfigWindow
             ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerLight");
             ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
             
+
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleLight");
             
             titleStyles = (Style)FindResource("TitleTextLight");
@@ -95,7 +101,6 @@ public partial class TestConfigWindow
         ChosenTestModelesTitle.Style = titleStyles;
         StructBibTitleText.Style = titleStyles;
         BorderDefStructTitleText.Style = titleStyles;
-        BorderStructTitleText.Style = titleStyles;
         BorderModelsTitleText.Style = titleStyles;
         ModelBibText.Style = titleStyles;
         
@@ -104,8 +109,6 @@ public partial class TestConfigWindow
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
         BorderDefStruct.Style = borderStyles;
-        BorderStructTitle.Style = borderTitleStyles;
-        BorderStruct.Style = borderStyles;
         BorderAllModels.Style = borderStyles;
         BorderModelTitle.Style = borderTitleStyles;
         BorderModels.Style = borderStyles;
@@ -116,7 +119,6 @@ public partial class TestConfigWindow
         SearchModelButton.Style = searchbuttonStyle;
         
         DefStructureBox.ItemContainerStyle = boxItemStyle;
-        StructureBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
         
@@ -126,7 +128,93 @@ public partial class TestConfigWindow
     
     private void ApplyScaling()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Apply Scaling not implemented");
+        var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
+        float scale;
+        if (scaleFactor <= 1f)
+        {
+            scale = scaleFactor - 0.1f;
+        }
+        else
+        {
+            scale = scaleFactor - 0.2f;
+        }
+        TestConfigWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
+            
+        Height = 700 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 700 * scale;
+        Width = 1200 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 1200 * scale;
     }
 
+    private void CheckedModelsHandler(object? sender, EventArgs? e)
+    {
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < ModelsBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = ModelsBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
+                continue;
+            var newTestModel = ModelsBox.Items[i] as FunctionalModel; // La Structure
+
+            // Si la case est cochée on supprime la structure
+            if (newTestModel is null || checkBox.IsChecked is false) 
+                continue;
+            if (_viewModel.SelectedTestModels.Contains(newTestModel))
+                continue;
+            _viewModel.SelectedTestModels.Add(newTestModel);
+        }
+        
+    }
+    
+    private void UncheckedModelsHandler(object? sender, EventArgs? e)
+    {
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < ModelsBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = ModelsBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
+                continue;
+            var newTestModel = ModelsBox.Items[i] as FunctionalModel; // La Structure
+
+            // Si la case est cochée on supprime la structure
+            if (newTestModel is null || checkBox.IsChecked is true) 
+                continue;
+            _viewModel.SelectedTestModels.Remove(newTestModel);
+        }
+        
+    }
+    
+    private void CheckIfModelsWasCheckedHandler(object? sender, EventArgs? e)
+    {
+        if (_viewModel.SelectedModelsTestWindow == null || _viewModel.SelectedTestModels.Count == 0)
+            return;
+        
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < _viewModel.SelectedModelsTestWindow.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = ModelsBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
+                continue;
+            var structure = ModelsBox.Items[i] as FunctionalModel; // La Structure
+
+            // Si la case est cochée on supprime la structure
+            if (structure == null) continue;
+            if (_viewModel.SelectedTestModels.Contains(structure))
+                checkBox.IsChecked = true;
+        }
+            
+    }
 }

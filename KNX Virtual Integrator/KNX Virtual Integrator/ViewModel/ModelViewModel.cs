@@ -107,5 +107,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
         }
         
+        
+        
     }
 }
