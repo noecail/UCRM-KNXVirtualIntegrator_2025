@@ -7,7 +7,7 @@
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="KNX Virtual Integrator" 
         WindowState="Maximized"
         ResizeMode="CanResize"
         WindowStyle="None"
@@ -28,11 +28,11 @@
         -->
 
 
-    <!-- Paramètres du logo dans la barre de titre, le logo est à modifier -->
+    <!-- Paramètres du logo dans la barre de titre, le logo est à modifier, 15 10 -->
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
             <StackPanel Background="{StaticResource NoColorBrush}"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Image Source="{StaticResource LogoDrawingImage}" Height="15" Margin="10"/>
+                <Image Source="{StaticResource LogoDrawingImage}" Height="25" Margin="2"/>
             </StackPanel>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
