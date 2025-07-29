@@ -54,11 +54,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 ],"Commutation")); //Convection, Prise, Arrosage, Portail
             for(var i =0;i<4;i++)
                 _keywordsDictionary.Add([]);
-
-            foreach (var value in FunctionalModels[0].ElementList[0].TestsIe[0].IntValue)
-            {
-                Console.WriteLine("La valeeeeeeeeuuuuuuuuuuuuuuuuuuuuuuuuur est : " + value);
-            }
             
             AddKeyword(0, "Lumiere on/off");
             AddKeyword(0, "Lumiere on-off");
