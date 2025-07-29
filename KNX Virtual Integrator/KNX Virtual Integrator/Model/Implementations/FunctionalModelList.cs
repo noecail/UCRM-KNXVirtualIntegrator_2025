@@ -10,6 +10,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 
 public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
 {
+    private List<int> _nbModelsCreated = [];
     public List<ObservableCollection<FunctionalModel>> FunctionalModels { get; set; } = [];
     public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
 
@@ -20,6 +21,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         foreach (var model in FunctionalModelDictionary.GetAllModels())
         {
             FunctionalModels.Add([]);
+            _nbModelsCreated.Add(0);
             AddToList(index);
             index++;
         }
@@ -31,6 +33,8 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
                 if (FunctionalModels.Count <= FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
                 {
                     FunctionalModels.Add([]);
+                    _nbModelsCreated.Add(0);
+
                     AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
                 } 
                 OnPropertyChanged(nameof(FunctionalModelDictionary)); //notifier le mainviewmodel
@@ -73,13 +77,14 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         {
             newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],1,false);
         }
+        _nbModelsCreated[index]++;
         if (newModel.Name.Contains("Structure"))
         {
             if (newModel.Name.Contains("New_Structure"))
-                newModel.Name = "New_Model_" + newModel.Key;
+                newModel.Name = "New_Model_" +_nbModelsCreated[index];
             else
             {
-                newModel.Name = newModel.Name[..^10] + "_" + newModel.Key;
+                newModel.Name = newModel.Name[..^10] + "_" + _nbModelsCreated[index];
             }
         }
         FunctionalModels[index].Add(newModel);
@@ -92,6 +97,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// <param name="index"> Index of the structure</param>
     public void AddToList(int index, FunctionalModel functionalModel, bool copy)
     {
+        _nbModelsCreated[index]++;
         FunctionalModels[index].Add(new FunctionalModel(functionalModel,FunctionalModels[index].Count+1,copy));
     }
 

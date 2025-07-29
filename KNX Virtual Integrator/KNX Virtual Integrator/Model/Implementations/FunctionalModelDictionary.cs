@@ -15,6 +15,8 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         private ObservableCollection<FunctionalModel> _functionalModels =[];
         
         private List<List<string>> _keywordsDictionary = [];
+        
+        private int _nbStructuresCreated = 0;
 
         public ObservableCollection<FunctionalModel> FunctionalModels
         {
@@ -94,8 +96,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         public void AddFunctionalModel(FunctionalModel functionalModel)
         {
+            _nbStructuresCreated++;
             if (functionalModel.Name == "New_Structure")
-                functionalModel.Name += "_" + (FunctionalModels.Count+1);
+                functionalModel.Name += "_" + _nbStructuresCreated;
             else if (!functionalModel.Name.Contains("Structure"))
                 functionalModel.Name += "_Structure";
             FunctionalModels.Add(functionalModel);
