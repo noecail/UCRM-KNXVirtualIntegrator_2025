@@ -9,7 +9,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
     /// </summary>
     public class TestedElement
     {
-        public List<DataPointType> TestsCmd { get; } // List of commands to send to the bus and 
+        public List<DataPointType> TestsCmd { get; } // List of commands to send to the bus 
 
         public List<DataPointType> TestsIe { get; } // List of expected feedback to be read on the bus
         

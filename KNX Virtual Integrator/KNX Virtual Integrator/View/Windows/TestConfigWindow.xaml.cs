@@ -50,33 +50,77 @@ public partial class TestConfigWindow
 
     private void ApplyThemeToWindow()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Apply Theme not implemented");
-
-        Brush borderBrushes;
+        Style titleStyles;
+        Style borderStyles;
+        Style borderTitleStyles;
+        Style searchbuttonStyle;
+        Style boxItemStyle;
         Brush backgrounds;
 
         if (_viewModel.AppSettings.EnableLightTheme)
         {
             ChosenTestModelesListBox.Style = (Style)FindResource("StandardListBoxLight");
-            ChosenTestModelesTitle.Style = (Style)FindResource("TitleTextLight");
+            ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerLight");
+            ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
+            
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleLight");
-            borderBrushes = (Brush)FindResource("LightGrayBorderBrush");
+            
+            titleStyles = (Style)FindResource("TitleTextLight");
+            borderStyles = (Style)FindResource("BorderLight");
+            borderTitleStyles = (Style)FindResource("BorderTitleLight");
+            searchbuttonStyle = (Style)FindResource("SearchButtonLight");
+            boxItemStyle = (Style)FindResource("ModelListBoxItemStyleLight");
+            
             backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
         } 
         else
         {
-            ChosenTestModelesListBox.Style = (Style)FindResource("StandardListBoxDark");
-            ChosenTestModelesTitle.Style = (Style)FindResource("TitleTextDark");
+            ChosenTestModelesListBox.Style = (Style)FindResource("ListBoxStyleDark");
+            ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerDark");
+            ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemDark");
+            
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleDark");
-            borderBrushes = (Brush)FindResource("LightGrayBorderBrush");
+            
+            titleStyles = (Style)FindResource("TitleTextDark");
+            borderStyles = (Style)FindResource("BorderDark");
+            borderTitleStyles = (Style)FindResource("BorderTitleDark");
+            searchbuttonStyle = (Style)FindResource("SearchButtonDark");
+            boxItemStyle = (Style)FindResource("ModelListBoxItemStyleDark");
+            
             backgrounds = (Brush)FindResource("DarkGrayBackgroundBrush");
         }
 
         Background = backgrounds;
-        AllModelsAndElementsColumn.Background = backgrounds;
-        AllModelsAndElementsColumn.BorderBrush = borderBrushes;
-        ChosenModelsColumn.Background = backgrounds;
-        ChosenModelsColumn.BorderBrush = borderBrushes;
+        
+        ChosenTestModelesTitle.Style = titleStyles;
+        StructBibTitleText.Style = titleStyles;
+        BorderDefStructTitleText.Style = titleStyles;
+        BorderStructTitleText.Style = titleStyles;
+        BorderModelsTitleText.Style = titleStyles;
+        ModelBibText.Style = titleStyles;
+        
+        AllModelsAndElementsColumn.Style = borderStyles;
+        ChosenModelsColumn.Style = borderStyles;
+        BorderAllStruct.Style = borderStyles;
+        BorderDefStructTitle.Style = borderTitleStyles;
+        BorderDefStruct.Style = borderStyles;
+        BorderStructTitle.Style = borderTitleStyles;
+        BorderStruct.Style = borderStyles;
+        BorderAllModels.Style = borderStyles;
+        BorderModelTitle.Style = borderTitleStyles;
+        BorderModels.Style = borderStyles;
+        BorderModelBib.Style = borderStyles;
+        BorderStructBib.Style = borderStyles;
+        
+        SearchDefStructButton.Style = searchbuttonStyle;
+        SearchModelButton.Style = searchbuttonStyle;
+        
+        DefStructureBox.ItemContainerStyle = boxItemStyle;
+        StructureBox.ItemContainerStyle = boxItemStyle;
+        ModelsBox.ItemContainerStyle = boxItemStyle;
+        
+        
+        
         
     }
     

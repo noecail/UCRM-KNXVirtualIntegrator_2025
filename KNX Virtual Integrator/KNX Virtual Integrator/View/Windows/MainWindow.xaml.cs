@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
@@ -57,9 +58,76 @@ public partial class MainWindow
 
     private void ApplyThemeToWindow()
     {
+        Style titleStyles;
+        Style borderStyles;
+        Style borderTitleStyles;
+        Style searchbuttonStyle;
+        Style boxItemStyle;
+        Style supprButtonStyle;
+        Brush backgrounds;
         
-        if (_viewModel.AppSettings.EnableLightTheme) 
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute(""); // Si le thème clair est actif
+        if (_viewModel.AppSettings.EnableLightTheme)
+        {
+            NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
+            NameTextBlock.Style= (Style)FindResource("StandardTextBlockLight");
+            
+            titleStyles = (Style)FindResource("TitleTextLight");
+            borderStyles = (Style)FindResource("BorderLight");
+            borderTitleStyles = (Style)FindResource("BorderTitleLight");
+            searchbuttonStyle = (Style)FindResource("SearchButtonLight");
+            boxItemStyle = (Style)FindResource("ModelListBoxItemStyleLight");
+            supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleLight");
+            backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
+
+        }
+        else
+        {
+            NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
+            NameTextBlock.Style= (Style)FindResource("StandardTextBlockDark");
+            
+            titleStyles = (Style)FindResource("TitleTextDark");
+            borderStyles = (Style)FindResource("BorderDark");
+            borderTitleStyles = (Style)FindResource("BorderTitleDark");
+            searchbuttonStyle = (Style)FindResource("SearchButtonDark");
+            boxItemStyle = (Style)FindResource("ModelListBoxItemStyleDark");
+            supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleDark");
+
+            backgrounds = (Brush)FindResource("DarkGrayBackgroundBrush");
+
+        }
+        
+        Background = backgrounds;
+        StructBibTitleText.Style = titleStyles;
+        BorderDefStructTitleText.Style = titleStyles;
+        BorderStructTitleText.Style = titleStyles;
+        BorderModelsTitleText.Style = titleStyles;
+        ModelBibText.Style = titleStyles;
+        ModelSettingsText.Style = titleStyles;
+        AddressTitleText.Style = titleStyles;
+        
+        BorderAllStruct.Style = borderStyles;
+        BorderDefStructTitle.Style = borderTitleStyles;
+        BorderDefStruct.Style = borderStyles;
+        BorderStructTitle.Style = borderTitleStyles;
+        BorderStruct.Style = borderStyles;
+        BorderAllModels.Style = borderStyles;
+        BorderModelTitle.Style = borderTitleStyles;
+        BorderModels.Style = borderStyles;
+        BorderAddModel.Style = borderStyles;
+        BorderModelBib.Style = borderStyles;
+        BorderStructBib.Style = borderStyles;
+        
+        
+        SearchDefStructButton.Style = searchbuttonStyle;
+        SearchModelButton.Style = searchbuttonStyle;
+        SearchAddressButton.Style = searchbuttonStyle;
+        ModelSupprButton.Style = supprButtonStyle;
+        ModelSupprButton.Style = supprButtonStyle;
+        
+        StructBox.ItemContainerStyle = boxItemStyle;
+        StructuresBox.ItemContainerStyle = boxItemStyle;
+        ModelsBox.ItemContainerStyle = boxItemStyle;
+        
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyThemeToWindow is not implemented");
 
     }
@@ -410,11 +478,39 @@ public partial class MainWindow
         // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
     }
 
-    private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
+    private void DeleteStructuresButtonClick(object sender, RoutedEventArgs e)
     {
-        //_viewModel.DeleteStructureDictionaryCommand.Execute();
-        _viewModel.SelectedStructure = null; // ou alors []
-        // TODO : récupérer l'index de la structure
+        // Store all indexes to delete
+        var indexesToDelete = new HashSet<int>();
+            
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < StructuresBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = StructuresBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+            if (itemContainer == null)
+                continue;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer.Template.FindName("DeleteCheckBox", itemContainer) is CheckBox checkBox)
+            {
+                var structure = StructuresBox.Items[i] as FunctionalModel; // La Structure
+
+                // Si la case est cochée on supprime la structure
+                if (checkBox.IsChecked == true)
+                    if (structure != null)
+                    {
+                        indexesToDelete.Add(structure.Key-1); // supprimer la structure
+                    }
+            }
+        }
+        
+        // toutes les supprimer dans l'ordre inverse pour éviter que les structures changent d'index avant d'avoir été supprimées
+        foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
+            _viewModel.DeleteStructureDictionaryCommand.Execute(indexToDelete); 
+        
     }
     
     // <<<<<<<<<<<<<<<<<<<< COLONNE 2 >>>>>>>>>>>>>>>>>>>>
@@ -424,22 +520,53 @@ public partial class MainWindow
     /// </summary>
     private void AddFunctionalModelToListButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddFunctionalModelToList.Execute(null);
+        _viewModel.AddFunctionalModelToListCommand.Execute(null);
         FunctionalModelsScrollViewer.ScrollToEnd();
-        /*var cb = (CheckBox)StructureBox.Template.FindName("DeleteStructureCheckBox", StructureBox);
-        Console.WriteLine(cb.IsChecked);*/
+        StructuresBox.ApplyTemplate();
     }
 
-    
-    // <<<<<<<<<<<<<<<<<<<< COLONNE 3 >>>>>>>>>>>>>>>>>>>>
-    
     /// <summary>
     /// Handles the button click event to delete a Functional Model.
     /// </summary>
     private void DeleteFunctionalModelFromListButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.DeleteFunctionalModelFromList.Execute(_viewModel.SelectedModel);
+        // Store all indexes to delete
+        var indexesToDelete = new HashSet<int>();
+            
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < ModelsBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = ModelsBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+            if (itemContainer == null)
+                continue;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer.Template.FindName("DeleteCheckBox", itemContainer) is CheckBox checkBox)
+            {
+                var model = ModelsBox.Items[i] as FunctionalModel; // Le Modèle Fonctionnel
+
+                // Si la case est cochée on supprime lae modèle fonctionnel
+                if (checkBox.IsChecked == true)
+                    if (model != null)
+                    {
+                        indexesToDelete.Add(model.Key-1); // supprimer le modèle
+                    }
+            }
+        }
+        
+        // tous les supprimer dans l'ordre inverse pour éviter que les modèles changent d'index avant d'avoir été supprimés
+        foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
+            _viewModel.DeleteFunctionalModelFromListCommand.Execute(indexToDelete);
+        
+        foreach (var model in _viewModel.SelectedModels)
+            Console.WriteLine(model);
     }
+    
+    
+    // <<<<<<<<<<<<<<<<<<<< COLONNE 3 >>>>>>>>>>>>>>>>>>>>
     
     /// <summary>
     /// Handles the button click event to add a Tested Element to an already existing Functional Model.
@@ -447,7 +574,7 @@ public partial class MainWindow
     /// </summary>
     private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddTestedElementToStructure.Execute(_viewModel.SelectedModel);
+        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedModel);
     }
     
     /// <summary>
@@ -463,7 +590,7 @@ public partial class MainWindow
         if (dep == null) return;
         var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        _viewModel.RemoveTestedElementFromStructure.Execute((_viewModel.SelectedModel, index)); 
+        _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedModel, index)); 
     }
     
 
@@ -486,6 +613,12 @@ public partial class MainWindow
     {
         //_viewModel.RemoveTestFromElement.Execute();
         // TODO : récupérer le selected element et l'index du test
+    }
+
+
+    private void SaveModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ModelConsoleWriteCommand.Execute(_viewModel.SelectedModel);
     }
     
     

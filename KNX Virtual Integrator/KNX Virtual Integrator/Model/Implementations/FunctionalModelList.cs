@@ -24,16 +24,14 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
             index++;
         }
 
-        //FunctionalModels[0][0].Name = "Lumière_ON_OFF_Salon";
-
         FunctionalModelDictionary.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(FunctionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
             {
-                if (FunctionalModels.Count != FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
+                if (FunctionalModels.Count <= FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
                 {
                     FunctionalModels.Add([]);
-                    AddToList(FunctionalModels.Count - 1);
+                    AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
                 } 
                 OnPropertyChanged(nameof(FunctionalModelDictionary)); //notifier le mainviewmodel
             }
@@ -48,7 +46,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         {
             if (e.PropertyName == nameof(FunctionalModelDictionary.FunctionalModels)) // notification de modification dans le dictionnaire
             {
-                if (FunctionalModels.Count != FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
+                if (FunctionalModels.Count <= FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
                 {
                     FunctionalModels.Add([]);
                     AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
@@ -81,7 +79,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
                 newModel.Name = "New_Model_" + newModel.Key;
             else
             {
-                newModel.Name = newModel.Name[..^10];
+                newModel.Name = newModel.Name[..^10] + "_" + newModel.Key;
             }
         }
         FunctionalModels[index].Add(newModel);
@@ -102,10 +100,12 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// </summary>
     /// <param name="indexOfStructure">Index of the structure of the Functional Model to delete in the list</param>
     /// <param name="indexOfModel">Index of the Functional Model to delete in the list</param>
-    
-    public void DeleteFromList(int indexOfStructure,int indexOfModel)
+    public void DeleteFromList(int indexOfStructure, int indexOfModel)
     {
         FunctionalModels[indexOfStructure].RemoveAt(indexOfModel);
+        foreach (var model in FunctionalModels[indexOfStructure])
+            if (model.Key > indexOfModel + 1) 
+                model.Key--;
     }
 
     /// <summary>
@@ -137,8 +137,11 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     {
         if (index > FunctionalModelDictionary.FunctionalModels.Count)
             return;
+        for (var i = FunctionalModelDictionary.FunctionalModels[index].Key; i < FunctionalModelDictionary.FunctionalModels[^1].Key; i++)
+            FunctionalModelDictionary.FunctionalModels[i].Key--;
         FunctionalModelDictionary.RemoveFunctionalModel(index);
         FunctionalModels.RemoveAt(index);
+        OnPropertyChanged(nameof(FunctionalModels)); //notifier l'ui
     }
     
     /// <summary>
