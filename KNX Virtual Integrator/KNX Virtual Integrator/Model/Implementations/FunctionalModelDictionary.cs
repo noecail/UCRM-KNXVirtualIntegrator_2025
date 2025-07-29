@@ -50,27 +50,40 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             AddFunctionalModel(new FunctionalModel([
             new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[new GroupValue(true), new GroupValue(false)]])  //On/Off
                 ],"Commutation")); //Convection, Prise, Arrosage, Portail
-            _keywordsDictionary.Add([]);
-            _keywordsDictionary[0].Add("Lumiere on/off");
-            _keywordsDictionary[0].Add("Lumiere on-off");
-            _keywordsDictionary[0].Add("Lumiere on_off");
-            _keywordsDictionary[0].Add("Light on/off");
+            for(var i =0;i<4;i++)
+                _keywordsDictionary.Add([]);
+            
+            AddKeyword(0, "Lumiere on/off");
+            AddKeyword(0, "Lumiere on-off");
+            AddKeyword(0, "Lumiere on_off");
+            AddKeyword(0, "Light on/off");
+            AddKeyword(0, "Eclairage_Simple");
 
-            _keywordsDictionary.Add([]);
-            _keywordsDictionary[1].Add("Lumiere variation");
-            _keywordsDictionary[1].Add("variation");
-            _keywordsDictionary[1].Add("Lumiere_variation");
-            _keywordsDictionary[1].Add("Light variation");
-            
-            _keywordsDictionary.Add([]);
-            _keywordsDictionary[2].Add("store");
-            _keywordsDictionary[2].Add("blind");
-            
-            _keywordsDictionary.Add([]);
-            _keywordsDictionary[3].Add("Commute");
-            _keywordsDictionary[3].Add("Commutation");
+            AddKeyword(1, "Lumiere variation");
+            AddKeyword(1, "variation");
+            AddKeyword(1, "Lumiere_variation");
+            AddKeyword(1, "Light variation");
+            AddKeyword(1, "Eclairages_variable");
+
+            AddKeyword(2, "store");
+            AddKeyword(2, "blind");
+            AddKeyword(2, "Volet_roulant");
+            AddKeyword(2, "Volets_roulants");
+
+            AddKeyword(3, "Commute");
+            AddKeyword(3, "Commutation");
+            AddKeyword(3, "Convecteur");
+            AddKeyword(3, "Prise");
+            AddKeyword(3, "Arrosage");
+            AddKeyword(3, "Ouvrant");
+
         }
 
+        public void AddKeyword(int index, string word)
+        {
+            _keywordsDictionary[index].Add(word.ToLower());
+        }
+        
         public FunctionalModelDictionary(string path)
         {
             FunctionalModels = [];
@@ -173,6 +186,19 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public int? HasSameStructure(FunctionalModel functionalModel)
         {
             int? result = null;
+            Console.WriteLine("The model name isssssssssssss : " + functionalModel.Name);
+            foreach (var list in _keywordsDictionary)
+            {
+                foreach (var keyword in list)
+                {
+                    if (functionalModel.Name.ToLower().Contains(keyword))
+                    {
+                        result = _keywordsDictionary.IndexOf(list);
+                        return result;
+                    }
+                }
+            }
+            
             var i = 0;
             while (i < FunctionalModels.Count && result == null)
             {

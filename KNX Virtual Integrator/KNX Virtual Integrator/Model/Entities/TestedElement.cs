@@ -124,6 +124,23 @@ namespace KNX_Virtual_Integrator.Model.Entities
         }
         
         /// <summary>
+        /// This method adds a test pair (value to send, value(s) to read) to the list of tests
+        /// </summary>
+        public void CopyTest(TestedElement? other, int index)
+        {
+            if (other == null)
+                return;
+            for (var i = 0; i< other.TestsCmd.Count;i++)
+            {
+                TestsCmd[i].AddValue(other.TestsCmd[i].Value[i]);
+            }
+            for (var i = 0; i< other.TestsIe.Count;i++)
+            {
+                TestsIe[i].AddValue(other.TestsIe[i].Value[i]);
+            }
+        }
+        
+        /// <summary>
         /// This method removes a test pair (value to send, value to read) from the list of tests
         /// </summary>
         public void RemoveTest(int index)
@@ -137,8 +154,29 @@ namespace KNX_Virtual_Integrator.Model.Entities
                 dpt.RemoveValue(index);
             }
         }
-        
 
+        public int CmdContains(int type)
+        {
+            var count = 0;
+            foreach (var myDpt in TestsCmd)
+            {
+                if (myDpt.Type == type)
+                    count++;
+            }
+            return count;
+        }
+        
+        public int IeContains(DataPointType dpt)
+        {
+            var count = 0;
+            foreach (var myDpt in TestsIe)
+            {
+                if (myDpt.Type == dpt.Type)
+                    count++;
+            }
+            return count;
+        }
+        
         public void AddDptToCmd(int type, string address, List<GroupValue?> value)
         {
             TestsCmd.Add(new DataPointType(type, address, value));

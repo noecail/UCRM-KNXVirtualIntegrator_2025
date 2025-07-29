@@ -15,7 +15,7 @@ public interface IGroupAddressManager
     /// file is chosen or a default file is used. Processes the XML file to extract and group addresses
     /// from either a specific format or a standard format.
     /// </summary>
-    void ExtractGroupAddress();
+    void ExtractGroupAddress(IFunctionalModelList functionalModelList);
 
     /// <summary>
     /// Processes an XML file in the Zero format to extract and group addresses.

@@ -198,7 +198,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 142;
+    public const int AppBuild = 143;
     
         
     
@@ -249,9 +249,9 @@ public partial class App
         // Définir la priorité du processus à un niveau inférieur pour réduire l'utilisation des ressources
         Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
         //var list = new FunctionalModelList();
-        //list.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
+        //list.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray2.xml");
         //list.ExportDictionary(@"C:\Users\caill\Desktop\INSA\4A\Stage");
-        //list.ExportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray2");
+        //list.ExportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray");
         
 
         // Instancier les dépendances nécessaires

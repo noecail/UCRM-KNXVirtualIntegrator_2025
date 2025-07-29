@@ -129,7 +129,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
 
         ExtractGroupAddressCommand =
-            new Commands.RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress()
+            new Commands.RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress(_functionalModelList)
             );
 
         EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(parameter =>
@@ -232,7 +232,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 if (SelectedStructure!=null)
                     if (model is FunctionalModel myModel)
-                        _functionalModelList.AddToList(SelectedStructure.Key-1,myModel);
+                        _functionalModelList.AddToList(SelectedStructure.Key-1,myModel,false);
                     else
                         _functionalModelList.AddToList(SelectedStructure.Key-1);
             }

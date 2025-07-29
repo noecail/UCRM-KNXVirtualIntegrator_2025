@@ -7,6 +7,10 @@ public interface IProjectFileManager
 {
     string ProjectFolderPath { get; set; }
     
+    
+    public string GroupAddressFilePath { get; set; } // Chemin d'accès au dossier exporté du projet
+
+    
     /// <summary>
     /// Extracts project files from the specified .knxproj file path.
     /// </summary>

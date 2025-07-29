@@ -92,9 +92,9 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     /// </summary>
     /// <param name="functionalModel">FunctionalModel to add</param>
     /// <param name="index"> Index of the structure</param>
-    public void AddToList(int index, FunctionalModel functionalModel)
+    public void AddToList(int index, FunctionalModel functionalModel, bool copy)
     {
-        FunctionalModels[index].Add(new FunctionalModel(functionalModel,FunctionalModels[index].Count+1,true));
+        FunctionalModels[index].Add(new FunctionalModel(functionalModel,FunctionalModels[index].Count+1,copy));
     }
 
     /// <summary>

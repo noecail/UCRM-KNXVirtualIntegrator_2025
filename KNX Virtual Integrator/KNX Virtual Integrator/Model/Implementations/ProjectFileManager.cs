@@ -44,7 +44,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
     /// <remarks>
     /// This property holds the file path  of the group addresses file
     /// </remarks>
-    public string GroupAddressFilePath { get; private set; } = ""; // Chemin d'accès au dossier exporté du projet
+    public string GroupAddressFilePath { get; set; } = ""; // Chemin d'accès au dossier exporté du projet
     
     
     /// <summary>
