@@ -183,7 +183,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         return FunctionalModelDictionary.GetAllModels();
     }
 
-    public new event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

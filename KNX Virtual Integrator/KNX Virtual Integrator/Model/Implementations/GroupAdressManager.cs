@@ -378,14 +378,13 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         {
                             if (newFunctionalModels[i].ElementList.Count >= 1)
                             {
-                                newFunctionalModels[j]
-                                    .AddElement(new TestedElement(newFunctionalModels[j].ElementList[0]));
+                                newFunctionalModels[j].AddElement(new TestedElement([1],[newFunctionalModels[j].ElementList[0].TestsCmd[0].Address],[[]
+                                ]));
                                 newFunctionalModels[j].ElementList[^1].AddDptToCmd(newType, newAddress, []);
                             }
                         } else 
                         if (prefixes.Any(p => objectType[j].Attribute("Name")?.Value.StartsWith(p,StringComparison.OrdinalIgnoreCase) == true))
                         {
-
                             newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
                                 [[]]));
                         }
@@ -404,7 +403,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 .ToString()!);
                             var newAddress = objectType[j].Attribute("Address")?.Value!;
                             var newDpt = new DataPointType(newType, newAddress, []);
-                            for (var k = 0; k < functionalModelList.FunctionalModelDictionary.FunctionalModels[(int)index].ElementList.Count; k++) //For each element, if for the same command 
+                            for (var k = 0; k < newFunctionalModels[0].ElementList.Count; k++) //For each element, if for the same command 
                             {
                                 var newElement = newFunctionalModels[j].ElementList[k];
                                 if (index != null) // If there is an ie of the same type in the structure associated, add it to the ie list
