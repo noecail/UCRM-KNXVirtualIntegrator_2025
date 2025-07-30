@@ -1,7 +1,10 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using KNX_Virtual_Integrator.ViewModel;
+using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
@@ -20,6 +23,7 @@ public partial class ReportCreationWindow
     {
         InitializeComponent();
         _mainViewModel = mv;
+        MyBrowser.RenderSize = new Size(340, 480);
     }
 
     /// <summary>
@@ -34,23 +38,14 @@ public partial class ReportCreationWindow
     }
 
     /// <summary>
-    /// Handles the event to close (hide) the report creation window.
-    /// </summary>
-    /// <param name="sender">The source of the event.</param>
-    /// <param name="e">The event data.</param>
-    private void CloseReportCreationWindow(object sender, RoutedEventArgs e)
-    {
-        Hide();
-    }
-
-    /// <summary>
     /// Handles the click event of the save button to generate a report.
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">The event data.</param>
     private void SaveButtonClick(object sender, RoutedEventArgs e)
     {
-        _mainViewModel.GenerateReportCommand.Execute(("../../Allo.pdf", authorNameTextBox.Text.Trim()));
+        _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, AuthorNameTextBox.Text.Trim()));
+        MyBrowser.Navigate(_mainViewModel.PdfPath);
     }
 
     /// <summary>
@@ -60,12 +55,47 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void CancelButtonClick(object sender, RoutedEventArgs e)
     {
-        authorNameTextBox.Text = string.Empty;
+        AuthorNameTextBox.Text = string.Empty;
     }
 
     private void ClosingReportCreationWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
         Hide();
+    }
+
+    private void SetPdfPathButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
+        OpenFileDialog openFileDialog = new()
+        {
+            // Définir des propriétés optionnelles
+            Title = "Choisissez un nom pour le rapport",
+            // Applique un filtre pour n'afficher que les fichiers pdf ou tous les fichiers
+            Filter = "Fichiers pdf|*.pdf",
+            // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
+            FilterIndex = 1,
+            // N'autorise pas la sélection de plusieurs fichiers à la fois
+            Multiselect = false,
+            // N'indique pas de warning si le fichier n'existe pas
+            CheckFileExists = false
+        };
+
+        // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
+        var result = openFileDialog.ShowDialog();
+
+        if (result == true)
+        {
+            // Récupérer le chemin du fichier sélectionné
+            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
+
+            // Donner le chemin au Model
+            _mainViewModel.PdfPath = openFileDialog.FileName;
+            PdfPathText.Text = openFileDialog.FileName;
+        }
+        else
+        {
+            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
+        }
     }
 }

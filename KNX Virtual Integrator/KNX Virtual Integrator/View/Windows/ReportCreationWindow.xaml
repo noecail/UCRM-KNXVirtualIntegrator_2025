@@ -5,8 +5,9 @@
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
+                 d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="Création du rapport de test" Height="650" Width="500"
+                 Title="Création du rapport de test" Height="850" Width="600"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
                  Background="{StaticResource WhiteBackgroundBrush}"
@@ -132,11 +133,33 @@
                                            FontSize="17" FontWeight="SemiBold"
                                            Margin="10,10,0,0" />
                                 
-                                <TextBlock Text="Auteur du rapport" Margin="10,10,10,2" />
-                                <TextBox x:Name="authorNameTextBox" Margin="10, 5, 10, 10"/>
+                                <TextBlock Text="Auteur du rapport" 
+                                           Style="{StaticResource StandardTextBlockLight}" 
+                                           Margin="10,10,10,2" />
+                                <TextBox x:Name="AuthorNameTextBox" 
+                                         Style="{StaticResource StandardTextBoxLight}" 
+                                         Width="400"
+                                         Margin="10, 5, 10, 10"/>
+                                <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Chemin du rapport" 
+                                           Style="{StaticResource StandardTextBlockLight}" 
+                                           Margin="10,10,10,2" />
+                                <Button Grid.Row="1" Grid.Column="1" Name="SetPdfPathButton"
+                                        Style="{StaticResource ImportKeysButtonLight}"
+                                        Click="SetPdfPathButton_OnClick">
+                                </Button>
+                                </StackPanel>
+                                <TextBlock x:Name="PdfPathText" 
+                                         Style="{StaticResource StandardTextBlockLight}" 
+                                         Width="400"
+                                         Margin="10, 5, 10, 10"/>
                                 
                                 <!-- ICI AJOUTER L'APERÇU DU PDF AU FORMAT 339 x 479 Pixel -->
-
+                                
+                                <TextBlock Text="Prévisualisation du rapport" 
+                                           Style="{StaticResource StandardTextBlockLight}" 
+                                           Margin="10,10,10,2" />
+                                <WebBrowser x:Name="MyBrowser"></WebBrowser>
 
                             </StackPanel>
                         </ScrollViewer>
