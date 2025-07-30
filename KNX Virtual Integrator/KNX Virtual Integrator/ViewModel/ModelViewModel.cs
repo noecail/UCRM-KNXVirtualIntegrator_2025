@@ -84,6 +84,7 @@ namespace KNX_Virtual_Integrator.ViewModel
                 
                 // updating the second column
                 SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;
+                SelectedModel = SelectedModels?.First();
                 ShowModelColumn(); // Affiche le panneau avec la liste de modèles fonctionnels
                 
             }

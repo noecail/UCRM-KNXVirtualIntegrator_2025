@@ -125,7 +125,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         ModelConsoleWriteCommand = new Commands.RelayCommand<FunctionalModel>(model =>
             {
-                Console.WriteLine("Starting SelectedModelConsoleWriteCommand");
+                Console.WriteLine("Starting ModelConsoleWriteCommand");
                 Console.WriteLine("Accessing the selected model : " + model.Name);
                 var i = 1;
                 foreach (var testedelement in model.ElementList)
@@ -154,14 +154,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                         Console.Write(dpttoreceive.Type + "|");
                     Console.WriteLine();
                     Console.Write("Address(es) to receive : ");
-                    foreach (var dpttoreceive in testedelement.TestsCmd)
+                    foreach (var dpttoreceive in testedelement.TestsIe)
                         Console.Write(dpttoreceive.Address + "|");
                     Console.WriteLine();
                     Console.Write("Value(s) to receive    : ");
                     foreach (var dpttoreceive in testedelement.TestsIe) 
                     {
                         foreach (var value in dpttoreceive.Value) 
-                            Console.Write(value);
+                            Console.Write(value + ",");
                         Console.Write("|"); 
                     } 
                     Console.WriteLine();
@@ -447,6 +447,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             new Commands.RelayCommand<(string fileName, string authorName)>(args =>
                 _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
 
+        LaunchAnalysisCommand = new RelayCommandWithResult<ObservableCollection<FunctionalModel>, Task<List<List<List<List<bool>>>>>>(
+            async testModels =>
+            {
+                Analyze analysis = new Analyze(testModels, _modelManager.GroupCommunication);
+                await analysis.TestAll();
+                /*foreach(var model in analysis.Results)
+                    foreach (var element in model)
+                        foreach(var cmd in element)
+                            foreach (var cmd2 in cmd)
+                            ConsoleAndLogWriteLineCommand.Execute($"{cmd} : {cmd2}");*/
+                return analysis.Results;
+            }
+        );
+        
     }
 
 

@@ -7,11 +7,15 @@ public class WindowManager
 {
     private readonly MainViewModel _mainViewModel;
     public MainWindow MainWindow { get; }
-    public SettingsWindow? SettingsWindow { get; }
-    public ConnectionWindow? ConnectionWindow { get; private set; }
+    public SettingsWindow SettingsWindow { get; }
+    public ConnectionWindow ConnectionWindow { get; private set; }
     
-    public TestConfigWindow? TestConfigWindow { get; private set; }
-
+    public TestConfigWindow TestConfigWindow { get; private set; }
+    
+    public ReportCreationWindow ReportCreationWindow { get; private set; }
+    public ModelEditWindow ModelEditWindow {get;}
+    
+    
     public WindowManager(MainViewModel mainViewModel)
     {
         // Initialisation du viewmodel
@@ -23,10 +27,14 @@ public class WindowManager
         ConnectionWindow = new ConnectionWindow(_mainViewModel);
         MainWindow = new MainWindow(_mainViewModel, ConnectionWindow, this);
         TestConfigWindow = new TestConfigWindow(_mainViewModel);
+        ReportCreationWindow = new ReportCreationWindow(_mainViewModel);
+        ModelEditWindow = new ModelEditWindow(_mainViewModel);
     }
 
     public void ShowMainWindow() => MainWindow.Show();
-    public void ShowSettingsWindow() => SettingsWindow?.Show();
-    public void ShowConnectionWindow() => ConnectionWindow?.Show();
-    public void ShowTestConfigWindow() => TestConfigWindow?.Show();
+    public void ShowSettingsWindow() => SettingsWindow.Show();
+    public void ShowConnectionWindow() => ConnectionWindow.Show();
+    public void ShowTestConfigWindow() => TestConfigWindow.Show();
+    public void ShowReportCreationWindow() => ReportCreationWindow.Show();
+    public void ShowModelEditWindow() => ModelEditWindow.ShowDialog();
 }

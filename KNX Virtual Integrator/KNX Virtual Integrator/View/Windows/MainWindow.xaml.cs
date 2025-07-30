@@ -7,7 +7,6 @@ using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
 using Knx.Falcon;
-using MahApps.Metro.Controls;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
@@ -437,12 +436,17 @@ public partial class MainWindow
     private void OnReadButtonClick(object sender, RoutedEventArgs e)
     {
         var groupAddress = new GroupAddress("1/4/1");
-        _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
+        _viewModel.MaGroupValueReadCommand.Execute(groupAddress);
     }
 
     private void OnTestConfigButtonClick(object sender, RoutedEventArgs e)
     {
         _windowManager.ShowTestConfigWindow();
+    }
+    
+    private void OnCreateTestReportButtonClick(object sender, RoutedEventArgs e)
+    {
+        _windowManager.ShowReportCreationWindow();
     }
     
     /// <summary>
@@ -472,7 +476,8 @@ public partial class MainWindow
         // Also, selecting the newly created model and scrolling down to it
         _viewModel.SelectedStructure = _viewModel.Structures?.Last();
         PredefinedStructuresScrollViewer.ScrollToEnd();
-        // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
+        
+        _windowManager.ShowModelEditWindow(); // ouverture de la fenêtre d'édition de MF
     }
     
     /// <summary>
@@ -591,7 +596,7 @@ public partial class MainWindow
     {
         // Code que je ne comprends pas qui sert à récupérer l'index de l'item depuis lequel le clic a été effectué
         // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
-        // Pour utiliser ce segment de code, il faut avoir une référence
+        // Pour utiliser ce segment de code, il faut avoir une référence sur la listbox
         var dep = (DependencyObject)e.OriginalSource;
         while (dep != null && !(dep is ListBoxItem)) { dep = VisualTreeHelper.GetParent(dep); }
         if (dep == null) return;
@@ -677,5 +682,4 @@ public partial class MainWindow
         PredefinedStructuresScrollViewer.ScrollToEnd();
     }
     
-    //private void
 }
