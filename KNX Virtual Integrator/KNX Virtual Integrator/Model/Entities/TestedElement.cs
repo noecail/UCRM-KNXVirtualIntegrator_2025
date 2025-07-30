@@ -128,15 +128,20 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// </summary>
         public void CopyTest(TestedElement? other, int index)
         {
-            if (other == null)
+            if (other == null || other.TestsCmd.Count != TestsCmd.Count || TestsIe.Count != other.TestsIe.Count)
+            {
                 return;
+            }
+
             for (var i = 0; i< other.TestsCmd.Count;i++)
             {
-                TestsCmd[i].AddValue(other.TestsCmd[i].Value[i]);
+                Console.WriteLine("Je copie la cmd : " + other.TestsCmd[i].Type);
+                TestsCmd[i].AddValue(other.TestsCmd[i].Value[index]);
             }
             for (var i = 0; i< other.TestsIe.Count;i++)
             {
-                TestsIe[i].AddValue(other.TestsIe[i].Value[i]);
+                Console.WriteLine("Je copie l'ie : " + other.TestsIe[i].Type);
+                TestsIe[i].AddValue(other.TestsIe[i].Value[index]);
             }
         }
         

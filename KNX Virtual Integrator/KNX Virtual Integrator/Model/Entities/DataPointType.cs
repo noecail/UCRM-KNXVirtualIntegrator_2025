@@ -287,6 +287,7 @@ public class DataPointType
     public void AddValue(GroupValue? value)
     {
         Value.Add(value);
+        // IntValue.Add(new BigInteger(value!.Value));
     }
     
     /// <summary>
@@ -295,6 +296,7 @@ public class DataPointType
     public void RemoveValue(int index)
     {
         Value.RemoveAt(index);
+       // IntValue.RemoveAt(index);
     }
 
     /// <summary>

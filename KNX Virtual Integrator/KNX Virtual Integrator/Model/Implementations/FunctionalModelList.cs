@@ -90,6 +90,11 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         FunctionalModels[index].Add(newModel);
     }
     
+    public void ResetCount(int index)
+    {
+        _nbModelsCreated[index] = 0;
+    }
+    
     /// <summary>
     /// Copies a functional model to the list.
     /// </summary>
