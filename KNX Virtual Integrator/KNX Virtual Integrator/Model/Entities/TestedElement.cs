@@ -129,15 +129,20 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// </summary>
         public void CopyTest(TestedElement? other, int index)
         {
-            if (other == null)
+            if (other == null || other.TestsCmd.Count != TestsCmd.Count || TestsIe.Count != other.TestsIe.Count)
+            {
                 return;
+            }
+
             for (var i = 0; i< other.TestsCmd.Count;i++)
             {
-                TestsCmd[i].AddValue(other.TestsCmd[i].Value[i]);
+                Console.WriteLine("Je copie la cmd : " + other.TestsCmd[i].Type);
+                TestsCmd[i].AddValue(other.TestsCmd[i].Value[index]);
             }
             for (var i = 0; i< other.TestsIe.Count;i++)
             {
-                TestsIe[i].AddValue(other.TestsIe[i].Value[i]);
+                Console.WriteLine("Je copie l'ie : " + other.TestsIe[i].Type);
+                TestsIe[i].AddValue(other.TestsIe[i].Value[index]);
             }
         }
         
@@ -197,5 +202,36 @@ namespace KNX_Virtual_Integrator.Model.Entities
         {
             TestsIe.RemoveAt(index);
         }
+        
+        /// <summary>
+        /// Updates the BigInteger array of all the DPTs
+        /// </summary>
+        public void UpdateIntValue()
+        {
+            foreach (var test in TestsCmd)
+            {
+                test.UpdateIntValue();
+            }
+            foreach (var test in TestsIe)
+            {
+                test.UpdateIntValue();
+            }
+        }
+
+        /// <summary>
+        /// Updates the GroupValue array of all DPTs
+        /// </summary>
+        public void UpdateValue()
+        {
+            foreach (var test in TestsCmd)
+            {
+                test.UpdateValue();
+            }
+            foreach (var test in TestsIe)
+            {
+                test.UpdateValue();
+            }
+        }
+
     }
 }

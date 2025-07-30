@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Xml.Linq;
 using Knx.Falcon;
 using System.Numerics;
+using System;
 using System.Runtime.CompilerServices;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
@@ -298,6 +299,7 @@ public class DataPointType : INotifyPropertyChanged
     public void AddValue(GroupValue? value)
     {
         Value.Add(value);
+        // IntValue.Add(new BigInteger(value!.Value));
     }
     
     /// <summary>
@@ -306,12 +308,13 @@ public class DataPointType : INotifyPropertyChanged
     public void RemoveValue(int index)
     {
         Value.RemoveAt(index);
+       // IntValue.RemoveAt(index);
     }
 
     /// <summary>
-    /// Updates the GroupValue array by copying the intValue array and turning it into group values
+    /// Updates the BigInteger array by copying the intValue array and turning it into group values
     /// </summary>
-    public void UpdateValue()
+    public void UpdateIntValue()
     {
         IntValue.Clear();
         foreach (var value in Value)
@@ -321,6 +324,20 @@ public class DataPointType : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Updates the GroupValue array by copying the intValue array and turning it into group values
+    /// </summary>
+    public void UpdateValue()
+    {
+        IntValue.Clear();
+        foreach (var value in IntValue)
+        {
+            if (value != null)
+                Value.Add(new GroupValue(value.Value.ToByteArray()));
+        }
+    }
+    
+    
     /// <summary>
     /// This method checks if the group value of the DPT is the same as the one in parameter.
     /// </summary>
