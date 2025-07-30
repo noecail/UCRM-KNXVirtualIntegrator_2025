@@ -192,6 +192,11 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <param name="../FileFinder.fileName">The name of the file to extract.</param>
         /// <returns>True if the extraction was successful; otherwise, false.</returns>
         public ICommand ExtractProjectFilesCommand { get; private set; }
+        
+        /// <summary>
+        /// Command that 
+        /// </summary>
+        public ICommand LaunchAnalysisCommand {get; private set; }
 
 
 

@@ -447,6 +447,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             new Commands.RelayCommand<(string fileName, string authorName)>(args =>
                 _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
 
+        LaunchAnalysisCommand = new RelayCommandWithResult<ObservableCollection<FunctionalModel>, Task<List<List<List<List<bool>>>>>>(
+            async testModels =>
+            {
+                Analyze analysis = new Analyze(testModels, _modelManager.GroupCommunication);
+                await analysis.TestAll();
+                /*foreach(var model in analysis.Results)
+                    foreach (var element in model)
+                        foreach(var cmd in element)
+                            foreach (var cmd2 in cmd)
+                            ConsoleAndLogWriteLineCommand.Execute($"{cmd} : {cmd2}");*/
+                return analysis.Results;
+            }
+        );
+        
     }
 
 

@@ -6,11 +6,11 @@ using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class Analyze(FunctionalModelList liste, GroupCommunication communication) : IAnalyze
+public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommunication communication) : IAnalyze
 {
-    public readonly List<ObservableCollection<FunctionalModel>> FunctionalModels = liste.FunctionalModels;
-    public List<List<List<List<List<bool>>>>> Results { get; set; } = []; //Table of results sorted by Tests, in TestedElements, in functionalModels
-    public GroupCommunication Communication = communication;
+    public readonly ObservableCollection<FunctionalModel> FunctionalModels = liste;
+    public List<List<List<List<bool>>>> Results { get; set; } = []; //Table of results sorted by Tests, in TestedElements, in functionalModels
+    public IGroupCommunication Communication = communication;
 
     
     /// <summary>
@@ -19,16 +19,13 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
     public async Task TestAll()
     {
         Results = [];
-        foreach (var functionalModelStructure in FunctionalModels) //
+        List<List<List<List<bool>>>> resList = [];
+        foreach (var functionalModelToTest in FunctionalModels) //
         {
-            List<List<List<List<bool>>>> resList = [];
-            foreach (var model in functionalModelStructure)
-            {
-                var res = await TestModel(model);
+                var res = await TestModel(functionalModelToTest);
                 resList.Add(res);
-            }
-            Results.Add(resList);
         }
+        Results = resList;
     }
 
     /// <summary>
@@ -58,17 +55,22 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
         var testsCmd = element.TestsCmd;
         var testsIe = element.TestsIe;
         List<List<bool>> result = []; //List containing results of each of the tests
-        for (var i = 0; i < testsCmd[0].Value.Count; i++) //For each of the tests
+        
+        var time = 2000;
+        foreach (var t in testsCmd) // parcourt toutes les colonnes de Cmd et s'il y a un dpt 5, mettre à 5000 ms d'attente
+            if (t.Type == 5) 
+                time = 10000;
+
+        for (var i = 0; i < testsCmd[0].Value.Count; i++) //For each of the tests (1 test per value in the Cmd part) (parcourt les lignes)
         {
-            var time = 1000;
-            if (testsCmd[i].Type == 5) 
-                time = 5000;
+            
             var testResult = false; //Result of the test
             List<bool> resList=[]; //List to check each expected dpt initialized at 0
-            for (var j = 0; j < (testsIe?[0].Value.Count); j++)
+            for (var j = 0; j < (testsIe?[0].Value.Count); j++) //Initialization of the list to false for each value
             {
                 resList.Add(false);
             }
+            
             //var cts = new CancellationTokenSource();
             List<Task<List<GroupCommunication.GroupMessage>>> readTaskList = [];
             if (testsIe != null)
@@ -77,13 +79,13 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
                     readTaskList.Add(Communication.GroupValuesWithinTimerAsync(ie.Address, time));
             }
 
-            foreach(var test in testsCmd) //Send all the commands
+            foreach(var test in testsCmd) //Send all the commands 
             {
                 await Communication.GroupValueWriteAsync(test.Address, test.Value[i]!);
             }
-            while (!readTaskList[0].IsCompleted || testResult) //While the timer hasn't expired and the test hasn't succeeded
+            while (readTaskList.TrueForAll(task => task.Result.Count != 0) && !testResult) //While the timer hasn't expired and the test hasn't succeeded
             {
-                for (var j = 0; j < testsIe?[0].Value.Count; j++) //Goes through all the expected returns
+                for (var j = 0; j < testsIe?.Count; j++) //Goes through all the expected returns (columns)
                 {
                     if (testsIe[j].Value[i] != null && !resList[j])
                     {
@@ -91,6 +93,7 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
                         var readValues = readTaskList[j].Result; //Updates readValues, the list of messages read on the bus
                         resList[j] = CheckResult(ref readValues, testsIe[j], i); //Check if the message has arrived
                     }
+                    testResult = resList[j];
                 }
             }
 
@@ -119,9 +122,11 @@ public class Analyze(FunctionalModelList liste, GroupCommunication communication
         while (result == false && i < readValues.Count)
         {
             var value =  readValues[i];
-            if ((value.DestinationAddress == expectedResult.Address) &&
-                (value.EventType == GroupEventType.ValueResponse || value.EventType == GroupEventType.ValueWrite) &&
-                (value.Value != null)&&(value.Value.Equals(expectedResult.Value[index])))
+            if (value.DestinationAddress == expectedResult.Address
+                && value.Value is not null
+                && ((value.EventType is GroupEventType.ValueWrite 
+                && value.Value.Equals(expectedResult.Value[index]))
+                || value.EventType == GroupEventType.ValueResponse))
             {
                 result = true;
                 readValues.RemoveAt(i);
