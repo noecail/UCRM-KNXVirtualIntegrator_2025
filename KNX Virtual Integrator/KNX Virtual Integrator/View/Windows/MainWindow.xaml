@@ -557,7 +557,7 @@
                                                         <ListBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
-                                                                    <StackPanel Orientation="Vertical"/>
+                                                                    <StackPanel Orientation="Horizontal"/>
                                                                 </ItemsPanelTemplate>
                                                             </ListBox.ItemsPanel>
                                                             <ListBox.ItemTemplate>

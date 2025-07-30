@@ -52,9 +52,12 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             AddFunctionalModel(new FunctionalModel([
             new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[new GroupValue(true), new GroupValue(false)]])  //On/Off
                 ],"Commutation")); //Convection, Prise, Arrosage, Portail
-            for(var i =0;i<4;i++)
+            for (var i = 0; i < 4; i++)
+            {
+                FunctionalModels[i].UpdateIntValue();
                 _keywordsDictionary.Add([]);
-            
+            }
+
             AddKeyword(0, "Lumiere on/off");
             AddKeyword(0, "Lumiere on-off");
             AddKeyword(0, "Lumiere on_off");

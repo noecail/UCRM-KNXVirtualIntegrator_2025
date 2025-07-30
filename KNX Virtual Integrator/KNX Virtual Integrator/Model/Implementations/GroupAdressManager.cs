@@ -463,8 +463,12 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     functionalModelList.AddToDictionary(newFunctionalModels[0]);
                     functionalModelList.FunctionalModels[(int) index].Clear();
                 }
+
                 foreach (var newFunctionalModel in newFunctionalModels)
-                    functionalModelList.AddToList((int)index,newFunctionalModel,false);
+                {
+                    newFunctionalModel.UpdateIntValue();
+                    functionalModelList.AddToList((int)index, newFunctionalModel, false);
+                }
             }
     }
     
