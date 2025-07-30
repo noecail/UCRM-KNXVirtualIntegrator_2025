@@ -546,6 +546,7 @@
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Right"
                         MinHeight="50"
+                        Click="LaunchTestButton_OnClick"
                 />
                 
                 

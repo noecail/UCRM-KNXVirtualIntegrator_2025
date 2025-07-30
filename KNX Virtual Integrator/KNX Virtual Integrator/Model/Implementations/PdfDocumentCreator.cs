@@ -138,10 +138,10 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
 
 
         // Logo du logiciel (les 2 lignes qui suivent ne servent pas pour le moment)
-        var logo = new Image(ImageDataFactory.Create(@"C:\Users\maxim\Downloads\BOOST.png"));
+        var logo = new Image(ImageDataFactory.Create("../../../Resources/resources/logoUCRM.png"));
         logo.ScaleToFit(42f, 42f); // Ajuster la taille du logo
         // Ajouter l'image à une position spécifique (x, y) sur la page
-        canvas.AddImageAt(ImageDataFactory.Create(@"C:\Users\maxim\Downloads\BOOST.png"), 0f, document.GetDefaultPageSize().GetHeight() - 42f, false);
+        canvas.AddImageAt(ImageDataFactory.Create("../../../Resources/resources/logoUCRM.png"), 0f, document.GetDefaultPageSize().GetHeight() - 42f, false);
         
         // Nom du logiciel, à côté du logo
         doc.Add(new Paragraph($"{App.AppName}"));

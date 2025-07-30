@@ -29,6 +29,8 @@
     <ItemGroup>
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.1.0" />
       <PackageReference Include="itext" Version="9.2.0" />
+      <PackageReference Include="itext.commons" Version="9.2.0" />
+      <PackageReference Include="itext.bouncy-castle-adapter" Version="9.2.0" />
       <PackageReference Include="Knx.Falcon.Sdk" Version="6.3.7959" />
       <PackageReference Include="MahApps.Metro" Version="2.4.10" />
       <PackageReference Include="SharpVectors" Version="1.8.4.2" />

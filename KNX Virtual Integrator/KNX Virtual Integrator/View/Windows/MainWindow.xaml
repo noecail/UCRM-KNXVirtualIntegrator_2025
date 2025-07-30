@@ -111,10 +111,12 @@
             />
             
             <!-- Bouton d'Exportation -->
-            <Button Content="{StaticResource ExportButton}"
-                Style="{StaticResource IconTextButtonStyle}"
-                Foreground="{StaticResource DarkForegroundBrush}"
-                Tag="{StaticResource ExportedDrawingImage}"
+            <Button x:Name="CreateTestReportButton"
+                    Content="{StaticResource ExportButton}"
+                    Style="{StaticResource IconTextButtonStyle}"
+                    Foreground="{StaticResource DarkForegroundBrush}"
+                    Tag="{StaticResource ExportedDrawingImage}"
+                    Click="OnCreateTestReportButtonClick"
             />
             
         </StackPanel>

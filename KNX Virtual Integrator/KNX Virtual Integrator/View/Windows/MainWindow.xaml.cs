@@ -437,12 +437,17 @@ public partial class MainWindow
     private void OnReadButtonClick(object sender, RoutedEventArgs e)
     {
         var groupAddress = new GroupAddress("1/4/1");
-        _viewModel.MaGroupValueReadCommand.Execute((groupAddress));
+        _viewModel.MaGroupValueReadCommand.Execute(groupAddress);
     }
 
     private void OnTestConfigButtonClick(object sender, RoutedEventArgs e)
     {
         _windowManager.ShowTestConfigWindow();
+    }
+    
+    private void OnCreateTestReportButtonClick(object sender, RoutedEventArgs e)
+    {
+        _windowManager.ShowReportCreationWindow();
     }
     
     /// <summary>
@@ -677,5 +682,4 @@ public partial class MainWindow
         PredefinedStructuresScrollViewer.ScrollToEnd();
     }
     
-    //private void
 }

@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 using KNX_Virtual_Integrator.ViewModel;
 
@@ -49,7 +50,7 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void SaveButtonClick(object sender, RoutedEventArgs e)
     {
-        _mainViewModel.GenerateReportCommand.Execute(("test.pdf", authorNameTextBox.Text.Trim()));
+        _mainViewModel.GenerateReportCommand.Execute(("../../Allo.pdf", authorNameTextBox.Text.Trim()));
     }
 
     /// <summary>
@@ -59,6 +60,12 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void CancelButtonClick(object sender, RoutedEventArgs e)
     {
-        throw new NotImplementedException();
+        authorNameTextBox.Text = string.Empty;
+    }
+
+    private void ClosingReportCreationWindow(object? sender, CancelEventArgs e)
+    {
+        e.Cancel = true;
+        Hide();
     }
 }
