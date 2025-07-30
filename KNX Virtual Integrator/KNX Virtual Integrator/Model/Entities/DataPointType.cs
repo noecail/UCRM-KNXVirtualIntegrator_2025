@@ -1,13 +1,15 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Xml.Linq;
 using Knx.Falcon;
 using System.Numerics;
+using System.Runtime.CompilerServices;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 /// <summary>
 /// Represents a DataPointType with : its type code, size, address and values expected to be sent or read
 /// </summary>
-public class DataPointType
+public class DataPointType : INotifyPropertyChanged
 {
     private int _type;
     public int Type // DPT code
@@ -17,6 +19,7 @@ public class DataPointType
         {
             _type = value;
             GetSizeOf();
+            OnPropertyChanged();
         }
     }
 
@@ -29,15 +32,23 @@ public class DataPointType
     public ObservableCollection<BigInteger?> IntValue
     {
         get => _intValue;
-        set => _intValue = value; 
+        set
+        {
+            _intValue = value;
+            OnPropertyChanged();
+        }
     }
 
-    private string _address = "0/1/1";
+    private string _address;
 
     public string Address
     {
         get => _address;
-        set => _address = value;
+        set
+        {
+            _address = value;
+            OnPropertyChanged();
+        }
     }
     
     //Constructors
@@ -328,6 +339,20 @@ public class DataPointType
         Address = element.Attributes("Address").First().Value;
         Type = int.Parse(element.Attributes("DPTs").First().Value);
     }
-    
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    /*protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
+        field = value;
+        OnPropertyChanged(propertyName);
+        return true;
+    }*/
 }
 

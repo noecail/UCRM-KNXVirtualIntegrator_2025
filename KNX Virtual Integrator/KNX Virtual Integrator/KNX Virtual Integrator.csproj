@@ -72,8 +72,4 @@
       <Compile Remove="View\Utils\NotConverter.cs" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="View\Utils\" />
-    </ItemGroup>
-
 </Project>

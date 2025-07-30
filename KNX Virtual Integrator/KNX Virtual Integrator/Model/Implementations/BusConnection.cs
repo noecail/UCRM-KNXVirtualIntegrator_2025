@@ -445,12 +445,12 @@ public sealed class BusConnection : ObservableObject, IBusConnection
 
             case "IP à distance (NAT)" when NatAddress == "":
                 // Connexion NAT mais pas d'IP fourni
-                errorMessage = "Pour établir une connexion NAT, veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
+                errorMessage = "Pour établir une connexion NAT, veuillez renseigner une adresse IP au format IPv4. Exemple : 203.0.113.2";
                 break;
 
             case "IP à distance (NAT)" when !ValidateIPv4(NatAddress):
                 // Connexion NAT mais IP fourni n'est pas une adresse IP
-                errorMessage = "Veuillez renseigner une adresse IP au format IPv4. Exemple : 92.174.145.34";
+                errorMessage = "Veuillez renseigner une adresse IP au format IPv4. Exemple : 203.0.113.2";
                 break;
 
             case "IP à distance (NAT)" when e.Message.Contains("No reply from interface", StringComparison.OrdinalIgnoreCase):

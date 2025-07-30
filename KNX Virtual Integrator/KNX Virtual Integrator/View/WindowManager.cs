@@ -13,7 +13,9 @@ public class WindowManager
     public TestConfigWindow TestConfigWindow { get; private set; }
     
     public ReportCreationWindow ReportCreationWindow { get; private set; }
-
+    public ModelEditWindow ModelEditWindow {get;}
+    
+    
     public WindowManager(MainViewModel mainViewModel)
     {
         // Initialisation du viewmodel
@@ -26,6 +28,7 @@ public class WindowManager
         MainWindow = new MainWindow(_mainViewModel, ConnectionWindow, this);
         TestConfigWindow = new TestConfigWindow(_mainViewModel);
         ReportCreationWindow = new ReportCreationWindow(_mainViewModel);
+        ModelEditWindow = new ModelEditWindow(_mainViewModel);
     }
 
     public void ShowMainWindow() => MainWindow.Show();
@@ -33,4 +36,5 @@ public class WindowManager
     public void ShowConnectionWindow() => ConnectionWindow.Show();
     public void ShowTestConfigWindow() => TestConfigWindow.Show();
     public void ShowReportCreationWindow() => ReportCreationWindow.Show();
+    public void ShowModelEditWindow() => ModelEditWindow.ShowDialog();
 }
