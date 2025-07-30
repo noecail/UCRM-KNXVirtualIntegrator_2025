@@ -66,7 +66,7 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
             
             var testResult = false; //Result of the test
             List<bool> resList=[]; //List to check each expected dpt initialized at 0
-            for (var j = 0; j < (testsIe?[0].Value.Count); j++) //Initialization of the list to false for each value
+            for (var j = 0; j < testsIe?.Count; j++) //Initialization of the list to false for each value
             {
                 resList.Add(false);
             }
