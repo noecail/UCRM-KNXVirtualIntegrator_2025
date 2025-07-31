@@ -7,9 +7,9 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
+public class FunctionalModelList : IFunctionalModelList
 {
-    private List<int> _nbModelsCreated = [];
+    private readonly List<int> _nbModelsCreated = [];
     public List<ObservableCollection<FunctionalModel>> FunctionalModels { get; set; } = [];
     public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
 
@@ -17,7 +17,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     {
         FunctionalModelDictionary = new FunctionalModelDictionary();
         var index = 0; 
-        foreach (var model in FunctionalModelDictionary.GetAllModels())
+        foreach (var unused in FunctionalModelDictionary.GetAllModels())
         {
             FunctionalModels.Add([]);
             _nbModelsCreated.Add(0);
@@ -54,7 +54,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
                     FunctionalModels.Add([]);
                     AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
                 } 
-                OnPropertyChanged(nameof(FunctionalModels)); //notifier le mainviewmodel
+                OnPropertyChanged(nameof(FunctionalModels)); //notifier le mainViewModel
             }
         };
 
@@ -68,14 +68,12 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     public void AddToList(int index)
     {
         FunctionalModel newModel;
+        // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
         if (FunctionalModels[index].Count > 0)
-        {
             newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index], FunctionalModels[index][^1].Key + 1, false);
-        }
         else
-        {
             newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],1,false);
-        }
+        
         _nbModelsCreated[index]++;
         if (newModel.Name.Contains("Structure"))
         {
@@ -93,12 +91,13 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
     {
         _nbModelsCreated[index] = 0;
     }
-    
+
     /// <summary>
     /// Copies a functional model to the list.
     /// </summary>
     /// <param name="functionalModel">FunctionalModel to add</param>
     /// <param name="index"> Index of the structure</param>
+    /// <param name="copy"> boolean indicating whether the model is a copy or not</param>
     public void AddToList(int index, FunctionalModel functionalModel, bool copy)
     {
         _nbModelsCreated[index]++;
@@ -151,7 +150,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
             FunctionalModelDictionary.FunctionalModels[i].Key--;
         FunctionalModelDictionary.RemoveFunctionalModel(index);
         FunctionalModels.RemoveAt(index);
-        OnPropertyChanged(nameof(FunctionalModels)); //notifier l'ui
+        OnPropertyChanged(nameof(FunctionalModels)); //notifier la UI
     }
     
     /// <summary>

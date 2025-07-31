@@ -16,7 +16,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         
         private List<List<string>> _keywordsDictionary = [];
         
-        private int _nbStructuresCreated = 0;
+        private int _nbStructuresCreated ;
 
         public ObservableCollection<FunctionalModel> FunctionalModels
         {

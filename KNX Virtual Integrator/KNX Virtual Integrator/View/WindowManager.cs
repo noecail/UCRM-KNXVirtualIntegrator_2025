@@ -27,6 +27,7 @@ public class WindowManager
     public void ShowMainWindow() {
         MainWindow.Show(); // Pour ouvrir la fenêtre
         MainWindow.Focus();
+        
     }
 
     public void ShowSettingsWindow() {

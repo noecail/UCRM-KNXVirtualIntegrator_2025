@@ -3,7 +3,7 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations ;
 
-public class GroupAddressProcessor(Logger logger) : IGroupAddressProcessor
+public class GroupAddressProcessor(ILogger logger) : IGroupAddressProcessor
 {
     /// <summary>
     /// Normalizes the name by removing specific prefixes.

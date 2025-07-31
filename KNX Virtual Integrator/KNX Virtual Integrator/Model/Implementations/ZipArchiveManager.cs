@@ -4,9 +4,8 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ZipArchiveManager(Logger logger) : IZipArchiveManager
+public class ZipArchiveManager(ILogger logger) : IZipArchiveManager
 {
-    private readonly ILogger _logger = logger;
 
     // Fonction permettant de créer une archive zip et d'ajouter des fichiers dedans
     /// <summary>
@@ -31,7 +30,7 @@ public class ZipArchiveManager(Logger logger) : IZipArchiveManager
                     if (Directory.Exists(path))
                     {
                         // Ajouter tous les fichiers du répertoire (et sous-répertoires) à l'archive
-                        _logger.ConsoleAndLogWriteLine($"{path} {Path.GetDirectoryName(path)}");
+                        logger.ConsoleAndLogWriteLine($"{path} {Path.GetDirectoryName(path)}");
                         AddDirectoryToArchive(archive, path, path);
                     }
                     else if (File.Exists(path))
@@ -47,14 +46,14 @@ public class ZipArchiveManager(Logger logger) : IZipArchiveManager
                     }
                     else
                     {
-                        _logger.ConsoleAndLogWriteLine(
+                        logger.ConsoleAndLogWriteLine(
                             $"Le chemin {path} n'a pas été trouvé et ne sera pas ajouté à l'archive en cours de création.");
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
+                logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
             }
         }
         else
@@ -83,14 +82,14 @@ public class ZipArchiveManager(Logger logger) : IZipArchiveManager
                     }
                     else
                     {
-                        _logger.ConsoleAndLogWriteLine(
+                        logger.ConsoleAndLogWriteLine(
                             $"Le chemin {path} n'a pas été trouvé et ne sera pas ajouté à l'archive en cours de création.");
                     }
                 }
             }
             catch (Exception e)
             {
-                _logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
+                logger.ConsoleAndLogWriteLine($"Error: an error occured while creating and adding files to the archive at {zipFilePath} : {e.Message}");
             }
         }
     }
@@ -130,7 +129,7 @@ public class ZipArchiveManager(Logger logger) : IZipArchiveManager
         }
         catch (Exception e)
         {
-            _logger.ConsoleAndLogWriteLine($"Error: an error occured while adding a directory to the debug archive : {e.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: an error occured while adding a directory to the debug archive : {e.Message}");
         }
     }
 }

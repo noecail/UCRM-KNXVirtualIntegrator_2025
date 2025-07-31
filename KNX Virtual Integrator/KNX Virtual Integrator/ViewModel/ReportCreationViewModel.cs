@@ -10,7 +10,11 @@ public partial class MainViewModel
 
     public string PdfPath
     {
-        get=>_pdfPath; 
-        set=>_pdfPath=value;
+        get=>_pdfPath;
+        set
+        {
+            _pdfPath = value;
+            WhenPropertyChanged(nameof(PdfPath));
+        }
     }
 }

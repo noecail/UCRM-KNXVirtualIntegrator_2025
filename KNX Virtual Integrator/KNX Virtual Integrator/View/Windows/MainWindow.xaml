@@ -387,7 +387,6 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" /> <!-- Titre -->
-                            <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
                         </Grid.ColumnDefinitions>
 
                         <!-- Titre -->
@@ -397,15 +396,6 @@
                                    Text="Paramètres du Modèle Fonctionnel"
                                    HorizontalAlignment="Left"
                                    Margin="5,0"
-                        />
-
-                        <!--Bouton de fermeture -->
-                        <Button Grid.Column="1"
-                            Style="{StaticResource IconButtonStyle}"
-                            Tag="{StaticResource CloseDrawingImage}"
-                            HorizontalAlignment="Right"
-                            Background="{StaticResource NoColorBrush}"
-                            Command="{Binding HideModelColumnCommand}"
                         />
                     </Grid>
                 </Border>

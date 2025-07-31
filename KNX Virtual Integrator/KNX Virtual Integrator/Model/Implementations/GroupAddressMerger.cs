@@ -3,9 +3,8 @@ using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-public class GroupAddressMerger( StringManagement stringManagement, Logger logger) : IGroupAddressMerger
+public class GroupAddressMerger( StringManagement stringManagement, ILogger logger) : IGroupAddressMerger
 {
-    private readonly ILogger _logger = logger;
         
     /// <summary>
     /// Merges single-element groups in the grouped addresses dictionary with entries from the provided 
@@ -40,7 +39,7 @@ public class GroupAddressMerger( StringManagement stringManagement, Logger logge
                 if (ieElementName != null && stringManagement.CalculateSimilarity(groupName, ieElementName) >= 0.8)
                 {
                     // Log l'ajout de l'élément 'ieElementName' au groupe 'groupName'
-                    _logger.ConsoleAndLogWriteLine($"Adding '{ieElementName}' from IeAddressesSet to single-element group '{groupName}'.");
+                    logger.ConsoleAndLogWriteLine($"Adding '{ieElementName}' from IeAddressesSet to single-element group '{groupName}'.");
 
                     // Ajouter l'élément 'ieElement' au groupe actuel
                     group.Value.Add(ieElement);

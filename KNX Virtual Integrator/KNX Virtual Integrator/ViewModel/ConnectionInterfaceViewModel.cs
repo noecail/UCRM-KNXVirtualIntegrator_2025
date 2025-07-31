@@ -10,12 +10,13 @@ public class ConnectionInterfaceViewModel
     /// <summary>
     /// Gets the type of connector for the connection interface.
     /// </summary>
+    // ReSharper disable once UnusedAutoPropertyAccessor.Global
     public ConnectorType ConnectorType { get; }
 
     /// <summary>
     /// Gets or sets the display name of the connection interface.
     /// </summary>
-    public string DisplayName { get; set; }
+    public string DisplayName { get; }
 
     /// <summary>
     /// Gets or sets the connection string used for the connection interface.

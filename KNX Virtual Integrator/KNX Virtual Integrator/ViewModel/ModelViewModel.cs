@@ -43,7 +43,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                     return;
                 _selectedModels = value;
                 SelectedModel = null; // reset SelectedModel if SelectedModels has changed
-                ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedModels));
             }
         }
@@ -61,7 +60,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                 if (_selectedModel != null && _selectedModel.Key == value?.Key)
                     return;
                 _selectedModel = value;
-                ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedModel));
                 
             }
@@ -85,7 +83,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                 // updating the second column
                 SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;
                 SelectedModel = SelectedModels?.First();
-                ShowModelColumn(); // Affiche le panneau avec la liste de modèles fonctionnels
                 
             }
         }

@@ -6,7 +6,7 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class SliderClickHandler (Logger logger, ParentFinder parentFinder) : ISliderClickHandler
+public class SliderClickHandler (ILogger logger, ParentFinder parentFinder) : ISliderClickHandler
 {
     private bool _isDragging;
     
