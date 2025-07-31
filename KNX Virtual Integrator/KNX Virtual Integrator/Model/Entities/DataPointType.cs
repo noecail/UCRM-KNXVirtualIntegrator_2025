@@ -11,6 +11,33 @@ namespace KNX_Virtual_Integrator.Model.Entities;
 /// </summary>
 public class DataPointType : INotifyPropertyChanged
 {
+    // Class used only for Value collections, used by the UI to access and modify BigInteger values, which do not raise notifications by default
+    public class BigIntegerItem : INotifyPropertyChanged
+    {
+        private BigInteger? _value;
+        public BigInteger? Value
+        {
+            get => _value;
+            set
+            {
+                if (_value != value)
+                {
+                    _value = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public BigIntegerItem(BigInteger BI)
+        {
+            Value = BI;
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
     private int _type;
     public int Type // DPT code
     {
@@ -28,16 +55,16 @@ public class DataPointType : INotifyPropertyChanged
     public List<GroupValue?> Value { get; set; } // Value to send or expected to be read
 
     private ObservableCollection<BigInteger?> _intValue = [];
-    
-    public ObservableCollection<BigInteger?> IntValue
-    {
+
+    public ObservableCollection<BigIntegerItem> IntValue { get; }= new ObservableCollection<BigIntegerItem>();
+    /*{
         get => _intValue;
         set
         {
             _intValue = value;
             OnPropertyChanged();
         }
-    }
+    }*/
 
     private string _address = "";
 
@@ -56,7 +83,7 @@ public class DataPointType : INotifyPropertyChanged
     {
         Type = 1;
         Value = [new GroupValue(true)];
-        IntValue = [new BigInteger(Value[0]!.Value)];//[BitConverter.ToUInt128(Value[0]!.Value)];
+        IntValue = [new BigIntegerItem(new BigInteger(Value[0]!.Value))];//[BitConverter.ToUInt128(Value[0]!.Value)];
         GetSizeOf();
     }
     
@@ -64,7 +91,7 @@ public class DataPointType : INotifyPropertyChanged
     {
         Type = type;
         Value = [new GroupValue(true)];
-        IntValue = [new BigInteger(Value[0]!.Value)];
+        IntValue = [new BigIntegerItem(new BigInteger(Value[0]!.Value))];
         GetSizeOf();
     }
 
@@ -72,7 +99,7 @@ public class DataPointType : INotifyPropertyChanged
     {
         Type = type;
         Value = [new GroupValue(true)];
-        IntValue = [new BigInteger(Value[0]!.Value)];
+        IntValue = [new BigIntegerItem(new BigInteger(Value[0]!.Value))];
         GetSizeOf();
         Address = address;
     }
@@ -88,7 +115,7 @@ public class DataPointType : INotifyPropertyChanged
         {
             Value.Add(value);
             if (Value[^1] != null)
-                IntValue.Add(new BigInteger(Value[^1]!.Value));
+                IntValue.Add(new BigIntegerItem(new BigInteger(Value[^1]!.Value)));
         }
     }
 
@@ -287,7 +314,7 @@ public class DataPointType : INotifyPropertyChanged
         var res = true;
         foreach (var value in IntValue)
         {
-            res = res && value <= max && value >= min;
+            res = res && value.Value <= max && value.Value >= min;
         }
         return res;
     }
@@ -319,7 +346,7 @@ public class DataPointType : INotifyPropertyChanged
         foreach (var value in Value)
         {
             if (value != null)
-                IntValue.Add(new BigInteger(value.Value));
+                IntValue.Add(new BigIntegerItem(new BigInteger(value.Value)));
         }
     }
 
@@ -332,7 +359,7 @@ public class DataPointType : INotifyPropertyChanged
         foreach (var value in IntValue)
         {
             if (value != null)
-                Value.Add(new GroupValue(value.Value.ToByteArray()));
+                Value.Add(new GroupValue(value.Value.Value.ToByteArray()));
         }
     }
     

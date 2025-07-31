@@ -560,7 +560,7 @@
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
                                                                                 <TextBox 
-                                                                                    Text="{Binding ., Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                    Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
                                                                                     Width="40"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -627,7 +627,7 @@
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
                                                                                 <TextBox 
-                                                                                    Text="{Binding ., Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                    Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
                                                                                     Width="40"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"

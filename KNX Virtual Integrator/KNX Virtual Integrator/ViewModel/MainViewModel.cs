@@ -120,6 +120,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 {
                     foreach (var model in modelList)
                     {
+                        //model.UpdateValue();
                         ModelConsoleWriteCommand?.Execute(model);
                     }
                 }
@@ -163,8 +164,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     Console.Write("Value(s) to send       : ");
                     foreach (var dpttosend in testedelement.TestsCmd)
                     {
-                        foreach (var value in dpttosend.Value)
-                            Console.Write(value + ",");
+                        foreach (var value in dpttosend.IntValue)
+                            Console.Write(value.Value + ",");
                         Console.Write("|");
                     }
 
@@ -181,8 +182,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     Console.Write("Value(s) to receive    : ");
                     foreach (var dpttoreceive in testedelement.TestsIe)
                     {
-                        foreach (var value in dpttoreceive.Value)
-                            Console.Write(value + ",");
+                        foreach (var value in dpttoreceive.IntValue)
+                            Console.Write(value.Value + ",");
                         Console.Write("|");
                     }
 
