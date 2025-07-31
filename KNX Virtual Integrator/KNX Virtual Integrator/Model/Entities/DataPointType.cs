@@ -328,7 +328,7 @@ public class DataPointType : INotifyPropertyChanged
     /// </summary>
     public void UpdateValue()
     {
-        IntValue.Clear();
+        Value.Clear();
         foreach (var value in IntValue)
         {
             if (value != null)

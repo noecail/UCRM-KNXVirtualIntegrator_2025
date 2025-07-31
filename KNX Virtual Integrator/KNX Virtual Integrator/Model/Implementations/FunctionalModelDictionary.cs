@@ -16,7 +16,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         
         private List<List<string>> _keywordsDictionary = [];
         
-        private int _nbStructuresCreated = 0;
+        private int _nbStructuresCreated;
 
         public ObservableCollection<FunctionalModel> FunctionalModels
         {
@@ -55,6 +55,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             for (var i = 0; i < 4; i++)
             {
                 FunctionalModels[i].UpdateIntValue();
+            }
+
+            for (var i = 0; i < 4; i++)
+            {
                 _keywordsDictionary.Add([]);
             }
 
@@ -189,9 +193,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         /// </summary>
         /// <param name="functionalModel">Structure to find in the dictionary</param>
         /// <returns>Index of the corresponding structure, or null if not found</returns>
-        public int? HasSameStructure(FunctionalModel functionalModel)
+        public int HasSameStructure(FunctionalModel functionalModel)
         {
-            int? result = null;
+            var result = -1;
             foreach (var list in _keywordsDictionary)
             {
                 foreach (var keyword in list)
@@ -205,7 +209,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             }
             
             var i = 0;
-            while (i < FunctionalModels.Count && result == null)
+            while (i < FunctionalModels.Count && result == -1)
             {
                 if (FunctionalModels[i].HasSameStructure(functionalModel))
                     result = i;

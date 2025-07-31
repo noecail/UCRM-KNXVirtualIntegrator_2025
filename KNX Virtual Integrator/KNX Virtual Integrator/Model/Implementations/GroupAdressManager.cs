@@ -471,10 +471,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var nbAppearances = element.IeContains(newDpt);
                                         for (var l = 0; l < nbAppearances; l++)
                                         {
-                                            if (newDpt.Type == 5)
-                                                Console.WriteLine("J'ajoute un 5 à l'élément " + k + " de " +
-                                                                  newFunctionalModels[j]);
-
                                             newElement.AddDptToIe(newType, newAddress, []);
                                         }
                                     }
@@ -496,8 +492,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     {
                         if (index != -1)
                         {
-                            Console.WriteLine("On est dans : " + functionalModelList.FunctionalModelDictionary
-                                .FunctionalModels[index].Name);
                             for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
                             {
                                 for (var l = 0;
@@ -505,11 +499,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                          .ElementList[k].TestsCmd[0].Value.Count;
                                      l++)
                                 {
-                                    if (index == 2)
-                                    {
-                                        Console.WriteLine("On ajoute un test au store " + l);
-                                    }
-
                                     newFunctionalModels[j].ElementList[k].CopyTest(
                                         functionalModelList.FunctionalModelDictionary.FunctionalModels[index]
                                             .ElementList[k], l);
@@ -518,9 +507,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
                     }
 
-                    functionalModelList.ExportList(@"C:\Users\manui\Documents\Stage 4A\Test\List");
 
-                    if (index == null) // if the structure doesn't exist yet, creates it
+                    if (index == -1) // if the structure doesn't exist yet, creates it
                     {
                         index = functionalModelList.FunctionalModelDictionary.FunctionalModels.Count;
                         var tempName = newFunctionalModels[0].Name;
@@ -534,12 +522,13 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         newFunctionalModel.UpdateIntValue();
                         functionalModelList.AddToList(index, newFunctionalModel, false);
                     }
+
                 }
             }
             else// if (_groupAddressStructure == 2)
             {
-                Console.WriteLine("Bizarre, il trouve pas que c'est à 3 niveaux, il trouve : "+_groupAddressStructure);
             }
+            //functionalModelList.ExportList(@"C:\Users\manui\Documents\Stage 4A\Test\List");
         }
     }
     
@@ -595,19 +584,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// </summary>
     public int DetermineGroupAddressStructureGroupAddressFile(IEnumerable<XElement>? modelStructures)
     {
+        if (modelStructures == null)
+            return 0;
         if (modelStructures.ToList()[0].Elements().ToList()[0].Elements().ToList().Count > 0)
             return 3;
-        Console.WriteLine(modelStructures.ToList()[0].Attribute("Name").Value);
-        foreach (var groupRange in modelStructures.ToList()[0].Elements())
-        {
-            Console.WriteLine(groupRange.Attribute("Name").Value);
-            foreach (var groupAddress in groupRange.Elements())
-            {
-                Console.WriteLine(groupAddress.Attribute("Name").Value);
-                Console.WriteLine(groupAddress.Elements().ToList().Count);
-            }
-        }
-
+       
         // if(modelStructures.ToList()[0].Attributes().ToList().Count == 0)
         // Si aucun chevauchement n'est trouvé, retourne 2.
         return 2;

@@ -136,12 +136,10 @@ namespace KNX_Virtual_Integrator.Model.Entities
 
             for (var i = 0; i< other.TestsCmd.Count;i++)
             {
-                Console.WriteLine("Je copie la cmd : " + other.TestsCmd[i].Type);
                 TestsCmd[i].AddValue(other.TestsCmd[i].Value[index]);
             }
             for (var i = 0; i< other.TestsIe.Count;i++)
             {
-                Console.WriteLine("Je copie l'ie : " + other.TestsIe[i].Type);
                 TestsIe[i].AddValue(other.TestsIe[i].Value[index]);
             }
         }
