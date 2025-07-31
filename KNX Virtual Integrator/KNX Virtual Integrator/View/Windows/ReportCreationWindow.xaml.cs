@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using KNX_Virtual_Integrator.ViewModel;
@@ -23,8 +22,49 @@ public partial class ReportCreationWindow
     {
         InitializeComponent();
         _mainViewModel = mv;
-        MyBrowser.RenderSize = new Size(340, 480);
+        MyBrowser.RenderSize = new Size(400, 600);
     }
+    
+    
+    /// <summary>
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
+    /// </summary>
+    public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
+    {
+        if (langChanged) TranslateWindowContents();
+        if (themeChanged) ApplyThemeToWindow();
+        if (scaleChanged) ApplyScaling();
+    }
+
+    private void TranslateWindowContents()
+    {
+        _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("ReportCreationWindow.Translate is not implemented");
+    }
+
+    private void ApplyThemeToWindow()
+    {
+        _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("ReportCreationWindow.ApplyTheme is not implemented");
+    }
+    
+    private void ApplyScaling()
+    {
+        var scaleFactor = _mainViewModel.AppSettings.AppScaleFactor / 100f;
+        float scale;
+        if (scaleFactor <= 1f)
+        {
+            scale = scaleFactor - 0.1f;
+        }
+        else
+        {
+            scale = scaleFactor - 0.2f;
+        }
+        ReportCreationWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
+            
+        Height = 650 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 650 * scale;
+        Width = 500 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 500 * scale;
+    }
+    
+    
 
     /// <summary>
     /// Handles the MouseLeftButtonDown event to initiate dragging of the window.

@@ -96,9 +96,6 @@
                 Margin="0,0"
             />
 
-            <!-- Bouton Test trames -->
-            <Button Content="Envoyer Trame" Click="OnWriteButtonClick" />
-            <Button Content="Lire Trame" Click="OnReadButtonClick" />
         </StackPanel>
         
         <!-- Boutons de droite -->
@@ -236,7 +233,7 @@
                         </ScrollViewer>
 
                         <!-- Bandeau inférieur -->
-                        <Grid Grid.Row="4">
+                        <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
@@ -320,7 +317,7 @@
                             
                             <TextBlock Style="{StaticResource TitleTextLight}"
                                        x:Name="BorderModelsTitleText"
-                                       Text="{Binding SelectedStructure.Name}"
+                                       Text="{Binding SelectedStructure.Name, FallbackValue=''}"
                             />
                         </Border>
 
@@ -435,14 +432,14 @@
                                          Style="{StaticResource StandardTextBoxLight}"
                                          HorizontalAlignment="Left" 
                                          Width="200"
-                                         Text="{Binding SelectedModel.Name, UpdateSourceTrigger=PropertyChanged}"
+                                         Text="{Binding SelectedModel.Name, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
                                          />
                                 
                                 
                                 <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                                     <ListBox Name="SelectedElementsListBox"
-                                             ItemsSource="{Binding SelectedModel.ElementList}"
+                                             ItemsSource="{Binding SelectedModel.ElementList, FallbackValue=''}"
                                              SelectedItem="{Binding SelectedTestedElement}"
                                              ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}"
                                              AlternationCount="100"
@@ -462,7 +459,7 @@
                                                         <TextBlock Grid.Column="0" Text="Élément à tester" Style="{StaticResource TitleTextLight}"/>
                                                         
                                                         <!-- Pour l'index de l'élément à tester -->
-                                                        <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AlternationIndex}"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"/>
                                                         <!-- Bouton de suppression -->
                                                         <Button Grid.Column="1" 
                                                                 Style="{StaticResource DeleteStructureButtonStyleLight}"

@@ -5,7 +5,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
-        xmlns:local="clr-namespace:KNX_Virtual_Integrator.View.Windows"
         xmlns:utils="clr-namespace:KNX_Virtual_Integrator.View.Utils"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
@@ -42,7 +41,7 @@
                     
                     <!--Nom de la structure-->
                     <TextBox Grid.Column="0"
-                             Text="{Binding SelectedStructure.Name, Mode=TwoWay}"
+                             Text="{Binding SelectedStructure.Name, Mode=TwoWay, FallbackValue=''}"
                              Style="{StaticResource StandardTextBoxLight}"
                              HorizontalAlignment="Left"
                              Margin="10,0,0,0"/>
@@ -67,7 +66,7 @@
                         <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <ListBox Name="TestedElementsListBox"
-                                     ItemsSource="{Binding SelectedStructure.ElementList}"
+                                     ItemsSource="{Binding SelectedStructure.ElementList, FallbackValue=''}"
                                      SelectedItem="{Binding SelectedTestedElement}"
                                      ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}"
                                      AlternationCount="100"
@@ -87,7 +86,7 @@
                                                 <TextBlock Grid.Column="0" Text="Élément à tester" Style="{StaticResource TitleTextLight}"/>
                                                 
                                                 <!-- Pour l'index de l'élément à tester -->
-                                                <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AlternationIndex}"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"/>
                                                 <!-- Bouton de suppression -->
                                                 <Button Grid.Column="1" 
                                                         Style="{StaticResource DeleteStructureButtonStyleLight}"

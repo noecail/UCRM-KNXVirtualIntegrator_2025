@@ -1,7 +1,6 @@
 ﻿using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
-using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
@@ -391,7 +390,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
                     }
                 }
-                var index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0]);
+                var index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0])??-1;
                 for (var i = 0; i < structureList.Count; i++)  //Goes through all structures
                 {
                     var objectType = structureList[i].Elements().ToList();
@@ -404,13 +403,13 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 .ToString()!);
                             var newAddress = objectType[j].Attribute("Address")?.Value!;
                             var newDpt = new DataPointType(newType, newAddress, []);
-                            for (var k = 0; k < functionalModelList.FunctionalModelDictionary.FunctionalModels[(int)index].ElementList.Count; k++) //For each element, if for the same command 
+                            for (var k = 0; k < functionalModelList.FunctionalModelDictionary.FunctionalModels[index].ElementList.Count; k++) //For each element, if for the same command 
                             {
                                 var newElement = newFunctionalModels[j].ElementList[k];
-                                if (index != null) // If there is an ie of the same type in the structure associated, add it to the ie list
+                                if (index != -1) // If there is an ie of the same type in the structure associated, add it to the ie list
                                 {
                                     var element = functionalModelList.FunctionalModelDictionary
-                                        .FunctionalModels[(int)index].ElementList[k];
+                                        .FunctionalModels[index].ElementList[k];
                                     var nbAppearances = element.IeContains(newDpt);
                                     for (var l = 0; l < nbAppearances; l++)
                                     {
@@ -435,39 +434,39 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 var newObjectType = structureList[0].Elements().ToList();
                 for (var j = 0; j < newObjectType.Count; j++)
                 {
-                    if (index != null)
+                    if (index != -1)
                     {
                         Console.WriteLine("On est dans : " + functionalModelList.FunctionalModelDictionary
-                            .FunctionalModels[(int)index].Name);
+                            .FunctionalModels[index].Name);
                         for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
                         {
-                            for (var l = 0; l < functionalModelList.FunctionalModelDictionary.FunctionalModels[(int)index].ElementList[k].TestsCmd[0].Value.Count; l++)
+                            for (var l = 0; l < functionalModelList.FunctionalModelDictionary.FunctionalModels[index].ElementList[k].TestsCmd[0].Value.Count; l++)
                             {
                                 if (index == 2)
                                 {
                                     Console.WriteLine("On ajoute un test au store " + l);
                                 }
-                                newFunctionalModels[j].ElementList[k].CopyTest(functionalModelList.FunctionalModelDictionary.FunctionalModels[(int)index].ElementList[k], l);
+                                newFunctionalModels[j].ElementList[k].CopyTest(functionalModelList.FunctionalModelDictionary.FunctionalModels[index].ElementList[k], l);
                             }
                         }
                     }
                 }
                 
-                functionalModelList.ExportList(@"C:\Users\manui\Documents\Stage 4A\Test\List");
+                //functionalModelList.ExportList(@"C:\Users\manui\Documents\Stage 4A\Test\List");
 
-                if (index == null) // if the structure doesn't exist yet, creates it
+                if (index == -1) // if the structure doesn't exist yet, creates it
                 {
                     index = functionalModelList.FunctionalModelDictionary.FunctionalModels.Count;
                     var tempName = newFunctionalModels[0].Name;
                     newFunctionalModels[0].Name = modelName;
                     functionalModelList.AddToDictionary(newFunctionalModels[0]);
-                    functionalModelList.FunctionalModels[(int) index].Clear();
+                    functionalModelList.FunctionalModels[index].Clear();
                 }
 
                 foreach (var newFunctionalModel in newFunctionalModels)
                 {
                     newFunctionalModel.UpdateIntValue();
-                    functionalModelList.AddToList((int)index, newFunctionalModel, false);
+                    functionalModelList.AddToList(index, newFunctionalModel, false);
                 }
             }
     }

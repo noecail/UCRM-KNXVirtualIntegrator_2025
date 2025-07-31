@@ -7,7 +7,7 @@
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="Création du rapport de test" Height="650" Width="600"
+                 Title="Création du rapport de test" Height="650" Width="500"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
                  Background="{StaticResource WhiteBackgroundBrush}"
@@ -50,7 +50,8 @@
             </Setter>
         </Style>
 
-
+        
+        <!-- ReSharper disable once Xaml.RedundantResource -->
         <Style x:Key="BottomButtonDark" TargetType="Button">
             <Setter Property="Background" Value="#262626"/>
             <Setter Property="BorderBrush" Value="Transparent"/>
@@ -81,11 +82,8 @@
         </Style>
     </Window.Resources>
 
-
-    <Grid>
-        <Border BorderBrush="#369226"
-                BorderThickness="1">
-
+    <ScrollViewer x:Name="ReportCreationWindowBorder" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible">
+        <Grid>
             <StackPanel Orientation="Vertical" VerticalAlignment="Top">
                 <!-- En-tête de la fenêtre -->
                 <Viewbox HorizontalAlignment="Left" MouseLeftButtonDown="Header_MouseLeftButtonDown">
@@ -181,7 +179,7 @@
                         
 
                         <!-- Partie basse de la fenêtre (boutons sauvegarder et annuler) -->
-                        <StackPanel x:Name="SettingsWindowFooter" Grid.Row="2" Orientation="Vertical" Margin="0,5,0,0"
+                        <StackPanel x:Name="SettingsWindowFooter" Orientation="Vertical" Margin="0,5,0,0"
                                     Background="White">
 
                             <!-- Trait de séparation -->
@@ -255,6 +253,6 @@
                     </StackPanel>
                 </Viewbox>
             </StackPanel>
-        </Border>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </mah:MetroWindow>

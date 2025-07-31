@@ -8,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using KNX_Virtual_Integrator.ViewModel;
+// ReSharper disable StringLiteralTypo
 
 // ReSharper disable NullableWarningSuppressionIsUsed
 // ReSharper disable ConvertToUsingDeclaration
@@ -141,7 +142,7 @@ public partial class SettingsWindow
                                         $"\nالبناء {App.AppBuild}" +
                                         $"\n" +
                                         $"\nبرنامج تم إنشاؤه كجزء من تدريب هندسي بواسطة طلاب INSA Toulouse:" +
-                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE و Maxime OLIVEIRA LOPES" +
+                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA و Raphaël MARQUES" +
                                         $"\n" +
                                         $"\nبإشراف:" +
                                         $"\nDidier BESSE (UCRM)" +
@@ -150,7 +151,7 @@ public partial class SettingsWindow
                                         $"\n" +
                                         $"\nشراكة بين المعهد الوطني للعلوم التطبيقية (INSA) في تولوز واتحاد Cépière Robert Monnier (UCRM)." +
                                         $"\n" +
-                                        $"\nإنشاء: 06/2024 - 07/2024\n";
+                                        $"\nإنشاء: 2024 - 2025\n";
                 SaveButtonText.Text = "حفظ";
                 CancelButtonText.Text = "إلغاء";
                     
@@ -183,7 +184,7 @@ public partial class SettingsWindow
                                         $"\nИзграждане {App.AppBuild}" +
                                         $"\n" +
                                         $"\nСофтуер, създаден като част от инженерно стаж от студенти на INSA Toulouse:" +
-                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE и Maxime OLIVEIRA LOPES" +
+                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA и Raphaël MARQUES" +
                                         $"\n" +
                                         $"\nПод наблюдението на:" +
                                         $"\nDidier BESSE (UCRM)" +
@@ -192,7 +193,7 @@ public partial class SettingsWindow
                                         $"\n" +
                                         $"\nПартньорство между Националния институт по приложни науки (INSA) в Тулуза и Съюза Cépière Robert Monnier (UCRM)." +
                                         $"\n" +
-                                        $"\nСъздаване: 06/2024 - 07/2024\n";
+                                        $"\nСъздаване: 2024 - 2025\n";
                 SaveButtonText.Text = "Запази";
                 CancelButtonText.Text = "Отказ";
                     
@@ -225,7 +226,7 @@ public partial class SettingsWindow
                                         $"\nBuild {App.AppBuild}" +
                                         $"\n" +
                                         $"\nSoftware vytvořený jako součást inženýrského stáže studenty INSA Toulouse:" +
-                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE a Maxime OLIVEIRA LOPES" +
+                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA a Raphaël MARQUES" +
                                         $"\n" +
                                         $"\nPod dohledem:" +
                                         $"\nDidier BESSE (UCRM)" +
@@ -234,7 +235,7 @@ public partial class SettingsWindow
                                         $"\n" +
                                         $"\nPartnerství mezi Národním institutem aplikovaných věd (INSA) v Toulouse a Union Cépière Robert Monnier (UCRM)." +
                                         $"\n" +
-                                        $"\nVytvořeno: 06/2024 - 07/2024\n";
+                                        $"\nVytvořeno: 2024 - 2025\n";
                 SaveButtonText.Text = "Uložit";
                 CancelButtonText.Text = "Zrušit";
                     
@@ -267,7 +268,7 @@ public partial class SettingsWindow
                                         $"\nBuild {App.AppBuild}" +
                                         $"\n" +
                                         $"\nSoftware skabt som en del af en ingeniørpraktik af studerende fra INSA Toulouse:" +
-                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE og Maxime OLIVEIRA LOPES" +
+                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA og Raphaël MARQUES" +
                                         $"\n" +
                                         $"\nUnder vejledning af:" +
                                         $"\nDidier BESSE (UCRM)" +
@@ -276,7 +277,7 @@ public partial class SettingsWindow
                                         $"\n" +
                                         $"\nPartnerskab mellem National Institute of Applied Sciences (INSA) i Toulouse og Union Cépière Robert Monnier (UCRM)." +
                                         $"\n" +
-                                        $"\nOprettelse: 06/2024 - 07/2024\n";
+                                        $"\nOprettelse: 2024 - 2025\n";
                 SaveButtonText.Text = "Gem";
                 CancelButtonText.Text = "Annuller";
                     
@@ -316,7 +317,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftware im Rahmen eines Ingenieurpraktikums von Studenten der INSA Toulouse entwickelt:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE und Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA und Raphaël MARQUES" +
                     $"\n" +
                     $"\nUnter der Aufsicht von:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -325,7 +326,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerschaft zwischen dem Institut National des Sciences Appliquées (INSA) de Toulouse und der Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nUmsetzung: 06/2024 - 07/2024\n";
+                    $"\nUmsetzung: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Speichern";
                 CancelButtonText.Text = "Abbrechen";
@@ -359,7 +360,7 @@ public partial class SettingsWindow
                                         $"\nΚατασκευή {App.AppBuild}" +
                                         $"\n" +
                                         $"\nΛογισμικό που δημιουργήθηκε ως μέρος της μηχανικής πρακτικής από φοιτητές της INSA Toulouse:" +
-                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE και Maxime OLIVEIRA LOPES" +
+                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA και Raphaël MARQUES" +
                                         $"\n" +
                                         $"\nΥπό την επίβλεψη:" +
                                         $"\nDidier BESSE (UCRM)" +
@@ -368,7 +369,7 @@ public partial class SettingsWindow
                                         $"\n" +
                                         $"\nΣυνεργασία μεταξύ του Εθνικού Ινστιτούτου Εφαρμοσμένων Επιστημών (INSA) της Τουλούζης και της Ένωσης Cépière Robert Monnier (UCRM)." +
                                         $"\n" +
-                                        $"\nΔημιουργία: 06/2024 - 07/2024\n";
+                                        $"\nΔημιουργία: 2024 - 2025\n";
                 SaveButtonText.Text = "Αποθήκευση";
                 CancelButtonText.Text = "Άκυρο";
                     
@@ -407,7 +408,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftware developed as part of an engineering internship by students of INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE and Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA and Raphaël MARQUES" +
                     $"\n" +
                     $"\nUnder the supervision of:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -416,7 +417,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnership between the Institut National des Sciences Appliquées (INSA) de Toulouse and the Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nImplementation: 06/2024 - 07/2024\n";
+                    $"\nImplementation: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Save";
                 CancelButtonText.Text = "Cancel";
@@ -456,7 +457,7 @@ public partial class SettingsWindow
                     $"\nCompilación {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftware desarrollado como parte de una pasantía de ingeniería por estudiantes de INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE y Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA y Raphaël MARQUES" +
                     $"\n" +
                     $"\nBajo la supervisión de:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -465,7 +466,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nAsociación entre el Instituto Nacional de Ciencias Aplicadas (INSA) de Toulouse y la Unión Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nImplementación: 06/2024 - 07/2024\n";
+                    $"\nImplementación: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Guardar";
                 CancelButtonText.Text = "Cancelar";
@@ -499,7 +500,7 @@ public partial class SettingsWindow
                                         $"\nKoostamine {App.AppBuild}" +
                                         $"\n" +
                                         $"\nTarkvara, mille lõid osana inseneripraktikast INSA Toulouse üliõpilased:" +
-                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE ja Maxime OLIVEIRA LOPES" +
+                                        $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA ja Raphaël MARQUES" +
                                         $"\n" +
                                         $"\nJärelevalve all:" +
                                         $"\nDidier BESSE (UCRM)" +
@@ -508,7 +509,7 @@ public partial class SettingsWindow
                                         $"\n" +
                                         $"\nPartnerlus Toulouse'i Rakendusteaduste Riikliku Instituudi (INSA) ja Union Cépière Robert Monnier (UCRM) vahel." +
                                         $"\n" +
-                                        $"\nLoomine: 06/2024 - 07/2024\n";
+                                        $"\nLoomine: 2024 - 2025\n";
                 SaveButtonText.Text = "Salvesta";
                 CancelButtonText.Text = "Tühista";
                     
@@ -546,7 +547,7 @@ public partial class SettingsWindow
                     $"\nKokoelma {App.AppBuild}" +
                     $"\n" +
                     $"\nOhjelmisto kehitetty osana INSAn Toulousen insinööriharjoittelua:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE ja Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA ja Raphaël MARQUES" +
                     $"\n" +
                     $"\nValvonnassa:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -555,7 +556,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nYhteistyö Instituutti National des Sciences Appliquées (INSA) de Toulousen ja Union Cépière Robert Monnier (UCRM) välillä." +
                     $"\n" +
-                    $"\nToteutus: 06/2024 - 07/2024\n";
+                    $"\nToteutus: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Tallenna";
                 CancelButtonText.Text = "Peruuta";
@@ -595,7 +596,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSzoftver az INSA Toulouse mérnöki szakmai gyakorlat keretében fejlesztett:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE és Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA és Raphaël MARQUES" +
                     $"\n" +
                     $"\nFelügyelete alatt:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -604,7 +605,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerség az Institut National des Sciences Appliquées (INSA) de Toulouse és az Union Cépière Robert Monnier (UCRM) között." +
                     $"\n" +
-                    $"\nMegvalósítás: 06/2024 - 07/2024\n";
+                    $"\nMegvalósítás: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Mentés";
                 CancelButtonText.Text = "Mégse";
@@ -644,7 +645,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nPerangkat lunak dikembangkan sebagai bagian dari magang teknik oleh siswa INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE dan Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA dan Raphaël MARQUES" +
                     $"\n" +
                     $"\nDi bawah pengawasan:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -653,7 +654,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nKemitraan antara Institut National des Sciences Appliquées (INSA) de Toulouse dan Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nImplementasi: 06/2024 - 07/2024\n";
+                    $"\nImplementasi: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Simpan";
                 CancelButtonText.Text = "Batal";
@@ -693,7 +694,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftware sviluppato nell'ambito di uno stage di ingegneria da studenti dell'INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE e Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA e Raphaël MARQUES" +
                     $"\n" +
                     $"\nSotto la supervisione di:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -702,7 +703,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartenariato tra l'Istituto Nazionale delle Scienze Applicate (INSA) di Tolosa e l'Unione Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRealizzazione: 06/2024 - 07/2024\n";
+                    $"\nRealizzazione: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Salva";
                 CancelButtonText.Text = "Annulla";
@@ -742,7 +743,7 @@ public partial class SettingsWindow
                     $"\nビルド {App.AppBuild}" +
                     $"\n" +
                     $"\nINSAトゥールーズの学生によるエンジニアリングインターンシップの一環として開発されたソフトウェア:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA, Raphaël MARQUES" +
                     $"\n" +
                     $"\n監督の下:" +
                     $"\nDidier BESSE（UCRM）" +
@@ -791,7 +792,7 @@ public partial class SettingsWindow
                     $"\n빌드 {App.AppBuild}" +
                     $"\n" +
                     $"\nINSA 툴루즈 학생들이 엔지니어링 인턴십의 일환으로 개발한 소프트웨어:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA, Raphaël MARQUES" +
                     $"\n" +
                     $"\n감독 하에:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -839,7 +840,7 @@ public partial class SettingsWindow
                     $"\nBūvēt {App.AppBuild}" +
                     $"\n" +
                     $"\nProgrammatūra izstrādāta INSA Toulouse inženierijas prakses ietvaros:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE un Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA un Raphaël MARQUES" +
                     $"\n" +
                     $"\nPārraudzīja:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -848,7 +849,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerība starp National Institute of Applied Sciences (INSA) Toulouse un Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nIzstrāde: 06/2024 - 07/2024\n";
+                    $"\nIzstrāde: 2024 - 2025\n";
                                         
                 SaveButtonText.Text = "Saglabāt";
                 CancelButtonText.Text = "Atcelt";
@@ -888,7 +889,7 @@ public partial class SettingsWindow
                     $"\nKūrimas {App.AppBuild}" +
                     $"\n" +
                     $"\nPrograminė įranga sukurta INSA Toulouse inžinerijos praktikos metu:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE ir Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA ir Raphaël MARQUES" +
                     $"\n" +
                     $"\nPrižiūrėtojai:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -897,7 +898,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerystė tarp Nacionalinio taikomųjų mokslų instituto (INSA) Tulūzoje ir Sąjungos Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRealizacija: 06/2024 - 07/2024\n";
+                    $"\nRealizacija: 2024 - 2025\n";
                                 
                 SaveButtonText.Text = "Išsaugoti";
                 CancelButtonText.Text = "Atšaukti";
@@ -937,7 +938,7 @@ public partial class SettingsWindow
                     $"\nBygg {App.AppBuild}" +
                     $"\n" +
                     $"\nProgramvare laget som en del av et ingeniørpraksis ved INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE og Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA og Raphaël MARQUES" +
                     $"\n" +
                     $"\nUnder veiledning av:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -946,7 +947,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerskap mellom National Institute of Applied Sciences (INSA) i Toulouse og Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nUtførelse: 06/2024 - 07/2024\n";
+                    $"\nUtførelse: 2024 - 2025\n";
                                 
                 SaveButtonText.Text = "Lagre";
                 CancelButtonText.Text = "Avbryt";
@@ -986,7 +987,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftware gemaakt in het kader van een ingenieursstage door studenten van INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE en Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA en Raphaël MARQUES" +
                     $"\n" +
                     $"\nOnder supervisie van:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -995,7 +996,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerschap tussen het Institut National des Sciences Appliquées (INSA) van Toulouse en de Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRealisatie: 06/2024 - 07/2024\n";
+                    $"\nRealisatie: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Opslaan";
                 CancelButtonText.Text = "Annuleren";
@@ -1035,7 +1036,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nOprogramowanie stworzone w ramach praktyk inżynierskich przez studentów INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE i Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA i Raphaël MARQUES" +
                     $"\n" +
                     $"\nPod nadzorem:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1044,7 +1045,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerstwo między Institut National des Sciences Appliquées (INSA) w Tuluzie a Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRealizacja: 06/2024 - 07/2024\n";
+                    $"\nRealizacja: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Zapisz";
                 CancelButtonText.Text = "Anuluj";
@@ -1083,7 +1084,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftware realizado no âmbito de um estágio de engenharia por estudantes da INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE e Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA e Raphaël MARQUES" +
                     $"\n" +
                     $"\nSob a supervisão de:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1092,7 +1093,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nParceria entre o Institut National des Sciences Appliquées (INSA) de Toulouse e a Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRealização: 06/2024 - 07/2024\n";
+                    $"\nRealização: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Salvar";
                 CancelButtonText.Text = "Cancelar";
@@ -1131,7 +1132,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftware creat în cadrul unui stagiu de inginerie la INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE și Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA și Raphaël MARQUES" +
                     $"\n" +
                     $"\nSub supravegherea lui:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1140,7 +1141,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nParteneriat între Institutul Național de Științe Aplicate (INSA) din Toulouse și Uniunea Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRealizare: 06/2024 - 07/2024\n";
+                    $"\nRealizare: 2024 - 2025\n";
                                 
                 SaveButtonText.Text = "Salvați";
                 CancelButtonText.Text = "Anulați";
@@ -1180,7 +1181,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nSoftvér vytvorený v rámci inžinierskej stáže na INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE a Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA a Raphaël MARQUES" +
                     $"\n" +
                     $"\nPod dohľadom:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1189,7 +1190,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerstvo medzi Národným inštitútom aplikovaných vied (INSA) v Toulouse a Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRealizácia: 06/2024 - 07/2024\n";
+                    $"\nRealizácia: 2024 - 2025\n";
                                 
                 SaveButtonText.Text = "Uložiť";
                 CancelButtonText.Text = "Zrušiť";
@@ -1230,7 +1231,7 @@ public partial class SettingsWindow
                     $"\nIzgradnja {App.AppBuild}" +
                     $"\n" +
                     $"\nProgramska oprema, izdelana v okviru inženirskega pripravništva na INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE in Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA in Raphaël MARQUES" +
                     $"\n" +
                     $"\nPod nadzorom:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1239,7 +1240,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartnerstvo med Nacionalnim inštitutom za uporabne znanosti (INSA) v Toulouseu in Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nIzvedba: 06/2024 - 07/2024\n";
+                    $"\nIzvedba: 2024 - 2025\n";
                                 
                 SaveButtonText.Text = "Shrani";
                 CancelButtonText.Text = "Prekliči";
@@ -1279,7 +1280,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nProgramvara utvecklad inom ramen för en ingenjörspraktik av studenter från INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE och Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA och Raphaël MARQUES" +
                     $"\n" +
                     $"\nUnder överinseende av:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1288,7 +1289,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nSamarbete mellan Institut National des Sciences Appliquées (INSA) i Toulouse och Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nGenomförande: 06/2024 - 07/2024\n";
+                    $"\nGenomförande: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Spara";
                 CancelButtonText.Text = "Avbryt";
@@ -1328,7 +1329,7 @@ public partial class SettingsWindow
                     $"\nYapı {App.AppBuild}" +
                     $"\n" +
                     $"\nINSA Toulouse öğrencileri tarafından bir mühendislik stajı kapsamında yapılan yazılım:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE ve Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA ve Raphaël MARQUES" +
                     $"\n" +
                     $"\nGözetim altında:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1337,7 +1338,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nInstitut National des Sciences Appliquées (INSA) Toulouse ve Union Cépière Robert Monnier (UCRM) arasındaki ortaklık." +
                     $"\n" +
-                    $"\nGerçekleştirme: 06/2024 - 07/2024\n";
+                    $"\nGerçekleştirme: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Kaydet";
                 CancelButtonText.Text = "İptal";
@@ -1376,7 +1377,7 @@ public partial class SettingsWindow
                     $"\nЗбірка {App.AppBuild}" +
                     $"\n" +
                     $"\nПрограмне забезпечення розроблене в рамках інженерного стажування студентами INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE та Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA та Raphaël MARQUES" +
                     $"\n" +
                     $"\nПід наглядом:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1385,7 +1386,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nПартнерство між Institut National des Sciences Appliquées (INSA) в Тулузі та Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nРеалізація: 06/2024 - 07/2024\n";
+                    $"\nРеалізація: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Зберегти";
                 CancelButtonText.Text = "Скасувати";
@@ -1424,7 +1425,7 @@ public partial class SettingsWindow
                     $"\nСборка {App.AppBuild}" +
                     $"\n" +
                     $"\nПрограммное обеспечение, разработанное в рамках инженерной стажировки студентами INSA Toulouse:" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE и Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA и Raphaël MARQUES" +
                     $"\n" +
                     $"\nПод руководством:" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1433,7 +1434,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nПартнерство между Institut National des Sciences Appliquées (INSA) в Тулузе и Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nРеализация: 06/2024 - 07/2024\n";
+                    $"\nРеализация: 2024 - 2025\n";
                         
                 SaveButtonText.Text = "Сохранить";
                 CancelButtonText.Text = "Отмена";
@@ -1473,7 +1474,7 @@ public partial class SettingsWindow
                     $"\n构建 {App.AppBuild}" +
                     $"\n" +
                     $"\n由INSA Toulouse的学生在工程实习中开发的软件：" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE 和 Maxime OLIVEIRA LOPES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA 和 Raphaël MARQUES" +
                     $"\n" +
                     $"\n在以下人员的指导下：" +
                     $"\nDidier BESSE（UCRM）" +
@@ -1482,7 +1483,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nToulouse的Institut National des Sciences Appliquées（INSA）与Union Cépière Robert Monnier（UCRM）之间的合作。" +
                     $"\n" +
-                    $"\n实施：06/2024 - 07/2024\n";
+                    $"\n实施：2024 - 2025\n";
                         
                 SaveButtonText.Text = "保存";
                 CancelButtonText.Text = "取消";
@@ -1522,9 +1523,7 @@ public partial class SettingsWindow
                     $"\nBuild {App.AppBuild}" +
                     $"\n" +
                     $"\nLogiciel réalisé dans le cadre d'un stage d'ingénierie par des étudiants de l'INSA Toulouse :" +
-                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE et Maxime OLIVEIRA LOPES" +
-                    $"\nPuis par" +
-                    $"\nFatine AZZABI, Noé CAILLET, Manuel IBARLUCIA et Raphaël MARQUES" +
+                    $"\nNathan BRUGIÈRE, Emma COUSTON, Hugo MICHEL, Daichi MALBRANCHE, Maxime OLIVEIRA LOPES, Fatine AZZABI, Noé CAILLET, Manuel IBARLUCIA et Raphaël MARQUES" +
                     $"\n" +
                     $"\nSous la supervision de :" +
                     $"\nDidier BESSE (UCRM)" +
@@ -1533,7 +1532,7 @@ public partial class SettingsWindow
                     $"\n" +
                     $"\nPartenariat entre l'Institut National des Sciences Appliquées (INSA) de Toulouse et l'Union Cépière Robert Monnier (UCRM)." +
                     $"\n" +
-                    $"\nRéalisation: De Juillet à Septembre 2024 et de Juin à Septembre 2025\n";
+                    $"\nRéalisation: 2024 - 2025\n";
 
                 NoteImportante.Text = "\nNote importante:";
                 NoteImportanteContenu.Text =
@@ -1699,11 +1698,19 @@ public partial class SettingsWindow
             previousAppLang != _viewModel.AppSettings.AppLang, 
             previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
-        App.WindowManager?.ConnectionWindow?.UpdateWindowContents(
+        App.WindowManager?.ConnectionWindow.UpdateWindowContents(
             previousAppLang != _viewModel.AppSettings.AppLang, 
             previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
-        App.WindowManager?.TestConfigWindow?.UpdateWindowContents(
+        App.WindowManager?.TestConfigWindow.UpdateWindowContents(
+            previousAppLang != _viewModel.AppSettings.AppLang, 
+            previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
+            previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
+        App.WindowManager?.ReportCreationWindow.UpdateWindowContents(
+            previousAppLang != _viewModel.AppSettings.AppLang, 
+            previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
+            previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
+        App.WindowManager?.ModelEditWindow.UpdateWindowContents(
             previousAppLang != _viewModel.AppSettings.AppLang, 
             previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);

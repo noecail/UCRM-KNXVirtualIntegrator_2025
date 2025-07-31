@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Xml;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -37,7 +36,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
 
                     AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
                 } 
-                OnPropertyChanged(nameof(FunctionalModelDictionary)); //notifier le mainviewmodel
+                OnPropertyChanged(nameof(FunctionalModelDictionary)); //notifier le mainViewModel
             }
         };
     }
@@ -183,7 +182,7 @@ public class FunctionalModelList : IFunctionalModelList, INotifyPropertyChanged
         return FunctionalModelDictionary.GetAllModels();
     }
 
-    public new event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {

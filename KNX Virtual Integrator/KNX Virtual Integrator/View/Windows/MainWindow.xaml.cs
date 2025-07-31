@@ -6,7 +6,6 @@ using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
-using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
@@ -19,8 +18,6 @@ public partial class MainWindow
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
     private readonly MainViewModel _viewModel;
-
-    private readonly ConnectionWindow _connectionWindow;
     private readonly WindowManager _windowManager;
 
         
@@ -38,14 +35,12 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- MÉTHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    public MainWindow(MainViewModel viewModel, ConnectionWindow cw, WindowManager wm)
+    public MainWindow(MainViewModel viewModel, WindowManager wm)
     {
         InitializeComponent();
             
         _viewModel = viewModel;
         DataContext = _viewModel;
-        
-        _connectionWindow = cw;
         _windowManager = wm;
         _cancellationTokenSource = new CancellationTokenSource();
 
@@ -412,33 +407,6 @@ public partial class MainWindow
         _windowManager.ShowSettingsWindow();
     }
 
-    // TEMPORAIRE
-    /// <summary>
-    /// Runs a test by sending a frame on the bus
-    /// Used to test the application
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void OnWriteButtonClick(object sender, RoutedEventArgs e)
-    {
-        var groupAddress = new GroupAddress("1/3/1");
-        var groupValue = new GroupValue(Convert.ToByte(255));
-        _viewModel.GroupValueWriteCommand.Execute((groupAddress, groupValue));
-    }
-    
-    // TEMPORAIRE
-    /// <summary>
-    /// Runs a test by receiving a frame from the bus
-    /// Used to test the application
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
-    private void OnReadButtonClick(object sender, RoutedEventArgs e)
-    {
-        var groupAddress = new GroupAddress("1/4/1");
-        _viewModel.MaGroupValueReadCommand.Execute(groupAddress);
-    }
-
     private void OnTestConfigButtonClick(object sender, RoutedEventArgs e)
     {
         _windowManager.ShowTestConfigWindow();
@@ -572,7 +540,7 @@ public partial class MainWindow
         // tous les supprimer dans l'ordre inverse pour éviter que les modèles changent d'index avant d'avoir été supprimés
         foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
             _viewModel.DeleteFunctionalModelFromListCommand.Execute(indexToDelete);
-        
+        if (_viewModel.SelectedModels is null) return;
         foreach (var model in _viewModel.SelectedModels)
             Console.WriteLine(model);
     }
