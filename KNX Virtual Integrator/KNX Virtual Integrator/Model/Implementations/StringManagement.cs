@@ -98,8 +98,8 @@ public class StringManagement(GroupAddressProcessor groupAddressProcessor) : ISt
     /// <returns>True if the names are similar based on the criteria; otherwise, false.</returns>
     public bool AreNamesSimilar(string name1, string name2)
     {
-        var words1 = groupAddressProcessor.NormalizeName(name1).Split(new[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries);
-        var words2 = groupAddressProcessor.NormalizeName(name2).Split(new[] { '_', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+        var words1 = groupAddressProcessor.NormalizeName(name1).Split(['_', ' '], StringSplitOptions.RemoveEmptyEntries);
+        var words2 = groupAddressProcessor.NormalizeName(name2).Split(['_', ' '], StringSplitOptions.RemoveEmptyEntries);
 
         if (words1.Length < 3 || words2.Length < 3)
             return false; // Ensure we have at least three words to compare

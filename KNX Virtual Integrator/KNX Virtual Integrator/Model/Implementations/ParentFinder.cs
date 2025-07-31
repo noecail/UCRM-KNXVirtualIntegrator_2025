@@ -7,7 +7,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 /// <summary>
 /// Provides an implementation of IParentFinder for finding the parent of a specific type in the visual tree.
 /// </summary>
-public class ParentFinder (Logger logger) : IParentFinder
+public class ParentFinder (ILogger logger) : IParentFinder
 {
     /// <summary>
     /// Utility method to find the parent of a specific type in the visual tree.

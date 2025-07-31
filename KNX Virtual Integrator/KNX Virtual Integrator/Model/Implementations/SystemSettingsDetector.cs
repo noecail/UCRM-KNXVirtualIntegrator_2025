@@ -66,31 +66,29 @@ public class SystemSettingsDetector (ILogger logger) : ISystemSettingsDetector
     {
         try
         {
-            using (var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\International"))
+            using var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\International");
+            var registryValue = key?.GetValue("LocaleName");
+
+            if (registryValue != null)
             {
-                var registryValue = key?.GetValue("LocaleName");
-
-                if (registryValue != null)
+                // Créer un HashSet avec tous les codes de langue pris en charge par la traduction de l'application
+                var validLanguageCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                 {
-                    // Créer un HashSet avec tous les codes de langue pris en charge par la traduction de l'application
-                    var validLanguageCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-                    {
-                        "AR", "BG", "CS", "DA", "DE", "EL", "EN", "ES", "ET", "FI",
-                        "HU", "ID", "IT", "JA", "KO", "LT", "LV", "NB", "NL", "PL",
-                        "PT", "RO", "RU", "SK", "SL", "SV", "TR", "UK", "ZH", "FR"
-                    };
+                    "AR", "BG", "CS", "DA", "DE", "EL", "EN", "ES", "ET", "FI",
+                    "HU", "ID", "IT", "JA", "KO", "LT", "LV", "NB", "NL", "PL",
+                    "PT", "RO", "RU", "SK", "SL", "SV", "TR", "UK", "ZH", "FR"
+                };
 
-                    var localeName = registryValue.ToString();
+                var localeName = registryValue.ToString();
 
-                    // Extraire les deux premières lettres de localeName pour obtenir le code de langue
-                    var languageCode = localeName?.Split('-')[0].ToUpper();
+                // Extraire les deux premières lettres de localeName pour obtenir le code de langue
+                var languageCode = localeName?.Split('-')[0].ToUpper();
 
-                    // Vérifier si le code de langue extrait est dans le HashSet
-                    if (languageCode != null && validLanguageCodes.Contains(languageCode))
-                    {
-                        logger.ConsoleAndLogWriteLine($"Langue windows détectée : {languageCode}");
-                        return languageCode;
-                    }
+                // Vérifier si le code de langue extrait est dans le HashSet
+                if (languageCode != null && validLanguageCodes.Contains(languageCode))
+                {
+                    logger.ConsoleAndLogWriteLine($"Langue windows détectée : {languageCode}");
+                    return languageCode;
                 }
             }
         }

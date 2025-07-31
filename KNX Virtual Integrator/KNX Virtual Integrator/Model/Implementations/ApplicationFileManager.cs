@@ -202,7 +202,7 @@ public class ApplicationFileManager (ILogger logger) : IApplicationFileManager
 
             File.Create(settingsPath).Close();
 
-            if (App.WindowManager == null || App.WindowManager.SettingsWindow == null) return false;
+            if (App.WindowManager is null) return false;
         }
         // Si une exception a lieu
         catch (Exception e)

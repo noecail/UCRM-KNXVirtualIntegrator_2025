@@ -66,12 +66,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// Command that extracts a group address using the GroupAddressManager.
         /// </summary>
         public ICommand ExtractGroupAddressCommand { get; private set; }
-
-
-        /// <summary>
-        /// Command that ensures the settings file exists. Creates the file if it does not exist, using the provided file path.
-        /// </summary>
-        public ICommand EnsureSettingsFileExistsCommand { get; private set; }
+        
 
         /// <summary>
         /// Command that creates a debug archive with optional OS info, hardware info, and imported projects.

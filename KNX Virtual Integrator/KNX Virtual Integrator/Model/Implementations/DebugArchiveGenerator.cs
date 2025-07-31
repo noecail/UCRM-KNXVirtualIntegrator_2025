@@ -4,6 +4,7 @@ using System.Management;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Microsoft.Win32;
 // ReSharper disable NullableWarningSuppressionIsUsed
+// ReSharper disable StringLiteralTypo
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 

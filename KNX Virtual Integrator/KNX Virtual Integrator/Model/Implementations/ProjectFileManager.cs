@@ -7,9 +7,8 @@ using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class ProjectFileManager(Logger logger, ApplicationSettings settings) : IProjectFileManager
+public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : IProjectFileManager
 {
-    private readonly ILogger _logger = logger;
 
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -50,7 +49,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
     /// <summary>
     ///  Gets the name of the group addresses file the application is currently working on.
     /// </summary>
-    public string GroupAddressFileName { get; private set; } = "";
+    private string GroupAddressFileName { get; set; } = "";
     
     
     
@@ -68,7 +67,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
         {
             if (string.Equals(knxprojSourceFilePath, "null", StringComparison.CurrentCultureIgnoreCase))
             {
-                _logger.ConsoleAndLogWriteLine("User cancelled the project extraction process.");
+                logger.ConsoleAndLogWriteLine("User cancelled the project extraction process.");
                 return false;
             }
 
@@ -101,17 +100,17 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
         }
         catch (ArgumentException)
         {
-            _logger.ConsoleAndLogWriteLine("Error: the .knxproj source file path is empty. Please try selecting the file again.");
+            logger.ConsoleAndLogWriteLine("Error: the .knxproj source file path is empty. Please try selecting the file again.");
             return SelectAnotherFile();
         }
         catch (PathTooLongException)
         {
-            _logger.ConsoleAndLogWriteLine($"Error: the path {path} is too long (more than 255 characters). Please try selecting another path.");
+            logger.ConsoleAndLogWriteLine($"Error: the path {path} is too long (more than 255 characters). Please try selecting another path.");
             return SelectAnotherFile();
         }
         catch (Exception ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Error normalizing file path: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error normalizing file path: {ex.Message}");
             return SelectAnotherFile();
         }
     }
@@ -129,7 +128,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
         }
         else
         {
-            _logger.ConsoleAndLogWriteLine("Error: the selected file is not a .knxproj file. Please try again.");
+            logger.ConsoleAndLogWriteLine("Error: the selected file is not a .knxproj file. Please try again.");
             return SelectAnotherFile();
         }
     }
@@ -143,19 +142,19 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
     {
         if (File.Exists(zipArchivePath))
         {
-            _logger.ConsoleAndLogWriteLine($"{zipArchivePath} already exists. Removing the file before creating the new archive.");
+            logger.ConsoleAndLogWriteLine($"{zipArchivePath} already exists. Removing the file before creating the new archive.");
             try
             {
                 File.Delete(zipArchivePath);
             }
             catch (IOException ex)
             {
-                _logger.ConsoleAndLogWriteLine($"Error deleting existing file {zipArchivePath}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($"Error deleting existing file {zipArchivePath}: {ex.Message}");
                 return false;
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.ConsoleAndLogWriteLine($"Error deleting existing file {zipArchivePath}: {ex.Message}. Please change the rights of the file.");
+                logger.ConsoleAndLogWriteLine($"Error deleting existing file {zipArchivePath}: {ex.Message}. Please change the rights of the file.");
                 return false;
             }
         }
@@ -177,27 +176,27 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
         }
         catch (FileNotFoundException)
         {
-            _logger.ConsoleAndLogWriteLine($"Error: the file {knxprojSourceFilePath} was not found.");
+            logger.ConsoleAndLogWriteLine($"Error: the file {knxprojSourceFilePath} was not found.");
             return false;
         }
         catch (UnauthorizedAccessException)
         {
-            _logger.ConsoleAndLogWriteLine($"Unable to write to the file {knxprojSourceFilePath}. Please check permissions.");
+            logger.ConsoleAndLogWriteLine($"Unable to write to the file {knxprojSourceFilePath}. Please check permissions.");
             return false;
         }
         catch (DirectoryNotFoundException)
         {
-            _logger.ConsoleAndLogWriteLine($"The folder {Path.GetDirectoryName(knxprojSourceFilePath)} cannot be found.");
+            logger.ConsoleAndLogWriteLine($"The folder {Path.GetDirectoryName(knxprojSourceFilePath)} cannot be found.");
             return false;
         }
         catch (PathTooLongException)
         {
-            _logger.ConsoleAndLogWriteLine($"Error: the path {knxprojSourceFilePath} is too long.");
+            logger.ConsoleAndLogWriteLine($"Error: the path {knxprojSourceFilePath} is too long.");
             return false;
         }
         catch (Exception ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Error copying file {knxprojSourceFilePath} to {zipArchivePath}: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error copying file {knxprojSourceFilePath} to {zipArchivePath}: {ex.Message}");
             return false;
         }
     }
@@ -213,7 +212,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
 
         if (Directory.Exists(knxprojExportFolderPath))
         {
-            _logger.ConsoleAndLogWriteLine($"The folder {knxprojExportFolderPath} already exists, deleting...");
+            logger.ConsoleAndLogWriteLine($"The folder {knxprojExportFolderPath} already exists, deleting...");
             try
             {
                 Directory.Delete(knxprojExportFolderPath, true);
@@ -221,17 +220,17 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
             }
             catch (IOException ex)
             {
-                _logger.ConsoleAndLogWriteLine($"Error deleting existing folder {knxprojExportFolderPath}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($"Error deleting existing folder {knxprojExportFolderPath}: {ex.Message}");
                 return false;
             }
             catch (UnauthorizedAccessException ex)
             {
-                _logger.ConsoleAndLogWriteLine($"Error deleting existing folder {knxprojExportFolderPath}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($"Error deleting existing folder {knxprojExportFolderPath}: {ex.Message}");
                 return false;
             }
             catch (Exception ex)
             {
-                _logger.ConsoleAndLogWriteLine($"Error deleting folder {knxprojExportFolderPath}: {ex.Message}");
+                logger.ConsoleAndLogWriteLine($"Error deleting folder {knxprojExportFolderPath}: {ex.Message}");
                 return false;
             }
         }
@@ -258,22 +257,22 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
         }
         catch (NotSupportedException)
         {
-            _logger.ConsoleAndLogWriteLine("Error: The archive type is not supported.");
+            logger.ConsoleAndLogWriteLine("Error: The archive type is not supported.");
             return false;
         }
         catch (IOException ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Error extracting file {zipArchivePath}: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error extracting file {zipArchivePath}: {ex.Message}");
             return false;
         }
         catch (UnauthorizedAccessException ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Unauthorized access extracting file {zipArchivePath}: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Unauthorized access extracting file {zipArchivePath}: {ex.Message}");
             return false;
         }
         catch (Exception ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Error extracting file {zipArchivePath}: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error extracting file {zipArchivePath}: {ex.Message}");
             return false;
         }
     }
@@ -315,7 +314,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
                 if (groupAddressesSourceFilePath.Equals("null", StringComparison.CurrentCultureIgnoreCase))
                 {
                     cancelOperation = true;
-                    _logger.ConsoleAndLogWriteLine("User cancelled the group addresses file extraction process.");
+                    logger.ConsoleAndLogWriteLine("User cancelled the group addresses file extraction process.");
                     continue;
                 }
 
@@ -328,7 +327,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
                 catch (ArgumentException)
                 {
                     // Si l'adresse du fichier du projet est vide
-                    _logger.ConsoleAndLogWriteLine(
+                    logger.ConsoleAndLogWriteLine(
                         "Error: the group addresses file source file path is empty. Please try selecting the file again.");
                     groupAddressesSourceFilePath = SelectAnotherFile();
                     continue;
@@ -336,7 +335,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
                 catch (PathTooLongException)
                 {
                     // Si l'adresse du fichier du projet est trop longue
-                    _logger.ConsoleAndLogWriteLine(
+                    logger.ConsoleAndLogWriteLine(
                         $"Error: the path {groupAddressesSourceFilePath} is too long (more than 255 characters). " +
                         $"Please try selecting another path.");
                     groupAddressesSourceFilePath = SelectAnotherFile();
@@ -345,7 +344,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
                 catch (Exception ex)
                 {
                     // Gestion générique des exceptions non prévues
-                    _logger.ConsoleAndLogWriteLine($"Error normalizing file path: {ex.Message}");
+                    logger.ConsoleAndLogWriteLine($"Error normalizing file path: {ex.Message}");
                     groupAddressesSourceFilePath = SelectAnotherFile();
                     continue;
                 }
@@ -354,14 +353,14 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
             }
 
             
-            _logger.ConsoleAndLogWriteLine($"Extracting {Path.GetFileName(groupAddressesSourceFilePath)}...");
+            logger.ConsoleAndLogWriteLine($"Extracting {Path.GetFileName(groupAddressesSourceFilePath)}...");
             
             var newFilePath =$"./{Path.GetFileName(groupAddressesSourceFilePath)}"; 
             
             // S'il existe déjà un fichier avec le même nom, le supprime
             if (File.Exists(newFilePath))
             {
-                _logger.ConsoleAndLogWriteLine(
+                logger.ConsoleAndLogWriteLine(
                     $"{newFilePath} already exists. Removing the file before creating the new archive.");
                 try
                 {
@@ -369,14 +368,14 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
                 }
                 catch (IOException ex)
                 {
-                    _logger.ConsoleAndLogWriteLine($"Error deleting existing file {newFilePath}: {ex.Message}");
+                    logger.ConsoleAndLogWriteLine($"Error deleting existing file {newFilePath}: {ex.Message}");
                     groupAddressesSourceFilePath = SelectAnotherFile();
                     continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
                 }
                 catch (UnauthorizedAccessException ex)
                 {
                     // Si on n'a pas les droits de supprimer le fichier
-                    _logger.ConsoleAndLogWriteLine($"Error deleting existing file {newFilePath}: {ex.Message}. " +
+                    logger.ConsoleAndLogWriteLine($"Error deleting existing file {newFilePath}: {ex.Message}. " +
                                                    $"Please change the rights of the file so the program can delete {newFilePath}");
                     groupAddressesSourceFilePath = SelectAnotherFile();
                     continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
@@ -391,7 +390,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
             catch (FileNotFoundException)
             {
                 // Si le fichier n'existe pas ou que le path est incorrect
-                _logger.ConsoleAndLogWriteLine(
+                logger.ConsoleAndLogWriteLine(
                     $"Error: the file {groupAddressesSourceFilePath} was not found. Please check the selected file path and try again.");
                 groupAddressesSourceFilePath = SelectAnotherFile();
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
@@ -402,7 +401,7 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
                 msg = $"Unable to write to the file {groupAddressesSourceFilePath}. "
                       + "Please check that the program has access to the file or try running it "
                       + "as an administrator.";
-                _logger.ConsoleAndLogWriteLine(msg);
+                logger.ConsoleAndLogWriteLine(msg);
                 groupAddressesSourceFilePath = SelectAnotherFile();
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
             }
@@ -411,14 +410,14 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
                 // Si le dossier destination n'a pas été trouvé
                 msg = $"The folder {Path.GetDirectoryName(groupAddressesSourceFilePath)} cannot be found. "
                       + "Please check the entered path and try again.";
-                _logger.ConsoleAndLogWriteLine(msg);
+                logger.ConsoleAndLogWriteLine(msg);
                 groupAddressesSourceFilePath = SelectAnotherFile();
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
             }
             catch (PathTooLongException)
             {
                 // Si le chemin est trop long
-                _logger.ConsoleAndLogWriteLine(
+                logger.ConsoleAndLogWriteLine(
                     $"Error: the path {groupAddressesSourceFilePath} is too long (more than 255 characters). Please try again.");
                 groupAddressesSourceFilePath = SelectAnotherFile();
                 continue; // Retour au début de la boucle pour retenter l'extraction avec le nouveau path
@@ -426,13 +425,13 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
             catch (Exception ex)
             {
                 // Gestion générique des exceptions non prévues
-                _logger.ConsoleAndLogWriteLine(
+                logger.ConsoleAndLogWriteLine(
                     $"Error copying file {groupAddressesSourceFilePath} to {newFilePath}: {ex.Message}");
                 groupAddressesSourceFilePath = SelectAnotherFile();
                 continue;
             }
             
-            _logger.ConsoleAndLogWriteLine($"Done! Copy the file: {Path.GetFullPath(groupAddressesSourceFilePath)}");
+            logger.ConsoleAndLogWriteLine($"Done! Copy the file: {Path.GetFullPath(groupAddressesSourceFilePath)}");
 
             // On stocke le nouveau path d'exportation du projet
             GroupAddressFilePath = newFilePath;
@@ -564,18 +563,18 @@ public class ProjectFileManager(Logger logger, ApplicationSettings settings) : I
         catch (InvalidOperationException ex)
         {
             // Gérer les exceptions liées à l'état non valide de l'OpenFileDialog
-            _logger.ConsoleAndLogWriteLine($"Error: Could not open file dialog. Details: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: Could not open file dialog. Details: {ex.Message}");
         }
         catch (System.Runtime.InteropServices.ExternalException ex)
         {
             // Gérer les exceptions liées aux erreurs internes des bibliothèques de l'OS
-            _logger.ConsoleAndLogWriteLine(
+            logger.ConsoleAndLogWriteLine(
                 $"Error: An external error occurred while trying to open the file dialog. Details: {ex.Message}");
         }
         catch (Exception ex)
         {
             // Gérer toutes autres exceptions génériques
-            _logger.ConsoleAndLogWriteLine($"Error: An unexpected error occurred. Details: {ex.Message}");
+            logger.ConsoleAndLogWriteLine($"Error: An unexpected error occurred. Details: {ex.Message}");
         }
 
         return "";

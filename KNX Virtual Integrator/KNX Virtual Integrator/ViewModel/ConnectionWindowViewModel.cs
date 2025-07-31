@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using KNX_Virtual_Integrator.Model;
+﻿using System.Windows;
 
 namespace KNX_Virtual_Integrator.ViewModel;
 

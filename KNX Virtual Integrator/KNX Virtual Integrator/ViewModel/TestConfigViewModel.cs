@@ -74,7 +74,6 @@ public partial class MainViewModel
             if (_selectedModelTestWindow != null && _selectedModelTestWindow.Key == value?.Key)
                 return;
             _selectedModelTestWindow = value;
-            ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
             WhenPropertyChanged(nameof(SelectedModelTestWindow));
                 
         }

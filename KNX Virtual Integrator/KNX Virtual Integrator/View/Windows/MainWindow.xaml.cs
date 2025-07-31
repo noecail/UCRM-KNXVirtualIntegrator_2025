@@ -442,7 +442,7 @@ public partial class MainWindow
         _viewModel.CreateStructureDictionaryCommand.Execute(null);
         
         // Also, selecting the newly created model and scrolling down to it
-        _viewModel.SelectedStructure = _viewModel.Structures?.Last();
+        _viewModel.SelectedStructure = _viewModel.Structures.Last();
         PredefinedStructuresScrollViewer.ScrollToEnd();
         
         _windowManager.ShowModelEditWindow(); // ouverture de la fenêtre d'édition de MF
@@ -640,7 +640,7 @@ public partial class MainWindow
         // TODO : récupérer le selected element et l'index du DPT    
     }
 
-    //public bool ScrollToEnd { get; set; } // pour demander à l'ui de scroller vers le bas des modèles prédéfinis
+    //public bool ScrollToEnd { get; set; } // pour demander à la UI de scroller vers le bas des modèles prédéfinis
 
 
     // Used when adding a new model

@@ -185,12 +185,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             new Commands.RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress(_functionalModelList)
             );
 
-        EnsureSettingsFileExistsCommand = new Commands.RelayCommand<string>(parameter =>
-            {
-                if (!string.IsNullOrWhiteSpace(parameter))
-                    modelManager.ApplicationFileManager.EnsureSettingsFileExists(parameter);
-            }
-        );
 
         CreateDebugArchiveCommand =
             new Commands.RelayCommand<(bool IncludeOsInfo, bool IncludeHardwareInfo, bool IncludeImportedProjects
@@ -236,7 +230,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 
                 // delete the structure
                 _functionalModelList.DeleteFromDictionary(index);
-                HideModelColumnCommand?.Execute(null);
                 
                 // restore (or not) the previously selected structure and model
                 if (previouslySelectedStructure is null) return;
@@ -388,12 +381,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 return success;
             }
         );
-
-        // Gestion des colonnes 
-        HideModelColumnCommand = new RelayCommand(HideModelColumn);
-        HideAdressColumnCommand = new RelayCommand(HideAdressColumn);
-        ShowModelColumnCommand = new RelayCommand(ShowModelColumn);
-        ShowAdressColumnCommand = new RelayCommand(ShowAdressColumn);
         
 
         // Chargement des modèles par défaut dans la collection observable

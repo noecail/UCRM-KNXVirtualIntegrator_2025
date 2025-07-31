@@ -5,7 +5,7 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
-public class FileLoader(Logger logger) : IFileLoader
+public class FileLoader(ILogger logger) : IFileLoader
 {
     /// <summary>
     /// Loads an XML document from a specified path.

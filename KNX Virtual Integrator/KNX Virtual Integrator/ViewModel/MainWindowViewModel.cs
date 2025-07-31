@@ -51,58 +51,7 @@ namespace KNX_Virtual_Integrator.ViewModel
                 WhenPropertyChanged(nameof(AdressColumnWidth)); // Notify of property change
             }
         }
-        
-        /// <summary>
-        /// Gets the command to hide the model column.
-        /// </summary>
-        public RelayCommand HideModelColumnCommand { get; private set; }
 
-        /// <summary>
-        /// Gets the command to hide the address column.
-        /// </summary>
-        public RelayCommand HideAdressColumnCommand { get; private set; }
-
-        /// <summary>
-        /// Gets the command to show the model column.
-        /// </summary>
-        public RelayCommand ShowModelColumnCommand { get; private set; }
-
-        /// <summary>
-        /// Gets the command to show the address column.
-        /// </summary>
-        public RelayCommand ShowAdressColumnCommand { get; private set; }
-
-        /// <summary>
-        /// Hides the model column by setting its width to zero.
-        /// </summary>
-        private void HideModelColumn()
-        {
-            ModelColumnWidth = new GridLength(0);
-        }
-
-        /// <summary>
-        /// Hides the address column by setting its width to zero.
-        /// </summary>
-        private void HideAdressColumn()
-        {
-            AdressColumnWidth = new GridLength(0);
-        }
-
-        /// <summary>
-        /// Shows the model column by setting its width to auto.
-        /// </summary>
-        private void ShowModelColumn()
-        {
-            ModelColumnWidth = GridLength.Auto;
-        }
-
-        /// <summary>
-        /// Shows the address column by setting its width to auto.
-        /// </summary>
-        private void ShowAdressColumn()
-        {
-            AdressColumnWidth = GridLength.Auto;
-        }
 
     }
 }
