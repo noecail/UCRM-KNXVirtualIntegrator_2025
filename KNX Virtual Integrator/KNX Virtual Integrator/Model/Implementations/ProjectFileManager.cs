@@ -123,14 +123,11 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
     private string GetZipArchivePath(string knxprojSourceFilePath)
     {
         if (knxprojSourceFilePath.EndsWith(".knxproj"))
-        {
+        
             return $"./{Path.GetFileNameWithoutExtension(knxprojSourceFilePath)}.zip";
-        }
-        else
-        {
-            logger.ConsoleAndLogWriteLine("Error: the selected file is not a .knxproj file. Please try again.");
-            return SelectAnotherFile();
-        }
+        
+        logger.ConsoleAndLogWriteLine("Error: the selected file is not a .knxproj file. Please try again.");
+        return SelectAnotherFile();
     }
 
     /// <summary>
