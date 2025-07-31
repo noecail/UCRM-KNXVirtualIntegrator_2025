@@ -197,7 +197,7 @@
                 <TextBox Name="NatAddressTextBox" Grid.Row="1" Grid.Column="1"
                          Style="{StaticResource TextBoxLight}"
                          Width="90"
-                         Text="{Binding _busConnection.NatAddress}" />
+                         Text="{Binding BusConnection.NatAddress}" />
 
             </Grid>
 
@@ -294,7 +294,7 @@
                 <TextBlock
                     Name="ImportKeyPathText"
                     Margin="21,0,0,5"
-                    Text="{Binding _busConnection.KeysPath}"
+                    Text="{Binding BusConnection.KeysPath}"
                     TextAlignment="Left"
                     FontSize="10"
                     TextWrapping="Wrap">
@@ -315,7 +315,7 @@
                     <TextBox Grid.Column="1"
                              Name="ActualPwdKeysFileTextBox"
                              Style="{StaticResource TextBoxLight}"
-                             Text="{Binding _busConnection.KeysFilePassword}" />
+                             Text="{Binding BusConnection.KeysFilePassword}" />
                 </Grid>
 
             </StackPanel>
@@ -327,7 +327,7 @@
                     FontWeight="Bold"
                     Foreground="Red" />
                 <TextBlock
-                    Text="{Binding _busConnection.ConnectionErrorMessage}"
+                    Text="{Binding BusConnection.ConnectionErrorMessage}"
                     FontWeight="SemiBold"
                     Foreground="Red"
                     TextWrapping="Wrap" />

@@ -93,13 +93,13 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Gets or sets the currently selected tested element.
         /// </summary>  
-        private FunctionalModel _selectedTestedElement;
-        public FunctionalModel SelectedTestedElement
+        private FunctionalModel? _selectedTestedElement;
+        public FunctionalModel? SelectedTestedElement
         {
             get => _selectedTestedElement;
             set
             {
-                if (_selectedTestedElement.Equals(value)) return;
+                if (_selectedTestedElement != null && _selectedTestedElement.Equals(value)) return;
                 _selectedTestedElement = value;
                 //ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedTestedElement));

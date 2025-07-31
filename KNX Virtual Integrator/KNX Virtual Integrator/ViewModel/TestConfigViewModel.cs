@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows;
 using KNX_Virtual_Integrator.Model.Entities;
 
 namespace KNX_Virtual_Integrator.ViewModel;
@@ -18,14 +17,9 @@ public partial class MainViewModel
         {
             if (_selectedTestModels.Equals(value)) return;
             _selectedTestModels = value;
-            WhenPropertyChanged(nameof(_selectedTestModels));
+            WhenPropertyChanged(nameof(SelectedTestModels));
         }
     }
-    
-    /// <summary>
-    /// Gets the collection of functional models.
-    /// </summary>
-    public ObservableCollection<FunctionalModel> StructuresTestWindow { get; set; }
     
     /// <summary>
     /// Column 1. Selected model structure.
@@ -61,7 +55,7 @@ public partial class MainViewModel
             if (_selectedModelsTestWindow != null && _selectedModelsTestWindow.Equals(value))
                 return;
             _selectedModelsTestWindow = value;
-            SelectedModelTestWindow = null; // reset the selected model if selectedmodels has changed
+            SelectedModelTestWindow = null; // reset the selected model if selectedModels has changed
             WhenPropertyChanged(nameof(SelectedModelsTestWindow));
                 
         }

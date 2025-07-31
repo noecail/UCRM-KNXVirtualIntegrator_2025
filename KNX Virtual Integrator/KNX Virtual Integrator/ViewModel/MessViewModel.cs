@@ -18,33 +18,33 @@ namespace KNX_Virtual_Integrator.ViewModel
             ------------------------------------------------------------------------------------------------ */
         public string ProjectFolderPath { get; private set; } // Stocke le chemin du dossier projet
         
-        public IBusConnection _busConnection { get; }
+        public IBusConnection BusConnection { get; }
 
         public IApplicationSettings AppSettings => _modelManager.AppSettings;
         private readonly ModelManager _modelManager;  // Référence à ModelManager
 
-        public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces => _busConnection.DiscoveredInterfaces;
+        public ObservableCollection<ConnectionInterfaceViewModel> DiscoveredInterfaces => BusConnection.DiscoveredInterfaces;
         public string? SelectedConnectionType
         {
-            get => _busConnection.SelectedConnectionType;
+            get => BusConnection.SelectedConnectionType;
             set
             {
-                if (_busConnection.SelectedConnectionType == value) return;
-                _busConnection.SelectedConnectionType = value;
-                _busConnection.OnSelectedConnectionTypeChanged();
+                if (BusConnection.SelectedConnectionType == value) return;
+                BusConnection.SelectedConnectionType = value;
+                BusConnection.OnSelectedConnectionTypeChanged();
             }
         }
         public ConnectionInterfaceViewModel? SelectedInterface
         {
-            get => _busConnection.SelectedInterface;
+            get => BusConnection.SelectedInterface;
             set
             {
-                if (_busConnection.SelectedInterface == value) return;
-                _busConnection.SelectedInterface = value;
+                if (BusConnection.SelectedInterface == value) return;
+                BusConnection.SelectedInterface = value;
             }
         }
-        public bool IsConnected => _busConnection.IsConnected;
-        public string? CurrentInterface => _busConnection.CurrentInterface;
+        public bool IsConnected => BusConnection.IsConnected;
+        public string CurrentInterface => BusConnection.CurrentInterface;
 
         /* ------------------------------------------------------------------------------------------------
          -------------------------------- COMMANDES SANS VALEUR DE RETOUR  ---------------------------------
@@ -122,31 +122,14 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand ImportListCommand  { get; private set; }
 
         public ICommand ExportListCommand  { get; private set; }
-
-        //public AsyncRelayCommand OpenConnectionWindowCommand { get; }
+        
         public AsyncRelayCommand ConnectBusCommand { get; }
+        
         public AsyncRelayCommand DisconnectBusCommand { get; }
+        
         public AsyncRelayCommand RefreshInterfacesCommand { get; }
-        // à implémenter dans le VM
-        public AsyncRelayCommand ConnectBusRemotelyCommand { get; private set; }
 
-        /// <summary>
-        /// Command that sends a group value write "on" command asynchronously.
-        /// </summary>
-        public ICommand GroupValueWriteOnCommand { get; private set; }
-
-        /// <summary>
-        /// Command that sends a group value write "off" command asynchronously.
-        /// </summary>
-        public ICommand GroupValueWriteOffCommand { get; private set; }
-
-        public ICommand MaGroupValueReadCommand { get; private set; }
         
-        public ICommand MaGroupValueReadCommandWithinTimer { get; private set; }
-        
-        public ICommand GroupValueWriteCommand { get; private set; }
-
-
         /// <summary>
         /// Command that saves the current application settings.
         /// </summary>

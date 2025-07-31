@@ -155,7 +155,7 @@ public partial class ConnectionWindow
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
 
             // Donner le chemin au Model
-            _viewModel._busConnection.KeysPath = openFileDialog.FileName;
+            _viewModel.BusConnection.KeysPath = openFileDialog.FileName;
         }
         else
         {

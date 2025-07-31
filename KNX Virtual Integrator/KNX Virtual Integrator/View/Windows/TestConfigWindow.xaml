@@ -245,7 +245,7 @@
                             
                             <TextBlock Style="{StaticResource TitleTextLight}"
                                        x:Name="BorderModelsTitleText"
-                                       Text="{Binding SelectedStructureTestWindow.Name}"
+                                       Text="{Binding Path='SelectedStructureTestWindow.Name', FallbackValue=''}"
                             />
                         </Border>
 
@@ -325,14 +325,14 @@
                                          Style="{StaticResource StandardTextBoxLight}"
                                          HorizontalAlignment="Left" 
                                          Width="200"
-                                         Text="{Binding SelectedModelTestWindow.Name, UpdateSourceTrigger=PropertyChanged}"
+                                         Text="{Binding SelectedModelTestWindow.Name, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"
                                          />
                                 
                                 
                                 <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                                     <ListBox Name="SelectedElementsListBox"
-                                             ItemsSource="{Binding SelectedModelTestWindow.ElementList}"
+                                             ItemsSource="{Binding SelectedModelTestWindow.ElementList, FallbackValue=''}"
                                              ItemContainerStyle="{StaticResource TestElementToTestListBoxItemStyle}"
                                              AlternationCount="100"
                                              Foreground="{StaticResource LightForegroundBrush}"
@@ -354,7 +354,7 @@
                                                         <TextBlock Grid.Column="0" Text="Élément à tester" FontWeight="SemiBold"/>
                                                         
                                                         <!-- Pour l'index de l'élément à tester -->
-                                                        <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=AlternationIndex}"/>
+                                                        <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"/>
                                                        
                                                     </Grid>
                                                     

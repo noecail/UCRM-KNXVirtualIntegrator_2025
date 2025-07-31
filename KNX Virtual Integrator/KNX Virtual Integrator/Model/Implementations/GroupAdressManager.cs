@@ -44,8 +44,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
         if (namespaceResolver.GlobalKnxNamespace == null) return;
 
-
-        
         if (filePath == manager.ZeroXmlPath)
         {
             NewProcessZeroXmlFile(groupAddressFile, functionalModelList);
@@ -466,11 +464,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                      k++) //For each element, if for the same command 
                                 {
                                     var newElement = newFunctionalModels[j].ElementList[k];
-                                    if (index !=
-                                        null) // If there is an ie of the same type in the structure associated, add it to the ie list
+                                    if (index != -1) // If there is an ie of the same type in the structure associated, add it to the ie list
                                     {
                                         var element = functionalModelList.FunctionalModelDictionary
-                                            .FunctionalModels[(int)index].ElementList[k];
+                                            .FunctionalModels[index].ElementList[k];
                                         var nbAppearances = element.IeContains(newDpt);
                                         for (var l = 0; l < nbAppearances; l++)
                                         {
@@ -497,14 +494,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     var newObjectType = structureList[0].Elements().ToList();
                     for (var j = 0; j < newObjectType.Count; j++)
                     {
-                        if (index != null)
+                        if (index != -1)
                         {
                             Console.WriteLine("On est dans : " + functionalModelList.FunctionalModelDictionary
-                                .FunctionalModels[(int)index].Name);
+                                .FunctionalModels[index].Name);
                             for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
                             {
                                 for (var l = 0;
-                                     l < functionalModelList.FunctionalModelDictionary.FunctionalModels[(int)index]
+                                     l < functionalModelList.FunctionalModelDictionary.FunctionalModels[index]
                                          .ElementList[k].TestsCmd[0].Value.Count;
                                      l++)
                                 {
@@ -514,7 +511,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
 
                                     newFunctionalModels[j].ElementList[k].CopyTest(
-                                        functionalModelList.FunctionalModelDictionary.FunctionalModels[(int)index]
+                                        functionalModelList.FunctionalModelDictionary.FunctionalModels[index]
                                             .ElementList[k], l);
                                 }
                             }
@@ -529,13 +526,13 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         var tempName = newFunctionalModels[0].Name;
                         newFunctionalModels[0].Name = modelName;
                         functionalModelList.AddToDictionary(newFunctionalModels[0]);
-                        functionalModelList.FunctionalModels[(int)index].Clear();
+                        functionalModelList.FunctionalModels[index].Clear();
                     }
 
                     foreach (var newFunctionalModel in newFunctionalModels)
                     {
                         newFunctionalModel.UpdateIntValue();
-                        functionalModelList.AddToList((int)index, newFunctionalModel, false);
+                        functionalModelList.AddToList(index, newFunctionalModel, false);
                     }
                 }
             }

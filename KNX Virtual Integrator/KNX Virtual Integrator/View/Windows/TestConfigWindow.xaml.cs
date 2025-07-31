@@ -28,7 +28,7 @@ public partial class TestConfigWindow
     }
     
     /// <summary>
-    /// Handles the Connection window closing event by canceling the closure, restoring previous settings, and hiding the window.
+    /// Handles the TestConfig window closing event by canceling the closure, restoring previous settings, and hiding the window.
     /// </summary>
     private void ClosingTestConfigWindow(object? sender, CancelEventArgs e)
     {
@@ -146,7 +146,7 @@ public partial class TestConfigWindow
 
     private void CheckedModelsHandler(object? sender, EventArgs? e)
     {
-        // On cherche à récupérer l'index des structures à supprimer
+        // On cherche à récupérer l'index des modèles/structures qui ont été cochées
         // les index sont disponibles à partir des checkbox associées au listbox items
         // on parcourt tous les listbox items
         for (var i = 0; i < ModelsBox.Items.Count; i++)
@@ -157,8 +157,8 @@ public partial class TestConfigWindow
             // Récupère la CheckBox dans le template
             if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
                 continue;
+            
             var newTestModel = ModelsBox.Items[i] as FunctionalModel; // La Structure
-
             // Si la case est cochée on supprime la structure
             if (newTestModel is null || checkBox.IsChecked is false) 
                 continue;

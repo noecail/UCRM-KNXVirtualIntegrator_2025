@@ -49,46 +49,45 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     {
         // Initialisation des attributs
         _modelManager = modelManager;
-        _busConnection = _modelManager.BusConnection;
-        _busConnection.PropertyChanged += (_, e) =>
+        BusConnection = _modelManager.BusConnection;
+        BusConnection.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName == nameof(_busConnection.IsConnected))
+            if (e.PropertyName == nameof(BusConnection.IsConnected))
             {
                 WhenPropertyChanged(nameof(IsConnected)); // Notification de la view
                 ConnectBusCommand?.NotifyCanExecuteChanged(); //ATTENTION, PEUT CAUSER PROBLÈMES APRÈS L'UPGRADE
                 DisconnectBusCommand?.NotifyCanExecuteChanged();
             }
-            else if (e.PropertyName == nameof(_busConnection.CurrentInterface))
+            else if (e.PropertyName == nameof(BusConnection.CurrentInterface))
             {
                 WhenPropertyChanged(nameof(CurrentInterface)); // Mise à jour de la vue
             }
             // Pas besoin de WhenPropertyChanged(nameof(NatAddress)) car la View est directement bind à la propriété du Model
             // Contrairement à CurrentInterface, la View est bind à une propriété du ViewModel et donc WhenPropertyChanged(nameof(CurrentInterface))
-            else if (e.PropertyName == nameof(_busConnection.SelectedConnectionType))
+            else if (e.PropertyName == nameof(BusConnection.SelectedConnectionType))
             {
-                if (_busConnection.SelectedConnectionType is "IP")
+                if (BusConnection.SelectedConnectionType is "IP")
                 {
                     DiscoveredInterfacesVisibility = Visibility.Visible;
                     RemoteConnexionVisibility = Visibility.Collapsed;
                     SecureConnectionVisibility = Visibility.Visible;
                 }
-                else if (_busConnection.SelectedConnectionType is "IP à distance (NAT)")
+                else if (BusConnection.SelectedConnectionType is "IP à distance (NAT)")
                 {
                     DiscoveredInterfacesVisibility = Visibility.Collapsed;
                     RemoteConnexionVisibility = Visibility.Visible;
                     SecureConnectionVisibility = Visibility.Visible;
                 }
-                else if (_busConnection.SelectedConnectionType is "USB")
+                else if (BusConnection.SelectedConnectionType is "USB")
                 {
                     DiscoveredInterfacesVisibility = Visibility.Visible;
                     RemoteConnexionVisibility = Visibility.Collapsed;
                     SecureConnectionVisibility = Visibility.Collapsed;
                 }
             }
-            else if (e.PropertyName == nameof(_busConnection.ConnectionErrorMessage))
+            else if (e.PropertyName == nameof(BusConnection.ConnectionErrorMessage))
             {
-                if (_busConnection.ConnectionErrorMessage == "") ErrorMessageVisibility = Visibility.Collapsed;
-                else ErrorMessageVisibility = Visibility.Visible;
+                ErrorMessageVisibility = BusConnection.ConnectionErrorMessage==""? Visibility.Collapsed : Visibility.Visible;
             }
         };
         
@@ -100,76 +99,77 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         _functionalModelList.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName == nameof(_functionalModelList.FunctionalModelDictionary))
+            if (e.PropertyName != nameof(_functionalModelList.FunctionalModelDictionary)) 
+                return;
+            // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
+            Structures.Clear();
+            var newStructures = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
+            foreach (var newstructure in newStructures)
             {
-                // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
-                Structures?.Clear();
-                var newStructures = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
-                foreach (var newstructure in newStructures)
-                {
-                    Structures?.Add(newstructure);
-                }
-                
+                Structures.Add(newstructure);
             }
         };
-        
-        Structures.CollectionChanged += (_, _) =>
-        {
-            StructuresTestWindow = new ObservableCollection<FunctionalModel>(Structures);
-        };
 
-        _busConnection.SelectedConnectionType = "USB";
+        BusConnection.SelectedConnectionType = "USB";
 
         ProjectFolderPath = "";
 
 
         ModelConsoleWriteCommand = new Commands.RelayCommand<FunctionalModel>(model =>
+        {
+            Console.WriteLine("Starting ModelConsoleWriteCommand");
+            if (model is null) {
+                Console.WriteLine("Model is null");
+                return; }
+
+            Console.WriteLine("Accessing the selected model : " + model.Name);
+            var i = 1;
+            if (model.ElementList.Count == 0) {
+                Console.WriteLine(model.Name + " is empty");
+                return; }
+            
+            foreach (var testedelement in model.ElementList)
             {
-                Console.WriteLine("Starting ModelConsoleWriteCommand");
-                Console.WriteLine("Accessing the selected model : " + model.Name);
-                var i = 1;
-                foreach (var testedelement in model.ElementList)
+                Console.WriteLine("--- Tested Element : " + i + "---");
+                    
+                Console.Write("DPT(s) to send         : ");
+                foreach (var dpttosend in testedelement.TestsCmd)
+                    Console.Write(dpttosend.Type + "|");
+                Console.WriteLine();
+                Console.Write("Address(es) to send    : ");
+                foreach (var dpttosend in testedelement.TestsCmd)
+                    Console.Write(dpttosend.Address + "|");
+                Console.WriteLine();
+                Console.Write("Value(s) to send       : ");
+                foreach (var dpttosend in testedelement.TestsCmd)
                 {
-                    Console.WriteLine("--- Tested Element : " + i + "---");
-                    
-                    Console.Write("DPT(s) to send         : ");
-                    foreach (var dpttosend in testedelement.TestsCmd)
-                        Console.Write(dpttosend.Type + "|");
-                    Console.WriteLine();
-                    Console.Write("Address(es) to send    : ");
-                    foreach (var dpttosend in testedelement.TestsCmd)
-                        Console.Write(dpttosend.Address + "|");
-                    Console.WriteLine();
-                    Console.Write("Value(s) to send       : ");
-                    foreach (var dpttosend in testedelement.TestsCmd)
-                    {
-                        foreach (var value in dpttosend.Value)
-                            Console.Write(value + ",");
-                        Console.Write("|");
-                    }
-                    Console.WriteLine();
-                    
-                    Console.Write("DPT(s) to receive      : ");
-                    foreach (var dpttoreceive in testedelement.TestsIe)
-                        Console.Write(dpttoreceive.Type + "|");
-                    Console.WriteLine();
-                    Console.Write("Address(es) to receive : ");
-                    foreach (var dpttoreceive in testedelement.TestsIe)
-                        Console.Write(dpttoreceive.Address + "|");
-                    Console.WriteLine();
-                    Console.Write("Value(s) to receive    : ");
-                    foreach (var dpttoreceive in testedelement.TestsIe) 
-                    {
-                        foreach (var value in dpttoreceive.Value) 
-                            Console.Write(value + ",");
-                        Console.Write("|"); 
-                    } 
-                    Console.WriteLine();
-                    Console.WriteLine("----------------------------");
-                    Console.WriteLine();
-                    i++;
+                    foreach (var value in dpttosend.Value)
+                        Console.Write(value + ",");
+                    Console.Write("|");
                 }
+                Console.WriteLine();
+                    
+                Console.Write("DPT(s) to receive      : ");
+                foreach (var dpttoreceive in testedelement.TestsIe)
+                    Console.Write(dpttoreceive.Type + "|");
+                Console.WriteLine();
+                Console.Write("Address(es) to receive : ");
+                foreach (var dpttoreceive in testedelement.TestsIe)
+                    Console.Write(dpttoreceive.Address + "|");
+                Console.WriteLine();
+                Console.Write("Value(s) to receive    : ");
+                foreach (var dpttoreceive in testedelement.TestsIe) 
+                {
+                    foreach (var value in dpttoreceive.Value) 
+                        Console.Write(value + ",");
+                    Console.Write("|"); 
+                } 
+                Console.WriteLine();
+                Console.WriteLine("----------------------------");
+                Console.WriteLine();
+                i++;
             }
+        }
         );
 
 
@@ -213,14 +213,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                _functionalModelList?.AddToDictionary(new FunctionalModel("New Model " + (Structures?.Count+1)));
+                _functionalModelList.AddToDictionary(new FunctionalModel("New Model " + (Structures.Count+1)));
             }
         );
 
         DuplicateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                if (SelectedStructure!=null && Structures!=null)
-                    _functionalModelList?.AddToDictionary(new FunctionalModel(SelectedStructure,Structures.Count+1,false));
+                if (SelectedStructure!=null && Structures.Count != 0)
+                    _functionalModelList.AddToDictionary(new FunctionalModel(SelectedStructure,Structures.Count+1,false));
             }
         );
 
@@ -239,11 +239,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 HideModelColumnCommand?.Execute(null);
                 
                 // restore (or not) the previously selected structure and model
-                if (_functionalModelList.FunctionalModelDictionary.FunctionalModels.Contains(previouslySelectedStructure) && _functionalModelList.FunctionalModelDictionary.FunctionalModels[_functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(previouslySelectedStructure)].Name == previouslySelectedStructure.Name)
-                {
-                    SelectedStructure =  previouslySelectedStructure;
-                    SelectedModel = previouslySelectedModel;
-                }
+                if (previouslySelectedStructure is null) return;
+                if (!_functionalModelList.FunctionalModelDictionary.FunctionalModels.Contains(
+                        previouslySelectedStructure) ||
+                    _functionalModelList.FunctionalModelDictionary.FunctionalModels[
+                        _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(
+                            previouslySelectedStructure)].Name != previouslySelectedStructure.Name) return;
+                SelectedStructure =  previouslySelectedStructure;
+                SelectedModel = previouslySelectedModel;
             }
         );
 
@@ -324,10 +327,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;
                
                 // restore (or not) the previously selected model
+                if (SelectedModels is null || previouslySelectedModel is null || SelectedStructure is null) return;
                 if (SelectedModels.Contains(previouslySelectedModel) && SelectedModels[_functionalModelList.FunctionalModels[SelectedStructure.Key-1].IndexOf(previouslySelectedModel)].Name == previouslySelectedModel.Name)
-                {
                     SelectedModel = previouslySelectedModel;
-                }
             }
         );
         
@@ -363,55 +365,13 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ConnectBusCommand = new AsyncRelayCommand(
             async _ =>
             {
-                _busConnection.NatAccess = false;
+                BusConnection.NatAccess = false;
                 await modelManager.BusConnection.ConnectBusAsync();
             });
         DisconnectBusCommand = new AsyncRelayCommand(modelManager.BusConnection.DisconnectBusAsync);
 
         RefreshInterfacesCommand = new AsyncRelayCommand(modelManager.BusConnection.DiscoverInterfacesAsync);
-
-        ConnectBusRemotelyCommand = new AsyncRelayCommand(
-           async _ =>
-        {
-            _busConnection.NatAccess = true;
-            await modelManager.BusConnection.ConnectBusAsync();
-        });
-
-        GroupValueWriteOnCommand = new Commands.RelayCommand<object>(
-            _ => modelManager.GroupCommunication.GroupValueWriteOnAsync()
-        );
-
-        GroupValueWriteOffCommand = new Commands.RelayCommand<object>(
-            _ => modelManager.GroupCommunication.GroupValueWriteOffAsync()
-        );
-
-
-        // Initialisation des commandes
-        GroupValueWriteCommand = new Commands.RelayCommand<(GroupAddress, GroupValue)>(
-            async parameters =>
-            {
-                await modelManager.GroupCommunication.GroupValueWriteAsync(parameters.Item1, parameters.Item2);
-            }
-        );
-
-        MaGroupValueReadCommand = new Commands.RelayCommand<GroupAddress>(
-            async groupAddress =>
-            {
-                await modelManager.GroupCommunication.MaGroupValueReadAsync(groupAddress);
-                // Vous pouvez faire quelque chose avec la valeur lue ici si nécessaire
-            }
-        );
         
-        //Crée une liste avec tous les messages reçus pendant 2 secondes
-        MaGroupValueReadCommandWithinTimer = new Commands.RelayCommand<GroupAddress>(
-            async groupAddress =>
-            {
-                var msglist = new List<GroupCommunication.GroupMessage>(await modelManager.GroupCommunication.GroupValuesWithinTimerAsync(groupAddress,2000));
-                // Vous pouvez faire quelque chose avec la valeur lue ici si nécessaire
-            }
-        );
-
-
         SaveSettingsCommand = new Commands.RelayCommand<object>(
             _ => modelManager.AppSettings.Save()
         );
