@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Xml.Linq;
 using Knx.Falcon;
 using System.Numerics;
-using System;
 using System.Runtime.CompilerServices;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
@@ -40,7 +39,7 @@ public class DataPointType : INotifyPropertyChanged
         }
     }
 
-    private string _address;
+    private string _address = "";
 
     public string Address
     {
