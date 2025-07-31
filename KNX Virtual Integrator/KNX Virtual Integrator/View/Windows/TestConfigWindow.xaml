@@ -91,22 +91,22 @@
                 </Grid.ColumnDefinitions>
             
             
-                    <!-- Première colonne
-                    Bibliothèque des Structures de Modèle Fonctionnel
-                    Contient toutes les Structures de Modèle Fonctionnel (çàd non instanciées), prédéfinies ou crées (ou suggérées (IA))
-                    ex : Structure de Modèle Fonctionnel pour les lampes
-                    -->
-                    
-                    <!-- En-tête colonne 1 -->
-                    <Border Grid.Row="0" Grid.Column="0"
-                            x:Name="BorderStructBib"
-                            Style="{StaticResource BorderLight}"
-                            BorderThickness="0,0,1,1">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
-                                <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
-                            </Grid.ColumnDefinitions>
+                <!-- Première colonne
+                Bibliothèque des Structures de Modèle Fonctionnel
+                Contient toutes les Structures de Modèle Fonctionnel (çàd non instanciées), prédéfinies ou crées (ou suggérées (IA))
+                ex : Structure de Modèle Fonctionnel pour les lampes
+                -->
+                
+                <!-- En-tête colonne 1 -->
+                <Border Grid.Row="0" Grid.Column="0"
+                        x:Name="BorderStructBib"
+                        Style="{StaticResource BorderLight}"
+                        BorderThickness="0,0,1,1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
+                            <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                        </Grid.ColumnDefinitions>
 
                         <!-- Bandeau supérieur -->
                         <StackPanel Grid.Column="0"
@@ -186,22 +186,22 @@
                     </Grid>
                 </Border>
                 
-                    <!-- Deuxième colonne
-                    Liste des Modèles Fonctionnels correspondant à la Structure Sélectionnée
-                    Contient tous les Modèles Fonctionnels qui ont été créés à partir de la Structure sélectionnée
-                    ex : tous les Modèles Fonctionnels pour toutes les lampes de l'installation
-                    -->
+                <!-- Deuxième colonne
+                Liste des Modèles Fonctionnels correspondant à la Structure Sélectionnée
+                Contient tous les Modèles Fonctionnels qui ont été créés à partir de la Structure sélectionnée
+                ex : tous les Modèles Fonctionnels pour toutes les lampes de l'installation
+                -->
 
-                    <!-- En-tête colonne 2-->
-                    <Border Grid.Row="0" Grid.Column="1" 
-                            x:Name="BorderModelBib"
-                            Style="{StaticResource BorderLight}"
-                            BorderThickness="0,0,1,1">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
-                                <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
-                            </Grid.ColumnDefinitions>
+                <!-- En-tête colonne 2-->
+                <Border Grid.Row="0" Grid.Column="1" 
+                        x:Name="BorderModelBib"
+                        Style="{StaticResource BorderLight}"
+                        BorderThickness="0,0,1,1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
+                            <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                        </Grid.ColumnDefinitions>
 
                         <StackPanel Background="{StaticResource NoColorBrush}" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                             <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
@@ -277,31 +277,31 @@
                 </Border>
                     
 <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
-                    <!-- Troisième colonne
-                    Liste des Éléments à Tester d'un Modèle Fonctionnel
-                    Permet d'instancier (adresses et valeurs) tous les Éléments à Tester de la Structure du Modèle Fonctionnel Sélectionné
-                    ex : Pour la lampe du salon, tous les Éléments à Tester
-                    -->
-                    
-                    <!-- En-tête colonne 3 -->
-                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
-                                BorderThickness="0,0,1,0" >
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" /> <!-- Titre -->
-                                <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
-                            </Grid.ColumnDefinitions>
+                <!-- Troisième colonne
+                Liste des Éléments à Tester d'un Modèle Fonctionnel
+                Permet d'instancier (adresses et valeurs) tous les Éléments à Tester de la Structure du Modèle Fonctionnel Sélectionné
+                ex : Pour la lampe du salon, tous les Éléments à Tester
+                -->
+                
+                <!-- En-tête colonne 3 -->
+                <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
+                            BorderThickness="0,0,1,0" >
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" /> <!-- Titre -->
+                            <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
+                        </Grid.ColumnDefinitions>
 
-                            <!-- Titre -->
-                            <TextBlock Grid.Column="0"
-                                       x:Name="ModelSettingsText"
-                                       Style="{StaticResource TitleTextLight}"
-                                       Text="Paramètres du Modèle Fonctionnel"
-                                       HorizontalAlignment="Left"
-                                       Margin="5,0"
-                            />
-                        </Grid>
-                    </Border>
+                        <!-- Titre -->
+                        <TextBlock Grid.Column="0"
+                                   x:Name="ModelSettingsText"
+                                   Style="{StaticResource TitleTextLight}"
+                                   Text="Paramètres du Modèle Fonctionnel"
+                                   HorizontalAlignment="Left"
+                                   Margin="5,0"
+                        />
+                    </Grid>
+                </Border>
                 
                 <!-- Contenu colonne 3 : liste des Éléments à Tester -->
                 <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"

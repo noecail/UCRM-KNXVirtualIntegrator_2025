@@ -8,7 +8,7 @@
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="KNX Virtual Integrator" 
+        Title="KNX Virtual Integrator (Beta Version)" 
         WindowState="Maximized"
         ResizeMode="CanResize"
         WindowStyle="None"
@@ -133,7 +133,7 @@
                     <ColumnDefinition Width="250" /> <!-- Modèles -->
                     <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
                     <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
-                    <ColumnDefinition MinWidth="200"  Width="*" /> <!-- Adresses -->
+                    <ColumnDefinition MinWidth="200" Width="*" />   <!-- Adresses -->
                 </Grid.ColumnDefinitions>
                     
                     
@@ -219,8 +219,7 @@
                                 <ListBox Grid.Row="0"
                                          x:Name="StructuresBox"
                                          ItemsSource="{Binding Structures}"
-                                         SelectedItem="{Binding SelectedStructure, Mode=TwoWay}"
-                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
+                                         SelectedItem="{Binding SelectedStructure, Mode=TwoWay}">
                                 </ListBox>
                                 
                                 <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
@@ -305,7 +304,8 @@
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/> <!-- Titre structure -->
-                            <RowDefinition Height="*" /><!-- Listes modèles-->
+                            <RowDefinition Height="*" />   <!-- Listes modèles-->
+                            <RowDefinition Height="Auto"/> <!--Bandeau inférieur-->
                         </Grid.RowDefinitions>
 
                         <!-- Titre Structure-->
@@ -327,14 +327,17 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/> <!--Liste des Modèles Fonctionnels-->
                                     <RowDefinition Height="*"/>
-                                    <RowDefinition Height="Auto"/> <!--Bandeau inférieur Modèle Fonctionnel-->
                                 </Grid.RowDefinitions>
                                 
                                 <ListBox Grid.Row="0" 
                                          x:Name="ModelsBox"
-                                         ItemsSource="{Binding SelectedModels}"
-                                         SelectedItem="{Binding SelectedModel, Mode=TwoWay}"
-                                         ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
+                                         ItemsSource="{Binding SelectedModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         SelectedItem="{Binding SelectedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding FullName}"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
                                 </ListBox>
                                 
                                 <!-- Bordure qui se place en dessous de la liste, dans l'espace restant. Sert à appliquer le fond et la bordure contre la scrollbar-->
@@ -343,34 +346,34 @@
                                         Style="{StaticResource BorderLight}"
                                         BorderThickness="0,0,1,0">
                                 </Border>
-                                
-                                <!-- Bandeau inférieur -->
-                                <Grid Grid.Row="2">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                            
-                                    <!--Bouton de suppression -->
-                                    <Button Grid.Column="0"
-                                            x:Name="ModelSupprButton"
-                                            Style="{StaticResource DeleteStructureButtonStyleLight}"
-                                            Height="35"
-                                            Click="DeleteFunctionalModelFromListButtonClick"
-                                    />
-                                    <!-- Bouton d'ajout d'élément à tester-->
-                                    <Border Grid.Column="1"
-                                            x:Name="BorderAddModel"
-                                            Style="{StaticResource BorderLight}"
-                                            BorderThickness="0,0,1,0">
-                                        <Button HorizontalAlignment="Stretch"
-                                                Click="AddFunctionalModelToListButtonClick"
-                                                Style="{StaticResource NewSomethingButtonStyle}"
-                                                Tag="{StaticResource CreateFunctionalModel}"/>
-                                    </Border>
-                                </Grid>
                             </Grid>
                         </ScrollViewer>
+                        
+                         <!-- Bandeau inférieur -->
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                    
+                            <!--Bouton de suppression -->
+                            <Button Grid.Column="0"
+                                    x:Name="ModelSupprButton"
+                                    Style="{StaticResource DeleteStructureButtonStyleLight}"
+                                    Height="35"
+                                    Click="DeleteFunctionalModelFromListButtonClick"
+                            />
+                            <!-- Bouton d'ajout d'élément à tester-->
+                            <Border Grid.Column="1"
+                                    x:Name="BorderAddModel"
+                                    Style="{StaticResource BorderLight}"
+                                    BorderThickness="0,0,1,0">
+                                <Button HorizontalAlignment="Stretch"
+                                        Click="AddFunctionalModelToListButtonClick"
+                                        Style="{StaticResource NewSomethingButtonStyle}"
+                                        Tag="{StaticResource CreateFunctionalModel}"/>
+                            </Border>
+                        </Grid>
                     </Grid>
                 </Border>
                 
@@ -422,9 +425,8 @@
                                          Style="{StaticResource StandardTextBoxLight}"
                                          HorizontalAlignment="Left" 
                                          Width="200"
-                                         Text="{Binding SelectedModel.Name, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
+                                         Text="{Binding SelectedModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
                                          />
-                                
                                 
                                 <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -515,7 +517,7 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Type}"
-                                                                             MinWidth="40"
+                                                                             Width="40"
                                                                              HorizontalContentAlignment="Center"
                                                                              Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
@@ -533,7 +535,7 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Address}"
-                                                                             MinWidth="40"
+                                                                             Width="40"
                                                                              HorizontalContentAlignment="Center"
                                                                              Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
@@ -560,7 +562,7 @@
                                                                                 <TextBox 
                                                                                     Text="{Binding ., Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
-                                                                                    MinWidth="40"
+                                                                                    Width="40"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                     />
                                                                             </DataTemplate>
@@ -582,7 +584,7 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Type}"
-                                                                        MinWidth="40"
+                                                                        Width="40"
                                                                         HorizontalContentAlignment="Center"
                                                                         Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
@@ -600,7 +602,7 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Address}"
-                                                                        MinWidth="40"
+                                                                        Width="40"
                                                                         HorizontalContentAlignment="Center"
                                                                         Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
@@ -627,7 +629,7 @@
                                                                                 <TextBox 
                                                                                     Text="{Binding ., Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
-                                                                                    MinWidth="40"
+                                                                                    Width="40"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                 />
                                                                             </DataTemplate>
@@ -660,11 +662,12 @@
                             <Button Style="{StaticResource IconTextButtonStyle}"
                                     Foreground="{StaticResource DarkForegroundBrush}"
                                     Tag="{StaticResource FilterDrawingImage}"
-                                    Content="Filtrer" Margin="10,0"/>
+                                    Content="Afficher tous les modèles" Margin="10,0"
+                                    Click="FilterModelButtonClick"/>
                             <Button Style="{StaticResource IconTextButtonStyle}"
                                     Foreground="{StaticResource DarkForegroundBrush}"
                                     Tag="{StaticResource CheckmarkDrawingImage}"
-                                    Content="{StaticResource Save}"
+                                    Content="Afficher le modèle sélectionné"
                                     Click="SaveModelButtonClick"/>
                         </StackPanel>
                     </Grid>

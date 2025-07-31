@@ -10,7 +10,7 @@ public class WindowManager
     public ConnectionWindow ConnectionWindow { get; }
     public TestConfigWindow TestConfigWindow { get; }
     public ReportCreationWindow ReportCreationWindow { get; }
-    public ModelEditWindow ModelEditWindow {get;}
+    public StructureEditWindow StructureEditWindow {get;}
     
     
     public WindowManager(MainViewModel mainViewModel)
@@ -21,7 +21,7 @@ public class WindowManager
         MainWindow = new MainWindow(mainViewModel, this);
         TestConfigWindow = new TestConfigWindow(mainViewModel);
         ReportCreationWindow = new ReportCreationWindow(mainViewModel);
-        ModelEditWindow = new ModelEditWindow(mainViewModel);
+        StructureEditWindow = new StructureEditWindow(mainViewModel);
     }
 
     public void ShowMainWindow() {
@@ -50,8 +50,8 @@ public class WindowManager
         ReportCreationWindow.Focus();
     }
 
-    public void ShowModelEditWindow() {
-        ModelEditWindow.ShowDialog();
-        ModelEditWindow.Focus();
+    public void ShowStructureEditWindow() {
+        StructureEditWindow.ShowDialog();
+        StructureEditWindow.Focus();
     }
 }

@@ -445,7 +445,7 @@ public partial class MainWindow
         _viewModel.SelectedStructure = _viewModel.Structures.Last();
         PredefinedStructuresScrollViewer.ScrollToEnd();
         
-        _windowManager.ShowModelEditWindow(); // ouverture de la fenêtre d'édition de MF
+        _windowManager.ShowStructureEditWindow(); // ouverture de la fenêtre d'édition de MF
     }
     
     /// <summary>
@@ -540,9 +540,7 @@ public partial class MainWindow
         // tous les supprimer dans l'ordre inverse pour éviter que les modèles changent d'index avant d'avoir été supprimés
         foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
             _viewModel.DeleteFunctionalModelFromListCommand.Execute(indexToDelete);
-        if (_viewModel.SelectedModels is null) return;
-        foreach (var model in _viewModel.SelectedModels)
-            Console.WriteLine(model);
+        
     }
     
     
@@ -595,10 +593,22 @@ public partial class MainWindow
         // TODO : récupérer le selected element et l'index du test
     }
 
-
+    /// <summary>
+    /// Currently used to display the SelectedModel in the console
+    /// Delete later
+    /// </summary>
     private void SaveModelButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.ModelConsoleWriteCommand.Execute(_viewModel.SelectedModel);
+        _viewModel.SelectedModelConsoleWriteCommand.Execute(null);
+    }
+
+    /// <summary>
+    /// Currently used to display all the models in the console
+    /// Delete later
+    /// </summary>
+    private void FilterModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.AllModelsConsoleWriteCommand.Execute(null);
     }
     
     

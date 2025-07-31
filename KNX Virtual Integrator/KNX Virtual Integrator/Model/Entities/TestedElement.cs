@@ -104,7 +104,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 result = result && TestsIe[i].IsEqual(other.TestsIe[i]);
             }*/
-            return  result;
+            return result;
         }
         
         

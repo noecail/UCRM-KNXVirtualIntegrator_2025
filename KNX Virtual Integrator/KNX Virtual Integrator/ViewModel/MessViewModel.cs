@@ -66,7 +66,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// Command that extracts a group address using the GroupAddressManager.
         /// </summary>
         public ICommand ExtractGroupAddressCommand { get; private set; }
-        
+
 
         /// <summary>
         /// Command that creates a debug archive with optional OS info, hardware info, and imported projects.
@@ -82,7 +82,10 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <param name="../FileFinder.fileName">The name of the file to find.</param>
         public ICommand FindZeroXmlCommand { get; private set; }
         
-        public ICommand ModelConsoleWriteCommand { get; private set; }
+        private ICommand ModelConsoleWriteCommand { get; set; }
+        public ICommand AllModelsConsoleWriteCommand { get; private set; }
+        public ICommand SelectedModelConsoleWriteCommand { get; private set; }
+
         
         public ICommand CreateStructureDictionaryCommand { get; private set; }
 
@@ -124,7 +127,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         
         public AsyncRelayCommand RefreshInterfacesCommand { get; }
 
-        
+
         /// <summary>
         /// Command that saves the current application settings.
         /// </summary>

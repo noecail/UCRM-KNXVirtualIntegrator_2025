@@ -901,8 +901,7 @@
                             <!-- Contenu de l'élément -->
                             <ContentPresenter Grid.Column="1"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              Content="{TemplateBinding Content}">
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                             </ContentPresenter>
                             <!-- Icône de sélection -->
                             <Image Grid.Column="2"
@@ -990,8 +989,7 @@
                             <!-- Contenu de l'élément -->
                             <ContentPresenter Grid.Column="1"
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              Content="{TemplateBinding Content}">
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
                             </ContentPresenter>
                             <!-- Icône de sélection -->
                             <Image Grid.Column="2"

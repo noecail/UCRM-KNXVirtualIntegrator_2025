@@ -13,7 +13,7 @@ namespace KNX_Virtual_Integrator.View.Windows;
 /// </summary>
 
 
-public partial class ModelEditWindow
+public partial class StructureEditWindow
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
@@ -26,9 +26,9 @@ public partial class ModelEditWindow
     ------------------------------------------------------------------------------------------------ */
     
     /// <summary>
-    /// Default constructor for ModelEditWindow
+    /// Default constructor for StructureEditWindow
     /// </summary>
-    public ModelEditWindow(MainViewModel mainViewModel)
+    public StructureEditWindow(MainViewModel mainViewModel)
     {
         InitializeComponent();
         
@@ -42,7 +42,7 @@ public partial class ModelEditWindow
     /// <summary>
     /// Handles the Model Edit window closing event by canceling the closure, restoring previous settings, and hiding the window.
     /// </summary>
-    private void ClosingModelEditWindow(object? sender, CancelEventArgs e)
+    private void ClosingStructureEditWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
         //UpdateWindowContents(true, true, true);
@@ -73,11 +73,11 @@ public partial class ModelEditWindow
     
     private void ApplyThemeToWindow()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("ModelEditWindow.ApplyThemeToWindow is not implemented");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyThemeToWindow is not implemented");
     }
     private void ApplyScaling()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("ModelEditWindow.ApplyScaling is not implemented");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyScaling is not implemented");
     }
     
     

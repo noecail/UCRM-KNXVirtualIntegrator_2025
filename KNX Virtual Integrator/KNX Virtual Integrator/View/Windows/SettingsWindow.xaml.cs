@@ -1710,7 +1710,7 @@ public partial class SettingsWindow
             previousAppLang != _viewModel.AppSettings.AppLang, 
             previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
-        App.WindowManager?.ModelEditWindow.UpdateWindowContents(
+        App.WindowManager?.StructureEditWindow.UpdateWindowContents(
             previousAppLang != _viewModel.AppSettings.AppLang, 
             previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);

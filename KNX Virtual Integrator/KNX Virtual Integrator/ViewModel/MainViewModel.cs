@@ -114,62 +114,84 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         ProjectFolderPath = "";
 
+        AllModelsConsoleWriteCommand = new Commands.RelayCommand<object>(_ => 
+            {
+                foreach (var modelList in _functionalModelList.FunctionalModels)
+                {
+                    foreach (var model in modelList)
+                    {
+                        ModelConsoleWriteCommand?.Execute(model);
+                    }
+                }
+                
+            }
+        );
+
+        SelectedModelConsoleWriteCommand = new Commands.RelayCommand<object>(_ =>
+            ModelConsoleWriteCommand?.Execute(SelectedModel)
+        );
 
         ModelConsoleWriteCommand = new Commands.RelayCommand<FunctionalModel>(model =>
-        {
-            Console.WriteLine("Starting ModelConsoleWriteCommand");
-            if (model is null) {
-                Console.WriteLine("Model is null");
-                return; }
-
-            Console.WriteLine("Accessing the selected model : " + model.Name);
-            var i = 1;
-            if (model.ElementList.Count == 0) {
-                Console.WriteLine(model.Name + " is empty");
-                return; }
-            
-            foreach (var testedelement in model.ElementList)
             {
-                Console.WriteLine("--- Tested Element : " + i + "---");
-                    
-                Console.Write("DPT(s) to send         : ");
-                foreach (var dpttosend in testedelement.TestsCmd)
-                    Console.Write(dpttosend.Type + "|");
-                Console.WriteLine();
-                Console.Write("Address(es) to send    : ");
-                foreach (var dpttosend in testedelement.TestsCmd)
-                    Console.Write(dpttosend.Address + "|");
-                Console.WriteLine();
-                Console.Write("Value(s) to send       : ");
-                foreach (var dpttosend in testedelement.TestsCmd)
-                {
-                    foreach (var value in dpttosend.Value)
-                        Console.Write(value + ",");
-                    Console.Write("|");
+                if (model is null)
+                { 
+                    Console.WriteLine("Model is null"); 
+                    return;
                 }
-                Console.WriteLine();
+                Console.WriteLine("Accessing the model : " + model.Name);
+                var i = 1;
                     
-                Console.Write("DPT(s) to receive      : ");
-                foreach (var dpttoreceive in testedelement.TestsIe)
-                    Console.Write(dpttoreceive.Type + "|");
-                Console.WriteLine();
-                Console.Write("Address(es) to receive : ");
-                foreach (var dpttoreceive in testedelement.TestsIe)
-                    Console.Write(dpttoreceive.Address + "|");
-                Console.WriteLine();
-                Console.Write("Value(s) to receive    : ");
-                foreach (var dpttoreceive in testedelement.TestsIe) 
+                if (model.ElementList.Count == 0)
                 {
-                    foreach (var value in dpttoreceive.Value) 
-                        Console.Write(value + ",");
-                    Console.Write("|"); 
-                } 
-                Console.WriteLine();
-                Console.WriteLine("----------------------------");
-                Console.WriteLine();
-                i++;
+                    Console.WriteLine(model.Name + " is empty");
+                    return;
+                }
+                
+                
+                foreach (var testedelement in model.ElementList)
+                {
+                    Console.WriteLine("--- Tested Element : " + i + "---");
+
+                    Console.Write("DPT(s) to send         : ");
+                    foreach (var dpttosend in testedelement.TestsCmd)
+                        Console.Write(dpttosend.Type + "|");
+                    Console.WriteLine();
+                    Console.Write("Address(es) to send    : ");
+                    foreach (var dpttosend in testedelement.TestsCmd)
+                        Console.Write(dpttosend.Address + "|");
+                    Console.WriteLine();
+                    Console.Write("Value(s) to send       : ");
+                    foreach (var dpttosend in testedelement.TestsCmd)
+                    {
+                        foreach (var value in dpttosend.Value)
+                            Console.Write(value + ",");
+                        Console.Write("|");
+                    }
+
+                    Console.WriteLine();
+
+                    Console.Write("DPT(s) to receive      : ");
+                    foreach (var dpttoreceive in testedelement.TestsIe)
+                        Console.Write(dpttoreceive.Type + "|");
+                    Console.WriteLine();
+                    Console.Write("Address(es) to receive : ");
+                    foreach (var dpttoreceive in testedelement.TestsIe)
+                        Console.Write(dpttoreceive.Address + "|");
+                    Console.WriteLine();
+                    Console.Write("Value(s) to receive    : ");
+                    foreach (var dpttoreceive in testedelement.TestsIe)
+                    {
+                        foreach (var value in dpttoreceive.Value)
+                            Console.Write(value + ",");
+                        Console.Write("|");
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("----------------------------");
+                    Console.WriteLine();
+                    i++;
+                }
             }
-        }
         );
 
 
@@ -295,11 +317,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         AddFunctionalModelToListCommand = new Commands.RelayCommand<object>(model =>
             {
-                if (SelectedStructure!=null)
+                if (SelectedStructure != null)
+                {
                     if (model is FunctionalModel myModel)
-                        _functionalModelList.AddToList(SelectedStructure.Key-1,myModel,false);
+                        _functionalModelList.AddToList(SelectedStructure.Key - 1, myModel, false);
                     else
-                        _functionalModelList.AddToList(SelectedStructure.Key-1);
+                        _functionalModelList.AddToList(SelectedStructure.Key - 1);
+                    SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key - 1] : null;
+                    /*
+                     * Je le garde dans un coin pour le moment
+                     * SelectedModels?.Clear();
+                     * foreach (var newmodel in _functionalModelList.FunctionalModels[SelectedStructure.Key - 1])
+                     * SelectedModels?.Add(newmodel);
+                     * */
+                }
             }
         );
         
@@ -314,7 +345,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 if (SelectedStructure != null)
                 {
                     var indexStructure = SelectedStructure.Key-1;
-                    _functionalModelList.DeleteFromList(indexStructure,indexModel);
+                    _functionalModelList.DeleteFromList(indexStructure, indexModel);
                 }
                 
                 SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;

@@ -39,11 +39,13 @@ namespace KNX_Virtual_Integrator.ViewModel
             get => _selectedModels;
             set
             {
-                if (_selectedModels != null && _selectedModels.Equals(value) && _selectedModels.Count == value.Count)
+                if (_selectedModels != null && value != null && _selectedModels.Equals(value) && _selectedModels.Count == value.Count)
                     return;
                 _selectedModels = value;
-                SelectedModel = null; // reset SelectedModel if SelectedModels has changed
-                WhenPropertyChanged(nameof(SelectedModels));
+                
+                SelectedModel = null;
+                WhenPropertyChanged(nameof(SelectedModel));
+                WhenPropertyChanged(nameof(SelectedModels)); 
             }
         }
         
@@ -81,9 +83,13 @@ namespace KNX_Virtual_Integrator.ViewModel
                 WhenPropertyChanged(nameof(SelectedStructure));
                 
                 // updating the second column
-                SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;
-                SelectedModel = SelectedModels?.First();
+                if (SelectedStructure != null)
+                {
+                    var source = _functionalModelList.FunctionalModels[value.Key-1];
+                    SelectedModels = new ObservableCollection<FunctionalModel>(source);
+                }
                 
+                //SelectedModel = SelectedModels?.First(); //bonne idée mais rallonge le temps d'affichage alors que parfois on veut simplement balayer les structures
             }
         }
         
