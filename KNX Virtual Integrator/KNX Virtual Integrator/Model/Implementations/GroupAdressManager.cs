@@ -73,9 +73,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         if (null == ns || doc == null)
             return;
         var groupAddresses = doc.Descendants(ns + "GroupRanges");
-        Console.WriteLine(groupAddresses.Elements().ToList().Count);
+        //Console.WriteLine(groupAddresses.Elements().ToList().Count);
         foreach (var i in groupAddresses.Elements())
-            Console.WriteLine(i.Name);
+            //Console.WriteLine(i.Name);
 
        /* if (doc == null) return;
         var project = doc.Elements();
@@ -398,7 +398,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     var modelName = modelStructure.Attribute("Name")?.Value ?? "";
                     modelName = modelName.Replace(" ", "_");
                     List<FunctionalModel> newFunctionalModels = []; // new list to store all the functional model of the next structure
-                    Console.WriteLine("MàJ des newmodels !!!!!!!!!!!");
+                    //Console.WriteLine("MàJ des newmodels !!!!!!!!!!!");
                     for (var i = 0; i < structureList.Count; i++) //Takes all the commands
                     {
                         var objectType = structureList[i].Elements().ToList();
@@ -409,9 +409,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
 
                         var prefix = FindMajorityPrefix(names);
-                        Console.WriteLine("Le préfixe est : " + prefix);
+                       // Console.WriteLine("Le préfixe est : " + prefix);
 
-                        Console.WriteLine("La taille est de "+ objectType.Count);
+                       // Console.WriteLine("La taille est de "+ objectType.Count);
                         for (var j = 0; j < objectType.Count; j++)
                         {
                             if (i == 0)
@@ -425,7 +425,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 {
                                     exName = string.Join("",exName.Split('_')[1..]); //Takes the name of the object, except the first word 
                                 }
-                                Console.WriteLine("On a ajoutéééééééééééééééééééééééééééééé "+exName);
+                               // Console.WriteLine("On a ajoutéééééééééééééééééééééééééééééé "+exName);
                                 newFunctionalModels.Add(new FunctionalModel(exName, j + 1));
                             }
 
@@ -452,8 +452,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                          objectType[j].Attribute("Name")?.Value
                                              .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
                             {
-                                Console.WriteLine("On veut ajouter "+   objectType[j].Attribute("Name")?.Value!);
-                                Console.WriteLine(newFunctionalModels.Count + " et " + j);
+                               // Console.WriteLine("On veut ajouter "+   objectType[j].Attribute("Name")?.Value!);
+                               // Console.WriteLine(newFunctionalModels.Count + " et " + j);
                                 newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
                                     [[]],newName));
                             }
