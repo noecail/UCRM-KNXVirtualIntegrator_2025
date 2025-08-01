@@ -1,4 +1,5 @@
 ﻿using System.Xml.Linq;
+using iText.StyledXmlParser.Jsoup.Select;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
@@ -83,7 +84,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         var modelStructures = project.Elements("GroupAddresses");
         Console.WriteLine("Le doc n'est pas nul, il y a " + modelStructures.Elements().ToList().Count + " enfants de GroupAddresses");*/
 
-        NewProcessStandardXmlFile(groupAddresses, functionalModelList);
+        NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);
 
     }
     
@@ -394,27 +395,43 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 foreach (var modelStructure in modelStructures)
                 {
                     var structureList = modelStructure.Elements().ToList();
-                    var modelName = modelStructure.Attribute("Name")?.Value!;
+                    var modelName = modelStructure.Attribute("Name")?.Value ?? "";
                     modelName = modelName.Replace(" ", "_");
-                    List<FunctionalModel>
-                        newFunctionalModels = []; // new list to store all the functional model of the next structure
+                    List<FunctionalModel> newFunctionalModels = []; // new list to store all the functional model of the next structure
+                    Console.WriteLine("MàJ des newmodels !!!!!!!!!!!");
                     for (var i = 0; i < structureList.Count; i++) //Takes all the commands
                     {
                         var objectType = structureList[i].Elements().ToList();
+                        List<String> names = [];
+                        for (var j = 0; j < objectType.Count; j++)
+                        {
+                            names.Add(objectType[j].Attribute("Name")?.Value ?? "");
+                        }
+
+                        var prefix = FindMajorityPrefix(names);
+                        Console.WriteLine("Le préfixe est : " + prefix);
+
+                        Console.WriteLine("La taille est de "+ objectType.Count);
                         for (var j = 0; j < objectType.Count; j++)
                         {
                             if (i == 0)
                             {
                                 var exName = objectType[j].Attribute("Name")?.Value!;
                                 exName = exName.Replace(" ", "_");
-                                exName = modelName + "_" +
-                                         exName.Split('_')
-                                             [^1]; //Takes the structure name plus the last word of the model
+                                if (!string.IsNullOrEmpty(modelName))// && exName.Contains(prefix))
+                                    exName = modelName + "_" + exName.Split('_')[^1]; //Takes the structure name plus the last word of the model
+                                    //exName = exName.Replace(prefix + "_", "");
+                                else
+                                {
+                                    exName = string.Join("",exName.Split('_')[1..]); //Takes the name of the object, except the first word 
+                                }
+                                Console.WriteLine("On a ajoutéééééééééééééééééééééééééééééé "+exName);
                                 newFunctionalModels.Add(new FunctionalModel(exName, j + 1));
                             }
 
-                            int newType = 1;
-                            if (objectType[j].Attribute("DPTs") != null)
+                            var newType = 1;
+                            var newName = objectType[j].Attribute("Name")?.Value ?? "";
+                            if (objectType[j].Attribute("DPTs") != null) 
                                 newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                     .Split('-')[1]!); //gets the type between the dashes in the xml
                             var newAddress = objectType[j].Attribute("Address")?.Value!;
@@ -427,7 +444,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     newFunctionalModels[j].AddElement(new TestedElement([1],
                                         [newFunctionalModels[j].ElementList[0].TestsCmd[0].Address], [
                                             []
-                                        ]));
+                                        ],newName));
                                     newFunctionalModels[j].ElementList[^1].AddDptToCmd(newType, newAddress, []);
                                 }
                             }
@@ -435,8 +452,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                          objectType[j].Attribute("Name")?.Value
                                              .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
                             {
+                                Console.WriteLine("On veut ajouter "+   objectType[j].Attribute("Name")?.Value!);
+                                Console.WriteLine(newFunctionalModels.Count + " et " + j);
                                 newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
-                                    [[]]));
+                                    [[]],newName));
                             }
                         }
                     }
@@ -454,13 +473,13 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                          .Contains("stop", StringComparison.OrdinalIgnoreCase) ??
                                      false)) //If the name doesn't start with anything command related nor contains stop, it's an IE
                             {
-                                var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
-                                    .FirstOrDefault(char.IsDigit)
-                                    .ToString()!);
+                                int newType = 0 ;
+                                if (objectType[j].Attribute("DPTs") != null)
+                                    newType = int.Parse(objectType[j].Attribute("DPTs")?.Value.Split('-')[1]!); //gets the type between the dashes in the xml
                                 var newAddress = objectType[j].Attribute("Address")?.Value!;
                                 var newDpt = new DataPointType(newType, newAddress, []);
                                 for (var k = 0;
-                                     k < newFunctionalModels[0].ElementList.Count;
+                                     k < newFunctionalModels[j].ElementList.Count;
                                      k++) //For each element, if for the same command 
                                 {
                                     var newElement = newFunctionalModels[j].ElementList[k];
@@ -593,5 +612,95 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         // Si aucun chevauchement n'est trouvé, retourne 2.
         return 2;
     }
+    
+    /// <summary>
+    /// Finds the biggest prefix corresponding to at least threshold (default 90 %) of the addresses
+    /// </summary>
+    /// <param name="strings">List of string to </param>
+    /// <param name="threshold">percentage of names that need to have the same prefix</param>
+    /// <returns></returns>
+    string FindMajorityPrefix(List<string> strings, double threshold = 0.9)
+    {
+        if (strings.Count == 0)
+            return string.Empty;
 
+        int n = strings.Count;
+        int minConsideredLength = strings
+            .OrderByDescending(s => s.Length)
+            .Take((int)Math.Ceiling(n * threshold)) // on ne garde que les plus longues qui forment la majorité
+            .Min(s => s.Length);
+
+        string bestPrefix = "";
+
+        // On teste tous les préfixes jusqu'à la plus courte chaîne parmi la majorité
+        for (int len = 1; len <= minConsideredLength; len++)
+        {
+            var prefixCounts = new Dictionary<string, int>();
+
+            foreach (var s in strings)
+            {
+                if (s.Length < len) continue; // on ignore les bruits trop courts
+                string prefix = s.Substring(0, len);
+                if (!prefixCounts.ContainsKey(prefix))
+                    prefixCounts[prefix] = 0;
+                prefixCounts[prefix]++;
+            }
+
+            var bestAtThisLength = prefixCounts
+                .OrderByDescending(kv => kv.Value)
+                .First();
+
+            // Vérifier si ce préfixe est majoritaire
+            if (bestAtThisLength.Value >= n * threshold)
+            {
+                bestPrefix = bestAtThisLength.Key;
+            }
+            else
+            {
+                break; // dès que ça échoue, on arrête
+            }
+        }
+
+        return bestPrefix;
+    }
+
+    public int FindSuffixInModels(string suffix, List<FunctionalModel> models)
+    {
+        if ( string.IsNullOrEmpty(suffix) || models.Count == 0) return -1;
+        for (var i = 0; i < models.Count; i++) // If the suffix is directly in the model name give it
+        {
+            if (models[i].Name.Contains(suffix))
+                return i;
+        }
+        for (var i = 0; i < models.Count; i++)//Otherwise check the name of all the DPTs if they contain it
+        {
+            foreach (var element in models[i].ElementList)
+            {
+                if (element.TestsCmd[0].Name.Contains(suffix))
+                    return i;
+            }
+        }
+        return -1; //If not found, returns 0
+    }
+
+    /// <summary>
+    /// Finds in a model the index of the element containing the right string
+    /// </summary>
+    /// <param name="stringToFind">String to find in the name of the dpt</param>
+    /// <param name="model">The mdoel where the string has to be found</param>
+    /// <returns></returns>
+    public int FindStringInElement(string stringToFind, FunctionalModel model)
+    {
+        for (var i = 0; i < model.ElementList.Count; i++)
+        {
+            foreach (var dpt in model.ElementList[i].TestsCmd)
+            {
+                if (dpt.Name.Contains(stringToFind))
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
 }

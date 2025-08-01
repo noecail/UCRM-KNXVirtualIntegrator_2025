@@ -11,6 +11,8 @@ namespace KNX_Virtual_Integrator.Model.Entities;
 /// </summary>
 public class DataPointType : INotifyPropertyChanged
 {
+    public string Name { get; set; } = "";
+
     // Class used only for Value collections, used by the UI to access and modify BigInteger values, which do not raise notifications by default
     public class BigIntegerItem : INotifyPropertyChanged
     {
@@ -106,6 +108,22 @@ public class DataPointType : INotifyPropertyChanged
 
     public DataPointType(int type, string  address, List<GroupValue?> values)
     {
+        Type = type;
+        Address = address;
+        GetSizeOf();
+        Value = [];
+        IntValue = [];
+        foreach (var value in values)
+        {
+            Value.Add(value);
+            if (Value[^1] != null)
+                IntValue.Add(new BigIntegerItem(new BigInteger(Value[^1]!.Value)));
+        }
+    }
+    
+    public DataPointType(int type, string  address, List<GroupValue?> values, string name)
+    {
+        Name = name;
         Type = type;
         Address = address;
         GetSizeOf();
@@ -358,7 +376,7 @@ public class DataPointType : INotifyPropertyChanged
         Value.Clear();
         foreach (var value in IntValue)
         {
-            if (value != null)
+            if (value.Value != null)
                 Value.Add(new GroupValue(value.Value.Value.ToByteArray()));
         }
     }

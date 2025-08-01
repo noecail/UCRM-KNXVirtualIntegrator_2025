@@ -49,6 +49,16 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
         } 
         
+        public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd, string name)
+        {
+            TestsCmd = []; 
+            TestsIe = [];
+            for (var i = 0; i < typeCmd.Length; i++)
+            {
+                TestsCmd.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i], name));
+            }
+        } 
+        
         public TestedElement(TestedElement element)
         {
             TestsCmd = []; 
