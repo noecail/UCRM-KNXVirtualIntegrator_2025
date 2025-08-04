@@ -35,7 +35,7 @@
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
             <StackPanel Background="{StaticResource NoColorBrush}"  HorizontalAlignment="Center" VerticalAlignment="Center">
-                <Image Source="{StaticResource LogoDrawingImage}" Height="25" Margin="2"/>
+                <Image Source="{StaticResource LogoDrawingImage}" Height="15" Margin="2,6,8,2"/>
             </StackPanel>
         </mah:WindowCommands>
     </mah:MetroWindow.LeftWindowCommands>
@@ -234,23 +234,33 @@
                         <!-- Bandeau inférieur -->
                         <Grid Grid.Row="2">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>    <!--Bouton création-->
+                                <ColumnDefinition Width="Auto"/> <!--Bouton édition-->
+                                <ColumnDefinition Width="Auto"/> <!--Bouton suppression-->
                             </Grid.ColumnDefinitions>
                             
+                            <!--Bouton de création-->
+                            <Button Grid.Column="0" HorizontalAlignment="Stretch"
+                                    Click="CreateStructureButtonClick"
+                                    Style="{StaticResource NewSomethingButtonStyle}"
+                                    Tag="{StaticResource NewStructure}"
+                            />
+                            
+                            <!--Bouton d'édition-->
+                            <Button Grid.Column="1"
+                                    x:Name="EditStructButton"
+                                    Style="{StaticResource EditStructureButtonStyleLight}"
+                                    Height="35"
+                                    Padding="7"
+                                    Click="EditStructureButtonClick"
+                            />
+                            
                             <!--Bouton de suppression -->
-                            <Button Grid.Column="0"
+                            <Button Grid.Column="2"
                                     x:Name="StructSupprButton"
                                     Style="{StaticResource DeleteStructureButtonStyleLight}"
                                     Height="35"
                                     Click="DeleteStructuresButtonClick"
-                            />
-                            
-                            <!--Bouton de création-->
-                            <Button Grid.Column="1" HorizontalAlignment="Stretch"
-                                    Click="CreateStructureButtonClick"
-                                    Style="{StaticResource NewSomethingButtonStyle}"
-                                    Tag="{StaticResource NewStructure}"
                             />
                         </Grid>
                     </Grid>
@@ -517,7 +527,7 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Type}"
-                                                                             Width="40"
+                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                              HorizontalContentAlignment="Center"
                                                                              Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
@@ -535,7 +545,7 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Address}"
-                                                                             Width="40"
+                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                              HorizontalContentAlignment="Center"
                                                                              Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
@@ -562,7 +572,7 @@
                                                                                 <TextBox 
                                                                                     Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
-                                                                                    Width="40"
+                                                                                    Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                     />
                                                                             </DataTemplate>
@@ -584,9 +594,9 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Type}"
-                                                                        Width="40"
-                                                                        HorizontalContentAlignment="Center"
-                                                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                            HorizontalContentAlignment="Center"
+                                                                            Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
@@ -602,9 +612,9 @@
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Address}"
-                                                                        Width="40"
-                                                                        HorizontalContentAlignment="Center"
-                                                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                             HorizontalContentAlignment="Center"
+                                                                             Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                     />
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
@@ -629,7 +639,7 @@
                                                                                 <TextBox 
                                                                                     Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
-                                                                                    Width="40"
+                                                                                    Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
                                                                                 />
                                                                             </DataTemplate>
@@ -774,7 +784,6 @@
                                 <TreeViewItem Header="Cmd_Compteur_EnergieEclairages_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/4/1"/>
                             </TreeViewItem>
                         </TreeViewItem>
-
                         <TreeViewItem Header="SCENARIO SALON" IsExpanded="True">
                             <TreeViewItem Header="ON/OFF ECL SALON" IsExpanded="True">
                                 <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/1"/>
@@ -782,10 +791,10 @@
                             </TreeViewItem>
                         </TreeViewItem>
                     </TreeView>
+                     
                 </Border>
             </Grid>
         </Border>
-    </Grid>
-    </ScrollViewer> 
-
+        </Grid>
+    </ScrollViewer>
 </mah:MetroWindow>

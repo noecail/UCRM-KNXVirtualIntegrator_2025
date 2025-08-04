@@ -458,6 +458,12 @@ public partial class MainWindow
         // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
     }
 
+    private void EditStructureButtonClick(object sender, RoutedEventArgs e)
+    {
+        if (_viewModel.SelectedStructure != null)
+            _windowManager.ShowStructureEditWindow(); // ouvre la fenêtre d'édition selon la structure sélectionnée
+    }
+    
     private void DeleteStructuresButtonClick(object sender, RoutedEventArgs e)
     {
         // Store all indexes to delete

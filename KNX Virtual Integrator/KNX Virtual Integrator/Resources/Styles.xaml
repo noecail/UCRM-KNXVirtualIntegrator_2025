@@ -252,6 +252,37 @@
         </Style.Triggers>
     </Style>
     
+    <!-- Style pour le bouton de suppression de Modèle Fonctionnel -->
+    <Style x:Key="EditStructureButtonStyleLight" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}" />
+        <Setter Property="Tag" Value="{StaticResource PencilDrawingImage}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Tag" Value="{StaticResource BlackPencilDrawingImage}" />
+                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="EditStructureButtonStyleDark" TargetType="Button" BasedOn="{StaticResource EditStructureButtonStyleLight}">
+        <Setter Property="Background" Value="{StaticResource DarkerGrayBackgroundBrush}" />
+        <Setter Property="Tag" Value="{StaticResource WhitePencilDrawingImage}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBorderBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Tag" Value="{StaticResource BlackPencilDrawingImage}" />
+                <Setter Property="Background" Value="{StaticResource DarkBlueMouseOverBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <!-- Style pour le bouton refresh -->
     <Style x:Key="RefreshButton" TargetType="Button">
