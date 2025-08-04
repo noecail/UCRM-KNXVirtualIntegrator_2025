@@ -362,7 +362,23 @@
     <DrawingImage x:Key="AddDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V60 H60 V0 H0 Z">
-                <GeometryDrawing Brush="#FFFFFFFF" Geometry="F1 M60,60z M0,0z M0,0L0,60 60,60 60,0 0,0z M51,32L32,32 32,51 28,51 28,32 9,32 9,28 28,28 28,9 32,9 32,28 51,28 51,32z" />
+                <GeometryDrawing Brush="{StaticResource WhiteBackgroundBrush }" Geometry="F1 M60,60z M0,0z M0,0L0,60 60,60 60,0 0,0z M51,32L32,32 32,51 28,51 28,32 9,32 9,28 28,28 28,9 32,9 32,28 51,28 51,32z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="GrayAddDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V60 H60 V0 H0 Z">
+                <GeometryDrawing Brush="{StaticResource GrayBorderBrush}" Geometry="F1 M60,60z M0,0z M0,0L0,60 60,60 60,0 0,0z M51,32L32,32 32,51 28,51 28,32 9,32 9,28 28,28 28,9 32,9 32,28 51,28 51,32z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+   
+    <DrawingImage x:Key="BlackAddDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V60 H60 V0 H0 Z">
+                <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M60,60z M0,0z M0,0L0,60 60,60 60,0 0,0z M51,32L32,32 32,51 28,51 28,32 9,32 9,28 28,28 28,9 32,9 32,28 51,28 51,32z" />
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>

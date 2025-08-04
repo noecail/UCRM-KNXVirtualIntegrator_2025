@@ -642,9 +642,24 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Style pour le bouton d'ajout de Test dans un Élémént À Tester -->
+    <Style x:Key="AddTestButtonStyleLight" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}" />
+        <Setter Property="Tag" Value="{StaticResource GrayAddDrawingImage}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Tag" Value="{StaticResource BlackAddDrawingImage}" />
+                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
-
-    <!-- Style pour le bouton rechercher -->
     <Style x:Key="SearchButtonLight" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
         <Setter Property="Tag" Value="{StaticResource SearchDrawingImageLight}" />
         <Setter Property="BorderBrush" Value="{StaticResource GrayBrush}" />

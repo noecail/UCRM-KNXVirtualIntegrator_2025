@@ -16,30 +16,42 @@ public class DataPointType : INotifyPropertyChanged
     // Class used only for Value collections, used by the UI to access and modify BigInteger values, which do not raise notifications by default
     public class BigIntegerItem : INotifyPropertyChanged
     {
-        private BigInteger? _value;
-        public BigInteger? Value
+        private BigInteger? _bigIntegervalue;
+        public BigInteger? BigIntegerValue
         {
-            get => _value;
+            get => _bigIntegervalue;
             set
             {
-                if (_value != value)
+                if (_bigIntegervalue != value)
                 {
-                    _value = value;
+                    _bigIntegervalue = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        public BigIntegerItem(BigInteger BI)
+        public BigIntegerItem(BigInteger bi)
         {
-            Value = BI;
+            BigIntegerValue = bi;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string? name = null)
+
+        private void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+    
+    // List of GroupValues to send/read
+    // GroupValues is the type understood by KNX
+    // GroupValues cannot be accessed/modified on the UI because they are not a common type
+    public List<GroupValue?> Value { get; set; } // Value to send or expected to be read
 
+    // Collection that is parallel to the GroupValues one
+    // Every change on this collection is copied onto the list
+    // BigIntegers are made modifiable through the BigIntegerItem class
+    private ObservableCollection<BigIntegerItem?> _intValue = [];
+    public ObservableCollection<BigIntegerItem> IntValue { get; } = new ObservableCollection<BigIntegerItem>();
+    
     private int _type;
     public int Type // DPT code
     {
@@ -54,20 +66,6 @@ public class DataPointType : INotifyPropertyChanged
 
     private int _size; // Size of the DPT
     
-    public List<GroupValue?> Value { get; set; } // Value to send or expected to be read
-
-    private ObservableCollection<BigInteger?> _intValue = [];
-
-    public ObservableCollection<BigIntegerItem> IntValue { get; }= new ObservableCollection<BigIntegerItem>();
-    /*{
-        get => _intValue;
-        set
-        {
-            _intValue = value;
-            OnPropertyChanged();
-        }
-    }*/
-
     private string _address = "";
 
     public string Address
@@ -332,7 +330,7 @@ public class DataPointType : INotifyPropertyChanged
         var res = true;
         foreach (var value in IntValue)
         {
-            res = res && value.Value <= max && value.Value >= min;
+            res = res && value.BigIntegerValue <= max && value.BigIntegerValue >= min;
         }
         return res;
     }
@@ -343,7 +341,7 @@ public class DataPointType : INotifyPropertyChanged
     public void AddValue(GroupValue? value)
     {
         Value.Add(value);
-        // IntValue.Add(new BigInteger(value!.Value));
+        IntValue.Add(new BigIntegerItem(new BigInteger(value!.Value))); //celle qui m'intéresse, Noé
     }
     
     /// <summary>
@@ -352,11 +350,11 @@ public class DataPointType : INotifyPropertyChanged
     public void RemoveValue(int index)
     {
         Value.RemoveAt(index);
-       // IntValue.RemoveAt(index);
+        // IntValue.RemoveAt(index);
     }
 
     /// <summary>
-    /// Updates the BigInteger array by copying the intValue array and turning it into group values
+    /// Updates the BigIntegerItem array by copying the Value array and turning it into big integer values
     /// </summary>
     public void UpdateIntValue()
     {
@@ -376,8 +374,8 @@ public class DataPointType : INotifyPropertyChanged
         Value.Clear();
         foreach (var value in IntValue)
         {
-            if (value.Value != null)
-                Value.Add(new GroupValue(value.Value.Value.ToByteArray()));
+            if (value.BigIntegerValue != null)
+                Value.Add(new GroupValue(value.BigIntegerValue.Value.ToByteArray()));
         }
     }
     

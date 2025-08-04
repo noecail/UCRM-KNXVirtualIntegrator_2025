@@ -477,12 +477,14 @@
                                                             <RowDefinition Height="Auto"/>   <!--"Envoi" + Réception-->
                                                             <RowDefinition Height="Auto"/>   <!--"Type de DPT" + Type(s) Cmd + Type(s) IE-->
                                                             <RowDefinition Height="Auto"/>   <!--"Adresse liée" + @Cmd + @IE-->
-                                                            <RowDefinition Height="Auto"/>   <!--"Valeurs" + Valeur(s) Cmd + Valeur(s) IE-->
+                                                            <RowDefinition Height="Auto"/>   <!--"Valeurs" + Valeur(s) Cmd + Valeur(s) IE + Bouton supprimer Test-->
+                                                            <RowDefinition Height="Auto"/>   <!--Bouton ajouter Test-->
                                                         </Grid.RowDefinitions>
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto"/>  <!--Titres-->
                                                             <ColumnDefinition Width="Auto"/>  <!--Cmd(s)-->
                                                             <ColumnDefinition Width="Auto"/>  <!--IE(s)-->
+                                                            <ColumnDefinition Width="Auto"/>  <!--Add/Remove Test-->
                                                         </Grid.ColumnDefinitions>
                                                         
                                                         <!--Colonne 1 : Titres-->
@@ -570,7 +572,7 @@
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
                                                                                 <TextBox 
-                                                                                    Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                    Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
                                                                                     Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -637,7 +639,7 @@
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
                                                                                 <TextBox 
-                                                                                    Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                    Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
                                                                                     Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -648,6 +650,12 @@
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
+                                                        
+                                                        <!--Colonne 3 : Bouton ajouter test-->
+                                                        <Button Grid.Row="4" Grid.Column="3"
+                                                                Style="{StaticResource AddTestButtonStyleLight}"
+                                                                Click="AddTestToElementButtonClick"/>
+
                                                     </Grid>
                                                 </StackPanel>
                                             </DataTemplate>
