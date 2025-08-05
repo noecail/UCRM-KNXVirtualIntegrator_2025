@@ -170,7 +170,6 @@ namespace KNX_Virtual_Integrator.Model.Entities
         /// </summary>
         public void CopyTest(TestedElement? other, int index)
         {
-            Console.WriteLine("bbbbbbbbbbbbbbbbb");
             if (other == null || other.TestsCmd.Count != TestsCmd.Count || TestsIe.Count != other.TestsIe.Count)
             {
                 return;

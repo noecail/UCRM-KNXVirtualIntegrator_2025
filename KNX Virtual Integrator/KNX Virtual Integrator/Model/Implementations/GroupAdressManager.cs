@@ -409,9 +409,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
 
                         var prefix = FindMajorityPrefix(names);
-                       Console.WriteLine("Le préfixe est : " + prefix);
+                       //Console.WriteLine("Le préfixe est : " + prefix);
 
-                       Console.WriteLine("La taille est de "+ objectType.Count);
                         for (var j = 0; j < objectType.Count; j++)
                         {
                             var dptName = objectType[j].Attribute("Name")?.Value ?? "";
@@ -426,7 +425,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             }
                             if (i == 0)
                             {
-                                Console.WriteLine("On a ajoutéééééééééééééééééééééééééééééé "+ modelName +"_"+ circuitName);
+                                //Console.WriteLine("On a ajoutéééééééééééééééééééééééééééééé "+ modelName +"_"+ circuitName);
                                 newFunctionalModels.Add(new FunctionalModel(modelName +"_"+ circuitName, j + 1));
                             }
                             var newType = 1;
@@ -437,8 +436,18 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             {
                                 if (newFunctionalModels[j].ElementList.Count >= 1)
                                 {
-                                    newFunctionalModels[j].AddElement(new TestedElement([1], //TODO : find corresponding index instead of [j]
-                                        [newFunctionalModels[j].ElementList[0].TestsCmd[0].Address], [
+                                    var baseIndex = 0;
+                                    for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
+                                    {
+                                        if (newFunctionalModels[j].ElementList[k]
+                                            .IsEqual(new TestedElement([1], [""], [[]])))
+                                        {
+                                            baseIndex = k;
+                                            break;
+                                        }
+                                    }
+                                    newFunctionalModels[j].AddElement(new TestedElement([1],
+                                        [newFunctionalModels[j].ElementList[baseIndex].TestsCmd[0].Address], [
                                             []
                                         ],[newFunctionalModels[j].ElementList[0].TestsCmd[0].Name], circuitName));
                                     newFunctionalModels[j].ElementList[^1].AddDptToCmd(newType, newAddress, dptName, []);
@@ -448,25 +457,25 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                          objectType[j].Attribute("Name")?.Value
                                              .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
                             {
-                                Console.WriteLine("j = " + j + " and count : " + newFunctionalModels.Count);
                                 if (newFunctionalModels.Count > j)// && newFunctionalModels[j].Name.Contains(circuitName))
                                 {
-                                    Console.WriteLine("On veut ajouter " + objectType[j].Attribute("Name")?.Value!);
-                                    Console.WriteLine(newFunctionalModels.Count + " et " + j);
+                                    //Console.WriteLine("On veut ajouter " + objectType[j].Attribute("Name")?.Value!);
+                                    //Console.WriteLine(newFunctionalModels.Count + " et " + j);
                                     newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
                                         [[]], [dptName], circuitName));
                                 }
                                 else
                                 {
-                                    Console.WriteLine("AAAAAAAAAAAAAAAAAAAAA");
                                     var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                     if (modelIndex != -1)
                                     {
                                         newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
                                             [[]], [dptName], circuitName));
                                     }
-                                    else 
-                                        Console.WriteLine("Je sais pas quoi en faire");
+                                    else
+                                    {
+                                        //Console.WriteLine("Je sais pas quoi en faire");
+                                    }
                                 }
                             }
                         }
@@ -495,9 +504,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     var newElement = newFunctionalModels[j].ElementList[k];
                                     if (index != -1) // If there is an ie of the same type in the structure associated, add it to the ie list
                                     {
-                                        Console.WriteLine("Indexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx : " + index);
-                                        Console.WriteLine("Nom : " + functionalModelList.FunctionalModelDictionary
-                                            .FunctionalModels[index].Name);
                                         var element = functionalModelList.FunctionalModelDictionary
                                             .FunctionalModels[index].ElementList[k];
                                         var nbAppearances = element.IeContains(newDpt);
@@ -523,7 +529,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     {
                         if (index != -1)
                         {
-                            for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++) //TODO : ajouter une fonction de recherche d'élément au cas où des élément sont inversés
+                            for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++) 
                             {
                                 var indexModel = newFunctionalModels[j].ElementList[k]
                                     .FindELementInModel(
