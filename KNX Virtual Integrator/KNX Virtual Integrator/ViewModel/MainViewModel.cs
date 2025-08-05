@@ -165,7 +165,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     foreach (var dpttosend in testedelement.TestsCmd)
                     {
                         foreach (var value in dpttosend.IntValue)
-                            Console.Write(value.Value + ",");
+                            Console.Write(value.BigIntegerValue + ",");
                         Console.Write("|");
                     }
 
@@ -183,7 +183,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     foreach (var dpttoreceive in testedelement.TestsIe)
                     {
                         foreach (var value in dpttoreceive.IntValue)
-                            Console.Write(value.Value + ",");
+                            Console.Write(value.BigIntegerValue + ",");
                         Console.Write("|");
                     }
 
