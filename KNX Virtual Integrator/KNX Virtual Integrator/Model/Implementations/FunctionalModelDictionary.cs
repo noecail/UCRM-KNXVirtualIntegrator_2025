@@ -98,14 +98,15 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         public void AddFunctionalModel(FunctionalModel functionalModel)
         {
+            var newModel = new FunctionalModel(functionalModel,FunctionalModels.Count +1,false);
             _keywordsDictionary.Add([]);
             _nbStructuresCreated++;
-            if (functionalModel.Name == "New_Structure")
-                functionalModel.Name += "_" + _nbStructuresCreated;
+            if (newModel.Name == "New_Structure")
+                newModel.Name += "_" + _nbStructuresCreated;
             else if (!functionalModel.Name.Contains("Structure"))
-                functionalModel.Name += "_Structure";
-            FunctionalModels.Add(functionalModel);
-            FunctionalModels.Last().Key = FunctionalModels.Count;
+                newModel.Name += "_Structure";
+            FunctionalModels.Add(newModel);
+            //FunctionalModels.Last().Key = FunctionalModels.Count;
             OnPropertyChanged(nameof(FunctionalModels));
         }
 
@@ -192,7 +193,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public int HasSameStructure(FunctionalModel functionalModel)
         {
             var result = -1;
-            foreach (var list in _keywordsDictionary)
+            /*foreach (var list in _keywordsDictionary)
             {
                 foreach (var keyword in list)
                 {
@@ -202,7 +203,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         return result;
                     }
                 }
-            }
+            }*/
             
             var i = 0;
             while (i < FunctionalModels.Count && result == -1)
