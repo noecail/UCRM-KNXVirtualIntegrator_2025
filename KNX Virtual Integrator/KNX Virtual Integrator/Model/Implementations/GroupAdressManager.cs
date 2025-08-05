@@ -73,9 +73,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         if (null == ns || doc == null)
             return;
         var groupAddresses = doc.Descendants(ns + "GroupRanges");
-        //Console.WriteLine(groupAddresses.Elements().ToList().Count);
+        Console.WriteLine(groupAddresses.Elements().ToList().Count);
         foreach (var i in groupAddresses.Elements())
-            //Console.WriteLine(i.Name);
+            Console.WriteLine(i.Name);
 
        /* if (doc == null) return;
         var project = doc.Elements();
@@ -398,7 +398,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     var modelName = modelStructure.Attribute("Name")?.Value ?? "";
                     modelName = modelName.Replace(" ", "_");
                     List<FunctionalModel> newFunctionalModels = []; // new list to store all the functional model of the next structure
-                    //Console.WriteLine("MàJ des newmodels !!!!!!!!!!!");
+                    Console.WriteLine("MàJ des newmodels !!!!!!!!!!!");
                     for (var i = 0; i < structureList.Count; i++) //Takes all the commands
                     {
                         var objectType = structureList[i].Elements().ToList();
@@ -409,101 +409,124 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
 
                         var prefix = FindMajorityPrefix(names);
-                       //Console.WriteLine("Le préfixe est : " + prefix);
+                       Console.WriteLine("Le préfixe est : " + prefix);
+                     //  if (i == 0 || objectType.Count < 1.2 * newFunctionalModels.Count &&
+                     //      objectType.Count > 0.8 * newFunctionalModels.Count - 1)
+                       {
 
-                        for (var j = 0; j < objectType.Count; j++)
-                        {
-                            var dptName = objectType[j].Attribute("Name")?.Value ?? "";
-                            dptName = dptName.Replace(" ", "_");
-                            var circuitName = dptName;
-                            if (!string.IsNullOrEmpty(circuitName) && !string.IsNullOrEmpty(prefix))// && circuitName.Contains(prefix))
-                                // circuitName = modelName + "_" + circuitName.Split('_')[^1]; //Takes the structure name plus the last word of the model
-                                circuitName = circuitName.Replace(prefix , "");
-                            else
-                            {
-                                circuitName = string.Join("",circuitName.Split('_')[1..]); //Takes the name of the object, except the first word 
-                            }
-                            if (i == 0)
-                            {
-                                //Console.WriteLine("On a ajoutéééééééééééééééééééééééééééééé "+ modelName +"_"+ circuitName);
-                                newFunctionalModels.Add(new FunctionalModel(modelName +"_"+ circuitName, j + 1));
-                            }
-                            var newType = 1;
-                            if (objectType[j].Attribute("DPTs") != null) 
-                                newType = int.Parse(objectType[j].Attribute("DPTs")?.Value.Split('-')[1]!); //gets the type between the dashes in the xml
-                            var newAddress = objectType[j].Attribute("Address")?.Value!;
-                            if (dptName.Contains("stop", StringComparison.OrdinalIgnoreCase)) //If it's a stop command, create a new element (which is a copy of the first element)
-                            {
-                                if (newFunctionalModels[j].ElementList.Count >= 1)
-                                {
-                                    var baseIndex = 0;
-                                    for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
-                                    {
-                                        if (newFunctionalModels[j].ElementList[k]
-                                            .IsEqual(new TestedElement([1], [""], [[]])))
-                                        {
-                                            baseIndex = k;
-                                            break;
-                                        }
-                                    }
-                                    newFunctionalModels[j].AddElement(new TestedElement([1],
-                                        [newFunctionalModels[j].ElementList[baseIndex].TestsCmd[0].Address], [
-                                            []
-                                        ],[newFunctionalModels[j].ElementList[0].TestsCmd[0].Name], circuitName));
-                                    newFunctionalModels[j].ElementList[^1].AddDptToCmd(newType, newAddress, dptName, []);
-                                }
-                            }
-                            else if (Prefixes.Any(p =>
-                                         objectType[j].Attribute("Name")?.Value
-                                             .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
-                            {
-                                if (newFunctionalModels.Count > j)// && newFunctionalModels[j].Name.Contains(circuitName))
-                                {
-                                    //Console.WriteLine("On veut ajouter " + objectType[j].Attribute("Name")?.Value!);
-                                    //Console.WriteLine(newFunctionalModels.Count + " et " + j);
-                                    newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
-                                        [[]], [dptName], circuitName));
-                                }
-                                else
-                                {
-                                    var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                    if (modelIndex != -1)
-                                    {
-                                        newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
-                                            [[]], [dptName], circuitName));
-                                    }
-                                    else
-                                    {
-                                        //Console.WriteLine("Je sais pas quoi en faire");
-                                    }
-                                }
-                            }
-                        }
+                           for (var j = 0; j < objectType.Count; j++)
+                           {
+                               var dptName = objectType[j].Attribute("Name")?.Value ?? "";
+                               dptName = dptName.Replace(" ", "_");
+                               var circuitName = dptName;
+                               if (!string.IsNullOrEmpty(circuitName) &&
+                                   !string.IsNullOrEmpty(prefix)) // && circuitName.Contains(prefix))
+                                   // circuitName = modelName + "_" + circuitName.Split('_')[^1]; //Takes the structure name plus the last word of the model
+                                   circuitName = circuitName.Replace(prefix, "");
+                               else
+                               {
+                                   circuitName =
+                                       string.Join("",
+                                           circuitName.Split('_')[
+                                               1..]); //Takes the name of the object, except the first word 
+                               }
+
+                               if (i == 0)
+                               {
+                                   Console.WriteLine("On a ajoutéééééééééééééééééééééééééééééé " + modelName + "_" +
+                                                     circuitName);
+                                   newFunctionalModels.Add(new FunctionalModel(modelName + "_" + circuitName, j + 1));
+                               }
+
+                               var newType = 1;
+                               if (objectType[j].Attribute("DPTs") != null)
+                                   newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                       .Split('-')[1]!); //gets the type between the dashes in the xml
+                               var newAddress = objectType[j].Attribute("Address")?.Value!;
+                               if (dptName.Contains("stop",
+                                       StringComparison
+                                           .OrdinalIgnoreCase)) //If it's a stop command, create a new element (which is a copy of the first element)
+                               {
+                                   if (newFunctionalModels[j].ElementList.Count >= 1)
+                                   {
+                                       var baseIndex = 0;
+                                       for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
+                                       {
+                                           if (newFunctionalModels[j].ElementList[k]
+                                               .IsEqual(new TestedElement([1], [""], [[]])))
+                                           {
+                                               baseIndex = k;
+                                               break;
+                                           }
+                                       }
+
+                                       newFunctionalModels[j].AddElement(new TestedElement([1],
+                                           [newFunctionalModels[j].ElementList[baseIndex].TestsCmd[0].Address], [
+                                               []
+                                           ], [newFunctionalModels[j].ElementList[0].TestsCmd[0].Name], circuitName));
+                                       newFunctionalModels[j].ElementList[^1]
+                                           .AddDptToCmd(newType, newAddress, dptName, []);
+                                   }
+                               }
+                               else if (Prefixes.Any(p =>
+                                            objectType[j].Attribute("Name")?.Value
+                                                .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
+                               {
+                                   if (newFunctionalModels.Count >
+                                       j) // && newFunctionalModels[j].Name.Contains(circuitName))
+                                   {
+                                       Console.WriteLine("On veut ajouter " + objectType[j].Attribute("Name")?.Value!);
+                                       Console.WriteLine(newFunctionalModels.Count + " et " + j);
+                                       newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
+                                           [[]], [dptName], circuitName));
+                                   }
+                                   else
+                                   {
+                                       var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
+                                       if (modelIndex != -1)
+                                       {
+                                           newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
+                                               [[]], [dptName], circuitName));
+                                       }
+                                       else
+                                       {
+                                           Console.WriteLine("Je sais pas quoi en faire");
+                                       }
+                                   }
+                               }
+                           }
+                       }
                     }
 
                     var index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0]);
-                    for (var i = 0; i < structureList.Count; i++) //Goes through all structures
+                    if (index != -1)
                     {
-                        var objectType = structureList[i].Elements().ToList();
-                        for (var j = 0; j < objectType.Count; j++)
+                        for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                         {
-                            if (Prefixes.All(p =>
-                                    !(objectType[j].Attribute("Name")?.Value
-                                        .StartsWith(p, StringComparison.OrdinalIgnoreCase) ?? false))
-                                && !(objectType[j].Attribute("Name")?.Value
-                                         .Contains("stop", StringComparison.OrdinalIgnoreCase) ??
-                                     false)) //If the name doesn't start with anything command related nor contains stop, it's an IE
+                            var objectType = structureList[i].Elements().ToList();
+                            for (var j = 0; j < objectType.Count; j++)
                             {
-                                int newType = 0 ;
-                                if (objectType[j].Attribute("DPTs") != null)
-                                    newType = int.Parse(objectType[j].Attribute("DPTs")?.Value.Split('-')[1]!); //gets the type between the dashes in the xml
-                                var newAddress = objectType[j].Attribute("Address")?.Value!;
-                                var newDpt = new DataPointType(newType, newAddress, []);
-                                for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++) //For each element, if for the same command 
+                                if (Prefixes.All(p =>
+                                        !(objectType[j].Attribute("Name")?.Value
+                                            .StartsWith(p, StringComparison.OrdinalIgnoreCase) ?? false))
+                                    && !(objectType[j].Attribute("Name")?.Value
+                                             .Contains("stop", StringComparison.OrdinalIgnoreCase) ??
+                                         false)) //If the name doesn't start with anything command related nor contains stop, it's an IE
                                 {
-                                    var newElement = newFunctionalModels[j].ElementList[k];
-                                    if (index != -1) // If there is an ie of the same type in the structure associated, add it to the ie list
+                                    int newType = 0;
+                                    if (objectType[j].Attribute("DPTs") != null)
+                                        newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                            .Split('-')[1]!); //gets the type between the dashes in the xml
+                                    var newAddress = objectType[j].Attribute("Address")?.Value!;
+                                    var newDpt = new DataPointType(newType, newAddress, []);
+                                    for (var k = 0;
+                                         k < newFunctionalModels[j].ElementList.Count;
+                                         k++) //For each element, if for the same command 
                                     {
+                                        var newElement = newFunctionalModels[j].ElementList[k];
+                                        Console.WriteLine(k + "          " + functionalModelList
+                                            .FunctionalModelDictionary
+                                            .FunctionalModels[index].ElementList.Count);
                                         var element = functionalModelList.FunctionalModelDictionary
                                             .FunctionalModels[index].ElementList[k];
                                         var nbAppearances = element.IeContains(newDpt);
@@ -512,22 +535,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             newElement.AddDptToIe(newType, newAddress, []);
                                         }
                                     }
-                                    else // If there is a command of the same type or the ie is of type 5, adds it to the ie list
-                                    {
-                                        if (newElement.CmdContains(newType) > 0 || newType == 5)
-                                        {
-                                            newElement.AddDptToIe(newType, newAddress, []);
-                                        }
-                                    }
                                 }
                             }
                         }
-                    }
-
-                    var newObjectType = structureList[0].Elements().ToList();
-                    for (var j = 0; j < newObjectType.Count; j++)
-                    {
-                        if (index != -1)
+                        var newObjectType = structureList[0].Elements().ToList();
+                        for (var j = 0; j < newObjectType.Count; j++)
                         {
                             for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++) 
                             {
@@ -547,18 +559,46 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 }
                             }
                         }
+                        
                     }
-
-
-                    if (index == -1) // if the structure doesn't exist yet, creates it
+                    else
                     {
+                        for (var i = 0; i < structureList.Count; i++) //Goes through all structures
+                        {
+                            var objectType = structureList[i].Elements().ToList();
+                            for (var j = 0; j < objectType.Count; j++)
+                            {
+                                if (Prefixes.All(p =>
+                                        !(objectType[j].Attribute("Name")?.Value
+                                            .StartsWith(p, StringComparison.OrdinalIgnoreCase) ?? false))
+                                    && !(objectType[j].Attribute("Name")?.Value
+                                             .Contains("stop", StringComparison.OrdinalIgnoreCase) ??
+                                         false)) //If the name doesn't start with anything command related nor contains stop, it's an IE
+                                {
+                                    int newType = 0;
+                                    if (objectType[j].Attribute("DPTs") != null)
+                                        newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                            .Split('-')[1]!); //gets the type between the dashes in the xml
+                                    var newAddress = objectType[j].Attribute("Address")?.Value!;
+                                    var newDpt = new DataPointType(newType, newAddress, []);
+                                    for (var k = 0;
+                                         k < newFunctionalModels[j].ElementList.Count;
+                                         k++) //For each element, if for the same command 
+                                    {
+                                        var newElement = newFunctionalModels[j].ElementList[k]; // TODO : Recherche de cmd contenant le même suffixe
+                                        if (newElement.CmdContains(newType) > 0 || newType == 5)
+                                        {
+                                            newElement.AddDptToIe(newType, newAddress, []);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
                         index = functionalModelList.FunctionalModelDictionary.FunctionalModels.Count;
-                        var tempName = newFunctionalModels[0].Name;
-                        //newFunctionalModels[0].Name = modelName;
                         functionalModelList.AddToDictionary(newFunctionalModels[0]);
                         functionalModelList.FunctionalModels[index].Clear();
                     }
-
                     foreach (var newFunctionalModel in newFunctionalModels)
                     {
                         newFunctionalModel.UpdateIntValue();
