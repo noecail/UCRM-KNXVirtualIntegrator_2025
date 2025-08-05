@@ -341,7 +341,8 @@ public class DataPointType : INotifyPropertyChanged
     public void AddValue(GroupValue? value)
     {
         Value.Add(value);
-        IntValue.Add(new BigIntegerItem(new BigInteger(value!.Value))); //celle qui m'intéresse, Noé
+        if (value != null)
+            IntValue.Add(new BigIntegerItem(new BigInteger(value.Value))); //celle qui m'intéresse, Noé
     }
     
     /// <summary>
