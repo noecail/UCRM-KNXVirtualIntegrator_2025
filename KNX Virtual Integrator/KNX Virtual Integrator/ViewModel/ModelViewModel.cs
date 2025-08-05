@@ -93,7 +93,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                 var source = _functionalModelList.FunctionalModels[value.Key-1];
                 SelectedModels = new ObservableCollection<FunctionalModel>(source);
                 
-                
                 //SelectedModel = SelectedModels?.First(); //bonne idée mais rallonge le temps d'affichage alors que parfois on veut simplement balayer les structures
             }
         }
@@ -109,14 +108,9 @@ namespace KNX_Virtual_Integrator.ViewModel
             {
                 if (_selectedTestedElement != null && _selectedTestedElement.Equals(value)) return;
                 _selectedTestedElement = value;
-                //ShowModelColumn(); // Affiche le panneau de modification de modèle fonctionnel
                 WhenPropertyChanged(nameof(SelectedTestedElement));
-                
             }
-            // ++ Ajouter notamment tout le mécanisme de sauvegarde des paramètres
         }
-        
-        
-        
+
     }
 }

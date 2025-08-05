@@ -333,7 +333,7 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"
-                                   Source="{StaticResource AddDrawingImage}"
+                                   Source="{StaticResource WhiteInvertedAddDrawingImage}"
                                    Margin="0,5,5,5"
                                    Height="25" Width="25" />
                             <TextBlock Text="{StaticResource NewStructure}" VerticalAlignment="Center" FontSize="12"
@@ -366,7 +366,7 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"
-                                   Source="{StaticResource AddDrawingImage}"
+                                   Source="{StaticResource WhiteInvertedAddDrawingImage}"
                                    Margin="0,5,5,5"
                                    Height="25" Width="25" />
                             <TextBlock Text="{TemplateBinding Tag}" VerticalAlignment="Center" FontSize="12"
@@ -1095,8 +1095,7 @@
         <Setter Property="Margin" Value="0,5,0,0" />
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderThickness" Value="2" />
-                <Setter Property="BorderBrush" Value="{StaticResource BlueAccentBrush}" />
+                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
             </Trigger>
         </Style.Triggers>
     </Style>

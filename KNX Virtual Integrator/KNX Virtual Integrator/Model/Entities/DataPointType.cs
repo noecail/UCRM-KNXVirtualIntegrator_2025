@@ -363,6 +363,8 @@ public class DataPointType : INotifyPropertyChanged
         {
             if (value != null)
                 IntValue.Add(new BigIntegerItem(new BigInteger(value.Value)));
+            else
+                IntValue.Add(new BigIntegerItem(new BigInteger(666)));
         }
     }
 

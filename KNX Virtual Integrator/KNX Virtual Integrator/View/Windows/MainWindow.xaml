@@ -574,9 +574,25 @@
                                                                                 <TextBox 
                                                                                     Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                                     HorizontalContentAlignment="Center"
+                                                                                    VerticalContentAlignment="Center"
                                                                                     Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                    Height="35"
                                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                                    />
+                                                                                    VerticalAlignment="Center"
+                                                                                    >
+                                                                                    <!--Disable the textbox if the expected value is unknown-->
+                                                                                    <TextBox.Style>
+                                                                                        <Style TargetType="TextBox">
+                                                                                            <Setter Property="IsEnabled" Value="True"/>
+                                                                                            <Style.Triggers>
+                                                                                                <DataTrigger Binding="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}}" Value="666">
+                                                                                                    <Setter Property="IsEnabled" Value="False"/>
+                                                                                                    <Setter Property="Foreground" Value="{StaticResource NoColorBrush}"/>
+                                                                                                </DataTrigger>
+                                                                                            </Style.Triggers>
+                                                                                        </Style>
+                                                                                    </TextBox.Style>
+                                                                                </TextBox>
                                                                             </DataTemplate>
                                                                         </ItemsControl.ItemTemplate>
                                                                     </ItemsControl>
@@ -622,7 +638,9 @@
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
                                                         <!--Valeurs de la réception-->
-                                                        <ListBox Grid.Row="3" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                        <ListBox Grid.Row="3" Grid.Column="2" 
+                                                                 ItemsSource="{Binding TestsIe}"
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -638,12 +656,31 @@
                                                                         </ItemsControl.ItemsPanel>
                                                                         <ItemsControl.ItemTemplate>
                                                                             <DataTemplate>
-                                                                                <TextBox 
-                                                                                    Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                                    HorizontalContentAlignment="Center"
-                                                                                    Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                                    Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                                />
+                                                                                <StackPanel Orientation="Horizontal">
+                                                                                    <TextBox
+                                                                                        Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                        
+                                                                                        
+                                                                                        HorizontalContentAlignment="Center"
+                                                                                        VerticalContentAlignment="Center"
+                                                                                        Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                                        Height="35">
+                                                                                        
+                                                                                        <!--Disable the textbox if the expected value is unknown-->
+                                                                                        <TextBox.Style>
+                                                                                            <Style TargetType="TextBox">
+                                                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                                                <Style.Triggers>
+                                                                                                    <DataTrigger Binding="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}}" Value="666">
+                                                                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                                                                        <Setter Property="Foreground" Value="{StaticResource NoColorBrush}"/>
+                                                                                                    </DataTrigger>
+                                                                                                </Style.Triggers>
+                                                                                            </Style>
+                                                                                        </TextBox.Style>
+                                                                                    </TextBox>
+                                                                                </StackPanel>
                                                                             </DataTemplate>
                                                                         </ItemsControl.ItemTemplate>
                                                                     </ItemsControl>
@@ -653,6 +690,9 @@
                                                         
                                                         <!--Colonne 3 : Bouton ajouter test-->
                                                         <Button Grid.Row="4" Grid.Column="3"
+                                                                Margin="5"
+                                                                VerticalAlignment="Center"
+                                                                HorizontalAlignment="Center"
                                                                 Style="{StaticResource AddTestButtonStyleLight}"
                                                                 Click="AddTestToElementButtonClick"/>
 

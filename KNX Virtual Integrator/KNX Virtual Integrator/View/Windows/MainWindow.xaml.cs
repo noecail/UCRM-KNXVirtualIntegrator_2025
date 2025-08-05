@@ -591,9 +591,9 @@ public partial class MainWindow
         var dep = (DependencyObject)e.OriginalSource;
         while (dep != null && !(dep is ListBoxItem)) { dep = VisualTreeHelper.GetParent(dep); }
         if (dep == null) return;
-        var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
-        _viewModel.AddTestToElementCommand.Execute(_viewModel.SelectedModel?.ElementList[index]);
+        _viewModel.AddTestToElementCommand.Execute(_viewModel.SelectedModel?.ElementList[indexElement]);
     }
     
     /// <summary>
