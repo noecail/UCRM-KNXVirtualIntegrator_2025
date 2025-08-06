@@ -285,7 +285,7 @@
     </Style>
 
     <!-- Style pour le bouton refresh -->
-    <Style x:Key="RefreshButton" TargetType="Button">
+    <Style x:Key="RefreshButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource BlueBrush }" />
         <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -294,6 +294,40 @@
         <Setter Property="Height" Value="20" />
         <Setter Property="HorizontalAlignment" Value="Center" />
         <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Survol -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource BlueAccentBrush}" />
+                        </Trigger>
+                        <!-- Clic -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource BlueAccentMoreBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Style pour le bouton reset des Values dans les Tested Elements -->
+    <Style x:Key="ResetValueButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource BlueBrush }" />
+        <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
+        <Setter Property="Height" Value="12"/>
+        <Setter Property="Width" Value="12"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
