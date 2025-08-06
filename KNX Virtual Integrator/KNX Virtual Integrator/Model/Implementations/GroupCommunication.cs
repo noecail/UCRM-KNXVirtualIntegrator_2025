@@ -298,6 +298,76 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
     
     
+    //TACHE LECTURE TRAME NORMALE MULTIPLE SOUS TIMER OU RECEPTION D'UNE MESSAGE DE TYPE WRITE
+    /// <summary>
+    /// Lit de manière asynchrone les valeurs d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
+    /// Vérifie la connexion et l'état du bus avant d'envoyer la requête.
+    /// Utilise un <see cref="TaskCompletionSource{T}"/> pour capturer la valeur lue.
+    /// </summary>
+    /// <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
+    ///  <param name="timerDuration">Le timer sous lequel les trames doivent être reçues, en ms</param>
+    /// <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+    public async Task<List<GroupMessage>> GroupValuesTimerOrRecievedAWriteAsync(GroupAddress groupAddress, int timerDuration)
+    {
+        var theList = new List<GroupMessage>();
+        Timer timer = new Timer(timerDuration);
+        if (!_busConnection.IsConnected)
+        {
+            _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
+            return [];
+        }
+
+        if (_busConnection.IsBusy)
+        {
+            _logger.ConsoleAndLogWriteLine("Le bus est occupé");
+            return [];
+        }
+ 
+        timer.AutoReset = false;
+        ElapsedEventHandler? timerHandler = null;
+        timerHandler = (_, _) =>
+        {
+            timer.Enabled = false;
+            timer.Elapsed -= timerHandler;
+        };
+        timer.Elapsed += timerHandler;
+        try
+        {
+            //subscribe to Message updates
+            timer.Enabled = true;
+            NotifyCollectionChangedEventHandler messageHandler = (_, _) =>
+            {
+                if (!Messages.Last().DestinationAddress.Equals(groupAddress)) return;
+                // La 2e vérification est nécessitée par le dédoublement des messages reçus ( influence du wrapper? )
+                if (theList.Count > 0 && theList.Last().Equals(Messages.Last())) return;
+                theList.Add(Messages.Last());
+            };
+            
+            Messages.CollectionChanged += messageHandler;
+            
+            // Possibilité (fine) que les messages de Response arrivent en même temps que les messages de Write
+            if (_busConnection is { CancellationTokenSource: not null, Bus.IsNull : false })
+                await _busConnection.Bus.RequestGroupValueAsync(
+                    groupAddress, MessagePriority.High,
+                    _busConnection.CancellationTokenSource.Token
+                );
+            
+            while (timer.Enabled && !(theList.Count > 0 && theList.Last().EventType.Equals(GroupEventType.ValueWrite))) { } 
+            
+            Messages.CollectionChanged -= messageHandler;
+            timer.Enabled = false; // Juste au cas où il y a un problème avec le timer ou si on sort avant sa fin
+        }
+        catch (Exception ex)
+        {
+            _logger.ConsoleAndLogWriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
+            return [];
+        }
+
+        // Retourne toutes les valeurs reçues sans traitement
+        return theList;
+    }
+    
+    
     // Liste observable pour les messages reçus
     private ObservableCollection<GroupMessage> Messages { get; } = new ();
 

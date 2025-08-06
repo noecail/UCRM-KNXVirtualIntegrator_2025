@@ -81,7 +81,7 @@ public class FunctionalModelList : IFunctionalModelList
                 newModel.Name = "New_Model_" +_nbModelsCreated[index];
             else
             {
-                newModel.Name = newModel.Name[..^10] + "_" + _nbModelsCreated[index];
+                newModel.Name = string.Join("_",newModel.Name.Split('_')[..^1]) +"_" + _nbModelsCreated[index];
             }
         }
         FunctionalModels[index].Add(newModel);
@@ -134,8 +134,9 @@ public class FunctionalModelList : IFunctionalModelList
     public void AddToDictionary(FunctionalModel model)
     {
         var newModel = model;
-        newModel.Name = "New_Structure";
-        FunctionalModelDictionary.AddFunctionalModel(model);
+        if (string.IsNullOrEmpty(model.Name))
+            newModel.Name = "New_Structure";
+        FunctionalModelDictionary.AddFunctionalModel(newModel);
     }
 
     /// <summary>
@@ -224,6 +225,6 @@ public class FunctionalModelList : IFunctionalModelList
                 FunctionalModels[i].Add(FunctionalModel.ImportFunctionalModel(model));
         }
     }
-
+    
 }
 

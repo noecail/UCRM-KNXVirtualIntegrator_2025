@@ -5,6 +5,7 @@ using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -423,19 +424,24 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         //Sauvegarde des modèles --------------------------------------------------------------------
 
         GenerateReportCommand =
-            new Commands.RelayCommand<(string fileName, string authorName)>(args =>
-                _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName));
+            new Commands.RelayCommand<(string fileName, string authorName, ObservableCollection<FunctionalModel>
+                testedList, List<List<List<List<ResultType>>>> testResults)>(args =>
+                _modelManager.PdfDocumentCreator.CreatePdf(args.fileName, args.authorName, args.testedList, args.testResults));
 
-        LaunchAnalysisCommand = new RelayCommandWithResult<ObservableCollection<FunctionalModel>, Task<List<List<List<List<bool>>>>>>(
+        LaunchAnalysisCommand = new RelayCommandWithResult<ObservableCollection<FunctionalModel>, Task<List<List<List<List<ResultType>>>>>>(
             async testModels =>
             {
                 Analyze analysis = new Analyze(testModels, _modelManager.GroupCommunication);
+                ConsoleAndLogWriteLineCommand.Execute("Analysis Started");
                 await analysis.TestAll();
-                /*foreach(var model in analysis.Results)
-                    foreach (var element in model)
-                        foreach(var cmd in element)
-                            foreach (var cmd2 in cmd)
-                            ConsoleAndLogWriteLineCommand.Execute($"{cmd} : {cmd2}");*/
+                    /*foreach(var model in analysis.Results)
+                        foreach (var element in model)
+                            foreach(var cmd in element)
+                                foreach (var cmd2 in cmd)
+                                ConsoleAndLogWriteLineCommand.Execute($"{cmd} : {cmd2}");
+                    */
+                ConsoleAndLogWriteLineCommand.Execute("Analysis Finished");
+                LastTestResults = analysis.Results;
                 return analysis.Results;
             }
         );

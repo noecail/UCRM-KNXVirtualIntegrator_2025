@@ -13,6 +13,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public ObservableCollection<DataPointType> TestsCmd { get; set; } // List of commands to send to the bus 
 
         public ObservableCollection<DataPointType> TestsIe { get; set; } // List of expected feedback to be read on the bus
+
+
+        public string Name = "";
         
 
         //Constructors
@@ -49,13 +52,14 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
         } 
         
-        public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd, string name)
+        public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd, string[] dptNames,string circuitName)
         {
             TestsCmd = []; 
             TestsIe = [];
+            Name = circuitName;
             for (var i = 0; i < typeCmd.Length; i++)
             {
-                TestsCmd.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i], name));
+                TestsCmd.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i], dptNames[i]));
             }
         } 
         
@@ -104,16 +108,29 @@ namespace KNX_Virtual_Integrator.Model.Entities
         {
             if (other == null)
                 return false;
+            HashSet<int> bannedIndexes = [];
             var result = TestsCmd.Count == other.TestsCmd.Count;
+            if (result == false) return false;
             for (var i = 0; i < TestsCmd.Count; i++)
             {
-                result = result && TestsCmd[i].IsEqual(other.TestsCmd[i]);
+                var res = Contains(other.TestsCmd[i], bannedIndexes);
+                if (res == -1)
+                    return false;
+                bannedIndexes.Add(res);
             } 
-            /* result = result && TestsIe.Count == other.TestsIe.Count;
-            for (var i = 0; i < TestsIe.Count; i++)
+            return result;
+        }
+
+        public int Contains(DataPointType other, HashSet<int> bannedIndexes)
+        {
+            var result = -1;
+            for (var i = 0; i < TestsCmd.Count; i++)
             {
-                result = result && TestsIe[i].IsEqual(other.TestsIe[i]);
-            }*/
+                if (TestsCmd[i].IsEqual(other) && !bannedIndexes.Contains(i))
+                {
+                    return i;
+                }
+            }
             return result;
         }
         
@@ -132,6 +149,20 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 dpt.AddValue(new GroupValue(false));
             }   
+        }
+
+        public int FindELementInModel(FunctionalModel model)
+        {
+            for(var i = 0; i<model.ElementList.Count;i++)
+            {
+                var element = model.ElementList[i];
+                if (IsEqual(element))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
         }
         
         /// <summary>
@@ -194,6 +225,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public void AddDptToCmd(int type, string address, List<GroupValue?> value)
         {
             TestsCmd.Add(new DataPointType(type, address, value));
+        }
+        
+        public void AddDptToCmd(int type, string address, string name, List<GroupValue?> value)
+        {
+            TestsCmd.Add(new DataPointType(type, address, value, name));
         }
         
         public void AddDptToIe(int type, string address, List<GroupValue?> value)

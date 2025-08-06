@@ -15,5 +15,7 @@ public interface IGroupCommunication
     Task<List<GroupCommunication.GroupMessage>> GroupValuesWithinTimerAsync(GroupAddress groupAddress,
         int timerDuration);
 
+    Task<List<GroupCommunication.GroupMessage>> GroupValuesTimerOrRecievedAWriteAsync(GroupAddress groupAddress, int timerDuration);
+
 
 }
