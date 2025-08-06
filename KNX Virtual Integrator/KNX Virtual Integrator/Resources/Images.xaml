@@ -358,8 +358,38 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
-
-    <DrawingImage x:Key="AddDrawingImage">
+    
+    <DrawingImage x:Key="WhiteAddDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V500 H500 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,500">
+                    <GeometryDrawing Brush="{StaticResource WhiteBackgroundBrush}" Geometry="F1 M500,500z M0,0z M2073,4753C2072,4699,2072,4267,2071,3793L2070,2930 1110,2930 150,2930 150,2500 150,2070 1110,2070 2070,2070 2070,1110 2070,150 2500,150 2930,150 2930,1110 2930,2070 3890,2070 4850,2070 4850,2499 4850,2928 3893,2929C3366,2930 2935,2932 2933,2933 2932,2935 2930,3366 2929,3893L2928,4850 2501,4850 2074,4850 2073,4753z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="GrayAddDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V500 H500 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,500">
+                    <GeometryDrawing Brush="{StaticResource GrayBackgroundBrush}" Geometry="F1 M500,500z M0,0z M2073,4753C2072,4699,2072,4267,2071,3793L2070,2930 1110,2930 150,2930 150,2500 150,2070 1110,2070 2070,2070 2070,1110 2070,150 2500,150 2930,150 2930,1110 2930,2070 3890,2070 4850,2070 4850,2499 4850,2928 3893,2929C3366,2930 2935,2932 2933,2933 2932,2935 2930,3366 2929,3893L2928,4850 2501,4850 2074,4850 2073,4753z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="BlackAddDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V500 H500 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,500">
+                    <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M500,500z M0,0z M2073,4753C2072,4699,2072,4267,2071,3793L2070,2930 1110,2930 150,2930 150,2500 150,2070 1110,2070 2070,2070 2070,1110 2070,150 2500,150 2930,150 2930,1110 2930,2070 3890,2070 4850,2070 4850,2499 4850,2928 3893,2929C3366,2930 2935,2932 2933,2933 2932,2935 2930,3366 2929,3893L2928,4850 2501,4850 2074,4850 2073,4753z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="WhiteInvertedAddDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V60 H60 V0 H0 Z">
                 <GeometryDrawing Brush="{StaticResource WhiteBackgroundBrush }" Geometry="F1 M60,60z M0,0z M0,0L0,60 60,60 60,0 0,0z M51,32L32,32 32,51 28,51 28,32 9,32 9,28 28,28 28,9 32,9 32,28 51,28 51,32z" />
@@ -367,7 +397,7 @@
         </DrawingImage.Drawing>
     </DrawingImage>
     
-    <DrawingImage x:Key="GrayAddDrawingImage">
+    <DrawingImage x:Key="GrayInvertedAddDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V60 H60 V0 H0 Z">
                 <GeometryDrawing Brush="{StaticResource GrayBorderBrush}" Geometry="F1 M60,60z M0,0z M0,0L0,60 60,60 60,0 0,0z M51,32L32,32 32,51 28,51 28,32 9,32 9,28 28,28 28,9 32,9 32,28 51,28 51,32z" />
@@ -375,10 +405,40 @@
         </DrawingImage.Drawing>
     </DrawingImage>
    
-    <DrawingImage x:Key="BlackAddDrawingImage">
+    <DrawingImage x:Key="BlackInvertedAddDrawingImage">
         <DrawingImage.Drawing>
             <DrawingGroup ClipGeometry="M0,0 V60 H60 V0 H0 Z">
                 <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M60,60z M0,0z M0,0L0,60 60,60 60,0 0,0z M51,32L32,32 32,51 28,51 28,32 9,32 9,28 28,28 28,9 32,9 32,28 51,28 51,32z" />
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="WhiteRemoveDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V500 H500 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,500">
+                    <GeometryDrawing Brush="{StaticResource WhiteBackgroundBrush}" Geometry="F1 M500,500z M0,0z M150,2500L150,2070 2500,2070 4850,2070 4850,2499 4850,2929 2500,2930 150,2930 150,2500z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="GrayRemoveDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V500 H500 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,500">
+                    <GeometryDrawing Brush="{StaticResource GrayBackgroundBrush}" Geometry="F1 M500,500z M0,0z M150,2500L150,2070 2500,2070 4850,2070 4850,2499 4850,2929 2500,2930 150,2930 150,2500z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="BlackRemoveDrawingImage">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V500 H500 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,500">
+                    <GeometryDrawing Brush="{StaticResource BlackBackgroundBrush}" Geometry="F1 M500,500z M0,0z M150,2500L150,2070 2500,2070 4850,2070 4850,2499 4850,2929 2500,2930 150,2930 150,2500z" />
+                </DrawingGroup>
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>

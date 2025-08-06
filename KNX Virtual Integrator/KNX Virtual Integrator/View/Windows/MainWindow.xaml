@@ -459,9 +459,6 @@
                                                         
                                                         <!-- Titre -->
                                                         <TextBlock Grid.Column="0" Text="Élément à tester" Style="{StaticResource TitleTextLight}"/>
-                                                        
-                                                        <!-- Pour l'index de l'élément à tester -->
-                                                        <TextBlock Grid.Column="1" Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}"/>
                                                         <!-- Bouton de suppression -->
                                                         <Button Grid.Column="1" 
                                                                 Style="{StaticResource DeleteStructureButtonStyleLight}"
@@ -483,8 +480,8 @@
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto"/>  <!--Titres-->
                                                             <ColumnDefinition Width="Auto"/>  <!--Cmd(s)-->
-                                                            <ColumnDefinition Width="Auto"/>  <!--IE(s)-->
-                                                            <ColumnDefinition Width="Auto"/>  <!--Add/Remove Test-->
+                                                            <ColumnDefinition Width="Auto"/>  <!--IE(s) + Remove Test-->
+                                                            <ColumnDefinition Width="Auto"/>  <!--Add Test-->
                                                         </Grid.ColumnDefinitions>
                                                         
                                                         <!--Colonne 1 : Titres-->
@@ -641,6 +638,8 @@
                                                         <ListBox Grid.Row="3" Grid.Column="2" 
                                                                  ItemsSource="{Binding TestsIe}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                 AlternationCount="100"
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -648,7 +647,7 @@
                                                             </ListBox.ItemsPanel>
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <ItemsControl ItemsSource="{Binding IntValue}">
+                                                                    <ItemsControl ItemsSource="{Binding IntValue}" AlternationCount="100">
                                                                         <ItemsControl.ItemsPanel>
                                                                             <ItemsPanelTemplate>
                                                                                 <StackPanel Orientation="Vertical"/>
@@ -659,8 +658,6 @@
                                                                                 <StackPanel Orientation="Horizontal">
                                                                                     <TextBox
                                                                                         Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                                        
-                                                                                        
                                                                                         HorizontalContentAlignment="Center"
                                                                                         VerticalContentAlignment="Center"
                                                                                         Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -680,6 +677,17 @@
                                                                                             </Style>
                                                                                         </TextBox.Style>
                                                                                     </TextBox>
+                                                                                    
+                                                                                    <Button
+                                                                                        Margin="10,0,0,0"
+                                                                                        VerticalAlignment="Center"
+                                                                                        HorizontalAlignment="Center"
+                                                                                        Style="{StaticResource RemoveTestButtonStyleLight}"
+                                                                                        Click="RemoveTestFromElementButtonClick">
+                                                                                    </Button>
+                                                                                    
+                                                                                    <!--<TextBlock Text="{Binding RemoveTestButtonVisibility}"/>-->
+                                                                                   
                                                                                 </StackPanel>
                                                                             </DataTemplate>
                                                                         </ItemsControl.ItemTemplate>
@@ -687,8 +695,7 @@
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
-                                                        
-                                                        <!--Colonne 3 : Bouton ajouter test-->
+                                                        <!--Colonne 4 : Bouton ajouter test-->
                                                         <Button Grid.Row="4" Grid.Column="3"
                                                                 Margin="5"
                                                                 VerticalAlignment="Center"

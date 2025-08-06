@@ -570,8 +570,7 @@ public partial class MainWindow
         // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
         // Pour utiliser ce segment de code, il faut avoir une référence sur la listbox
         var dep = (DependencyObject)e.OriginalSource;
-        while (dep != null && !(dep is ListBoxItem)) { dep = VisualTreeHelper.GetParent(dep); }
-        if (dep == null) return;
+        dep = FindParent<ListBoxItem>(dep);
         var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
         _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedModel, index)); 
@@ -589,8 +588,7 @@ public partial class MainWindow
         // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
         // Pour utiliser ce segment de code, il faut avoir une référence sur la listbox
         var dep = (DependencyObject)e.OriginalSource;
-        while (dep != null && !(dep is ListBoxItem)) { dep = VisualTreeHelper.GetParent(dep); }
-        if (dep == null) return;
+        dep = FindParent<ListBoxItem>(dep);
         var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
         _viewModel.AddTestToElementCommand.Execute(_viewModel.SelectedModel?.ElementList[indexElement]);
@@ -602,10 +600,35 @@ public partial class MainWindow
     /// </summary>
     private void RemoveTestFromElementButtonClick(object sender, RoutedEventArgs e)
     {
-        //_viewModel.RemoveTestFromElement.Execute();
-        // TODO : récupérer le selected element et l'index du test
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+
+        // Find the Test's index
+        var button = (Button)sender;
+        var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
+        var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
+        var indexTest = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+        
+        _viewModel.RemoveTestFromElementCommand.Execute((_viewModel.SelectedModel?.ElementList[indexElement], indexTest));
     }
 
+    // Méthode récursive qui remonte les parents d'un objet jusqu'à atteindre le parent du type passé en paramètre
+    // Utilisée dans RemoveTestedElementFromStructureButtonClick
+    // Utilisée dans AddTestToElementButtonClick
+    // Utilisée dans RemoveTestFromElementButtonClick
+    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        var parentObject = VisualTreeHelper.GetParent(child);
+        if (parentObject == null) return null;
+        if (parentObject is T parent) return parent;
+        return FindParent<T>(parentObject);
+    }
+
+    
     /// <summary>
     /// Currently used to display the SelectedModel in the console
     /// Delete later

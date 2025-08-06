@@ -659,6 +659,19 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <Style x:Key="RemoveTestButtonStyleLight" TargetType="Button" BasedOn="{StaticResource AddTestButtonStyleLight}">
+        <Setter Property="Tag" Value="{StaticResource GrayRemoveDrawingImage}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Tag" Value="{StaticResource BlackRemoveDrawingImage}" />
+                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
     <Style x:Key="SearchButtonLight" TargetType="Button" BasedOn="{StaticResource IconButtonStyle}">
         <Setter Property="Tag" Value="{StaticResource SearchDrawingImageLight}" />
