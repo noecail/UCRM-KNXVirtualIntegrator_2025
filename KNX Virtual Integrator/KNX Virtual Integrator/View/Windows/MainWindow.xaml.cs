@@ -617,6 +617,65 @@ public partial class MainWindow
     }
 
     /// <summary>
+    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void DeactivateValueCmdButtonClick(object sender, RoutedEventArgs e)
+    {
+        DeactivateValue(sender, e, "TestsCmd");
+    }
+    
+    /// <summary>
+    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void DeactivateValueIeButtonClick(object sender, RoutedEventArgs e)
+    {
+        DeactivateValue(sender, e, "TestsIe");
+    }
+
+    /// <summary>
+    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void DeactivateValue(object sender, RoutedEventArgs e, string tests)
+    {
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        
+        var button = (Button)sender;
+        
+        // Find the DPT's index
+        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
+        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
+        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexDpt = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        
+        // Find the Test's index
+        var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
+        var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
+        int indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+
+        // Effectively reset the value
+        switch (tests)
+        {
+            case "TestsCmd":
+            {
+                if (_viewModel.SelectedModel != null)
+                    _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].BigIntegerValue = 666;
+                break;
+            }
+            case "TestsIe":
+            {
+                if (_viewModel.SelectedModel != null)
+                    _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].BigIntegerValue = 666;
+                break;
+            }
+        }
+    }
+    
+    /// <summary>
     /// Handles the button click to reset to 0 a Cmd Value that has been deactivated because it was unknown 
     /// </summary>
     private void ResetValueCmdButtonClick(object sender, RoutedEventArgs e)

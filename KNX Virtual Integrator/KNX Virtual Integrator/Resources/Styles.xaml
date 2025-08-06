@@ -355,6 +355,40 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Style pour le bouton reset des Values dans les Tested Elements -->
+    <Style x:Key="DeactivateValueButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource GrayBackgroundBrush }" />
+        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}" />
+        <Setter Property="Height" Value="12"/>
+        <Setter Property="Width" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Survol -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource DarkGrayBackgroundBrush}" />
+                        </Trigger>
+                        <!-- Clic -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource DarkerGrayBackgroundBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style TargetType="Button" x:Key="CreateStructureButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
         <Setter Property="Background" Value="{StaticResource BlueBrush}" />
