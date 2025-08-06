@@ -1,10 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using KNX_Virtual_Integrator.Model.Entities;
+using KNX_Virtual_Integrator.Model.Implementations;
 
 namespace KNX_Virtual_Integrator.ViewModel;
 
 public partial class MainViewModel
 {
+
+    public List<List<List<List<ResultType>>>> LastTestResults=[];
     
     /// <summary>
     /// Gets or sets the currently selected tested element.

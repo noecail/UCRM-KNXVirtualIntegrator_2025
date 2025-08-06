@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Net.Mime;
 using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Geom;
@@ -8,7 +10,10 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
+using iText.Layout.Properties;
+using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
+using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
@@ -24,8 +29,6 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     private PdfWriter? _writer;
 
     
-    // ⚠️ POUR TESTER UNIQUEMENT ⚠️
-    private List<string> _modelesFonctionnels = new();
     
     
     /* ------------------------------------------------------------------------------------------------
@@ -38,15 +41,13 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     /// </summary>
     /// <param name="fileName">The file path where the PDF will be saved.</param>
     /// <param name="authorName">The name of the author to include in the project information section.</param>
-    public void CreatePdf(string fileName, string authorName)
+    /// <param name="testResults"></param>
+    public void CreatePdf(string fileName, string authorName, ObservableCollection<FunctionalModel>  testedList, List<List<List<List<ResultType>>>> testResults)
     {
-        // ⚠️ POUR TESTER UNIQUEMENT ⚠️
-        _modelesFonctionnels.Add("test");
-        _modelesFonctionnels.Add("test2");
-        _modelesFonctionnels.Add("test3");
-        _modelesFonctionnels.Add("test4");
-        _modelesFonctionnels.Add("test5");
-        
+        if (fileName.Length == 0)
+        {
+            return;
+        }
         // Génération d'un PDF et du writer pour écrire dans le Pdf
         _writer =  new PdfWriter(new FileStream(fileName, FileMode.Create));
         var newPdf = new PdfDocument(_writer);
@@ -54,8 +55,9 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         doc.SetMargins(72, 72, 72, 72);
         
         // Écriture du contenu du document PDF
-        GeneratePdfHeader(newPdf); // Génération de la bannière d'en-tête
+        GeneratePdfHeader(doc); // Génération de la bannière d'en-tête
         GenerateProjectInformationSection(doc, authorName); // Génération de la section d'infos du projet (nom, ...)
+        GenerateTestListAndResults(doc, testedList,testResults);
         GenerateTreeStructure();
 
         
@@ -67,52 +69,6 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         _writer.Close();
         // Mise à jour du path du dernier pdf généré
         LatestReportPath = fileName;
-    }
-
-    
-    /// <summary>
-    /// Creates a PDF document at the specified file path, with the given author name, 
-    /// and then opens the generated PDF. The PDF is in A4 format without margins 
-    /// and includes a header, project information, and a tree structure. 
-    /// The generated file path is stored as the latest report path, and the PDF is automatically opened in Windows.
-    /// </summary>
-    /// <param name="fileName">The file path where the PDF will be saved.</param>
-    /// <param name="authorName">The name of the author to include in the project information section.</param>
-    public void CreateAndOpenPdf(string fileName, string authorName)
-    {
-        // ⚠️ POUR TESTER UNIQUEMENT ⚠️
-        _modelesFonctionnels.Add("test");
-        _modelesFonctionnels.Add("test2");
-        _modelesFonctionnels.Add("test3");
-        _modelesFonctionnels.Add("test4");
-        _modelesFonctionnels.Add("test5");
-        
-        // Génération d'un PDF et du writer pour écrire dans le Pdf
-        _writer =  new PdfWriter(new FileStream(fileName, FileMode.Create));
-        var newPdf = new PdfDocument(_writer);
-        var doc = new Document(newPdf,PageSize.A4);
-        doc.SetMargins(0, 0, 0, 0);
-        
-        // Écriture du contenu du document PDF
-        GeneratePdfHeader(newPdf); // Génération de la bannière d'en-tête
-        GenerateProjectInformationSection(doc, authorName); // Génération de la section d'infos du projet (nom, ...)
-        GenerateTreeStructure();
-
-        // Fermeture du document et du stream d'écriture
-        doc.Close();
-        newPdf.Close();
-        _writer.Close();
-        
-        // Mise à jour du path du dernier pdf généré
-        LatestReportPath = fileName;
-
-        // Ouverture du PDF dans Windows
-        OpenLatestReport();
-    }
-
-    public void ClosePdf()
-    {
-        // Non implémentée
     }
 
 
@@ -123,42 +79,29 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     /// and version information and the current date on the right. A title is added below the header.
     /// </summary>
     /// <param name="document">The PDF document to which the header will be added.</param>
-    private void GeneratePdfHeader(PdfDocument document)
+    private void GeneratePdfHeader(Document document)
     {
-        // Génération du rectangle d'en-tête (bannière)
-        var doc = new Document(document);
-        PdfPage page = document.AddNewPage(PageSize.A4);
-        var canvas = new PdfCanvas(page);
         
-        const int llx = 0; // Coordonnée x du coin inférieur gauche du rectangle
-        const int lly = 800; // Coordonnée y du coin inférieur gauche du rectangle
-        const int urx = 595; // Coordonnée x du coin supérieur droit du rectangle
-        const int ury = 842; // Coordonnée y du coin supérieur droit du rectangle
-        canvas.Rectangle(llx, lly, urx - llx, ury - lly).SetColor(DeviceRgb.GREEN, true ); // Dessin et remplissage du rectangle
-
-
         // Logo du logiciel (les 2 lignes qui suivent ne servent pas pour le moment)
-        var logo = new Image(ImageDataFactory.Create("../../../Resources/resources/logoUCRM.png"));
-        logo.ScaleToFit(42f, 42f); // Ajuster la taille du logo
-        // Ajouter l'image à une position spécifique (x, y) sur la page
-        canvas.AddImageAt(ImageDataFactory.Create("../../../Resources/resources/logoUCRM.png"), 0f, document.GetDefaultPageSize().GetHeight() - 42f, false);
+        var logo = new Image(ImageDataFactory.Create("../../../Resources/resources/logoUCRM.png")).ScaleToFit(60f, 60f).SetTextAlignment(TextAlignment.RIGHT).SetFixedPosition(500,780);
+        document.Add(logo);
         
         // Nom du logiciel, à côté du logo
-        doc.Add(new Paragraph($"{App.AppName}"));
+        document.Add(new Paragraph($"{App.AppName}"));
         
         // Information sur la version du logiciel utilisée pour générer le document
-        doc.Add(new Paragraph($"V{App.AppVersion.ToString(CultureInfo.InvariantCulture)} build {App.AppBuild}"));
+        document.Add(new Paragraph($"V{App.AppVersion.ToString(CultureInfo.InvariantCulture)}, build {App.AppBuild}"));
         
         // Date du jour
-        doc.Add(new Paragraph(DateTime.Now.ToString("dd/MM/yyyy")));
+        document.Add(new Paragraph(DateTime.Now.ToString("dd/MM/yyyy")));
         
         // Ajout d'un paragraphe vide pour créer un espace au-dessus du titre
         var emptyParagraph = new Paragraph("\n");
-        doc.Add(emptyParagraph);
+        document.Add(emptyParagraph);
         
         // Titre du document
         var titleParagraph = new Paragraph("RAPPORT DE FONCTIONNEMENT DE L’INSTALLATION KNX");
-        doc.Add(titleParagraph);
+        document.Add(titleParagraph);
         
     }
 
@@ -180,50 +123,77 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     
         
         // Nom de l'installation évaluée
-        var installationChunk = new Paragraph("Installation évaluée :");
-        var projectNameChunk = new Paragraph($" {manager.ProjectName}");
-
-        // Combiner les deux Chunk dans un Paragraph
-        var projectInformationParagraph = new Paragraph().Add(installationChunk).Add(projectNameChunk);
-        document.Add(projectInformationParagraph);
         
+        if (!string.IsNullOrWhiteSpace(manager.ProjectName))
+        {
+            var installationChunk = new Paragraph("Projet évalué :");
+            var projectNameChunk = new Paragraph($" {manager.ProjectName}");
+
+            // Combiner les deux Chunk dans un Paragraph
+            var projectInformationParagraph = new Paragraph().Add(installationChunk).Add(projectNameChunk);
+            document.Add(projectInformationParagraph);
+        }
+        else
+        {
+             var projectInformationParagraph = new Paragraph("Nouveau projet évalué");
+            document.Add(projectInformationParagraph);
+        }
+
         // Nom de l'auteur du rapport
         if (!string.IsNullOrWhiteSpace(username))
         {
-            var evaluationChunk = new Paragraph("Evaluation menée par :");
+            var evaluationChunk = new Paragraph("Evaluation menée par : ");
             var usernameChunk = new Paragraph($" {username}");
             
             var evaluatorNameParagraph = new Paragraph().Add(evaluationChunk).Add(usernameChunk);
-
             // Ajouter le paragraphe au document
             document.Add(evaluatorNameParagraph);
-        }
-        
-        // Structure de l'installation
-        var projectStructureParagraph = new Paragraph("Structure de l'installation évaluée :");
-        document.Add(projectStructureParagraph);
-        foreach (var modeles in _modelesFonctionnels)
-        {
-            document.Add(new Paragraph(modeles));
         }
         
         // TODO Portion de code à remplacer par la génération de deux arborescences:
         // TODO 1 pour montrer le lien entre les CMD, les IE et les modèles de tests
         // TODO 1 pour montrer la structure du bâtiment
-        //var img = Image.GetInstance(@"C:\Users\maxim\Downloads\screenshot en attendant.png");
-        //img.Alignment = Element.ALIGN_CENTER;
-        //img.SpacingAfter = 5f;
-        //img.ScaleToFit(document.PageSize.Width, 0.3810169491525424f*document.PageSize.Width);
-        //document.Add(img);
         
         // Ajout d'un trait de séparation avec la couleur définie
         
-        
-        // Affichage des résultats des tests
-        var conductedTests = new Paragraph("Tests réalisés :");
-        document.Add(conductedTests);
-        
         // TODO ICI IL MANQUE DU COUP L'AFFICHAGE DE TOUS LES RÉSULTATS (Voir fonction GenerateTestList)
+    }
+
+    /// <summary>
+    /// NaN
+    /// </summary>
+    /// <param name="document"></param>
+    /// <param name="testedList"></param>
+    /// <param name="testResults"></param>
+    private void GenerateTestListAndResults(Document document, ObservableCollection<FunctionalModel>  testedList, List<List<List<List<ResultType>>>> testResults)
+    {
+        int i=0, j, k, l;
+        foreach (var testedModel in testedList)
+        {
+            j = 0;
+            document.Add(new Paragraph($"Modèle testé : {testedModel.FullName}"));
+            foreach (var testedElement in testedModel.ElementList)
+            {
+                k = 0;
+                document.Add(new Paragraph("Élément n°" + (j+1)));
+                foreach (var testedCommand in testedElement.TestsCmd[0].Value)
+                {
+                    l = 0;
+                    var resultString = "Commande n°" + (k+1) + " :   ";
+                    foreach (var testedDpt in testedElement.TestsCmd)
+                    {
+                        resultString += "DPT n°" + (l+1)  + " : "+ testResults[i][j][k][l] + (testedElement.TestsCmd.Count==1?"":", ") ;
+                        l++;
+                    }
+                    Paragraph resultParagraph = new Paragraph(resultString);
+                    document.Add(resultParagraph);
+                    k++;
+                }
+                j++;
+            }
+
+            i++;
+        }
     }
     
     

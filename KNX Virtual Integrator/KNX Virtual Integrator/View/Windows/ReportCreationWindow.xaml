@@ -135,7 +135,8 @@
                                            Style="{StaticResource StandardTextBlockLight}" 
                                            Margin="10,10,10,2" />
                                 <TextBox x:Name="AuthorNameTextBox" 
-                                         Style="{StaticResource StandardTextBoxLight}" 
+                                         Style="{StaticResource StandardTextBoxLight}"
+                                         Text="{Binding AuthorName}"
                                          Width="400"
                                          Margin="10, 5, 10, 10" />
 

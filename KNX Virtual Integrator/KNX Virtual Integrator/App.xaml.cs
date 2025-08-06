@@ -198,7 +198,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 151;
+    public const int AppBuild = 153;
     
         
     
@@ -236,8 +236,6 @@ public partial class App
         OpenMainWindow(); // Ouvrir la fenêtre principale
         PerformStartupTasks(); // Exécuter les tâches de démarrage
 
-        //if (MainViewModel != null) _creationWindow = new ReportCreationWindow(MainViewModel);
-        //_creationWindow?.Show();
     }
 
     
@@ -365,6 +363,7 @@ public partial class App
     }
     
 }
+
 
 
 
