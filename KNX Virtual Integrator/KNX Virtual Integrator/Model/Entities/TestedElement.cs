@@ -211,12 +211,50 @@ namespace KNX_Virtual_Integrator.Model.Entities
             return count;
         }
         
+        public int CmdContains(string name)
+        {
+            var count = 0;
+            foreach (var myDpt in TestsCmd)
+            {
+                Console.WriteLine("mydpt name : " + myDpt.Name + ", name : " + name);
+                if (myDpt.Name//.Replace('_',' ')
+                    .Contains(name, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine("We're good");
+                    count++;
+                }
+            }
+            return count;
+        }
+        
+        /// <summary>
+        /// Searches for a dpt of the same type of the argument, in the list of dptIe
+        /// </summary>
+        /// <param name="dpt"> dpt to find in the list</param>
+        /// <returns>THe index of the dpt in the list of dptIe</returns>
         public int IeContains(DataPointType dpt)
         {
             var count = 0;
             foreach (var myDpt in TestsIe)
             {
                 if (myDpt.Type == dpt.Type)
+                    count++;
+            }
+            return count;
+        }
+        
+        /// <summary>
+        /// Searches for a dpt of the same type of the argument, in the list of dptIe
+        /// </summary>
+        /// <param name="prefix"> prefix
+        /// to find in the list</param>
+        /// <returns>THe index of the dpt in the list of dptIe</returns>
+        public int IeContains(string prefix)
+        {
+            var count = 0;
+            foreach (var myDpt in TestsIe)
+            {
+                if (myDpt.Name.Contains(prefix,StringComparison.OrdinalIgnoreCase))
                     count++;
             }
             return count;

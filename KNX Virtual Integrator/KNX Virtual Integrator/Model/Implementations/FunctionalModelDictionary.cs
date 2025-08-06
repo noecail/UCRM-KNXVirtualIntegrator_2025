@@ -32,7 +32,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public FunctionalModelDictionary()
         {
             FunctionalModels = [];
-            AddFunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
+           /* AddFunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
                 "Lumiere_ON_OFF")); //Adding On/Off light functional model
             AddFunctionalModel(new FunctionalModel([
                 new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,5],["",""],
@@ -79,7 +79,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             AddKeyword(3, "Convecteur");
             AddKeyword(3, "Prise");
             AddKeyword(3, "Arrosage");
-            AddKeyword(3, "Ouvrant");
+            AddKeyword(3, "Ouvrant");*/
 
         }
 
@@ -106,7 +106,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             else if (!functionalModel.Name.Contains("Structure"))
                 newModel.Name += "_Structure";
             FunctionalModels.Add(newModel);
-            //FunctionalModels.Last().Key = FunctionalModels.Count;
             OnPropertyChanged(nameof(FunctionalModels));
         }
 

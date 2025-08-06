@@ -413,7 +413,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                      //  if (i == 0 || objectType.Count < 1.2 * newFunctionalModels.Count &&
                      //      objectType.Count > 0.8 * newFunctionalModels.Count - 1)
                        {
-
                            for (var j = 0; j < objectType.Count; j++)
                            {
                                var dptName = objectType[j].Attribute("Name")?.Value ?? "";
@@ -485,7 +484,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                        var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                        if (modelIndex != -1)
                                        {
-                                           newFunctionalModels[j].AddElement(new TestedElement([newType], [newAddress],
+                                           newFunctionalModels[modelIndex].AddElement(new TestedElement([newType], [newAddress],
                                                [[]], [dptName], circuitName));
                                        }
                                        else
@@ -503,33 +502,77 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     {
                         for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                         {
+                            
                             var objectType = structureList[i].Elements().ToList();
+                            List<String> names = [];
                             for (var j = 0; j < objectType.Count; j++)
                             {
-                                if (Prefixes.All(p =>
-                                        !(objectType[j].Attribute("Name")?.Value
-                                            .StartsWith(p, StringComparison.OrdinalIgnoreCase) ?? false))
-                                    && !(objectType[j].Attribute("Name")?.Value
-                                             .Contains("stop", StringComparison.OrdinalIgnoreCase) ??
-                                         false)) //If the name doesn't start with anything command related nor contains stop, it's an IE
+                                names.Add(objectType[j].Attribute("Name")?.Value ?? "");
+                            }
+
+                            var prefix = FindMajorityPrefix(names);
+                            var suffix = "";
+                            if (names.Count == 1)
+                            {
+                                names = [];
+                                for (var j = 0; j < structureList.Count; j++)
                                 {
-                                    int newType = 0;
-                                    if (objectType[j].Attribute("DPTs") != null)
-                                        newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
-                                            .Split('-')[1]!); //gets the type between the dashes in the xml
-                                    var newAddress = objectType[j].Attribute("Address")?.Value!;
-                                    var newDpt = new DataPointType(newType, newAddress, []);
-                                    for (var k = 0;
-                                         k < newFunctionalModels[j].ElementList.Count;
-                                         k++) //For each element, if for the same command 
+                                    names.Add(structureList[j].Elements().ToList()[0].Attribute("Name")?.Value ?? "");
+                                }
+                                suffix = FindMajoritySuffix(names);
+                            }
+                            for (var j = 0; j < objectType.Count; j++)
+                            {
+                                if (objectType.Count == 1)
+                                    prefix = prefix.Replace(suffix, "");
+                                var dptName = objectType[j].Attribute("Name")?.Value ?? "";
+                                dptName = dptName.Replace(" ", "_");
+                                if (Prefixes.All(p =>
+                                        !dptName
+                                            .StartsWith(p, StringComparison.OrdinalIgnoreCase))
+                                    && !dptName
+                                             .Contains("stop", StringComparison.OrdinalIgnoreCase)) //If the name doesn't start with anything command related nor contains stop, it's an IE
+                                {
+                                    Console.WriteLine(dptName);
+                                    var circuitName = dptName;
+                                    if (!string.IsNullOrEmpty(circuitName) &&
+                                        !string.IsNullOrEmpty(prefix))
+                                        circuitName = circuitName.Replace(prefix.Replace(" ","_"), "");
+                                    else
                                     {
-                                        var newElement = newFunctionalModels[j].ElementList[k];
-                                        Console.WriteLine(k + "          " + functionalModelList
-                                            .FunctionalModelDictionary
-                                            .FunctionalModels[index].ElementList.Count);
-                                        var element = functionalModelList.FunctionalModelDictionary
-                                            .FunctionalModels[index].ElementList[k];
-                                        var nbAppearances = element.IeContains(newDpt);
+                                        circuitName =
+                                            string.Join("",
+                                                circuitName.Split('_')[
+                                                    1..]); //Takes the name of the object, except the first word 
+                                    }
+                                    var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                            .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
+                                    var newAddress = objectType[j].Attribute("Address")?.Value!;
+                                    var newDpt = new DataPointType(newType, newAddress, [],dptName);
+                                    Console.WriteLine("Le nom du circuit esr : " + circuitName);
+                                    var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
+                                    if (modelIndex == -1) //When the circuit name doesn't exist, maybe take j?? dangerous
+                                    {
+                                        Console.WriteLine("We fucked up");
+                                        modelIndex = j;
+                                    }
+
+                                    if (modelIndex >= newFunctionalModels.Count)
+                                    {
+                                        return;
+                                    }
+                                    for (var k = 0;
+                                            k < newFunctionalModels[modelIndex].ElementList.Count;
+                                            k++) //For each element, if for the same command 
+                                    {
+                                        var newElement = newFunctionalModels[modelIndex].ElementList[k];
+                                        //element = functionalModelList.FunctionalModelDictionary
+                                        //    .FunctionalModels[index].ElementList[k];
+                                       // newElement = newFunctionalModels[modelIndex].ElementList[k];
+                                        Console.WriteLine("Hey : " + string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..])); 
+                                        Console.WriteLine("prefixxxxx" + prefix);
+                                        var nbAppearances = newElement.CmdContains(string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..]));
+                                        Console.WriteLine("zzzzzzzzzzzzzzzzzz" + nbAppearances +" z " + string.Join("_", prefix.Split(' ')[1..]));
                                         for (var l = 0; l < nbAppearances; l++)
                                         {
                                             newElement.AddDptToIe(newType, newAddress, []);
@@ -565,9 +608,31 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     {
                         for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                         {
+                            
                             var objectType = structureList[i].Elements().ToList();
+                            List<String> names = [];
                             for (var j = 0; j < objectType.Count; j++)
                             {
+                                names.Add(objectType[j].Attribute("Name")?.Value ?? "");
+                            }
+
+                            var prefix = FindMajorityPrefix(names);
+                            var suffix = "";
+                            if (names.Count == 1)
+                            {
+                                names = [];
+                                for (var j = 0; j < structureList.Count; j++)
+                                {
+                                    names.Add(structureList[j].Elements().ToList()[0].Attribute("Name")?.Value ?? "");
+                                }
+                                suffix = FindMajoritySuffix(names);
+                            }
+                            for (var j = 0; j < objectType.Count; j++)
+                            {
+                                if (objectType.Count == 1)
+                                    prefix = prefix.Replace(suffix, "");
+                                var dptName = objectType[j].Attribute("Name")?.Value ?? "";
+                                dptName = dptName.Replace(" ", "_");
                                 if (Prefixes.All(p =>
                                         !(objectType[j].Attribute("Name")?.Value
                                             .StartsWith(p, StringComparison.OrdinalIgnoreCase) ?? false))
@@ -575,18 +640,48 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                              .Contains("stop", StringComparison.OrdinalIgnoreCase) ??
                                          false)) //If the name doesn't start with anything command related nor contains stop, it's an IE
                                 {
-                                    int newType = 0;
+                                    var circuitName = dptName;
+                                    if (!string.IsNullOrEmpty(circuitName) &&
+                                        !string.IsNullOrEmpty(prefix))
+                                        circuitName = circuitName.Replace(prefix.Replace(" ","_"), "");
+                                    else
+                                    {
+                                        circuitName =
+                                            string.Join("",
+                                                circuitName.Split('_')[
+                                                    1..]); //Takes the name of the object, except the first word 
+                                    }
+                                    var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                        .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                     if (objectType[j].Attribute("DPTs") != null)
                                         newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                             .Split('-')[1]!); //gets the type between the dashes in the xml
                                     var newAddress = objectType[j].Attribute("Address")?.Value!;
                                     var newDpt = new DataPointType(newType, newAddress, []);
+                                    var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
+                                    if (modelIndex == -1) //When the circuit name doesn't exist, maybe take j?? dangerous
+                                    {
+                                        Console.WriteLine("We fucked up");
+                                        modelIndex = j;
+                                    }
+
+                                    if (modelIndex >= newFunctionalModels.Count)
+                                    {
+                                        return;
+                                    }
                                     for (var k = 0;
                                          k < newFunctionalModels[j].ElementList.Count;
                                          k++) //For each element, if for the same command 
                                     {
-                                        var newElement = newFunctionalModels[j].ElementList[k]; // TODO : Recherche de cmd contenant le même suffixe
-                                        if (newElement.CmdContains(newType) > 0 || newType == 5)
+                                        var newElement = newFunctionalModels[modelIndex].ElementList[k];
+                                        //element = functionalModelList.FunctionalModelDictionary
+                                        //    .FunctionalModels[index].ElementList[k];
+                                        // newElement = newFunctionalModels[modelIndex].ElementList[k];
+                                        Console.WriteLine("Hey : " + string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..])); 
+                                        Console.WriteLine("prefixxxxx" + prefix);
+                                        var nbAppearances = newElement.CmdContains(string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..]));
+                                        Console.WriteLine("zzzzzzzzzzzzzzzzzz" + nbAppearances +" z " + string.Join("_", prefix.Split(' ')[1..]));
+                                        for (var l = 0; l < nbAppearances; l++)
                                         {
                                             newElement.AddDptToIe(newType, newAddress, []);
                                         }
@@ -607,7 +702,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
                 }
             }
-            else// if (_groupAddressStructure == 2)
+            else// if (_groupAddressStructure == 2) //Case when Addresses are structured with 2 levels
             {
             }
             //functionalModelList.ExportList(@"C:\Users\manui\Documents\Stage 4A\Test\List");
@@ -679,9 +774,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// <summary>
     /// Finds the biggest prefix corresponding to at least threshold (default 90 %) of the addresses
     /// </summary>
-    /// <param name="strings">List of string to </param>
-    /// <param name="threshold">percentage of names that need to have the same prefix</param>
-    /// <returns></returns>
+    /// <param name="strings">List of string where the prefix has to be found </param>
+    /// <param name="threshold">Percentage of names that need to have the same prefix</param>
+    /// <returns>The biggest prefix shared by at least the threshold</returns>
     string FindMajorityPrefix(List<string> strings, double threshold = 0.9)
     {
         if (strings.Count == 0)
@@ -725,6 +820,24 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         }
 
         return bestPrefix;
+    }
+    
+    /// <summary>
+    /// Finds the biggest suffix corresponding to at least threshold (default 90 %) of the addresses
+    /// </summary>
+    /// <param name="strings">List of string where the suffix has to be found</param>
+    /// <param name="threshold">Percentage of names that need to have the same suffix</param>
+    /// <returns>The biggest suffix shared by at least the threshold</returns>
+    string FindMajoritySuffix(List<string> strings, double threshold = 0.9)
+    {
+        // On inverse toutes les chaînes
+        var reversedStrings = strings.Select(s => new string(s.Reverse().ToArray())).ToList();
+
+        // On réutilise ta méthode pour trouver le préfixe majoritaire sur les chaînes inversées
+        string reversedSuffix = FindMajorityPrefix(reversedStrings, threshold);
+
+        // On inverse à nouveau pour obtenir le suffixe original
+        return new string(reversedSuffix.Reverse().ToArray());
     }
 
     /// <summary>
