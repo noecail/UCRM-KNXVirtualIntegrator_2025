@@ -437,7 +437,8 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
 
             // On stocke le nom du nouveau projet
             GroupAddressFileName = Path.GetFileNameWithoutExtension(groupAddressesSourceFilePath);
-                
+            ProjectName = GroupAddressFileName;
+            
             App.WindowManager!.MainWindow.Title = settings.AppLang switch
             {
                 // Arabe

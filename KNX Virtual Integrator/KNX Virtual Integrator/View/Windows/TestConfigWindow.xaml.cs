@@ -220,6 +220,10 @@ public partial class TestConfigWindow
 
     private void LaunchTestButton_OnClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.LaunchAnalysisCommand.Execute(_viewModel.SelectedTestModels);
+
+        Dispatcher.InvokeAsync(() =>
+        {
+            _viewModel.LaunchAnalysisCommand.Execute(_viewModel.SelectedTestModels);
+        });
     }
 }

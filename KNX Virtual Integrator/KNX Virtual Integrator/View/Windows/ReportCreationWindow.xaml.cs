@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using KNX_Virtual_Integrator.ViewModel;
@@ -84,8 +85,24 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void SaveButtonClick(object sender, RoutedEventArgs e)
     {
-        _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, AuthorNameTextBox.Text.Trim()));
-        MyBrowser.Navigate(_mainViewModel.PdfPath);
+        _mainViewModel.AuthorName = AuthorNameTextBox.Text;
+        Uri uri = new Uri(_mainViewModel.PdfPath, UriKind.RelativeOrAbsolute);
+        if (!uri.IsAbsoluteUri)
+        {
+            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("The pdf URI Address has to be absolute");
+            return;
+        }
+        if (uri.Equals(MyBrowser.Source))
+        {
+            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("The pdf URI Address has to be changed before modifying the file");
+            return;
+        }
+        _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
+            _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
+        if (_mainViewModel.PdfPath.Length <= 0)
+            return;
+        MyBrowser.Navigate(uri);
+        
     }
 
     /// <summary>

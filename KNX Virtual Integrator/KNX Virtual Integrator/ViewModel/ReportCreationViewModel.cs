@@ -17,4 +17,16 @@ public partial class MainViewModel
             WhenPropertyChanged(nameof(PdfPath));
         }
     }
+    
+    private string _authorName = "";
+
+    public string AuthorName
+    {
+        get => _authorName;
+        set
+        {
+            _authorName = value;
+            WhenPropertyChanged(nameof(AuthorName));
+        }
+    }
 }

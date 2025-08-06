@@ -22,8 +22,6 @@
         <None Remove="Resources\resources\logo-ucrm.svg" />
         <None Remove="Resources\resources\logo-ucrm-blanc.svg" />
         <Resource Include="Resources\resources\logoUCRM.png" />
-        <Resource Include="Resources\resources\logo-ucrm.svg" />
-        <Resource Include="Resources\resources\logo-ucrm-blanc.svg" />
     </ItemGroup>
 
     <ItemGroup>

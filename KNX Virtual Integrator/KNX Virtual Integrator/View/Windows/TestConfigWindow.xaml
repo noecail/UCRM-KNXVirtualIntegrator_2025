@@ -22,12 +22,12 @@
         
         <!-- Style pour les Modèles Fonctionnels choisis -->
         <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type entities:FunctionalModel}">
-            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=Name}"
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=FullName}"
                        Style="{StaticResource ItalicTextBlockLight}" />
         </DataTemplate>
 
         <DataTemplate x:Key="ListBoxItemDark" DataType="{x:Type entities:FunctionalModel}">
-            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=Name}"
+            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=FullName}"
                        Style="{StaticResource ItalicTextBlockDark}" />
         </DataTemplate>
         
