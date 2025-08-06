@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Windows;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities
@@ -38,6 +39,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 TestsIe.Add(new DataPointType(typeIe[i],addressesIe[i],valueIe[i]));
             }
+            UpdateRemoveTestButtonVisibility();
         } 
         
         
@@ -75,6 +77,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 TestsIe.Add(element.TestsIe[i]);
             }
+            UpdateRemoveTestButtonVisibility();
         }
 
         /// <summary>
@@ -149,6 +152,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 dpt.AddValue(new GroupValue(false));
             }   
+            UpdateRemoveTestButtonVisibility();
         }
 
         public int FindELementInModel(FunctionalModel model)
@@ -198,6 +202,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 dpt.RemoveValue(index);
             }
+            UpdateRemoveTestButtonVisibility();
         }
 
         public int CmdContains(int type)
@@ -235,6 +240,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public void AddDptToIe(int type, string address, List<GroupValue?> value)
         {
             TestsIe.Add(new DataPointType(type, address, value));
+            UpdateRemoveTestButtonVisibility();
         }
 
         public void RemoveDptFromCmd(int index)
@@ -245,6 +251,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         public void RemoveDptFromIe(int index)
         {
             TestsIe.RemoveAt(index);
+            UpdateRemoveTestButtonVisibility();
         }
         
         /// <summary>
@@ -276,6 +283,14 @@ namespace KNX_Virtual_Integrator.Model.Entities
                 test.UpdateValue();
             }
         }
-
+        
+        public void UpdateRemoveTestButtonVisibility()
+        {
+            foreach (var test in TestsIe)
+            {
+                var vis = test != TestsIe.Last() ? Visibility.Collapsed : Visibility.Visible;
+                test.UpdateRemoveTestButtonVisibility(vis);
+            }
+        }
     }
 }

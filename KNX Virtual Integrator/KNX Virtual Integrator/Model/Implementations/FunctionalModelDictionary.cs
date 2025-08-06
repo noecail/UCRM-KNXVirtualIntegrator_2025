@@ -55,6 +55,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             for (var i = 0; i < FunctionalModels.Count; i++)
             {
                 FunctionalModels[i].UpdateIntValue();
+                FunctionalModels[i].UpdateRemoveTestButtonVisibility();
             }
             
             AddKeyword(0, "Lumiere on/off");

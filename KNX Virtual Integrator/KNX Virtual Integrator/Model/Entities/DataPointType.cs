@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Knx.Falcon;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 /// <summary>
@@ -16,6 +17,18 @@ public class DataPointType : INotifyPropertyChanged
     // Class used only for Value collections, used by the UI to access and modify BigInteger values, which do not raise notifications by default
     public class BigIntegerItem : INotifyPropertyChanged
     {
+        private Visibility? _removeTestButtonVisibility ;
+        public Visibility? RemoveTestButtonVisibility
+        {
+            get => _removeTestButtonVisibility;
+            set
+            {
+                if (_removeTestButtonVisibility == value) return;
+                _removeTestButtonVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+        
         private BigInteger? _bigIntegervalue;
         public BigInteger? BigIntegerValue
         {
@@ -33,6 +46,7 @@ public class DataPointType : INotifyPropertyChanged
         public BigIntegerItem(BigInteger bi)
         {
             BigIntegerValue = bi;
+            RemoveTestButtonVisibility = Visibility.Collapsed;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -381,7 +395,12 @@ public class DataPointType : INotifyPropertyChanged
                 Value.Add(new GroupValue(value.BigIntegerValue.Value.ToByteArray()));
         }
     }
-    
+
+    public void UpdateRemoveTestButtonVisibility(Visibility vis)
+    {
+        foreach (var bigIntegerItem in IntValue)
+            bigIntegerItem.RemoveTestButtonVisibility = vis;
+    }
     
     /// <summary>
     /// This method checks if the group value of the DPT is the same as the one in parameter.

@@ -444,7 +444,6 @@
                                              ItemsSource="{Binding SelectedModel.ElementList, FallbackValue=''}"
                                              SelectedItem="{Binding SelectedTestedElement}"
                                              ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}"
-                                             AlternationCount="100"
                                              >
                                         <ListBox.ItemTemplate>
                                             <DataTemplate>
@@ -638,8 +637,6 @@
                                                         <ListBox Grid.Row="3" Grid.Column="2" 
                                                                  ItemsSource="{Binding TestsIe}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}">
-                                                                 Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                 AlternationCount="100"
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -647,7 +644,7 @@
                                                             </ListBox.ItemsPanel>
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <ItemsControl ItemsSource="{Binding IntValue}" AlternationCount="100">
+                                                                    <ItemsControl ItemsSource="{Binding IntValue}">
                                                                         <ItemsControl.ItemsPanel>
                                                                             <ItemsPanelTemplate>
                                                                                 <StackPanel Orientation="Vertical"/>
@@ -682,12 +679,11 @@
                                                                                         Margin="10,0,0,0"
                                                                                         VerticalAlignment="Center"
                                                                                         HorizontalAlignment="Center"
+                                                                                        Visibility="{Binding RemoveTestButtonVisibility}"
                                                                                         Style="{StaticResource RemoveTestButtonStyleLight}"
                                                                                         Click="RemoveTestFromElementButtonClick">
                                                                                     </Button>
                                                                                     
-                                                                                    <!--<TextBlock Text="{Binding RemoveTestButtonVisibility}"/>-->
-                                                                                   
                                                                                 </StackPanel>
                                                                             </DataTemplate>
                                                                         </ItemsControl.ItemTemplate>
