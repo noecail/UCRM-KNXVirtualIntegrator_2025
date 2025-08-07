@@ -397,20 +397,28 @@
                 <!-- En-tête colonne 3 -->
                 <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,1,0" >
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" /> <!-- Titre -->
-                        </Grid.ColumnDefinitions>
-
+                    
+                    <StackPanel Orientation="Vertical">
                         <!-- Titre -->
-                        <TextBlock Grid.Column="0"
+                        <TextBlock 
                                    x:Name="ModelSettingsText"
                                    Style="{StaticResource TitleTextLight}"
                                    Text="Paramètres du Modèle Fonctionnel"
                                    HorizontalAlignment="Left"
                                    Margin="5,0"
                         />
-                    </Grid>
+                        <!--Nom du Modèle Fonctionnel-->
+                        <TextBlock Text="{StaticResource Name:}" 
+                                   x:Name="NameTextBlock"
+                                   Style="{StaticResource StandardTextBlockLight}"
+                                   Margin="15,0,0,0"/>
+                        <TextBox x:Name="NomTextBox" 
+                                 Style="{StaticResource StandardTextBoxLight}"
+                                 HorizontalAlignment="Left" 
+                                 Width="200"
+                                 Text="{Binding SelectedModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
+                                 Margin="15,0,0,0"/>
+                    </StackPanel>
                 </Border>
                 
                 <!-- Contenu colonne 3 : liste des Éléments à Tester -->
@@ -426,18 +434,6 @@
                         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
                             <!-- Modèle Fonctionnel -->
                             <StackPanel Orientation="Vertical" Margin="0,10,0,0">
-                                
-                                <!--Nom du Modèle Fonctionnel-->
-                                <TextBlock Text="{StaticResource Name:}" 
-                                           x:Name="NameTextBlock"
-                                           Style="{StaticResource StandardTextBlockLight}"/>
-                                <TextBox x:Name="NomTextBox" 
-                                         Style="{StaticResource StandardTextBoxLight}"
-                                         HorizontalAlignment="Left" 
-                                         Width="200"
-                                         Text="{Binding SelectedModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
-                                         />
-                                
                                 <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                                     <ListBox Name="SelectedElementsListBox"
@@ -516,7 +512,9 @@
                                                         <!--Colonne 2 : Cmd(s)-->
                                                         <TextBlock Grid.Row="0" Grid.Column="1" Text="Envoi(s)" Margin="5,0,0,0"/>
                                                         <!--Type de DPT de l'envoi-->
-                                                        <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                        <ListBox Grid.Row="1" Grid.Column="1"
+                                                                 ItemsSource="{Binding TestsCmd}"
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -528,12 +526,15 @@
                                                                              Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                              HorizontalContentAlignment="Center"
                                                                              Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                             Margin="0,0,14,0"
                                                                     />
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
                                                         <!--Adresses de l'envoi-->
-                                                        <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TestsCmd}" Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                        <ListBox Grid.Row="2" Grid.Column="1"
+                                                                 ItemsSource="{Binding TestsCmd}"
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal"
@@ -546,6 +547,7 @@
                                                                              Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                              HorizontalContentAlignment="Center"
                                                                              Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                             Margin="0,0,14,0"
                                                                     />
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
@@ -595,14 +597,6 @@
                                                                                         <Button
                                                                                             HorizontalAlignment="Left"
                                                                                             VerticalAlignment="Bottom"
-                                                                                            Margin="2,0,0,2"
-                                                                                            Style="{StaticResource DeactivateValueButtonStyle}"
-                                                                                            Click="DeactivateValueCmdButtonClick">
-                                                                                            <TextBlock Text="x" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                                                                        </Button>
-                                                                                        <Button
-                                                                                            HorizontalAlignment="Left"
-                                                                                            VerticalAlignment="Bottom"
                                                                                             Margin="2,0,0,0"
                                                                                             Style="{StaticResource ResetValueButtonStyle}"
                                                                                             Click="ResetValueCmdButtonClick">
@@ -630,8 +624,9 @@
                                                                 <DataTemplate>
                                                                     <TextBox Text="{Binding Type}"
                                                                              Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                            HorizontalContentAlignment="Center"
-                                                                            Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                             HorizontalContentAlignment="Center"
+                                                                             Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                             Margin="0,0,14,0"
                                                                     />
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
@@ -650,6 +645,7 @@
                                                                              Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                              HorizontalContentAlignment="Center"
                                                                              Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                             Margin="0,0,14,0"
                                                                     />
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
@@ -746,30 +742,32 @@
                                     </ListBox>
                                 </ScrollViewer>
                                 
-                                <!-- Bouton d'ajout d'élément à tester-->
-                                <Button HorizontalAlignment="Stretch"
-                                        Click="AddTestedElementToStructureButtonClick"
-                                        Style="{StaticResource NewSomethingButtonStyle}"
-                                        Tag="{StaticResource AddTestedElement}"
-                                        Margin="0,10,0,0"
-                                        Padding="0"/>
                             </StackPanel>
                         </ScrollViewer>
-
-                        <!-- Boutons Enregister et Filtrer-->
-                        <StackPanel Grid.Row="1" Orientation="Horizontal"
-                                    VerticalAlignment="Top" HorizontalAlignment="Right"
-                                    Margin="10">
-                            <Button Style="{StaticResource IconTextButtonStyle}"
-                                    Foreground="{StaticResource DarkForegroundBrush}"
-                                    Tag="{StaticResource FilterDrawingImage}"
-                                    Content="Afficher tous les modèles" Margin="10,0"
-                                    Click="FilterModelButtonClick"/>
-                            <Button Style="{StaticResource IconTextButtonStyle}"
-                                    Foreground="{StaticResource DarkForegroundBrush}"
-                                    Tag="{StaticResource CheckmarkDrawingImage}"
-                                    Content="Afficher le modèle sélectionné"
-                                    Click="SaveModelButtonClick"/>
+                        <StackPanel Grid.Row="1" Orientation="Vertical">
+                            <!-- Bouton d'ajout d'élément à tester-->
+                            <Button HorizontalAlignment="Stretch"
+                                    Click="AddTestedElementToStructureButtonClick"
+                                    Style="{StaticResource NewSomethingButtonStyle}"
+                                    VerticalAlignment="Bottom"
+                                    Tag="{StaticResource AddTestedElement}"
+                                    Margin="0,10,0,0"
+                                    Padding="0"/>
+                            <!-- Boutons Enregister et Filtrer-->
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Top" HorizontalAlignment="Right"
+                                        Margin="10">
+                                <Button Style="{StaticResource IconTextButtonStyle}"
+                                        Foreground="{StaticResource DarkForegroundBrush}"
+                                        Tag="{StaticResource FilterDrawingImage}"
+                                        Content="Afficher tous les modèles" Margin="10,0"
+                                        Click="FilterModelButtonClick"/>
+                                <Button Style="{StaticResource IconTextButtonStyle}"
+                                        Foreground="{StaticResource DarkForegroundBrush}"
+                                        Tag="{StaticResource CheckmarkDrawingImage}"
+                                        Content="Afficher le modèle sélectionné"
+                                        Click="SaveModelButtonClick"/>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </Border>
