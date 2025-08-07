@@ -315,5 +315,20 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
         }
 
+        public int GetDptType(string dptName)
+        {
+            var res = 0;
+            foreach (var myDpt in TestsCmd)
+            {
+                if (myDpt.Name//.Replace('_',' ')
+                    .Contains(dptName, StringComparison.OrdinalIgnoreCase))
+                {
+                    res = myDpt.Type;
+                    break;
+                }
+            }
+            return res;
+        }
+
     }
 }

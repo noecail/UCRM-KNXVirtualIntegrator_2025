@@ -392,6 +392,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
             if (_groupAddressStructure == 3)
             {
+                List<string> prefixOfPrefixes = [];
                 foreach (var modelStructure in modelStructures)
                 {
                     var structureList = modelStructure.Elements().ToList();
@@ -399,6 +400,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     modelName = modelName.Replace(" ", "_");
                     List<FunctionalModel> newFunctionalModels = []; // new list to store all the functional model of the next structure
                     Console.WriteLine("MàJ des newmodels !!!!!!!!!!!");
+                    List<string> prefixList = [];
+
                     for (var i = 0; i < structureList.Count; i++) //Takes all the commands
                     {
                         var objectType = structureList[i].Elements().ToList();
@@ -409,6 +412,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
 
                         var prefix = FindMajorityPrefix(names);
+                        prefixList.Add(prefix);
                        Console.WriteLine("Le préfixe est : " + prefix);
                      //  if (i == 0 || objectType.Count < 1.2 * newFunctionalModels.Count &&
                      //      objectType.Count > 0.8 * newFunctionalModels.Count - 1)
@@ -495,6 +499,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                }
                            }
                        }
+                       prefixOfPrefixes.Add(FindMajorityPrefix(prefixList));
                     }
 
                     var index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0]);
@@ -571,7 +576,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                        // newElement = newFunctionalModels[modelIndex].ElementList[k];
                                         Console.WriteLine("Hey : " + string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..])); 
                                         Console.WriteLine("prefixxxxx" + prefix);
-                                        var nbAppearances = newElement.CmdContains(string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..]));
+                                        var name = string.Join("_", prefix.Replace(circuitName,"").Split('_')[1..]);
+                                        if (name=="")
+                                            name = string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..]);
+                                        var nbAppearances = newElement.CmdContains(name);
                                         Console.WriteLine("zzzzzzzzzzzzzzzzzz" + nbAppearances +" z " + string.Join("_", prefix.Split(' ')[1..]));
                                         for (var l = 0; l < nbAppearances; l++)
                                         {
@@ -670,7 +678,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         return;
                                     }
                                     for (var k = 0;
-                                         k < newFunctionalModels[j].ElementList.Count;
+                                         k < newFunctionalModels[modelIndex].ElementList.Count;
                                          k++) //For each element, if for the same command 
                                     {
                                         var newElement = newFunctionalModels[modelIndex].ElementList[k];
@@ -679,7 +687,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         // newElement = newFunctionalModels[modelIndex].ElementList[k];
                                         Console.WriteLine("Hey : " + string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..])); 
                                         Console.WriteLine("prefixxxxx" + prefix);
-                                        var nbAppearances = newElement.CmdContains(string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..]));
+                                        var name = string.Join("_", prefix.Replace(circuitName,"").Split('_')[1..]);
+                                        if (name=="")
+                                            name = string.Join("_", prefix.Replace(circuitName,"").Split(' ')[1..]);
+                                        var nbAppearances = newElement.CmdContains(name);
+                                        if (newType == 0 && nbAppearances != 0)
+                                        {
+                                            newType = newElement.GetDptType(name);
+                                        }
                                         Console.WriteLine("zzzzzzzzzzzzzzzzzz" + nbAppearances +" z " + string.Join("_", prefix.Split(' ')[1..]));
                                         for (var l = 0; l < nbAppearances; l++)
                                         {
