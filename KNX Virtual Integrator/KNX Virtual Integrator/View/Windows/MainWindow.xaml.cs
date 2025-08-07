@@ -657,19 +657,19 @@ public partial class MainWindow
         var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
         int indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
 
-        // Effectively reset the value
+        // Effectively deactivate the value
         switch (tests)
         {
             case "TestsCmd":
             {
                 if (_viewModel.SelectedModel != null)
-                    _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].BigIntegerValue = 666;
+                    _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].IsEnabled = false;
                 break;
             }
             case "TestsIe":
             {
                 if (_viewModel.SelectedModel != null)
-                    _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].BigIntegerValue = 666;
+                    _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].IsEnabled = false;
                 break;
             }
         }
@@ -715,21 +715,32 @@ public partial class MainWindow
         var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
         var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
         int indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
-        
-        // Effectively reset the value
-        switch (tests)
+
+        if (_viewModel.SelectedModel != null)
         {
-            case "TestsCmd":
+            // Effectively reset the value
+            switch (tests)
             {
-                if (_viewModel.SelectedModel != null)
-                    _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].BigIntegerValue = 0;
-                break;
-            }
-            case "TestsIe":
-            {
-                if (_viewModel.SelectedModel != null)
-                    _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].BigIntegerValue = 0;
-                break;
+                case "TestsCmd":
+                {
+                    var bigIntegerItem = _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue];
+                    
+                    if (bigIntegerItem.IsEnabled == false)
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].IsEnabled = true;
+                    else
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].BigIntegerValue = 0;
+                    break;
+                }
+                case "TestsIe":
+                {
+                    var bigIntegerItem = _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue];
+                    
+                    if (bigIntegerItem.IsEnabled == false)
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].IsEnabled = true;
+                    else
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].BigIntegerValue = 0;
+                    break;
+                }
             }
         }
     }

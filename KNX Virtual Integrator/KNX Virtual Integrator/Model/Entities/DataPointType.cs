@@ -43,10 +43,26 @@ public class DataPointType : INotifyPropertyChanged
             }
         }
 
+        private bool _isEnabled;
+
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public BigIntegerItem(BigInteger bi)
         {
             BigIntegerValue = bi;
             RemoveTestButtonVisibility = Visibility.Collapsed;
+            IsEnabled = true;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -374,12 +390,17 @@ public class DataPointType : INotifyPropertyChanged
     public void UpdateIntValue()
     {
         IntValue.Clear();
+        var i = 0;
         foreach (var value in Value)
         {
             if (value != null)
                 IntValue.Add(new BigIntegerItem(new BigInteger(value.Value)));
             else
-                IntValue.Add(new BigIntegerItem(new BigInteger(666)));
+            {
+                IntValue.Add(new BigIntegerItem(new BigInteger(0)));
+                IntValue[i].IsEnabled = false;
+            }
+            i++;
         }
     }
 
