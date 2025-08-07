@@ -342,17 +342,17 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
                 if (theList.Count > 0 && theList.Last().Equals(Messages.Last())) return;
                 theList.Add(Messages.Last());
             };
-            
             Messages.CollectionChanged += messageHandler;
             
-            // Possibilité (fine) que les messages de Response arrivent en même temps que les messages de Write
+            
+            // Possibilité (fine) que les messages de Response arrivent après les messages de Write
             if (_busConnection is { CancellationTokenSource: not null, Bus.IsNull : false })
                 await _busConnection.Bus.RequestGroupValueAsync(
                     groupAddress, MessagePriority.High,
                     _busConnection.CancellationTokenSource.Token
                 );
             
-            while (timer.Enabled && !(theList.Count > 0 && theList.Last().EventType.Equals(GroupEventType.ValueWrite))) { } 
+            SpinWait.SpinUntil(() => !timer.Enabled || (theList.Count > 0 && theList.Last().EventType.Equals(GroupEventType.ValueWrite)));
             
             Messages.CollectionChanged -= messageHandler;
             timer.Enabled = false; // Juste au cas où il y a un problème avec le timer ou si on sort avant sa fin
