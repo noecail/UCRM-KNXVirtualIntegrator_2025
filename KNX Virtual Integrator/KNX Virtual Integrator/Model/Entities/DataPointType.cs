@@ -44,7 +44,6 @@ public class DataPointType : INotifyPropertyChanged
         }
 
         private bool _isEnabled;
-
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -412,8 +411,11 @@ public class DataPointType : INotifyPropertyChanged
         Value.Clear();
         foreach (var value in IntValue)
         {
-            if (value.BigIntegerValue != null)
+            if (value.BigIntegerValue == null) return;
+            if (value.IsEnabled)
                 Value.Add(new GroupValue(value.BigIntegerValue.Value.ToByteArray()));
+            else
+                Value.Add(null);
         }
     }
 
