@@ -35,10 +35,13 @@
     <sys:String x:Key="NewStructure">Nouvelle Structure</sys:String>
     <sys:String x:Key="CreateFunctionalModel">Créer un Modèle Fonctionnel</sys:String>
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
+    <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
     <sys:String x:Key="LinkedModel">Modèle Lié</sys:String>
     <sys:String x:Key="UnlinkedModel">Modèle Non Lié</sys:String>
     <sys:String x:Key="Save">Enregistrer</sys:String>
     <sys:String x:Key="IeAssociated">IE Associées :</sys:String>
+    <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
+    <sys:String x:Key="DptPersonalizationtitle">Personnalisation de DPTs</sys:String>
 
 
 

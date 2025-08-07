@@ -1170,18 +1170,52 @@
         </Setter>
     </Style>
 
-    <Style x:Key="TestedElementListListBoxItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
-        <Setter Property="Height" Value="Auto" />
-        <Setter Property="Margin" Value="0,5,0,0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
-            </Trigger>
-        </Style.Triggers>
+    <Style x:Key="TestedElementListListBoxItemContainerStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border Name="Border"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
-
-    <!-- Style pour les infobulles -->
+    
+    <Style x:Key="DptLisBoxItemContainerStyle" TargetType="ListBoxItem">
+        <Setter Property="Padding" Value="5,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
     <Style x:Key="TooltipImage" TargetType="Image">
         <Setter Property="Source" Value="{StaticResource TooltipWhiteOnKnxGreenDrawingImage}" />
         <Style.Triggers>
@@ -1404,7 +1438,7 @@
     </Style>
 
     <Style x:Key="BorderLight" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource NoColorBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}" />
     </Style>
 
@@ -1413,4 +1447,12 @@
         <Setter Property="BorderBrush" Value="{StaticResource LightGrayBorderBrush}" />
     </Style>
 
+    
+    <Style x:Key="ValueBorderLight" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+    
+    
 </ResourceDictionary>
