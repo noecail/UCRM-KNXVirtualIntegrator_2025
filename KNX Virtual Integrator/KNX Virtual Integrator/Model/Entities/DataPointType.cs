@@ -413,7 +413,13 @@ public class DataPointType : INotifyPropertyChanged
         foreach (var value in IntValue)
         {
             if (value.BigIntegerValue != null)
-                Value.Add(new GroupValue(value.BigIntegerValue.Value.ToByteArray()));
+            {
+                var updatedValue = value.BigIntegerValue.Value.ToByteArray();
+                if (_size == 1)
+                    Value.Add(new GroupValue(BitConverter.ToBoolean(updatedValue,0)));
+                else
+                    Value.Add(new GroupValue(updatedValue));
+            }
         }
     }
 

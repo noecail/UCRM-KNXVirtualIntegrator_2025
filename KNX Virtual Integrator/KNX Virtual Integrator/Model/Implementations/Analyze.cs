@@ -35,6 +35,7 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
     /// <returns></returns>
     private async Task<List<List<List<ResultType>>>> TestModel(FunctionalModel functionalModel)
     {
+        functionalModel.UpdateValue();
         var result = new List<List<List<ResultType>>>();
         foreach (var element in functionalModel.ElementList)
         {
@@ -73,10 +74,10 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
             //var cts = new CancellationTokenSource();
             List<Task<List<GroupCommunication.GroupMessage>>> readTaskList = [];
             if (testsIe != null)
-            {
                 foreach (var ie in testsIe) //Start all the tasks to read 
                     readTaskList.Add(Communication.GroupValuesTimerOrRecievedAWriteAsync(ie.Address, time));
-            }
+            else
+                testResult = ResultType.Success;
 
             foreach(var test in testsCmd) //Send all the commands 
             {
@@ -93,11 +94,6 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
                     }
                     testResult = resList[j];
                 }
-            }
-
-            if (!readTaskList[0].IsCompleted) //If the test succeeded before the end of the timer
-            {
-                //TO DO :Arrêter les tâches
             }
             result.Add(resList); //Adds the result of the test to the list of results of tests
         }
@@ -142,7 +138,7 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
             }
             i++;
         }
-        if (alternateResult.Equals(ResultType.Success))
+        if (alternateResult.Equals(ResultType.Success) && !result.Equals(ResultType.Success))
             result = ResultType.Response;
         return result;
     }
