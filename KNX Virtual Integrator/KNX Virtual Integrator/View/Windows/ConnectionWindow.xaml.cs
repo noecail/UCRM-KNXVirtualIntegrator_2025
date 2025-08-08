@@ -98,7 +98,7 @@ public partial class ConnectionWindow
         FileKeysText.Foreground = textColorBrush;
         NatConnectionText.Foreground = textColorBrush;
         LockIconText.Foreground = textColorBrush;
-        CurrCoInterfaceText.Foreground = textColorBrush;
+        CurrCoInterfaceText.Tag = textColorBrush;
         NatIconText.Foreground = textColorBrush;
         
     }

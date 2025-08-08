@@ -37,7 +37,7 @@
                     <Setter Property="Foreground" Value="{StaticResource KnxGreenBrush}" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding ElementName=DisconnectButton, Path=IsEnabled}" Value="False">
-                    <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}" />
+                    <Setter Property="Foreground" Value="{Binding Tag, RelativeSource={RelativeSource Self}}" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
@@ -197,7 +197,7 @@
                 <TextBox Name="NatAddressTextBox" Grid.Row="1" Grid.Column="1"
                          Style="{StaticResource TextBoxLight}"
                          Width="90"
-                         Text="{Binding BusConnection.NatAddress}" />
+                         Text="{Binding BusConnection.NatAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             </Grid>
 
@@ -315,7 +315,7 @@
                     <TextBox Grid.Column="1"
                              Name="ActualPwdKeysFileTextBox"
                              Style="{StaticResource TextBoxLight}"
-                             Text="{Binding BusConnection.KeysFilePassword}" />
+                             Text="{Binding BusConnection.KeysFilePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </Grid>
 
             </StackPanel>
@@ -345,9 +345,8 @@
                 <StackPanel Orientation="Vertical">
                     <TextBlock
                         Name="CurrCoInterfaceText"
-                        Margin="5,0,5,0"
+                        Margin="5,0"
                         Text="{Binding Path=CurrentInterface}"
-                        Foreground="White"
                         Style="{StaticResource InterfaceTextBlockLight}"
                         TextAlignment="Left"
                         TextWrapping="Wrap"
@@ -377,7 +376,8 @@
                         Margin="5" Padding="5,2"
                         Foreground="{StaticResource DarkForegroundBrush}"
                         Command="{Binding ConnectBusCommand}"
-                        HorizontalAlignment="Right" />
+                        HorizontalAlignment="Right"
+                        IsDefault="True"/>
             </Grid>
 
 
