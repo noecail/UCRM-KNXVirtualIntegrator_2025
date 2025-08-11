@@ -17,10 +17,10 @@ public class FunctionalModelStructure
 
     public Dictionary<int, DptAndKeywords> DptDictionary { get; set; } = [];
 
-    public struct ElementStructure
+    public struct ElementStructure(List<int> cmd, List<int> ie)
     {
-        public List<int> Cmd;
-        public List<int> Ie;
+        public List<int> Cmd = cmd;
+        public List<int> Ie = ie;
     }
     
     // Gives the same output as ToString method. But ToString does not dynamically change when the name is modified

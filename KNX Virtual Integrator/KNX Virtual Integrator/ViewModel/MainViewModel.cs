@@ -250,7 +250,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 // unselect the structure and model
                 SelectedStructure = null;
                 SelectedModel = null;
-                
+                _functionalModelList.ReinitializeNbModels(index);
+
                 
                 // delete the structure
                 _functionalModelList.DeleteFromDictionary(index);

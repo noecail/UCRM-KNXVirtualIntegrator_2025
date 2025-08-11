@@ -85,7 +85,10 @@ public partial class StructureEditWindow
     private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
     {
         if (_viewModel.SelectedStructure != null)
-            _viewModel.DeleteStructureDictionaryCommand.Execute(_viewModel.SelectedStructure.Model.Key-1);
+        {
+            _viewModel.DeleteStructureDictionaryCommand.Execute(_viewModel.SelectedStructure.Model.Key - 1);
+        }
+
         Hide();
     }
     

@@ -225,6 +225,12 @@ public class FunctionalModelList : IFunctionalModelList
                 FunctionalModels[i].Add(FunctionalModel.ImportFunctionalModel(model));
         }
     }
+
+    public void ReinitializeNbModels(int index)
+    {
+        FunctionalModels.RemoveAt(index);
+        _nbModelsCreated.RemoveAt(index);
+    }
     
 }
 

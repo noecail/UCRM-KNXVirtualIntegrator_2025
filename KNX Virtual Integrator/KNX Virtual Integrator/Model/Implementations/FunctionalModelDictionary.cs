@@ -32,55 +32,67 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public FunctionalModelDictionary()
         {
             FunctionalModels = [];
-           /* AddFunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
-                "Lumiere_ON_OFF")); //Adding On/Off light functional model
-            AddFunctionalModel(new FunctionalModel([
-                new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,5],["",""],
-                    [[new GroupValue(true), new GroupValue(false)], [new GroupValue(0xFF),new GroupValue(0x00)]]), // Variation functional model : First element : On/Off
-                new TestedElement([5], [""], [[new GroupValue(0xFF), new GroupValue(0x4F)]], [5], ["", ""],
-                    [[new GroupValue(0xFF), new GroupValue(0x4F)]]), //Second element : absolute change
-                new TestedElement([3], [""], [[new GroupValue(0x4)]],[5],[""],[[new GroupValue([0x2E])]])
-            ], "Lumiere_variation")); //Third element : relative change
-            AddFunctionalModel(new FunctionalModel([
-            new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,1,5],["","",""],
-                [[new GroupValue(true), new GroupValue(true)],[new GroupValue(false), new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]), //On/Off command 
-            new TestedElement([1,1],["",""],[[new GroupValue(true)],[new GroupValue(true)]],[1,1,5],["","",""],
-                [[new GroupValue(true)],[new GroupValue(false)],[null]]),//Stop
-            new TestedElement([5], [""],[[new GroupValue(0xFF),new GroupValue(0x00)]],[1,1,5],["","",""],//Absolute command
-                [[new GroupValue(true),new GroupValue(true)],[new GroupValue(false),new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]),
-            ],"Store"));
-            AddFunctionalModel(new FunctionalModel([
-            new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[new GroupValue(true), new GroupValue(false)]])  //On/Off
-                ],"Commutation")); //Convection, Prise, Arrosage, Portail
-            for (var i = 0; i < FunctionalModels.Count; i++)
-            {
-                FunctionalModels[i].UpdateIntValue();
-                FunctionalModels[i].UpdateRemoveTestButtonVisibility();
-            }
-            
-            AddKeyword(0, "Lumiere on/off");
-            AddKeyword(0, "Lumiere on-off");
-            AddKeyword(0, "Lumiere on_off");
-            AddKeyword(0, "Light on/off");
-            AddKeyword(0, "Eclairage_Simple");
+            AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
+                new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
+                {
+                    {
+                        1, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                    }, //CMD
+                    {
+                        2, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                    } //IE
+                },
+                [new FunctionalModelStructure.ElementStructure([1],[2])]
+                    )
+                );           /* AddFunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
+                                "Lumiere_ON_OFF")); //Adding On/Off light functional model
+                            AddFunctionalModel(new FunctionalModel([
+                                new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,5],["",""],
+                                    [[new GroupValue(true), new GroupValue(false)], [new GroupValue(0xFF),new GroupValue(0x00)]]), // Variation functional model : First element : On/Off
+                                new TestedElement([5], [""], [[new GroupValue(0xFF), new GroupValue(0x4F)]], [5], ["", ""],
+                                    [[new GroupValue(0xFF), new GroupValue(0x4F)]]), //Second element : absolute change
+                                new TestedElement([3], [""], [[new GroupValue(0x4)]],[5],[""],[[new GroupValue([0x2E])]])
+                            ], "Lumiere_variation")); //Third element : relative change
+                            AddFunctionalModel(new FunctionalModel([
+                            new TestedElement([1],[""], [[new GroupValue(true), new GroupValue(false)]], [1,1,5],["","",""],
+                                [[new GroupValue(true), new GroupValue(true)],[new GroupValue(false), new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]), //On/Off command
+                            new TestedElement([1,1],["",""],[[new GroupValue(true)],[new GroupValue(true)]],[1,1,5],["","",""],
+                                [[new GroupValue(true)],[new GroupValue(false)],[null]]),//Stop
+                            new TestedElement([5], [""],[[new GroupValue(0xFF),new GroupValue(0x00)]],[1,1,5],["","",""],//Absolute command
+                                [[new GroupValue(true),new GroupValue(true)],[new GroupValue(false),new GroupValue(false)],[new GroupValue(0xFF),new GroupValue(0x00)]]),
+                            ],"Store"));
+                            AddFunctionalModel(new FunctionalModel([
+                            new TestedElement([1],[""],[[new GroupValue(true), new GroupValue(false)]],[1],[""],[[new GroupValue(true), new GroupValue(false)]])  //On/Off
+                                ],"Commutation")); //Convection, Prise, Arrosage, Portail
+                            for (var i = 0; i < FunctionalModels.Count; i++)
+                            {
+                                FunctionalModels[i].UpdateIntValue();
+                                FunctionalModels[i].UpdateRemoveTestButtonVisibility();
+                            }
 
-            AddKeyword(1, "Lumiere variation");
-            AddKeyword(1, "variation");
-            AddKeyword(1, "Lumiere_variation");
-            AddKeyword(1, "Light variation");
-            AddKeyword(1, "Eclairages_variable");
+                            AddKeyword(0, "Lumiere on/off");
+                            AddKeyword(0, "Lumiere on-off");
+                            AddKeyword(0, "Lumiere on_off");
+                            AddKeyword(0, "Light on/off");
+                            AddKeyword(0, "Eclairage_Simple");
 
-            AddKeyword(2, "store");
-            AddKeyword(2, "blind");
-            AddKeyword(2, "Volet_roulant");
-            AddKeyword(2, "Volets_roulants");
+                            AddKeyword(1, "Lumiere variation");
+                            AddKeyword(1, "variation");
+                            AddKeyword(1, "Lumiere_variation");
+                            AddKeyword(1, "Light variation");
+                            AddKeyword(1, "Eclairages_variable");
 
-            AddKeyword(3, "Commute");
-            AddKeyword(3, "Commutation");
-            AddKeyword(3, "Convecteur");
-            AddKeyword(3, "Prise");
-            AddKeyword(3, "Arrosage");
-            AddKeyword(3, "Ouvrant");*/
+                            AddKeyword(2, "store");
+                            AddKeyword(2, "blind");
+                            AddKeyword(2, "Volet_roulant");
+                            AddKeyword(2, "Volets_roulants");
+
+                            AddKeyword(3, "Commute");
+                            AddKeyword(3, "Commutation");
+                            AddKeyword(3, "Convecteur");
+                            AddKeyword(3, "Prise");
+                            AddKeyword(3, "Arrosage");
+                            AddKeyword(3, "Ouvrant");*/
 
         }
 
@@ -100,16 +112,18 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void AddFunctionalModel(FunctionalModelStructure functionalModel)
         {
             var newModel = functionalModel;
-            newModel.Model.Key = FunctionalModels.Count +1 ;
-            
             _keywordsDictionary.Add([]);
             _nbStructuresCreated++;
             if (newModel.Model.Name == "New_Structure")
                 newModel.Model.Name += "_" + _nbStructuresCreated;
             else if (!functionalModel.Model.Name.Contains("Structure"))
                 newModel.Model.Name += "_Structure";
+            newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name);
+            newModel.Model.Key = FunctionalModels.Count +1 ;
+
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
+            
         }
 
         public void RemoveFunctionalModel(int index)
