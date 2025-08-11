@@ -22,6 +22,10 @@ public class FunctionalModelStructure
         public List<int> Cmd;
         public List<int> Ie;
     }
+    
+    // Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
+    // FullName is used to display the Key and the Name in the SelectedModels listbox in the Mainwindow
+    public string FullName => $"S{Model.Key} | {Model.Name}";
 
     public ObservableCollection<ElementStructure> ModelStructure { get; set; } = [];
 
