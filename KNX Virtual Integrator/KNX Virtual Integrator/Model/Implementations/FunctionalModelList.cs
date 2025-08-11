@@ -222,7 +222,7 @@ public class FunctionalModelList : IFunctionalModelList
         {
             FunctionalModels.Add([]);
             foreach (XmlNode model in xnList[i]?.ChildNodes!) // pour chaque modèle
-                FunctionalModels[i].Add(new FunctionalModel("").ImportFunctionalModel(model));
+                FunctionalModels[i].Add(FunctionalModel.ImportFunctionalModel(model));
         }
     }
     
