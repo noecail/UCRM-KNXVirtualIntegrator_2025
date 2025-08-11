@@ -99,14 +99,16 @@ namespace KNX_Virtual_Integrator.ViewModel
             }
         }
         
+        /// <summary>
+        /// StructureEditWindow and Column 2. Name of the selected model structure.
+        /// </summary>
         private FunctionalModel? _selectedStructureModel;
-
         public FunctionalModel? SelectedStructureModel
         {
             get => _selectedStructureModel;
             set
             {
-                if (_selectedStructureModel?.Key == value?.Key)
+                if (_selectedStructureModel != null && _selectedStructureModel.Key == value?.Key)
                     return;
                 _selectedStructureModel = value;
                 WhenPropertyChanged(nameof(SelectedStructureModel));

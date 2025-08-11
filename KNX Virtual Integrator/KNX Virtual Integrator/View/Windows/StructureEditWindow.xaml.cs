@@ -89,6 +89,7 @@ public partial class StructureEditWindow
             _viewModel.DeleteStructureDictionaryCommand.Execute(_viewModel.SelectedStructure.Model.Key - 1);
         }
 
+        // fermer la fenetre edit
         Hide();
     }
     
@@ -105,7 +106,7 @@ public partial class StructureEditWindow
         if (dep == null) return;
         var index = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedStructure, index)); 
+        _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedStructureModel, index));
     }
     
     /// <summary>
@@ -115,5 +116,23 @@ public partial class StructureEditWindow
     private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructureModel);
+        var testedElementsScrollViewer = FindVisualChild<ScrollViewer>(TestedElementsListBox);
+        testedElementsScrollViewer.ScrollToEnd();
+    }
+
+    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    {
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T correctlyTyped)
+                return correctlyTyped;
+
+            var childOfChild = FindVisualChild<T>(child);
+            if (childOfChild != null)
+                return childOfChild;
+        }
+
+        return null;
     }
 }

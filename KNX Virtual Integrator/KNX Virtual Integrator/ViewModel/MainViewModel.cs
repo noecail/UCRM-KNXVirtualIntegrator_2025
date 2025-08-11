@@ -244,6 +244,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         DeleteStructureDictionaryCommand = new Commands.RelayCommand<int>(index =>
             {
+                // clear selected models if the selected structure is deleted 
+                if (SelectedStructure?.Model.Key-1 == index)
+                    SelectedModels?.Clear();
+                
                 // save the previously selected structure and model
                 var previouslySelectedStructure = SelectedStructure;
                 var previouslySelectedModel = SelectedModel;
