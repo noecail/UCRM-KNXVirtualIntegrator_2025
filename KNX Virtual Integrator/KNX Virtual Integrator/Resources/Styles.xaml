@@ -285,7 +285,7 @@
     </Style>
 
     <!-- Style pour le bouton refresh -->
-    <Style x:Key="RefreshButton" TargetType="Button">
+    <Style x:Key="RefreshButtonStyle" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource BlueBrush }" />
         <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
         <Setter Property="BorderThickness" Value="0" />
@@ -321,6 +321,74 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Style pour le bouton reset des Values dans les Tested Elements -->
+    <Style x:Key="ResetValueButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource BlueBrush }" />
+        <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
+        <Setter Property="Height" Value="12"/>
+        <Setter Property="Width" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Survol -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource BlueAccentBrush}" />
+                        </Trigger>
+                        <!-- Clic -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource BlueAccentMoreBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    <!-- Style pour le bouton reset des Values dans les Tested Elements -->
+    <Style x:Key="DeactivateValueButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource GrayBackgroundBrush }" />
+        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}" />
+        <Setter Property="Height" Value="12"/>
+        <Setter Property="Width" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="btnBorder"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="0"
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Survol -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource DarkGrayBackgroundBrush}" />
+                        </Trigger>
+                        <!-- Clic -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="btnBorder" Property="Background"
+                                    Value="{StaticResource DarkerGrayBackgroundBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style TargetType="Button" x:Key="CreateStructureButtonStyle" BasedOn="{StaticResource IconTextButtonStyle}">
         <Setter Property="Background" Value="{StaticResource BlueBrush}" />
@@ -333,7 +401,7 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"
-                                   Source="{StaticResource AddDrawingImage}"
+                                   Source="{StaticResource WhiteInvertedAddDrawingImage}"
                                    Margin="0,5,5,5"
                                    Height="25" Width="25" />
                             <TextBlock Text="{StaticResource NewStructure}" VerticalAlignment="Center" FontSize="12"
@@ -366,7 +434,7 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                             <Image VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill"
-                                   Source="{StaticResource AddDrawingImage}"
+                                   Source="{StaticResource WhiteInvertedAddDrawingImage}"
                                    Margin="0,5,5,5"
                                    Height="25" Width="25" />
                             <TextBlock Text="{TemplateBinding Tag}" VerticalAlignment="Center" FontSize="12"
@@ -652,6 +720,19 @@
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Tag" Value="{StaticResource BlackAddDrawingImage}" />
+                <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="RemoveTestButtonStyleLight" TargetType="Button" BasedOn="{StaticResource AddTestButtonStyleLight}">
+        <Setter Property="Tag" Value="{StaticResource GrayRemoveDrawingImage}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Tag" Value="{StaticResource BlackRemoveDrawingImage}" />
                 <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
@@ -1089,19 +1170,52 @@
         </Setter>
     </Style>
 
-    <Style x:Key="TestedElementListListBoxItemStyle" TargetType="ListBoxItem">
-        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
-        <Setter Property="Height" Value="Auto" />
-        <Setter Property="Margin" Value="0,5,0,0" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="BorderThickness" Value="2" />
-                <Setter Property="BorderBrush" Value="{StaticResource BlueAccentBrush}" />
-            </Trigger>
-        </Style.Triggers>
+    <Style x:Key="TestedElementListListBoxItemContainerStyle" TargetType="ListBoxItem">
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border Name="Border"
+                        Background="{TemplateBinding Background}"
+                        SnapsToDevicePixels="True">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- Hover -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
-
-    <!-- Style pour les infobulles -->
+    
+    <Style x:Key="DptLisBoxItemContainerStyle" TargetType="ListBoxItem">
+        <Setter Property="Padding" Value="5,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ListBoxItem">
+                    <Border x:Name="Bd"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="true">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
+    
     <Style x:Key="TooltipImage" TargetType="Image">
         <Setter Property="Source" Value="{StaticResource TooltipWhiteOnKnxGreenDrawingImage}" />
         <Style.Triggers>
@@ -1324,7 +1438,7 @@
     </Style>
 
     <Style x:Key="BorderLight" TargetType="Border">
-        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}" />
+        <Setter Property="Background" Value="{StaticResource NoColorBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}" />
     </Style>
 
@@ -1333,4 +1447,12 @@
         <Setter Property="BorderBrush" Value="{StaticResource LightGrayBorderBrush}" />
     </Style>
 
+    
+    <Style x:Key="ValueBorderLight" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+    </Style>
+    
+    
 </ResourceDictionary>

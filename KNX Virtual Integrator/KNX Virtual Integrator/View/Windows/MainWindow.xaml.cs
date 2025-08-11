@@ -570,8 +570,7 @@ public partial class MainWindow
         // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
         // Pour utiliser ce segment de code, il faut avoir une référence sur la listbox
         var dep = (DependencyObject)e.OriginalSource;
-        while (dep != null && !(dep is ListBoxItem)) { dep = VisualTreeHelper.GetParent(dep); }
-        if (dep == null) return;
+        dep = FindParent<ListBoxItem>(dep);
         var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
         _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedModel, index)); 
@@ -589,11 +588,10 @@ public partial class MainWindow
         // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
         // Pour utiliser ce segment de code, il faut avoir une référence sur la listbox
         var dep = (DependencyObject)e.OriginalSource;
-        while (dep != null && !(dep is ListBoxItem)) { dep = VisualTreeHelper.GetParent(dep); }
-        if (dep == null) return;
-        var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        dep = FindParent<ListBoxItem>(dep);
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
-        _viewModel.AddTestToElementCommand.Execute(_viewModel.SelectedModel?.ElementList[index]);
+        _viewModel.AddTestToElementCommand.Execute(_viewModel.SelectedModel?.ElementList[indexElement]);
     }
     
     /// <summary>
@@ -602,10 +600,164 @@ public partial class MainWindow
     /// </summary>
     private void RemoveTestFromElementButtonClick(object sender, RoutedEventArgs e)
     {
-        //_viewModel.RemoveTestFromElement.Execute();
-        // TODO : récupérer le selected element et l'index du test
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+
+        // Find the Test's index
+        var button = (Button)sender;
+        var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
+        var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
+        var indexTest = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+        
+        _viewModel.RemoveTestFromElementCommand.Execute((_viewModel.SelectedModel?.ElementList[indexElement], indexTest));
     }
 
+    /// <summary>
+    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void DeactivateValueCmdButtonClick(object sender, RoutedEventArgs e)
+    {
+        DeactivateValue(sender, e, "TestsCmd");
+    }
+    
+    /// <summary>
+    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void DeactivateValueIeButtonClick(object sender, RoutedEventArgs e)
+    {
+        DeactivateValue(sender, e, "TestsIe");
+    }
+
+    /// <summary>
+    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void DeactivateValue(object sender, RoutedEventArgs e, string tests)
+    {
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        
+        var button = (Button)sender;
+        
+        // Find the DPT's index
+        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
+        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
+        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexDpt = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        
+        // Find the Test's index
+        var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
+        var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
+        int indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+
+        // Effectively deactivate the value
+        switch (tests)
+        {
+            case "TestsCmd":
+            {
+                if (_viewModel.SelectedModel != null)
+                    _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].IsEnabled = false;
+                break;
+            }
+            case "TestsIe":
+            {
+                if (_viewModel.SelectedModel != null)
+                    _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].IsEnabled = false;
+                break;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Handles the button click to reset to 0 a Cmd Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void ResetValueCmdButtonClick(object sender, RoutedEventArgs e)
+    {
+        ResetValue(sender, e, "TestsCmd");
+    }
+    
+    /// <summary>
+    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void ResetValueIeButtonClick(object sender, RoutedEventArgs e)
+    {
+        ResetValue(sender, e, "TestsIe");
+    }
+    
+    /// <summary>
+    /// Handles the reset to 0 a Value that has been deactivated because it was unknown 
+    /// </summary>
+    private void ResetValue(object sender, RoutedEventArgs e, string tests)
+    {
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        
+        var button = (Button)sender;
+        
+        // Find the DPT's index
+        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
+        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
+        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexDpt = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        
+        // Find the Test's index
+        var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
+        var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
+        int indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+
+        if (_viewModel.SelectedModel != null)
+        {
+            // Effectively reset the value
+            switch (tests)
+            {
+                case "TestsCmd":
+                {
+                    var bigIntegerItem = _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue];
+                    
+                    if (bigIntegerItem.IsEnabled == false)
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].IsEnabled = true;
+                    else
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsCmd[indexDpt].IntValue[indexValue].BigIntegerValue = 0;
+                    break;
+                }
+                case "TestsIe":
+                {
+                    var bigIntegerItem = _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue];
+                    
+                    if (bigIntegerItem.IsEnabled == false)
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].IsEnabled = true;
+                    else
+                        _viewModel.SelectedModel.ElementList[indexElement].TestsIe[indexDpt].IntValue[indexValue].BigIntegerValue = 0;
+                    break;
+                }
+            }
+        }
+    }
+        
+    // Méthode récursive qui remonte les parents d'un objet jusqu'à atteindre le parent du type passé en paramètre
+    // Utilisée dans RemoveTestedElementFromStructureButtonClick
+    // Utilisée dans AddTestToElementButtonClick
+    // Utilisée dans RemoveTestFromElementButtonClick
+    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        var parentObject = VisualTreeHelper.GetParent(child);
+        if (parentObject == null) return null;
+        if (parentObject is T parent) return parent;
+        return FindParent<T>(parentObject);
+    }
+
+    
     /// <summary>
     /// Currently used to display the SelectedModel in the console
     /// Delete later

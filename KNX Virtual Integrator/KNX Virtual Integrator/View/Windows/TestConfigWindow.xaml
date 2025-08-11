@@ -51,7 +51,7 @@
             <Setter Property="BorderThickness" Value=" 1"/>
         </Style>
         
-        <Style x:Key="TestElementToTestListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource TestedElementListListBoxItemStyle}">
+        <Style x:Key="TestElementToTestListBoxItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource TestedElementListListBoxItemContainerStyle}">
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="BorderThickness" Value="1" />

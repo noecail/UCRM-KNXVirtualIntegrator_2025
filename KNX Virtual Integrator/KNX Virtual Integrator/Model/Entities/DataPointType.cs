@@ -4,6 +4,7 @@ using System.Xml.Linq;
 using Knx.Falcon;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Windows;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 /// <summary>
@@ -16,6 +17,18 @@ public class DataPointType : INotifyPropertyChanged
     // Class used only for Value collections, used by the UI to access and modify BigInteger values, which do not raise notifications by default
     public class BigIntegerItem : INotifyPropertyChanged
     {
+        private Visibility? _removeTestButtonVisibility ;
+        public Visibility? RemoveTestButtonVisibility
+        {
+            get => _removeTestButtonVisibility;
+            set
+            {
+                if (_removeTestButtonVisibility == value) return;
+                _removeTestButtonVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+        
         private BigInteger? _bigIntegervalue;
         public BigInteger? BigIntegerValue
         {
@@ -30,9 +43,25 @@ public class DataPointType : INotifyPropertyChanged
             }
         }
 
+        private bool _isEnabled;
+        public bool IsEnabled
+        {
+            get => _isEnabled;
+            set
+            {
+                if (_isEnabled != value)
+                {
+                    _isEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public BigIntegerItem(BigInteger bi)
         {
             BigIntegerValue = bi;
+            RemoveTestButtonVisibility = Visibility.Collapsed;
+            IsEnabled = true;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -351,7 +380,7 @@ public class DataPointType : INotifyPropertyChanged
     public void RemoveValue(int index)
     {
         Value.RemoveAt(index);
-        // IntValue.RemoveAt(index);
+        IntValue.RemoveAt(index);
     }
 
     /// <summary>
@@ -360,10 +389,17 @@ public class DataPointType : INotifyPropertyChanged
     public void UpdateIntValue()
     {
         IntValue.Clear();
+        var i = 0;
         foreach (var value in Value)
         {
             if (value != null)
                 IntValue.Add(new BigIntegerItem(new BigInteger(value.Value)));
+            else
+            {
+                IntValue.Add(new BigIntegerItem(new BigInteger(0)));
+                IntValue[i].IsEnabled = false;
+            }
+            i++;
         }
     }
 
@@ -375,11 +411,26 @@ public class DataPointType : INotifyPropertyChanged
         Value.Clear();
         foreach (var value in IntValue)
         {
-            if (value.BigIntegerValue != null)
-                Value.Add(new GroupValue(value.BigIntegerValue.Value.ToByteArray()));
+            if (value.BigIntegerValue == null) return;
+            if (value.IsEnabled)
+            {
+                var updatedValue = value.BigIntegerValue.Value.ToByteArray();
+                if (_size == 1)
+                    Value.Add(new GroupValue(BitConverter.ToBoolean(updatedValue, 0)));
+                else
+                    Value.Add(new GroupValue(updatedValue));
+            }
+
+        else
+                Value.Add(null);
         }
     }
-    
+
+    public void UpdateRemoveTestButtonVisibility(Visibility vis)
+    {
+        foreach (var bigIntegerItem in IntValue)
+            bigIntegerItem.RemoveTestButtonVisibility = vis;
+    }
     
     /// <summary>
     /// This method checks if the group value of the DPT is the same as the one in parameter.
@@ -407,12 +458,5 @@ public class DataPointType : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    /*protected bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value)) return false;
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
-    }*/
 }
 

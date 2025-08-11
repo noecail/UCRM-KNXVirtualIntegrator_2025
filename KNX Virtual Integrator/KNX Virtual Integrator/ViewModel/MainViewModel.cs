@@ -270,7 +270,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         AddTestedElementToStructureCommand = new Commands.RelayCommand<FunctionalModel>(model =>
             {
                 model?.AddElement(new TestedElement([1], [""], [[new GroupValue(true)]], [1], [""], [[new GroupValue(true)]]));
-                //_functionalModelList.FunctionalModels[0].AddElement(new TestedElement());
                 WhenPropertyChanged(nameof(Structures));
             }
         );
@@ -447,6 +446,4 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
         
     }
-
-
 }

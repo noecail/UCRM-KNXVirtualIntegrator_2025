@@ -180,9 +180,9 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
                 {
                     l = 0;
                     var resultString = "Commande n°" + (k+1) + " :   ";
-                    foreach (var testedDpt in testedElement.TestsCmd)
+                    foreach (var testedIe in testedElement.TestsIe)
                     {
-                        resultString += "DPT n°" + (l+1)  + " : "+ testResults[i][j][k][l] + (testedElement.TestsCmd.Count==1?"":", ") ;
+                        resultString += testResults[i][j][k][l] + (testedElement.TestsIe.Count==1 || testedElement.TestsIe.Last().IsEqual(testedIe)?"":", ") ;
                         l++;
                     }
                     Paragraph resultParagraph = new Paragraph(resultString);
