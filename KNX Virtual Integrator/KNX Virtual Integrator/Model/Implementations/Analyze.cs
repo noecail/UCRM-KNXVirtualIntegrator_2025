@@ -71,11 +71,12 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
                 resList.Add(ResultType.Failure);
             }
             
-            //var cts = new CancellationTokenSource();
             List<Task<List<GroupCommunication.GroupMessage>>> readTaskList = [];
             if (testsIe != null)
                 foreach (var ie in testsIe) //Start all the tasks to read 
+                {
                     readTaskList.Add(Communication.GroupValuesTimerOrRecievedAWriteAsync(ie.Address, time));
+                }
             else
                 testResult = ResultType.Success;
 
@@ -91,6 +92,9 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
                     {
                         var readValues = readTaskList[j].Result; //Updates readValues, the list of messages read on the bus
                         resList[j] = CheckResult(ref readValues, testsIe[j], i); //Check if the message has arrived
+                    } else if (testsIe[j].Value[i] is null)
+                    {
+                        resList[j] = ResultType.Success;
                     }
                     testResult = resList[j];
                 }
@@ -117,6 +121,7 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
         while (!result.Equals(ResultType.Success) && i < readValues.Count)
         {
             var value =  readValues[i];
+            Console.WriteLine(value.Value + "-->" + value.DestinationAddress + "-->" + value.EventType);
             if (value.DestinationAddress == expectedResult.Address
                 && value.Value is not null
                 && value.EventType is GroupEventType.ValueWrite 
