@@ -15,34 +15,45 @@
 
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-    <sys:String x:Key="ExportButton">Exporter le rapport de test</sys:String>
+    
+    <!--Main Window-->
+        <!--Bandeau supérieur-->
     <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>
     <sys:String x:Key="TestButton">Paramètres de test</sys:String>
-    <sys:String x:Key="GroupAdressesTitle">Adresses de Groupe</sys:String>
+    <sys:String x:Key="ExportButton">Exporter le rapport de test</sys:String>
+        <!--Colonne 1-->
     <sys:String x:Key="Library">Bibliothèque</sys:String>
-    <sys:String x:Key="ModelsTitle">Modèles Fonctionnels</sys:String>
-    <sys:String x:Key="ModelsParametersTitle">Paramètres du Modèle Fonctionnel</sys:String>
-    <sys:String x:Key="CommandeParametersTitle">Paramètres Commande : </sys:String>
     <sys:String x:Key="PredefinedStructures">Structures Prédéfinies</sys:String>
     <sys:String x:Key="PersonalizedStructures">Structures Personnalisées</sys:String>
-    <sys:String x:Key="AddModelsButton">Ajouter</sys:String>
-    <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
-    <sys:String x:Key="SentDpt">DPT envoyé :</sys:String>
+    <sys:String x:Key="NewStructure">Nouvelle Structure</sys:String>
+        <!--Colonne 2-->
+    <sys:String x:Key="ModelsTitle">Modèles Fonctionnels</sys:String>
+    <sys:String x:Key="CreateFunctionalModel">Créer un Modèle Fonctionnel</sys:String>
+        <!--Colonne 3-->
+    <sys:String x:Key="ModelsParametersTitle">Paramètres du Modèle Fonctionnel</sys:String>
     <sys:String x:Key="Name:">Nom :</sys:String>
+            <!-- Element à Tester-->
+    <sys:String x:Key="TestedElement">Élémént à Tester</sys:String>
+    <sys:String x:Key="DptType">Type de DPT :</sys:String>
+    <sys:String x:Key="LinkedAddress">Adresse liée :</sys:String>
+    <sys:String x:Key="Values">Valeurs :</sys:String>
+    <sys:String x:Key="Dispatch(es)">Envoi(s)</sys:String>
+    <sys:String x:Key="Reception(s)">Réception(s)</sys:String>
+        <!--Colonne 4-->
+    <sys:String x:Key="GroupAdressesTitle">Adresses de Groupe</sys:String>
+    <!--/Main Window-->
+    
+    <!--Structure Edit Window-->
+    <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
+    <sys:String x:Key="DptPersonalizationtitle">Personnalisation de DPTs</sys:String>
+    <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
+    <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
+    <!--/Structure Edit Window-->
+
+    <!--Xaml Dump-->
+    <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
     <sys:String x:Key="ExpectedDpt">DPT attendu :</sys:String>
     <sys:String x:Key="TableTitleSentExpected">Valeur Envoyé / Valeur Attendue :</sys:String>
     <sys:String x:Key="DptSubtype">Sous-type du DPT :</sys:String>
-    <sys:String x:Key="NewStructure">Nouvelle Structure</sys:String>
-    <sys:String x:Key="CreateFunctionalModel">Créer un Modèle Fonctionnel</sys:String>
-    <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
-    <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
-    <sys:String x:Key="LinkedModel">Modèle Lié</sys:String>
-    <sys:String x:Key="UnlinkedModel">Modèle Non Lié</sys:String>
-    <sys:String x:Key="Save">Enregistrer</sys:String>
-    <sys:String x:Key="IeAssociated">IE Associées :</sys:String>
-    <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
-    <sys:String x:Key="DptPersonalizationtitle">Personnalisation de DPTs</sys:String>
-
-
-
+    <!--/Xaml Dump-->
 </ResourceDictionary>

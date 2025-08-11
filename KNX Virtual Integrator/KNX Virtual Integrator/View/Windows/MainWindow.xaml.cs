@@ -114,10 +114,10 @@ public partial class MainWindow
         
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
-        BorderDefStruct.Style = borderStyles;
+        //BorderDefStruct.Style = borderStyles;
         BorderAllModels.Style = borderStyles;
         BorderModelTitle.Style = borderTitleStyles;
-        BorderModels.Style = borderStyles;
+        //BorderModels.Style = borderStyles;
         BorderAddModel.Style = borderStyles;
         BorderModelBib.Style = borderStyles;
         BorderStructBib.Style = borderStyles;
@@ -443,7 +443,9 @@ public partial class MainWindow
         
         // Also, selecting the newly created model and scrolling down to it
         _viewModel.SelectedStructure = _viewModel.Structures.Last();
-        PredefinedStructuresScrollViewer.ScrollToEnd();
+        
+        var predefinedStructuresScrollViewer = FindVisualChild<ScrollViewer>(StructuresBox);
+        predefinedStructuresScrollViewer.ScrollToEnd();
         
         _windowManager.ShowStructureEditWindow(); // ouverture de la fenêtre d'édition de MF
     }
@@ -507,7 +509,8 @@ public partial class MainWindow
     private void AddFunctionalModelToListButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.AddFunctionalModelToListCommand.Execute(null);
-        FunctionalModelsScrollViewer.ScrollToEnd();
+        var functionalModelsScrollViewer = FindVisualChild<ScrollViewer>(ModelsBox);
+        functionalModelsScrollViewer.ScrollToEnd();
         StructuresBox.ApplyTemplate();
     }
 
@@ -815,14 +818,19 @@ public partial class MainWindow
         // TODO : récupérer le selected element et l'index du DPT    
     }
 
-    //public bool ScrollToEnd { get; set; } // pour demander à la UI de scroller vers le bas des modèles prédéfinis
-
-
-    // Used when adding a new model
-    // Scrolls to the end of the list of models
-    private void PredefinedStructuresScrollToEnd()
+   
+    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
-        PredefinedStructuresScrollViewer.ScrollToEnd();
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T correctlyTyped)
+                return correctlyTyped;
+
+            var childOfChild = FindVisualChild<T>(child);
+            if (childOfChild != null)
+                return childOfChild;
+        }
+        return null;
     }
-    
 }

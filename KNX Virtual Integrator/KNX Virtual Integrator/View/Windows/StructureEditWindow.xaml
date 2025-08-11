@@ -140,10 +140,10 @@
                                                             </Grid.ColumnDefinitions>
                                                             
                                                             <!--Colonne 1 : Titres-->
-                                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Type de DPT :"/>
+                                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="{StaticResource DptType}"/>
                                                             
                                                             <!--Colonne 2 : Cmd(s)-->
-                                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="Envoi(s)" Margin="5,0,0,0"/>
+                                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{StaticResource Dispatch(es)}" Margin="5,0,0,0"/>
                                                             <!--Type de DPT de l'envoi-->
                                                             <ListBox Grid.Row="1" Grid.Column="1"
                                                                      ItemsSource="{Binding TestsCmd}"
@@ -166,7 +166,7 @@
                                                             </ListBox>
                                                             
                                                             <!--Colonne 3 : IE(s)-->
-                                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="Réception(s)" Margin="5,0,0,0"/>
+                                                            <TextBlock Grid.Row="0" Grid.Column="2" Text="{StaticResource Reception(s)}" Margin="5,0,0,0"/>
                                                             <!--Type de DPT à recevoir-->
                                                             <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                 <ListBox.ItemsPanel>
