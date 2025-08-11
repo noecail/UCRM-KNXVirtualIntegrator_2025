@@ -184,7 +184,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     foreach (var dpttoreceive in testedelement.TestsIe)
                     {
                         foreach (var value in dpttoreceive.IntValue)
-                            Console.Write(value.BigIntegerValue + " " + value.RemoveTestButtonVisibility + ",");
+                            Console.Write(value.BigIntegerValue + ",");
                         Console.Write("|");
                     }
 
