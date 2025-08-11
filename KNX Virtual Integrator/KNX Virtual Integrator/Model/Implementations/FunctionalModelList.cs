@@ -228,7 +228,6 @@ public class FunctionalModelList : IFunctionalModelList
 
     public void ReinitializeNbModels(int index)
     {
-        FunctionalModels.RemoveAt(index);
         _nbModelsCreated.RemoveAt(index);
     }
     
