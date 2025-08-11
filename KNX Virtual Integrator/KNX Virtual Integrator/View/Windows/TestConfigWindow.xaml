@@ -361,7 +361,7 @@
                                                     <!-- Bandeau suivant -->
                                                     <StackPanel Orientation="Horizontal" >
                                                         <TextBlock Text="Envoi" Margin="90,0,15,0"/>
-                                                        <TextBlock Text="Réception(s)"/>
+                                                        <TextBlock Text="{StaticResource Reception(s)}"/>
                                                     </StackPanel>
                                                     
                                                     <!-- Contenu de l'élément à tester -->
@@ -377,7 +377,7 @@
                                                             <ColumnDefinition Width="*"/> <!--Colonne de réception(s)-->
                                                         </Grid.ColumnDefinitions>
                                                        
-                                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="Type de DPT :"/>
+                                                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{StaticResource DptType}"/>
                                                         <!--Type de DPT de l'envoi-->
                                                         <ListBox Grid.Row="0" Grid.Column="1" ItemsSource="{Binding TestsCmd}" >
                                                             <ListBox.ItemsPanel>
@@ -414,7 +414,7 @@
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
                                                         
-                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Adresse liée :"/>
+                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{StaticResource LinkedAddress}"/>
                                                         <!--Adresses de l'envoi-->
                                                         <ListBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding TestsCmd}">
                                                             <ListBox.ItemsPanel>
@@ -454,7 +454,7 @@
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
                                                         
-                                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Valeurs :"/>
+                                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{StaticResource Values}"/>
                                                         <!--Valeurs de l'envoi-->
                                                         <ListBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding TestsCmd}" >
                                                             <ListBox.ItemsPanel>

@@ -5,7 +5,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Ajouter le dictionnaire de ressources pour les chaînes de caractères -->
-                <ResourceDictionary Source="Resources/Strings.MainWindow.fr.xaml" />
+                <ResourceDictionary Source="Resources/Strings.fr.xaml" />
 
                 <!-- Ajouter le dictionnaire de ressources pour les styles -->
                 <ResourceDictionary Source="Resources/Styles.xaml" />
