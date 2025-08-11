@@ -39,9 +39,6 @@
       <Resource Include="Resources\Images.xaml">
         <Generator>MSBuild:Compile</Generator>
       </Resource>
-      <Resource Include="Resources\Strings.MainWindow.fr.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </Resource>
       <Resource Include="Resources\Styles.xaml">
         <Generator>MSBuild:Compile</Generator>
       </Resource>
@@ -68,10 +65,12 @@
     <ItemGroup>
       <Compile Remove="Model\Implementations\pourdaihi.cs" />
       <Compile Remove="View\Utils\NotConverter.cs" />
+      <Compile Remove="View\Utils\Tuple3Converter.cs" />
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="Resources\resources\VIIcon.ico" />
+      <Content Include="KNX Virtual Integrator_kicx1wdq_wpftmp.csproj" />
       <Content Include="Resources\resources\VIIcon.ico">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
