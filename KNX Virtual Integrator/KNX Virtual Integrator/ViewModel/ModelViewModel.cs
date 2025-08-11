@@ -32,7 +32,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Gets the collection of functional models.
         /// </summary>
-        public ObservableCollection<FunctionalModel> Structures { get; set; }
+        public ObservableCollection<FunctionalModelStructure> Structures { get; set; }
         
         /// <summary>
         /// Not seen on the UI
@@ -76,25 +76,40 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Column 1. Selected model structure.
         /// </summary>  
-        private FunctionalModel? _selectedStructure;
-        public FunctionalModel? SelectedStructure
+        private FunctionalModelStructure? _selectedStructure;
+        public FunctionalModelStructure? SelectedStructure
         {
             get => _selectedStructure;
             set
             {
-                if (_selectedStructure?.Key == value?.Key)
+                if (_selectedStructure?.Model.Key == value?.Model.Key)
                     return;
                 _selectedStructure = value;
                 WhenPropertyChanged(nameof(SelectedStructure));
+                SelectedStructureModel = SelectedStructure?.Model;
                 
                 // updating the second column
                 if (value is null) return;
                 
-                var source = _functionalModelList.FunctionalModels[value.Key-1];
+                var source = _functionalModelList.FunctionalModels[value.Model.Key-1];
                 SelectedModels = new ObservableCollection<FunctionalModel>(source);
                 
                 
                 //SelectedModel = SelectedModels?.First(); //bonne idée mais rallonge le temps d'affichage alors que parfois on veut simplement balayer les structures
+            }
+        }
+        
+        private FunctionalModel? _selectedStructureModel;
+
+        public FunctionalModel? SelectedStructureModel
+        {
+            get => _selectedStructureModel;
+            set
+            {
+                if (_selectedStructureModel?.Key == value?.Key)
+                    return;
+                _selectedStructureModel = value;
+                WhenPropertyChanged(nameof(SelectedStructureModel));
             }
         }
         

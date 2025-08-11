@@ -23,8 +23,8 @@ public interface IFunctionalModelList : INotifyPropertyChanged
     public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
 
     public void ExportDictionary(string path);
-    public List<FunctionalModel> GetAllModels();
-    public void AddToDictionary(FunctionalModel model);
+    public List<FunctionalModelStructure> GetAllModels();
+    public void AddToDictionary(FunctionalModelStructure model);
     public void DeleteFromDictionary(int index);
     public void AddToList(int index);
     public void AddToList(int index,FunctionalModel model, bool copy);

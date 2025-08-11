@@ -216,11 +216,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
             var count = 0;
             foreach (var myDpt in TestsCmd)
             {
-                Console.WriteLine("mydpt name : " + myDpt.Name + ", name : " + name);
                 if (myDpt.Name//.Replace('_',' ')
                     .Contains(name, StringComparison.OrdinalIgnoreCase))
                 {
-                    Console.WriteLine("We're good");
                     count++;
                 }
             }
@@ -270,9 +268,24 @@ namespace KNX_Virtual_Integrator.Model.Entities
             TestsCmd.Add(new DataPointType(type, address, value, name));
         }
         
+        public void AddDptToCmd(DataPointType dpt)
+        {
+            TestsCmd.Add(dpt);
+        }
+        
         public void AddDptToIe(int type, string address, List<GroupValue?> value)
         {
             TestsIe.Add(new DataPointType(type, address, value));
+        }
+        
+        public void AddDptToIe(int type, string address, string name, List<GroupValue?> value)
+        {
+            TestsIe.Add(new DataPointType(type, address, value, name));
+        }
+        
+        public void AddDptToIe(DataPointType dpt)
+        {
+            TestsIe.Add(dpt);
         }
 
         public void RemoveDptFromCmd(int index)

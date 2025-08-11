@@ -85,7 +85,7 @@ public partial class StructureEditWindow
     private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
     {
         if (_viewModel.SelectedStructure != null)
-            _viewModel.DeleteStructureDictionaryCommand.Execute(_viewModel.SelectedStructure.Key-1);
+            _viewModel.DeleteStructureDictionaryCommand.Execute(_viewModel.SelectedStructure.Model.Key-1);
         Hide();
     }
     
@@ -111,6 +111,6 @@ public partial class StructureEditWindow
     /// </summary>
     private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructure);
+        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructureModel);
     }
 }

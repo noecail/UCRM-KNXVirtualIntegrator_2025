@@ -104,7 +104,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 return;
             // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
             Structures.Clear();
-            var newStructures = new ObservableCollection<FunctionalModel>(_functionalModelList.GetAllModels());
+            var newStructures = new ObservableCollection<FunctionalModelStructure>(_functionalModelList.GetAllModels());
             foreach (var newstructure in newStructures)
             {
                 Structures.Add(newstructure);
@@ -231,14 +231,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                _functionalModelList.AddToDictionary(new FunctionalModel("New Model " + (Structures.Count+1)));
+                _functionalModelList.AddToDictionary(new FunctionalModelStructure("New_Model " + (Structures.Count+1)));
             }
         );
 
         DuplicateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
                 if (SelectedStructure!=null && Structures.Count != 0)
-                    _functionalModelList.AddToDictionary(new FunctionalModel(SelectedStructure,Structures.Count+1,false));
+                    _functionalModelList.AddToDictionary(new FunctionalModelStructure(new FunctionalModel(SelectedStructure.Model,Structures.Count+1,false),_functionalModelList.FunctionalModelDictionary.FunctionalModels.Count+1));
             }
         );
 
@@ -261,7 +261,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                         previouslySelectedStructure) ||
                     _functionalModelList.FunctionalModelDictionary.FunctionalModels[
                         _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(
-                            previouslySelectedStructure)].Name != previouslySelectedStructure.Name) return;
+                            previouslySelectedStructure)].Model.Name != previouslySelectedStructure.Model.Name) return;
                 SelectedStructure =  previouslySelectedStructure;
                 SelectedModel = previouslySelectedModel;
             }
@@ -322,10 +322,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 if (SelectedStructure != null)
                 {
                     if (model is FunctionalModel myModel)
-                        _functionalModelList.AddToList(SelectedStructure.Key - 1, myModel, false);
+                        _functionalModelList.AddToList(SelectedStructure.Model.Key - 1, myModel, false);
                     else
-                        _functionalModelList.AddToList(SelectedStructure.Key - 1);
-                    SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key - 1] : null;
+                        _functionalModelList.AddToList(SelectedStructure.Model.Key - 1);
+                    SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Model.Key - 1] : null;
                     /*
                      * Je le garde dans un coin pour le moment
                      * SelectedModels?.Clear();
@@ -346,15 +346,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 
                 if (SelectedStructure != null)
                 {
-                    var indexStructure = SelectedStructure.Key-1;
+                    var indexStructure = SelectedStructure.Model.Key-1;
                     _functionalModelList.DeleteFromList(indexStructure, indexModel);
                 }
                 
-                SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Key-1] : null;
+                SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Model.Key-1] : null;
                
                 // restore (or not) the previously selected model
                 if (SelectedModels is null || previouslySelectedModel is null || SelectedStructure is null) return;
-                if (SelectedModels.Contains(previouslySelectedModel) && SelectedModels[_functionalModelList.FunctionalModels[SelectedStructure.Key-1].IndexOf(previouslySelectedModel)].Name == previouslySelectedModel.Name)
+                if (SelectedModels.Contains(previouslySelectedModel) && SelectedModels[_functionalModelList.FunctionalModels[SelectedStructure.Model.Key-1].IndexOf(previouslySelectedModel)].Name == previouslySelectedModel.Name)
                     SelectedModel = previouslySelectedModel;
             }
         );
@@ -417,7 +417,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
 
         // Chargement des modèles par défaut dans la collection observable
-        Structures = new ObservableCollection<FunctionalModel>(_functionalModelList.FunctionalModelDictionary.FunctionalModels);
+        Structures = new ObservableCollection<FunctionalModelStructure>(_functionalModelList.FunctionalModelDictionary.FunctionalModels);
         SelectedModels = [];
         
         

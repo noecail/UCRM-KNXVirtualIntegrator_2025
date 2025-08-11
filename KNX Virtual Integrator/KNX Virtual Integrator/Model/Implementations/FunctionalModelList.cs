@@ -70,9 +70,9 @@ public class FunctionalModelList : IFunctionalModelList
         FunctionalModel newModel;
         // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
         if (FunctionalModels[index].Count > 0)
-            newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index], FunctionalModels[index][^1].Key + 1, false);
+            newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index].Model, FunctionalModels[index][^1].Key + 1, false);
         else
-            newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index],1,false);
+            newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index].Model,1,false);
         
         _nbModelsCreated[index]++;
         if (newModel.Name.Contains("Structure"))
@@ -131,11 +131,11 @@ public class FunctionalModelList : IFunctionalModelList
     /// Adds a personalized model to the dictionary of models.
     /// </summary>
     /// <param name="model">The model to add to the dictionary</param>
-    public void AddToDictionary(FunctionalModel model)
+    public void AddToDictionary(FunctionalModelStructure model)
     {
         var newModel = model;
-        if (string.IsNullOrEmpty(model.Name))
-            newModel.Name = "New_Structure";
+        if (string.IsNullOrEmpty(model.Model.Name))
+            newModel.Model.Name = "New_Structure";
         FunctionalModelDictionary.AddFunctionalModel(newModel);
     }
 
@@ -147,8 +147,8 @@ public class FunctionalModelList : IFunctionalModelList
     {
         if (index > FunctionalModelDictionary.FunctionalModels.Count)
             return;
-        for (var i = FunctionalModelDictionary.FunctionalModels[index].Key; i < FunctionalModelDictionary.FunctionalModels[^1].Key; i++)
-            FunctionalModelDictionary.FunctionalModels[i].Key--;
+        for (var i = FunctionalModelDictionary.FunctionalModels[index].Model.Key; i < FunctionalModelDictionary.FunctionalModels[^1].Model.Key; i++)
+            FunctionalModelDictionary.FunctionalModels[i].Model.Key--;
         FunctionalModelDictionary.RemoveFunctionalModel(index);
         FunctionalModels.RemoveAt(index);
         OnPropertyChanged(nameof(FunctionalModels)); //notifier la UI
@@ -177,7 +177,7 @@ public class FunctionalModelList : IFunctionalModelList
     /// Method to get all the models in the dictionary.
     /// </summary>
     /// <returns>Returns a list containing all the functional models. </returns>
-    public List<FunctionalModel> GetAllModels()
+    public List<FunctionalModelStructure> GetAllModels()
     {
         return FunctionalModelDictionary.GetAllModels();
     }
@@ -199,7 +199,7 @@ public class FunctionalModelList : IFunctionalModelList
         var project = doc.CreateElement("Project");
         foreach (var modelStructure in FunctionalModels)
         {
-            var structure = doc.CreateElement(FunctionalModelDictionary.FunctionalModels[FunctionalModels.FindIndex(l => l == modelStructure)].Name);
+            var structure = doc.CreateElement(FunctionalModelDictionary.FunctionalModels[FunctionalModels.FindIndex(l => l == modelStructure)].Model.Name);
             foreach (var model in modelStructure)
             {
                 var functionalModel = model.ExportFunctionalModel(doc);
@@ -222,7 +222,7 @@ public class FunctionalModelList : IFunctionalModelList
         {
             FunctionalModels.Add([]);
             foreach (XmlNode model in xnList[i]?.ChildNodes!) // pour chaque modèle
-                FunctionalModels[i].Add(FunctionalModel.ImportFunctionalModel(model));
+                FunctionalModels[i].Add(new FunctionalModel("").ImportFunctionalModel(model));
         }
     }
     

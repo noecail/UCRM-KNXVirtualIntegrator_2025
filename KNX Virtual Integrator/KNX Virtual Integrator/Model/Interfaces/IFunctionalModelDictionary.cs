@@ -17,13 +17,13 @@ namespace KNX_Virtual_Integrator.Model.Interfaces
     /// </summary>
     public interface IFunctionalModelDictionary
     {
-        void AddFunctionalModel(FunctionalModel functionalModel);
+        void AddFunctionalModel(FunctionalModelStructure functionalModel);
 
         void RemoveFunctionalModel(int index);
 
-        List<FunctionalModel> GetAllModels();
+        List<FunctionalModelStructure> GetAllModels();
         
-        public ObservableCollection<FunctionalModel> FunctionalModels {get;set;}
+        public ObservableCollection<FunctionalModelStructure> FunctionalModels {get;set;}
 
         public int HasSameStructure(FunctionalModel functionalModel);
 

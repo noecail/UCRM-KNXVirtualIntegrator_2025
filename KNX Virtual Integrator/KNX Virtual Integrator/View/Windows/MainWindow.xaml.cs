@@ -558,7 +558,7 @@ public partial class MainWindow
     /// </summary>
     private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedModel);
+        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructureModel);
     }
     
     /// <summary>

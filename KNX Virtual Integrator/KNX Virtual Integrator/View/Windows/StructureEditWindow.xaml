@@ -42,7 +42,7 @@
                     
                     <!--Nom de la structure-->
                     <TextBox Grid.Column="0"
-                             Text="{Binding SelectedStructure.Name, Mode=TwoWay, FallbackValue=''}"
+                             Text="{Binding SelectedStructureModel.Name, Mode=TwoWay, FallbackValue=''}"
                              Style="{StaticResource StandardTextBoxLight}"
                              HorizontalAlignment="Left"
                              Margin="10,0,0,0"/>
@@ -67,7 +67,7 @@
                         <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                             <ListBox Name="TestedElementsListBox"
-                                     ItemsSource="{Binding SelectedStructure.ElementList, FallbackValue=''}"
+                                     ItemsSource="{Binding SelectedStructureModel.ElementList, FallbackValue=''}"
                                      SelectedItem="{Binding SelectedTestedElement}"
                                      ItemContainerStyle="{StaticResource TestedElementListListBoxItemStyle}"
                                      AlternationCount="100"
@@ -196,7 +196,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <TextBox 
-                                                                            Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                            Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                             HorizontalContentAlignment="Center"
                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                             Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -263,7 +263,7 @@
                                                                 <ItemsControl.ItemTemplate>
                                                                     <DataTemplate>
                                                                         <TextBox 
-                                                                            Text="{Binding Value, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                            Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                                             HorizontalContentAlignment="Center"
                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
                                                                             Background="{StaticResource OffWhiteBackgroundBrush}"

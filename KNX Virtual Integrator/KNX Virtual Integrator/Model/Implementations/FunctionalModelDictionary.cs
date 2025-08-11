@@ -12,13 +12,13 @@ namespace KNX_Virtual_Integrator.Model.Implementations
     //Find Summary in the interface
     public class FunctionalModelDictionary : IFunctionalModelDictionary
     {
-        private ObservableCollection<FunctionalModel> _functionalModels =[];
+        private ObservableCollection<FunctionalModelStructure> _functionalModels =[];
         
         private List<List<string>> _keywordsDictionary = [];
         
         private int _nbStructuresCreated ;
 
-        public ObservableCollection<FunctionalModel> FunctionalModels
+        public ObservableCollection<FunctionalModelStructure> FunctionalModels
         {
             get => _functionalModels;
             set
@@ -96,15 +96,17 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         }
 
 
-        public void AddFunctionalModel(FunctionalModel functionalModel)
+        public void AddFunctionalModel(FunctionalModelStructure functionalModel)
         {
-            var newModel = new FunctionalModel(functionalModel,FunctionalModels.Count +1,false);
+            var newModel = functionalModel;
+            newModel.Model.Key = FunctionalModels.Count +1 ;
+            
             _keywordsDictionary.Add([]);
             _nbStructuresCreated++;
-            if (newModel.Name == "New_Structure")
-                newModel.Name += "_" + _nbStructuresCreated;
-            else if (!functionalModel.Name.Contains("Structure"))
-                newModel.Name += "_Structure";
+            if (newModel.Model.Name == "New_Structure")
+                newModel.Model.Name += "_" + _nbStructuresCreated;
+            else if (!functionalModel.Model.Name.Contains("Structure"))
+                newModel.Model.Name += "_Structure";
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
         }
@@ -115,9 +117,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             OnPropertyChanged(nameof(FunctionalModels));
         }
 
-        public List<FunctionalModel> GetAllModels()
+        public List<FunctionalModelStructure> GetAllModels()
         {
-            var liste = new List<FunctionalModel>();
+            var liste = new List<FunctionalModelStructure>();
             foreach (var model in FunctionalModels) 
             {
                 liste.Add(model);
@@ -135,9 +137,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             var project = doc.CreateElement("Dictionary");
             foreach (var model in GetAllModels())
             {
-                var functionalModel = model.ExportFunctionalModel(doc);
+                var functionalModel = model.ExportFunctionalModelStructure(doc);
                 var keywords = doc.CreateElement("Keywords");
-                foreach (var keyword in _keywordsDictionary[model.Key - 1])
+                foreach (var keyword in _keywordsDictionary[model.Model.Key - 1])
                 {
                     var xKeyword = doc.CreateElement("Keyword");
                     xKeyword.InnerText = keyword;
@@ -168,16 +170,17 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             for (var i = 0; i < xnList.Count;i++) // pour chaque modèle
             {
                 var model = xnList[i];
-                if (model != null)
-                    AddFunctionalModel(FunctionalModel.ImportFunctionalModel(model));
-                _keywordsDictionary.Add([]);
-                foreach (XmlNode element in model?.ChildNodes!)
-                {
-                    if (element.Name == "Keywords")
+                if (model != null){
+                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model));
+                    _keywordsDictionary.Add([]);
+                    foreach (XmlNode element in model?.ChildNodes!)
                     {
-                        foreach (XmlNode keyword in element.ChildNodes)
+                        if (element.Name == "Keywords")
                         {
-                            _keywordsDictionary[i].Add(keyword.InnerText);
+                            foreach (XmlNode keyword in element.ChildNodes)
+                            {
+                                _keywordsDictionary[i].Add(keyword.InnerText);
+                            }
                         }
                     }
                 }
@@ -207,7 +210,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             var i = 0;
             while (i < FunctionalModels.Count && result == -1)
             {
-                if (FunctionalModels[i].HasSameStructure(functionalModel))
+                if (FunctionalModels[i].Model.HasSameStructure(functionalModel))
                     result = i;
                 i++;
             }
