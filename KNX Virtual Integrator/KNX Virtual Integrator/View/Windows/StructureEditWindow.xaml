@@ -75,7 +75,7 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="2*"/>  <!--Panneau de gauche : Édition de la structure-->
-                        <ColumnDefinition Width="3*"/> <!--Panneau de droite : Personnalisation de DPTs-->
+                        <ColumnDefinition Width="*"/> <!--Panneau de droite : Personnalisation de DPTs-->
                     </Grid.ColumnDefinitions>
                     
                     <!--Panneau de gauche : Édition de la structure-->
@@ -149,18 +149,32 @@
                                                         <Grid.ColumnDefinitions>
                                                             <ColumnDefinition Width="Auto"/>  <!--Titres-->
                                                             <ColumnDefinition Width="Auto"/>  <!--Cmd(s)-->
-                                                            <ColumnDefinition Width="Auto"/>  <!--IE(s) + Remove Test-->
+                                                            <ColumnDefinition Width="Auto"/>  <!--IE(s) + Add Dpt-->
                                                         </Grid.ColumnDefinitions>
                                                         
                                                         <!--Colonne 1 : Titres-->
-                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{StaticResource DptType}"/>
+                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{StaticResource DptType}" VerticalAlignment="Center"/>
                                                         
                                                         <!--Colonne 2 : Cmd(s)-->
-                                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{StaticResource Dispatch(es)}" Margin="5,0,0,0"/>
+                                                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5,0,10,5">
+                                                            <TextBlock Text="{StaticResource Dispatch(es)}" Margin="0,0,2,0"/>
+                                                            <!--Button to add a cmd dpt-->
+                                                            <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                <Button
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center"
+                                                                    Margin="2,0,0,0"
+                                                                    Style="{StaticResource ResetValueButtonStyle}"
+                                                                    Click="AddDptCmdToElementButtonClick">
+                                                                    <TextBlock Text="+" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                </Button>
+                                                            </Border>
+                                                        </StackPanel>
                                                         <!--Type de DPT de l'envoi-->
-                                                        <ListBox Grid.Row="1" Grid.Column="1"
+                                                        <ListBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0"
                                                                  ItemsSource="{Binding TestsCmd}"
-                                                                 Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -168,20 +182,54 @@
                                                             </ListBox.ItemsPanel>
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <TextBox Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                             HorizontalContentAlignment="Center"
-                                                                             Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                             Margin="0,0,14,0"
-                                                                    />
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBox 
+                                                                            Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                            HorizontalContentAlignment="Center"
+                                                                            VerticalContentAlignment="Center"
+                                                                            Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                            Height="35"
+                                                                            Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                            VerticalAlignment="Center">
+                                                                        </TextBox>
+                                                                        <!--Button to delete the dpt-->
+                                                                        <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                                                                <Button
+                                                                                    HorizontalAlignment="Left"
+                                                                                    VerticalAlignment="Bottom"
+                                                                                    Margin="2,0,0,0"
+                                                                                    Style="{StaticResource DeactivateValueButtonStyle}"
+                                                                                    Click="RemoveCmdDptFromElementButtonClick">
+                                                                                    <TextBlock Text="-" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                                </Button>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                    </StackPanel>
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
                                                         
                                                         <!--Colonne 3 : IE(s)-->
-                                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{StaticResource Reception(s)}" Margin="5,0,0,0"/>
+                                                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,5">
+                                                            <TextBlock Text="{StaticResource Reception(s)}" Margin="0,0,2,0"/>
+                                                            <!--Button to add an ie dpt-->
+                                                            <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                <Button
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center"
+                                                                    Margin="2,0,0,0"
+                                                                    Style="{StaticResource ResetValueButtonStyle}"
+                                                                    Click="AddDptIeToElementButtonClick">
+                                                                    <TextBlock Text="+" FontSize="8" Margin="0,0,0,1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                </Button>
+                                                            </Border>
+                                                        </StackPanel>
                                                         <!--Type de DPT à recevoir-->
-                                                        <ListBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding TestsIe}" Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                        <ListBox Grid.Row="1" Grid.Column="2"
+                                                                 ItemsSource="{Binding TestsIe}"
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -189,16 +237,33 @@
                                                             </ListBox.ItemsPanel>
                                                             <ListBox.ItemTemplate>
                                                                 <DataTemplate>
-                                                                    <TextBox Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                             Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                                             HorizontalContentAlignment="Center"
-                                                                             Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                             Margin="0,0,14,0"
-                                                                    />
+                                                                    <StackPanel Orientation="Horizontal">
+                                                                        <TextBox 
+                                                                            Text="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                            HorizontalContentAlignment="Center"
+                                                                            VerticalContentAlignment="Center"
+                                                                            Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                            Height="35"
+                                                                            Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                            VerticalAlignment="Center">
+                                                                        </TextBox>
+                                                                        <!--Button to delete the dpt-->
+                                                                        <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                                                                <Button
+                                                                                    HorizontalAlignment="Left"
+                                                                                    VerticalAlignment="Bottom"
+                                                                                    Margin="2,0,0,0"
+                                                                                    Style="{StaticResource DeactivateValueButtonStyle}"
+                                                                                    Click="RemoveIeDptFromElementButtonClick">
+                                                                                    <TextBlock Text="-" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                                </Button>
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                    </StackPanel>
                                                                 </DataTemplate>
                                                             </ListBox.ItemTemplate>
                                                         </ListBox>
-                                                        
                                                     </Grid>
                                                 </StackPanel>
                                             </Border>
