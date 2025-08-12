@@ -1,6 +1,5 @@
 using System.Collections.ObjectModel;
 using System.Xml;
-using iText.StyledXmlParser.Jsoup.Nodes;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 
@@ -35,7 +34,7 @@ public class FunctionalModelStructure
             }
         }
 
-        public DataPointType Dpt;
+        public DataPointType Dpt { get; set; }
         /// <summary>
         /// Takes a string, and puts all the keywords inside it into the keywords associated
         /// </summary>
@@ -58,7 +57,7 @@ public class FunctionalModelStructure
 
     }
 
-    public Dictionary<int, DptAndKeywords> DptDictionary { get; set; } = [];
+    public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; set; } = [];
 
     public struct ElementStructure(List<int> cmd, List<int> ie)
     {
@@ -236,7 +235,7 @@ public class FunctionalModelStructure
     public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
         ObservableCollection<ElementStructure> modelStructure) 
     {
-        DptDictionary = new Dictionary<int, DptAndKeywords>(functionalModels);
+        DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
         Model = BuildFunctionalModel(name);
 
@@ -245,7 +244,7 @@ public class FunctionalModelStructure
     public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
     {
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key,false);
-        DptDictionary = new Dictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
+        DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
     }
     
@@ -485,13 +484,15 @@ public class FunctionalModelStructure
 
         public void CreateDpt()
         {
-            var newKey = DptDictionary.Keys.ToList().Last() + 1;
+            if (DptDictionary.Keys.Count != 0)
+                newKey = DptDictionary.Keys.ToList().Last() + 1;
             DptDictionary.Add(newKey,new DptAndKeywords(){Key = newKey,Keywords = [],Dpt = new DataPointType(1)});
         }
         
-        public void RemoveDpt(int index)
+        public void RemoveDpt(int key)
         {
             DptDictionary.Remove(index);
+            DptDictionary.Remove(key);
         }
 
 }

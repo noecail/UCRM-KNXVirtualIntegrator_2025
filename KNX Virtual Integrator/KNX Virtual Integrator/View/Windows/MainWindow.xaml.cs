@@ -785,7 +785,6 @@ public partial class MainWindow
         return FindParent<T>(parentObject);
     }
 
-    
     /// <summary>
     /// Currently used to display the SelectedModel in the console
     /// Delete later
@@ -805,10 +804,9 @@ public partial class MainWindow
     }
     
     
-    // <<<<<<<<<<<<<<<<<<<< FENÊTRE ÉDITION >>>>>>>>>>>>>>>>>>>>
+    // <<<<<<<<<<<<<<<<<<<< UTILS >>>>>>>>>>>>>>>>>>>>
 
-   
-    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+   private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
