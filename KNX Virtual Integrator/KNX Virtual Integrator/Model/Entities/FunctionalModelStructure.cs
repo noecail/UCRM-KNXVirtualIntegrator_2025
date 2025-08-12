@@ -484,6 +484,7 @@ public class FunctionalModelStructure
 
         public void CreateDpt()
         {
+            var newKey = 0;
             if (DptDictionary.Keys.Count != 0)
                 newKey = DptDictionary.Keys.ToList().Last() + 1;
             DptDictionary.Add(newKey,new DptAndKeywords(){Key = newKey,Keywords = [],Dpt = new DataPointType(1)});
@@ -491,7 +492,6 @@ public class FunctionalModelStructure
         
         public void RemoveDpt(int key)
         {
-            DptDictionary.Remove(index);
             DptDictionary.Remove(key);
         }
 
