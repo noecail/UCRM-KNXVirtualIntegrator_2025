@@ -494,4 +494,17 @@ public class FunctionalModelStructure
             DptDictionary.Remove(index);
         }
 
+        public int FindKeyWithKeywords(string name)
+        {
+            foreach (var key in DptDictionary.Keys)
+            {
+                if (DptDictionary[key].Keywords.Any(p =>
+                        name.Contains(p, StringComparison.OrdinalIgnoreCase) == true))
+                {
+                    return key;
+                }
+            }
+            return -1;
+        }
+
 }
