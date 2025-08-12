@@ -81,6 +81,23 @@ public partial class MainViewModel
                 
         }
     }
-    
+
+    public void AddStructToTestModels(int structKey)
+    {
+        foreach (var testedModel in _functionalModelList.FunctionalModels[structKey])
+        {
+            if (SelectedTestModels.Contains(testedModel))
+                continue;
+            SelectedTestModels.Add(testedModel);
+        }
+    }
+
+    public void RmvStructFromTestModels(int structKey)
+    {
+        foreach (var testedModel in _functionalModelList.FunctionalModels[structKey])
+        {
+            SelectedTestModels.Remove(testedModel);
+        }
+    }
     
 }

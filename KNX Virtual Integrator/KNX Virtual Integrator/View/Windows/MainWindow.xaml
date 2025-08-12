@@ -219,12 +219,7 @@
                                      ScrollViewer.CanContentScroll="False"
                                      ScrollViewer.PanningMode="VerticalOnly"
                                      IsManipulationEnabled="True"
-                                     Background="{StaticResource OffWhiteBackgroundBrush}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FullName}"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
+                                     ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
                             </ListBox>
 
                             <!-- Bandeau inférieur -->
@@ -337,12 +332,7 @@
                                      ScrollViewer.CanContentScroll="False"
                                      ScrollViewer.PanningMode="VerticalOnly"
                                      IsManipulationEnabled="True"
-                                     Background="{StaticResource OffWhiteBackgroundBrush}">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding FullName}"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
+                                     ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
                             </ListBox>
                             
                              <!-- Bandeau inférieur -->
