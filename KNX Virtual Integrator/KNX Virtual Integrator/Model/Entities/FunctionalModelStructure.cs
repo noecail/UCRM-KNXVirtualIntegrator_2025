@@ -315,11 +315,17 @@ public class FunctionalModelStructure
             res.AddElement(new TestedElement());
             foreach (var cmd in element.Cmd)
             {
-                res.ElementList[^1].AddDptToCmd(DptDictionary[cmd].Dpt);
+                var dptToAdd = new DataPointType(DptDictionary[cmd].Dpt);
+                for (var i = 0; i < dptToAdd.IntValue.Count; i++)
+                    dptToAdd.IntValue[i] = new DataPointType.BigIntegerItem(dptToAdd.IntValue[i].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
+                res.ElementList[^1].AddDptToCmd(dptToAdd);
             }
             foreach (var ie in element.Ie)
             {
-                res.ElementList[^1].AddDptToIe(DptDictionary[ie].Dpt);
+                var dptToAdd = new DataPointType(DptDictionary[ie].Dpt);
+                for (var i = 0; i < dptToAdd.IntValue.Count; i++)
+                    dptToAdd.IntValue[i] = new DataPointType.BigIntegerItem(dptToAdd.IntValue[i].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
+                res.ElementList[^1].AddDptToIe(dptToAdd);
             }
         }
         return res;

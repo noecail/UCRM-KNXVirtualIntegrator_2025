@@ -35,6 +35,9 @@ namespace KNX_Virtual_Integrator.Model.Interfaces
         
         public void ExportDictionary(string path);
 
+        public int CheckName(string name);
+
+
     }
 }
 

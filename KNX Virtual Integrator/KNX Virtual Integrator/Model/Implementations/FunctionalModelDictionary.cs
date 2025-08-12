@@ -256,18 +256,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public int HasSameStructure(FunctionalModel functionalModel)
         {
             var result = -1;
-            /*foreach (var list in _keywordsDictionary)
-            {
-                foreach (var keyword in list)
-                {
-                    if (functionalModel.Name.ToLower().Contains(keyword))
-                    {
-                        result = _keywordsDictionary.IndexOf(list);
-                        return result;
-                    }
-                }
-            }*/
-            
             var i = 0;
             while (i < FunctionalModels.Count && result == -1)
             {
@@ -283,6 +271,23 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public int CheckName(string name)
+        {
+            var result = -1;
+            foreach (var list in _keywordsDictionary)
+            {
+                foreach (var keyword in list)
+                {
+                    if (name.ToLower().Contains(keyword))
+                    {
+                        result = _keywordsDictionary.IndexOf(list);
+                        return result;
+                    }
+                }
+            }
+            return result;
         }
     }
 }
