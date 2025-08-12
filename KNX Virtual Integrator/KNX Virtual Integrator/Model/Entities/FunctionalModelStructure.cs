@@ -10,8 +10,47 @@ public class FunctionalModelStructure
     public FunctionalModel Model;
     public struct DptAndKeywords
     {
-        public List<string> Keywords;
+        private List<string> _keywords;
+
+        public List<string> Keywords
+        {
+            get => _keywords;
+            set
+            {
+                UpdateKeywordList();
+                _keywords = value; 
+                
+            }
+        }
+
+        private string _allKeywords;
+        public string AllKeywords
+        {
+            get=>_allKeywords;
+            set
+            {
+                _allKeywords = value;
+                UpdateKeywords(AllKeywords);
+            }
+        }
+
         public DataPointType Dpt;
+        /// <summary>
+        /// Takes a string, and puts all the keywords inside it into the keywords associated
+        /// </summary>
+        /// <param name="keywordList">String containing all the keywords separated with commas</param>
+        private void UpdateKeywords(string keywordList)
+        {
+            Keywords = keywordList.Split(',').ToList();
+        }
+        
+        /// <summary>
+        /// Takes all the keywords associated to a dpt and group them, separating them with commas
+        /// </summary>
+        private void UpdateKeywordList()
+        {
+            AllKeywords = string.Join(',', Keywords);
+        }
 
     }
 
@@ -255,26 +294,7 @@ public class FunctionalModelStructure
 
         return -1;
     }
-
-    /// <summary>
-    /// Takes a string, and puts all the keywords inside it into the keywords associated
-    /// </summary>
-    /// <param name="keywordList">String containing all the keywords separated with commas</param>
-    /// <param name="selectedDpt">The DPT currently selected</param>
-    public void UpdateKeywords(string keywordList, DptAndKeywords selectedDpt)
-    {
-        selectedDpt.Keywords = keywordList.Split(',').ToList();
-    }
     
-    /// <summary>
-    /// Takes all the keywords associated to a dpt and group them, separating them with commas
-    /// </summary>
-    /// <param name="selectedDpt">The DPT currently selected</param>
-    public string UpdateKeywordList(DptAndKeywords selectedDpt)
-    {
-        return string.Join(',', selectedDpt.Keywords);
-    }
-
     public void AddElement()
     {
         ModelStructure.Add(new ElementStructure());
@@ -448,6 +468,11 @@ public class FunctionalModelStructure
         public override string ToString()
         {
               return $"S{Model.Key} | {Model.Name}";
+        }
+
+        public void CreateDpt()
+        {
+            
         }
 
 }
