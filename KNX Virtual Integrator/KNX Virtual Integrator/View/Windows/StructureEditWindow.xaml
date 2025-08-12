@@ -74,8 +74,8 @@
             <Border Grid.Row="1" Style="{StaticResource BorderLight}" BorderThickness="1" Margin="10,10,10,10">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>  <!--Panneau de gauche : Édition de la structure-->
-                        <ColumnDefinition Width="*"/> <!--Panneau de droite : Personnalisation de DPTs-->
+                        <ColumnDefinition Width="3*"/>  <!--Panneau de gauche : Édition de la structure-->
+                        <ColumnDefinition Width="2*"/> <!--Panneau de droite : Personnalisation de DPTs-->
                     </Grid.ColumnDefinitions>
                     
                     <!--Panneau de gauche : Édition de la structure-->
@@ -93,11 +93,37 @@
                                     Style="{StaticResource BorderLight}"
                                     Background="{StaticResource LightGrayBackgroundBrush}"
                                     BorderThickness="0,0,0,1">
-                                <StackPanel Background="{StaticResource NoColorBrush}" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
-                                    <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
-                                    <TextBlock x:Name="TETitleText"
-                                               Style="{StaticResource TitleTextLight}"
-                                               Text="{StaticResource TestedElementsListTitle}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Background="{StaticResource NoColorBrush}" Orientation="Horizontal" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
+                                        <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
+                                        <TextBlock x:Name="TETitleText"
+                                                   Style="{StaticResource TitleTextLight}"
+                                                   Text="{StaticResource TestedElementsListTitle}"/>
+                                    </StackPanel>
+                                    <Image Style="{StaticResource TooltipImage}"
+                                           Height="15"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right"
+                                           Margin="0,1,3,0">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Background="White"
+                                                     BorderBrush="{StaticResource KnxGreenBrush}">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                                        Aide - Liste d'Éléments à Tester
+                                                    </TextBlock>
+                                                    <TextBlock>
+                                                        Créer ou modifier une structure de Modèle Fonctionnel.
+                                                        <LineBreak/>
+                                                        Les Modèles Fonctionnels déjà créés ne seront pas modifiés.
+                                                        <LineBreak/>
+                                                        Après que cette fenêtre soit fermée, les Modèles Fonctionnels créés auront les mêmes champs que la structure modifiée.
+                                                        <!-- TODO: à revoir-->
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </ToolTipService.ToolTip>
+                                    </Image>
                                 </StackPanel>
                             </Border>
                             
@@ -302,13 +328,80 @@
                                 </StackPanel>
                             </Border>
                             
-                            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Visible">
-                                
-                            </ScrollViewer>
+                            <ListBox Grid.Row="1"
+                                     ItemsSource="{Binding SelectedStructure.DptDictionary}"
+                                     
+                                     Background="{StaticResource OffWhiteBackgroundBrush}"
+                                     ScrollViewer.CanContentScroll="False"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                     ScrollViewer.PanningMode="Both"
+                                     IsManipulationEnabled="True">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,0,0,5"
+                                            BorderBrush="{StaticResource DarkGrayBorderBrush}"
+                                            BorderThickness="0,0,0,1">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/> <!--"Nom" + "Type"-->
+                                                    <ColumnDefinition Width="*"/>    <!--"Mots-clés"-->
+                                                </Grid.ColumnDefinitions>
+                                                
+                                                <!--"Nom" + "Type"-->
+                                                <StackPanel Grid.Column="0" Orientation="Vertical">
+                                                    <Button Style="{StaticResource DeleteStructureButtonStyleLight}"
+                                                            HorizontalAlignment="Right"
+                                                            Height="35"
+                                                            Click="RemoveDptFromDictionaryButtonClick"
+                                                    />
+                                                    <StackPanel Margin="10" Orientation="Vertical">
+                                                        <TextBlock Text="Clé"/>
+                                                        <TextBlock Text="{Binding Key}"/>
+                                                    </StackPanel>
+                                                    <StackPanel Margin="10" Orientation="Vertical">
+                                                        <TextBlock Text="Type"/>
+                                                        <TextBox Text="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                
+                                                <!--"Mots-clés"-->
+                                                <StackPanel Grid.Column="1" Margin="10" Orientation="Vertical">
+                                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                                                        <TextBlock Text="Mots-clés"/>
+                                                        <Image Style="{StaticResource TooltipImage}"
+                                                               Height="15"
+                                                               VerticalAlignment="Top"
+                                                               HorizontalAlignment="Left"
+                                                               Margin="3,0,0,0">
+                                                            <ToolTipService.ToolTip>
+                                                                <ToolTip Background="White"
+                                                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                                                    <StackPanel Orientation="Vertical">
+                                                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                                                            Aide - Mots-clés
+                                                                        </TextBlock>
+                                                                        <TextBlock>
+                                                                            Rentrer les mots-clés à la suite, en les séparant par une virgule.
+                                                                            <LineBreak/>
+                                                                            exemple : lumiere,lum,Lumiere
+                                                                        </TextBlock>
+                                                                    </StackPanel>
+                                                                </ToolTip>
+                                                            </ToolTipService.ToolTip>
+                                                        </Image>
+                                                    </StackPanel>
+                                                    <TextBox Text="{Binding Value.Keywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
                             
                             <!-- Bouton d'ajout de DPTs-->
                             <Button Grid.Row="2" HorizontalAlignment="Stretch"
-                                    Click="AddTestedElementToStructureButtonClick"
+                                    Click="AddDptToDictionaryButtonClick"
                                     Style="{StaticResource NewSomethingButtonStyle}"
                                     Tag="{StaticResource AddDpt}"/>
                         </Grid>

@@ -53,7 +53,6 @@ public partial class StructureEditWindow
     
     
     // TODO : implement later
-    
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
         if (langChanged)
@@ -175,11 +174,13 @@ public partial class StructureEditWindow
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
         var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        var indexCmd = 0;
+        var button = (Button)sender;
+        // Find the DPT's index
+        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
+        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
+        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexCmd = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
-        Console.WriteLine("delete dpt cmd number " + indexCmd + " from element " + indexElement);
-        
-        //TODO: récupérer index Dpt
         _viewModel.RemoveCmdDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexCmd));
     }
     
@@ -193,21 +194,31 @@ public partial class StructureEditWindow
         var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
         var button = (Button)sender;
-        
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
         var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
         int indexIe = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
-        
-        Console.WriteLine("delete dpt ie number " + indexIe + " from element " + indexElement);
-        
-        //TODO: récupérer index Dpt
         _viewModel.RemoveIeDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexIe));
     }
-    
-    
+
+    private void AddDptToDictionaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.AddDptToDictionaryCommand.Execute(_viewModel.SelectedStructure);
+    }
+
+    private void RemoveDptFromDictionaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        // Find the DPT's index
+        var button = sender as Button; // Récupère le bouton
+        var kvp = button?.DataContext as KeyValuePair<int,FunctionalModelStructure.DptAndKeywords>? ; // l'élément du dictionnaire
+        //var listBox = FindParent<ListBox>(button); // Récupère le ListBox parent
+        //int indexDpt = listBox.ItemContainerGenerator.IndexFromContainer(listBox.ItemContainerGenerator.ContainerFromItem(kvp)); // Récupère l'index
+        int key = 0;
+        if (kvp?.Value != null) key = kvp.Value.Key;
+        _viewModel.RemoveDptFromDictionaryCommand.Execute((key,_viewModel.SelectedStructure));
+    }
     
     
     
@@ -216,6 +227,7 @@ public partial class StructureEditWindow
     // Utilisée dans RemoveTestedElementFromStructureButtonClick
     // Utilisée dans AddTestToElementButtonClick
     // Utilisée dans RemoveTestFromElementButtonClick
+    // etc
     private static T FindParent<T>(DependencyObject child) where T : DependencyObject
     {
         var parentObject = VisualTreeHelper.GetParent(child);

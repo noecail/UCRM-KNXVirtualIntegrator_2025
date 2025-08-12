@@ -311,7 +311,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         RemoveCmdDptFromElementCommand = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
             {
-                parameters.element.RemoveDptFromCmd(parameters.index);
+                if(parameters.element.TestsCmd.Count>1)
+                    parameters.element.RemoveDptFromCmd(parameters.index);
             }
         );
         

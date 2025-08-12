@@ -12,7 +12,16 @@ namespace KNX_Virtual_Integrator.Model.Entities;
 /// </summary>
 public class DataPointType : INotifyPropertyChanged
 {
-    public string Name { get; set; } = "";
+    private string _name = "";
+    public string Name {
+        get => _name;
+        set
+        {
+            if (_name == value) return;
+            _name = value;
+            OnPropertyChanged();
+        }
+    }
 
     // Class used only for Value collections, used by the UI to access and modify BigInteger values, which do not raise notifications by default
     public class BigIntegerItem : INotifyPropertyChanged
