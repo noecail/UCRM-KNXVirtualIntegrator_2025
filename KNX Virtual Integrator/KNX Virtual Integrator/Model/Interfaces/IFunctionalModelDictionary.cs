@@ -17,7 +17,7 @@ namespace KNX_Virtual_Integrator.Model.Interfaces
     /// </summary>
     public interface IFunctionalModelDictionary
     {
-        void AddFunctionalModel(FunctionalModelStructure functionalModel);
+        void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported);
 
         void RemoveFunctionalModel(int index);
 

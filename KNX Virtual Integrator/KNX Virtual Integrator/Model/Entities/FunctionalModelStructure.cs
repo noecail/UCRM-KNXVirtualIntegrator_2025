@@ -112,7 +112,7 @@ public class FunctionalModelStructure
     
     public FunctionalModelStructure(FunctionalModel model, string myName, int myKey)
     {
-        Model = model;
+        Model = new FunctionalModel(model, myKey, false);
         ModelStructure = [];
         int index;
         DptDictionary = [];
@@ -181,7 +181,8 @@ public class FunctionalModelStructure
             ModelStructure.Add(elementStructure);
         }
         Model.Key = myKey;
-        model.Name = myName;
+        
+        Model.Name = myName;
 
     }
 
@@ -192,6 +193,13 @@ public class FunctionalModelStructure
         Model = new FunctionalModel(name);
         DptDictionary = new Dictionary<int, DptAndKeywords>(functionalModels);
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
+    }
+    
+    public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
+    {
+        Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key,false);
+        DptDictionary = new Dictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
+        ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
     }
     
     

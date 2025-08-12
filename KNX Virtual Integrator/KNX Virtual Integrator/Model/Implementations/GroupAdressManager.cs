@@ -438,7 +438,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                {
                                    //Console.Writeline("On a ajoutéééééééééééééééééééééééééééééé " + modelName + "_" +
                                    //                  circuitName);
+
                                    newFunctionalModels.Add(new FunctionalModel(modelName + "_" + circuitName, j + 1));
+
                                }
 
                                var newType = 1;
@@ -706,11 +708,17 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
 
                         index = functionalModelList.FunctionalModelDictionary.FunctionalModels.Count;
-                        functionalModelList.AddToDictionary(new FunctionalModelStructure(newFunctionalModels[0],modelName,index+1));
+
+
+                        functionalModelList.AddToDictionary(
+                            new FunctionalModelStructure(newFunctionalModels[0], modelName, index + 1), true);
+
+
                         functionalModelList.FunctionalModels[index].Clear();
                     }
                     foreach (var newFunctionalModel in newFunctionalModels)
                     {
+
                         newFunctionalModel.UpdateIntValue();
                         functionalModelList.AddToList(index, newFunctionalModel, false);
                     }

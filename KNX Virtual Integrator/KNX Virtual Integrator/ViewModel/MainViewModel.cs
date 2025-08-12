@@ -231,14 +231,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                _functionalModelList.AddToDictionary(new FunctionalModelStructure("New_Model " + (Structures.Count+1)));
+                _functionalModelList.AddToDictionary(new FunctionalModelStructure("New_Model " + (Structures.Count+1)),false);
             }
         );
 
         DuplicateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
                 if (SelectedStructure!=null && Structures.Count != 0)
-                    _functionalModelList.AddToDictionary(new FunctionalModelStructure(new FunctionalModel(SelectedStructure.Model,Structures.Count+1,false),_functionalModelList.FunctionalModelDictionary.FunctionalModels.Count+1));
+                    _functionalModelList.AddToDictionary(new FunctionalModelStructure(new FunctionalModel(SelectedStructure.Model,Structures.Count+1,false),_functionalModelList.FunctionalModelDictionary.FunctionalModels.Count+1),false);
             }
         );
 

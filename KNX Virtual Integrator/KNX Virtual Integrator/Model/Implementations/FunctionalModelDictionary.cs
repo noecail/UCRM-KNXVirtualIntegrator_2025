@@ -43,7 +43,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     } //IE
                 },
                 [new FunctionalModelStructure.ElementStructure([1],[2])]
-                    )
+                    ),false
                 );           /* AddFunctionalModel(new FunctionalModel([new TestedElement([1],["0/1/1"],[[new GroupValue(true), new GroupValue(false)]],[1],["0/2/1"],[[new GroupValue(true), new GroupValue(false)]])],
                                 "Lumiere_ON_OFF")); //Adding On/Off light functional model
                             AddFunctionalModel(new FunctionalModel([
@@ -108,17 +108,18 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         }
 
-
-        public void AddFunctionalModel(FunctionalModelStructure functionalModel)
+        
+        public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported)
         {
-            var newModel = functionalModel;
+            var newModel = new FunctionalModelStructure(functionalModel);
             _keywordsDictionary.Add([]);
             _nbStructuresCreated++;
             if (newModel.Model.Name == "New_Structure")
                 newModel.Model.Name += "_" + _nbStructuresCreated;
             else if (!functionalModel.Model.Name.Contains("Structure"))
                 newModel.Model.Name += "_Structure";
-            newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name);
+            if (imported == false)
+                newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name);
             newModel.Model.Key = FunctionalModels.Count +1 ;
 
             FunctionalModels.Add(newModel);
@@ -186,7 +187,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 var model = xnList[i];
                 if (model != null){
-                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model));
+                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model),false);
                     _keywordsDictionary.Add([]);
                     foreach (XmlNode element in model?.ChildNodes!)
                     {
