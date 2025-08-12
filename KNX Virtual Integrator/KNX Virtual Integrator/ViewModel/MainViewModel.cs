@@ -231,14 +231,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
-                _functionalModelList.AddToDictionary(new FunctionalModelStructure("New_Model " + (Structures.Count+1)));
+                _functionalModelList.AddToDictionary(new FunctionalModelStructure("New_Model " + (Structures.Count+1)),false);
             }
         );
 
         DuplicateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
                 if (SelectedStructure!=null && Structures.Count != 0)
-                    _functionalModelList.AddToDictionary(new FunctionalModelStructure(new FunctionalModel(SelectedStructure.Model,Structures.Count+1,false),_functionalModelList.FunctionalModelDictionary.FunctionalModels.Count+1));
+                    _functionalModelList.AddToDictionary(new FunctionalModelStructure(new FunctionalModel(SelectedStructure.Model,Structures.Count+1,false),_functionalModelList.FunctionalModelDictionary.FunctionalModels.Count+1),false);
             }
         );
 
@@ -362,6 +362,16 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     SelectedModel = previouslySelectedModel;
             }
         );
+
+        AddDptToDictionaryCommand = new Commands.RelayCommand<FunctionalModelStructure>(structure =>
+        {
+            structure?.CreateDpt();
+        });
+        
+        RemoveDptFromDictionaryCommand = new Commands.RelayCommand<(int index, FunctionalModelStructure structure)>(parameters =>
+        {
+            parameters.structure.RemoveDpt(parameters.index);
+        });
         
         ExportDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {

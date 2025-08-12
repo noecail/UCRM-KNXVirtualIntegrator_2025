@@ -98,10 +98,25 @@ public class FunctionalModelList : IFunctionalModelList
     /// <param name="functionalModel">FunctionalModel to add</param>
     /// <param name="index"> Index of the structure</param>
     /// <param name="copy"> boolean indicating whether the model is a copy or not</param>
+    
     public void AddToList(int index, FunctionalModel functionalModel, bool copy)
     {
+
+        var newModel = new FunctionalModel(functionalModel,FunctionalModels[index].Count + 1,false);
         _nbModelsCreated[index]++;
-        FunctionalModels[index].Add(new FunctionalModel(functionalModel,FunctionalModels[index].Count+1,copy));
+        if (newModel.Name.Contains("Structure"))
+        {
+            if (newModel.Name.Contains("New_Structure"))
+                newModel.Name = "New_Model_" +_nbModelsCreated[index];
+            else
+            {
+                newModel.Name = string.Join("_",newModel.Name.Split('_')[..^1]) +"_" + _nbModelsCreated[index];
+            }
+        }
+
+
+        FunctionalModels[index].Add(newModel);
+        // FunctionalModels[index].Add(new FunctionalModel(functionalModel,FunctionalModels[index].Count+1,copy));
     }
 
     /// <summary>
@@ -131,12 +146,15 @@ public class FunctionalModelList : IFunctionalModelList
     /// Adds a personalized model to the dictionary of models.
     /// </summary>
     /// <param name="model">The model to add to the dictionary</param>
-    public void AddToDictionary(FunctionalModelStructure model)
+    /// <param name="imported">Boolean to check if the functionalModelStructure to add is created manually or by the application during importation</param>
+    public void AddToDictionary(FunctionalModelStructure model, bool imported)
     {
-        var newModel = model;
+
+        var newModel = new FunctionalModelStructure(model);
         if (string.IsNullOrEmpty(model.Model.Name))
             newModel.Model.Name = "New_Structure";
-        FunctionalModelDictionary.AddFunctionalModel(newModel);
+        FunctionalModelDictionary.AddFunctionalModel(newModel, imported);
+
     }
 
     /// <summary>

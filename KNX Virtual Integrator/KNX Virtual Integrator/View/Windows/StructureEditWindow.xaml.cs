@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator.View.Windows;
@@ -82,6 +83,7 @@ public partial class StructureEditWindow
     
     
     // --------------------------------------  Boutons  --------------------------------------
+    
     private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
     {
         if (_viewModel.SelectedStructure != null)
@@ -120,6 +122,91 @@ public partial class StructureEditWindow
         testedElementsScrollViewer.ScrollToEnd();
     }
 
+    /// <summary>
+    /// Handles the button click event to add a DPT to send to a tested element
+    /// </summary>
+    private void AddDptCmdToElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        
+        _viewModel.AddDptCmdToElementCommand.Execute(_viewModel.SelectedStructureModel?.ElementList[indexElement]);
+    }
+    
+    /// <summary>
+    /// Handles the button click event to add a DPT to send to a tested element
+    /// </summary>
+    private void AddDptIeToElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        
+        _viewModel.AddDptIeToElementCommand.Execute(_viewModel.SelectedStructureModel?.ElementList[indexElement]);
+    }
+    
+    private void RemoveCmdDptFromElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+
+        var indexCmd = 0;
+        
+        Console.WriteLine("delete dpt cmd number " + indexCmd + " from element " + indexElement);
+        
+        //TODO: récupérer index Dpt
+        _viewModel.RemoveCmdDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexCmd));
+    }
+    
+    private void RemoveIeDptFromElementButtonClick(object sender, RoutedEventArgs e)
+    {
+        // Find the Tested Element's index 
+        var dep = (DependencyObject)e.OriginalSource;
+        dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+
+        var button = (Button)sender;
+        
+        // Find the DPT's index
+        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
+        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
+        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexIe = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        
+        
+        Console.WriteLine("delete dpt ie number " + indexIe + " from element " + indexElement);
+        
+        //TODO: récupérer index Dpt
+        _viewModel.RemoveIeDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexIe));
+    }
+    
+    
+    
+    
+    
+    
+    // Méthode récursive qui remonte les parents d'un objet jusqu'à atteindre le parent du type passé en paramètre
+    // Utilisée dans RemoveTestedElementFromStructureButtonClick
+    // Utilisée dans AddTestToElementButtonClick
+    // Utilisée dans RemoveTestFromElementButtonClick
+    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        var parentObject = VisualTreeHelper.GetParent(child);
+        if (parentObject == null) return null;
+        if (parentObject is T parent) return parent;
+        return FindParent<T>(parentObject);
+    }
+    
+    
     private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)

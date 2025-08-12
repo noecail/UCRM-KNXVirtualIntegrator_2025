@@ -10,8 +10,51 @@ public class FunctionalModelStructure
     public FunctionalModel Model;
     public struct DptAndKeywords
     {
-        public List<string> Keywords;
+        public int Key;
+        private List<string> _keywords;
+
+        public List<string> Keywords
+        {
+            get => _keywords;
+            set
+            {
+                UpdateKeywordList();
+                _keywords = value; 
+                
+            }
+        }
+
+        private string _allKeywords;
+        public string AllKeywords
+        {
+            get=>_allKeywords;
+            set
+            {
+                _allKeywords = value;
+                UpdateKeywords(AllKeywords);
+            }
+        }
+
         public DataPointType Dpt;
+        /// <summary>
+        /// Takes a string, and puts all the keywords inside it into the keywords associated
+        /// </summary>
+        /// <param name="keywordList">String containing all the keywords separated with commas</param>
+        private void UpdateKeywords(string keywordList)
+        {
+            Keywords = keywordList.Split(',').ToList();
+        }
+        
+        /// <summary>
+        /// Takes all the keywords associated to a dpt and group them, separating them with commas
+        /// </summary>
+        private void UpdateKeywordList()
+        {
+            if (Keywords == null)
+                return;
+            if (Keywords.Count > 0)
+                AllKeywords = string.Join(',', Keywords);
+        }
 
     }
 
@@ -74,6 +117,7 @@ public class FunctionalModelStructure
                     {
                         newKey = 0;
                     }
+                    newDpt.Key = newKey;
 
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
@@ -100,6 +144,7 @@ public class FunctionalModelStructure
                     newDpt.Dpt = dpt;
                     newDpt.Keywords = [];
                     var newKey = DptDictionary.Keys.ToList()[^1] + 1;
+                    newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
                 }
@@ -112,7 +157,7 @@ public class FunctionalModelStructure
     
     public FunctionalModelStructure(FunctionalModel model, string myName, int myKey)
     {
-        Model = model;
+        Model = new FunctionalModel(model, myKey, false);
         ModelStructure = [];
         int index;
         DptDictionary = [];
@@ -148,7 +193,7 @@ public class FunctionalModelStructure
                     {
                         newKey = 0;
                     }
-
+                    newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
                 }
@@ -174,6 +219,7 @@ public class FunctionalModelStructure
                     newDpt.Dpt = dpt;
                     newDpt.Keywords = [];
                     var newKey = DptDictionary.Keys.ToList()[^1] + 1;
+                    newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
                 }
@@ -181,7 +227,8 @@ public class FunctionalModelStructure
             ModelStructure.Add(elementStructure);
         }
         Model.Key = myKey;
-        model.Name = myName;
+        
+        Model.Name = myName;
 
     }
 
@@ -189,9 +236,17 @@ public class FunctionalModelStructure
     public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
         ObservableCollection<ElementStructure> modelStructure) 
     {
-        Model = new FunctionalModel(name);
         DptDictionary = new Dictionary<int, DptAndKeywords>(functionalModels);
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
+        Model = BuildFunctionalModel(name);
+
+    }
+    
+    public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
+    {
+        Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key,false);
+        DptDictionary = new Dictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
+        ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
     }
     
     
@@ -246,26 +301,7 @@ public class FunctionalModelStructure
 
         return -1;
     }
-
-    /// <summary>
-    /// Takes a string, and puts all the keywords inside it into the keywords associated
-    /// </summary>
-    /// <param name="keywordList">String containing all the keywords separated with commas</param>
-    /// <param name="selectedDpt">The DPT currently selected</param>
-    public void UpdateKeywords(string keywordList, DptAndKeywords selectedDpt)
-    {
-        selectedDpt.Keywords = keywordList.Split(',').ToList();
-    }
     
-    /// <summary>
-    /// Takes all the keywords associated to a dpt and group them, separating them with commas
-    /// </summary>
-    /// <param name="selectedDpt">The DPT currently selected</param>
-    public string UpdateKeywordList(DptAndKeywords selectedDpt)
-    {
-        return string.Join(',', selectedDpt.Keywords);
-    }
-
     public void AddElement()
     {
         ModelStructure.Add(new ElementStructure());
@@ -439,6 +475,17 @@ public class FunctionalModelStructure
         public override string ToString()
         {
               return $"S{Model.Key} | {Model.Name}";
+        }
+
+        public void CreateDpt()
+        {
+            var newKey = DptDictionary.Keys.ToList().Last() + 1;
+            DptDictionary.Add(newKey,new DptAndKeywords(){Key = newKey,Keywords = [],Dpt = new DataPointType(1)});
+        }
+        
+        public void RemoveDpt(int index)
+        {
+            DptDictionary.Remove(index);
         }
 
 }
