@@ -131,10 +131,10 @@
                     </Grid.RowDefinitions>
                     <!-- TODO: régler largeur panneaux-->
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250" />                <!-- Modèles -->
-                        <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
-                        <ColumnDefinition MinWidth="200" Width="Auto"/> <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
-                        <ColumnDefinition MinWidth="200" Width="*" />   <!-- Adresses -->
+                        <ColumnDefinition Width="300"/>   <!-- Modèles -->
+                        <ColumnDefinition Width="400"/>   <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition Width="400"/>   <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition Width="*"/>     <!-- Adresses -->
                     </Grid.ColumnDefinitions>
                         
                         
@@ -215,7 +215,7 @@
                                      ItemsSource="{Binding Structures}"
                                      SelectedItem="{Binding SelectedStructure, Mode=TwoWay}"
                                      ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.CanContentScroll="False"
                                      ScrollViewer.PanningMode="VerticalOnly"
                                      IsManipulationEnabled="True"
@@ -323,7 +323,7 @@
                                 
                                 <TextBlock Style="{StaticResource TitleTextLight}"
                                            x:Name="BorderModelsTitleText"
-                                           Text="{Binding SelectedStructure.Name, FallbackValue=''}"
+                                           Text="{Binding SelectedStructureModel.Name, FallbackValue=''}"
                                 />
                             </Border>
 
@@ -333,7 +333,7 @@
                                      ItemsSource="{Binding SelectedModels, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      SelectedItem="{Binding SelectedModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.CanContentScroll="False"
                                      ScrollViewer.PanningMode="VerticalOnly"
                                      IsManipulationEnabled="True"
@@ -423,7 +423,7 @@
                                          Height="Auto"
                                          ItemContainerStyle="{StaticResource TestedElementListListBoxItemContainerStyle}"
                                          ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                          ScrollViewer.CanContentScroll="False"
                                          ScrollViewer.PanningMode="VerticalOnly"
                                          IsManipulationEnabled="True">
@@ -826,7 +826,12 @@
                     
                     <Border Grid.Row="1" Grid.Column="3">
                         <!-- TreeView(figuratif) : à redesign entièrement selon la maquette, ajouter les infos de liaison, et ouvrir les paramètres sur clique -->
-                        <TreeView >
+                        <TreeView
+                            ScrollViewer.CanContentScroll="False"
+                            ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                            ScrollViewer.VerticalScrollBarVisibility="Visible"
+                            ScrollViewer.PanningMode="Both"
+                            IsManipulationEnabled="True">
                             <TreeViewItem Header="ECLAIRAGE SIMPLE" IsExpanded="True">
                                 <TreeViewItem Header="ON/OFF" IsExpanded="True">
                                     <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/1"/>

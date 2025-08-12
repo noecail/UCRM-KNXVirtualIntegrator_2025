@@ -484,21 +484,21 @@ public partial class MainWindow
             // Récupère la CheckBox dans le template
             if (itemContainer.Template.FindName("DeleteCheckBox", itemContainer) is CheckBox checkBox)
             {
-                var structure = StructuresBox.Items[i] as FunctionalModel; // La Structure
+                var structure = StructuresBox.Items[i] as FunctionalModelStructure; // La Structure
 
                 // Si la case est cochée on supprime la structure
                 if (checkBox.IsChecked == true)
                     if (structure != null)
                     {
-                        indexesToDelete.Add(structure.Key-1); // supprimer la structure
+                        indexesToDelete.Add(structure.Model.Key-1); // supprimer la structure
                     }
             }
         }
         
         // toutes les supprimer dans l'ordre inverse pour éviter que les structures changent d'index avant d'avoir été supprimées
         foreach (var indexToDelete in indexesToDelete.OrderByDescending(i => i))
-            _viewModel.DeleteStructureDictionaryCommand.Execute(indexToDelete); 
-        
+            _viewModel.DeleteStructureDictionaryCommand.Execute(indexToDelete);
+
     }
     
     // <<<<<<<<<<<<<<<<<<<< COLONNE 2 >>>>>>>>>>>>>>>>>>>>
