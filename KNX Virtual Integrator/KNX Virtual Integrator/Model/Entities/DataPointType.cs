@@ -79,7 +79,7 @@ public class DataPointType : INotifyPropertyChanged
     // Every change on this collection is copied onto the list
     // BigIntegers are made modifiable through the BigIntegerItem class
     private ObservableCollection<BigIntegerItem?> _intValue = [];
-    public ObservableCollection<BigIntegerItem> IntValue { get; } = new ObservableCollection<BigIntegerItem>();
+    public ObservableCollection<BigIntegerItem> IntValue { get; set;  } = new ObservableCollection<BigIntegerItem>();
     
     private int _type;
     public int Type // DPT code

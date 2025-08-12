@@ -395,9 +395,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 List<string> prefixOfPrefixes = [];
                 foreach (var modelStructure in modelStructures)
                 {
+                    //Add name
                     var structureList = modelStructure.Elements().ToList();
                     var modelName = modelStructure.Attribute("Name")?.Value ?? "";
                     modelName = modelName.Replace(" ", "_");
+                    var index = functionalModelList.FunctionalModelDictionary.CheckName(modelName);
                     List<FunctionalModel> newFunctionalModels = []; // new list to store all the functional model of the next structure
                     //Console.Writeline("MàJ des newmodels !!!!!!!!!!!");
                     List<string> prefixList = [];
@@ -504,8 +506,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                        prefixOfPrefixes.Add(FindMajorityPrefix(prefixList));
                     }
 
-                    var index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0]);
-                    if (index != -1)
+                    index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0]);
+                    if (index != -1) 
                     {
                         for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                         {
