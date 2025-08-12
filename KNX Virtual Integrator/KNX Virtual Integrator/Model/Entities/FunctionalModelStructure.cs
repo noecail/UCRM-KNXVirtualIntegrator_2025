@@ -50,7 +50,10 @@ public class FunctionalModelStructure
         /// </summary>
         private void UpdateKeywordList()
         {
-            AllKeywords = string.Join(',', Keywords);
+            if (Keywords == null)
+                return;
+            if (Keywords.Count > 0)
+                AllKeywords = string.Join(',', Keywords);
         }
 
     }
