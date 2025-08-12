@@ -131,8 +131,6 @@ public partial class MainWindow
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyThemeToWindow is not implemented");
-
     }
 
     private void TranslateWindowContents()
@@ -157,6 +155,8 @@ public partial class MainWindow
             Resources["Values"] = "Valeurs :";
             Resources["Dispatch(es)"] = "Envoi(s)";
             Resources["Reception(s)"] = "Réception(s)";
+            Resources["ShowAllModels"] = "Afficher tous les modèles";
+            Resources["ShowTheModel"] = "Afficher le modèle sélectionné";
             
             Resources["GroupAdressesTitle"] = "Adresses de Groupe";
         }
@@ -180,6 +180,8 @@ public partial class MainWindow
             Resources["Values"] = "Values :";
             Resources["Dispatch(es)"] = "Dispatch(s)";
             Resources["Reception(s)"] = "Reception(s)";
+            Resources["ShowAllModels"] = "Show all models";
+            Resources["ShowTheModel"] = "Show selected model";
             
             Resources["GroupAdressesTitle"] = "Group Addresses";
         }

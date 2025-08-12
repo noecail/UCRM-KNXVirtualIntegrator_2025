@@ -234,7 +234,7 @@
                                 <Button Grid.Column="0" HorizontalAlignment="Stretch"
                                         Click="CreateStructureButtonClick"
                                         Style="{StaticResource NewSomethingButtonStyle}"
-                                        Tag="{StaticResource NewStructure}"
+                                        Tag="{DynamicResource NewStructure}"
                                 />
                                 
                                 <!--Bouton d'édition-->
@@ -357,7 +357,7 @@
                                     <Button HorizontalAlignment="Stretch"
                                             Click="AddFunctionalModelToListButtonClick"
                                             Style="{StaticResource NewSomethingButtonStyle}"
-                                            Tag="{StaticResource CreateFunctionalModel}"/>
+                                            Tag="{DynamicResource CreateFunctionalModel}"/>
                                 </Border>
                             </Grid>
                         </Grid>
@@ -762,12 +762,12 @@
                                     <Button Style="{StaticResource IconTextButtonStyle}"
                                             Foreground="{StaticResource DarkForegroundBrush}"
                                             Tag="{StaticResource FilterDrawingImage}"
-                                            Content="Afficher tous les modèles" Margin="10,0"
+                                            Content="{DynamicResource ShowAllModels}" Margin="10,0"
                                             Click="FilterModelButtonClick"/>
                                     <Button Style="{StaticResource IconTextButtonStyle}"
                                             Foreground="{StaticResource DarkForegroundBrush}"
                                             Tag="{StaticResource CheckmarkDrawingImage}"
-                                            Content="Afficher le modèle sélectionné"
+                                            Content="{DynamicResource ShowTheModel}"
                                             Click="SaveModelButtonClick"/>
                                 </StackPanel>
                             </StackPanel>

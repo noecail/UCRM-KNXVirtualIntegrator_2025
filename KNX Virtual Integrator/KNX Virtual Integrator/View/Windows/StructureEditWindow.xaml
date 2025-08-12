@@ -8,7 +8,7 @@
         xmlns:utils="clr-namespace:KNX_Virtual_Integrator.View.Utils"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        Title="Fenêtre d'édition de Structure de Modèle Fonctionnel"
+        Title="{DynamicResource StructEditWindowTitle}"
         Height="700"
         Width="Auto"
         MaxWidth="1000"
@@ -54,7 +54,7 @@
                     
                     <!--Bouton de suppression de la structure-->
                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                        <TextBlock Text="Supprimer la structure"
+                        <TextBlock Text="{DynamicResource StructRmvText}"
                                    Foreground="{StaticResource LightGrayForegroundBrush}"
                                    Margin="0,0,3,0"
                                    VerticalAlignment="Center"
@@ -98,7 +98,7 @@
                                         <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
                                         <TextBlock x:Name="TETitleText"
                                                    Style="{StaticResource TitleTextLight}"
-                                                   Text="{StaticResource TestedElementsListTitle}"/>
+                                                   Text="{DynamicResource TestedElementsListTitle}"/>
                                     </StackPanel>
                                     <Image Style="{StaticResource TooltipImage}"
                                            Height="15"
@@ -156,7 +156,7 @@
                                                         </Grid.ColumnDefinitions>
                                                         
                                                         <!-- Titre -->
-                                                        <TextBlock Grid.Column="0" Text="Élément à tester" Style="{StaticResource TitleTextLight}"/>
+                                                        <TextBlock Grid.Column="0" Text="{DynamicResource TestedElement}" Style="{StaticResource TitleTextLight}"/>
                                                         <!-- Bouton de suppression -->
                                                         <Button Grid.Column="1" 
                                                                 Style="{StaticResource DeleteStructureButtonStyleLight}"
@@ -179,11 +179,11 @@
                                                         </Grid.ColumnDefinitions>
                                                         
                                                         <!--Colonne 1 : Titres-->
-                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{StaticResource DptType}" VerticalAlignment="Center"/>
+                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource DptType}" VerticalAlignment="Center"/>
                                                         
                                                         <!--Colonne 2 : Cmd(s)-->
                                                         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5,0,10,5">
-                                                            <TextBlock Text="{StaticResource Dispatch(es)}" Margin="0,0,2,0"/>
+                                                            <TextBlock Text="{DynamicResource Dispatch(es)}" Margin="0,0,2,0"/>
                                                             <!--Button to add a cmd dpt-->
                                                             <Border Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                 <Button
@@ -238,7 +238,7 @@
                                                         
                                                         <!--Colonne 3 : IE(s)-->
                                                         <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" Margin="0,0,0,5">
-                                                            <TextBlock Text="{StaticResource Reception(s)}" Margin="0,0,2,0"/>
+                                                            <TextBlock Text="{DynamicResource Reception(s)}" Margin="0,0,2,0"/>
                                                             <!--Button to add an ie dpt-->
                                                             <Border Background="{StaticResource OffWhiteBackgroundBrush}">
                                                                 <Button
@@ -301,7 +301,7 @@
                             <Button Grid.Row="2" HorizontalAlignment="Stretch"
                                     Click="AddTestedElementToStructureButtonClick"
                                     Style="{StaticResource NewSomethingButtonStyle}"
-                                    Tag="{StaticResource AddTestedElement}"/>
+                                    Tag="{DynamicResource AddTestedElement}"/>
                         </Grid>
                     </Border>
                     
@@ -324,7 +324,7 @@
                                     <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
                                     <TextBlock x:Name="DptsTitleText"
                                                Style="{StaticResource TitleTextLight}"
-                                               Text="{StaticResource DptPersonalizationtitle}"/>
+                                               Text="{DynamicResource DptPersonalizationTitle}"/>
                                 </StackPanel>
                             </Border>
                             
@@ -355,7 +355,7 @@
                                                 
                                                 <!--Titre DPT Personnalisé-->
                                                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="10" Orientation="Horizontal">
-                                                    <TextBlock Text="Dpt personnalisé de clé : "/>
+                                                    <TextBlock Text="Dpt personnalisé de clé : "/> <!--ICI-->
                                                     <TextBlock Text="{Binding Key}"/>
                                                 </StackPanel>
                                                 <Button Grid.Row="0" Grid.Column="1"
@@ -383,7 +383,7 @@
                                                         </TextBox>
                                                     </StackPanel>
                                                     <StackPanel Margin="10" Orientation="Vertical">
-                                                        <TextBlock Text="Type :"/>
+                                                        <TextBlock Text="{DynamicResource Type}"/>
                                                         <TextBox 
                                                             Text="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             HorizontalContentAlignment="Center"
@@ -400,7 +400,7 @@
                                                 <!--"Mots-clés"-->
                                                 <StackPanel Grid.Row="1" Grid.Column="1" Margin="10" Orientation="Vertical">
                                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
-                                                        <TextBlock Text="Mots-clés"/>
+                                                        <TextBlock Text="{DynamicResource Keywords}"/>
                                                         <Image Style="{StaticResource TooltipImage}"
                                                                Height="15"
                                                                VerticalAlignment="Top"
@@ -435,7 +435,7 @@
                             <Button Grid.Row="2" HorizontalAlignment="Stretch"
                                     Click="AddDptToDictionaryButtonClick"
                                     Style="{StaticResource NewSomethingButtonStyle}"
-                                    Tag="{StaticResource AddDpt}"/>
+                                    Tag="{DynamicResource AddDpt}"/>
                         </Grid>
                     </Border>
                 </Grid>
