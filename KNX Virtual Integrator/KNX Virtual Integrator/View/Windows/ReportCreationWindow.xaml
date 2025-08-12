@@ -7,7 +7,7 @@
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="Création du rapport de test" Height="650" Width="500"
+                 Title="{DynamicResource ReportWindowTitle}" Height="650" Width="500"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
                  Background="{StaticResource WhiteBackgroundBrush}"
@@ -112,7 +112,7 @@
                                     </DrawingImage>
                                 </Image.Source>
                             </Image>
-                            <TextBlock x:Name="ReportWindowTopTitle" Text="Génération du rapport de test"
+                            <TextBlock x:Name="ReportWindowTopTitle" Text="{DynamicResource TestGenerationTitle}"
                                        FontFamily="Aptos" FontWeight="Bold" FontSize="22"
                                        VerticalAlignment="Center" Margin="0, 12, 0, 0" />
                         </StackPanel>
@@ -127,11 +127,11 @@
                         
                         <ScrollViewer VerticalScrollBarVisibility="Auto" Background="White" Margin="10">
                             <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                                <TextBlock Text="Paramètres du document" FontFamily="Aptos"
+                                <TextBlock Text="{DynamicResource DocParametersTitle}" FontFamily="Aptos"
                                            FontSize="17" FontWeight="SemiBold"
                                            Margin="10,10,0,0" />
                                 
-                                <TextBlock Text="Auteur du rapport" 
+                                <TextBlock Text="{DynamicResource AuthorReport}" 
                                            Style="{StaticResource StandardTextBlockLight}" 
                                            Margin="10,10,10,2" />
                                 <TextBox x:Name="AuthorNameTextBox" 
@@ -142,7 +142,7 @@
 
                                 <Grid>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" >
-                                        <TextBlock Text="Chemin du rapport :"
+                                        <TextBlock Text="{DynamicResource ReportPath}"
                                                    Style="{StaticResource StandardTextBlockLight}"
                                                    HorizontalAlignment="Left"
                                                    Margin="10,10,10,5" />
@@ -154,7 +154,7 @@
                                                 Style="{StaticResource ImportKeysButtonLight}"
                                                 Click="SetPdfPathButton_OnClick"
                                                 Margin="10,5,10,5" >
-                                            <TextBlock Text="Emplacement du rapport"
+                                            <TextBlock Text="{DynamicResource ReportFullPath}"
                                                        Width="125"
                                                        FontSize="10"
                                                        TextAlignment="Center"
@@ -170,7 +170,7 @@
 
                                 <!-- ICI AJOUTER L'APERÇU DU PDF AU FORMAT 339 x 479 Pixel -->
 
-                                <TextBlock Text="Prévisualisation du rapport : "
+                                <TextBlock Text="{DynamicResource ReportPreview}"
                                            Style="{StaticResource StandardTextBlockLight}"
                                            Margin="10,10,10,10" />
                                 <WebBrowser x:Name="MyBrowser"></WebBrowser>
@@ -215,7 +215,7 @@
                                                 </DrawingImage>
                                             </Image.Source>
                                         </Image>
-                                        <TextBlock x:Name="SaveButtonText" Text="Générer le rapport"
+                                        <TextBlock x:Name="SaveButtonText" Text="{DynamicResource GenerationButton}"
                                                    FontWeight="Regular"
                                                    VerticalAlignment="Center" FontFamily="Aptos" FontSize="16"
                                                    HorizontalAlignment="Center" Margin="5,0,5,0" />
@@ -244,7 +244,7 @@
                                                 </DrawingImage>
                                             </Image.Source>
                                         </Image>
-                                        <TextBlock x:Name="CancelButtonText" Text="Annuler" FontWeight="Regular"
+                                        <TextBlock x:Name="CancelButtonText" Text="{DynamicResource CancelButton}" FontWeight="Regular"
                                                    VerticalAlignment="Center" FontFamily="Aptos" FontSize="16"
                                                    HorizontalAlignment="Center" Margin="5,0,5,0" />
                                     </StackPanel>

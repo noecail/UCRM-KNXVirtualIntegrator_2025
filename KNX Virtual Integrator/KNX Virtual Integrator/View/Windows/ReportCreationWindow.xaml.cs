@@ -39,7 +39,30 @@ public partial class ReportCreationWindow
 
     private void TranslateWindowContents()
     {
-        _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("ReportCreationWindow.Translate is not implemented");
+        if (_mainViewModel.AppSettings.AppLang == "FR")
+        {
+            Resources["ReportWindowTitle"] = "Création du rapport de test";
+            Resources["TestGenerationTitle"] = "Génération du rapport de test";
+            Resources["DocParametersTitle"] = "Paramètres du document";
+            Resources["AuthorReport"] = "Auteur du rapport :";
+            Resources["ReportPath"] = "Chemin du rapport :";
+            Resources["ReportFullPath"] = "Emplacement du rapport";
+            Resources["ReportPreview"] = "Prévisualisation du rapport :";
+            Resources["GenerationButton"] = "Générer le rapport";
+            Resources["CancelButton"] = "Annuler";
+        }
+        else
+        {
+            Resources["ReportWindowTitle"] = "Test report creation";
+            Resources["TestGenerationTitle"] = "Test report generation";
+            Resources["DocParametersTitle"] = "Document parameters";
+            Resources["AuthorReport"] = "Report author :";
+            Resources["ReportPath"] = "Report path :";
+            Resources["ReportFullPath"] = "Report full path :";
+            Resources["ReportPreview"] = "Report preview :";
+            Resources["GenerationButton"] = "Generate report";
+            Resources["CancelButton"] = "Cancel";
+        }
     }
 
     private void ApplyThemeToWindow()

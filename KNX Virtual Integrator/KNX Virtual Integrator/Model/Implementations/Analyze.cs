@@ -121,7 +121,6 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
         while (!result.Equals(ResultType.Success) && i < readValues.Count)
         {
             var value =  readValues[i];
-            Console.WriteLine(value.Value + "-->" + value.DestinationAddress + "-->" + value.EventType);
             if (value.DestinationAddress == expectedResult.Address
                 && value.Value is not null
                 && value.EventType is GroupEventType.ValueWrite 

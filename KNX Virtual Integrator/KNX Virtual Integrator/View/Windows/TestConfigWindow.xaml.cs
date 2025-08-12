@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
+using Microsoft.Extensions.DependencyModel;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
@@ -25,6 +26,8 @@ public partial class TestConfigWindow
         ModelsBox.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(CheckedModelsHandler));
         ModelsBox.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(UncheckedModelsHandler));
         ModelsBox.LayoutUpdated += CheckIfModelsWasCheckedHandler;
+        DefStructureBox.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(CheckedStructureHandler));
+        DefStructureBox.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(UncheckedStructureHandler));
     }
     
     /// <summary>
@@ -50,7 +53,44 @@ public partial class TestConfigWindow
 
     private void TranslateWindowContents()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("TestConfigWindow.Translate is not implemented");
+        if (_viewModel.AppSettings.AppLang == "FR")
+        {
+            Resources["Library"] = "Bibliothèque";
+            Resources["PredefinedStructures"] = "Structures Prédéfinies";
+            Resources["ModelsTitle"] = "Modèles Fonctionnels";
+            Resources["ModelsParametersTitle"] = "Paramètres du Modèle Fonctionnel";
+            Resources["Name:"] = "Nom :";
+            
+            Resources["TestedElement"] = "Élément à Tester";
+            Resources["DptType"] = "Type de DPT :";
+            Resources["LinkedAddress"] = "Adresse liée :";
+            Resources["Values"] = "Valeurs :";
+            Resources["Dispatch(es)"] = "Envoi(s)";
+            Resources["Reception(s)"] = "Réception(s)";
+            
+            Resources["TestWindowTitle"] = "Configuration du test";
+            Resources["ChosenTestModelsTitle"] = "Modèles Fonctionnels Choisis";
+            Resources["LaunchTest"] = "Lancer le test";
+        }
+        else
+        {
+            Resources["Library"] = "Library";
+            Resources["PredefinedStructures"] = "Predefined Structures";
+            Resources["ModelsTitle"] = "Functional Models";
+            Resources["ModelsParametersTitle"] = "Model Parameters";
+            Resources["Name:"] = "Name :";
+            
+            Resources["TestedElement"] = "Test Elements";
+            Resources["DptType"] = "DPT Type:";
+            Resources["LinkedAddress"] = "Linked Address :";
+            Resources["Values"] = "Values :";
+            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["Reception(s)"] = "Reception(s)";
+            
+            Resources["TestWindowTitle"] = "Test Configuration";
+            Resources["ChosenTestModelsTitle"] = "Chosen Functional Models";
+            Resources["LaunchTest"] = "Launch Test";
+        }
     }
 
     private void ApplyThemeToWindow()
@@ -108,10 +148,8 @@ public partial class TestConfigWindow
         ChosenModelsColumn.Style = borderStyles;
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
-        BorderDefStruct.Style = borderStyles;
         BorderAllModels.Style = borderStyles;
         BorderModelTitle.Style = borderTitleStyles;
-        BorderModels.Style = borderStyles;
         BorderModelBib.Style = borderStyles;
         BorderStructBib.Style = borderStyles;
         
@@ -194,7 +232,7 @@ public partial class TestConfigWindow
     
     private void CheckIfModelsWasCheckedHandler(object? sender, EventArgs? e)
     {
-        if (_viewModel.SelectedModelsTestWindow == null || _viewModel.SelectedTestModels.Count == 0)
+        if (_viewModel.SelectedModelsTestWindow == null)
             return;
         
         // On cherche à récupérer l'index des structures à supprimer
@@ -214,10 +252,65 @@ public partial class TestConfigWindow
             if (structure == null) continue;
             if (_viewModel.SelectedTestModels.Contains(structure))
                 checkBox.IsChecked = true;
+            else
+                checkBox.IsChecked = false;
         }
             
     }
 
+    private void CheckedStructureHandler(object? sender, EventArgs? e)
+    {
+        // On cherche à récupérer l'index des modèles/structures qui ont été cochées
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < DefStructureBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = DefStructureBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
+                continue;
+            
+            var newTestStruct = DefStructureBox.Items[i] as FunctionalModelStructure; // La Structure
+            // Si la case est cochée on update les modèles de la structure
+            if (newTestStruct is null || checkBox.IsChecked is false) 
+                continue;
+            _viewModel.AddStructToTestModels(newTestStruct.Model.Key - 1);
+            if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
+            {
+                CheckIfModelsWasCheckedHandler(sender, e);
+            }
+        }
+    }
+
+    private void UncheckedStructureHandler(object? sender, EventArgs? e)
+    {
+        // On cherche à récupérer l'index des structures à supprimer
+        // les index sont disponibles à partir des checkbox associées au listbox items
+        // on parcourt tous les listbox items
+        for (var i = 0; i < DefStructureBox.Items.Count; i++)
+        {
+            // Récupère le ListBoxItem correspondant
+            var itemContainer = DefStructureBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
+
+            // Récupère la CheckBox dans le template
+            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
+                continue;
+            var newTestStruct = DefStructureBox.Items[i] as FunctionalModelStructure; // La Structure
+
+            // Si la case est cochée on supprime la structure
+            if (newTestStruct is null || checkBox.IsChecked is true) 
+                continue;
+            _viewModel.RmvStructFromTestModels(newTestStruct.Model.Key - 1);
+            if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
+            {
+                CheckIfModelsWasCheckedHandler(sender, e);
+            }
+        }
+        
+    }
+    
     private void LaunchTestButton_OnClick(object sender, RoutedEventArgs e)
     {
 

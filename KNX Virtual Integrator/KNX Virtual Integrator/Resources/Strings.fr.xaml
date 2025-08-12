@@ -13,14 +13,17 @@
     </summary>
 -->
 
+<!-- ReSharper disable InconsistentNaming -->
+
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
     
     <!--Main Window-->
         <!--Bandeau supérieur-->
     <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>
     <sys:String x:Key="TestButton">Paramètres de test</sys:String>
-    <sys:String x:Key="ExportButton">Exporter le rapport de test</sys:String>
+    <sys:String x:Key="ExportButton">Exporter le rapport</sys:String>
         <!--Colonne 1-->
     <sys:String x:Key="Library">Bibliothèque</sys:String>
     <sys:String x:Key="PredefinedStructures">Structures Prédéfinies</sys:String>
@@ -49,7 +52,25 @@
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
     <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
     <!--/Structure Edit Window-->
+    
+    <!--Tests Configuration Window-->
+    <sys:String x:Key="TestWindowTitle">Configuration du test</sys:String>
+    <sys:String x:Key="ChosenTestModelsTitle">Modèles Fonctionnels Choisis</sys:String>
+    <sys:String x:Key="LaunchTest">Lancer le test</sys:String>
+    <!--Tests Configuration Window-->
 
+    <!--Tests Configuration Window-->
+    <sys:String x:Key="ReportWindowTitle">Création du rapport de test</sys:String>
+    <sys:String x:Key="TestGenerationTitle">Génération du rapport de test</sys:String>
+    <sys:String x:Key="DocParametersTitle">Paramètres du document</sys:String>
+    <sys:String x:Key="AuthorReport">Auteur du rapport :</sys:String>
+    <sys:String x:Key="ReportPath">Chemin du rapport :</sys:String>
+    <sys:String x:Key="ReportFullPath">Emplacement du rapport</sys:String>
+    <sys:String x:Key="ReportPreview">Prévisualisation du rapport :</sys:String>
+    <sys:String x:Key="GenerationButton">Générer le rapport</sys:String>
+    <sys:String x:Key="CancelButton">Annuler</sys:String>
+    <!--Tests Configuration Window-->
+    
     <!--Xaml Dump-->
     <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
     <sys:String x:Key="ExpectedDpt">DPT attendu :</sys:String>

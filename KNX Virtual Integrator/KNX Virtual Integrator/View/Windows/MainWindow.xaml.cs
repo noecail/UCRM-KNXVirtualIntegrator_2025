@@ -135,11 +135,61 @@ public partial class MainWindow
 
     }
 
+    private void TranslateWindowContents()
+    {
+        if (_viewModel.AppSettings.AppLang == "FR")
+        {
+            Resources["ImportButton"] = "Importer un nouveau projet";
+            Resources["TestButton"] = "Paramètres de test";
+            Resources["ExportButton"] = "Exporter le rapport";
+            
+            Resources["Library"] = "Bibliothèque";
+            Resources["PredefinedStructures"] = "Structures Prédéfinies";
+            Resources["NewStructure"] = "Nouvelle Structure";
+            Resources["ModelsTitle"] = "Modèles Fonctionnels";
+            Resources["CreateFunctionalModel"] = "Créer un Modèle Fonctionnel";
+            Resources["ModelsParametersTitle"] = "Paramètres du Modèle Fonctionnel";
+            Resources["Name:"] = "Nom :";
+            
+            Resources["TestedElement"] = "Élément à Tester";
+            Resources["DptType"] = "Type de DPT :";
+            Resources["LinkedAddress"] = "Adresse liée :";
+            Resources["Values"] = "Valeurs :";
+            Resources["Dispatch(es)"] = "Envoi(s)";
+            Resources["Reception(s)"] = "Réception(s)";
+            
+            Resources["GroupAdressesTitle"] = "Adresses de Groupe";
+        }
+        else
+        {
+            Resources["ImportButton"] = "Import new project";
+            Resources["TestButton"] = "Test parameters";
+            Resources["ExportButton"] = "Export test report";
+            
+            Resources["Library"] = "Library";
+            Resources["PredefinedStructures"] = "Predefined Structures";
+            Resources["NewStructure"] = "New Structure";
+            Resources["ModelsTitle"] = "Functional Models";
+            Resources["CreateFunctionalModel"] = "New Functional Model";
+            Resources["ModelsParametersTitle"] = "Model Parameters";
+            Resources["Name:"] = "Name :";
+            
+            Resources["TestedElement"] = "Test Elements";
+            Resources["DptType"] = "DPT Type:";
+            Resources["LinkedAddress"] = "Linked Address :";
+            Resources["Values"] = "Values :";
+            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["Reception(s)"] = "Reception(s)";
+            
+            Resources["GroupAdressesTitle"] = "Group Addresses";
+        }
+    }
+
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
         if (langChanged)
         {
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.Translate is not implemented");
+            TranslateWindowContents();
         }
         if (themeChanged)
         {
