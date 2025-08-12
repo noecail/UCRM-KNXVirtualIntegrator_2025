@@ -24,6 +24,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         {
             TestsCmd = []; 
             TestsIe = []; 
+            UpdateRemoveTestButtonVisibility();
         } 
         
         
@@ -52,6 +53,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 TestsCmd.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i]));
             }
+            UpdateRemoveTestButtonVisibility();
         } 
         
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd, string[] dptNames,string circuitName)
@@ -63,6 +65,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             {
                 TestsCmd.Add(new DataPointType(typeCmd[i], addressCmd[i], valueCmd[i], dptNames[i]));
             }
+            UpdateRemoveTestButtonVisibility();
         } 
         
         public TestedElement(TestedElement element)
@@ -335,7 +338,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
         }
         
-        public void UpdateRemoveTestButtonVisibility()
+        private void UpdateRemoveTestButtonVisibility()
         {
             foreach (var test in TestsIe)
             {

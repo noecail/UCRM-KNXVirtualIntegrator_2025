@@ -556,31 +556,6 @@ public partial class MainWindow
     // <<<<<<<<<<<<<<<<<<<< COLONNE 3 >>>>>>>>>>>>>>>>>>>>
     
     /// <summary>
-    /// Handles the button click event to add a Tested Element to an already existing Functional Model.
-    /// Adds a Functional Model to the Dictionary of Functional Model Structures.
-    /// </summary>
-    private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
-    {
-        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructureModel);
-    }
-    
-    /// <summary>
-    /// Handles the button click event to remove a Tested Element from a Functional Model.
-    /// </summary>
-    private void RemoveTestedElementFromStructureButtonClick(object sender, RoutedEventArgs e)
-    {
-        // Code que je ne comprends pas qui sert à récupérer l'index de l'item depuis lequel le clic a été effectué
-        // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
-        // Pour utiliser ce segment de code, il faut avoir une référence sur la listbox
-        var dep = (DependencyObject)e.OriginalSource;
-        dep = FindParent<ListBoxItem>(dep);
-        var index = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
-
-        _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedModel, index)); 
-    }
-    
-
-    /// <summary>
     /// Handles the button click event to add a Test to a Tested Element
     /// Adds a line of values to the Tested Element
     /// The number of fields added is equal to the number of DPTs in the Tested Element
@@ -781,42 +756,6 @@ public partial class MainWindow
     
     
     // <<<<<<<<<<<<<<<<<<<< FENÊTRE ÉDITION >>>>>>>>>>>>>>>>>>>>
-
-    /// <summary>
-    /// Handles the button click event to add a DPT to send to a tested element
-    /// </summary>
-    private void AddDptCmdToElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        //_viewModel.AddDptCmdToElement.Execute();
-        // TODO : récupérer le selected element
-    }
-
-    /// <summary>
-    /// Handles the button click event to remove a DPT to send from a tested element
-    /// </summary>
-    private void RemoveCmdDptFromElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        //_viewModel.RemoveCmdDptFromElement.Execute();
-        // TODO : récupérer le selected element et l'index du DPT    
-    }
-    
-    /// <summary>
-    /// Handles the button click event to add a DPT to send to a tested element
-    /// </summary>
-    private void AddDptIeToElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        //_viewModel.AddDptIeToElement.Execute();
-        // TODO : récupérer le selected element
-    }
-
-    /// <summary>
-    /// Handles the button click event to remove a DPT to send from a tested element
-    /// </summary>
-    private void RemoveIeDptFromElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        //_viewModel.RemoveIeDptFromElement.Execute();
-        // TODO : récupérer le selected element et l'index du DPT    
-    }
 
    
     private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
