@@ -234,11 +234,11 @@ public partial class TestConfigWindow
             if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
                 continue;
             
-            var newTestStruct = DefStructureBox.Items[i] as FunctionalModel; // La Structure
+            var newTestStruct = DefStructureBox.Items[i] as FunctionalModelStructure; // La Structure
             // Si la case est cochée on update les modèles de la structure
             if (newTestStruct is null || checkBox.IsChecked is false) 
                 continue;
-            _viewModel.AddStructToTestModels(newTestStruct.Key - 1);
+            _viewModel.AddStructToTestModels(newTestStruct.Model.Key - 1);
             if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
             {
                 CheckIfModelsWasCheckedHandler(sender, e);
@@ -259,12 +259,12 @@ public partial class TestConfigWindow
             // Récupère la CheckBox dans le template
             if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
                 continue;
-            var newTestStruct = DefStructureBox.Items[i] as FunctionalModel; // La Structure
+            var newTestStruct = DefStructureBox.Items[i] as FunctionalModelStructure; // La Structure
 
             // Si la case est cochée on supprime la structure
             if (newTestStruct is null || checkBox.IsChecked is true) 
                 continue;
-            _viewModel.RmvStructFromTestModels(newTestStruct.Key - 1);
+            _viewModel.RmvStructFromTestModels(newTestStruct.Model.Key - 1);
             if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
             {
                 CheckIfModelsWasCheckedHandler(sender, e);

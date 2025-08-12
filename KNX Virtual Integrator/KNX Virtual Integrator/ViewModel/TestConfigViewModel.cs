@@ -27,19 +27,19 @@ public partial class MainViewModel
     /// <summary>
     /// Column 1. Selected model structure.
     /// </summary>  
-    private FunctionalModel? _selectedStructureTestWindow;
-    public FunctionalModel? SelectedStructureTestWindow
+    private FunctionalModelStructure? _selectedStructureTestWindow;
+    public FunctionalModelStructure? SelectedStructureTestWindow
     {
         get => _selectedStructureTestWindow;
         set
         {
-            if (_selectedStructureTestWindow?.Key == value?.Key)
+            if (_selectedStructureTestWindow?.Model.Key == value?.Model.Key)
                 return;
             _selectedStructureTestWindow = value;
             WhenPropertyChanged(nameof(SelectedStructureTestWindow));
             
             // updating the second column
-            SelectedModelsTestWindow = SelectedStructureTestWindow != null ? _functionalModelList.FunctionalModels[SelectedStructureTestWindow.Key-1] : null;
+            SelectedModelsTestWindow = SelectedStructureTestWindow != null ? _functionalModelList.FunctionalModels[SelectedStructureTestWindow.Model.Key-1] : null;
         }
     }
     
