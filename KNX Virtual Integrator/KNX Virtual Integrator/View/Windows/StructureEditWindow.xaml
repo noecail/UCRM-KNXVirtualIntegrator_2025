@@ -339,34 +339,66 @@
                                      IsManipulationEnabled="True">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Border Margin="0,0,0,5"
+                                        <Border Margin="0,3,0,0"
                                             BorderBrush="{StaticResource DarkGrayBorderBrush}"
                                             BorderThickness="0,0,0,1">
                                             <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="Auto"/> <!--Titre + Bouton suppr-->
+                                                    <RowDefinition Height="*"/>    <!--Champs de personnalisation-->
+                                                </Grid.RowDefinitions>
+                                                
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="Auto"/> <!--"Nom" + "Type"-->
                                                     <ColumnDefinition Width="*"/>    <!--"Mots-clés"-->
                                                 </Grid.ColumnDefinitions>
                                                 
+                                                <!--Titre DPT Personnalisé-->
+                                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="10" Orientation="Horizontal">
+                                                    <TextBlock Text="Dpt personnalisé de clé : "/>
+                                                    <TextBlock Text="{Binding Key}"/>
+                                                </StackPanel>
+                                                <Button Grid.Row="0" Grid.Column="1"
+                                                        Margin="0,0,3,0"
+                                                        Style="{StaticResource DeleteStructureButtonStyleLight}"
+                                                        HorizontalAlignment="Right"
+                                                        Height="35"
+                                                        Click="RemoveDptFromDictionaryButtonClick"
+                                                />
+                                                
+                                                <!--Champs de personnalisation-->
                                                 <!--"Nom" + "Type"-->
-                                                <StackPanel Grid.Column="0" Orientation="Vertical">
-                                                    <Button Style="{StaticResource DeleteStructureButtonStyleLight}"
-                                                            HorizontalAlignment="Right"
-                                                            Height="35"
-                                                            Click="RemoveDptFromDictionaryButtonClick"
-                                                    />
+                                                <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
                                                     <StackPanel Margin="10" Orientation="Vertical">
-                                                        <TextBlock Text="Clé"/>
-                                                        <TextBlock Text="{Binding Key}"/>
+                                                        <TextBlock Text="Nom :"/>
+                                                        <TextBox 
+                                                            Text="{Binding Value.Dpt.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            HorizontalContentAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            Height="35"
+                                                            Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                            VerticalAlignment="Center"
+                                                            HorizontalAlignment="Left">
+                                                        </TextBox>
                                                     </StackPanel>
                                                     <StackPanel Margin="10" Orientation="Vertical">
-                                                        <TextBlock Text="Type"/>
-                                                        <TextBox Text="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+                                                        <TextBlock Text="Type :"/>
+                                                        <TextBox 
+                                                            Text="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                            HorizontalContentAlignment="Center"
+                                                            VerticalContentAlignment="Center"
+                                                            Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            Height="35"
+                                                            Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                            VerticalAlignment="Center"
+                                                            HorizontalAlignment="Left">
+                                                        </TextBox>
                                                     </StackPanel>
                                                 </StackPanel>
                                                 
                                                 <!--"Mots-clés"-->
-                                                <StackPanel Grid.Column="1" Margin="10" Orientation="Vertical">
+                                                <StackPanel Grid.Row="1" Grid.Column="1" Margin="10" Orientation="Vertical">
                                                     <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                                                         <TextBlock Text="Mots-clés"/>
                                                         <Image Style="{StaticResource TooltipImage}"
@@ -382,7 +414,7 @@
                                                                             Aide - Mots-clés
                                                                         </TextBlock>
                                                                         <TextBlock>
-                                                                            Rentrer les mots-clés à la suite, en les séparant par une virgule.
+                                                                            Rentrer les mots-clés à la suite, en les séparant par une virgule (sans espace).
                                                                             <LineBreak/>
                                                                             exemple : lumiere,lum,Lumiere
                                                                         </TextBlock>
@@ -391,7 +423,7 @@
                                                             </ToolTipService.ToolTip>
                                                         </Image>
                                                     </StackPanel>
-                                                    <TextBox Text="{Binding Value.Keywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"/>
+                                                    <TextBox Text="{Binding Value.Keywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                                 </StackPanel>
                                             </Grid>
                                         </Border>
