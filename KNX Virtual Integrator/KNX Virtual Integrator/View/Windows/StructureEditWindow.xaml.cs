@@ -56,11 +56,9 @@ public partial class StructureEditWindow
     
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.UpdateWindowContents is not implemented");
-
         if (langChanged)
         {
-            return;
+            TranslateWindowContents();
         }
         if (themeChanged)
         {
@@ -71,7 +69,27 @@ public partial class StructureEditWindow
             ApplyScaling();
         }
     }
-    
+
+    private void TranslateWindowContents()
+    {
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.TranslateWindowContents is not implemented");
+        if (_viewModel.AppSettings.AppLang == "FR")
+        {
+            Resources["TestedElementsListTitle"]="Liste d'Éléments à Tester";
+            Resources["DptPersonalizationtitle"]="Personnalisation de DPTs";
+            Resources["AddTestedElement"]="Ajouter un Élément à tester";
+            Resources["AddDpt"]="Ajouter un DataPointType";
+        }
+        else
+        {
+            Resources["TestedElementsListTitle"]="List of Test Elements";
+            Resources["DptPersonalizationtitle"]="DPT Customization";
+            Resources["AddTestedElement"]="Add a Test Element";
+            Resources["AddDpt"]="Add a DataPointType";
+        }
+    }
+
+
     private void ApplyThemeToWindow()
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyThemeToWindow is not implemented");

@@ -57,7 +57,7 @@ public partial class ConnectionWindow
             Resources["PublicIp"]="IP publique du routeur";
             Resources["ToFillWhenSecure"]="À ne remplir que pour une connexion sécurisée";
             Resources["IPSecureConnection"]="Connexion via IP Secure";
-            Resources["KnxKeysFile"]="Fichier de clés .knxkeys";
+            Resources["KnxKeysFile"]="Fichier de clés (.knxkeys)";
             Resources["ImportKeys"]="importer clés";
             Resources["PwdKeys"]="Mot de passe du fichier de clés";
             Resources["ConnectionError"]="Erreur lors de la connexion";

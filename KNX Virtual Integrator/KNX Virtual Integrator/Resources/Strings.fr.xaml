@@ -42,6 +42,8 @@
     <sys:String x:Key="Values">Valeurs :</sys:String>
     <sys:String x:Key="Dispatch(es)">Envoi(s)</sys:String>
     <sys:String x:Key="Reception(s)">Réception(s)</sys:String>
+    <sys:String x:Key="ShowAllModels">Afficher tous les modèles</sys:String>
+    <sys:String x:Key="ShowTheModel">Afficher le modèle sélectionné</sys:String>
         <!--Colonne 4-->
     <sys:String x:Key="GroupAdressesTitle">Adresses de Groupe</sys:String>
     <!--/Main Window-->
