@@ -5,6 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
+using Microsoft.Extensions.DependencyModel;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
@@ -52,7 +53,44 @@ public partial class TestConfigWindow
 
     private void TranslateWindowContents()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("TestConfigWindow.Translate is not implemented");
+        if (_viewModel.AppSettings.AppLang == "FR")
+        {
+            Resources["Library"] = "Bibliothèque";
+            Resources["PredefinedStructures"] = "Structures Prédéfinies";
+            Resources["ModelsTitle"] = "Modèles Fonctionnels";
+            Resources["ModelsParametersTitle"] = "Paramètres du Modèle Fonctionnel";
+            Resources["Name:"] = "Nom :";
+            
+            Resources["TestedElement"] = "Élément à Tester";
+            Resources["DptType"] = "Type de DPT :";
+            Resources["LinkedAddress"] = "Adresse liée :";
+            Resources["Values"] = "Valeurs :";
+            Resources["Dispatch(es)"] = "Envoi(s)";
+            Resources["Reception(s)"] = "Réception(s)";
+            
+            Resources["TestWindowTitle"] = "Configuration du test";
+            Resources["ChosenTestModelsTitle"] = "Modèles Fonctionnels Choisis";
+            Resources["LaunchTest"] = "Lancer le test";
+        }
+        else
+        {
+            Resources["Library"] = "Library";
+            Resources["PredefinedStructures"] = "Predefined Structures";
+            Resources["ModelsTitle"] = "Functional Models";
+            Resources["ModelsParametersTitle"] = "Model Parameters";
+            Resources["Name:"] = "Name :";
+            
+            Resources["TestedElement"] = "Test Elements";
+            Resources["DptType"] = "DPT Type:";
+            Resources["LinkedAddress"] = "Linked Address :";
+            Resources["Values"] = "Values :";
+            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["Reception(s)"] = "Reception(s)";
+            
+            Resources["TestWindowTitle"] = "Test Configuration";
+            Resources["ChosenTestModelsTitle"] = "Chosen Functional Models";
+            Resources["LaunchTest"] = "Launch Test";
+        }
     }
 
     private void ApplyThemeToWindow()

@@ -2,16 +2,17 @@
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                 xmlns:utils="clr-namespace:KNX_Virtual_Integrator.View.Utils"
                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                  xmlns:entities="clr-namespace:KNX_Virtual_Integrator.Model.Entities"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="Configuration du test" Height="700" Width="1200"
+                 Title="{DynamicResource TestWindowTitle}" Height="700" Width="1200"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
-                 Background="{StaticResource KnxGreenBrush}"
+                 Background="{StaticResource WhiteBackgroundBrush}"
                  BorderThickness="2"
                  BorderBrush="{StaticResource KnxGreenBrush}"
                  WindowTitleBrush="{StaticResource KnxGreenBrush}"
@@ -19,7 +20,9 @@
                  Closing="ClosingTestConfigWindow">
 
     <Window.Resources>
-
+        
+        <utils:BigIntegerToStringConverter x:Key="BigIntegerConverter"/>
+        
         <!-- Style pour les Modèles Fonctionnels choisis -->
         <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type entities:FunctionalModel}">
             <StackPanel>
@@ -107,9 +110,9 @@
                         <RowDefinition Height="*" />     <!-- Contenu -->
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="250" /> <!-- Modèles -->
-                        <ColumnDefinition MinWidth="200" Width="Auto" />
-                        <ColumnDefinition MinWidth="400" Width="Auto" />
+                        <ColumnDefinition Width="250" /> <!-- Structures -->
+                        <ColumnDefinition Width="300" /> <!-- FunctionalModels -->
+                        <ColumnDefinition Width="400" /> <!-- TestedElements -->
                     </Grid.ColumnDefinitions>
 
 
@@ -140,7 +143,7 @@
                                 <Image Source="{StaticResource LibraryDrawingImage}" Height="20" />
                                 <TextBlock x:Name="StructBibTitleText"
                                            Style="{StaticResource TitleTextLight}"
-                                           Text="{StaticResource Library}" />
+                                           Text="{DynamicResource Library}" />
                             </StackPanel>
 
                             <!-- Bouton de recherche,(Non-implémenté)-->
@@ -174,7 +177,7 @@
                                     Padding="5">
                                 <TextBlock x:Name="BorderDefStructTitleText"
                                            Style="{StaticResource TitleTextLight}"
-                                           Text="{StaticResource PredefinedStructures}" />
+                                           Text="{DynamicResource PredefinedStructures}" />
                             </Border>
 
                             <ListBox Grid.Row="1"
@@ -214,7 +217,7 @@
                                 <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20" />
                                 <TextBlock x:Name="ModelBibText"
                                            Style="{StaticResource TitleTextLight}"
-                                           Text="{StaticResource ModelsTitle}" />
+                                           Text="{DynamicResource ModelsTitle}" />
                             </StackPanel>
 
                             <!-- Bouton de recherche,(Non-implémenté)-->
@@ -250,7 +253,7 @@
 
                                 <TextBlock Style="{StaticResource TitleTextLight}"
                                            x:Name="BorderModelsTitleText"
-                                           Text="{Binding Path='SelectedStructureTestWindow.Name', FallbackValue=''}" />
+                                           Text="{Binding Path='SelectedStructureTestWindow.FullName', FallbackValue=''}" />
                             </Border>
 
                             <ListBox Grid.Row="1"
@@ -267,250 +270,383 @@
                         </Grid>
                     </Border>
 
-                    <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
+    <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Troisième colonne
-                Liste des Éléments à Tester d'un Modèle Fonctionnel
-                Permet d'instancier (adresses et valeurs) tous les Éléments à Tester de la Structure du Modèle Fonctionnel Sélectionné
-                ex : Pour la lampe du salon, tous les Éléments à Tester
-                -->
-
+                    Liste des Éléments à Tester d'un Modèle Fonctionnel
+                    Permet d'instancier (adresses et valeurs) tous les Éléments à Tester de la Structure du Modèle Fonctionnel Sélectionné
+                    ex : Pour la lampe du salon, tous les Éléments à Tester
+                    -->
+                    
                     <!-- En-tête colonne 3 -->
                     <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
-                            BorderThickness="0,0,1,0">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" /> <!-- Titre -->
-                                <ColumnDefinition Width="*" /> <!--Bouton de fermeture-->
-                            </Grid.ColumnDefinitions>
-
+                                BorderThickness="0,0,1,0" >
+                        
+                        <StackPanel Orientation="Vertical">
                             <!-- Titre -->
-                            <TextBlock Grid.Column="0"
+                            <TextBlock 
                                        x:Name="ModelSettingsText"
                                        Style="{StaticResource TitleTextLight}"
                                        Text="Paramètres du Modèle Fonctionnel"
                                        HorizontalAlignment="Left"
-                                       Margin="5,0" />
-                        </Grid>
+                                       Margin="5,0"
+                            />
+                            <!--Nom du Modèle Fonctionnel-->
+                            <TextBlock Text="{DynamicResource Name:}" 
+                                       x:Name="NameTextBlock"
+                                       Style="{StaticResource StandardTextBlockLight}"
+                                       Margin="15,0,0,0"/>
+                            <TextBox x:Name="NomTextBox" 
+                                     Style="{StaticResource StandardTextBoxLight}"
+                                     HorizontalAlignment="Left" 
+                                     Width="200"
+                                     Text="{Binding SelectedModelTestWindow.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
+                                     Margin="15,0,0,0"
+                                     IsReadOnly="True"/>
+                        </StackPanel>
                     </Border>
-
+                    
                     <!-- Contenu colonne 3 : liste des Éléments à Tester -->
                     <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
-                            BorderThickness="0,0,1,0">
+                                BorderThickness="0,0,1,0" >
                         <Grid Margin="10,10,10,0">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />  <!-- Conteneur principal -->
+                                <RowDefinition Height="*"  />  <!-- Conteneur principal -->
                                 <RowDefinition Height="Auto" /> <!-- Boutons Enregister et Filtrer-->
                             </Grid.RowDefinitions>
-
-                            <!-- Conteneur principal -->
-                            <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" FocusVisualStyle="{x:Null}">
+                            
                                 <!-- Modèle Fonctionnel -->
-                                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
-
-                                    <!--Nom du Modèle Fonctionnel-->
-                                    <TextBlock Text="{StaticResource Name:}"
-                                               x:Name="NameTextBlock"
-                                               Style="{StaticResource StandardTextBlockLight}" />
-                                    <TextBox x:Name="NomTextBox"
-                                             Style="{StaticResource StandardTextBoxLight}"
-                                             HorizontalAlignment="Left"
-                                             Width="200"
-                                             Text="{Binding SelectedModelTestWindow.Name, FallbackValue='', UpdateSourceTrigger=PropertyChanged}" />
-
-
-                                    <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
-                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
-                                        <ListBox Name="SelectedElementsListBox"
-                                                 ItemsSource="{Binding SelectedModelTestWindow.ElementList, FallbackValue=''}"
-                                                 ItemContainerStyle="{StaticResource TestElementToTestListBoxItemStyle}"
-                                                 AlternationCount="100"
-                                                 Foreground="{StaticResource LightForegroundBrush}">
-                                            <ListBox.ItemTemplate>
-                                                <DataTemplate>
-
-                                                    <!-- Element à tester = Liste de DPTs {types des DPTs, adresses d'envoi et de retours, liste de valeurs}-->
-                                                    <StackPanel Orientation="Vertical"
-                                                                Background="{StaticResource WhiteBackgroundBrush}">
-
-                                                        <!-- Bandeau supérieur -->
-                                                        <Grid Margin="0,0,0,5">
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="*" />
-                                                                <!-- Titre : "Élément à tester" -->
-                                                                <ColumnDefinition Width="Auto" />
-                                                                <!-- Bouton de suppression -->
-                                                            </Grid.ColumnDefinitions>
-
-                                                            <!-- Titre -->
-                                                            <TextBlock Grid.Column="0" Text="Élément à tester"
-                                                                       FontWeight="SemiBold" />
-
-                                                            <!-- Pour l'index de l'élément à tester -->
-                                                            <TextBlock Grid.Column="1"
-                                                                       Text="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=(ItemsControl.AlternationIndex)}" />
-
-                                                        </Grid>
-
-                                                        <!-- Bandeau suivant -->
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="Envoi" Margin="90,0,15,0" />
-                                                            <TextBlock Text="{StaticResource Reception(s)}" />
+                                <ListBox Grid.Row="0" Name="SelectedElementsListBox"
+                                         ItemsSource="{Binding SelectedModelTestWindow.ElementList, FallbackValue=''}"
+                                         Background="{StaticResource OffWhiteBackgroundBrush}"
+                                         Height="Auto"
+                                         ItemContainerStyle="{StaticResource TestedElementListListBoxItemContainerStyle}"
+                                         ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                         ScrollViewer.CanContentScroll="False"
+                                         ScrollViewer.PanningMode="VerticalOnly"
+                                         IsManipulationEnabled="True">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <!--Élément à Tester-->
+                                            <Border Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                    BorderBrush="{StaticResource LightGrayBorderBrush}"
+                                                    BorderThickness="1"
+                                                    Margin="0,10,10,0">
+                                                <StackPanel Orientation="Vertical">
+                                                    <!-- Titre : "Élément à tester" -->
+                                                    <TextBlock Text="{DynamicResource TestedElement}" Style="{StaticResource TitleTextLight}" Margin="0,0,0,5"/>
+                                                    
+                                                    <!-- Tableau principal : Cmd(s) et IE(s)-->
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto"/>   <!--"Envoi" + Réception-->
+                                                            <RowDefinition Height="Auto"/>   <!--"Type de DPT" + Type(s) Cmd + Type(s) IE-->
+                                                            <RowDefinition Height="Auto"/>   <!--"Adresse liée" + @Cmd + @IE-->
+                                                            <RowDefinition Height="Auto"/>   <!--"Valeurs" + Valeur(s) Cmd + Valeur(s) IE + Bouton supprimer Test-->
+                                                            <RowDefinition Height="Auto"/>   <!--Bouton ajouter Test-->
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto"/>  <!--Titres-->
+                                                            <ColumnDefinition Width="Auto"/>  <!--Cmd(s)-->
+                                                            <ColumnDefinition Width="Auto"/>  <!--IE(s) + Remove Test-->
+                                                            <ColumnDefinition Width="Auto"/>  <!--Add Test-->
+                                                        </Grid.ColumnDefinitions>
+                                                        
+                                                        <!--Colonne 1 : Titres-->
+                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource DptType}" VerticalAlignment="Center" Margin="3,0,2,0"/>
+                                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource LinkedAddress}" VerticalAlignment="Center" Margin="3,0,2,0"/>
+                                                        <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="3,10,2,0">
+                                                            <Image Style="{StaticResource TooltipImage}"
+                                                                   Height="15"
+                                                                   VerticalAlignment="Top"
+                                                                   HorizontalAlignment="Left"
+                                                                   Margin="0,1,3,0">
+                                                                <ToolTipService.ToolTip>
+                                                                    <ToolTip Background="{StaticResource WhiteBackgroundBrush}"
+                                                                             BorderBrush="{StaticResource KnxGreenBrush}">
+                                                                        <StackPanel Orientation="Vertical">
+                                                                            <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                                                                Aide - Valeurs à envoyer et Valeurs attendues en réception
+                                                                            </TextBlock>
+                                                                            <TextBlock>
+                                                                                Attention. Les valeurs sont à rentrer en décimal.
+                                                                                <LineBreak/>
+                                                                                Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.
+                                                                                <LineBreak/>
+                                                                                exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79
+                                                                            </TextBlock>
+                                                                        </StackPanel>
+                                                                    </ToolTip>
+                                                                </ToolTipService.ToolTip>
+                                                            </Image>
+                                                            <TextBlock Text="{DynamicResource Values}"/>
                                                         </StackPanel>
 
-                                                        <!-- Contenu de l'élément à tester -->
-                                                        <Grid>
-                                                            <Grid.RowDefinitions>
-                                                                <RowDefinition Height="Auto" />   <!--Type de DPT-->
-                                                                <RowDefinition Height="Auto" />   <!--Adresses-->
-                                                                <RowDefinition Height="Auto" />   <!--Valeurs-->
-                                                            </Grid.RowDefinitions>
-                                                            <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="80" />
-                                                                <!--"Type du DPT" ou "Adresse liée"-->
-                                                                <ColumnDefinition Width="*" />
-                                                                <!--Colonne d'envoi(s) -->
-                                                                <ColumnDefinition Width="*" />
-                                                                <!--Colonne de réception(s)-->
-                                                            </Grid.ColumnDefinitions>
-
-                                                            <TextBlock Grid.Row="0" Grid.Column="0"
-                                                                       Text="{StaticResource DptType}" />
-                                                            <!--Type de DPT de l'envoi-->
-                                                            <ListBox Grid.Row="0" Grid.Column="1"
-                                                                     ItemsSource="{Binding TestsCmd}">
+                                                        <!--Colonne 2 : Cmd(s)-->
+                                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource Dispatch(es)}" Margin="5,0,0,0"/>
+                                                        <!--Type de DPT de l'envoi-->
+                                                        <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                            <ListBox
+                                                                     ItemsSource="{Binding TestsCmd}"
+                                                                     Background="{StaticResource NoColorBrush}"
+                                                                     ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
+                                                                
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
-                                                                        <StackPanel Orientation="Horizontal" />
+                                                                        <StackPanel Orientation="Horizontal" Background="{StaticResource NoColorBrush}"/>
                                                                     </ItemsPanelTemplate>
                                                                 </ListBox.ItemsPanel>
                                                                 <ListBox.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <TextBox Text="{Binding Type}"
-                                                                            IsReadOnly="True"
-                                                                            Width="40"
-                                                                            HorizontalContentAlignment="Center"
-                                                                            Background="{StaticResource OffWhiteBackgroundBrush}" />
+                                                                        <!--Explication double border : border intérieure => style + marge, border extérieure => background derrière la marge-->
+                                                                        <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                            <Border 
+                                                                                Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                Height="35"
+                                                                                Margin="0,0,14,0"
+                                                                                Style="{StaticResource ValueBorderLight}">
+                                                                                <TextBlock Text="{Binding Type}"
+                                                                                    VerticalAlignment="Center"
+                                                                                    TextAlignment="Center"/>
+                                                                            </Border>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ListBox.ItemTemplate>
                                                             </ListBox>
-                                                            <!--Type de DPT à recevoir-->
-                                                            <ListBox Grid.Row="0" Grid.Column="2"
-                                                                     ItemsSource="{Binding TestsIe}">
-                                                                <ListBox.ItemsPanel>
-                                                                    <ItemsPanelTemplate>
-                                                                        <StackPanel Orientation="Horizontal" />
-                                                                    </ItemsPanelTemplate>
-                                                                </ListBox.ItemsPanel>
-                                                                <ListBox.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <TextBox Text="{Binding Type}"
-                                                                            IsReadOnly="True"
-                                                                            Width="40"
-                                                                            HorizontalContentAlignment="Center"
-                                                                            Background="{StaticResource OffWhiteBackgroundBrush}" />
-                                                                    </DataTemplate>
-                                                                </ListBox.ItemTemplate>
-                                                            </ListBox>
-
-                                                            <TextBlock Grid.Row="1" Grid.Column="0"
-                                                                       Text="{StaticResource LinkedAddress}" />
-                                                            <!--Adresses de l'envoi-->
-                                                            <ListBox Grid.Row="1" Grid.Column="1"
-                                                                     ItemsSource="{Binding TestsCmd}">
+                                                        </Border>
+                                                        <!--Adresses de l'envoi-->
+                                                        <Border Grid.Row="2" Grid.Column="1">
+                                                            <ListBox
+                                                                     ItemsSource="{Binding TestsCmd}"
+                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                     ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
                                                                         <StackPanel Orientation="Horizontal"
-                                                                            VerticalAlignment="Top" />
+                                                                            VerticalAlignment="Top"/>
                                                                     </ItemsPanelTemplate>
                                                                 </ListBox.ItemsPanel>
                                                                 <ListBox.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <TextBox Text="{Binding Address}"
-                                                                            IsReadOnly="True"
-                                                                            Width="40"
-                                                                            HorizontalContentAlignment="Center"
-                                                                            Background="{StaticResource OffWhiteBackgroundBrush}" />
+                                                                        <!--Explication double border : border intérieure => style + marge, border extérieure => background derrière la marge-->
+                                                                        <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                            <Border 
+                                                                                Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                Height="35"
+                                                                                Margin="0,0,14,0"
+                                                                                Style="{StaticResource ValueBorderLight}">
+                                                                                <TextBlock Text="{Binding Address}"
+                                                                                    VerticalAlignment="Center"
+                                                                                    TextAlignment="Center"/>
+                                                                            </Border>
+                                                                        </Border>
                                                                     </DataTemplate>
                                                                 </ListBox.ItemTemplate>
                                                             </ListBox>
-                                                            <!--Adresses de la réception-->
-                                                            <ListBox Grid.Row="1" Grid.Column="2"
-                                                                     ItemsSource="{Binding TestsIe}">
+                                                        </Border>
+                                                        <!--Valeurs de l'envoi-->
+                                                        <Border Grid.Row="3" Grid.Column="1">
+                                                            <ListBox ItemsSource="{Binding TestsCmd}"
+                                                                     Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                     ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
                                                                 <ListBox.ItemsPanel>
                                                                     <ItemsPanelTemplate>
-                                                                        <StackPanel Orientation="Horizontal"
-                                                                            VerticalAlignment="Top" />
+                                                                        <StackPanel Orientation="Horizontal"/>
                                                                     </ItemsPanelTemplate>
                                                                 </ListBox.ItemsPanel>
                                                                 <ListBox.ItemTemplate>
                                                                     <DataTemplate>
-                                                                        <TextBox Text="{Binding Address}"
-                                                                            IsReadOnly="True"
-                                                                            Width="40"
-                                                                            HorizontalContentAlignment="Center"
-                                                                            Background="{StaticResource OffWhiteBackgroundBrush}" />
+                                                                        <ItemsControl ItemsSource="{Binding IntValue}">
+                                                                            <ItemsControl.ItemsPanel>
+                                                                                <ItemsPanelTemplate>
+                                                                                    <StackPanel Orientation="Vertical"/>
+                                                                                </ItemsPanelTemplate>
+                                                                            </ItemsControl.ItemsPanel>
+                                                                            <ItemsControl.ItemTemplate>
+                                                                                <DataTemplate>
+                                                                                    <StackPanel Orientation="Horizontal">
+                                                                                        <TextBox 
+                                                                                            Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                            HorizontalContentAlignment="Center"
+                                                                                            VerticalContentAlignment="Center"
+                                                                                            Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                            Height="35"
+                                                                                            Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                                            VerticalAlignment="Center"
+                                                                                            IsReadOnly="True">
+                                                                                            <!--Disable the textbox if the expected value is unknown-->
+                                                                                            <TextBox.Style>
+                                                                                                <Style TargetType="TextBox">
+                                                                                                    <Setter Property="IsEnabled" Value="True"/>
+                                                                                                    <Style.Triggers>
+                                                                                                        <DataTrigger Binding="{Binding IsEnabled}" Value="false ">
+                                                                                                            <Setter Property="IsEnabled" Value="False"/>
+                                                                                                            <Setter Property="Foreground" Value="{StaticResource NoColorBrush}"/>
+                                                                                                        </DataTrigger>
+                                                                                                    </Style.Triggers>
+                                                                                                </Style>
+                                                                                            </TextBox.Style>
+                                                                                        </TextBox>
+                                                                                        <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                                            <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                                                                                <Button
+                                                                                                    HorizontalAlignment="Left"
+                                                                                                    VerticalAlignment="Bottom"
+                                                                                                    Margin="2,0,0,0"
+                                                                                                    Style="{StaticResource ResetValueButtonStyle}"
+                                                                                                    IsEnabled="False">
+                                                                                                    <TextBlock Text="⟲" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                                                </Button>
+                                                                                            </StackPanel>
+                                                                                        </Border>
+                                                                                    </StackPanel>
+                                                                                </DataTemplate>
+                                                                            </ItemsControl.ItemTemplate>
+                                                                        </ItemsControl>
                                                                     </DataTemplate>
                                                                 </ListBox.ItemTemplate>
                                                             </ListBox>
-
-                                                            <TextBlock Grid.Row="2" Grid.Column="0"
-                                                                       Text="{StaticResource Values}" />
-                                                            <!--Valeurs de l'envoi-->
-                                                            <ListBox Grid.Row="2" Grid.Column="1"
-                                                                     ItemsSource="{Binding TestsCmd}">
-                                                                <ListBox.ItemsPanel>
-                                                                    <ItemsPanelTemplate>
-                                                                        <StackPanel Orientation="Horizontal" />
-                                                                    </ItemsPanelTemplate>
-                                                                </ListBox.ItemsPanel>
-                                                                <ListBox.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <ScrollViewer
-                                                                            VerticalScrollBarVisibility="Auto"
-                                                                            VerticalAlignment="Center">
-                                                                            <TextBox Text="{Binding Value}"
-                                                                                IsReadOnly="True"
-                                                                                Width="40"
-                                                                                HorizontalContentAlignment="Center"
-                                                                                Background="{StaticResource OffWhiteBackgroundBrush}" />
-                                                                        </ScrollViewer>
-                                                                    </DataTemplate>
-                                                                </ListBox.ItemTemplate>
-                                                            </ListBox>
-                                                            <!--Valeurs de la réception-->
-                                                            <ListBox Grid.Row="2" Grid.Column="2"
-                                                                     ItemsSource="{Binding TestsIe}">
-                                                                <ListBox.ItemsPanel>
-                                                                    <ItemsPanelTemplate>
-                                                                        <StackPanel Orientation="Horizontal" />
-                                                                    </ItemsPanelTemplate>
-                                                                </ListBox.ItemsPanel>
-                                                                <ListBox.ItemTemplate>
-                                                                    <DataTemplate>
-                                                                        <ScrollViewer
-                                                                            VerticalScrollBarVisibility="Auto"
-                                                                            VerticalAlignment="Center">
-                                                                            <TextBox Text="{Binding Value}"
-                                                                                IsReadOnly="True"
-                                                                                Width="40"
-                                                                                HorizontalContentAlignment="Center"
-                                                                                Background="{StaticResource OffWhiteBackgroundBrush}" />
-                                                                        </ScrollViewer>
-                                                                    </DataTemplate>
-                                                                </ListBox.ItemTemplate>
-                                                            </ListBox>
-                                                        </Grid>
-
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ListBox.ItemTemplate>
-                                        </ListBox>
-                                    </ScrollViewer>
-                                </StackPanel>
-                            </ScrollViewer>
+                                                        </Border>
+                                                            
+                                                        <!--Colonne 3 : IE(s)-->
+                                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{DynamicResource Reception(s)}" Margin="5,0,0,0"/>
+                                                        <!--Type de DPT à recevoir-->
+                                                        <ListBox Grid.Row="1" Grid.Column="2"
+                                                                 ItemsSource="{Binding TestsIe}"
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
+                                                            <ListBox.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Horizontal" />
+                                                                </ItemsPanelTemplate>
+                                                            </ListBox.ItemsPanel>
+                                                            <ListBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <!--Explication double border : border intérieure => style + marge, border extérieure => background derrière la marge-->
+                                                                    <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                        <Border 
+                                                                            Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                            Height="35"
+                                                                            Margin="0,0,14,0"
+                                                                            Style="{StaticResource ValueBorderLight}">
+                                                                            <TextBlock Text="{Binding Type}"
+                                                                                VerticalAlignment="Center"
+                                                                                TextAlignment="Center"
+                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"/>
+                                                                        </Border>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                        <!--Adresses de la réception-->
+                                                        <ListBox Grid.Row="2" Grid.Column="2"
+                                                                 ItemsSource="{Binding TestsIe}"
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
+                                                            <ListBox.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Horizontal"
+                                                                        VerticalAlignment="Top"/>
+                                                                </ItemsPanelTemplate>
+                                                            </ListBox.ItemsPanel>
+                                                            <ListBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <!--Explication double border : border intérieure => style + marge, border extérieure => background derrière la marge-->
+                                                                    <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                        <Border 
+                                                                            Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                            Height="35"
+                                                                            Margin="0,0,14,0"
+                                                                            Style="{StaticResource ValueBorderLight}">
+                                                                            <TextBlock Text="{Binding Address}"
+                                                                                VerticalAlignment="Center"
+                                                                                TextAlignment="Center"
+                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"/>
+                                                                        </Border>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                        <!--Valeurs de la réception-->
+                                                        <ListBox Grid.Row="3" Grid.Column="2" 
+                                                                 ItemsSource="{Binding TestsIe}"
+                                                                 Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
+                                                            <ListBox.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <StackPanel Orientation="Horizontal" />
+                                                                </ItemsPanelTemplate>
+                                                            </ListBox.ItemsPanel>
+                                                            <ListBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <ItemsControl ItemsSource="{Binding IntValue}">
+                                                                        <ItemsControl.ItemsPanel>
+                                                                            <ItemsPanelTemplate>
+                                                                                <StackPanel Orientation="Vertical"/>
+                                                                            </ItemsPanelTemplate>
+                                                                        </ItemsControl.ItemsPanel>
+                                                                        <ItemsControl.ItemTemplate>
+                                                                            <DataTemplate>
+                                                                                <StackPanel Orientation="Horizontal">
+                                                                                    <TextBox
+                                                                                        Text="{Binding BigIntegerValue, Converter={StaticResource BigIntegerConverter}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                                                        HorizontalContentAlignment="Center"
+                                                                                        VerticalContentAlignment="Center"
+                                                                                        Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                        Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                                        Height="35"
+                                                                                        IsReadOnly="True">
+                                                                                        
+                                                                                        <!--Disable the textbox if the expected value is unknown-->
+                                                                                        <TextBox.Style>
+                                                                                            <Style TargetType="TextBox">
+                                                                                                <Setter Property="IsEnabled" Value="True"/>
+                                                                                                <Style.Triggers>
+                                                                                                    <DataTrigger Binding="{Binding IsEnabled}" Value="false">
+                                                                                                        <Setter Property="IsEnabled" Value="False"/>
+                                                                                                        <Setter Property="Foreground" Value="{StaticResource NoColorBrush}"/>
+                                                                                                    </DataTrigger>
+                                                                                                </Style.Triggers>
+                                                                                            </Style>
+                                                                                        </TextBox.Style>
+                                                                                    </TextBox>
+                                                                                    <!--Button to deactivate/reset the content of a Value that has been deactivated-->
+                                                                                    <Border Background="{StaticResource OffWhiteBackgroundBrush}">
+                                                                                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                                                                                            <Button
+                                                                                                HorizontalAlignment="Left"
+                                                                                                VerticalAlignment="Bottom"
+                                                                                                Margin="2,0,0,2"
+                                                                                                Style="{StaticResource DeactivateValueButtonStyle}"
+                                                                                                IsEnabled="False">
+                                                                                                <TextBlock Text="x" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                                            </Button>
+                                                                                            <Button
+                                                                                                HorizontalAlignment="Left"
+                                                                                                VerticalAlignment="Bottom"
+                                                                                                Margin="2,0,0,0"
+                                                                                                Style="{StaticResource ResetValueButtonStyle}"
+                                                                                                IsEnabled="False">
+                                                                                                <TextBlock Text="⟲" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                                                                            </Button>
+                                                                                        </StackPanel>
+                                                                                    </Border>
+                                                                                </StackPanel>
+                                                                            </DataTemplate>
+                                                                        </ItemsControl.ItemTemplate>
+                                                                    </ItemsControl>
+                                                                </DataTemplate>
+                                                            </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                    </Grid>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                         </Grid>
                     </Border>
-
+                    
                 </Grid>
             </Border>
 
@@ -531,7 +667,7 @@
                                Name="ChosenTestModelesTitle"
                                Style="{StaticResource TitleTextLight}"
                                HorizontalAlignment="Center"
-                               Text="Modèles Fonctionnels Choisis" />
+                               Text="{DynamicResource ChosenTestModelsTitle}" />
 
                     <ListBox Grid.Row="1" Name="ChosenTestModelesListBox" Width="200" Height="320"
                              Style="{StaticResource StandardListBoxLight}"
@@ -543,7 +679,7 @@
                     </ListBox>
 
                     <Button Grid.Row="2" Name="LaunchTestButton"
-                            Content="Lancer le test"
+                            Content="{DynamicResource LaunchTest}"
                             Style="{StaticResource LaunchTestButtonStyleLight}"
                             Tag="{StaticResource PlayDrawingImage}"
                             Margin="7,7"

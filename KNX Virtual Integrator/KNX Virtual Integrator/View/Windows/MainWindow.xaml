@@ -76,7 +76,7 @@
                 />
 
                 <!-- Deuxième bouton Importation -->
-                <Button Content="{StaticResource ImportButton}"
+                <Button Content="{DynamicResource ImportButton}"
                     Style="{StaticResource IconTextButtonStyle}"
                     Foreground="{StaticResource DarkForegroundBrush}"
                     Tag="{StaticResource ImportedDrawingImage}"
@@ -102,7 +102,7 @@
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
 
                 <!-- Bouton de Test -->
-                <Button Content="{StaticResource TestButton}"
+                <Button Content="{DynamicResource TestButton}"
                     Style="{StaticResource IconTextButtonStyle}"
                     Foreground="{StaticResource DarkForegroundBrush}"
                     Tag="{StaticResource PlayDrawingImage}"
@@ -112,7 +112,7 @@
                 
                 <!-- Bouton d'Exportation -->
                 <Button x:Name="CreateTestReportButton"
-                        Content="{StaticResource ExportButton}"
+                        Content="{DynamicResource ExportButton}"
                         Style="{StaticResource IconTextButtonStyle}"
                         Foreground="{StaticResource DarkForegroundBrush}"
                         Tag="{StaticResource ExportedDrawingImage}"
@@ -167,7 +167,7 @@
                                 <Image Source="{StaticResource LibraryDrawingImage}" Height="20"/>
                                 <TextBlock x:Name="StructBibTitleText"
                                            Style="{StaticResource TitleTextLight}"
-                                           Text="{StaticResource Library}"
+                                           Text="{DynamicResource Library}"
                                 />
                             </StackPanel>
 
@@ -205,7 +205,7 @@
                                 
                                 <TextBlock x:Name="BorderDefStructTitleText"
                                            Style="{StaticResource TitleTextLight}"
-                                           Text="{StaticResource PredefinedStructures}"
+                                           Text="{DynamicResource PredefinedStructures}"
                                 />
                             </Border>
 
@@ -279,7 +279,7 @@
                                 <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
                                 <TextBlock x:Name="ModelBibText"
                                            Style="{StaticResource TitleTextLight}"
-                                           Text="{StaticResource ModelsTitle}"
+                                           Text="{DynamicResource ModelsTitle}"
                                 />
                             </StackPanel>
 
@@ -379,12 +379,12 @@
                             <TextBlock 
                                        x:Name="ModelSettingsText"
                                        Style="{StaticResource TitleTextLight}"
-                                       Text="Paramètres du Modèle Fonctionnel"
+                                       Text="{DynamicResource ModelsParametersTitle}"
                                        HorizontalAlignment="Left"
                                        Margin="5,0"
                             />
                             <!--Nom du Modèle Fonctionnel-->
-                            <TextBlock Text="{StaticResource Name:}" 
+                            <TextBlock Text="{DynamicResource Name:}" 
                                        x:Name="NameTextBlock"
                                        Style="{StaticResource StandardTextBlockLight}"
                                        Margin="15,0,0,0"/>
@@ -426,7 +426,7 @@
                                                     Margin="0,10,10,0">
                                                 <StackPanel Orientation="Vertical">
                                                     <!-- Titre : "Élément à tester" -->
-                                                    <TextBlock Text="{StaticResource TestedElement}" Style="{StaticResource TitleTextLight}" Margin="0,0,0,5"/>
+                                                    <TextBlock Text="{DynamicResource TestedElement}" Style="{StaticResource TitleTextLight}" Margin="0,0,0,5"/>
                                                     
                                                     <!-- Tableau principal : Cmd(s) et IE(s)-->
                                                     <Grid>
@@ -445,8 +445,8 @@
                                                         </Grid.ColumnDefinitions>
                                                         
                                                         <!--Colonne 1 : Titres-->
-                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{StaticResource DptType}" VerticalAlignment="Center" Margin="3,0,2,0"/>
-                                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{StaticResource LinkedAddress}" VerticalAlignment="Center" Margin="3,0,2,0"/>
+                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource DptType}" VerticalAlignment="Center" Margin="3,0,2,0"/>
+                                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource LinkedAddress}" VerticalAlignment="Center" Margin="3,0,2,0"/>
                                                         <StackPanel Grid.Row="3" Grid.Column="0" Orientation="Horizontal" Margin="3,10,2,0">
                                                             <Image Style="{StaticResource TooltipImage}"
                                                                    Height="15"
@@ -454,7 +454,7 @@
                                                                    HorizontalAlignment="Left"
                                                                    Margin="0,1,3,0">
                                                                 <ToolTipService.ToolTip>
-                                                                    <ToolTip Background="White"
+                                                                    <ToolTip Background="{StaticResource WhiteBackgroundBrush}"
                                                                              BorderBrush="{StaticResource KnxGreenBrush}">
                                                                         <StackPanel Orientation="Vertical">
                                                                             <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
@@ -471,11 +471,11 @@
                                                                     </ToolTip>
                                                                 </ToolTipService.ToolTip>
                                                             </Image>
-                                                            <TextBlock Text="{StaticResource Values}"/>
+                                                            <TextBlock Text="{DynamicResource Values}"/>
                                                         </StackPanel>
 
                                                         <!--Colonne 2 : Cmd(s)-->
-                                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{StaticResource Dispatch(es)}" Margin="5,0,0,0"/>
+                                                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{DynamicResource Dispatch(es)}" Margin="5,0,0,0"/>
                                                         <!--Type de DPT de l'envoi-->
                                                         <Border Grid.Row="1" Grid.Column="1" Background="{StaticResource OffWhiteBackgroundBrush}">
                                                             <ListBox
@@ -601,7 +601,7 @@
                                                         </Border>
                                                             
                                                         <!--Colonne 3 : IE(s)-->
-                                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{StaticResource Reception(s)}" Margin="5,0,0,0"/>
+                                                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{DynamicResource Reception(s)}" Margin="5,0,0,0"/>
                                                         <!--Type de DPT à recevoir-->
                                                         <ListBox Grid.Row="1" Grid.Column="2"
                                                                  ItemsSource="{Binding TestsIe}"
@@ -796,7 +796,7 @@
                                 <TextBlock 
                                         x:Name="AddressTitleText"
                                         Style="{StaticResource TitleTextLight}"
-                                        Text="{StaticResource GroupAdressesTitle}"
+                                        Text="{DynamicResource GroupAdressesTitle}"
                                 />
                             </StackPanel>
 
