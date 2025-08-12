@@ -36,7 +36,7 @@
     <sys:String x:Key="ModelsParametersTitle">Paramètres du Modèle Fonctionnel</sys:String>
     <sys:String x:Key="Name:">Nom :</sys:String>
             <!-- Element à Tester-->
-    <sys:String x:Key="TestedElement">Élément à Tester</sys:String>
+    <sys:String x:Key="TestedElement">Élément à tester</sys:String>
     <sys:String x:Key="DptType">Type de DPT :</sys:String>
     <sys:String x:Key="LinkedAddress">Adresse liée :</sys:String>
     <sys:String x:Key="Values">Valeurs :</sys:String>
@@ -49,9 +49,14 @@
     <!--/Main Window-->
     
     <!--Structure Edit Window-->
+    <sys:String x:Key="StructEditWindowTitle">Fenêtre d'édition de Structure de Modèle Fonctionnel</sys:String>
+    <sys:String x:Key="StructRmvText">Supprimer la structure</sys:String>
     <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
-    <sys:String x:Key="DptPersonalizationtitle">Personnalisation de DPTs</sys:String>
+    <sys:String x:Key="DptPersonalizationTitle">Personnalisation de DPTs</sys:String>
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
+    <sys:String x:Key="Key">Clé</sys:String>
+    <sys:String x:Key="Type">Type</sys:String>
+    <sys:String x:Key="Keywords">Mots-clés</sys:String>
     <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
     <!--/Structure Edit Window-->
     

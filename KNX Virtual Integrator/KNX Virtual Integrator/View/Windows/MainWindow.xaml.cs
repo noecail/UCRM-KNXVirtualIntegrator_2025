@@ -131,8 +131,6 @@ public partial class MainWindow
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyThemeToWindow is not implemented");
-
     }
 
     private void TranslateWindowContents()

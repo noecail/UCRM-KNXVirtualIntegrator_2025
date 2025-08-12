@@ -35,8 +35,7 @@ public partial class StructureEditWindow
         
         _viewModel = mainViewModel;
         DataContext = _viewModel;
-        
-        UpdateWindowContents();
+        UpdateWindowContents(true, true, true);
     }
     
     
@@ -46,7 +45,7 @@ public partial class StructureEditWindow
     private void ClosingStructureEditWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
-        //UpdateWindowContents(true, true, true);
+        UpdateWindowContents(true, true, true);
         Hide();
     }    
     
@@ -71,19 +70,36 @@ public partial class StructureEditWindow
 
     private void TranslateWindowContents()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.TranslateWindowContents is not implemented");
         if (_viewModel.AppSettings.AppLang == "FR")
         {
+            Resources["StructEditWindowTitle"]="Fenêtre d'édition de Structure de Modèle Fonctionnel";
+            Resources["StructRmvText"]="Supprimer la structure";
             Resources["TestedElementsListTitle"]="Liste d'Éléments à Tester";
-            Resources["DptPersonalizationtitle"]="Personnalisation de DPTs";
+            Resources["DptPersonalizationTitle"]="Personnalisation de DPTs";
+            Resources["TestedElement"]="Élément à tester";
+            Resources["DptType"] = "Type de DPT :";
+            Resources["Dispatch(es)"] = "Envoi(s)";
+            Resources["Reception(s)"] = "Réception(s)";
             Resources["AddTestedElement"]="Ajouter un Élément à tester";
+            Resources["Key"]="Clé";
+            Resources["Type"]="Type";
+            Resources["Keywords"]="Mots-clés";
             Resources["AddDpt"]="Ajouter un DataPointType";
         }
         else
         {
+            Resources["StructEditWindowTitle"]="Functional Model's Structure Edition";
+            Resources["StructRmvText"]="Remove the structure";
             Resources["TestedElementsListTitle"]="List of Test Elements";
-            Resources["DptPersonalizationtitle"]="DPT Customization";
+            Resources["TestedElement"]="Test Element";
+            Resources["DptType"] = "DPT Type:";
+            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["Reception(s)"] = "Reception(s)";
+            Resources["DptPersonalizationTitle"]="DPT Customization";
             Resources["AddTestedElement"]="Add a Test Element";
+            Resources["Key"]="Key";
+            Resources["Type"]="Type";
+            Resources["Keywords"]="Keywords";
             Resources["AddDpt"]="Add a DataPointType";
         }
     }
