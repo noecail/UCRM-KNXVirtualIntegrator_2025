@@ -113,6 +113,10 @@ namespace KNX_Virtual_Integrator.ViewModel
             
         public ICommand DeleteFunctionalModelFromListCommand { get; private set; }
         
+        public ICommand AddDptToDictionaryCommand { get; private set; }
+            
+        public ICommand RemoveDptFromDictionaryCommand { get; private set; }
+        
         public ICommand ImportDictionaryCommand  { get; private set; }
 
         public ICommand ExportDictionaryCommand  { get; private set; }

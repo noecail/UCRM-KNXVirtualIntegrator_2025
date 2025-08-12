@@ -10,6 +10,7 @@ public class FunctionalModelStructure
     public FunctionalModel Model;
     public struct DptAndKeywords
     {
+        public int Key;
         private List<string> _keywords;
 
         public List<string> Keywords
@@ -113,6 +114,7 @@ public class FunctionalModelStructure
                     {
                         newKey = 0;
                     }
+                    newDpt.Key = newKey;
 
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
@@ -139,6 +141,7 @@ public class FunctionalModelStructure
                     newDpt.Dpt = dpt;
                     newDpt.Keywords = [];
                     var newKey = DptDictionary.Keys.ToList()[^1] + 1;
+                    newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
                 }
@@ -187,7 +190,7 @@ public class FunctionalModelStructure
                     {
                         newKey = 0;
                     }
-
+                    newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
                 }
@@ -213,6 +216,7 @@ public class FunctionalModelStructure
                     newDpt.Dpt = dpt;
                     newDpt.Keywords = [];
                     var newKey = DptDictionary.Keys.ToList()[^1] + 1;
+                    newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
                     elementStructure.Ie?.Add(index);
                 }
@@ -472,7 +476,13 @@ public class FunctionalModelStructure
 
         public void CreateDpt()
         {
-            
+            var newKey = DptDictionary.Keys.ToList().Last() + 1;
+            DptDictionary.Add(newKey,new DptAndKeywords(){Key = newKey,Keywords = [],Dpt = new DataPointType(1)});
+        }
+        
+        public void RemoveDpt(int index)
+        {
+            DptDictionary.Remove(index);
         }
 
 }

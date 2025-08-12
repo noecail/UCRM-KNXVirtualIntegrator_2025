@@ -362,6 +362,16 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     SelectedModel = previouslySelectedModel;
             }
         );
+
+        AddDptToDictionaryCommand = new Commands.RelayCommand<FunctionalModelStructure>(structure =>
+        {
+            structure?.CreateDpt();
+        });
+        
+        RemoveDptFromDictionaryCommand = new Commands.RelayCommand<(int index, FunctionalModelStructure structure)>(parameters =>
+        {
+            parameters.structure.RemoveDpt(parameters.index);
+        });
         
         ExportDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
