@@ -7,7 +7,7 @@
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="Connexion au Bus KNX" Height="650" Width="300"
+                 Title="{DynamicResource ConnectionWindowTitle}" Height="650" Width="300"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
                  Background="{StaticResource WhiteBackgroundBrush}"
@@ -87,7 +87,7 @@
 
             <!-- Bus Connection Type Selection Section -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
-                <TextBlock Name="ConnectionTypeText" Text="Type de connexion :" VerticalAlignment="Center"
+                <TextBlock Name="ConnectionTypeText" Text="{DynamicResource ConnectionType}" VerticalAlignment="Center"
                            Margin="0,0,10,0" />
                 <ComboBox Name="ConnectionTypeComboBox"
                           Style="{StaticResource LightComboBoxStyle}"
@@ -109,7 +109,7 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Name="DiscoveredInterfacesText" Text="Interfaces disponibles :" HorizontalAlignment="Left"
+                    <TextBlock Name="DiscoveredInterfacesText" Text="{DynamicResource AvailableInterfaces}" HorizontalAlignment="Left"
                                VerticalAlignment="Center" Margin="0,0,0,0" Grid.Column="0" />
 
                     <Button Grid.Column="1" Command="{Binding RefreshInterfacesCommand}"
@@ -118,7 +118,7 @@
                             Margin="0,0,0,0">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="⟲" FontSize="12" Height="20" Margin="0,2,5,0" VerticalAlignment="Center" />
-                            <TextBlock Text="Rafraîchir" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0" />
+                            <TextBlock Text="{DynamicResource Refresh}" FontSize="10" VerticalAlignment="Center" Margin="0,0,0,0" />
                         </StackPanel>
                     </Button>
                 </Grid>
@@ -155,7 +155,7 @@
                         VerticalAlignment="Center" />
                     <TextBlock
                         Name="NatConnectionText"
-                        Text="Connexion à distance (NAT)"
+                        Text="{DynamicResource NatConnection}"
                         Foreground="{StaticResource LightForegroundBrush}"
                         Margin="5,0,0,0"
                         TextAlignment="Left"
@@ -190,7 +190,7 @@
 
                 <TextBlock Name="IpRouterText" Grid.Row="1" Grid.Column="0"
                            Foreground="{StaticResource LightForegroundBrush}"
-                           Text="IP publique du routeur"
+                           Text="{DynamicResource PublicIp}"
                            VerticalAlignment="Center"
                            TextAlignment="Left" />
 
@@ -209,7 +209,7 @@
                            TextAlignment="Left"
                            FontStyle="Italic"
                            Margin="21,10,0,0"
-                           Text="À ne remplir que pour une connexion sécurisée" />
+                           Text="{DynamicResource ToFillWhenSecure}" />
 
                 <Grid HorizontalAlignment="Center" Width="255">
                     <Grid.ColumnDefinitions>
@@ -230,7 +230,7 @@
                                    TextAlignment="Left"
                                    VerticalAlignment="Center" />
                         <TextBlock Name="ConnectionIpSecText"
-                                   Text="Connexion via IP Secure"
+                                   Text="{DynamicResource IPSecureConnection}"
                                    Foreground="{StaticResource LightForegroundBrush}"
                                    Margin="5,0,0,0"
                                    TextAlignment="Left"
@@ -268,14 +268,14 @@
 
                     <TextBlock Grid.Row="1" Grid.Column="0"
                                Name="FileKeysText"
-                               Text="Fichier de clés .knxkeys"
+                               Text="{DynamicResource KnxKeysFile}"
                                VerticalAlignment="Center"
                                TextAlignment="Left" />
 
                     <Button Grid.Row="1" Grid.Column="1" Name="ImportKnxKeys"
                             Style="{StaticResource ImportKeysButtonLight}"
                             Click="ImportKeysFileButtonClick">
-                        <TextBlock Text="importer clés"
+                        <TextBlock Text="{DynamicResource ImportKeys}"
                                    Width="78"
                                    FontSize="10"
                                    TextAlignment="Center"
@@ -308,7 +308,7 @@
 
                     <TextBlock Grid.Column="0"
                                Name="PwdKeysFileText"
-                               Text="Mot de passe du fichier de clés"
+                               Text="{DynamicResource PwdKeys}"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left" />
 
@@ -323,7 +323,7 @@
             <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,0"
                         Visibility="{Binding ErrorMessageVisibility}">
                 <TextBlock
-                    Text="Erreur lors de la connexion"
+                    Text="{DynamicResource ConnectionError}"
                     FontWeight="Bold"
                     Foreground="Red" />
                 <TextBlock
@@ -339,7 +339,7 @@
                 <TextBlock
                     Name="CurrentInterfaceText"
                     Margin="5,0,5,0"
-                    Text="Interface actuellement connectée :"
+                    Text="{DynamicResource CurrentInterface}"
                     TextAlignment="Left"
                     FontWeight="SemiBold" />
                 <StackPanel Orientation="Vertical">
@@ -363,7 +363,7 @@
                 </Grid.ColumnDefinitions>
 
                 <!-- Bouton Déconnexion, collé à gauche -->
-                <Button Grid.Column="0" Name="DisconnectButton" Content="Déconnexion"
+                <Button Grid.Column="0" Name="DisconnectButton" Content="{DynamicResource DisconnectButtonText}"
                         Style="{StaticResource DisconnectButton}"
                         Margin="5" Padding="5,2"
                         Command="{Binding DisconnectBusCommand}"
@@ -371,7 +371,7 @@
                         HorizontalAlignment="Left" />
 
                 <!-- Bouton Connexion, collé à droite -->
-                <Button Grid.Column="1" Name="ConnectButton" Content="Connexion"
+                <Button Grid.Column="1" Name="ConnectButton" Content="{DynamicResource ConnectButtonText}"
                         Style="{StaticResource ConnectButton}"
                         Margin="5" Padding="5,2"
                         Foreground="{StaticResource DarkForegroundBrush}"

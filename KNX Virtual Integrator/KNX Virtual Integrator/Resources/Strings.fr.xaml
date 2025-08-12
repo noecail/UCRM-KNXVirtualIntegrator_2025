@@ -53,13 +53,31 @@
     <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
     <!--/Structure Edit Window-->
     
+    <!--Connection Window-->
+    <sys:String x:Key="ConnectionWindowTitle">Connexion au Bus KNX</sys:String>
+    <sys:String x:Key="ConnectionType">Type de connexion :</sys:String>
+    <sys:String x:Key="AvailableInterfaces">Interfaces disponibles :</sys:String>
+    <sys:String x:Key="Refresh">Rafraîchir</sys:String>
+    <sys:String x:Key="NatConnection">Connexion à distance (NAT)</sys:String>
+    <sys:String x:Key="PublicIp">IP publique du routeur</sys:String>
+    <sys:String x:Key="ToFillWhenSecure">À ne remplir que pour une connexion sécurisée</sys:String>
+    <sys:String x:Key="IPSecureConnection">Connexion via IP Secure</sys:String>
+    <sys:String x:Key="KnxKeysFile">Fichier de clés .knxkeys</sys:String>
+    <sys:String x:Key="ImportKeys">importer clés</sys:String>
+    <sys:String x:Key="PwdKeys">Mot de passe du fichier de clés</sys:String>
+    <sys:String x:Key="ConnectionError">Erreur lors de la connexion</sys:String>
+    <sys:String x:Key="CurrentInterface">Interface actuellement connectée :</sys:String>
+    <sys:String x:Key="ConnectButtonText">Connexion</sys:String>
+    <sys:String x:Key="DisconnectButtonText">Déconnexion</sys:String>
+    <!--/Connection Window-->
+    
     <!--Tests Configuration Window-->
     <sys:String x:Key="TestWindowTitle">Configuration du test</sys:String>
     <sys:String x:Key="ChosenTestModelsTitle">Modèles Fonctionnels Choisis</sys:String>
     <sys:String x:Key="LaunchTest">Lancer le test</sys:String>
     <!--Tests Configuration Window-->
 
-    <!--Tests Configuration Window-->
+    <!--Report Creation Window-->
     <sys:String x:Key="ReportWindowTitle">Création du rapport de test</sys:String>
     <sys:String x:Key="TestGenerationTitle">Génération du rapport de test</sys:String>
     <sys:String x:Key="DocParametersTitle">Paramètres du document</sys:String>
@@ -69,7 +87,7 @@
     <sys:String x:Key="ReportPreview">Prévisualisation du rapport :</sys:String>
     <sys:String x:Key="GenerationButton">Générer le rapport</sys:String>
     <sys:String x:Key="CancelButton">Annuler</sys:String>
-    <!--Tests Configuration Window-->
+    <!--Report Creation Window-->
     
     <!--Xaml Dump-->
     <sys:String x:Key="AdvancedSettings">Paramètres Avancés</sys:String>
