@@ -14,7 +14,6 @@
       <Page Remove="Resources\Images.xaml" />
       <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
       <Page Remove="Resources\Styles.xaml" />
-      <Page Remove="View\Utils\XamlDump.xaml" />
     </ItemGroup>
     
     <ItemGroup>

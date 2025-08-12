@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#pragma warning disable
+
+using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -420,3 +422,5 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
 
     internal KeyValuePair<TKey, TValue> FirstOrDefault() => _dictionary.FirstOrDefault();
 }
+
+#pragma warning restore

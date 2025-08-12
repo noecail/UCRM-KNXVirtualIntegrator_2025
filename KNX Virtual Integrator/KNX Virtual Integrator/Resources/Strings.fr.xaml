@@ -54,8 +54,9 @@
     <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
     <sys:String x:Key="DptPersonalizationTitle">Personnalisation de DPTs</sys:String>
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
-    <sys:String x:Key="Key">Clé</sys:String>
-    <sys:String x:Key="Type">Type</sys:String>
+    <sys:String x:Key="PersonalizedDpt">DPT personnalisé de clé :</sys:String>
+    <sys:String x:Key="Name">Nom :</sys:String>
+    <sys:String x:Key="Type">Type :</sys:String>
     <sys:String x:Key="Keywords">Mots-clés</sys:String>
     <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
     <!--/Structure Edit Window-->

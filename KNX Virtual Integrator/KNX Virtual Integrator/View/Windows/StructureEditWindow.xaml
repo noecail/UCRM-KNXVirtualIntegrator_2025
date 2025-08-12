@@ -355,7 +355,7 @@
                                                 
                                                 <!--Titre DPT Personnalisé-->
                                                 <StackPanel Grid.Row="0" Grid.Column="0" Margin="10" Orientation="Horizontal">
-                                                    <TextBlock Text="Dpt personnalisé de clé : "/> <!--ICI-->
+                                                    <TextBlock Text="{DynamicResource PersonalizedDpt}"/>
                                                     <TextBlock Text="{Binding Key}"/>
                                                 </StackPanel>
                                                 <Button Grid.Row="0" Grid.Column="1"
@@ -370,7 +370,7 @@
                                                 <!--"Nom" + "Type"-->
                                                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical">
                                                     <StackPanel Margin="10" Orientation="Vertical">
-                                                        <TextBlock Text="Nom :"/>
+                                                        <TextBlock Text="{DynamicResource Name}"/>
                                                         <TextBox 
                                                             Text="{Binding Value.Dpt.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             HorizontalContentAlignment="Center"

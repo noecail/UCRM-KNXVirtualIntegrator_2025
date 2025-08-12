@@ -152,7 +152,7 @@ public partial class StructureEditWindow
     {
         _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructureModel);
         var testedElementsScrollViewer = FindVisualChild<ScrollViewer>(TestedElementsListBox);
-        testedElementsScrollViewer.ScrollToEnd();
+        testedElementsScrollViewer?.ScrollToEnd();
     }
 
     /// <summary>
@@ -194,8 +194,12 @@ public partial class StructureEditWindow
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
-        int indexCmd = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        DataPointType? testsIeItem = null;
+        if (listBoxItem != null)
+            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexCmd = 0;
+        if (testsIeItem != null)
+            indexCmd = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
         _viewModel.RemoveCmdDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexCmd));
     }
@@ -205,16 +209,24 @@ public partial class StructureEditWindow
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the data point type
-        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
-        dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        if (dep != null)
+            dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        if (dep != null)
+            dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        int indexElement = 0;
+        if (dep != null)
+            indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
         var button = (Button)sender;
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
-        int indexIe = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        DataPointType? testsIeItem = null;
+        if (listBoxItem != null)
+            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexIe = 0;
+        if (testsIeItem != null)
+            indexIe = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
         _viewModel.RemoveIeDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexIe));
     }
@@ -244,7 +256,7 @@ public partial class StructureEditWindow
     // Utilisée dans AddTestToElementButtonClick
     // Utilisée dans RemoveTestFromElementButtonClick
     // etc
-    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
     {
         var parentObject = VisualTreeHelper.GetParent(child);
         if (parentObject == null) return null;
@@ -253,7 +265,7 @@ public partial class StructureEditWindow
     }
     
     
-    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
