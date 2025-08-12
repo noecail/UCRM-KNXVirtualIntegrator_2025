@@ -190,9 +190,10 @@ public class FunctionalModelStructure
     public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
         ObservableCollection<ElementStructure> modelStructure) 
     {
-        Model = new FunctionalModel(name);
         DptDictionary = new Dictionary<int, DptAndKeywords>(functionalModels);
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
+        Model = BuildFunctionalModel(name);
+
     }
     
     public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
