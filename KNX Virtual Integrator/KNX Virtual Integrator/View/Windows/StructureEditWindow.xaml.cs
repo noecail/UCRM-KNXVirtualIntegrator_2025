@@ -35,8 +35,7 @@ public partial class StructureEditWindow
         
         _viewModel = mainViewModel;
         DataContext = _viewModel;
-        
-        UpdateWindowContents();
+        UpdateWindowContents(true, true, true);
     }
     
     
@@ -46,21 +45,18 @@ public partial class StructureEditWindow
     private void ClosingStructureEditWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
-        //UpdateWindowContents(true, true, true);
+        UpdateWindowContents(true, true, true);
         Hide();
     }    
     
     
     
     // TODO : implement later
-    
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.UpdateWindowContents is not implemented");
-
         if (langChanged)
         {
-            return;
+            TranslateWindowContents();
         }
         if (themeChanged)
         {
@@ -71,7 +67,44 @@ public partial class StructureEditWindow
             ApplyScaling();
         }
     }
-    
+
+    private void TranslateWindowContents()
+    {
+        if (_viewModel.AppSettings.AppLang == "FR")
+        {
+            Resources["StructEditWindowTitle"]="Fenêtre d'édition de Structure de Modèle Fonctionnel";
+            Resources["StructRmvText"]="Supprimer la structure";
+            Resources["TestedElementsListTitle"]="Liste d'Éléments à Tester";
+            Resources["DptPersonalizationTitle"]="Personnalisation de DPTs";
+            Resources["TestedElement"]="Élément à tester";
+            Resources["DptType"] = "Type de DPT :";
+            Resources["Dispatch(es)"] = "Envoi(s)";
+            Resources["Reception(s)"] = "Réception(s)";
+            Resources["AddTestedElement"]="Ajouter un Élément à tester";
+            Resources["Key"]="Clé";
+            Resources["Type"]="Type";
+            Resources["Keywords"]="Mots-clés";
+            Resources["AddDpt"]="Ajouter un DataPointType";
+        }
+        else
+        {
+            Resources["StructEditWindowTitle"]="Functional Model's Structure Edition";
+            Resources["StructRmvText"]="Remove the structure";
+            Resources["TestedElementsListTitle"]="List of Test Elements";
+            Resources["TestedElement"]="Test Element";
+            Resources["DptType"] = "DPT Type:";
+            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["Reception(s)"] = "Reception(s)";
+            Resources["DptPersonalizationTitle"]="DPT Customization";
+            Resources["AddTestedElement"]="Add a Test Element";
+            Resources["Key"]="Key";
+            Resources["Type"]="Type";
+            Resources["Keywords"]="Keywords";
+            Resources["AddDpt"]="Add a DataPointType";
+        }
+    }
+
+
     private void ApplyThemeToWindow()
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyThemeToWindow is not implemented");
@@ -119,7 +152,7 @@ public partial class StructureEditWindow
     {
         _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructureModel);
         var testedElementsScrollViewer = FindVisualChild<ScrollViewer>(TestedElementsListBox);
-        testedElementsScrollViewer.ScrollToEnd();
+        testedElementsScrollViewer?.ScrollToEnd();
     }
 
     /// <summary>
@@ -157,11 +190,17 @@ public partial class StructureEditWindow
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
         var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        var indexCmd = 0;
+        var button = (Button)sender;
+        // Find the DPT's index
+        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
+        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
+        DataPointType? testsIeItem = null;
+        if (listBoxItem != null)
+            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexCmd = 0;
+        if (testsIeItem != null)
+            indexCmd = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
-        Console.WriteLine("delete dpt cmd number " + indexCmd + " from element " + indexElement);
-        
-        //TODO: récupérer index Dpt
         _viewModel.RemoveCmdDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexCmd));
     }
     
@@ -170,26 +209,41 @@ public partial class StructureEditWindow
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the data point type
-        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
-        dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+        if (dep != null)
+            dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        if (dep != null)
+            dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        int indexElement = 0;
+        if (dep != null)
+            indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
         var button = (Button)sender;
-        
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
-        int indexIe = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        DataPointType? testsIeItem = null;
+        if (listBoxItem != null)
+            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexIe = 0;
+        if (testsIeItem != null)
+            indexIe = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
-        
-        Console.WriteLine("delete dpt ie number " + indexIe + " from element " + indexElement);
-        
-        //TODO: récupérer index Dpt
         _viewModel.RemoveIeDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexIe));
     }
-    
-    
+
+    private void AddDptToDictionaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.AddDptToDictionaryCommand.Execute(_viewModel.SelectedStructure);
+    }
+
+    private void RemoveDptFromDictionaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        var button = sender as Button; // Récupérer le bouton cliqué
+        if (button == null) return;
+        var item = button.DataContext; // Le DataContext est l'élément du dictionnaire (KeyValuePair<,>)
+        if (item is KeyValuePair<int, FunctionalModelStructure.DptAndKeywords> kvp) // Si c'est un KeyValuePair<int, FunctionalModelStructure.DptAndKeywords>
+            _viewModel.RemoveDptFromDictionaryCommand.Execute((kvp.Key,_viewModel.SelectedStructure));
+    }
     
     
     
@@ -198,7 +252,8 @@ public partial class StructureEditWindow
     // Utilisée dans RemoveTestedElementFromStructureButtonClick
     // Utilisée dans AddTestToElementButtonClick
     // Utilisée dans RemoveTestFromElementButtonClick
-    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    // etc
+    private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
     {
         var parentObject = VisualTreeHelper.GetParent(child);
         if (parentObject == null) return null;
@@ -207,7 +262,7 @@ public partial class StructureEditWindow
     }
     
     
-    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {

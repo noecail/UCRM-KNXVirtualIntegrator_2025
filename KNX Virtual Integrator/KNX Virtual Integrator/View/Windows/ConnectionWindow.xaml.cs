@@ -47,7 +47,43 @@ public partial class ConnectionWindow
 
     private void TranslateWindowContents()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("ConnectionWindow.Translate is not implemented");
+        if (_viewModel.AppSettings.AppLang == "FR")
+        {
+            Resources["ConnectionWindowTitle"]="Connexion au Bus KNX";
+            Resources["ConnectionType"]="Type de connexion :";
+            Resources["AvailableInterfaces"]="Interfaces disponibles :";
+            Resources["Refresh"]="Rafraîchir";
+            Resources["NatConnection"]="Connexion à distance (NAT)";
+            Resources["PublicIp"]="IP publique du routeur";
+            Resources["ToFillWhenSecure"]="À ne remplir que pour une connexion sécurisée";
+            Resources["IPSecureConnection"]="Connexion via IP Secure";
+            Resources["KnxKeysFile"]="Fichier de clés (.knxkeys)";
+            Resources["ImportKeys"]="importer clés";
+            Resources["PwdKeys"]="Mot de passe du fichier de clés";
+            Resources["ConnectionError"]="Erreur lors de la connexion";
+            Resources["CurrentInterface"]="Interface actuellement connectée :";
+            Resources["ConnectButtonText"]="Connexion";
+            Resources["DisconnectButtonText"]="Déconnexion";
+        }
+        else
+        {
+            Resources["ConnectionWindowTitle"]="KNX Bus Connection";
+            Resources["ConnectionType"]="Connection type :";
+            Resources["AvailableInterfaces"]="Available interfaces :";
+            Resources["Refresh"]="Refresh";
+            Resources["NatConnection"]="Connection (NAT)";
+            Resources["PublicIp"]="Router public IP";
+            Resources["ToFillWhenSecure"]="To fill only when connection is IP Secure";
+            Resources["IPSecureConnection"]="IP Secure connection";
+            Resources["KnxKeysFile"]="Keys file .knxkeys";
+            Resources["ImportKeys"]="Import keys";
+            Resources["PwdKeys"]="Keys file password";
+            Resources["ConnectionError"]="Connection error";
+            Resources["CurrentInterface"]="Currently connected interface :";
+            Resources["ConnectButtonText"]="Connect";
+            Resources["DisconnectButtonText"]="Disconnect";
+            
+        }
     }
 
     private void ApplyThemeToWindow()

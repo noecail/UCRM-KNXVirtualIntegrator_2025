@@ -131,8 +131,6 @@ public partial class MainWindow
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("MainWindow.ApplyThemeToWindow is not implemented");
-
     }
 
     private void TranslateWindowContents()
@@ -157,6 +155,8 @@ public partial class MainWindow
             Resources["Values"] = "Valeurs :";
             Resources["Dispatch(es)"] = "Envoi(s)";
             Resources["Reception(s)"] = "Réception(s)";
+            Resources["ShowAllModels"] = "Afficher tous les modèles";
+            Resources["ShowTheModel"] = "Afficher le modèle sélectionné";
             
             Resources["GroupAdressesTitle"] = "Adresses de Groupe";
         }
@@ -180,6 +180,8 @@ public partial class MainWindow
             Resources["Values"] = "Values :";
             Resources["Dispatch(es)"] = "Dispatch(s)";
             Resources["Reception(s)"] = "Reception(s)";
+            Resources["ShowAllModels"] = "Show all models";
+            Resources["ShowTheModel"] = "Show selected model";
             
             Resources["GroupAdressesTitle"] = "Group Addresses";
         }
@@ -495,7 +497,7 @@ public partial class MainWindow
         _viewModel.SelectedStructure = _viewModel.Structures.Last();
         
         var predefinedStructuresScrollViewer = FindVisualChild<ScrollViewer>(StructuresBox);
-        predefinedStructuresScrollViewer.ScrollToEnd();
+        predefinedStructuresScrollViewer?.ScrollToEnd();
         
         _windowManager.ShowStructureEditWindow(); // ouverture de la fenêtre d'édition de MF
     }
@@ -560,7 +562,7 @@ public partial class MainWindow
     {
         _viewModel.AddFunctionalModelToListCommand.Execute(null);
         var functionalModelsScrollViewer = FindVisualChild<ScrollViewer>(ModelsBox);
-        functionalModelsScrollViewer.ScrollToEnd();
+        functionalModelsScrollViewer?.ScrollToEnd();
         StructuresBox.ApplyTemplate();
     }
 
@@ -639,8 +641,9 @@ public partial class MainWindow
         var button = (Button)sender;
         var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
         var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
-        var indexTest = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
-        
+        int indexTest = 0;
+        if (itemsControl != null)
+            indexTest = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
         _viewModel.RemoveTestFromElementCommand.Execute((_viewModel.SelectedModel?.ElementList[indexElement], indexTest));
     }
 
@@ -677,13 +680,19 @@ public partial class MainWindow
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
-        int indexDpt = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        DataPointType? testsIeItem = null;
+        if (listBoxItem != null)
+            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexDpt = 0;
+        if (testsIeItem != null) 
+            indexDpt = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
         // Find the Test's index
         var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
         var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
-        int indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+        int indexValue = 0;
+        if (itemsControl != null)
+            indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
 
         // Effectively deactivate the value
         switch (tests)
@@ -727,8 +736,10 @@ public partial class MainWindow
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the data point type
-        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
-        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        if (dep != null)
+            dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        if (dep != null)
+            dep = FindParent<ListBoxItem>(dep); // reach the tested element
         var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
         var button = (Button)sender;
@@ -736,13 +747,19 @@ public partial class MainWindow
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        var testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
-        int indexDpt = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
+        DataPointType? testsIeItem = null;
+        if (listBoxItem != null)
+            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
+        int indexDpt = 0;
+        if (testsIeItem != null) 
+            indexDpt = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
         
         // Find the Test's index
         var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
         var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
-        int indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+        int indexValue = 0;
+        if (itemsControl != null)
+            indexValue = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
 
         if (_viewModel.SelectedModel != null)
         {
@@ -777,7 +794,7 @@ public partial class MainWindow
     // Utilisée dans RemoveTestedElementFromStructureButtonClick
     // Utilisée dans AddTestToElementButtonClick
     // Utilisée dans RemoveTestFromElementButtonClick
-    private static T FindParent<T>(DependencyObject child) where T : DependencyObject
+    private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
     {
         var parentObject = VisualTreeHelper.GetParent(child);
         if (parentObject == null) return null;
@@ -785,7 +802,6 @@ public partial class MainWindow
         return FindParent<T>(parentObject);
     }
 
-    
     /// <summary>
     /// Currently used to display the SelectedModel in the console
     /// Delete later
@@ -805,10 +821,9 @@ public partial class MainWindow
     }
     
     
-    // <<<<<<<<<<<<<<<<<<<< FENÊTRE ÉDITION >>>>>>>>>>>>>>>>>>>>
+    // <<<<<<<<<<<<<<<<<<<< UTILS >>>>>>>>>>>>>>>>>>>>
 
-   
-    private static T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+   private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
