@@ -499,7 +499,7 @@ public class FunctionalModelStructure
             foreach (var key in DptDictionary.Keys)
             {
                 if (DptDictionary[key].Keywords.Any(p =>
-                        name.Contains(p, StringComparison.OrdinalIgnoreCase) == true))
+                        name.StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
                 {
                     return key;
                 }

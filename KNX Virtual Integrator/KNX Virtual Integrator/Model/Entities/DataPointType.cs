@@ -178,6 +178,20 @@ public class DataPointType : INotifyPropertyChanged
         }
     }
     
+    public DataPointType(DataPointType dpt, string address)
+    {
+        Type = dpt.Type;
+        Value = [];
+        IntValue = [];
+        Address = address;
+        GetSizeOf();
+        for (int i = 0; i < dpt.Value.Count; i++)
+        {
+            Value.Add(dpt.Value[i]);
+            IntValue.Add(dpt.IntValue[i]);
+        }
+    }
+    
     
     //Methods
     

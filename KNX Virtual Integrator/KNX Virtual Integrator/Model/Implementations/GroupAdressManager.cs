@@ -74,7 +74,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             return;
         var groupAddresses = doc.Descendants(ns + "GroupRanges");
         //Console.Writeline(groupAddresses.Elements().ToList().Count);
-        foreach (var i in groupAddresses.Elements())
             //Console.Writeline(i.Name);
 
        /* if (doc == null) return;
@@ -392,7 +391,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             }
             if (_groupAddressStructure == 3)
             {
-                List<string> prefixOfPrefixes = [];
                 foreach (var modelStructure in modelStructures)
                 {
                     //Add name
@@ -416,7 +414,21 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 names.Add(objectType[j].Attribute("Name")?.Value ?? "");
                             }
 
+                            string suffix = "";
+
                             var prefix = FindMajorityPrefix(names);
+                            if (names.Count == 1)
+                            {
+                                names = [];
+                                for (var j = 0; j < structureList.Count; j++)
+                                {
+                                    names.Add(
+                                        structureList[j].Elements().ToList()[0].Attribute("Name")?.Value ?? "");
+                                }
+
+                                suffix = FindMajoritySuffix(names);
+                                prefix = prefix.Replace(suffix, "");
+                            }
                             for (var j = 0; j < objectType.Count; j++)
                             {
                                 var dptName = objectType[j].Attribute("Name")?.Value ?? "";
@@ -424,7 +436,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 var circuitName = dptName;
                                 if (!string.IsNullOrEmpty(circuitName) &&
                                     !string.IsNullOrEmpty(prefix)) // && circuitName.Contains(prefix))
-                                    circuitName = circuitName.Replace(prefix, "");
+                                    circuitName = circuitName.Replace(prefix.Replace(' ','_'), "");
                                 else
                                 {
                                     circuitName =
@@ -460,6 +472,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 {
                                     //Find a way to find in which model it should be
                                 }
+
                                 //Add the dpt wherever needed
                                 var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                     .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
@@ -473,7 +486,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var cmd =  elementStructure.Cmd[l];
                                         if (cmd == dptKey)
                                         {
-                                            newFunctionalModels[modelIndex].ElementList[k].TestsCmd[l]=new DataPointType(newDpt);
+                                            newFunctionalModels[modelIndex].ElementList[k].TestsCmd[l]=new DataPointType(newDpt, newAddress);
+
                                         }
                                     }
                                     for (var l = 0;l< elementStructure.Ie.Count;l++)
@@ -481,7 +495,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var ie =  elementStructure.Ie[l];
                                         if (ie == dptKey)
                                         {
-                                            newFunctionalModels[modelIndex].ElementList[k].TestsIe[l]=new DataPointType(newDpt);
+                                            newFunctionalModels[modelIndex].ElementList[k].TestsIe[l]=new DataPointType(newDpt, newAddress);
                                         }
                                     }
                                     
@@ -584,7 +598,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
                                 }
                             }
-                            prefixOfPrefixes.Add(FindMajorityPrefix(prefixList)); //Why ? Idk
                         }
 
                         index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0]);
@@ -612,12 +625,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
 
                                     suffix = FindMajoritySuffix(names);
+                                    prefix = prefix.Replace(suffix, "");
                                 }
 
                                 for (var j = 0; j < objectType.Count; j++)
                                 {
-                                    if (objectType.Count == 1)
-                                        prefix = prefix.Replace(suffix, "");
                                     var dptName = objectType[j].Attribute("Name")?.Value ?? "";
                                     dptName = dptName.Replace(" ", "_");
                                     if (Prefixes.All(p =>
@@ -770,6 +782,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newAddress = objectType[j].Attribute("Address")?.Value!;
                                         var newDpt = new DataPointType(newType, newAddress, []);
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
+
                                         if (modelIndex ==
                                             -1) //When the circuit name doesn't exist, maybe take j?? dangerous
                                         {
