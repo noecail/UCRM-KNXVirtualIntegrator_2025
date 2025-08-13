@@ -238,14 +238,11 @@ public partial class StructureEditWindow
 
     private void RemoveDptFromDictionaryButtonClick(object sender, RoutedEventArgs e)
     {
-        // Find the DPT's index
-        var button = sender as Button; // Récupère le bouton
-        var kvp = button?.DataContext as KeyValuePair<int,FunctionalModelStructure.DptAndKeywords>? ; // l'élément du dictionnaire
-        //var listBox = FindParent<ListBox>(button); // Récupère le ListBox parent
-        //int indexDpt = listBox.ItemContainerGenerator.IndexFromContainer(listBox.ItemContainerGenerator.ContainerFromItem(kvp)); // Récupère l'index
-        int key = 0;
-        if (kvp?.Value != null) key = kvp.Value.Key;
-        _viewModel.RemoveDptFromDictionaryCommand.Execute((key,_viewModel.SelectedStructure));
+        var button = sender as Button; // Récupérer le bouton cliqué
+        if (button == null) return;
+        var item = button.DataContext; // Le DataContext est l'élément du dictionnaire (KeyValuePair<,>)
+        if (item is KeyValuePair<int, FunctionalModelStructure.DptAndKeywords> kvp) // Si c'est un KeyValuePair<int, FunctionalModelStructure.DptAndKeywords>
+            _viewModel.RemoveDptFromDictionaryCommand.Execute((kvp.Key,_viewModel.SelectedStructure));
     }
     
     

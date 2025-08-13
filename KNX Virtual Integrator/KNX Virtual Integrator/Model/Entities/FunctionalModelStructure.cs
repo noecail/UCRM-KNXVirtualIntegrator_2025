@@ -484,10 +484,10 @@ public class FunctionalModelStructure
 
         public void CreateDpt()
         {
-            var newKey = 0;
+            int newKey = 0;
             if (DptDictionary.Keys.Count != 0)
-                newKey = DptDictionary.Keys.ToList().Last() + 1;
-            DptDictionary.Add(newKey,new DptAndKeywords(){Key = newKey,Keywords = [],Dpt = new DataPointType(1)});
+                newKey = DptDictionary.Keys.Max() + 1;
+            DptDictionary.Add(newKey,new DptAndKeywords(){Key = newKey,Keywords = new List<string>(),Dpt = new DataPointType(1)});
         }
         
         public void RemoveDpt(int key)
