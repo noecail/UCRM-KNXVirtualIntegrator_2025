@@ -29,6 +29,28 @@
         -->
     <Window.Resources>
         <utils:BigIntegerToStringConverter x:Key="BigIntegerConverter"/>
+        
+        <Style x:Key="TreeViewLight" TargetType="TreeView">
+            <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
+        </Style>
+        
+        <Style x:Key="TreeViewDark" TargetType="TreeView">
+            <Setter Property="Background" Value="{StaticResource DarkerGrayBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
+        </Style>
+        
+        
+        <Style x:Key="TreeViewItemLight" TargetType="TreeViewItem">
+            <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
+        </Style>
+        
+        <Style x:Key="TreeViewItemDark" TargetType="TreeViewItem">
+            <Setter Property="Background" Value="{StaticResource DarkerGrayBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
+        </Style>
+        
     </Window.Resources>
 
     <!-- Paramètres du logo dans la barre de titre, le logo est à modifier, 15 10 -->
@@ -68,10 +90,12 @@
                 />
 
                 <!-- Premier bouton Importation -->
-                <Button Style="{StaticResource IconButtonStyle}"
+                <Button Style="{StaticResource IconTextButtonStyle}"
                     Tag="{StaticResource ImportedDrawingImage}" 
                     Foreground="{StaticResource DarkForegroundBrush}"
-                    Click="ImportGroupAddressFileButtonClick"                       
+                    Click="ImportGroupAddressFileButtonClick"        
+                    Content="{StaticResource ImportXmlButton}"
+                    Background="{StaticResource BlueBrush}"
                     Margin="5,0,0,0"
                 />
 
@@ -757,23 +781,6 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
-                            <StackPanel Grid.Row="1" Orientation="Vertical">
-                                <!-- Boutons Enregister et Filtrer-->
-                                <StackPanel Orientation="Horizontal"
-                                            VerticalAlignment="Top" HorizontalAlignment="Right"
-                                            Margin="10">
-                                    <Button Style="{StaticResource IconTextButtonStyle}"
-                                            Foreground="{StaticResource DarkForegroundBrush}"
-                                            Tag="{StaticResource FilterDrawingImage}"
-                                            Content="{DynamicResource ShowAllModels}" Margin="10,0"
-                                            Click="FilterModelButtonClick"/>
-                                    <Button Style="{StaticResource IconTextButtonStyle}"
-                                            Foreground="{StaticResource DarkForegroundBrush}"
-                                            Tag="{StaticResource CheckmarkDrawingImage}"
-                                            Content="{DynamicResource ShowTheModel}"
-                                            Click="SaveModelButtonClick"/>
-                                </StackPanel>
-                            </StackPanel>
                         </Grid>
                     </Border>
                         
@@ -784,8 +791,8 @@
                     -->
                     
                     <!-- En-tête -->
-                    <Border Grid.Row="0" Grid.Column="3"
-                            Background="{StaticResource OffWhiteBackgroundBrush}">
+                    <Border Grid.Row="0" Grid.Column="3" x:Name="AdressTitleBorder"
+                            Style="{StaticResource BorderLight}">
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" /> <!--Titre avec son icon-->
@@ -794,7 +801,7 @@
 
 
                             <!--Titre avec son icon-->
-                            <StackPanel Grid.Column="0"  Background="Transparent" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel Grid.Column="0"  Background="{StaticResource NoColorBrush}" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
                                 <TextBlock 
                                         x:Name="AddressTitleText"
@@ -818,13 +825,15 @@
                     </Border>
                     
                     <Border Grid.Row="1" Grid.Column="3">
-                        <!-- TreeView(figuratif) : à redesign entièrement selon la maquette, ajouter les infos de liaison, et ouvrir les paramètres sur clique -->
                         <TreeView
+                            x:Name="GroupAddressTreeView"
                             ScrollViewer.CanContentScroll="False"
                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
                             ScrollViewer.VerticalScrollBarVisibility="Visible"
                             ScrollViewer.PanningMode="Both"
-                            IsManipulationEnabled="True">
+                            IsManipulationEnabled="True"
+                            Style="{StaticResource TreeViewLight}"
+                            ItemContainerStyle="{StaticResource TreeViewItemLight}">
                             <TreeViewItem Header="ECLAIRAGE SIMPLE" IsExpanded="True">
                                 <TreeViewItem Header="ON/OFF" IsExpanded="True">
                                     <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/1"/>

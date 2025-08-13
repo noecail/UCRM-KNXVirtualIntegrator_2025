@@ -21,7 +21,8 @@
     
     <!--Main Window-->
         <!--Bandeau supérieur-->
-    <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>
+    <sys:String x:Key="ImportXmlButton">Importer les adresses</sys:String>
+    <sys:String x:Key="ImportButton">Importer un projet</sys:String>
     <sys:String x:Key="TestButton">Paramètres de test</sys:String>
     <sys:String x:Key="ExportButton">Exporter le rapport</sys:String>
         <!--Colonne 1-->
