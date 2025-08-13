@@ -84,6 +84,28 @@ public class FunctionalModelList : IFunctionalModelList
                 newModel.Name = string.Join("_",newModel.Name.Split('_')[..^1]) +"_" + _nbModelsCreated[index];
             }
         }
+/*
+ 
+        for (var i = 0; i < newModel.ElementList.Count; i++)
+        {
+            var element = newModel.ElementList[i];
+            for (var j = 0; j < element.TestsCmd.Count; j++)
+            {
+                var dpt = element.TestsCmd[j];
+                for (var k = 0; k < dpt.IntValue.Count; k++)
+                {
+                    newModel.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(dpt.IntValue[k].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
+                }
+            }
+            for (var j = 0; j < element.TestsIe.Count; j++)
+            {
+                var dpt = element.TestsIe[j];
+                for (var k = 0; k < dpt.IntValue.Count; k++)
+                {
+                    newModel.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(dpt.IntValue[k].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
+                }
+            }
+        }*/
         FunctionalModels[index].Add(newModel);
     }
     

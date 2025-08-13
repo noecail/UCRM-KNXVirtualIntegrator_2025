@@ -36,10 +36,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
                             {
-                                1, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                                1, new FunctionalModelStructure.DptAndKeywords { Keywords = ["On/off"], Dpt = new DataPointType(1) }
                             }, //CMD
                             {
-                                2, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                                2, new FunctionalModelStructure.DptAndKeywords { Keywords = ["etat On/Off"], Dpt = new DataPointType(1) }
                             } //IE
                         },
                         [new FunctionalModelStructure.ElementStructure([1],[2])]
@@ -49,19 +49,19 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
                             {
-                                1, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                                1, new FunctionalModelStructure.DptAndKeywords { Keywords = ["On/off"], Dpt = new DataPointType(1) }
                             }, //CMD on/off
                             {
-                                2, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                                2, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etat On/off"], Dpt = new DataPointType(1) }
                             }, //IE  on/off
                             {
-                                3, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(3) }
+                                3, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Variations"], Dpt = new DataPointType(3) }
                             }, //CMD relative
                             {
-                                4, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(5) }
+                                4, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Valeurs variation"], Dpt = new DataPointType(5) }
                             }, //CMD absolue
                             {
-                                5, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(5) }
+                                5, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etats variation"], Dpt = new DataPointType(5) }
                             }, //IE  absolue
                         },
                         [new FunctionalModelStructure.ElementStructure([1],[2,5]), // test on/off
@@ -76,19 +76,19 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                     {
                         {
-                            1, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                            1, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Montee/descente"], Dpt = new DataPointType(1) }
                         }, //CMD on/off
                         {
-                            2, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                            2, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etats Montee/descente"], Dpt = new DataPointType(1) }
                         }, //IE  on/off
                         {
-                            3, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(1) }
+                            3, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Stop"], Dpt = new DataPointType(1) }
                         }, //Stop
                         {
-                            4, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(5) }
+                            4, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Position"], Dpt = new DataPointType(5) }
                         }, //CMD absolue
                         {
-                            5, new FunctionalModelStructure.DptAndKeywords { Keywords = [], Dpt = new DataPointType(5) }
+                            5, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etat Position"], Dpt = new DataPointType(5) }
                         }, //IE  absolue
                     },
                     [new FunctionalModelStructure.ElementStructure([1],[2,5]), // test on/off
@@ -103,12 +103,12 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                             {
                                 1,
                                 new FunctionalModelStructure.DptAndKeywords
-                                    { Keywords = [], Dpt = new DataPointType(1) }
+                                    { Keywords = ["On/Off"], Dpt = new DataPointType(1) }
                             }, //CMD
                             {
                                 2,
                                 new FunctionalModelStructure.DptAndKeywords
-                                    { Keywords = [], Dpt = new DataPointType(1) }
+                                    { Keywords = ["Etat On/off"], Dpt = new DataPointType(1) }
                             } //IE
                         },
                         [new FunctionalModelStructure.ElementStructure([1], [2])]
