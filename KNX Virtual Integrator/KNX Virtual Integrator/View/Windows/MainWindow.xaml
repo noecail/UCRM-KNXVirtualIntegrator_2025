@@ -527,9 +527,11 @@
                                                                                 Height="35"
                                                                                 Margin="0,0,14,0"
                                                                                 Style="{StaticResource ValueBorderLight}">
-                                                                                <TextBlock Text="{Binding Address}"
+                                                                                <TextBox Text="{Binding Address}"
                                                                                     VerticalAlignment="Center"
-                                                                                    TextAlignment="Center"/>
+                                                                                    TextAlignment="Center"
+                                                                                    Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                                    BorderThickness="0"/>
                                                                             </Border>
                                                                         </Border>
                                                                     </DataTemplate>
@@ -650,10 +652,11 @@
                                                                             Height="35"
                                                                             Margin="0,0,14,0"
                                                                             Style="{StaticResource ValueBorderLight}">
-                                                                            <TextBlock Text="{Binding Address}"
+                                                                            <TextBox Text="{Binding Address}"
                                                                                 VerticalAlignment="Center"
                                                                                 TextAlignment="Center"
-                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"/>
+                                                                                Background="{StaticResource OffWhiteBackgroundBrush}"
+                                                                                BorderThickness="0"/>
                                                                         </Border>
                                                                     </Border>
                                                                 </DataTemplate>

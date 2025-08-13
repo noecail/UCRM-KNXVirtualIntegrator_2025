@@ -339,7 +339,6 @@
                             
                             <ListBox Grid.Row="1"
                                      ItemsSource="{Binding Source={StaticResource SortedSelectedStructureDptDictionary}}"
-                                     
                                      Background="{StaticResource OffWhiteBackgroundBrush}"
                                      ScrollViewer.CanContentScroll="False"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
