@@ -172,20 +172,18 @@ public class DataPointType : INotifyPropertyChanged
                 IntValue.Add(new BigIntegerItem(new BigInteger(Value[^1]!.Value)));
         }
     }
-
-    public DataPointType(DataPointType dpt)
+    
+    public DataPointType(DataPointType other)
     {
-        Type = dpt.Type;
+        Address = other.Address;
+        Type = other.Type;
         Value = [];
-        IntValue = [];
-        Address = dpt.Address;
-        GetSizeOf();
-        for (int i = 0; i < dpt.Value.Count; i++)
+        IntValue = new ObservableCollection<BigIntegerItem>(other.IntValue
+            .Select(v => new BigIntegerItem(v.BigIntegerValue ?? 0)));
+        for (int i = 0; i < other.Value.Count; i++)
         {
-            Value.Add(dpt.Value[i]);
-            IntValue.Add(dpt.IntValue[i]);
-        }
-    }
+            Value.Add(other.Value[i] != null ? new GroupValue(other.Value[i]?.Value) : null);
+        }    }
     
     public DataPointType(DataPointType dpt, string address)
     {

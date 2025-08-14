@@ -161,8 +161,7 @@ public class FunctionalModelList : IFunctionalModelList
     /// <param name="index">Index of the model to copy</param>
     public void DuplicateModel(List<FunctionalModel> models, int index)
     {
-        models.Add(models[index]);
-    }
+        models.Add(new FunctionalModel(models[index], models.Count + 1, true));    }
 
     /// <summary>
     /// Adds a personalized model to the dictionary of models.
@@ -185,7 +184,7 @@ public class FunctionalModelList : IFunctionalModelList
     /// <param name="index">Index of the Structure to delete from in the dictionary. </param>
     public void DeleteFromDictionary(int index)
     {
-        if (index > FunctionalModelDictionary.FunctionalModels.Count)
+        if (index >= FunctionalModelDictionary.FunctionalModels.Count)
             return;
         for (var i = FunctionalModelDictionary.FunctionalModels[index].Model.Key; i < FunctionalModelDictionary.FunctionalModels[^1].Model.Key; i++)
             FunctionalModelDictionary.FunctionalModels[i].Model.Key--;
