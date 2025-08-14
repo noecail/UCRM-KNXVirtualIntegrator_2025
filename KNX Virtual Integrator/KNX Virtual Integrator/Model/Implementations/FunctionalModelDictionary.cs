@@ -31,7 +31,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public FunctionalModelDictionary()
         {
             FunctionalModels = [];
-            /*AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
+            AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
                             {
@@ -112,8 +112,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         },
                         [new FunctionalModelStructure.ElementStructure([1], [2])]
                     ), false,["Commute", "Commutation", "Convecteur", "Prise", "Arrosage", "Ouvrant"]
-                );*/
-            ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
+                );
         }
 
         public void AddKeyword(int index, string word)
