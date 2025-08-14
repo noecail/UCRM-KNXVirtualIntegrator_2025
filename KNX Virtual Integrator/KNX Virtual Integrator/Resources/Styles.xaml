@@ -939,7 +939,7 @@
         <Setter Property="BorderThickness" Value="1" />
         <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}" />
         <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}" />
-        <Setter Property="Margin" Value="0,5,0,0" />
+        <Setter Property="Margin" Value="0,2,0,0" />
     </Style>
 
     <Style x:Key="StandardListBoxDark" TargetType="ListBox">
@@ -1135,6 +1135,7 @@
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Border" Property="Background"
                                     Value="{StaticResource LightGrayBackgroundBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
                             <!-- Gris clair à la sélection -->
                             <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,1" />
                             <!-- Contour noir à la sélection -->
@@ -1342,7 +1343,7 @@
         <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" /> <!-- Adjust border thickness here -->
-        <Setter Property="Padding" Value="5,3" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource LightComboBoxItemStyle}" />
         <Setter Property="Template" Value="{StaticResource ComboBoxTemplateLight}" />
     </Style>

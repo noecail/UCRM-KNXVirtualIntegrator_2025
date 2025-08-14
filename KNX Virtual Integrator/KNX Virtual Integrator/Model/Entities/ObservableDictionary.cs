@@ -49,17 +49,18 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
     {
         OnPropertyChanged(nameof(Count));
         OnPropertyChanged("Item[]");
-        OnCollectionChanged(new NotifyCollectionChangedEventArgs(
-            NotifyCollectionChangedAction.Add,
-            new KeyValuePair<TKey, TValue>(key, value)
-        ));
+        OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, new KeyValuePair<TKey, TValue>(key, value)));
     }
 
-    private void NotifyRemove(TKey key, TValue value)
+    private void NotifyRemove(TKey key, TValue value, int index)
     {
         OnPropertyChanged(nameof(Count));
         OnPropertyChanged("Item[]");
-        NotifyReset();
+        OnCollectionChanged(new NotifyCollectionChangedEventArgs(
+            NotifyCollectionChangedAction.Remove,
+            new KeyValuePair<TKey, TValue>(key, value),
+            index
+        ));
     }
 
     private void NotifyReset()
@@ -79,9 +80,12 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
 
     public bool Remove(TKey key)
     {
+        var keysList = new List<TKey>(Keys);
+        keysList.Sort();
+        var index = keysList.IndexOf(key);
         if (_dictionary.TryGetValue(key, out var value) && _dictionary.Remove(key))
         {
-            NotifyRemove(key, value);
+            NotifyRemove(key, value, index);
             return true;
         }
         return false;

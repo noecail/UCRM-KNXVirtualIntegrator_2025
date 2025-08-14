@@ -21,7 +21,8 @@
     
     <!--Main Window-->
         <!--Bandeau supérieur-->
-    <sys:String x:Key="ImportButton">Importer un nouveau projet</sys:String>
+    <sys:String x:Key="ImportXmlButton">Importer les adresses</sys:String>
+    <sys:String x:Key="ImportButton">Importer un projet</sys:String>
     <sys:String x:Key="TestButton">Paramètres de test</sys:String>
     <sys:String x:Key="ExportButton">Exporter le rapport</sys:String>
         <!--Colonne 1-->
@@ -37,7 +38,7 @@
     <sys:String x:Key="Name:">Nom :</sys:String>
             <!-- Element à Tester-->
     <sys:String x:Key="TestedElement">Élément à tester</sys:String>
-    <sys:String x:Key="DptType">Type de DPT :</sys:String>
+    <sys:String x:Key="DptType">DPT :</sys:String>
     <sys:String x:Key="LinkedAddress">Adresse liée :</sys:String>
     <sys:String x:Key="Values">Valeurs :</sys:String>
     <sys:String x:Key="Dispatch(es)">Envoi(s)</sys:String>

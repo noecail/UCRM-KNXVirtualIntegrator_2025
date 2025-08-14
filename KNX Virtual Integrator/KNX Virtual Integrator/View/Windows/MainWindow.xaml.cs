@@ -78,6 +78,8 @@ public partial class MainWindow
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
             NameTextBlock.Style= (Style)FindResource("StandardTextBlockLight");
+            GroupAddressTreeView.Style = (Style)FindResource("TreeViewLight");
+            GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemLight");
             
             titleStyles = (Style)FindResource("TitleTextLight");
             borderStyles = (Style)FindResource("BorderLight");
@@ -86,12 +88,13 @@ public partial class MainWindow
             boxItemStyle = (Style)FindResource("ModelListBoxItemStyleLight");
             supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleLight");
             backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
-
         }
         else
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
             NameTextBlock.Style= (Style)FindResource("StandardTextBlockDark");
+            GroupAddressTreeView.Style = (Style)FindResource("TreeViewDark");
+            GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemDark");
             
             titleStyles = (Style)FindResource("TitleTextDark");
             borderStyles = (Style)FindResource("BorderDark");
@@ -105,6 +108,9 @@ public partial class MainWindow
         }
         
         Background = backgrounds;
+        StructuresBox.Background = backgrounds;
+        ModelsBox.Background = backgrounds;
+        
         StructBibTitleText.Style = titleStyles;
         BorderDefStructTitleText.Style = titleStyles;
         BorderModelsTitleText.Style = titleStyles;
@@ -121,6 +127,7 @@ public partial class MainWindow
         BorderAddModel.Style = borderStyles;
         BorderModelBib.Style = borderStyles;
         BorderStructBib.Style = borderStyles;
+        AdressTitleBorder.Style = borderTitleStyles;
         
         
         SearchDefStructButton.Style = searchbuttonStyle;
@@ -137,7 +144,8 @@ public partial class MainWindow
     {
         if (_viewModel.AppSettings.AppLang == "FR")
         {
-            Resources["ImportButton"] = "Importer un nouveau projet";
+            Resources["ImportButton"] = "Importer un projet";
+            Resources["ImportXmlButton"] = "Importer les adresses";
             Resources["TestButton"] = "Paramètres de test";
             Resources["ExportButton"] = "Exporter le rapport";
             
@@ -163,6 +171,7 @@ public partial class MainWindow
         else
         {
             Resources["ImportButton"] = "Import new project";
+            Resources["ImportXmlButton"] = "Importer addresses";
             Resources["TestButton"] = "Test parameters";
             Resources["ExportButton"] = "Export test report";
             
@@ -800,24 +809,6 @@ public partial class MainWindow
         if (parentObject == null) return null;
         if (parentObject is T parent) return parent;
         return FindParent<T>(parentObject);
-    }
-
-    /// <summary>
-    /// Currently used to display the SelectedModel in the console
-    /// Delete later
-    /// </summary>
-    private void SaveModelButtonClick(object sender, RoutedEventArgs e)
-    {
-        _viewModel.SelectedModelConsoleWriteCommand.Execute(null);
-    }
-
-    /// <summary>
-    /// Currently used to display all the models in the console
-    /// Delete later
-    /// </summary>
-    private void FilterModelButtonClick(object sender, RoutedEventArgs e)
-    {
-        _viewModel.AllModelsConsoleWriteCommand.Execute(null);
     }
     
     
