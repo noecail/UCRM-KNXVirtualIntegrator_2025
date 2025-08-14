@@ -1,5 +1,7 @@
 using System.Collections.ObjectModel;
 using System.Xml;
+using Knx.Falcon;
+using Org.BouncyCastle.Math;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 
@@ -78,6 +80,49 @@ public class FunctionalModelStructure
         DptDictionary = [];
     }
 
+    private List<string> _keywords = [];
+
+    public List<string> Keywords
+    {
+        get => _keywords;
+        set
+        {
+            UpdateKeywordList();
+            _keywords = value; 
+                
+        }
+    }
+
+    private string _allKeywords = "";
+    public string AllKeywords
+    {
+        get=>_allKeywords;
+        set
+        {
+            _allKeywords = value;
+            UpdateKeywords();
+        }
+    }
+
+    /// <summary>
+    /// Takes a string, and puts all the keywords inside it into the keywords associated
+    /// </summary>
+    /// <param name="keywordList">String containing all the keywords separated with commas</param>
+    private void UpdateKeywords()
+    {
+        Keywords = AllKeywords.Split(',').ToList();
+    }
+        
+    /// <summary>
+    /// Takes all the keywords associated to a dpt and group them, separating them with commas
+    /// </summary>
+    private void UpdateKeywordList()
+    {
+        if (Keywords == null)
+            return;
+        if (Keywords.Count > 0)
+            AllKeywords = string.Join(',', Keywords);
+    }
     public FunctionalModelStructure(FunctionalModel model, int myKey)
     {
         Model = new FunctionalModel(model,myKey,false);
@@ -343,64 +388,72 @@ public class FunctionalModelStructure
                 foreach (XmlNode element in dicoOrModelStructure.ChildNodes)
                 {
                     ElementStructure elementStructure = new ElementStructure();
-                    foreach (XmlNode xElement in element.ChildNodes)
+                    var cmdList = new List<int>();
+                    var ieList = new List<int>();
+                    foreach (XmlNode keyList in element.ChildNodes)
                     {
-                        var cmdList = new List<int>();
-                        var ieList = new List<int>();
-
-                        foreach (XmlNode keyList in xElement.ChildNodes)
+                        if (keyList.Name == "Command" && keyList.Attributes != null)
                         {
-                            if (keyList.Name == "Command")
+                            var list = keyList.Attributes;
+                            foreach (XmlAttribute cmd in keyList.Attributes)
                             {
-                                foreach (XmlNode cmd in keyList.ChildNodes)
-                                {
-                                    cmdList.Add(int.Parse(cmd.Attributes?["Key"]?.Value ?? ""));
-                                }
-                            }
+                                var indexStr = cmd.Name.Substring("Key_".Length); //Takes the index of the key
+                                var index = int.Parse(indexStr);
 
-                            if (keyList.Name == "State_information")
-                            {
-                                foreach (XmlNode ie in keyList.ChildNodes)
-                                {
-                                    ieList.Add(int.Parse(ie.Attributes?["Key"]?.Value ?? ""));
-                                }
+                                while (cmdList.Count <= index)  //Ensures that the list is big enough
+                                    cmdList.Add(0);
+
+                                cmdList[index] = int.Parse(cmd.Value); //Updates the key at the given index
                             }
                         }
 
-                        elementStructure.Cmd = cmdList;
-                        elementStructure.Ie = ieList;
-                    }
+                        if (keyList.Name == "State_information" && keyList.Attributes != null)
+                        {
+                            foreach (XmlAttribute ie in keyList.Attributes)
+                            {
+                                var indexStr = ie.Name.Substring("Key_".Length); //Takes the index of the key
+                                var index = int.Parse(indexStr);
 
+                                while (ieList.Count <= index) //Ensures that the list is big enough
+                                    ieList.Add(0);
+
+                                ieList[index] = int.Parse(ie.Value); //Updates the key at the given index
+                            }
+                        }
+                    }
+                    elementStructure.Cmd = cmdList;
+                    elementStructure.Ie = ieList;
                     res.ModelStructure.Add(elementStructure);
                 }
             } else if (dicoOrModelStructure.Name == "Dictionary")
             {
-                res.DptDictionary = [];
+                res.DptDictionary = new ObservableDictionary<int, DptAndKeywords>();
                 foreach (XmlNode xPair in dicoOrModelStructure.ChildNodes)
                 {
                     var key = int.Parse(xPair.Attributes?["Key"]?.Value ?? "");
                     var pair = new DptAndKeywords();
                     pair.Dpt = new DataPointType();
+                    pair.Keywords = [];
                     foreach (XmlNode xDptAndKeywords in xPair.ChildNodes)
                     {
+                        pair.Dpt.Type = int.Parse(xDptAndKeywords.Attributes?["Type"]?.Value ?? "0");
                         foreach (XmlNode xTypesOrKeywordsOrValues in xDptAndKeywords.ChildNodes)
                         {
-                            if (xTypesOrKeywordsOrValues.Name == "Type")
+                            if (xTypesOrKeywordsOrValues.Name == "Keywords")
                             {
-                                pair.Dpt.Type = int.Parse(xTypesOrKeywordsOrValues.Attributes?["Value"]?.Value ?? "0");
-                            } else if (xTypesOrKeywordsOrValues.Name == "Keywords")
-                            {
-                                foreach (XmlNode xKeyword in xTypesOrKeywordsOrValues.ChildNodes)
-                                {
-                                    pair.Keywords?.Add(xKeyword.Attributes?["Keyword"]?.Value ?? ""); //Then  have to be checked 
-                                }
+                                if (xTypesOrKeywordsOrValues.Attributes!=null)
+                                    foreach (XmlAttribute xKeyword in xTypesOrKeywordsOrValues.Attributes)
+                                    {
+                                        pair.Keywords?.Add(xKeyword.Value); //Then  have to be checked 
+                                    }
                                 
                             } else if (xTypesOrKeywordsOrValues.Name == "Values")
                             {
-                                foreach (XmlNode xValue in xTypesOrKeywordsOrValues.ChildNodes)
-                                {
-                                    pair.Keywords?.Add(xValue.Attributes?["Value"]?.Value ?? ""); //Then  have to be checked 
-                                }
+                                if(xTypesOrKeywordsOrValues.Attributes!=null)
+                                    foreach (XmlAttribute xValue in xTypesOrKeywordsOrValues.Attributes)
+                                    {
+                                        pair.Dpt.IntValue.Add(new DataPointType.BigIntegerItem(int.Parse(xValue.Value))); //Then  have to be checked 
+                                    }
                             }
                         }
                     }
@@ -424,15 +477,17 @@ public class FunctionalModelStructure
                 var xElement = doc.CreateElement("Element_to_test");
                 var xCmd = doc.CreateElement("Command");
                 var xIe = doc.CreateElement("State_information");
-                foreach (var cmd in element.Cmd)
+                for (var i = 0;i<element.Cmd.Count;i++)
                 {
-                    var key = doc.CreateAttribute("Key");
+                    var cmd = element.Cmd[i];
+                    var key = doc.CreateAttribute("Key_"+i);
                     key.Value = cmd.ToString();
                     xCmd.Attributes.Append(key);
                 }
-                foreach (var ie in element.Ie)
+                for (var i = 0; i < element.Ie.Count;i++)
                 {
-                    var key = doc.CreateAttribute("Key");
+                    var ie = element.Ie[i];
+                    var key = doc.CreateAttribute("Key_"+i);
                     key.Value = ie.ToString();
                     xIe.Attributes.Append(key);
                 }
@@ -452,20 +507,28 @@ public class FunctionalModelStructure
                 var xDptKeywords = doc.CreateElement("Keywords");
                 var xDptValues = doc.CreateElement("Values");
 
-                foreach (var keyword in element.Value.Keywords)
+                if (element.Value.Keywords.Count > 0)
                 {
-                    var xKeyword  = doc.CreateElement("Keyword");
-                    xKeyword.Value = keyword;
-                    xDptValues.AppendChild(xKeyword);
+                    foreach (var keyword in element.Value.Keywords)
+                    {
+                        var xKeyword = doc.CreateAttribute("Keyword");
+                        xKeyword.Value = keyword;
+                        xDptKeywords.Attributes.Append(xKeyword);
+                    }
                 }
-                foreach (var value in element.Value.Dpt.Value)
+
+                if (element.Value.Dpt.Value.Count > 0)
                 {
-                    var xValue  = doc.CreateElement("Value");
-                    xValue.Value = value?.ToString();
-                    xDptValues.AppendChild(xValue);
+                    foreach (var value in element.Value.Dpt.Value)
+                    {
+                        var xValue = doc.CreateAttribute("Value");
+                        xValue.Value = value?.ToString();
+                        xDptValues.Attributes.Append(xValue);
+                    }
                 }
-                
-                xDptAndKeywords.AppendChild(xDptType);
+
+                xDptType.Value = element.Value.Dpt.Type.ToString();
+                xDptAndKeywords.Attributes.Append(xDptType);
                 xDptAndKeywords.AppendChild(xDptKeywords);
                 xDptAndKeywords.AppendChild(xDptValues);
                 xPair.AppendChild(xDptAndKeywords);

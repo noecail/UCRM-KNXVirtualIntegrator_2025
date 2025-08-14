@@ -19,6 +19,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     public readonly List<XElement> IeAddressesSet = new();
 
     private int _groupAddressStructure;
+    
+    
 
     public string[] Prefixes { get; set; } = { "Cmd", "Command", "Control", "Do","on/off", "Variations", "Montee/Descente", "Position", "Valeurs" }; //Initialize the keywords for command
 
@@ -73,15 +75,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         if (null == ns || doc == null)
             return;
         var groupAddresses = doc.Descendants(ns + "GroupRanges");
-        //Console.Writeline(groupAddresses.Elements().ToList().Count);
-            //Console.Writeline(i.Name);
-
-       /* if (doc == null) return;
-        var project = doc.Elements();
-        //Console.Writeline("Le doc n'est pas nul, il y a " + project.Elements().ToList()[0] + " enfants de project");
-
-        var modelStructures = project.Elements("GroupAddresses");
-        //Console.Writeline("Le doc n'est pas nul, il y a " + modelStructures.Elements().ToList().Count + " enfants de GroupAddresses");*/
 
         NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);
 
@@ -377,7 +370,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// This method processes group addresses from the XML file, normalizing the names by removing
     /// specific prefixes ("Ie" or "Cmd") and grouping addresses based on the remaining common names.
     ///
-    /// <param name="groupAddressFile">The XML document containing group address data in standard format.</param>
+    /// <param name="modelStructures">The XML document containing group address data in standard format.</param>
+    /// <param name="functionalModelList">The list of lists of functional models.</param>
     /// </summary>
     public void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList)
     {
@@ -401,7 +395,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     List<FunctionalModel>
                         newFunctionalModels =
                             []; // new list to store all the functional model of the next structure
-                    List<string> prefixList = [];
                     if (index != -1) //If the name is recognized
                     {
                         var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
@@ -464,12 +457,16 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 var dptKey = model.FindKeyWithKeywords(prefix);
                                 if (dptKey == -1)
                                 {
+                                    //Console.WriteLine("Error");
+                                    continue;
                                     //Find a way to find which dpt it should be
                                 }
 
                                 var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                 if (modelIndex == -1)
                                 {
+                                    // Console.WriteLine("Error");
+                                    continue;
                                     //Find a way to find in which model it should be
                                 }
 
@@ -516,7 +513,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             }
 
                             var prefix = FindMajorityPrefix(names);
-                            prefixList.Add(prefix);
                             {
                                 for (var j = 0; j < objectType.Count; j++)
                                 {
@@ -625,7 +621,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
 
                                     suffix = FindMajoritySuffix(names);
-                                    prefix = prefix.Replace(suffix, "");
+                                    if (!string.IsNullOrEmpty(suffix))
+                                        prefix = prefix.Replace(suffix, "");
                                 }
 
                                 for (var j = 0; j < objectType.Count; j++)
@@ -662,13 +659,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         if (modelIndex ==
                                             -1) //When the circuit name doesn't exist, maybe take j?? dangerous
                                         {
-                                            //Console.Writeline("We fucked up");
-                                            modelIndex = j;
+                                            Console.WriteLine("ERREUR");
+                                            continue;
                                         }
 
                                         if (modelIndex >= newFunctionalModels.Count)
                                         {
-                                            return;
+                                            Console.WriteLine("ERREUR");
+                                            continue;
                                         }
 
                                         for (var k = 0;
@@ -843,7 +841,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         newFunctionalModel.UpdateIntValue();
                         functionalModelList.AddToList(index, newFunctionalModel, false);
                     }
-
                 }
             }
             else// if (_groupAddressStructure == 2) //Case when Addresses are structured with 2 levels

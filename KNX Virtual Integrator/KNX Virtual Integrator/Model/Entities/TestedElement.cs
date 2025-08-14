@@ -268,21 +268,29 @@ namespace KNX_Virtual_Integrator.Model.Entities
         
         public void AddDptToCmd(int type, string address, List<GroupValue?> value)
         {
+            if (TestsCmd == null)
+                TestsCmd = new ObservableCollection<DataPointType>();
             TestsCmd.Add(new DataPointType(type, address, value));
         }
         
         public void AddDptToCmd(int type, string address, string name, List<GroupValue?> value)
         {
+            if (TestsIe == null)
+                TestsIe = new ObservableCollection<DataPointType>();
             TestsCmd.Add(new DataPointType(type, address, value, name));
         }
         
         public void AddDptToCmd(DataPointType dpt)
         {
+            if (TestsCmd == null)
+                TestsCmd = new ObservableCollection<DataPointType>();
             TestsCmd.Add(dpt);
         }
         
         public void AddDptToIe(int type, string address, List<GroupValue?> value)
         {
+            if (TestsIe == null)
+                TestsIe = new ObservableCollection<DataPointType>();
             TestsIe.Add(new DataPointType(type, address, value));
             UpdateRemoveTestButtonVisibility();
         }

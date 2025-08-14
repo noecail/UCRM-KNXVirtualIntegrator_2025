@@ -14,7 +14,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
     {
         private ObservableCollection<FunctionalModelStructure> _functionalModels =[];
         
-        private List<List<string>> _keywordsDictionary = [];
         
         private int _nbStructuresCreated ;
 
@@ -32,7 +31,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public FunctionalModelDictionary()
         {
             FunctionalModels = [];
-            AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
+            /*AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
                             {
@@ -43,7 +42,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                             } //IE
                         },
                         [new FunctionalModelStructure.ElementStructure([1],[2])]
-                    ),false
+                    ),false,["Lumiere on/off", "Lumiere on-off", "Lumiere on_off", "Light on/off", "Eclairage_Simple"]
                 );  //Adding On/Off light functional model
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_Variation",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
@@ -68,7 +67,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                             new FunctionalModelStructure.ElementStructure([3],[2,2,5]), //test relative command
                             new FunctionalModelStructure.ElementStructure([4],[2,2,5]) //test absolute command
                         ]
-                    ),false
+                    ),false, ["Lumiere variation", "variation", "Lumiere_variation", "Light variation", "Eclairages_variable"]
                 );
             
             
@@ -95,7 +94,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         new FunctionalModelStructure.ElementStructure([1,3],[2,2,5]), //test stop
                         new FunctionalModelStructure.ElementStructure([4],[2,2,5]) //test absolute command
                     ]
-                ),false
+                ),false, ["stre", "blind", "Volets_roulants"]
             );
             AddFunctionalModel(new FunctionalModelStructure("Commutation",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
@@ -112,38 +111,14 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                             } //IE
                         },
                         [new FunctionalModelStructure.ElementStructure([1], [2])]
-                    ), false
-                );
-
-                AddKeyword(0, "Lumiere on/off");
-                AddKeyword(0, "Lumiere on-off");
-                AddKeyword(0, "Lumiere on_off");
-                AddKeyword(0, "Light on/off");
-                AddKeyword(0, "Eclairage_Simple");
-
-                AddKeyword(1, "Lumiere variation");
-                AddKeyword(1, "variation");
-                AddKeyword(1, "Lumiere_variation");
-                AddKeyword(1, "Light variation");
-                AddKeyword(1, "Eclairages_variable");
-
-                AddKeyword(2, "store");
-                AddKeyword(2, "blind");
-                AddKeyword(2, "Volet_roulant");
-                AddKeyword(2, "Volets_roulants");
-
-                AddKeyword(3, "Commute");
-                AddKeyword(3, "Commutation");
-                AddKeyword(3, "Convecteur");
-                AddKeyword(3, "Prise");
-                AddKeyword(3, "Arrosage");
-                AddKeyword(3, "Ouvrant");
-
+                    ), false,["Commute", "Commutation", "Convecteur", "Prise", "Arrosage", "Ouvrant"]
+                );*/
+            ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
         }
 
         public void AddKeyword(int index, string word)
         {
-            _keywordsDictionary[index].Add(word.ToLower());
+            FunctionalModels[index].Keywords.Add(word.ToLower());
         }
         
         public FunctionalModelDictionary(string path)
@@ -157,7 +132,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported)
         {
             var newModel = new FunctionalModelStructure(functionalModel);
-            _keywordsDictionary.Add([]);
             _nbStructuresCreated++;
             if (newModel.Model.Name == "New_Structure")
                 newModel.Model.Name += "_" + _nbStructuresCreated;
@@ -171,6 +145,31 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             OnPropertyChanged(nameof(FunctionalModels));
             
         }
+
+        public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported, List<string> keywords)
+        {
+            var newModel = new FunctionalModelStructure(functionalModel);
+            foreach (var keyword in keywords)
+            {
+                newModel.Keywords.Add(keyword);
+                newModel.Keywords.Add(keyword.Replace(' ','_'));
+                newModel.Keywords.Add(keyword.Replace('_',' '));
+            }
+
+            _nbStructuresCreated++;
+            if (newModel.Model.Name == "New_Structure")
+                newModel.Model.Name += "_" + _nbStructuresCreated;
+            else if (!functionalModel.Model.Name.Contains("Structure"))
+                newModel.Model.Name += "_Structure";
+            if (imported == false)
+                newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name);
+            newModel.Model.Key = FunctionalModels.Count + 1;
+
+            FunctionalModels.Add(newModel);
+            OnPropertyChanged(nameof(FunctionalModels));
+            Console.WriteLine(FunctionalModels[0].AllKeywords);
+
+    }
 
         public void RemoveFunctionalModel(int index)
         {
@@ -200,7 +199,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 var functionalModel = model.ExportFunctionalModelStructure(doc);
                 var keywords = doc.CreateElement("Keywords");
-                foreach (var keyword in _keywordsDictionary[model.Model.Key - 1])
+                foreach (var keyword in model.Keywords)
                 {
                     var xKeyword = doc.CreateElement("Keyword");
                     xKeyword.InnerText = keyword;
@@ -222,7 +221,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void ImportDictionary(string path)
         {
             FunctionalModels.Clear();
-            _keywordsDictionary.Clear();
+            foreach (var functionalModel in FunctionalModels)
+            {
+                functionalModel.Keywords =[];
+            }
             var doc = new XmlDocument();
             doc.Load(path);
             var xnList = doc.DocumentElement?.ChildNodes;
@@ -232,15 +234,14 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 var model = xnList[i];
                 if (model != null){
-                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model),false);
-                    _keywordsDictionary.Add([]);
-                    foreach (XmlNode element in model?.ChildNodes!)
+                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model),true);
+                    foreach (XmlNode element in model.ChildNodes!)
                     {
                         if (element.Name == "Keywords")
                         {
                             foreach (XmlNode keyword in element.ChildNodes)
                             {
-                                _keywordsDictionary[i].Add(keyword.InnerText);
+                                FunctionalModels[i].Keywords.Add(keyword.InnerText);
                             }
                         }
                     }
@@ -276,13 +277,14 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public int CheckName(string name)
         {
             var result = -1;
-            foreach (var list in _keywordsDictionary)
+            for (var i = 0;i<FunctionalModels.Count;i++)
             {
-                foreach (var keyword in list)
+                var model = FunctionalModels[i];
+                foreach (var keyword in model.Keywords)
                 {
-                    if (name.ToLower().Contains(keyword))
+                    if (name.Contains(keyword,StringComparison.OrdinalIgnoreCase))
                     {
-                        result = _keywordsDictionary.IndexOf(list);
+                        result = i;
                         return result;
                     }
                 }
