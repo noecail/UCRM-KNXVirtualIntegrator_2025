@@ -898,15 +898,27 @@ public partial class MainWindow
             Margin = new Thickness(0, 0, 5, 0),
             Source = drawingImage
         };
-        var text = new TextBlock
+        var textName = new TextBlock
         {
             Text = ((XElement)xmlNode).Attribute("Name")?.Value,
             FontSize = 12
         };
+        var text = ((XElement)xmlNode).Attribute("Address") is not null? " - " + ((XElement)xmlNode).Attribute("Address")?.Value : "";
+        var textAddress = new TextBlock
+        {
+            Text = text,
+            FontSize = 12
+        };
+        text = ((XElement)xmlNode).Attribute("DPTs") is not null? " - " + ((XElement)xmlNode).Attribute("DPTs")?.Value : "";
+        var textDPTs = new TextBlock
+        {
+            Text = text,
+            FontSize = 12
+        };
         stack.Children.Add(icon);
-        stack.Children.Add(text);
-        //text.Text = " - " + ((XElement)xmlNode).Attribute("Address")?.Value;
-        //stack.Children.Add(text);
+        stack.Children.Add(textName);
+        stack.Children.Add(textAddress);
+        stack.Children.Add(textDPTs);
 
         var treeNode = new TreeViewItem
         {
