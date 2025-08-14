@@ -244,8 +244,21 @@ public partial class StructureEditWindow
         if (item is KeyValuePair<int, FunctionalModelStructure.DptAndKeywords> kvp) // Si c'est un KeyValuePair<int, FunctionalModelStructure.DptAndKeywords>
             _viewModel.RemoveDptFromDictionaryCommand.Execute((kvp.Key,_viewModel.SelectedStructure));
     }
-    
-    
+
+
+    private void PrintDptDictionaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        var dptDico = _viewModel.SelectedStructure?.DptDictionary;
+        if (dptDico == null) return;
+        foreach (var kvp in dptDico)
+        {
+            Console.WriteLine("--------------------------");
+            Console.WriteLine("DICO Printing key " + kvp.Key);
+            Console.WriteLine("DICO Printing value.Dpt.Type " + kvp.Value.Dpt.Type);
+            Console.WriteLine("DICO Printing value.Dpt.Name " + kvp.Value.Dpt.Name);
+            Console.WriteLine("--------------------------");
+        }
+    }
     
     
     // Méthode récursive qui remonte les parents d'un objet jusqu'à atteindre le parent du type passé en paramètre

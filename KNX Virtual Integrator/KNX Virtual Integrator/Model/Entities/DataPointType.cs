@@ -133,13 +133,13 @@ public class DataPointType : INotifyPropertyChanged
         GetSizeOf();
     }
 
-    public DataPointType(int type, string address)
+    public DataPointType(int type, string name)
     {
         Type = type;
+        Name = name;
         Value = [new GroupValue(true)];
         IntValue = [new BigIntegerItem(new BigInteger(Value[0]!.Value))];
         GetSizeOf();
-        Address = address;
     }
 
     public DataPointType(int type, string  address, List<GroupValue?> values)

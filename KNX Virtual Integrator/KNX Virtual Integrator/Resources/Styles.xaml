@@ -1046,7 +1046,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsSelected" Value="True">
                             <Setter TargetName="Border" Property="Background"
-                                    Value="{StaticResource LightGrayMouseOverBrush}" />
+                                    Value="{StaticResource WhiteBackgroundBrush}" />
                             <!-- Blanc à la sélection -->
                             <Setter TargetName="Border" Property="BorderThickness" Value="0,0,0,1" />
                             <!-- Contour noir à la sélection -->
@@ -1343,7 +1343,7 @@
         <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}" />
         <Setter Property="BorderBrush" Value="{StaticResource GrayBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" /> <!-- Adjust border thickness here -->
-        <Setter Property="Padding" Value="5,3" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="ItemContainerStyle" Value="{StaticResource LightComboBoxItemStyle}" />
         <Setter Property="Template" Value="{StaticResource ComboBoxTemplateLight}" />
     </Style>

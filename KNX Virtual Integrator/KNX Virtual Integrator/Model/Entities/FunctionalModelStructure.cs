@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Xml;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
@@ -57,8 +58,20 @@ public class FunctionalModelStructure
 
     }
 
-    public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; set; } = [];
+    public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; set; }
 
+    public ObservableCollection<string> DptNames { get; } = new();
+    
+    public static List<int> DefaultDptToChoose { get; } = new List<int>
+    {
+        1,2,23,24,28,31,3,4,5,6,17,18,20,21,25,26,236,238,200,
+        7,8,9,22,201,202,204,207,211,217,234,237,239,244,246,10,11,
+        30,203,205,206,209,223,225,232,240,250,254,215,216,218,248,252,
+        245,212,221,222,224,229,235,242,251,257,274,271,272,19,29,213,
+        219,230,243,255,273,265,267,268,247,266,16,269,277,278,279,280,
+        281,282,283,284,256,270
+    };
+    
     public struct ElementStructure(List<int> cmd, List<int> ie)
     {
         public List<int> Cmd = cmd;
@@ -76,6 +89,7 @@ public class FunctionalModelStructure
         Model = new FunctionalModel(name);
         ModelStructure = [];
         DptDictionary = [];
+        SetUpDptNamesUdpate();
     }
 
     public FunctionalModelStructure(FunctionalModel model, int myKey)
@@ -84,6 +98,7 @@ public class FunctionalModelStructure
         ModelStructure = [];
         int index;
         DptDictionary = [];
+        SetUpDptNamesUdpate();
 
         foreach (var element in  model.ElementList)
         {
@@ -160,6 +175,7 @@ public class FunctionalModelStructure
         ModelStructure = [];
         int index;
         DptDictionary = [];
+        SetUpDptNamesUdpate();
 
         foreach (var element in  model.ElementList)
         {
@@ -236,6 +252,7 @@ public class FunctionalModelStructure
         ObservableCollection<ElementStructure> modelStructure) 
     {
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
+        SetUpDptNamesUdpate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
         Model = BuildFunctionalModel(name);
 
@@ -245,6 +262,7 @@ public class FunctionalModelStructure
     {
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key,false);
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
+        SetUpDptNamesUdpate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
     }
     
@@ -416,96 +434,147 @@ public class FunctionalModelStructure
     
     
      public XmlElement ExportFunctionalModelStructure(XmlDocument doc)
+    {
+        var xModel = doc.CreateElement(Model.Name);
+        var xModelStructure = doc.CreateElement("Model_Structure");
+        foreach (var element in ModelStructure)
         {
-            var xModel = doc.CreateElement(Model.Name);
-            var xModelStructure = doc.CreateElement("Model_Structure");
-            foreach (var element in ModelStructure)
+            var xElement = doc.CreateElement("Element_to_test");
+            var xCmd = doc.CreateElement("Command");
+            var xIe = doc.CreateElement("State_information");
+            foreach (var cmd in element.Cmd)
             {
-                var xElement = doc.CreateElement("Element_to_test");
-                var xCmd = doc.CreateElement("Command");
-                var xIe = doc.CreateElement("State_information");
-                foreach (var cmd in element.Cmd)
-                {
-                    var key = doc.CreateAttribute("Key");
-                    key.Value = cmd.ToString();
-                    xCmd.Attributes.Append(key);
-                }
-                foreach (var ie in element.Ie)
-                {
-                    var key = doc.CreateAttribute("Key");
-                    key.Value = ie.ToString();
-                    xIe.Attributes.Append(key);
-                }
-                xElement.AppendChild(xCmd);
-                xElement.AppendChild(xIe);
-                xModelStructure.AppendChild(xElement);
-
-            }
-            var xDictionary = doc.CreateElement("Dictionary");
-            foreach (var element in DptDictionary)
-            {
-                var xPair = doc.CreateElement("Pair");
                 var key = doc.CreateAttribute("Key");
-                key.Value = element.Key.ToString();
-                var xDptAndKeywords = doc.CreateElement("Dpt");
-                var xDptType = doc.CreateAttribute("Type");
-                var xDptKeywords = doc.CreateElement("Keywords");
-                var xDptValues = doc.CreateElement("Values");
-
-                foreach (var keyword in element.Value.Keywords)
-                {
-                    var xKeyword  = doc.CreateElement("Keyword");
-                    xKeyword.Value = keyword;
-                    xDptValues.AppendChild(xKeyword);
-                }
-                foreach (var value in element.Value.Dpt.Value)
-                {
-                    var xValue  = doc.CreateElement("Value");
-                    xValue.Value = value?.ToString();
-                    xDptValues.AppendChild(xValue);
-                }
-                
-                xDptAndKeywords.AppendChild(xDptType);
-                xDptAndKeywords.AppendChild(xDptKeywords);
-                xDptAndKeywords.AppendChild(xDptValues);
-                xPair.AppendChild(xDptAndKeywords);
-                xPair.Attributes.Append(key);
-                xDictionary.AppendChild(xPair);
+                key.Value = cmd.ToString();
+                xCmd.Attributes.Append(key);
             }
-            xModel.AppendChild(xDictionary);
-            xModel.AppendChild(xModelStructure);
-            return xModel;
-        }
-
-        public override string ToString()
-        {
-              return $"S{Model.Key} | {Model.Name}";
-        }
-
-        public void CreateDpt()
-        {
-            int newKey = 0;
-            if (DptDictionary.Keys.Count != 0)
-                newKey = DptDictionary.Keys.Max() + 1;
-            DptDictionary.Add(newKey,new DptAndKeywords(){Key = newKey,Keywords = new List<string>(),Dpt = new DataPointType(1)});
-        }
-        
-        public void RemoveDpt(int key)
-        {
-            DptDictionary.Remove(key);
-        }
-
-        public int FindKeyWithKeywords(string name)
-        {
-            foreach (var key in DptDictionary.Keys)
+            foreach (var ie in element.Ie)
             {
-                if (DptDictionary[key].Keywords.Any(p =>
-                        name.StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
-                {
-                    return key;
-                }
+                var key = doc.CreateAttribute("Key");
+                key.Value = ie.ToString();
+                xIe.Attributes.Append(key);
             }
-            return -1;
+            xElement.AppendChild(xCmd);
+            xElement.AppendChild(xIe);
+            xModelStructure.AppendChild(xElement);
+
+        }
+        var xDictionary = doc.CreateElement("Dictionary");
+        foreach (var element in DptDictionary)
+        {
+            var xPair = doc.CreateElement("Pair");
+            var key = doc.CreateAttribute("Key");
+            key.Value = element.Key.ToString();
+            var xDptAndKeywords = doc.CreateElement("Dpt");
+            var xDptType = doc.CreateAttribute("Type");
+            var xDptKeywords = doc.CreateElement("Keywords");
+            var xDptValues = doc.CreateElement("Values");
+
+            foreach (var keyword in element.Value.Keywords)
+            {
+                var xKeyword  = doc.CreateElement("Keyword");
+                xKeyword.Value = keyword;
+                xDptValues.AppendChild(xKeyword);
+            }
+            foreach (var value in element.Value.Dpt.Value)
+            {
+                var xValue  = doc.CreateElement("Value");
+                xValue.Value = value?.ToString();
+                xDptValues.AppendChild(xValue);
+            }
+            
+            xDptAndKeywords.AppendChild(xDptType);
+            xDptAndKeywords.AppendChild(xDptKeywords);
+            xDptAndKeywords.AppendChild(xDptValues);
+            xPair.AppendChild(xDptAndKeywords);
+            xPair.Attributes.Append(key);
+            xDictionary.AppendChild(xPair);
+        }
+        xModel.AppendChild(xDictionary);
+        xModel.AppendChild(xModelStructure);
+        return xModel;
+    }
+
+    public override string ToString()
+    {
+          return $"S{Model.Key} | {Model.Name}";
+    }
+
+    public void CreateDpt()
+    {
+        int newKey = 0;
+        if (DptDictionary.Keys.Count != 0)
+            newKey = DptDictionary.Keys.Max() + 1;
+        DptDictionary.Add(newKey,new DptAndKeywords{Key = newKey,Keywords = new List<string>(),Dpt = new DataPointType(1,"DPT Personnalisé " + newKey)});
+    }
+    
+    public void RemoveDpt(int key)
+    {
+        DptDictionary.Remove(key);
+    }
+
+    public int FindKeyWithKeywords(string name)
+    {
+        foreach (var key in DptDictionary.Keys)
+        {
+            if (DptDictionary[key].Keywords.Any(p =>
+                    name.StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
+            {
+                return key;
+            }
+        }
+        return -1;
+    }
+
+    private void SetUpDptNamesUdpate()
+    {
+        // Initialisation
+        foreach (var kv in DptDictionary)
+        {
+            DptNames.Add(kv.Value.Dpt.Name);
+            SubscribeToDpt(kv.Value.Dpt);
         }
 
+        // Gestion des ajouts / suppressions dans le dictionnaire
+        DptDictionary.CollectionChanged += (s, e) =>
+        {
+            if (e.OldItems != null)
+            {
+                foreach (KeyValuePair<int, DptAndKeywords> item in e.OldItems)
+                {
+                    DptNames.Remove(item.Value.Dpt.Name);
+                    UnsubscribeFromDpt(item.Value.Dpt);
+                }
+            }
+            if (e.NewItems != null)
+            {
+                foreach (KeyValuePair<int, DptAndKeywords> item in e.NewItems)
+                {
+                    DptNames.Add(item.Value.Dpt.Name);
+                    SubscribeToDpt(item.Value.Dpt);
+                }
+            }
+        };
+    }
+
+    private void SubscribeToDpt(DataPointType dpt)
+    {
+        dpt.PropertyChanged += OnDptPropertyChanged;
+    }
+
+    private void UnsubscribeFromDpt(DataPointType dpt)
+    {
+        dpt.PropertyChanged -= OnDptPropertyChanged;
+    }
+
+    private void OnDptPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(DataPointType.Name))
+        {
+            // On reconstruit la liste des noms
+            DptNames.Clear();
+            foreach (var kv in DptDictionary)
+                DptNames.Add(kv.Value.Dpt.Name);
+        }
+    }
 }
