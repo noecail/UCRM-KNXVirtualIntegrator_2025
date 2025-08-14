@@ -402,6 +402,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             []; // new list to store all the functional model of the next structure
                     if (index != -1) //If the name is recognized
                     {
+                        Console.WriteLine("I recognized " + functionalModelList.FunctionalModelDictionary.FunctionalModels[index]);
                         var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
                         for (var i = 0; i < structureList.Count; i++) //Takes all the commands
                         {

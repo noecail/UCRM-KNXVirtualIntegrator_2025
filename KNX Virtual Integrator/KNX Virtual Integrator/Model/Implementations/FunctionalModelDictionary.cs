@@ -43,7 +43,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         },
                         [new FunctionalModelStructure.ElementStructure([1],[2])]
                     ),false,["Lumiere on/off", "Lumiere on-off", "Lumiere on_off", "Light on/off", "Eclairage_Simple"]
-                );  //Adding On/Off light functional model
+                );  //Adding On/Off light functional model*/
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_Variation",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
@@ -220,10 +220,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public void ImportDictionary(string path)
         {
             FunctionalModels.Clear();
-            foreach (var functionalModel in FunctionalModels)
-            {
-                functionalModel.Keywords =[];
-            }
             var doc = new XmlDocument();
             doc.Load(path);
             var xnList = doc.DocumentElement?.ChildNodes;

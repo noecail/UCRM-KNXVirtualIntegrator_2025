@@ -68,19 +68,17 @@ namespace KNX_Virtual_Integrator.Model.Entities
             UpdateRemoveTestButtonVisibility();
         } 
         
-        public TestedElement(TestedElement element)
+        public TestedElement(TestedElement other)
         {
-            TestsCmd = []; 
-            TestsIe = [];
-            for (var i = 0; i < element.TestsCmd.Count; i++)
-            {
-                TestsCmd.Add(element.TestsCmd[i]);
-            }
-            for (var i = 0; i < element.TestsIe.Count; i++)
-            {
-                TestsIe.Add(element.TestsIe[i]);
-            }
+            TestsCmd = new ObservableCollection<DataPointType>();
+            foreach (var dpt in other.TestsCmd)
+                TestsCmd.Add(new DataPointType(dpt));
+
+            TestsIe = new ObservableCollection<DataPointType>();
+            foreach (var dpt in other.TestsIe)
+                TestsIe.Add(new DataPointType(dpt));
             UpdateRemoveTestButtonVisibility();
+
         }
 
         /// <summary>
