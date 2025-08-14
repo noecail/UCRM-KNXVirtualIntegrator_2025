@@ -31,9 +31,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// file is chosen or a default file is used. Depending on the file path, it processes the XML
     /// file to extract and group addresses either from a specific format or a standard format.
     /// </summary>
-    public void ExtractGroupAddress(IFunctionalModelList functionalModelList)
+    public XDocument? ExtractGroupAddress(IFunctionalModelList functionalModelList)
     {
-        if (projectFileManager is not { } manager) return;
+        if (projectFileManager is not { } manager) return null;
         
         // Prend le bon fichier xml en fonction de si l'installateur a importé le projet ou un fichier d'adresse de groupe
         var filePath = App.WindowManager != null && App.WindowManager.MainWindow.UserChooseToImportGroupAddressFile
@@ -41,20 +41,21 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             : manager.ZeroXmlPath;
 
         var groupAddressFile = loader.LoadXmlDocument(filePath);
-        if (groupAddressFile == null) return;
+        if (groupAddressFile == null) return null;
         
         namespaceResolver.SetNamespaceFromXml(filePath);
 
-        if (namespaceResolver.GlobalKnxNamespace == null) return;
+        if (namespaceResolver.GlobalKnxNamespace == null) return null;
 
         if (filePath == manager.ZeroXmlPath)
         {
-            NewProcessZeroXmlFile(groupAddressFile, functionalModelList);
+            groupAddressFile = NewProcessZeroXmlFile(groupAddressFile, functionalModelList);
         }
         else
         {
             NewProcessStandardXmlFile(groupAddressFile.Root?.Elements(), functionalModelList);
         }
+        return groupAddressFile;
     }
 
 
@@ -67,16 +68,20 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     ///
     /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
     /// </summary>
-    public void NewProcessZeroXmlFile(XDocument groupAddressFile, IFunctionalModelList functionalModelList)
+    public XDocument? NewProcessZeroXmlFile(XDocument groupAddressFile, IFunctionalModelList functionalModelList)
     {
         var doc = groupAddressFile.Root?.Elements();
         _groupAddressStructure = DetermineGroupAddressStructure0Xml(groupAddressFile);
         var ns = namespaceResolver.GlobalKnxNamespace ?? null;
         if (null == ns || doc == null)
-            return;
+            return null;
         var groupAddresses = doc.Descendants(ns + "GroupRanges");
 
         NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);
+        XDocument document = new XDocument(
+            new XElement("Root", GroupedAddresses)
+        );
+        return document;
 
     }
     

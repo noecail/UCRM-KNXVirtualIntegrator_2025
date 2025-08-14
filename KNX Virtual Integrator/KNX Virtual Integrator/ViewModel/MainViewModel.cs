@@ -6,6 +6,7 @@ using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
+using System.Xml.Linq;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -41,6 +42,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         "IP à distance (NAT)",
         "USB"
     ];
+    
+    public XDocument? GroupAddressFile { get; set; }
 
 
     /* ------------------------------------------------------------------------------------------------
@@ -206,7 +209,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
 
         ExtractGroupAddressCommand =
-            new Commands.RelayCommand<object>(_ => modelManager.GroupAddressManager.ExtractGroupAddress(_functionalModelList)
+            new Commands.RelayCommand<object>(_ => 
+                GroupAddressFile = modelManager.GroupAddressManager.ExtractGroupAddress(_functionalModelList)
             );
 
 
