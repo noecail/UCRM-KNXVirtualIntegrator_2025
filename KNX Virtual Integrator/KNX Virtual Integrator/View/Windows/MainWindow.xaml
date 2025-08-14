@@ -30,26 +30,10 @@
     <Window.Resources>
         <utils:BigIntegerToStringConverter x:Key="BigIntegerConverter"/>
         
-        <Style x:Key="TreeViewLight" TargetType="TreeView">
-            <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
-            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
-        </Style>
-        
-        <Style x:Key="TreeViewDark" TargetType="TreeView">
-            <Setter Property="Background" Value="{StaticResource DarkerGrayBackgroundBrush}"/>
-            <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
-        </Style>
         
         
-        <Style x:Key="TreeViewItemLight" TargetType="TreeViewItem">
-            <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
-            <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}"/>
-        </Style>
         
-        <Style x:Key="TreeViewItemDark" TargetType="TreeViewItem">
-            <Setter Property="Background" Value="{StaticResource DarkerGrayBackgroundBrush}"/>
-            <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
-        </Style>
+        
         
     </Window.Resources>
 
@@ -871,71 +855,9 @@
                             ScrollViewer.VerticalScrollBarVisibility="Visible"
                             ScrollViewer.PanningMode="Both"
                             IsManipulationEnabled="True"
-                            Style="{StaticResource TreeViewLight}"
-                            ItemContainerStyle="{StaticResource TreeViewItemLight}">
-                            <TreeViewItem Header="ECLAIRAGE SIMPLE" IsExpanded="True">
-                                <TreeViewItem Header="ON/OFF" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/1"/>
-                                    <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="1/1/2"/>
-                                    <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="1/1/0"/>
-                                </TreeViewItem>
-                            </TreeViewItem>
-
-                            <TreeViewItem Header="ECLAIRAGE VARIABLE" IsExpanded="True">
-                                <TreeViewItem Header="ON/OFF" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/1"/>
-                                    <TreeViewItem Header="Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/1/2"/>
-                                </TreeViewItem>
-                                <TreeViewItem Header="VARIATIONS" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/1"/>
-                                    <TreeViewItem Header="Cmd_Eclairage_Variations_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="2/3/2"/>
-                                </TreeViewItem>
-                                <TreeViewItem Header="VALEURS VARIATION" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/1"/>
-                                    <TreeViewItem Header="Cmd_Eclairage_Variation_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="2/5/2"/>
-                                </TreeViewItem>
-                            </TreeViewItem>
-
-                            <TreeViewItem Header="COMMANDE PC" IsExpanded="True">
-                                <TreeViewItem Header="ON/OFF PC" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_CommandePc_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="3/1/1"/>
-                                </TreeViewItem>
-                            </TreeViewItem>
-
-                            <TreeViewItem Header="COMMANDE CHAUFFAGE" IsExpanded="True">
-                                <TreeViewItem Header="ON/OFF CHAUFFAGE" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_Chauffage_OnOff_MaisonDupre_RezDeChaussee_Etage_Entree" Tag="4/0/2"/>
-                                </TreeViewItem>
-                            </TreeViewItem>
-
-                            <TreeViewItem Header="VOLET ROULANT" IsExpanded="True">
-                                <TreeViewItem Header="MONTEE/DESCENTE" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_VoletRoulant_MonteeDescente_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/1/1"/>
-                                </TreeViewItem>
-                                <TreeViewItem Header="STOP" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_VoletRoulant_Stop_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="5/3/1"/>
-                                </TreeViewItem>
-                                <TreeViewItem Header="POSITION" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_VoletRoulant_Position_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="5/4/1"/>
-                                </TreeViewItem>
-                            </TreeViewItem>
-
-                            <TreeViewItem Header="COMPTEUR" IsExpanded="True">
-                                <TreeViewItem Header="ENERGIE CHAUFFAGE" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_Compteur_EnergieChauffage_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/3/1"/>
-                                </TreeViewItem>
-                                <TreeViewItem Header="ENERGIE ECLAIRAGES" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_Compteur_EnergieEclairages_MaisonDupre_RezDeChaussee_Etage_Tgbt" Tag="6/4/1"/>
-                                </TreeViewItem>
-                            </TreeViewItem>
-                            <TreeViewItem Header="SCENARIO SALON" IsExpanded="True">
-                                <TreeViewItem Header="ON/OFF ECL SALON" IsExpanded="True">
-                                    <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/1"/>
-                                    <TreeViewItem Header="Cmd_ScenarioSalon_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon" Tag="0/0/2"/>
-                                </TreeViewItem>
-                            </TreeViewItem>
+                            ItemContainerStyle="{StaticResource TreeViewItemStyleLight}"
+                            Background="{StaticResource NoColorBrush}">
                         </TreeView>
-                         
                     </Border>
                 </Grid>
             </Border>
