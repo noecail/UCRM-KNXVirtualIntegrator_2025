@@ -40,6 +40,14 @@ public interface IGroupAddressManager
     void ProcessStandardXmlFile(XDocument groupAddressFile);
 
     /// <summary>
+    /// Processes a list of XElement obtained from a XDocument to get the group addresses and fill the functional models
+    /// </summary>
+    /// <param name="modelStructures"> The list containing all the Xelements with the gorup addresses. </param>
+    /// <param name="functionalModelList"> The list where to put all the recognized models. </param>
+    void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList);
+
+
+    /// <summary>
     /// Determines the level structure of group addresses in an 0 XML document to check for overlaps.
     /// 
     /// This method examines an XML document containing group address ranges and specific group addresses.

@@ -487,31 +487,31 @@ public class FunctionalModelStructure
     
     
      public XmlElement ExportFunctionalModelStructure(XmlDocument doc)
+     {
+        var xModel = doc.CreateElement(Model.Name);
+        var xModelStructure = doc.CreateElement("Model_Structure");
+        foreach (var element in ModelStructure)
         {
-            var xModel = doc.CreateElement(Model.Name);
-            var xModelStructure = doc.CreateElement("Model_Structure");
-            foreach (var element in ModelStructure)
+            var xElement = doc.CreateElement("Element_to_test");
+            var xCmd = doc.CreateElement("Command");
+            var xIe = doc.CreateElement("State_information");
+            for (var i = 0;i<element.Cmd.Count;i++)
             {
-                var xElement = doc.CreateElement("Element_to_test");
-                var xCmd = doc.CreateElement("Command");
-                var xIe = doc.CreateElement("State_information");
-                for (var i = 0;i<element.Cmd.Count;i++)
-                {
-                    var cmd = element.Cmd[i];
-                    var key = doc.CreateAttribute("Key_"+i);
-                    key.Value = cmd.ToString();
-                    xCmd.Attributes.Append(key);
-                }
-                for (var i = 0; i < element.Ie.Count;i++)
-                {
-                    var ie = element.Ie[i];
-                    var key = doc.CreateAttribute("Key_"+i);
-                    key.Value = ie.ToString();
-                    xIe.Attributes.Append(key);
-                }
-                xElement.AppendChild(xCmd);
-                xElement.AppendChild(xIe);
-                xModelStructure.AppendChild(xElement);
+                var cmd = element.Cmd[i];
+                var key = doc.CreateAttribute("Key_"+i);
+                key.Value = cmd.ToString();
+                xCmd.Attributes.Append(key);
+            }
+            for (var i = 0; i < element.Ie.Count;i++)
+            {
+                var ie = element.Ie[i];
+                var key = doc.CreateAttribute("Key_"+i);
+                key.Value = ie.ToString();
+                xIe.Attributes.Append(key);
+            }
+            xElement.AppendChild(xCmd);
+            xElement.AppendChild(xIe);
+            xModelStructure.AppendChild(xElement);
 
         }
         var xDictionary = doc.CreateElement("Dictionary");
@@ -525,38 +525,39 @@ public class FunctionalModelStructure
             var xDptKeywords = doc.CreateElement("Keywords");
             var xDptValues = doc.CreateElement("Values");
 
-                if (element.Value.Keywords.Count > 0)
+            if (element.Value.Keywords.Count > 0)
+            {
+                foreach (var keyword in element.Value.Keywords)
                 {
-                    foreach (var keyword in element.Value.Keywords)
-                    {
-                        var xKeyword = doc.CreateAttribute("Keyword");
-                        xKeyword.Value = keyword;
-                        xDptKeywords.Attributes.Append(xKeyword);
-                    }
+                    var xKeyword = doc.CreateAttribute("Keyword");
+                    xKeyword.Value = keyword;
+                    xDptKeywords.Attributes.Append(xKeyword);
                 }
-
-                if (element.Value.Dpt.Value.Count > 0)
-                {
-                    foreach (var value in element.Value.Dpt.Value)
-                    {
-                        var xValue = doc.CreateAttribute("Value");
-                        xValue.Value = value?.ToString();
-                        xDptValues.Attributes.Append(xValue);
-                    }
-                }
-
-                xDptType.Value = element.Value.Dpt.Type.ToString();
-                xDptAndKeywords.Attributes.Append(xDptType);
-                xDptAndKeywords.AppendChild(xDptKeywords);
-                xDptAndKeywords.AppendChild(xDptValues);
-                xPair.AppendChild(xDptAndKeywords);
-                xPair.Attributes.Append(key);
-                xDictionary.AppendChild(xPair);
             }
-            xModel.AppendChild(xDictionary);
-            xModel.AppendChild(xModelStructure);
-            return xModel;
+
+            if (element.Value.Dpt.Value.Count > 0)
+            {
+                foreach (var value in element.Value.Dpt.Value)
+                {
+                    var xValue = doc.CreateAttribute("Value");
+                    xValue.Value = value?.ToString();
+                    xDptValues.Attributes.Append(xValue);
+                }
+            }
+
+            xDptType.Value = element.Value.Dpt.Type.ToString();
+            xDptAndKeywords.Attributes.Append(xDptType);
+            xDptAndKeywords.AppendChild(xDptKeywords);
+            xDptAndKeywords.AppendChild(xDptValues);
+            xPair.AppendChild(xDptAndKeywords);
+            xPair.Attributes.Append(key);
+            xDictionary.AppendChild(xPair);
+            
         }
+        xModel.AppendChild(xDictionary);
+        xModel.AppendChild(xModelStructure);
+        return xModel;
+     }
 
         public override string ToString()
         {
@@ -576,18 +577,23 @@ public class FunctionalModelStructure
         DptDictionary.Remove(key);
     }
 
-        public int FindKeyWithKeywords(string name)
+    /// <summary>
+    /// Finds the key of a dpt in a functional model structure from its name.
+    /// </summary>
+    /// <param name="name"> The name of the dpt. </param>
+    /// <returns>The key of the dpt in the structure. </returns>
+    public int FindKeyWithKeywords(string name)
+    {
+        foreach (var key in DptDictionary.Keys)
         {
-            foreach (var key in DptDictionary.Keys)
+            if (DptDictionary[key].Keywords.Any(p =>
+                    name.StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
             {
-                if (DptDictionary[key].Keywords.Any(p =>
-                        name.StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
-                {
-                    return key;
-                }
+                return key;
             }
-            return -1;
         }
+        return -1;
+    }
 
     private void SetUpDptNamesUdpate()
     {

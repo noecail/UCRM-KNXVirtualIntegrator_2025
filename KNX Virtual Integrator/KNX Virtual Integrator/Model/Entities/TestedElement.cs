@@ -353,6 +353,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
         }
         
+        
         public int GetDptType(string dptName)
         {
             var res = 0;
