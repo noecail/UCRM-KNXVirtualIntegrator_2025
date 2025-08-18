@@ -400,9 +400,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     List<FunctionalModel>
                         newFunctionalModels =
                             []; // new list to store all the functional model of the next structure
+                    List<List<(DataPointType,int)>> unrecognizedDataPoints = [];
                     if (index != -1) //If the name is recognized
                     {
-                        Console.WriteLine("I recognized " + functionalModelList.FunctionalModelDictionary.FunctionalModels[index]);
                         var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
                         for (var i = 0; i < structureList.Count; i++) //Takes all the commands
                         {
@@ -412,9 +412,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             {
                                 names.Add(objectType[j].Attribute("Name")?.Value ?? "");
                             }
-
-                            string suffix = "";
-
+                            
                             var prefix = FindMajorityPrefix(names);
                             if (names.Count == 1)
                             {
@@ -425,7 +423,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         structureList[j].Elements().ToList()[0].Attribute("Name")?.Value ?? "");
                                 }
 
-                                suffix = FindMajoritySuffix(names);
+                                var suffix = FindMajoritySuffix(names);
                                 prefix = prefix.Replace(suffix, "");
                             }
                             for (var j = 0; j < objectType.Count; j++)
@@ -443,10 +441,12 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             circuitName.Split('_')[
                                                 1..]); //Takes the name of the object, except the first word 
                                 }
-
-                                if (i == 0)
+                                var dptKey = model.FindKeyWithKeywords(prefix);
+                                var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
+                                if (modelIndex == -1)
                                 {
                                     newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
+                                    unrecognizedDataPoints.Add([]);
                                     for (var k = 0; k < model.ModelStructure.Count; k++)
                                     {
                                         newFunctionalModels[^1].AddElement();
@@ -459,50 +459,34 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             newFunctionalModels[^1].ElementList[^1].TestsIe.Add(new DataPointType());//Adds an ie for every command expected
                                         }
                                     }
+                                    modelIndex = newFunctionalModels.Count - 1;
                                 }
-                                var dptKey = model.FindKeyWithKeywords(prefix);
+                                
+                                
+                                //Add the dpt wherever needed
+                                var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                    .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
+                                var newAddress = objectType[j].Attribute("Address")?.Value!;
+                                var newDpt = new DataPointType(newType, newAddress, [], dptName); //Builds the dpt
+                                
                                 if (dptKey == -1)
                                 {
+                                    unrecognizedDataPoints[modelIndex].Add((newDpt,modelIndex));
                                     //Console.WriteLine("Error");
                                     continue;
                                     //Find a way to find which dpt it should be
                                 }
 
-                                var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                if (modelIndex == -1)
-                                {
-                                    // Console.WriteLine("Error");
-                                    continue;
-                                    //Find a way to find in which model it should be
-                                }
+                                newFunctionalModels[modelIndex].BuildFromStructure(model, newDpt,dptKey);
+                            }
+                        }
 
-                                //Add the dpt wherever needed
-                                var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
-                                    .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
-                                var newAddress = objectType[j].Attribute("Address")?.Value!;
-                                var newDpt = new DataPointType(newType, newAddress, [], dptName);
-                                for (var k = 0; k< model.ModelStructure.Count;k++)
-                                {
-                                    var elementStructure = model.ModelStructure[k];
-                                    for (var l = 0;l< elementStructure.Cmd.Count;l++)
-                                    {
-                                        var cmd =  elementStructure.Cmd[l];
-                                        if (cmd == dptKey)
-                                        {
-                                            newFunctionalModels[modelIndex].ElementList[k].TestsCmd[l]=new DataPointType(newDpt, newAddress);
-
-                                        }
-                                    }
-                                    for (var l = 0;l< elementStructure.Ie.Count;l++)
-                                    {
-                                        var ie =  elementStructure.Ie[l];
-                                        if (ie == dptKey)
-                                        {
-                                            newFunctionalModels[modelIndex].ElementList[k].TestsIe[l]=new DataPointType(newDpt, newAddress);
-                                        }
-                                    }
-                                    
-                                }
+                        for (var i=0;i<unrecognizedDataPoints.Count;i++)
+                        {
+                            var list = unrecognizedDataPoints[i];
+                            foreach (var dpt in list)
+                            {
+                                newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1));
 
                             }
                         }
@@ -519,7 +503,18 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             }
 
                             var prefix = FindMajorityPrefix(names);
+                            if (names.Count == 1)
                             {
+                                names = [];
+                                for (var j = 0; j < structureList.Count; j++)
+                                {
+                                    names.Add(
+                                        structureList[j].Elements().ToList()[0].Attribute("Name")?.Value ?? "");
+                                }
+
+                                var suffix = FindMajoritySuffix(names);
+                                prefix = prefix.Replace(suffix, "");
+                            }                            {
                                 for (var j = 0; j < objectType.Count; j++)
                                 {
                                     var dptName = objectType[j].Attribute("Name")?.Value ?? "";
@@ -540,6 +535,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     {
                                         newFunctionalModels.Add(new FunctionalModel(modelName + "_" + circuitName,
                                             j + 1));
+                                        unrecognizedDataPoints.Add([]);
                                     }
 
                                     var newType = 1;
@@ -607,7 +603,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         {
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {
-
                                 var objectType = structureList[i].Elements().ToList();
                                 List<String> names = [];
                                 for (var j = 0; j < objectType.Count; j++)
@@ -616,7 +611,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 }
 
                                 var prefix = FindMajorityPrefix(names);
-                                var suffix = "";
                                 if (names.Count == 1)
                                 {
                                     names = [];
@@ -626,7 +620,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             structureList[j].Elements().ToList()[0].Attribute("Name")?.Value ?? "");
                                     }
 
-                                    suffix = FindMajoritySuffix(names);
+                                    var suffix = FindMajoritySuffix(names);
                                     if (!string.IsNullOrEmpty(suffix))
                                         prefix = prefix.Replace(suffix, "");
                                 }
@@ -643,7 +637,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                                 StringComparison
                                                     .OrdinalIgnoreCase)) //If the name doesn't start with anything command related nor contains stop, it's an IE
                                     {
-                                        //Console.Writeline(dptName);
                                         var circuitName = dptName;
                                         if (!string.IsNullOrEmpty(circuitName) &&
                                             !string.IsNullOrEmpty(prefix))
@@ -660,19 +653,22 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value!;
                                         var newDpt = new DataPointType(newType, newAddress, [], dptName);
-                                        //Console.Writeline("Le nom du circuit esr : " + circuitName);
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                         if (modelIndex ==
                                             -1) //When the circuit name doesn't exist, maybe take j?? dangerous
                                         {
-                                            Console.WriteLine("ERREUR");
+                                            logger.ConsoleAndLogWriteLine("IE found with a non-existing circuit name");
                                             continue;
-                                        }
-
-                                        if (modelIndex >= newFunctionalModels.Count)
+                                        } 
+                                        
+                                        var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
+                                        var dptKey = model.FindKeyWithKeywords(prefix);
+                                        if (dptKey == -1)
                                         {
-                                            Console.WriteLine("ERREUR");
+                                            unrecognizedDataPoints[modelIndex].Add((newDpt,modelIndex));
+                                            //Console.WriteLine("Error");
                                             continue;
+                                            //Find a way to find which dpt it should be
                                         }
 
                                         for (var k = 0;
@@ -740,7 +736,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 }
 
                                 var prefix = FindMajorityPrefix(names);
-                                var suffix = "";
                                 if (names.Count == 1)
                                 {
                                     names = [];
@@ -750,13 +745,12 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             structureList[j].Elements().ToList()[0].Attribute("Name")?.Value ?? "");
                                     }
 
-                                    suffix = FindMajoritySuffix(names);
+                                    var suffix = FindMajoritySuffix(names);
+                                    prefix = prefix.Replace(suffix, "");
                                 }
 
                                 for (var j = 0; j < objectType.Count; j++)
                                 {
-                                    if (objectType.Count == 1)
-                                        prefix = prefix.Replace(suffix, "");
                                     var dptName = objectType[j].Attribute("Name")?.Value ?? "";
                                     dptName = dptName.Replace(" ", "_");
                                     if (Prefixes.All(p =>
