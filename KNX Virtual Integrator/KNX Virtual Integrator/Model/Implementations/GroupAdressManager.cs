@@ -472,9 +472,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 if (dptKey == -1)
                                 {
                                     unrecognizedDataPoints[modelIndex].Add((newDpt,modelIndex));
-                                    //Console.WriteLine("Error");
                                     continue;
-                                    //Find a way to find which dpt it should be
                                 }
 
                                 newFunctionalModels[modelIndex].BuildFromStructure(model, newDpt,dptKey);
@@ -534,7 +532,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 }
 
                                 var suffix = FindMajoritySuffix(names);
-                                prefix = prefix.Replace(suffix, "");
+                                if (!string.IsNullOrEmpty(suffix))
+                                {
+                                    prefix = prefix.Replace(suffix, "");
+                                }
                             }                            {
                                 for (var j = 0; j < objectType.Count; j++)
                                 {
@@ -543,7 +544,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     var circuitName = dptName;
                                     if (!string.IsNullOrEmpty(circuitName) &&
                                         !string.IsNullOrEmpty(prefix)) // && circuitName.Contains(prefix))
-                                        circuitName = circuitName.Replace(prefix, "");
+                                        circuitName = circuitName.Replace(prefix.Replace(' ','_'), "");
                                     else
                                     {
                                         circuitName =
@@ -553,7 +554,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
 
                                     var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                    if (modelIndex == -1)
+                                    if (modelIndex == -1 && (dptName.Contains("stop",
+                                            StringComparison
+                                                .OrdinalIgnoreCase) ||Prefixes.Any(p =>
+                                            objectType[j].Attribute("Name")?.Value
+                                                .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true) ))
                                     {
                                         newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
                                         unrecognizedDataPoints.Add([]);
@@ -599,8 +604,12 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 }
                             }
                         }
+                        if (newFunctionalModels.Count > 0)
+                        {
+                            index = functionalModelList.FunctionalModelDictionary.HasSameStructure(
+                                newFunctionalModels[0]);
+                        }
 
-                        index = functionalModelList.FunctionalModelDictionary.HasSameStructure(newFunctionalModels[0]);
                         if (index != -1)
                         {
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
@@ -724,7 +733,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
 
                                     var suffix = FindMajoritySuffix(names);
-                                    prefix = prefix.Replace(suffix, "");
+                                    if (!string.IsNullOrEmpty(suffix))
+                                        prefix = prefix.Replace(suffix, "");
                                 }
 
                                 for (var j = 0; j < objectType.Count; j++)
@@ -755,7 +765,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newAddress = objectType[j].Attribute("Address")?.Value!;
                                         var newDpt = new DataPointType(newType, newAddress, []);
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-
                                         if (modelIndex == -1)
                                         {
                                             newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
@@ -772,7 +781,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             if (name == "")
                                                 name = string.Join("_",
                                                     prefix.Replace(circuitName, "").Split(' ')[1..]);
-                                            var nbAppearances = newElement.CmdContains(name);
+                                            var nbAppearances = newElement.CmdContains(circuitName);
                                             if (newType == 0 && nbAppearances != 0)
                                             {
                                                 newType = newElement.GetDptType(name);
@@ -954,8 +963,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         if ( string.IsNullOrEmpty(suffix) || models.Count == 0) return -1;
         for (var i = 0; i < models.Count; i++) // If the suffix is directly in the model name give it
         {
-            if (models[i].Name.Contains(suffix))
+            if (models[i].Name.Contains(suffix, StringComparison.OrdinalIgnoreCase))
+            {
                 return i;
+            }
         }
         for (var i = 0; i < models.Count; i++)//Otherwise check the name of all the DPTs if they contain it
         {

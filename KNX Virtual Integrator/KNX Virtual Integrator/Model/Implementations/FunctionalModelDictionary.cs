@@ -43,7 +43,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         },
                         [new FunctionalModelStructure.ElementStructure([1],[2])]
                     ),false,["Lumiere on/off", "Lumiere on-off", "Lumiere on_off", "Light on/off", "Eclairage_Simple"]
-                );  //Adding On/Off light functional model*/
+                );  //Adding On/Off light functional model
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_Variation",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
@@ -112,7 +112,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         },
                         [new FunctionalModelStructure.ElementStructure([1], [2])]
                     ), false,["Commute", "Commutation", "Convecteur", "Prise", "Arrosage", "Ouvrant"]
-                );
+                );//Adding commutation functional model*/
         }
 
         public void AddKeyword(int index, string word)

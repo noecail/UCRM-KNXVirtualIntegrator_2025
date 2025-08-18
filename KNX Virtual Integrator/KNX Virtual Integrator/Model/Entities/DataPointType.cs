@@ -178,6 +178,7 @@ public class DataPointType : INotifyPropertyChanged
         Address = other.Address;
         Type = other.Type;
         Value = [];
+        Name = other.Name;
         IntValue = new ObservableCollection<BigIntegerItem>(other.IntValue
             .Select(v => new BigIntegerItem(v.BigIntegerValue ?? 0)));
         for (int i = 0; i < other.Value.Count; i++)
