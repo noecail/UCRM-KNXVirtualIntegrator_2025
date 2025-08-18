@@ -22,6 +22,8 @@
         NonActiveWindowTitleBrush="{StaticResource KnxLightGreenBrush}"
         Closing="ClosingStructureEditWindow">
     <Window.Resources>
+        <utils:IndicesToTupleConverter x:Key="IndicesToTupleConverter"/>
+        
         <CollectionViewSource x:Key="SortedSelectedStructureDptDictionary"
                               Source="{Binding SelectedStructure.DptDictionary}">
             <CollectionViewSource.SortDescriptions>
@@ -260,6 +262,7 @@
                                                VerticalAlignment="Center"
                                                Margin="10,0,0,0"/>
                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="{StaticResource NoColorBrush}" VerticalAlignment="Center" Margin="10,0">
+                                        <!--<Button Content="Afficher ModelStructure" Click="PrintModelStructureButtonClick"/>-->
                                         <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
                                         <TextBlock x:Name="TETitleText"
                                                    Style="{StaticResource TitleTextLight}"
@@ -292,13 +295,13 @@
                                 </Grid>
                             </Border>
                             
-                            <Border Grid.Row="1"
-                                    Background="{StaticResource OffWhiteBackgroundBrush}">
-                                <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
+                            <!-- Liste des Éléments à Tester du Modèle Fonctionnel -->
+                            <Border Grid.Row="1" Background="{StaticResource OffWhiteBackgroundBrush}">
                                 <ListBox Name="TestedElementsListBox"
-                                         ItemsSource="{Binding SelectedStructureModel.ElementList, FallbackValue=''}"
+                                         ItemsSource="{Binding SelectedStructure.ModelStructure, FallbackValue=''}"
                                          ItemContainerStyle="{StaticResource TestedElementListListBoxItemContainerStyle}"
-                                         Background="{StaticResource OffWhiteBackgroundBrush}">
+                                         Background="{StaticResource OffWhiteBackgroundBrush}"
+                                         AlternationCount="9999">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             
@@ -322,7 +325,7 @@
                                                                 Style="{StaticResource DeleteStructureButtonStyleLight}"
                                                                 HorizontalAlignment="Right"
                                                                 Height="35"
-                                                                Click="RemoveTestedElementFromStructureButtonClick"
+                                                                Click="RemoveTestedElementFromModelStructureButtonClick"
                                                         />
                                                     </Grid>
                                                     
@@ -351,16 +354,17 @@
                                                                     VerticalAlignment="Center"
                                                                     Margin="2,0,0,0"
                                                                     Style="{StaticResource ResetValueButtonStyle}"
-                                                                    Click="AddDptCmdToElementButtonClick">
+                                                                    Click="AddDptCmdToElementStructureButtonClick">
                                                                     <TextBlock Text="+" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                                 </Button>
                                                             </Border>
                                                         </StackPanel>
                                                         <!--Type de DPT de l'envoi-->
                                                         <ListBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0"
-                                                                 ItemsSource="{Binding TestsCmd}"
+                                                                 ItemsSource="{Binding Cmd}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}"
+                                                                 AlternationCount="9999">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -375,8 +379,8 @@
                                                                             VerticalAlignment="Center"
                                                                             FontSize="10"
                                                                             SelectedIndex="0"
-                                                                            SelectedItem="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                            ItemsSource="{Binding DataContext.SelectedStructure.DptNames, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}">
+                                                                            ItemsSource="{Binding DataContext.SelectedStructure.DptKeys, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"
+                                                                            SelectedItem="{Binding Value, Mode=TwoWay}">
                                                                         </ComboBox>
                                                                         <!--Button to delete the dpt-->
                                                                         <Border Background="{StaticResource OffWhiteBackgroundBrush}">
@@ -386,9 +390,18 @@
                                                                                     VerticalAlignment="Bottom"
                                                                                     Margin="2,0,0,0"
                                                                                     Style="{StaticResource DeactivateValueButtonStyle}"
-                                                                                    Click="RemoveCmdDptFromElementButtonClick">
+                                                                                    Command="{Binding DataContext.RemoveCmdDptFromElementStructureCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                                                                    <Button.CommandParameter>
+                                                                                        <MultiBinding Converter="{StaticResource IndicesToTupleConverter}">
+                                                                                            <!-- Index du ModelStructure -->
+                                                                                            <Binding RelativeSource="{RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor, AncestorLevel=2}" Path="(ItemsControl.AlternationIndex)"/> 
+                                                                                            <!-- Index du Cmd -->
+                                                                                            <Binding RelativeSource="{RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}" Path="(ItemsControl.AlternationIndex)"/>
+                                                                                        </MultiBinding>
+                                                                                    </Button.CommandParameter>
                                                                                     <TextBlock Text="-" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                                                 </Button>
+                                                                                
                                                                             </StackPanel>
                                                                         </Border>
                                                                     </StackPanel>
@@ -406,16 +419,17 @@
                                                                     VerticalAlignment="Center"
                                                                     Margin="2,0,0,0"
                                                                     Style="{StaticResource ResetValueButtonStyle}"
-                                                                    Click="AddDptIeToElementButtonClick">
+                                                                    Click="AddDptIeToElementStructureButtonClick">
                                                                     <TextBlock Text="+" FontSize="8" Margin="0,0,0,1" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                                 </Button>
                                                             </Border>
                                                         </StackPanel>
                                                         <!--Type de DPT à recevoir-->
                                                         <ListBox Grid.Row="1" Grid.Column="2"
-                                                                 ItemsSource="{Binding TestsIe}"
+                                                                 ItemsSource="{Binding Ie}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}">
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}"
+                                                                 AlternationCount="9999">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
                                                                     <StackPanel Orientation="Horizontal" />
@@ -430,8 +444,8 @@
                                                                             VerticalAlignment="Center"
                                                                             FontSize="10"
                                                                             SelectedIndex="0"
-                                                                            SelectedItem="{Binding Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                                            ItemsSource="{Binding DataContext.SelectedStructure.DptNames, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}">
+                                                                            ItemsSource="{Binding DataContext.SelectedStructure.DptKeys, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"
+                                                                            SelectedItem="{Binding Value, Mode=TwoWay}">
                                                                         </ComboBox>
                                                                         <!--Button to delete the dpt-->
                                                                         <Border Background="{StaticResource OffWhiteBackgroundBrush}">
@@ -441,7 +455,15 @@
                                                                                     VerticalAlignment="Bottom"
                                                                                     Margin="2,0,0,0"
                                                                                     Style="{StaticResource DeactivateValueButtonStyle}"
-                                                                                    Click="RemoveIeDptFromElementButtonClick">
+                                                                                    Command="{Binding DataContext.RemoveIeDptFromElementStructureCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                                                                    <Button.CommandParameter>
+                                                                                        <MultiBinding Converter="{StaticResource IndicesToTupleConverter}">
+                                                                                            <!-- Index du ModelStructure -->
+                                                                                            <Binding RelativeSource="{RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor, AncestorLevel=2}" Path="(ItemsControl.AlternationIndex)"/> 
+                                                                                            <!-- Index de l'Ie -->
+                                                                                            <Binding RelativeSource="{RelativeSource AncestorType=ListBoxItem, Mode=FindAncestor}" Path="(ItemsControl.AlternationIndex)"/>
+                                                                                        </MultiBinding>
+                                                                                    </Button.CommandParameter>
                                                                                     <TextBlock Text="-" FontSize="8" Margin="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                                                                 </Button>
                                                                             </StackPanel>
@@ -459,7 +481,7 @@
                             </Border>
                             <!-- Bouton d'ajout d'élément à tester-->
                             <Button Grid.Row="2" HorizontalAlignment="Stretch"
-                                    Click="AddTestedElementToStructureButtonClick"
+                                    Click="AddTestedElementToModelStructureButtonClick"
                                     Style="{StaticResource NewSomethingButtonStyle}"
                                     Tag="{DynamicResource AddTestedElement}"/>
                         </Grid>

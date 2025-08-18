@@ -97,17 +97,21 @@ namespace KNX_Virtual_Integrator.ViewModel
         
         public ICommand RemoveTestedElementFromStructureCommand  { get; private set; }
         
+        public ICommand AddTestedElementToModelStructureCommand  { get; private set; }
+        
+        public ICommand RemoveTestedElementFromModelStructureCommand  { get; private set; }
+        
         public ICommand AddTestToElementCommand { get; private set; }
         
         public ICommand RemoveTestFromElementCommand{ get; private set; }
         
-        public ICommand AddDptCmdToElementCommand {get; private set; }
+        public ICommand AddDptCmdToElementStructureCommand {get; private set; }
 
-        public ICommand AddDptIeToElementCommand {get; private set; }
+        public ICommand AddDptIeToElementStructureCommand {get; private set; }
         
-        public ICommand RemoveCmdDptFromElementCommand  { get; private set; }
+        public AsyncRelayCommand<Tuple<int,int>> RemoveCmdDptFromElementStructureCommand  { get; private set; }
 
-        public ICommand RemoveIeDptFromElementCommand  { get; private set; }
+        public AsyncRelayCommand<Tuple<int,int>> RemoveIeDptFromElementStructureCommand  { get; private set; }
         
         public ICommand AddFunctionalModelToListCommand { get; private set; }
             

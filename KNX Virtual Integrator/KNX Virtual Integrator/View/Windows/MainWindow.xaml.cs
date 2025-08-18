@@ -161,7 +161,7 @@ public partial class MainWindow
         if (_viewModel.AppSettings.AppLang == "FR")
         {
             Resources["ImportButton"] = "Importer un projet";
-            Resources["ImportXmlButton"] = "Importer les adresses";
+            Resources["ImportXmlButton"] = "Importer des adresses";
             Resources["TestButton"] = "Paramètres de test";
             Resources["ExportButton"] = "Exporter le rapport";
             
