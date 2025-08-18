@@ -1455,5 +1455,267 @@
         <Setter Property="BorderThickness" Value="1"/>
     </Style>
     
+    <!-- ________________________________________ TreeView __________________________________________________________________ -->
+    
+    <Style x:Key="TreeViewItemFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Rectangle/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <PathGeometry x:Key="TreeArrow" Figures="M0,0 L0,6 L6,0 z"/>
+
+    <!-- Style Toggle Clair et Sombre -->
+    <Style x:Key="ExpandCollapseToggleStyleDark" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Width="16" Height="16" Background="Transparent" Padding="5,5,5,5">
+                        <Path x:Name="ExpandPath" Fill="Transparent" Stroke="{StaticResource WhiteBrush}"
+                              Data="{StaticResource TreeArrow}">
+                            <Path.RenderTransform>
+                                <RotateTransform Angle="135" CenterX="3" CenterY="3" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Stroke" TargetName="ExpandPath" Value="{StaticResource WhiteBrush}" />
+                            <Setter Property="Fill" TargetName="ExpandPath" Value="{StaticResource BlueBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="RenderTransform" TargetName="ExpandPath">
+                                <Setter.Value>
+                                    <RotateTransform Angle="180" CenterX="3" CenterY="3" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Fill" TargetName="ExpandPath" Value="{StaticResource WhiteBrush}" />
+                            <Setter Property="Stroke" TargetName="ExpandPath" Value="{StaticResource WhiteBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="ExpandCollapseToggleStyleLight" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Focusable" Value="False" />
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border Width="16" Height="16" Background="Transparent" Padding="5,5,5,5">
+                        <Path x:Name="ExpandPath" Fill="Transparent" Stroke="{StaticResource BlackBrush}"
+                              Data="{StaticResource TreeArrow}">
+                            <Path.RenderTransform>
+                                <RotateTransform Angle="135" CenterX="3" CenterY="3" />
+                            </Path.RenderTransform>
+                        </Path>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Stroke" TargetName="ExpandPath" Value="{StaticResource BlackBrush}" />
+                            <Setter Property="Fill" TargetName="ExpandPath" Value="{StaticResource BlueBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="RenderTransform" TargetName="ExpandPath">
+                                <Setter.Value>
+                                    <RotateTransform Angle="180" CenterX="3" CenterY="3" />
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Fill" TargetName="ExpandPath" Value="{StaticResource BlackBrush}" />
+                            <Setter Property="Stroke" TargetName="ExpandPath" Value="{StaticResource BlackBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Style arbres Clair et Sombre -->
+    <Style x:Key="TreeViewItemStyleLight" TargetType="TreeViewItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource LightForegroundBrush}" />
+        <Setter Property="Padding" Value="2,2,5,2" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="19" Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <!-- Border for full row selection -->
+                        <Border x:Name="BdFullRow" Grid.ColumnSpan="3" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" Visibility="Collapsed" />
+
+                        <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyleLight}"
+                                      ClickMode="Press"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                        <Border x:Name="Bd" SnapsToDevicePixels="true" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}"
+                                Grid.Column="1">
+                            <ContentPresenter x:Name="PART_Header"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              ContentSource="Header" />
+                        </Border>
+
+                        <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="false">
+                            <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter Property="Visibility" TargetName="Expander" Value="Hidden" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Visibility" TargetName="BdFullRow" Value="Visible" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="HasItems" Value="False" />
+                                <Condition Property="IsSelected" Value="True" />
+                            </MultiTrigger.Conditions>
+                            <Setter Property="Foreground" Value="White" />
+                        </MultiTrigger>
+                        <DataTrigger Binding="{Binding Path=HasItems, RelativeSource={RelativeSource Self}}"
+                                     Value="False">
+                            <Setter Property="Background" TargetName="BdFullRow"
+                                    Value="{StaticResource LightGrayBackgroundBrush}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=HasItems}"
+                                     Value="True">
+                            <Setter Property="Background" TargetName="BdFullRow"
+                                    Value="{StaticResource LightGrayBackgroundBrush}" />
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="VirtualizingStackPanel.IsVirtualizing" Value="true">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+        <Style.Resources>
+            <!-- Définir le Trigger pour la sélection -->
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                             Color="{StaticResource WhiteMouseOver}" />
+            <SolidColorBrush x:Key="{x:Static  SystemColors.InactiveSelectionHighlightBrushKey}"
+                             Color="{StaticResource WhiteMouseOver}" />
+        </Style.Resources>
+    </Style>
+    <Style x:Key="TreeViewItemStyleDark" TargetType="{x:Type TreeViewItem}">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}" />
+        <Setter Property="Padding" Value="2,2,5,2" />
+        <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="19" Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+
+                        <!-- Border for full row selection -->
+                        <Border x:Name="BdFullRow" Grid.ColumnSpan="3" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" Visibility="Collapsed" />
+
+                        <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyleDark}"
+                                      ClickMode="Press"
+                                      IsChecked="{Binding IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" />
+
+                        <Border x:Name="Bd" SnapsToDevicePixels="true" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}"
+                                Grid.Column="1">
+                            <ContentPresenter x:Name="PART_Header"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              ContentSource="Header" />
+                        </Border>
+
+                        <ItemsPresenter x:Name="ItemsHost" Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="1" />
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="false">
+                            <Setter Property="Visibility" TargetName="ItemsHost" Value="Collapsed" />
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter Property="Visibility" TargetName="Expander" Value="Hidden" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="true">
+                            <Setter Property="Visibility" TargetName="BdFullRow" Value="Visible" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" />
+                        </Trigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=HasItems}"
+                                     Value="False">
+                            <Setter Property="Background" TargetName="BdFullRow"
+                                    Value="{StaticResource GrayBackgroundBrush}" />
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=HasItems}"
+                                     Value="True">
+                            <Setter Property="Background" TargetName="BdFullRow"
+                                    Value="{StaticResource GrayBackgroundBrush}" />
+                        </DataTrigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="VirtualizingStackPanel.IsVirtualizing" Value="true">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+        </Style.Triggers>
+        <Style.Resources>
+            <!-- Définir le Trigger pour la sélection -->
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}"
+                             Color="{StaticResource LightGrayColor}" />
+        </Style.Resources>
+    </Style>
     
 </ResourceDictionary>

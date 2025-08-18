@@ -2,6 +2,8 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Xml;
+using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
@@ -73,13 +75,12 @@ public partial class MainWindow
         Style boxItemStyle;
         Style supprButtonStyle;
         Brush backgrounds;
-        
+        Brush foregrounds;
         if (_viewModel.AppSettings.EnableLightTheme)
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
             NameTextBlock.Style= (Style)FindResource("StandardTextBlockLight");
-            GroupAddressTreeView.Style = (Style)FindResource("TreeViewLight");
-            GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemLight");
+            GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemStyleLight");
             
             titleStyles = (Style)FindResource("TitleTextLight");
             borderStyles = (Style)FindResource("BorderLight");
@@ -88,13 +89,13 @@ public partial class MainWindow
             boxItemStyle = (Style)FindResource("ModelListBoxItemStyleLight");
             supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleLight");
             backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
+            foregrounds = (Brush)FindResource("LightForegroundBrush");
         }
         else
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
             NameTextBlock.Style= (Style)FindResource("StandardTextBlockDark");
-            GroupAddressTreeView.Style = (Style)FindResource("TreeViewDark");
-            GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemDark");
+            GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemStyleDark");
             
             titleStyles = (Style)FindResource("TitleTextDark");
             borderStyles = (Style)FindResource("BorderDark");
@@ -104,12 +105,13 @@ public partial class MainWindow
             supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleDark");
 
             backgrounds = (Brush)FindResource("DarkGrayBackgroundBrush");
-
+            foregrounds = (Brush)FindResource("DarkForegroundBrush");
         }
         
         Background = backgrounds;
         StructuresBox.Background = backgrounds;
         ModelsBox.Background = backgrounds;
+        GroupAddressTreeView.Foreground = foregrounds;
         
         StructBibTitleText.Style = titleStyles;
         BorderDefStructTitleText.Style = titleStyles;
@@ -398,6 +400,12 @@ public partial class MainWindow
             _viewModel.FindZeroXmlCommand.Execute(_viewModel.ProjectFolderPath);
             // Exécute la commande pour extraire les adresses de groupe du projet
             _viewModel.ExtractGroupAddressCommand.Execute(null);
+            
+            Application.Current.Dispatcher.InvokeAsync( async() =>
+            {
+                await LoadAddressesOntoTreeViewAsync(GroupAddressTreeView);
+            });
+            
         }
         else // Si l'utilisateur annule la sélection de fichier
         {
@@ -449,6 +457,11 @@ public partial class MainWindow
             _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
             // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
             _viewModel.ExtractGroupAddressCommand.Execute(null);
+            
+            Application.Current.Dispatcher.InvokeAsync( async() =>
+            {
+                await LoadAddressesOntoTreeViewAsync(GroupAddressTreeView);
+            });
         }
         else
         {
@@ -810,7 +823,117 @@ public partial class MainWindow
         if (parentObject is T parent) return parent;
         return FindParent<T>(parentObject);
     }
+
+    private async Task LoadAddressesOntoTreeViewAsync(TreeView treeView)
+    {
+        var doc = _viewModel.GroupAddressFile?? new XDocument();
+        try
+        {
+            await Application.Current.Dispatcher.InvokeAsync(() =>
+            {
+                treeView.Items.Clear();
+
+                // Ajouter tous les nœuds récursivement
+                if (doc.Root == null) return;
+                
+                var index = 0;
+                
+                foreach (var node in doc.Root.Nodes())
+                {
+                    AddNodeRecursively(node, treeView.Items, 0, index++);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute(ex);
+        }
+        
+    }
     
+    /// <summary>
+    /// Adds XML nodes recursively to a TreeView.
+    /// </summary>
+    /// <param name="xmlNode">The XML node to add.</param>
+    /// <param name="parentItems">The parent collection of TreeView items.</param>
+    /// <param name="level">The depth level of the current XML node.</param>
+    /// <param name="index">The index of the current XML node among its siblings.</param>
+    private void AddNodeRecursively(XNode xmlNode, ItemCollection parentItems, int level, int index)
+    {
+        if (xmlNode.NodeType != XmlNodeType.Element) return;
+        var treeNode = CreateTreeViewItemFromXmlNode(xmlNode, level, index);
+        parentItems.Add(treeNode);
+        // Parcourir récursivement les enfants
+        var elementNode = xmlNode as XElement;
+        if (elementNode == null) return;
+        var childIndex = 0;
+        foreach (XNode childNode in elementNode.Elements())
+        {
+            AddNodeRecursively(childNode, treeNode.Items, level + 1, childIndex++);
+        }
+    }
+    
+    /// <summary>
+    /// Creates a TreeViewItem from an XML node, with its corresponding image.
+    /// </summary>
+    /// <param name="xmlNode">The XML node to create a TreeViewItem from.</param>
+    /// <param name="level">The depth level of the XML node.</param>
+    /// <param name="index">The index of the XML node among its siblings.</param>
+    /// <returns>A TreeViewItem representing the XML node.</returns>
+    private TreeViewItem CreateTreeViewItemFromXmlNode(XNode xmlNode, int level, int index)
+    {
+        var stack = new StackPanel { Orientation = Orientation.Horizontal };
+
+        // Définir l'icône en fonction du niveau
+        var drawingImageKey = level switch
+        {
+            0 => "Iconlevel1", 1 => "Iconlevel2", _ => "Iconlevel3"
+        };
+
+        var drawingImage = Application.Current.Resources[drawingImageKey] as DrawingImage;
+
+        var icon = new Image
+        {
+            Width = 16, Height = 16,
+            Margin = new Thickness(0, 0, 5, 0),
+            Source = drawingImage
+        };
+        var textName = new TextBlock
+        {
+            Text = ((XElement)xmlNode).Attribute("Name")?.Value,
+            FontSize = 12
+        };
+        var text = ((XElement)xmlNode).Attribute("Address") is not null? " - " + ((XElement)xmlNode).Attribute("Address")?.Value : "";
+        var textAddress = new TextBlock
+        {
+            Text = text,
+            FontSize = 12
+        };
+        text = ((XElement)xmlNode).Attribute("DPTs") is not null? " - " + ((XElement)xmlNode).Attribute("DPTs")?.Value : "";
+        var textDPTs = new TextBlock
+        {
+            Text = text,
+            FontSize = 12
+        };
+        stack.Children.Add(icon);
+        stack.Children.Add(textName);
+        stack.Children.Add(textAddress);
+        stack.Children.Add(textDPTs);
+
+        var treeNode = new TreeViewItem
+        {
+            Header = stack,
+            Tag = $"{level}-{index}"
+        };
+        
+        if (_viewModel.AppSettings.EnableLightTheme)
+            treeNode.Style = (Style)FindResource("TreeViewItemStyleLight");
+        else
+            treeNode.Style = (Style)FindResource("TreeViewItemStyleDark");
+        
+
+        return treeNode;
+    }
     
     // <<<<<<<<<<<<<<<<<<<< UTILS >>>>>>>>>>>>>>>>>>>>
 
