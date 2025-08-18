@@ -64,7 +64,7 @@
             <!-- Boutons de gauche -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
                 
-                <TextBlock Text="1"
+                <TextBlock x:Name="Number1" Text="1"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="0,0,10,0"/>
@@ -91,7 +91,7 @@
             
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                 
-                <TextBlock Text="3"
+                <TextBlock x:Name="Number3" Text="3"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="0,0,10,0"/>
@@ -101,7 +101,7 @@
                         Tag="{StaticResource ImportedDrawingImage}" 
                         Foreground="{StaticResource DarkForegroundBrush}"
                         Click="ImportGroupAddressFileButtonClick"        
-                        Content="{StaticResource ImportXmlButton}"
+                        Content="{DynamicResource ImportXmlButton}"
                         Background="{StaticResource BlueBrush}"
                         Margin="5,0,0,0"
                 />
@@ -121,7 +121,7 @@
             <!-- Boutons de droite -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
 
-                <TextBlock Text="6"
+                <TextBlock x:Name="Number6" Text="6"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="0,0,10,0"/>
@@ -147,7 +147,7 @@
             </StackPanel>
 
             <!-- Contour principal incluant le tableau avec les 4 colonnes -->
-            <Border Grid.Row="1" BorderBrush="{StaticResource GrayBorderBrush}" BorderThickness="1" Margin="10,0,10,10">
+            <Border Grid.Row="1" x:Name="AllColumnBorder" BorderBrush="{StaticResource GrayBorderBrush}" BorderThickness="1" Margin="10,0,10,10">
                 <Grid>
                     <!-- Define rows and columns for the nested grid -->
                     <Grid.RowDefinitions>
@@ -185,7 +185,7 @@
                             
                             <!-- Bandeau supérieur -->
                             <TextBlock Grid.Column="0"
-                                       Text="2"
+                                       x:Name="Number2" Text="2"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Margin="10,0,0,0"/>
@@ -309,7 +309,7 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0"
-                                       Text="4"
+                                       x:Name="Number4" Text="4"
                                        FontWeight="Bold"
                                        VerticalAlignment="Center"
                                        Margin="10,0,0,0"/>
@@ -414,8 +414,7 @@
                                 BorderThickness="0,0,1,0" >
                         
                         <Grid>
-                            <TextBlock
-                                       Text="5"
+                            <TextBlock x:Name="Number5" Text="5"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
@@ -432,8 +431,10 @@
                     </Border>
                     
                     <!-- Contenu colonne 3 : liste des Éléments à Tester -->
-                    <Border Grid.Row="1" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
-                                BorderThickness="0,0,1,0" >
+                    <Border Grid.Row="1" Grid.Column="2" 
+                            x:Name="BorderAllElements"
+                            BorderBrush="{StaticResource GrayBorderBrush}"
+                            BorderThickness="0,0,1,0" >
                         <Grid Margin="10,10,10,0">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/> <!--Nom du MF-->
@@ -847,7 +848,7 @@
                         </Grid>
                     </Border>
                     
-                    <Border Grid.Row="1" Grid.Column="3">
+                    <Border x:Name="BorderAddressTree" Grid.Row="1" Grid.Column="3">
                         <TreeView
                             x:Name="GroupAddressTreeView"
                             ScrollViewer.CanContentScroll="False"

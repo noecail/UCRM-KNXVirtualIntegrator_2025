@@ -45,7 +45,15 @@ public partial class MainWindow
         DataContext = _viewModel;
         _windowManager = wm;
         _cancellationTokenSource = new CancellationTokenSource();
-
+        
+        BorderAllStruct.Loaded += (_, _) =>
+        { BorderAllStruct.Width = 3f/12f * AllColumnBorder.ActualWidth; };
+        BorderAllModels.Loaded += (_, _) =>
+        { BorderAllModels.Width = 3f/12f * AllColumnBorder.ActualWidth; };
+        BorderAllElements.Loaded += (_, _) =>
+        { BorderAllElements.Width = 3f/12f * AllColumnBorder.ActualWidth; };
+        BorderAddressTree.Loaded += (_, _) =>
+        { BorderAddressTree.Width = 3f/12f * AllColumnBorder.ActualWidth; };
     }
 
     private void ApplyScaling()
@@ -112,6 +120,12 @@ public partial class MainWindow
         StructuresBox.Background = backgrounds;
         ModelsBox.Background = backgrounds;
         GroupAddressTreeView.Foreground = foregrounds;
+        Number1.Foreground = foregrounds;
+        Number2.Foreground = foregrounds;
+        Number3.Foreground = foregrounds;
+        Number4.Foreground = foregrounds;
+        Number5.Foreground = foregrounds;
+        Number6.Foreground = foregrounds;
         
         StructBibTitleText.Style = titleStyles;
         BorderDefStructTitleText.Style = titleStyles;
@@ -173,7 +187,7 @@ public partial class MainWindow
         else
         {
             Resources["ImportButton"] = "Import new project";
-            Resources["ImportXmlButton"] = "Importer addresses";
+            Resources["ImportXmlButton"] = "Import addresses";
             Resources["TestButton"] = "Test parameters";
             Resources["ExportButton"] = "Export test report";
             
@@ -433,9 +447,19 @@ public partial class MainWindow
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
-            Title = "Sélectionnez un fichier d'adresses de groupe à importer",
+            Title = _viewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Sélectionnez un fichier d'adresses de groupe à importer",
+                _ => "Select a group address file to import"
+            },
+                
             // Applique un filtre pour n'afficher que les fichiers XML ou tous les fichiers
-            Filter = "Fichiers d'adresses de groupes|*.xml|Tous les fichiers|*.*",
+            Filter = _viewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Fichiers d'adresses de groupes|*.xml|Tous les fichiers|*.*",
+                _ => "group address file|*.xml|All files|*.*"
+            },
+            
             // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
             FilterIndex = 1,
             // N'autorise pas la sélection de plusieurs fichiers à la fois
