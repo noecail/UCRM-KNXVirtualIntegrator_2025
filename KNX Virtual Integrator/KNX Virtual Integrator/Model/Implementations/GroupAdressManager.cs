@@ -380,34 +380,35 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// </summary>
     public void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList)
     {
+        List<DataPointType> lostDataPointTypes = [];
         if (modelStructures != null)
         {
-            _groupAddressStructure = DetermineGroupAddressStructureGroupAddressFile(modelStructures);
-            for (var i = 0; i < functionalModelList.FunctionalModels.Count; i++)
+            _groupAddressStructure = DetermineGroupAddressStructureGroupAddressFile(modelStructures); //Determines if the address structure is in 2 or 3 levels
+            for (var i = 0; i < functionalModelList.FunctionalModels.Count; i++) //Clears the list of list
             {
                 functionalModelList.FunctionalModels[i].Clear();
                 functionalModelList.ResetCount(i);
             }
-            if (_groupAddressStructure == 3)
+            if (_groupAddressStructure == 3)  //If the address structure is 3 levels
             {
                 foreach (var modelStructure in modelStructures)
                 {
                     //Add name
-                    var structureList = modelStructure.Elements().ToList();
-                    var modelName = modelStructure.Attribute("Name")?.Value ?? "";
+                    var structureList = modelStructure.Elements().ToList();  //Gets all the elements
+                    var modelName = modelStructure.Attribute("Name")?.Value ?? ""; //Gets the name of the model
                     modelName = modelName.Replace(" ", "_");
-                    var index = functionalModelList.FunctionalModelDictionary.CheckName(modelName);
+                    var index = functionalModelList.FunctionalModelDictionary.CheckName(modelName); //Checks if the name is related to any model structure in the dictionary
                     List<FunctionalModel>
                         newFunctionalModels =
                             []; // new list to store all the functional model of the next structure
-                    List<List<(DataPointType,int)>> unrecognizedDataPoints = [];
+                    List<(DataPointType,int)> unrecognizedDataPoints = [];
                     if (index != -1) //If the name is recognized
                     {
-                        var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
+                        var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index]; //The structure recognized
                         for (var i = 0; i < structureList.Count; i++) //Takes all the commands
                         {
                             var objectType = structureList[i].Elements().ToList();
-                            List<String> names = [];
+                            List<String> names = []; //Processes the prefix and name
                             for (var j = 0; j < objectType.Count; j++)
                             {
                                 names.Add(objectType[j].Attribute("Name")?.Value ?? "");
@@ -433,20 +434,20 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 var circuitName = dptName;
                                 if (!string.IsNullOrEmpty(circuitName) &&
                                     !string.IsNullOrEmpty(prefix)) // && circuitName.Contains(prefix))
-                                    circuitName = circuitName.Replace(prefix.Replace(' ','_'), "");
+                                    circuitName = circuitName.Replace(prefix.Replace(' ','_'), "");  //The prefix is the name since cmd is not written so errors
                                 else
                                 {
                                     circuitName =
-                                        string.Join("",
+                                        string.Join("_",
                                             circuitName.Split('_')[
                                                 1..]); //Takes the name of the object, except the first word 
                                 }
-                                var dptKey = model.FindKeyWithKeywords(prefix);
-                                var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                if (modelIndex == -1)
+                                var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels); //Checks if the circuit name corresponds to one of the new functional models
+                                if (modelIndex == -1) //If the name is not recognized, creates a new model and adds all the elements
                                 {
+                                    Console.WriteLine("DIdn't recognize the model for "+circuitName);
                                     newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
-                                    unrecognizedDataPoints.Add([]);
+                                    Console.WriteLine("Adding " + modelName + "_" + circuitName);
                                     for (var k = 0; k < model.ModelStructure.Count; k++)
                                     {
                                         newFunctionalModels[^1].AddElement();
@@ -468,10 +469,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                 var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
                                 var newDpt = new DataPointType(newType, newAddress, [], dptName); //Builds the dpt
-                                
-                                if (dptKey == -1)
+                                var dptKey = model.FindKeyWithKeywords(prefix); //Checks if the dpt name corresponds to a key in the dictionary of the structure
+
+                                if (dptKey == -1) //If the dpt is not recognized, adds it to a list of unrecognzed dpts
                                 {
-                                    unrecognizedDataPoints[modelIndex].Add((newDpt,modelIndex));
+                                    unrecognizedDataPoints.Add((newDpt,modelIndex));
                                     continue;
                                 }
 
@@ -479,15 +481,18 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             }
                         }
 
-                        for (var i=0;i<unrecognizedDataPoints.Count;i++)
+                        foreach (var dpt in unrecognizedDataPoints)//Checks again if the unrecognized dpt corresponds to missing dpt in the model
                         {
-                            var list = unrecognizedDataPoints[i];
-                            foreach (var dpt in list)
+                            var key = newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1);
+                            if (key == -1)
                             {
-                                newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1));
-
+                                lostDataPointTypes.Add(dpt.Item1);
+                                continue;
                             }
+                            newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,key);
+
                         }
+                        
                         
                         //Once Cmd and Ie are all filled, copy the tests from the structure
                         for (var j = 0; j < newFunctionalModels.Count; j++)
@@ -548,20 +553,19 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     else
                                     {
                                         circuitName =
-                                            string.Join("",
+                                            string.Join("_",
                                                 circuitName.Split('_')[
                                                     1..]); //Takes the name of the object, except the first word 
                                     }
 
                                     var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                    if (modelIndex == -1 && (dptName.Contains("stop",
+                                    if (modelIndex == -1 && dptName.Contains("stop",
                                             StringComparison
                                                 .OrdinalIgnoreCase) ||Prefixes.Any(p =>
                                             objectType[j].Attribute("Name")?.Value
-                                                .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true) ))
+                                                .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true) )
                                     {
                                         newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
-                                        unrecognizedDataPoints.Add([]);
                                         modelIndex = newFunctionalModels.Count - 1;
                                     }
                                     
@@ -672,22 +676,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                             logger.ConsoleAndLogWriteLine("IE found with a non-existing circuit name");
                                             continue;
                                         }
-                                        /*for (var k = 0; k < model.ModelStructure.Count; k++)
-                                        {
-                                            if (model.ModelStructure[k].Ie!=null)
-                                            {
-                                                foreach (var ie in model.ModelStructure[k].Ie)
-                                                {
-                                                    newFunctionalModels[modelIndex].ElementList[k].TestsIe
-                                                        .Add(
-                                                            new DataPointType()); //Adds an ie for every command expected
-                                                }
-                                            }
-                                        }*/
                                         var dptKey = newFunctionalModels[modelIndex].FindKey(model,newDpt);
                                         if (dptKey == -1)
                                         {
-                                            unrecognizedDataPoints[modelIndex].Add((newDpt,modelIndex));
+                                            unrecognizedDataPoints.Add((newDpt,modelIndex));
                                             continue;
                                         }
                                         
@@ -718,6 +710,18 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         }
                                     }
                                 }
+                            }
+                            
+                            foreach (var dpt in unrecognizedDataPoints)//Checks again if the unrecognized dpt corresponds to missing dpt in the model
+                            {
+                                var key = newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1);
+                                if (key == -1)
+                                {
+                                    lostDataPointTypes.Add(dpt.Item1);
+                                    continue;
+                                }
+                                newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,key);
+
                             }
 
                         }
@@ -777,9 +781,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                         if (modelIndex == -1)
                                         {
-                                            newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
-                                            unrecognizedDataPoints.Add([]);
-                                            modelIndex = newFunctionalModels.Count - 1;
+                                            lostDataPointTypes.Add(newDpt);
+                                            continue;
                                         }
                                         for (var k = 0;
                                              k < newFunctionalModels[modelIndex].ElementList.Count;
@@ -822,6 +825,16 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         newFunctionalModel.UpdateIntValue();
                         functionalModelList.AddToList(index, newFunctionalModel, false);
                     }
+                }
+
+                if (lostDataPointTypes.Count > 0)
+                    functionalModelList.FunctionalModels.Add([]);
+
+                foreach (var dpt in  lostDataPointTypes)
+                {
+                    functionalModelList.FunctionalModels[^1].Add(new FunctionalModel(dpt.Name));
+                    functionalModelList.FunctionalModels[^1][^1].AddElement(new TestedElement());
+                    functionalModelList.FunctionalModels[^1][^1].ElementList[^1].AddDptToCmd(dpt);
                 }
             }
             else// if (_groupAddressStructure == 2) //Case when Addresses are structured with 2 levels
