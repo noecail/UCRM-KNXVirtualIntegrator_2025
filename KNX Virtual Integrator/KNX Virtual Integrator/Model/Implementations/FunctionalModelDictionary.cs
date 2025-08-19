@@ -132,8 +132,8 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         {
             var newModel = new FunctionalModelStructure(functionalModel);
             _nbStructuresCreated++;
-            if (newModel.Model.Name == "New_Structure")
-                newModel.Model.Name += "_" + _nbStructuresCreated;
+            if (newModel.Model.Name == "New_Model")
+                newModel.Model.Name += "_Structure_" + _nbStructuresCreated;
             else if (!functionalModel.Model.Name.Contains("Structure"))
                 newModel.Model.Name += "_Structure";
             if (imported == false)
