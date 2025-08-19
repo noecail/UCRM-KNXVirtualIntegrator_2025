@@ -45,10 +45,11 @@
             <Border Grid.Row="0" Style="{StaticResource BorderTitleLight}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>    <!--Nom de la structure-->
-                        <ColumnDefinition Width="Auto"/> <!--Bouton suppression de la structure-->
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    
+                
                     <!--Nom de la structure-->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <Image Source="{StaticResource PencilDrawingImage}" Height="20" Margin="15,0,0,0"/>
@@ -58,11 +59,18 @@
                                  Style="{StaticResource StandardTextBoxLight}"
                                  HorizontalAlignment="Left"
                                  Margin="10,0,0,0"/>
-                        
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <TextBlock Text="Mots-clés de la structure" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                        <TextBox Text="{Binding SelectedStructure.AllKeywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource StandardTextBoxLight}"
+                                 FontSize="15"
+                                 Width="100"/>
                     </StackPanel>
                     
                     <!--Bouton de suppression de la structure-->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{DynamicResource StructRmvText}"
                                    Foreground="{StaticResource LightGrayForegroundBrush}"
                                    Margin="0,0,3,0"
@@ -76,7 +84,7 @@
                                 Click="DeleteStructureButtonClick"
                                 />
                     </StackPanel>
-                </Grid>
+               </Grid>
             </Border>
             
             <!--Conteneur principal-->
@@ -114,12 +122,11 @@
                                         <TextBlock x:Name="DptsTitleText"
                                                    Style="{StaticResource TitleTextLight}"
                                                    Text="{DynamicResource DptPersonalizationTitle}"/>
-                                        <!--Button Content="Afficher dico"
-                                                Click="PrintDptDictionaryButtonClick"/-->
+                                        <Button Content="Afficher dico"
+                                                Click="PrintDptDictionaryButtonClick"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
-                            <!--ItemsSource="{Binding Source={StaticResource SortedSelectedStructureDptDictionary}}"-->
                             <ListBox Grid.Row="1"
                                      ItemsSource="{Binding SelectedStructure.DptDictionary}"
                                      Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -184,7 +191,7 @@
                                                             HorizontalAlignment="Left"
                                                             FontSize="10"
                                                             SelectedIndex="0"
-                                                            SelectedItem="{Binding Value.Dpt.Type, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                            SelectedItem="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             ItemsSource="{Binding DataContext.SelectedStructure.DefaultDptToChoose, RelativeSource={RelativeSource AncestorType=Window}}">
                                                         </ComboBox>
                                                     </StackPanel>
@@ -209,7 +216,7 @@
                                                                         <TextBlock>
                                                                             Rentrer des mots-clés pour faciliter la reconnaissance des adresses de groupe de votre projet.
                                                                             <LineBreak/>
-                                                                            Rentrer les mots-clés à la suite, en les séparant par une virgule, sans espace entre eux.
+                                                                            Rentrer les mots-clés à la suite, en les séparant par une virgule (,) sans espace entre les mots-clés.
                                                                             <LineBreak/>
                                                                             Le mot-clé devrait être ce par quoi commence le nom de votre adresse de groupe.
                                                                             <LineBreak/>
@@ -220,7 +227,7 @@
                                                             </ToolTipService.ToolTip>
                                                         </Image>
                                                     </StackPanel>
-                                                    <TextBox Text="{Binding Value.Keywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    <TextBox Text="{Binding Value.AllKeywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              Height="101"
                                                              Width="210"
                                                              TextWrapping="Wrap"/>

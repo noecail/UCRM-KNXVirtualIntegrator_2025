@@ -163,9 +163,11 @@ public partial class StructureEditWindow
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
-        
-        _viewModel.AddDptCmdToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        if (dep != null)
+        {
+            var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+            _viewModel.AddDptCmdToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        }
     }
     
     /// <summary>
@@ -176,9 +178,11 @@ public partial class StructureEditWindow
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
-        
-        _viewModel.AddDptIeToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        if (dep != null)
+        {
+            var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+            _viewModel.AddDptIeToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        }
     }
 
     private void AddDptToDictionaryButtonClick(object sender, RoutedEventArgs e)
@@ -198,14 +202,23 @@ public partial class StructureEditWindow
 
     private void PrintDptDictionaryButtonClick(object sender, RoutedEventArgs e)
     {
+        Console.WriteLine("SelectedStructure : " + _viewModel.SelectedStructure?.FullName);
+        Console.WriteLine("with allkeywords : " + _viewModel.SelectedStructure?.AllKeywords);
+        if (_viewModel.SelectedStructure?.Keywords != null)
+            foreach (var kw in _viewModel.SelectedStructure.Keywords)
+                Console.WriteLine("with keywords : " + kw);
+
         var dptDico = _viewModel.SelectedStructure?.DptDictionary;
         if (dptDico == null) return;
         foreach (var kvp in dptDico)
         {
             Console.WriteLine("--------------------------");
             Console.WriteLine("DICO Printing key " + kvp.Key);
-            Console.WriteLine("DICO Printing value.Dpt.Type " + kvp.Value.Dpt.Type);
             Console.WriteLine("DICO Printing value.Dpt.Name " + kvp.Value.Dpt.Name);
+            Console.WriteLine("DICO Printing value.Dpt.Type " + kvp.Value.Dpt.Type);
+            Console.WriteLine("DICO Printing value.AllKeywords " + kvp.Value.AllKeywords);
+            foreach (var kw in kvp.Value.Keywords)
+                Console.WriteLine("DICO Printing value.Dpt.Keywords " + kw);
             Console.WriteLine("--------------------------");
         }
     }

@@ -10,42 +10,49 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
     public FunctionalModel Model;
 
-    public struct DptAndKeywords
+    public class DptAndKeywords : INotifyPropertyChanged
     {
-        public int Key;
+        public int Key = 0;
 
-        private List<string> _keywords;
-
+        private List<string> _keywords = [];
         public List<string> Keywords
         {
             get => _keywords;
             set
             {
-                UpdateKeywordList();
                 _keywords = value;
+                OnPropertyChanged();
+                UpdateKeywordList();
             }
         }
 
-        private string _allKeywords;
+        private string _allKeywords = "";
         public string AllKeywords
         {
             get => _allKeywords;
             set
             {
+                if (_allKeywords == value) return;
                 _allKeywords = value;
-                UpdateKeywords(AllKeywords);
+                OnPropertyChanged();
+                UpdateKeywords();
             }
         }
 
-        public DataPointType Dpt { get; set; }
+        public DataPointType Dpt { get; set; } = new ();
 
         /// <summary>
         /// Takes a string, and puts all the keywords inside it into the keywords associated
         /// </summary>
         /// <param name="keywordList">String containing all the keywords separated with commas</param>
-        private void UpdateKeywords(string keywordList)
+        private void UpdateKeywords()
         {
-            Keywords = keywordList.Split(',').ToList();
+            _keywords.Clear();
+            foreach (var kw in AllKeywords.Split(',').ToList())
+            {
+                _keywords.Add(kw);
+                OnPropertyChanged(nameof(Keywords));
+            }
         }
         
         /// <summary>
@@ -53,12 +60,14 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         /// </summary>
         private void UpdateKeywordList()
         {
-            if (Keywords == null)
+            if (Keywords == null || Keywords.Count == 0)
                 return;
-            if (Keywords.Count > 0)
-                AllKeywords = string.Join(',', Keywords);
+            _allKeywords = string.Join(',', Keywords);
+            OnPropertyChanged(nameof(AllKeywords));
         }
 
+        public event PropertyChangedEventHandler? PropertyChanged = null;
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
     }
 
     //J'ai choisir de faire démarrer les clés à 1 pour plus de logique pour l'utilisateur
@@ -160,25 +169,25 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     }
 
     private List<string> _keywords = [];
-
     public List<string> Keywords
     {
         get => _keywords;
         set
         {
-            UpdateKeywordList();
             _keywords = value; 
-                
+            OnPropertyChanged();
+            UpdateKeywordList();
         }
     }
 
     private string _allKeywords = "";
     public string AllKeywords
     {
-        get=>_allKeywords;
+        get => _allKeywords;
         set
         {
             _allKeywords = value;
+            OnPropertyChanged();
             UpdateKeywords();
         }
     }
@@ -189,7 +198,12 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// <param name="keywordList">String containing all the keywords separated with commas</param>
     private void UpdateKeywords()
     {
-        Keywords = AllKeywords.Split(',').ToList();
+        _keywords.Clear();
+        foreach (var kw in AllKeywords.Split(',').ToList())
+        {
+            _keywords.Add(kw);
+            OnPropertyChanged(nameof(Keywords));
+        }
     }
         
     /// <summary>
@@ -197,11 +211,12 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// </summary>
     private void UpdateKeywordList()
     {
-        if (Keywords == null)
+        if (Keywords == null || Keywords.Count == 0)
             return;
-        if (Keywords.Count > 0)
-            AllKeywords = string.Join(',', Keywords);
+        _allKeywords = string.Join(',', Keywords);
+        OnPropertyChanged(nameof(AllKeywords));
     }
+    
     public FunctionalModelStructure(FunctionalModel model, int myKey)
     {
         Model = new FunctionalModel(model, myKey, false);
@@ -638,7 +653,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         int newKey = 1;
         if (DptDictionary.Keys.Count != 0)
             newKey = DptDictionary.Keys.Max() + 1;
-        DptDictionary.Add(newKey,new DptAndKeywords{Key = newKey,Keywords = new List<string>(),Dpt = new DataPointType(1,"DPT Personnalisé " + newKey)});
+        DptDictionary.Add(newKey,new DptAndKeywords{Key = newKey,Keywords = new List<string>(), AllKeywords = "",Dpt = new DataPointType(1,"DPT Personnalisé " + newKey)});
     }
     
     public void RemoveDpt(int key)

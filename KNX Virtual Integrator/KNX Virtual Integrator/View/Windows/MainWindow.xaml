@@ -56,89 +56,100 @@
 
             <!-- Bandeau supérieur avec tous les boutons -->
             <!-- Boutons de gauche -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10">
-                
-                <TextBlock x:Name="Number1" Text="1"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,10,0"/>
-                
-                <!-- Bouton Paramètres -->
-                <Button Style="{StaticResource IconButtonStyle}"
-                    Tag="{StaticResource SettingsDrawingImage}"
-                    Click="SettingsButtonClick"
-                    Background="{StaticResource WhiteBackgroundBrush}"
-                    BorderBrush="{StaticResource GrayBorderBrush}"
-                    BorderThickness="1"
-                    Padding="5"
-                    Margin="5,0,0,0"
-                />
-                
-                <!-- Bouton Connexion -->
-                <Button 
-                    Click="OpenConnectionWindow"
-                    Style="{StaticResource ConnectWindowButton}"
-                    Margin="5,0,0,0"
-                />
+            <Border Grid.Row="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/> <!--Boutons de gauche-->
+                        <ColumnDefinition Width="*"/> <!--Boutons de centre gauche-->
+                        <ColumnDefinition Width="*"/> <!--Centre droit : pas de boutons-->
+                        <ColumnDefinition Width="*"/> <!--Boutons de droite-->
+                    </Grid.ColumnDefinitions>
+                    
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10">
+                        
+                        <TextBlock x:Name="Number1" Text="1"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
+                        
+                        <!-- Bouton Paramètres -->
+                        <Button Style="{StaticResource IconButtonStyle}"
+                            Tag="{StaticResource SettingsDrawingImage}"
+                            Click="SettingsButtonClick"
+                            Background="{StaticResource WhiteBackgroundBrush}"
+                            BorderBrush="{StaticResource GrayBorderBrush}"
+                            BorderThickness="1"
+                            Padding="5"
+                            Margin="5,0,0,0"
+                        />
+                        
+                        <!-- Bouton Connexion -->
+                        <Button 
+                            Click="OpenConnectionWindow"
+                            Style="{StaticResource ConnectWindowButton}"
+                            Margin="5,0,0,0"
+                        />
 
-            </StackPanel>
+                    </StackPanel>
             
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                
-                <TextBlock x:Name="Number3" Text="3"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,10,0"/>
-                
-                <!-- Premier bouton Importation -->
-                <Button Style="{StaticResource IconTextButtonStyle}"
-                        Tag="{StaticResource ImportedDrawingImage}" 
-                        Foreground="{StaticResource DarkForegroundBrush}"
-                        Click="ImportGroupAddressFileButtonClick"        
-                        Content="{DynamicResource ImportXmlButton}"
-                        Background="{StaticResource BlueBrush}"
-                        Margin="5,0,0,0"
-                />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10">
+                        
+                        <TextBlock x:Name="Number3" Text="3"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
+                        
+                        <!-- Premier bouton Importation -->
+                        <Button Style="{StaticResource IconTextButtonStyle}"
+                                Tag="{StaticResource ImportedDrawingImage}" 
+                                Foreground="{StaticResource DarkForegroundBrush}"
+                                Click="ImportGroupAddressFileButtonClick"        
+                                Content="{DynamicResource ImportXmlButton}"
+                                Background="{StaticResource BlueBrush}"
+                                Margin="5,0,0,0"
+                        />
 
-                <!-- Deuxième bouton Importation -->
-                <Button Content="{DynamicResource ImportButton}"
-                        Style="{StaticResource IconTextButtonStyle}"
-                        Foreground="{StaticResource DarkForegroundBrush}"
-                        Tag="{StaticResource ImportedDrawingImage}"
-                        Click="ImportProjectButtonClick"
-                        Background="{StaticResource BlueBrush}"
-                        Margin="5,0"
-                />
-                
-            </StackPanel>
+                        <!-- Deuxième bouton Importation -->
+                        <Button Content="{DynamicResource ImportButton}"
+                                Style="{StaticResource IconTextButtonStyle}"
+                                Foreground="{StaticResource DarkForegroundBrush}"
+                                Tag="{StaticResource ImportedDrawingImage}"
+                                Click="ImportProjectButtonClick"
+                                Background="{StaticResource BlueBrush}"
+                                Margin="5,0"
+                        />
+                        
+                    </StackPanel>
             
-            <!-- Boutons de droite -->
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <!-- Boutons de droite -->
+                    <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="10">
 
-                <TextBlock x:Name="Number6" Text="6"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,10,0"/>
-                
-                <!-- Bouton de Test -->
-                <Button Content="{DynamicResource TestButton}"
-                    Style="{StaticResource IconTextButtonStyle}"
-                    Foreground="{StaticResource DarkForegroundBrush}"
-                    Tag="{StaticResource PlayDrawingImage}"
-                    Click="OnTestConfigButtonClick"
-                    Margin="5,0"
-                />
-                
-                <!-- Bouton d'Exportation -->
-                <Button x:Name="CreateTestReportButton"
-                        Content="{DynamicResource ExportButton}"
-                        Style="{StaticResource IconTextButtonStyle}"
-                        Foreground="{StaticResource DarkForegroundBrush}"
-                        Tag="{StaticResource ExportedDrawingImage}"
-                        Click="OnCreateTestReportButtonClick"
-                />
-                
-            </StackPanel>
+                        <TextBlock x:Name="Number6" Text="6"
+                                   FontWeight="Bold"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
+                        
+                        <!-- Bouton de Test -->
+                        <Button Content="{DynamicResource TestButton}"
+                            Style="{StaticResource IconTextButtonStyle}"
+                            Foreground="{StaticResource DarkForegroundBrush}"
+                            Tag="{StaticResource PlayDrawingImage}"
+                            Click="OnTestConfigButtonClick"
+                            Margin="5,0"
+                        />
+                        
+                        <!-- Bouton d'Exportation -->
+                        <Button x:Name="CreateTestReportButton"
+                                Content="{DynamicResource ExportButton}"
+                                Style="{StaticResource IconTextButtonStyle}"
+                                Foreground="{StaticResource DarkForegroundBrush}"
+                                Tag="{StaticResource ExportedDrawingImage}"
+                                Click="OnCreateTestReportButtonClick"
+                        />
+                        
+                    </StackPanel>
+                </Grid>
+            </Border>
 
             <!-- Contour principal incluant le tableau avec les 4 colonnes -->
             <Border Grid.Row="1" x:Name="AllColumnBorder" BorderBrush="{StaticResource GrayBorderBrush}" BorderThickness="1" Margin="10,0,10,10">
