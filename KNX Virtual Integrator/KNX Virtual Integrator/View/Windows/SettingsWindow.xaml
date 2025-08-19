@@ -7,6 +7,8 @@
         Title="Paramètres"
         AllowsTransparency="True"
         Background="{StaticResource OffWhiteBackgroundBrush}"
+        BorderThickness="1.5"
+        BorderBrush="{StaticResource DarkGrayBorderBrush}"
         Closing="ClosingSettingsWindow"
         PreviewKeyDown="SettingsWindow_PreviewKeyDown">
 

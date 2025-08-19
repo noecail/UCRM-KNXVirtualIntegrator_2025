@@ -26,12 +26,12 @@ public class WindowManager
 
     public void ShowMainWindow() {
         MainWindow.Show(); // Pour ouvrir la fenêtre
-        MainWindow.Focus();
+        MainWindow.Focus(); // Un peu inutile ici
         
     }
 
     public void ShowSettingsWindow() {
-        SettingsWindow.ShowDialog(); //Pour empêcher l'intéraction avec le reste tant que la fenêtre est ouverte
+        SettingsWindow.Show();
         SettingsWindow.Focus(); // Pour s'assurer que la fenêtre se ré-affiche si nouvel appui sur bouton sans fermeture
     }
 
@@ -51,7 +51,7 @@ public class WindowManager
     }
 
     public void ShowStructureEditWindow() {
-        StructureEditWindow.ShowDialog();
+        StructureEditWindow.ShowDialog(); //Pour empêcher l'intéraction avec le reste tant que la fenêtre est ouverte
         StructureEditWindow.Focus();
     }
 }

@@ -21,7 +21,7 @@
     
     <!--Main Window-->
         <!--Bandeau supérieur-->
-    <sys:String x:Key="ImportXmlButton">Importer les adresses</sys:String>
+    <sys:String x:Key="ImportXmlButton">Importer des adresses</sys:String>
     <sys:String x:Key="ImportButton">Importer un projet</sys:String>
     <sys:String x:Key="TestButton">Paramètres de test</sys:String>
     <sys:String x:Key="ExportButton">Exporter le rapport</sys:String>
@@ -55,7 +55,7 @@
     <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
     <sys:String x:Key="DptPersonalizationTitle">Personnalisation de DPTs</sys:String>
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
-    <sys:String x:Key="PersonalizedDpt">DPT personnalisé de clé :</sys:String>
+    <sys:String x:Key="PersonalizedDpt">DPT personnalisé numéro</sys:String>
     <sys:String x:Key="Name">Nom :</sys:String>
     <sys:String x:Key="Type">Type :</sys:String>
     <sys:String x:Key="Keywords">Mots-clés</sys:String>

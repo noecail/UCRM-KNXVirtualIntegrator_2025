@@ -34,7 +34,7 @@ public partial class StructureEditWindow
         InitializeComponent();
         
         _viewModel = mainViewModel;
-        DataContext = _viewModel;
+        DataContext = mainViewModel;
         UpdateWindowContents(true, true, true);
     }
     
@@ -131,7 +131,7 @@ public partial class StructureEditWindow
     /// <summary>
     /// Handles the button click event to remove a Tested Element from a Functional Model.
     /// </summary>
-    private void RemoveTestedElementFromStructureButtonClick(object sender, RoutedEventArgs e)
+    private void RemoveTestedElementFromModelStructureButtonClick(object sender, RoutedEventArgs e)
     {
         // Code que je ne comprends pas qui sert à récupérer l'index de l'item depuis lequel le clic a été effectué
         // Dans ce cas, il s'agit de l'index du Tested Element qui est à supprimer
@@ -141,94 +141,44 @@ public partial class StructureEditWindow
         if (dep == null) return;
         var index = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
-        _viewModel.RemoveTestedElementFromStructureCommand.Execute((_viewModel.SelectedStructureModel, index));
+        _viewModel.RemoveTestedElementFromModelStructureCommand.Execute((_viewModel.SelectedStructure?.ModelStructure, index));
     }
     
     /// <summary>
-    /// Handles the button click event to add a Tested Element to an already existing Functional Model.
-    /// Adds a Functional Model to the Dictionary of Functional Model Structures.
+    /// Handles the button click event to add a Tested Element to a Model Structure.
     /// </summary>
-    private void AddTestedElementToStructureButtonClick(object sender, RoutedEventArgs e)
+    private void AddTestedElementToModelStructureButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.AddTestedElementToStructureCommand.Execute(_viewModel.SelectedStructureModel);
+        _viewModel.AddTestedElementToModelStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure);
+        //scroll to end if possible
         var testedElementsScrollViewer = FindVisualChild<ScrollViewer>(TestedElementsListBox);
         testedElementsScrollViewer?.ScrollToEnd();
     }
 
     /// <summary>
-    /// Handles the button click event to add a DPT to send to a tested element
+    /// Handles the button click event to add a DPT to send to a tested element structure
     /// </summary>
-    private void AddDptCmdToElementButtonClick(object sender, RoutedEventArgs e)
+    private void AddDptCmdToElementStructureButtonClick(object sender, RoutedEventArgs e)
     {
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
         var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
-        _viewModel.AddDptCmdToElementCommand.Execute(_viewModel.SelectedStructureModel?.ElementList[indexElement]);
+        _viewModel.AddDptCmdToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
     }
     
     /// <summary>
-    /// Handles the button click event to add a DPT to send to a tested element
+    /// Handles the button click event to add a DPT to send to a tested element structure
     /// </summary>
-    private void AddDptIeToElementButtonClick(object sender, RoutedEventArgs e)
+    private void AddDptIeToElementStructureButtonClick(object sender, RoutedEventArgs e)
     {
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
         var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
-        _viewModel.AddDptIeToElementCommand.Execute(_viewModel.SelectedStructureModel?.ElementList[indexElement]);
-    }
-    
-    private void RemoveCmdDptFromElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        // Find the Tested Element's index 
-        var dep = (DependencyObject)e.OriginalSource;
-        dep = FindParent<ListBoxItem>(dep); // reach the data point type
-        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
-        dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
-
-        var button = (Button)sender;
-        // Find the DPT's index
-        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
-        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        DataPointType? testsIeItem = null;
-        if (listBoxItem != null)
-            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
-        int indexCmd = 0;
-        if (testsIeItem != null)
-            indexCmd = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
-        
-        _viewModel.RemoveCmdDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexCmd));
-    }
-    
-    private void RemoveIeDptFromElementButtonClick(object sender, RoutedEventArgs e)
-    {
-        // Find the Tested Element's index 
-        var dep = (DependencyObject)e.OriginalSource;
-        dep = FindParent<ListBoxItem>(dep); // reach the data point type
-        if (dep != null)
-            dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
-        if (dep != null)
-            dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        int indexElement = 0;
-        if (dep != null)
-            indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
-
-        var button = (Button)sender;
-        // Find the DPT's index
-        var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
-        var testsIeListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        DataPointType? testsIeItem = null;
-        if (listBoxItem != null)
-            testsIeItem = (DataPointType)listBoxItem.DataContext; // Élément TestsIe parent
-        int indexIe = 0;
-        if (testsIeItem != null)
-            indexIe = testsIeListBox.Items.IndexOf(testsIeItem); // Index de cet élément dans TestsIe
-        
-        _viewModel.RemoveIeDptFromElementCommand.Execute((_viewModel.SelectedStructureModel?.ElementList[indexElement], indexIe));
+        _viewModel.AddDptIeToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
     }
 
     private void AddDptToDictionaryButtonClick(object sender, RoutedEventArgs e)
@@ -257,6 +207,21 @@ public partial class StructureEditWindow
             Console.WriteLine("DICO Printing value.Dpt.Type " + kvp.Value.Dpt.Type);
             Console.WriteLine("DICO Printing value.Dpt.Name " + kvp.Value.Dpt.Name);
             Console.WriteLine("--------------------------");
+        }
+    }
+    
+    private void PrintModelStructureButtonClick(object sender, RoutedEventArgs e)
+    {
+        var modelStructure = _viewModel.SelectedStructure?.ModelStructure;
+        if (modelStructure == null) return;
+        Console.WriteLine(modelStructure.ToString());
+        foreach (var elementStructure in modelStructure)
+        {
+            Console.WriteLine("one element structure");
+            foreach(var cmd in elementStructure.Cmd)
+                Console.WriteLine("--- one cmd : " + cmd);
+            foreach (var ie in elementStructure.Ie)
+                Console.WriteLine("--- one ie : " + ie);
         }
     }
     

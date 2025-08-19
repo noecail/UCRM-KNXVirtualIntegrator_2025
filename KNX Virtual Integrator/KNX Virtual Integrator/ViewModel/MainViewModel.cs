@@ -288,6 +288,18 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 parameters.model.RemoveElement(parameters.index);
             }
         );
+
+        AddTestedElementToModelStructureCommand = new Commands.RelayCommand<ObservableCollection<FunctionalModelStructure.ElementStructure>>(modelStructure =>
+            {
+                modelStructure?.Add(new FunctionalModelStructure.ElementStructure([0],[]));
+            }
+        );
+        
+        RemoveTestedElementFromModelStructureCommand = new Commands.RelayCommand<(ObservableCollection<FunctionalModelStructure.ElementStructure> modelStructure, int index)>(parameters =>
+            {
+                parameters.modelStructure.RemoveAt(parameters.index);
+            }
+        );
         
         AddTestToElementCommand = new Commands.RelayCommand<TestedElement>(parameter =>
             {
@@ -301,28 +313,46 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
-        AddDptCmdToElementCommand = new Commands.RelayCommand<TestedElement>(parameter =>
+        AddDptCmdToElementStructureCommand = new Commands.RelayCommand<FunctionalModelStructure.ElementStructure>(parameter =>
             {
-                parameter?.AddDptToCmd(1,"",[]);
+                parameter?.AddToCmd(0);
             }
         );
         
-        AddDptIeToElementCommand = new Commands.RelayCommand<TestedElement>(parameter =>
+        AddDptIeToElementStructureCommand = new Commands.RelayCommand<FunctionalModelStructure.ElementStructure>(parameter =>
             {
-                parameter?.AddDptToIe(1,"",[]);
+                parameter?.AddToIe(0);
             }
         );
         
-        RemoveCmdDptFromElementCommand = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+        // For some reason that I do not understand, commands that are directly bound to buttons (and not called via the code-behind, using th Click event) need to be Async in order to execute
+        RemoveCmdDptFromElementStructureCommand = new AsyncRelayCommand<Tuple<int,int>>(tuple  =>
             {
-                if(parameters.element.TestsCmd.Count>1)
-                    parameters.element.RemoveDptFromCmd(parameters.index);
+                if (tuple == null) return Task.CompletedTask;
+                var (elementIndex, cmdIndex) = tuple;
+
+                FunctionalModelStructure.ElementStructure? elementStructure = null;
+                if (SelectedStructure != null)
+                    elementStructure = SelectedStructure.ModelStructure[elementIndex];
+                if (elementStructure?.Cmd.Count > 1)
+                {
+                    elementStructure.Cmd.RemoveAt(cmdIndex);
+                }
+
+                return Task.CompletedTask;
             }
         );
         
-        RemoveIeDptFromElementCommand = new Commands.RelayCommand<(TestedElement element, int index)>(parameters =>
+        RemoveIeDptFromElementStructureCommand = new AsyncRelayCommand<Tuple<int,int>>(tuple  =>
             {
-                parameters.element.RemoveDptFromIe(parameters.index);
+                if (tuple == null) return Task.CompletedTask;
+                var (elementIndex, ieIndex) = tuple;
+
+                FunctionalModelStructure.ElementStructure? elementStructure = null;
+                if (SelectedStructure != null)
+                    elementStructure = SelectedStructure.ModelStructure[elementIndex];
+                elementStructure?.Ie.RemoveAt(ieIndex);
+                return Task.CompletedTask;
             }
         );
 
@@ -413,6 +443,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 BusConnection.NatAccess = false;
                 await modelManager.BusConnection.ConnectBusAsync();
             });
+        
         DisconnectBusCommand = new AsyncRelayCommand(modelManager.BusConnection.DisconnectBusAsync);
 
         RefreshInterfacesCommand = new AsyncRelayCommand(modelManager.BusConnection.DiscoverInterfacesAsync);

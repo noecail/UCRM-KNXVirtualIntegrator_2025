@@ -90,7 +90,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                 
                 // updating the second column
                 if (value is null) return;
-                
                 var source = _functionalModelList.FunctionalModels[value.Model.Key-1];
                 SelectedModels = new ObservableCollection<FunctionalModel>(source);
                 
