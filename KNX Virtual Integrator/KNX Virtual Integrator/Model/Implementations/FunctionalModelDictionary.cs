@@ -94,7 +94,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         new FunctionalModelStructure.ElementStructure([1,3],[2,2,5]), //test stop
                         new FunctionalModelStructure.ElementStructure([4],[2,2,5]) //test absolute command
                     ]
-                ),false, ["stre", "blind", "Volets_roulants"]
+                ),false, ["stre", "blind", "Volets_roulants","Volet_roulant"]
             );
             AddFunctionalModel(new FunctionalModelStructure("Commutation",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()

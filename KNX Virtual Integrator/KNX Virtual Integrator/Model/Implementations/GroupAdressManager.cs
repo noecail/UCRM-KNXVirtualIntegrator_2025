@@ -393,7 +393,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             {
                 foreach (var modelStructure in modelStructures)
                 {
-                    //Add name
                     var structureList = modelStructure.Elements().ToList();  //Gets all the elements
                     var modelName = modelStructure.Attribute("Name")?.Value ?? ""; //Gets the name of the model
                     modelName = modelName.Replace(" ", "_");
@@ -445,9 +444,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels); //Checks if the circuit name corresponds to one of the new functional models
                                 if (modelIndex == -1) //If the name is not recognized, creates a new model and adds all the elements
                                 {
-                                    Console.WriteLine("DIdn't recognize the model for "+circuitName);
                                     newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
-                                    Console.WriteLine("Adding " + modelName + "_" + circuitName);
                                     for (var k = 0; k < model.ModelStructure.Count; k++)
                                     {
                                         newFunctionalModels[^1].AddElement();
