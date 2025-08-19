@@ -559,11 +559,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
 
                                     var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                    if (modelIndex == -1 && dptName.Contains("stop",
+                                    if (modelIndex == -1 && (dptName.Contains("stop",
                                             StringComparison
                                                 .OrdinalIgnoreCase) ||Prefixes.Any(p =>
                                             objectType[j].Attribute("Name")?.Value
-                                                .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true) )
+                                                .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true)))
                                     {
                                         newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
                                         modelIndex = newFunctionalModels.Count - 1;
@@ -672,8 +672,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                         if (modelIndex ==
                                             -1) //When the circuit name doesn't exist, maybe take j?? dangerous
-                                        {
-                                            logger.ConsoleAndLogWriteLine("IE found with a non-existing circuit name");
+                                        { 
+                                            lostDataPointTypes.Add(newDpt);
                                             continue;
                                         }
                                         var dptKey = newFunctionalModels[modelIndex].FindKey(model,newDpt);
