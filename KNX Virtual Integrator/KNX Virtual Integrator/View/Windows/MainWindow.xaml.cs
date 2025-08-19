@@ -46,14 +46,14 @@ public partial class MainWindow
         _windowManager = wm;
         _cancellationTokenSource = new CancellationTokenSource();
         
-        BorderAllStruct.Loaded += (_, _) =>
-        { BorderAllStruct.Width = 3f/12f * AllColumnBorder.ActualWidth; };
-        BorderAllModels.Loaded += (_, _) =>
-        { BorderAllModels.Width = 3f/12f * AllColumnBorder.ActualWidth; };
-        BorderAllElements.Loaded += (_, _) =>
-        { BorderAllElements.Width = 3f/12f * AllColumnBorder.ActualWidth; };
-        BorderAddressTree.Loaded += (_, _) =>
-        { BorderAddressTree.Width = 3f/12f * AllColumnBorder.ActualWidth; };
+        AllColumnBorder.Loaded += (_, _) =>
+        {
+            Col0.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col1.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col2.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col3.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            ApplyScaling();
+        };
     }
 
     private void ApplyScaling()
@@ -68,11 +68,25 @@ public partial class MainWindow
         {
             scale = scaleFactor - 0.2f;
         }
+        Col0.Width = new GridLength(1, GridUnitType.Star);
+        Col1.Width = new GridLength(1, GridUnitType.Star);
+        Col2.Width = new GridLength(1, GridUnitType.Star);
+        Col3.Width = new GridLength(1, GridUnitType.Star);
         MainWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
-            
-        Height = 1366 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 1366 * scale;
-        Width = 786 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 786 * scale;
-    }
+        if (1500 * scale > 0.9 * SystemParameters.PrimaryScreenWidth)
+        {
+            Width = 0.9 * SystemParameters.PrimaryScreenWidth;
+            Col0.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col1.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col2.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col3.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+        }
+        else
+        {
+            Width = 1500 * scale;
+        }
+        Height = 786 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 786 * scale;
+        }
 
     private void ApplyThemeToWindow()
     {

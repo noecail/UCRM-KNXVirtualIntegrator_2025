@@ -12,7 +12,7 @@
         WindowState="Maximized"
         ResizeMode="CanResize"
         WindowStyle="None"
-        Width="1366" Height="786"
+        Width="786" Height="1366"
         WindowTitleBrush="{StaticResource KnxGreenBrush}"
         NonActiveWindowTitleBrush="{StaticResource KnxGreenBrush}"
         Background="{StaticResource WhiteBackgroundBrush}"
@@ -150,10 +150,10 @@
                     </Grid.RowDefinitions>
                     <!-- TODO: régler largeur panneaux-->
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="3*"/>   <!-- Modèles -->
-                        <ColumnDefinition Width="4*"/>   <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
-                        <ColumnDefinition Width="4*"/>   <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
-                        <ColumnDefinition Width="3*"/>     <!-- Adresses -->
+                        <ColumnDefinition x:Name="Col0" Width="3*"/>   <!-- Modèles -->
+                        <ColumnDefinition x:Name="Col1" Width="4*"/>   <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition x:Name="Col2" Width="4*"/>   <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition x:Name="Col3" Width="3*"/>     <!-- Adresses -->
                     </Grid.ColumnDefinitions>
                         
                         
