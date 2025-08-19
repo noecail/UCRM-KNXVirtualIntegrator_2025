@@ -612,6 +612,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
                         if (index != -1)
                         {
+                            var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {
                                 var objectType = structureList[i].Elements().ToList();
@@ -670,15 +671,24 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         {
                                             logger.ConsoleAndLogWriteLine("IE found with a non-existing circuit name");
                                             continue;
-                                        } 
-                                        
-                                        var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
-                                        var dptKey = model.FindKeyWithKeywords(prefix);
+                                        }
+                                        /*for (var k = 0; k < model.ModelStructure.Count; k++)
+                                        {
+                                            if (model.ModelStructure[k].Ie!=null)
+                                            {
+                                                foreach (var ie in model.ModelStructure[k].Ie)
+                                                {
+                                                    newFunctionalModels[modelIndex].ElementList[k].TestsIe
+                                                        .Add(
+                                                            new DataPointType()); //Adds an ie for every command expected
+                                                }
+                                            }
+                                        }*/
+                                        var dptKey = newFunctionalModels[modelIndex].FindKey(model,newDpt);
                                         if (dptKey == -1)
                                         {
                                             unrecognizedDataPoints[modelIndex].Add((newDpt,modelIndex));
                                             continue;
-                                            //Find a way to find which dpt it should be
                                         }
                                         
                                         newFunctionalModels[modelIndex].BuildFromStructure(model,newDpt,dptKey);

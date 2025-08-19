@@ -225,6 +225,8 @@ public class FunctionalModelStructure
         foreach (var element in  model.ElementList)
         {
             ElementStructure elementStructure = new ElementStructure();
+            elementStructure.Ie = [];
+            elementStructure.Cmd = [];
             foreach (var dpt in element.TestsCmd)
             {
                 index = -1;
@@ -255,7 +257,7 @@ public class FunctionalModelStructure
                     }
                     newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
-                    elementStructure.Ie?.Add(index);
+                    elementStructure.Ie?.Add(newKey);
                 }
                 
             }
@@ -281,7 +283,7 @@ public class FunctionalModelStructure
                     var newKey = DptDictionary.Keys.ToList()[^1] + 1;
                     newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
-                    elementStructure.Ie?.Add(index);
+                    elementStructure.Ie?.Add(newKey);
                 }
             }
             ModelStructure.Add(elementStructure);

@@ -31,7 +31,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         public FunctionalModelDictionary()
         {
             FunctionalModels = [];
-            AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
+            /*AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
                             {
@@ -166,7 +166,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
-            Console.WriteLine(FunctionalModels[0].AllKeywords);
 
     }
 
