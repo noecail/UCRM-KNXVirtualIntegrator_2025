@@ -52,13 +52,14 @@
     <!--Structure Edit Window-->
     <sys:String x:Key="StructEditWindowTitle">Fenêtre d'édition de Structure de Modèle Fonctionnel</sys:String>
     <sys:String x:Key="StructRmvText">Supprimer la structure</sys:String>
-    <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
+    <sys:String x:Key="FunctionalModelStructure">Structure du Modèle Fonctionnel</sys:String>
     <sys:String x:Key="DptPersonalizationTitle">Personnalisation de DPTs</sys:String>
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
     <sys:String x:Key="PersonalizedDpt">DPT personnalisé numéro</sys:String>
     <sys:String x:Key="Name">Nom :</sys:String>
     <sys:String x:Key="Type">Type :</sys:String>
     <sys:String x:Key="Keywords">Mots-clés</sys:String>
+    <sys:String x:Key="DptNumber">Dpt de numéro :</sys:String>
     <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
     <!--/Structure Edit Window-->
     

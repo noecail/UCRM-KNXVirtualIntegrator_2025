@@ -704,7 +704,7 @@ public partial class MainWindow
     }
 
     /// <summary>
-    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// Handles the button click to reset to 0 an Ie Value that has been deactivated because it was unknown 
     /// </summary>
     private void DeactivateValueCmdButtonClick(object sender, RoutedEventArgs e)
     {

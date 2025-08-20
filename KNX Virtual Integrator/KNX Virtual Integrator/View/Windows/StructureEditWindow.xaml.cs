@@ -74,7 +74,7 @@ public partial class StructureEditWindow
         {
             Resources["StructEditWindowTitle"]="Fenêtre d'édition de Structure de Modèle Fonctionnel";
             Resources["StructRmvText"]="Supprimer la structure";
-            Resources["TestedElementsListTitle"]="Liste d'Éléments à Tester";
+            Resources["FunctionalModelStructure"]="Structure du Modèle Fonctionnel";
             Resources["DptPersonalizationTitle"]="Personnalisation de DPTs";
             Resources["TestedElement"]="Élément à tester";
             Resources["DptType"] = "Type de DPT :";
@@ -82,15 +82,17 @@ public partial class StructureEditWindow
             Resources["Reception(s)"] = "Réception(s)";
             Resources["AddTestedElement"]="Ajouter un Élément à tester";
             Resources["Key"]="Clé";
-            Resources["Type"]="Type";
+            Resources["Name"]="Nom :";
+            Resources["Type"]="Type :";
             Resources["Keywords"]="Mots-clés";
+            Resources["DptNumber"]="Dpt de numéro :";
             Resources["AddDpt"]="Ajouter un DataPointType";
         }
         else
         {
             Resources["StructEditWindowTitle"]="Edition of the Structures";
             Resources["StructRmvText"]="Remove the structure";
-            Resources["TestedElementsListTitle"]="List of Test Elements";
+            Resources["FunctionalModelStructure"]="Your Functional Model Structure";
             Resources["TestedElement"]="Test Element";
             Resources["DptType"] = "DPT Type:";
             Resources["Dispatch(es)"] = "Dispatch(s)";
@@ -98,8 +100,10 @@ public partial class StructureEditWindow
             Resources["DptPersonalizationTitle"]="DPT Customization";
             Resources["AddTestedElement"]="Add a Test Element";
             Resources["Key"]="Key";
-            Resources["Type"]="Type";
+            Resources["Name"]="Name :";
+            Resources["Type"]="Type :";
             Resources["Keywords"]="Keywords";
+            Resources["DptNumber"]="Dpt number :";
             Resources["AddDpt"]="Add a DataPointType";
         }
     }
