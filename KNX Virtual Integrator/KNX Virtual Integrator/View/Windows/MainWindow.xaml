@@ -12,7 +12,7 @@
         WindowState="Maximized"
         ResizeMode="CanResize"
         WindowStyle="None"
-        Width="786" Height="1366"
+        Width="1500" Height="786"
         WindowTitleBrush="{StaticResource KnxGreenBrush}"
         NonActiveWindowTitleBrush="{StaticResource KnxGreenBrush}"
         Background="{StaticResource WhiteBackgroundBrush}"

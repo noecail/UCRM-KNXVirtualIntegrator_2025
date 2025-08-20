@@ -48,16 +48,13 @@ public partial class MainWindow
         
         AllColumnBorder.Loaded += (_, _) =>
         {
-            Col0.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col1.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col2.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col3.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             ApplyScaling();
         };
     }
 
     private void ApplyScaling()
     {
+        if (AllColumnBorder.IsLoaded is false) return;
         var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
         float scale;
         if (scaleFactor <= 1f)
@@ -73,7 +70,7 @@ public partial class MainWindow
         Col2.Width = new GridLength(1, GridUnitType.Star);
         Col3.Width = new GridLength(1, GridUnitType.Star);
         MainWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
-        if (1500 * scale > 0.9 * SystemParameters.PrimaryScreenWidth)
+        if (ActualWidth * scale >= 0.9 * SystemParameters.PrimaryScreenWidth)
         {
             Width = 0.9 * SystemParameters.PrimaryScreenWidth;
             Col0.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
@@ -83,10 +80,10 @@ public partial class MainWindow
         }
         else
         {
-            Width = 1500 * scale;
+            Width = ActualWidth * scale;
         }
-        Height = 786 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 786 * scale;
-        }
+        Height = ActualHeight * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : ActualHeight * scale;
+    }
 
     private void ApplyThemeToWindow()
     {
