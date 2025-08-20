@@ -162,8 +162,11 @@
                     <!-- TODO: régler largeur panneaux-->
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition x:Name="Col0" Width="3*"/>   <!-- Modèles -->
+                        <ColumnDefinition Width="3"/>
                         <ColumnDefinition x:Name="Col1" Width="4*"/>   <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition Width="3"/>
                         <ColumnDefinition x:Name="Col2" Width="4*"/>   <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
+                        <ColumnDefinition Width="3"/>
                         <ColumnDefinition x:Name="Col3" Width="3*"/>     <!-- Adresses -->
                     </Grid.ColumnDefinitions>
                         
@@ -217,6 +220,7 @@
                                     Margin="5"
                                     Padding="5"
                                     Height="30"
+                                    Visibility="Hidden"
                             />
                         </Grid>
                     </Border>
@@ -294,6 +298,7 @@
                         </Grid>
                     </Border>
 
+                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ShowsPreview="True"></GridSplitter>
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Deuxième colonne
                     Liste des Modèles Fonctionnels correspondant à la Structure Sélectionnée
@@ -302,7 +307,7 @@
                     -->
 
                     <!-- En-tête colonne 2-->
-                    <Border Grid.Row="0" Grid.Column="1" 
+                    <Border Grid.Row="0" Grid.Column="2" 
                             x:Name="BorderModelBib"
                             Style="{StaticResource BorderLight}"
                             BorderThickness="0,0,1,1">
@@ -336,12 +341,13 @@
                                     Margin="5"
                                     Padding="5"
                                     Height="30"
+                                    Visibility="Hidden"
                             />
                         </Grid>
                     </Border>
                         
                     <!-- Contenu colonne 2 : liste des Modèles Fonctionnels correspondant à la Structure sélectionnée-->
-                    <Border Grid.Row="1" Grid.Column="1"
+                    <Border Grid.Row="1" Grid.Column="2"
                             x:Name="BorderAllModels"
                             Style="{StaticResource BorderLight}"
                             BorderThickness="0,0,1,0">
@@ -407,6 +413,8 @@
                         </Grid>
                     </Border>
                     
+                    
+                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" ShowsPreview="True"></GridSplitter>
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Troisième colonne
                     Liste des Éléments à Tester d'un Modèle Fonctionnel
@@ -415,8 +423,10 @@
                     -->
                     
                     <!-- En-tête colonne 3 -->
-                    <Border Grid.Row="0" Grid.Column="2" BorderBrush="{StaticResource GrayBorderBrush}"
-                                BorderThickness="0,0,1,0" >
+                    <Border Grid.Row="0" Grid.Column="4" 
+                            x:Name="BorderElement"
+                            Style="{StaticResource BorderLight}"
+                            BorderThickness="0,0,1,1" >
                         
                         <Grid>
                             <TextBlock x:Name="Number5" Text="5"
@@ -436,7 +446,7 @@
                     </Border>
                     
                     <!-- Contenu colonne 3 : liste des Éléments à Tester -->
-                    <Border Grid.Row="1" Grid.Column="2" 
+                    <Border Grid.Row="1" Grid.Column="4" 
                             x:Name="BorderAllElements"
                             BorderBrush="{StaticResource GrayBorderBrush}"
                             BorderThickness="0,0,1,0" >
@@ -812,6 +822,8 @@
                             </ListBox>
                         </Grid>
                     </Border>
+                    
+                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="5" ShowsPreview="True"></GridSplitter>
                         
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Quatrième colonne
@@ -820,8 +832,9 @@
                     -->
                     
                     <!-- En-tête -->
-                    <Border Grid.Row="0" Grid.Column="3" x:Name="AdressTitleBorder"
-                            Style="{StaticResource BorderLight}">
+                    <Border Grid.Row="0" Grid.Column="6" x:Name="BorderAddress"
+                            Style="{StaticResource BorderLight}"
+                            BorderThickness="0,0,0,1">
                         <Grid >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" /> <!--Titre avec son icon-->
@@ -848,12 +861,13 @@
                                     Margin="5"
                                     Padding="5"
                                     Height="30"
+                                    Visibility="Hidden"
                             />
 
                         </Grid>
                     </Border>
                     
-                    <Border x:Name="BorderAddressTree" Grid.Row="1" Grid.Column="3">
+                    <Border x:Name="BorderAddressTree" Grid.Row="1" Grid.Column="6">
                         <TreeView
                             x:Name="GroupAddressTreeView"
                             ScrollViewer.CanContentScroll="False"

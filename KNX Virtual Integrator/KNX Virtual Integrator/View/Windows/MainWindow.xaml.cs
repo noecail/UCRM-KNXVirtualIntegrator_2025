@@ -8,7 +8,6 @@ using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
-
 namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
@@ -57,7 +56,7 @@ public partial class MainWindow
         if (AllColumnBorder.IsLoaded is false) return;
         var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
         float scale;
-        if (scaleFactor <= 1f)
+        if (scaleFactor < 1f)
         {
             scale = scaleFactor - 0.1f;
         }
@@ -65,10 +64,10 @@ public partial class MainWindow
         {
             scale = scaleFactor - 0.2f;
         }
-        Col0.Width = new GridLength(1, GridUnitType.Star);
-        Col1.Width = new GridLength(1, GridUnitType.Star);
-        Col2.Width = new GridLength(1, GridUnitType.Star);
-        Col3.Width = new GridLength(1, GridUnitType.Star);
+        Col0.Width = new GridLength(3, GridUnitType.Star);
+        Col1.Width = new GridLength(4, GridUnitType.Star);
+        Col2.Width = new GridLength(4, GridUnitType.Star);
+        Col3.Width = new GridLength(3, GridUnitType.Star);
         MainWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
         if (ActualWidth * scale >= 0.9 * SystemParameters.PrimaryScreenWidth)
         {
@@ -147,14 +146,13 @@ public partial class MainWindow
         
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
-        //BorderDefStruct.Style = borderStyles;
         BorderAllModels.Style = borderStyles;
         BorderModelTitle.Style = borderTitleStyles;
-        //BorderModels.Style = borderStyles;
         BorderAddModel.Style = borderStyles;
         BorderModelBib.Style = borderStyles;
         BorderStructBib.Style = borderStyles;
-        AdressTitleBorder.Style = borderTitleStyles;
+        BorderAddress.Style = borderStyles;
+        BorderElement.Style = borderStyles;
         
         
         SearchDefStructButton.Style = searchbuttonStyle;
