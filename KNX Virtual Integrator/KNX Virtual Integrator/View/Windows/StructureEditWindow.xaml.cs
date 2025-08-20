@@ -88,7 +88,7 @@ public partial class StructureEditWindow
         }
         else
         {
-            Resources["StructEditWindowTitle"]="Functional Model's Structure Edition";
+            Resources["StructEditWindowTitle"]="Edition of the Structures";
             Resources["StructRmvText"]="Remove the structure";
             Resources["TestedElementsListTitle"]="List of Test Elements";
             Resources["TestedElement"]="Test Element";
@@ -111,7 +111,19 @@ public partial class StructureEditWindow
     }
     private void ApplyScaling()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyScaling is not implemented");
+        var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
+        float scale;
+        if (scaleFactor < 1f)
+        {
+            scale = scaleFactor - 0.1f;
+        }
+        else
+        {
+            scale = scaleFactor - 0.2f;
+        }
+        StructEditWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
+        Width = 1500 * scale >= 0.9*SystemParameters.PrimaryScreenWidth? 0.9*SystemParameters.PrimaryScreenWidth : 1500 * scale;
+        Height = 786 * scale >= 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 786 * scale;
     }
     
     

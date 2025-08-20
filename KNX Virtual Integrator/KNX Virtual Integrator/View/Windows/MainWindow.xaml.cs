@@ -69,7 +69,7 @@ public partial class MainWindow
         Col2.Width = new GridLength(4, GridUnitType.Star);
         Col3.Width = new GridLength(3, GridUnitType.Star);
         MainWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
-        if (ActualWidth * scale >= 0.9 * SystemParameters.PrimaryScreenWidth)
+        if (1500 * scale >= 0.9 * SystemParameters.PrimaryScreenWidth)
         {
             Width = 0.9 * SystemParameters.PrimaryScreenWidth;
             Col0.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
@@ -80,9 +80,9 @@ public partial class MainWindow
         }
         else
         {
-            Width = ActualWidth * scale;
+            Width = 1500 * scale;
         }
-        Height = ActualHeight * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : ActualHeight * scale;
+        Height = 786 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 786 * scale;
     }
 
     private void ApplyThemeToWindow()

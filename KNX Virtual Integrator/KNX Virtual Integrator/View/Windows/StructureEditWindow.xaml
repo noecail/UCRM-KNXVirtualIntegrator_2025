@@ -33,7 +33,7 @@
         </CollectionViewSource>
     </Window.Resources>
     
-    <Border>
+    <ScrollViewer x:Name="StructEditWindowBorder" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/> <!--Bandeau supérieur-->
@@ -497,5 +497,5 @@
             </Border>
             
         </Grid>
-    </Border>
+    </ScrollViewer>
 </mah:MetroWindow>
