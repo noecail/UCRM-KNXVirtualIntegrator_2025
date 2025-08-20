@@ -75,7 +75,8 @@ public partial class MainWindow
             Col0.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             Col1.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             Col2.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col3.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col3.Width = new GridLength(1, GridUnitType.Star);
+            //Col3.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
         }
         else
         {

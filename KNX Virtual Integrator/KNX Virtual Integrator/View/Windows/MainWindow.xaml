@@ -843,7 +843,9 @@
 
 
                             <!--Titre avec son icon-->
-                            <StackPanel Grid.Column="0"  Background="{StaticResource NoColorBrush}" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel Grid.Column="0"  
+                                        Margin="40,0,0,0"
+                                        Background="{StaticResource NoColorBrush}" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                                 <Image Source="{StaticResource GroupAdressesDrawingImage}" Height="20"/>
                                 <TextBlock 
                                         x:Name="AddressTitleText"
