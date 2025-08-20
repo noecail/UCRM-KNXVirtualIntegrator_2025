@@ -207,13 +207,13 @@ public partial class MainWindow
             Resources["ModelsTitle"] = "Functional Models";
             Resources["CreateFunctionalModel"] = "New Functional Model";
             Resources["ModelsParametersTitle"] = "Model Parameters";
-            Resources["Name:"] = "Name :";
+            Resources["Name:"] = "Name:";
             
-            Resources["TestedElement"] = "Test Elements";
+            Resources["TestedElement"] = "Tested Element";
             Resources["DptType"] = "DPT Type:";
-            Resources["LinkedAddress"] = "Linked Address :";
-            Resources["Values"] = "Values :";
-            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["LinkedAddress"] = "Linked Address:";
+            Resources["Values"] = "Values:";
+            Resources["Dispatch(es)"] = "Dispatch(es)";
             Resources["Reception(s)"] = "Reception(s)";
             Resources["ShowAllModels"] = "Show all models";
             Resources["ShowTheModel"] = "Show selected model";

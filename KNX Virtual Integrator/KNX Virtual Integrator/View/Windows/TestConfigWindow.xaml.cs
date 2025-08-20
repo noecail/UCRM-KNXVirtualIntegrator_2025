@@ -78,13 +78,13 @@ public partial class TestConfigWindow
             Resources["PredefinedStructures"] = "Predefined Structures";
             Resources["ModelsTitle"] = "Functional Models";
             Resources["ModelsParametersTitle"] = "Model Parameters";
-            Resources["Name:"] = "Name :";
+            Resources["Name:"] = "Name:";
             
-            Resources["TestedElement"] = "Test Elements";
+            Resources["TestedElement"] = "Tested Element";
             Resources["DptType"] = "DPT Type:";
-            Resources["LinkedAddress"] = "Linked Address :";
-            Resources["Values"] = "Values :";
-            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["LinkedAddress"] = "Linked Address:";
+            Resources["Values"] = "Values:";
+            Resources["Dispatch(es)"] = "Dispatch(es)";
             Resources["Reception(s)"] = "Reception(s)";
             
             Resources["TestWindowTitle"] = "Test Configuration";

@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Xml;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
@@ -97,6 +98,18 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             set { _value = value; OnPropertyChanged(); }
         }
 
+        private Visibility? _removeDptButtonVisibility;
+        public Visibility? RemoveDptButtonVisibility
+        {
+            get => _removeDptButtonVisibility;
+            set
+            {
+                if (_removeDptButtonVisibility == value) return;
+                _removeDptButtonVisibility = value;
+                OnPropertyChanged();
+            }
+        }
+        
         public static implicit operator int(IntItem item) => item.Value;
 
         public override string ToString()
@@ -107,6 +120,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         public IntItem(int value)
         {
             Value = value;
+            RemoveDptButtonVisibility = Visibility.Hidden;
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -123,11 +137,23 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         public void AddToCmd(int value)
         {
             Cmd.Add(new IntItem(value));
+            UpdateRemoveDptButtonVisibility();
         }
 
         public void AddToIe(int value)
         {
             Ie.Add(new IntItem(value));
+        }
+
+        public void RemoveCmdAt(int cmdIndex)
+        {
+            Cmd.RemoveAt(cmdIndex);
+            UpdateRemoveDptButtonVisibility();
+        }
+
+        public void RemoveIeAt(int ieIndex)
+        {
+            Ie.RemoveAt(ieIndex);
         }
         
         public ElementStructure()
@@ -152,6 +178,13 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 AddToIe(ieInt);
         }
 
+        private void UpdateRemoveDptButtonVisibility()
+        {
+            var vis = Cmd.Count > 1 ? Visibility.Visible : Visibility.Hidden;
+            foreach (var intItem in Cmd)
+                intItem.RemoveDptButtonVisibility = vis;
+        }
+        
     }
     
     // Gives the same output as ToString method. But ToString does not dynamically change when the name is modified

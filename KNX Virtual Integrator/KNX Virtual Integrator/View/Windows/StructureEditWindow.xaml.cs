@@ -93,17 +93,17 @@ public partial class StructureEditWindow
             Resources["StructEditWindowTitle"]="Edition of the Structures";
             Resources["StructRmvText"]="Remove the structure";
             Resources["FunctionalModelStructure"]="Your Functional Model Structure";
-            Resources["TestedElement"]="Test Element";
+            Resources["TestedElement"]="Tested Element";
             Resources["DptType"] = "DPT Type:";
-            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["Dispatch(es)"] = "Dispatch(es)";
             Resources["Reception(s)"] = "Reception(s)";
             Resources["DptPersonalizationTitle"]="DPT Customization";
-            Resources["AddTestedElement"]="Add a Test Element";
+            Resources["AddTestedElement"]="Add a Tested Element";
             Resources["Key"]="Key";
-            Resources["Name"]="Name :";
-            Resources["Type"]="Type :";
+            Resources["Name"]="Name:";
+            Resources["Type"]="Type:";
             Resources["Keywords"]="Keywords";
-            Resources["DptNumber"]="Dpt number :";
+            Resources["DptNumber"]="Dpt number:";
             Resources["AddDpt"]="Add a DataPointType";
         }
     }

@@ -336,7 +336,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     elementStructure = SelectedStructure.ModelStructure[elementIndex];
                 if (elementStructure?.Cmd.Count > 1)
                 {
-                    elementStructure.Cmd.RemoveAt(cmdIndex);
+                    elementStructure.RemoveCmdAt(cmdIndex);
                 }
 
                 return Task.CompletedTask;
@@ -351,7 +351,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 FunctionalModelStructure.ElementStructure? elementStructure = null;
                 if (SelectedStructure != null)
                     elementStructure = SelectedStructure.ModelStructure[elementIndex];
-                elementStructure?.Ie.RemoveAt(ieIndex);
+                elementStructure?.RemoveIeAt(ieIndex);
                 return Task.CompletedTask;
             }
         );

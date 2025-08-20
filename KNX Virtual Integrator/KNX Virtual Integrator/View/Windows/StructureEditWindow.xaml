@@ -422,7 +422,8 @@
                                                                                     VerticalAlignment="Bottom"
                                                                                     Margin="2,0,0,0"
                                                                                     Style="{StaticResource DeactivateValueButtonStyle}"
-                                                                                    Command="{Binding DataContext.RemoveCmdDptFromElementStructureCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                                                                    Command="{Binding DataContext.RemoveCmdDptFromElementStructureCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                    Visibility="{Binding RemoveDptButtonVisibility }">
                                                                                     <Button.CommandParameter>
                                                                                         <MultiBinding Converter="{StaticResource IndicesToTupleConverter}">
                                                                                             <!-- Index du ModelStructure -->

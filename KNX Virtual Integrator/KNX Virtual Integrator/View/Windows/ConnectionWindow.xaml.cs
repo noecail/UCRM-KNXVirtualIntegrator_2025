@@ -68,8 +68,8 @@ public partial class ConnectionWindow
         else
         {
             Resources["ConnectionWindowTitle"]="KNX Bus Connection";
-            Resources["ConnectionType"]="Connection type :";
-            Resources["AvailableInterfaces"]="Available interfaces :";
+            Resources["ConnectionType"]="Connection type:";
+            Resources["AvailableInterfaces"]="Available interfaces:";
             Resources["Refresh"]="Refresh";
             Resources["NatConnection"]="Connection (NAT)";
             Resources["PublicIp"]="Router public IP";
@@ -79,7 +79,7 @@ public partial class ConnectionWindow
             Resources["ImportKeys"]="Import keys";
             Resources["PwdKeys"]="Keys file password";
             Resources["ConnectionError"]="Connection error";
-            Resources["CurrentInterface"]="Currently connected interface :";
+            Resources["CurrentInterface"]="Currently connected interface:";
             Resources["ConnectButtonText"]="Connect";
             Resources["DisconnectButtonText"]="Disconnect";
             

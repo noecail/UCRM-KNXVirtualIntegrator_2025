@@ -57,10 +57,10 @@ public partial class ReportCreationWindow
             Resources["ReportWindowTitle"] = "Test report creation";
             Resources["TestGenerationTitle"] = "Test report generation";
             Resources["DocParametersTitle"] = "Document parameters";
-            Resources["AuthorReport"] = "Report author :";
-            Resources["ReportPath"] = "Report path :";
-            Resources["ReportFullPath"] = "Report full path :";
-            Resources["ReportPreview"] = "Report preview :";
+            Resources["AuthorReport"] = "Report author:";
+            Resources["ReportPath"] = "Report path:";
+            Resources["ReportFullPath"] = "Report full path:";
+            Resources["ReportPreview"] = "Report preview:";
             Resources["GenerationButton"] = "Generate report";
             Resources["CancelButton"] = "Cancel";
         }
