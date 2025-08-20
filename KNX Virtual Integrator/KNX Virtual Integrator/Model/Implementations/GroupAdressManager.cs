@@ -808,11 +808,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             index = functionalModelList.FunctionalModelDictionary.FunctionalModels.Count;
 
 
-                            functionalModelList.AddToDictionary(
-                                new FunctionalModelStructure(newFunctionalModels[0], modelName, index + 1), true);
+                            if (newFunctionalModels.Count > 0)
+                            {
+                                functionalModelList.AddToDictionary(
+                                    new FunctionalModelStructure(newFunctionalModels[0], modelName, index + 1), true);
+                                functionalModelList.FunctionalModels[index].Clear();
 
+                            }
 
-                            functionalModelList.FunctionalModels[index].Clear();
                         }
                     }
 
