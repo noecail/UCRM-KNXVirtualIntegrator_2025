@@ -878,5 +878,95 @@
             </DrawingGroup>
         </DrawingImage.Drawing>
     </DrawingImage>
-        
+
+    <DrawingImage x:Key="PdfCreationImageLight">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,512">
+                    <GeometryDrawing Brush="{StaticResource LightForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M905,5106C848,5080,845,5067,842,4813L839,4580 656,4580C476,4580 472,4580 447,4556 433,4543 418,4521 415,4508 412,4496 411,3489 412,2273L415,60 443,33 470,5 2345,5 4220,5 4247,33 4275,60 4280,298 4285,535 4460,537C4573,539 4643,544 4658,552 4713,581 4710,483 4710,2298L4710,3977 4681,4016C4575,4160 3809,5097 3789,5107 3752,5126 947,5125 905,5106z M3640,4585C3640,4406 3637,4260 3633,4261 3628,4261 3571,4329 3505,4411 3439,4494 3381,4565 3375,4568 3370,4572 2845,4577 2210,4580L1055,4585 1052,4748 1050,4910 2345,4910 3640,4910 3640,4585z M4121,4380C4256,4212 4369,4069 4374,4063 4380,4053 4325,4050 4116,4050L3850,4050 3850,4383C3851,4646 3853,4712 3863,4700 3870,4691 3985,4547 4121,4380z M3212,3870L3215,3370 3243,3343 3270,3315 3670,3312 4070,3309 4070,1760 4070,210 2345,210 620,210 620,2290 620,4370 1915,4370 3209,4370 3212,3870z M3713,3823C3843,3662 3950,3528 3950,3525 3950,3522 3831,3520 3685,3520L3420,3520 3420,3850 3420,4181 3448,4148C3464,4130,3583,3983,3713,3823z M4500,2295L4500,750 4390,750 4280,750 4280,2103 4280,3456 4125,3648 3969,3840 4235,3840 4500,3840 4500,2295z" />
+                    <GeometryDrawing Brush="{StaticResource LightForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1221,2866C1164,2835,1154,2759,1199,2708L1228,2675 2345,2675 3462,2675 3491,2708C3539,2762 3526,2837 3463,2869 3429,2887 1253,2884 1221,2866z" />
+                    <GeometryDrawing Brush="{StaticResource LightForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1221,2226C1164,2195,1154,2119,1199,2068L1228,2035 2345,2035 3462,2035 3491,2068C3539,2122 3526,2197 3463,2229 3429,2247 1253,2244 1221,2226z" />
+                    <GeometryDrawing Brush="{StaticResource LightForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1221,1586C1164,1555,1154,1479,1199,1428L1228,1395 2317,1392C2915,1390 3419,1392 3436,1395 3533,1412 3551,1544 3463,1589 3429,1607 1253,1604 1221,1586z" />
+                    <GeometryDrawing Brush="{StaticResource LightForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1218,943C1163,908,1154,838,1199,788L1228,755 2317,752C2915,751 3419,752 3436,755 3533,772 3551,904 3463,949 3447,957 3133,960 2343,960 1338,959 1243,958 1218,943z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="PdfCreationImageDark">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V512 H512 V0 H0 Z">
+                <DrawingGroup Opacity="1" Transform="0.1,0,0,-0.1,0,512">
+                    <GeometryDrawing Brush="{StaticResource DarkForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M905,5106C848,5080,845,5067,842,4813L839,4580 656,4580C476,4580 472,4580 447,4556 433,4543 418,4521 415,4508 412,4496 411,3489 412,2273L415,60 443,33 470,5 2345,5 4220,5 4247,33 4275,60 4280,298 4285,535 4460,537C4573,539 4643,544 4658,552 4713,581 4710,483 4710,2298L4710,3977 4681,4016C4575,4160 3809,5097 3789,5107 3752,5126 947,5125 905,5106z M3640,4585C3640,4406 3637,4260 3633,4261 3628,4261 3571,4329 3505,4411 3439,4494 3381,4565 3375,4568 3370,4572 2845,4577 2210,4580L1055,4585 1052,4748 1050,4910 2345,4910 3640,4910 3640,4585z M4121,4380C4256,4212 4369,4069 4374,4063 4380,4053 4325,4050 4116,4050L3850,4050 3850,4383C3851,4646 3853,4712 3863,4700 3870,4691 3985,4547 4121,4380z M3212,3870L3215,3370 3243,3343 3270,3315 3670,3312 4070,3309 4070,1760 4070,210 2345,210 620,210 620,2290 620,4370 1915,4370 3209,4370 3212,3870z M3713,3823C3843,3662 3950,3528 3950,3525 3950,3522 3831,3520 3685,3520L3420,3520 3420,3850 3420,4181 3448,4148C3464,4130,3583,3983,3713,3823z M4500,2295L4500,750 4390,750 4280,750 4280,2103 4280,3456 4125,3648 3969,3840 4235,3840 4500,3840 4500,2295z" />
+                    <GeometryDrawing Brush="{StaticResource DarkForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1221,2866C1164,2835,1154,2759,1199,2708L1228,2675 2345,2675 3462,2675 3491,2708C3539,2762 3526,2837 3463,2869 3429,2887 1253,2884 1221,2866z" />
+                    <GeometryDrawing Brush="{StaticResource DarkForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1221,2226C1164,2195,1154,2119,1199,2068L1228,2035 2345,2035 3462,2035 3491,2068C3539,2122 3526,2197 3463,2229 3429,2247 1253,2244 1221,2226z" />
+                    <GeometryDrawing Brush="{StaticResource DarkForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1221,1586C1164,1555,1154,1479,1199,1428L1228,1395 2317,1392C2915,1390 3419,1392 3436,1395 3533,1412 3551,1544 3463,1589 3429,1607 1253,1604 1221,1586z" />
+                    <GeometryDrawing Brush="{StaticResource DarkForegroundBrush}"
+                                     Geometry="F1 M512,512z M0,0z M1218,943C1163,908,1154,838,1199,788L1228,755 2317,752C2915,751 3419,752 3436,755 3533,772 3551,904 3463,949 3447,957 3133,960 2343,960 1338,959 1243,958 1218,943z" />
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="CheckmarkLight">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V200 H200 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{StaticResource LightForegroundBrush}"
+                                         Geometry="F1 M200,200z M0,0z M71.85,170.17C47.88,145.5 24.91,121.87 1.22,97.48 7.66,91.43 13.61,85.84 18.82,80.94 37.15,98.28 55.11,115.27 73.63,132.78 109.14,99.25 145.32,65.08 181.76,30.68 187.89,36.72 193.64,42.39 200.01,48.67 157.4,89.05 115.09,129.17 71.85,170.17z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="CheckmarkDark">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V200 H200 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{StaticResource DarkForegroundBrush}"
+                                         Geometry="F1 M200,200z M0,0z M71.85,170.17C47.88,145.5 24.91,121.87 1.22,97.48 7.66,91.43 13.61,85.84 18.82,80.94 37.15,98.28 55.11,115.27 73.63,132.78 109.14,99.25 145.32,65.08 181.76,30.68 187.89,36.72 193.64,42.39 200.01,48.67 157.4,89.05 115.09,129.17 71.85,170.17z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="CrossmarkLight">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V200 H200 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{StaticResource LightForegroundBrush}"
+                                         Geometry="F1 M200,200z M0,0z M99.63,120.8C72.17,148.17 46.48,173.78 20.39,199.78 13.61,192.76 7.41,186.34 0,178.66 25.77,153.17 51.75,127.46 77.55,101.93 51.64,76.29 25.89,50.81 0.71,25.89 8.13,18.48 14.31,12.29 20.73,5.88 45.36,30.49 71.13,56.23 96.6,81.68 124.58,53.7 151.26,27.02 178.29,0 186.31,8.18 192.53,14.53 200,22.15 173.32,48.58 146.55,75.1 119.98,101.43 146.76,127.82 173.39,154.06 199.66,179.93 191.94,187.46 185.67,193.59 179.11,200 153.67,174.65 127.03,148.11 99.63,120.8z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
+    <DrawingImage x:Key="CrossmarkDark">
+        <DrawingImage.Drawing>
+            <DrawingGroup ClipGeometry="M0,0 V200 H200 V0 H0 Z">
+                <DrawingGroup Opacity="1">
+                    <DrawingGroup Opacity="1">
+                        <GeometryDrawing Brush="{StaticResource DarkForegroundBrush}"
+                                         Geometry="F1 M200,200z M0,0z M99.63,120.8C72.17,148.17 46.48,173.78 20.39,199.78 13.61,192.76 7.41,186.34 0,178.66 25.77,153.17 51.75,127.46 77.55,101.93 51.64,76.29 25.89,50.81 0.71,25.89 8.13,18.48 14.31,12.29 20.73,5.88 45.36,30.49 71.13,56.23 96.6,81.68 124.58,53.7 151.26,27.02 178.29,0 186.31,8.18 192.53,14.53 200,22.15 173.32,48.58 146.55,75.1 119.98,101.43 146.76,127.82 173.39,154.06 199.66,179.93 191.94,187.46 185.67,193.59 179.11,200 153.67,174.65 127.03,148.11 99.63,120.8z" />
+                    </DrawingGroup>
+                </DrawingGroup>
+            </DrawingGroup>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+    
 </ResourceDictionary>

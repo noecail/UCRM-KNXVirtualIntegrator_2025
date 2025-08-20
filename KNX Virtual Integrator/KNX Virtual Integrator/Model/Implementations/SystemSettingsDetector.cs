@@ -121,10 +121,10 @@ public class SystemSettingsDetector (ILogger logger) : ISystemSettingsDetector
             // Récupérer la valeur du registre qui indique l'échelle du système.
             var registryValue = key?.GetValue("AppliedDpi");
 
-            // Si la valeur récupérée est un entier, on vérifie si elle est égale à 1.
-            // Si c'est le cas, cela signifie que le thème clair est activé.
+            // Si la valeur récupérée est un entier on retourne le facteur d'échelle correspondant
             if (registryValue is int value)
             {
+                logger.ConsoleAndLogWriteLine($"Device DPI detected : {value}");
                 return value switch
                 {
                     96  => 100,
