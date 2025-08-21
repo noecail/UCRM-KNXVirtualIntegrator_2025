@@ -415,6 +415,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
             int structureKey = SelectedStructure.Model.Key - 1;
             _functionalModelList.FunctionalModels[structureKey].Clear();
+            var key = structureKey + 1;
+            _functionalModelList.FunctionalModelDictionary.FunctionalModels[structureKey].Model = _functionalModelList
+                .FunctionalModelDictionary.FunctionalModels[structureKey].BuildFunctionalModel(_functionalModelList
+                    .FunctionalModelDictionary.FunctionalModels[structureKey].Model.Name,key);
             _functionalModelList.ReinitializeNbModels(structureKey);
             _functionalModelList.AddToList(structureKey);
             
