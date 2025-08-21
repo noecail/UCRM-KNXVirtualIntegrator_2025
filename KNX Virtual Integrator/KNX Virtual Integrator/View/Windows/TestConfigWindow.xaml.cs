@@ -104,7 +104,7 @@ public partial class TestConfigWindow
 
         if (_viewModel.AppSettings.EnableLightTheme)
         {
-            ChosenTestModelesListBox.Style = (Style)FindResource("StandardListBoxLight");
+            ChosenTestModelesListBox.Style = (Style)FindResource("ListBoxStyleLight");
             ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerLight");
             ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
             SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateLight");

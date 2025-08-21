@@ -182,6 +182,11 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
                     var resultString = "Commande n°" + (k+1) + " :   ";
                     foreach (var testedIe in testedElement.TestsIe)
                     {
+                        if (testedIe.Address == "")
+                        {
+                            resultString += " Address Error.";
+                            break;
+                        }
                         resultString += testResults[i][j][k][l] + (testedElement.TestsIe.Count==1 || testedElement.TestsIe.Last().IsEqual(testedIe)?"":", ") ;
                         l++;
                     }
