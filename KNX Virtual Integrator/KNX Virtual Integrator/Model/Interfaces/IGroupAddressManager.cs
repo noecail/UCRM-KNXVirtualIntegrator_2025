@@ -74,5 +74,5 @@ public interface IGroupAddressManager
     /// <returns>An integer indicating the overlap status: 3 for detected overlap, 2 for no overlap.</returns>
     /// </summary>
     public int DetermineGroupAddressStructureGroupAddressFile(IEnumerable<XElement>? modelStructures);
-
+    
 }

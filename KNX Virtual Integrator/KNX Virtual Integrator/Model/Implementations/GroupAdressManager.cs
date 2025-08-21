@@ -384,10 +384,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         if (modelStructures != null)
         {
             _groupAddressStructure = DetermineGroupAddressStructureGroupAddressFile(modelStructures); //Determines if the address structure is in 2 or 3 levels
-            for (var i = 0; i < functionalModelList.FunctionalModels.Count; i++) //Clears the list of list
+            for (var i = 0; i < functionalModelList.FunctionalModelDictionary.FunctionalModels.Count; i++) //Clears the list of list
             {
                 functionalModelList.FunctionalModels[i].Clear();
                 functionalModelList.ResetCount(i);
+            }
+            if (functionalModelList.FunctionalModelDictionary.FunctionalModels[^1].Model.Name.Contains("Unrecognized DPTs",StringComparison.OrdinalIgnoreCase))
+            {
+                functionalModelList.DeleteFromDictionary(functionalModelList.FunctionalModelDictionary.FunctionalModels.Count-1);
             }
             if (_groupAddressStructure == 3)  //If the address structure is 3 levels
             {
@@ -828,11 +832,15 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 }
 
                 if (lostDataPointTypes.Count > 0)
-                    functionalModelList.FunctionalModels.Add([]);
+                {
+                    functionalModelList.AddNewCount();
+                    functionalModelList.AddToDictionary(new FunctionalModelStructure("Unrecognized DPTs"),false);
+                    functionalModelList.FunctionalModels[^1].Clear();
+                }
 
                 foreach (var dpt in  lostDataPointTypes)
                 {
-                    functionalModelList.FunctionalModels[^1].Add(new FunctionalModel(dpt.Name));
+                    functionalModelList.AddToList(functionalModelList.FunctionalModels.Count-1,new FunctionalModel(dpt.Name),false);
                     functionalModelList.FunctionalModels[^1][^1].AddElement(new TestedElement());
                     functionalModelList.FunctionalModels[^1][^1].ElementList[^1].AddDptToCmd(dpt);
                 }

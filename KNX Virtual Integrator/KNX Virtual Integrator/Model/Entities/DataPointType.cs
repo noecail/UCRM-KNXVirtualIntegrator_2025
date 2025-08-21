@@ -189,7 +189,7 @@ public class DataPointType : INotifyPropertyChanged
             //Console.WriteLine("Copying "+other.IntValue[i].BigIntegerValue );
             IntValue.Add(new BigIntegerItem(other.IntValue[i].BigIntegerValue ?? 0));
         }
-        UpdateValue();
+        //UpdateValue();
     }
     
     public DataPointType(DataPointType dpt, string address)

@@ -138,11 +138,11 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 newModel.Model.Name += "_Structure_" + _nbStructuresCreated;
             else if (!functionalModel.Model.Name.Contains("Structure"))
                 newModel.Model.Name += "_Structure";
-            if (imported == false)
+            if (imported == false && newModel.Model.ElementList.Count ==0)
                 newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name, FunctionalModels.Count +1);
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
-            
+
         }
 
         public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported, List<string> keywords)
@@ -187,6 +187,8 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name,FunctionalModels.Count + 1);
 
             FunctionalModels.Add(newModel);
+            //newModel.Model.DisplayIntValues();
+
             OnPropertyChanged(nameof(FunctionalModels));
         }
 

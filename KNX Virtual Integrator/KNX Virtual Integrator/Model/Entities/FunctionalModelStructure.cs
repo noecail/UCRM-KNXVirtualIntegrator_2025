@@ -546,7 +546,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 var value = ieValue[j];
                 for (var k = 0; k < value.Count; k++)
                 {
-                    Console.WriteLine("We're adding "+value[k]+" to "+ Model.Name);
                     if (Model.ElementList[i].TestsIe[j].IntValue.Count<k+1)
                     {
                         Model.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(value[k]));
@@ -626,17 +625,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             res.AddElement(new TestedElement());
             foreach (var cmd in element.Cmd)
             {
-                var dptToAdd = new DataPointType(DptDictionary[cmd].Dpt);
-                for (var i = 0; i < dptToAdd.IntValue.Count; i++)
-                    dptToAdd.IntValue[i] = new DataPointType.BigIntegerItem(dptToAdd.IntValue[i].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
-                res.ElementList[^1].AddDptToCmd(dptToAdd);
+                res.ElementList[^1].AddDptToCmd(new DataPointType(cmd));
             }
             foreach (var ie in element.Ie)
             {
-                var dptToAdd = new DataPointType(DptDictionary[ie].Dpt);
-                for (var i = 0; i < dptToAdd.IntValue.Count; i++)
-                    dptToAdd.IntValue[i] = new DataPointType.BigIntegerItem(dptToAdd.IntValue[i].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
-                res.ElementList[^1].AddDptToIe(dptToAdd);
+                res.ElementList[^1].AddDptToIe(new DataPointType(ie));
             }
         }
 

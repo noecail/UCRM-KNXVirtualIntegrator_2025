@@ -52,6 +52,7 @@ public class FunctionalModelList : IFunctionalModelList
                 if (FunctionalModels.Count <= FunctionalModelDictionary.FunctionalModels.Count) //If a model structure is created in the dictionary, creates a list with one element of this new model
                 {
                     FunctionalModels.Add([]);
+                    _nbModelsCreated.Add(0);
                     AddToList(FunctionalModelDictionary.FunctionalModels.Count - 1);
                 } 
                 OnPropertyChanged(nameof(FunctionalModels)); //notifier le mainViewModel
@@ -68,10 +69,6 @@ public class FunctionalModelList : IFunctionalModelList
     public void AddToList(int index)
     {
         FunctionalModel newModel;
-       /* var key = FunctionalModelDictionary.FunctionalModels[index].Model.Key;
-        FunctionalModelDictionary.FunctionalModels[index].Model = FunctionalModelDictionary.FunctionalModels[index]
-            .BuildFunctionalModel(FunctionalModelDictionary.FunctionalModels[index].Model.Name);
-        FunctionalModelDictionary.FunctionalModels[index].Model.Key = key;*/
         // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
         if (FunctionalModels[index].Count <= 1)
         {
@@ -93,34 +90,20 @@ public class FunctionalModelList : IFunctionalModelList
                 newModel.Name = string.Join("_",newModel.Name.Split('_')[..^1]) +"_" + _nbModelsCreated[index];
             }
         }
-/*
- 
-        for (var i = 0; i < newModel.ElementList.Count; i++)
-        {
-            var element = newModel.ElementList[i];
-            for (var j = 0; j < element.TestsCmd.Count; j++)
-            {
-                var dpt = element.TestsCmd[j];
-                for (var k = 0; k < dpt.IntValue.Count; k++)
-                {
-                    newModel.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(dpt.IntValue[k].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
-                }
-            }
-            for (var j = 0; j < element.TestsIe.Count; j++)
-            {
-                var dpt = element.TestsIe[j];
-                for (var k = 0; k < dpt.IntValue.Count; k++)
-                {
-                    newModel.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(dpt.IntValue[k].BigIntegerValue?? 0); //May look useless but allows to create a new instance of a dpt insead of copying the reference
-                }
-            }
-        }*/
         FunctionalModels[index].Add(newModel);
     }
     
     public void ResetCount(int index)
     {
         _nbModelsCreated[index] = 0;
+    }
+    
+    /// <summary>
+    /// Creates a new counter associated to a new list in the list of lists
+    /// </summary>
+    public void AddNewCount()
+    {
+        _nbModelsCreated.Add(0);
     }
 
     /// <summary>
@@ -134,6 +117,10 @@ public class FunctionalModelList : IFunctionalModelList
     {
 
         var newModel = new FunctionalModel(functionalModel,FunctionalModels[index].Count + 1,false);
+        if (_nbModelsCreated.Count < index)
+        {
+            _nbModelsCreated.Add(0);
+        }
         _nbModelsCreated[index]++;
         if (newModel.Name.Contains("Structure"))
         {
@@ -269,8 +256,12 @@ public class FunctionalModelList : IFunctionalModelList
         for (var i = 0;i<xnList?.Count;i++) // pour chaque structure
         {
             FunctionalModels.Add([]);
+            _nbModelsCreated.Add(0);
             foreach (XmlNode model in xnList[i]?.ChildNodes!) // pour chaque modèle
+            {
                 FunctionalModels[i].Add(FunctionalModel.ImportFunctionalModel(model));
+                _nbModelsCreated[i]++;
+            }
         }
     }
 

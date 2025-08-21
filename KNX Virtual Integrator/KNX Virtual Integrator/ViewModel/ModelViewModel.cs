@@ -84,10 +84,6 @@ namespace KNX_Virtual_Integrator.ViewModel
             {
                 if (_selectedStructure?.Model.Key == value?.Model.Key)
                     return;
-                /*var key = _selectedStructure.Model.Key;
-                _functionalModelList.FunctionalModelDictionary.FunctionalModels[key-1] = new FunctionalModelStructure(_selectedStructure); 
-                _functionalModelList.FunctionalModelDictionary.FunctionalModels[key-1].Model.Key = key;*/
-                //Console.WriteLine("key "+value?.Model.Key);
                 _selectedStructure = value;
                 WhenPropertyChanged(nameof(SelectedStructure));
                 SelectedStructureModel = SelectedStructure?.Model;
@@ -96,9 +92,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                 if (value is null) return;
                 var source = _functionalModelList.FunctionalModels[value.Model.Key-1];
                 SelectedModels = new ObservableCollection<FunctionalModel>(source);
-                
-                
-                //SelectedModel = SelectedModels?.First(); //bonne idée mais rallonge le temps d'affichage alors que parfois on veut simplement balayer les structures
             }
         }
         
