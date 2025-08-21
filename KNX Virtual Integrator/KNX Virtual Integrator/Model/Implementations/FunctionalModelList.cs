@@ -279,6 +279,12 @@ public class FunctionalModelList : IFunctionalModelList
     {
         _nbModelsCreated[index]=0;
     }
+
+    public void AddNewEmptyStruct()
+    {
+        FunctionalModels.Add([]);
+        _nbModelsCreated.Add(0);
+    }
     
 }
 

@@ -500,6 +500,7 @@ public partial class MainWindow
             // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
             _viewModel.ExtractGroupAddressCommand.Execute(null);
             
+            // Fonction permettant d'afficher les adresses de groupe sur la fenêtre principale
             Application.Current.Dispatcher.InvokeAsync( async() =>
             {
                 await LoadAddressesOntoTreeViewAsync(GroupAddressTreeView);

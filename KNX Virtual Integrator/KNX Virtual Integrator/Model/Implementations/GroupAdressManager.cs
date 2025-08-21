@@ -826,12 +826,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         functionalModelList.AddToList(index, newFunctionalModel, false);
                     }
                 }
-
-                if (lostDataPointTypes.Count > 0)
-                    functionalModelList.FunctionalModels.Add([]);
+                    
 
                 foreach (var dpt in  lostDataPointTypes)
                 {
+                    functionalModelList.AddNewEmptyStruct();
                     functionalModelList.FunctionalModels[^1].Add(new FunctionalModel(dpt.Name));
                     functionalModelList.FunctionalModels[^1][^1].AddElement(new TestedElement());
                     functionalModelList.FunctionalModels[^1][^1].ElementList[^1].AddDptToCmd(dpt);
