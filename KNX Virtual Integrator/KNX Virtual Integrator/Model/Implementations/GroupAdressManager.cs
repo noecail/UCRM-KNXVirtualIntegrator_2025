@@ -389,7 +389,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 functionalModelList.FunctionalModels[i].Clear();
                 functionalModelList.ResetCount(i);
             }
-            if (functionalModelList.FunctionalModelDictionary.FunctionalModels[^1].Model.Name.Contains("Unrecognized DPTs",StringComparison.OrdinalIgnoreCase))
+            if (functionalModelList.FunctionalModelDictionary.FunctionalModels.Count >0 && functionalModelList.FunctionalModelDictionary.FunctionalModels[^1].Model.Name.Contains("Unrecognized DPTs",StringComparison.OrdinalIgnoreCase))
             {
                 functionalModelList.DeleteFromDictionary(functionalModelList.FunctionalModelDictionary.FunctionalModels.Count-1);
             }
