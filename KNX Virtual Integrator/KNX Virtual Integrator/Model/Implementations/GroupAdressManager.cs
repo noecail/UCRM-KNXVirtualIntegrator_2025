@@ -671,9 +671,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
                                         var newDpt = new DataPointType(newType, newAddress, [], dptName);
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                        if (modelIndex ==
-                                            -1) //When the circuit name doesn't exist, maybe take j?? dangerous
+                                        if (modelIndex == -1) //When the circuit name doesn't exist, maybe take j?? dangerous
                                         { 
+
                                             lostDataPointTypes.Add(newDpt);
                                             continue;
                                         }
@@ -718,6 +718,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 var key = newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1);
                                 if (key == -1)
                                 {
+
                                     lostDataPointTypes.Add(dpt.Item1);
                                     continue;
                                 }
@@ -778,7 +779,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value!;
-                                        var newDpt = new DataPointType(newType, newAddress, []);
+                                        var newDpt = new DataPointType(newType, newAddress, [],dptName);
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                         if (modelIndex == -1)
                                         {
@@ -843,6 +844,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     functionalModelList.AddToList(functionalModelList.FunctionalModels.Count-1,new FunctionalModel(dpt.Name),false);
                     functionalModelList.FunctionalModels[^1][^1].AddElement(new TestedElement());
                     functionalModelList.FunctionalModels[^1][^1].ElementList[^1].AddDptToCmd(dpt);
+                    functionalModelList.FunctionalModels[^1][^1].Name=dpt.Name;
                 }
             }
             else// if (_groupAddressStructure == 2) //Case when Addresses are structured with 2 levels
