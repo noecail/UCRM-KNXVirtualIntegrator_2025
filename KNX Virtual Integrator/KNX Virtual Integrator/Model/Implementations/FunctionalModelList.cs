@@ -93,8 +93,8 @@ public class FunctionalModelList : IFunctionalModelList
                 newModel.Name = string.Join("_",newModel.Name.Split('_')[..^1]) +"_" + _nbModelsCreated[index];
             }
         }
-/*
- 
+
+        /*
         for (var i = 0; i < newModel.ElementList.Count; i++)
         {
             var element = newModel.ElementList[i];
@@ -115,6 +115,7 @@ public class FunctionalModelList : IFunctionalModelList
                 }
             }
         }*/
+        
         FunctionalModels[index].Add(newModel);
     }
     
@@ -276,7 +277,7 @@ public class FunctionalModelList : IFunctionalModelList
 
     public void ReinitializeNbModels(int index)
     {
-        _nbModelsCreated.RemoveAt(index);
+        _nbModelsCreated[index]=0;
     }
     
 }

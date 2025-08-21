@@ -45,6 +45,7 @@ public partial class StructureEditWindow
     private void ClosingStructureEditWindow(object? sender, CancelEventArgs e)
     {
         e.Cancel = true;
+        _viewModel.UpdateFunctionalModelListCommand.Execute(null);
         UpdateWindowContents(true, true, true);
         Hide();
     }    

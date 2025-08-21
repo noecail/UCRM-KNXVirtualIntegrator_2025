@@ -9,7 +9,7 @@ namespace KNX_Virtual_Integrator.Model.Entities;
 public class FunctionalModelStructure : INotifyPropertyChanged
 {
 
-    public FunctionalModel Model;
+    public FunctionalModel Model{get; set; }
 
     public class DptAndKeywords : INotifyPropertyChanged
     {
@@ -95,7 +95,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         public int Value
         {
             get => _value;
-            set { _value = value; OnPropertyChanged(); }
+            set
+            {
+                _value = value;
+                OnPropertyChanged();
+            }
         }
 
         private Visibility? _removeDptButtonVisibility;
@@ -422,7 +426,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
      public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
         ObservableCollection<ElementStructure> modelStructure,List<List<List<int>>> cmdValues, List<List<List<int>>> ieValues, int key)
     {
-        //Console.WriteLine("Building directly "+name);
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
         SetUpDptKeysUpdate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
@@ -493,13 +496,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
         SetUpDptKeysUpdate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
-        
     }
 
     public FunctionalModelStructure(FunctionalModelStructure modelStructure, List<List<List<int>>> cmdValues,
         List<List<List<int>>> ieValues)
     {
-        //Console.WriteLine("Entering "+modelStructure.Model.Name);
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key, false);
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
         SetUpDptKeysUpdate();
@@ -546,7 +547,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 var value = ieValue[j];
                 for (var k = 0; k < value.Count; k++)
                 {
-                    Console.WriteLine("We're adding "+value[k]+" to "+ Model.Name);
                     if (Model.ElementList[i].TestsIe[j].IntValue.Count<k+1)
                     {
                         Model.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(value[k]));
@@ -560,7 +560,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             }
         }
     }
-
 
 
     /// <summary>
@@ -618,6 +617,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         ModelStructure.Add(new ElementStructure());
     }
 
+    // Retourne un modèle fabriqué à partir du model structure du functional model structure
     public FunctionalModel BuildFunctionalModel(string name, int key)
     {
         var res = new FunctionalModel(name);
