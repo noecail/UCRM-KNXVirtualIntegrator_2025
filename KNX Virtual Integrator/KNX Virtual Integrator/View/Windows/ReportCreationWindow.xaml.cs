@@ -48,7 +48,7 @@ public partial class ReportCreationWindow
             Resources["AuthorReport"] = "Auteur du rapport :";
             Resources["ReportPath"] = "Chemin du rapport :";
             Resources["ReportFullPath"] = "Emplacement du rapport";
-            Resources["ReportPreview"] = "Prévisualisation du rapport :";
+            Resources["ReportPreview"] = "Prévisualisation du rapport : Désactivée pour la Beta";
             Resources["GenerationButton"] = "Générer le rapport";
             Resources["CancelButton"] = "Annuler";
         }
@@ -59,8 +59,8 @@ public partial class ReportCreationWindow
             Resources["DocParametersTitle"] = "Document parameters";
             Resources["AuthorReport"] = "Report author:";
             Resources["ReportPath"] = "Report path:";
-            Resources["ReportFullPath"] = "Report full path:";
-            Resources["ReportPreview"] = "Report preview:";
+            Resources["ReportFullPath"] = "Report full path : ";
+            Resources["ReportPreview"] = "Report preview : Inactive for the Beta";
             Resources["GenerationButton"] = "Generate report";
             Resources["CancelButton"] = "Cancel";
         }
@@ -157,24 +157,34 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void SaveButtonClick(object sender, RoutedEventArgs e)
     {
-        _mainViewModel.AuthorName = AuthorNameTextBox.Text;
-        Uri uri = new Uri(_mainViewModel.PdfPath, UriKind.RelativeOrAbsolute);
-        if (!uri.IsAbsoluteUri)
+        try
         {
-            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("The pdf URI Address has to be absolute");
-            return;
+            _mainViewModel.AuthorName = AuthorNameTextBox.Text;
+            Uri uri = new Uri(_mainViewModel.PdfPath, UriKind.RelativeOrAbsolute);
+            if (!uri.IsAbsoluteUri)
+            {
+                _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("The pdf URI Address has to be absolute");
+                return;
+            }
+
+            /*if (uri.Equals(MyBrowser.Source))
+            {
+                _mainViewModel.ConsoleAndLogWriteLineCommand.Execute(
+                    "The pdf URI Address has to be changed before modifying the file");
+                return;
+            }*/
+
+            _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
+                _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
+            if (_mainViewModel.PdfPath.Length <= 0)
+                return;
+            //MyBrowser.Navigate(uri);
+            //MyBrowser.Visibility = Visibility.Visible;
         }
-        if (uri.Equals(MyBrowser.Source))
+        catch (Exception ex)
         {
-            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("The pdf URI Address has to be changed before modifying the file");
-            return;
+            MessageBox.Show(ex.HelpLink + "       "  + ex.Message + "      " + ex.Data);
         }
-        _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
-            _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
-        if (_mainViewModel.PdfPath.Length <= 0)
-            return;
-        MyBrowser.Navigate(uri);
-        MyBrowser.Visibility = Visibility.Visible;
     }
 
     /// <summary>

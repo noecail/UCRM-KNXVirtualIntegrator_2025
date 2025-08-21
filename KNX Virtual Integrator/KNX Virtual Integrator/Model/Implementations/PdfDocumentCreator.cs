@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Net.Mime;
+using System.Windows;
 using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Geom;
@@ -10,10 +11,10 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
-using iText.Layout.Properties;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.ViewModel;
+using TextAlignment = iText.Layout.Properties.TextAlignment;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
@@ -44,31 +45,40 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     /// <param name="testResults"></param>
     public void CreatePdf(string fileName, string authorName, ObservableCollection<FunctionalModel>  testedList, List<List<List<List<ResultType>>>> testResults)
     {
-        if (fileName.Length == 0)
+        try
         {
-            return;
-        }
-        // Génération d'un PDF et du writer pour écrire dans le Pdf
-        _writer =  new PdfWriter(new FileStream(fileName, FileMode.Create));
-        var newPdf = new PdfDocument(_writer);
-        var doc = new Document(newPdf,PageSize.A4);
-        doc.SetMargins(72, 72, 72, 72);
-        
-        // Écriture du contenu du document PDF
-        GeneratePdfHeader(doc); // Génération de la bannière d'en-tête
-        GenerateProjectInformationSection(doc, authorName); // Génération de la section d'infos du projet (nom, ...)
-        GenerateTestListAndResults(doc, testedList,testResults);
-        GenerateTreeStructure();
+            if (fileName.Length == 0)
+            {
+                return;
+            }
 
-        
-        
-        
-        // Fermeture du document et du stream d'écriture
-        doc.Close();
-        newPdf.Close();
-        _writer.Close();
-        // Mise à jour du path du dernier pdf généré
-        LatestReportPath = fileName;
+            // Génération d'un PDF et du writer pour écrire dans le Pdf
+            _writer = new PdfWriter(new FileStream(fileName, FileMode.Create));
+            var newPdf = new PdfDocument(_writer);
+            var doc = new Document(newPdf, PageSize.A4);
+            doc.SetMargins(72, 72, 72, 72);
+
+            
+            // Écriture du contenu du document PDF
+            GeneratePdfHeader(doc); // Génération de la bannière d'en-tête
+            
+            GenerateProjectInformationSection(doc, authorName); // Génération de la section d'infos du projet (nom, ...)
+            
+            GenerateTestListAndResults(doc, testedList, testResults);
+            //GenerateTreeStructure();
+            
+
+
+            // Fermeture du document et du stream d'écriture
+            doc.Close();
+            _writer.Close();
+            // Mise à jour du path du dernier pdf généré
+            LatestReportPath = fileName;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message + "         " + ex.HelpLink + " :: "  + ex.Source);
+        }
     }
 
 
@@ -83,9 +93,10 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     {
         
         // Logo du logiciel (les 2 lignes qui suivent ne servent pas pour le moment)
-        var logo = new Image(ImageDataFactory.Create("../../../Resources/resources/logoUCRM.png")).ScaleToFit(60f, 60f).SetTextAlignment(TextAlignment.RIGHT).SetFixedPosition(500,780);
-        document.Add(logo);
-        
+        //var logo = new Image(ImageDataFactory.Create("../../../Resources/resources/logoUCRM.png")).ScaleToFit(60f, 60f).SetTextAlignment(TextAlignment.RIGHT).SetFixedPosition(500,780);
+        //MessageBox.Show("Passé création image");
+        //document.Add(logo);
+        //MessageBox.Show("Passé addition image");
         // Nom du logiciel, à côté du logo
         document.Add(new Paragraph($"{App.AppName}"));
         
