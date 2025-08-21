@@ -626,11 +626,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             res.AddElement(new TestedElement());
             foreach (var cmd in element.Cmd)
             {
-                res.ElementList[^1].AddDptToCmd(new DataPointType(cmd));
+                res.ElementList[^1].AddDptToCmd(new DataPointType(DptDictionary[cmd].Dpt));
             }
             foreach (var ie in element.Ie)
             {
-                res.ElementList[^1].AddDptToIe(new DataPointType(ie));
+                res.ElementList[^1].AddDptToIe(new DataPointType(DptDictionary[ie].Dpt));
             }
         }
 

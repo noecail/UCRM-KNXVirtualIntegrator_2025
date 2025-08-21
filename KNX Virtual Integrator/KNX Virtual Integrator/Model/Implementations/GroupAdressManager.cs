@@ -827,7 +827,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     foreach (var newFunctionalModel in newFunctionalModels)
                     {
 
-                        newFunctionalModel.UpdateIntValue();
+                        newFunctionalModel.UpdateValue();
                         functionalModelList.AddToList(index, newFunctionalModel, false);
                     }
                 }
