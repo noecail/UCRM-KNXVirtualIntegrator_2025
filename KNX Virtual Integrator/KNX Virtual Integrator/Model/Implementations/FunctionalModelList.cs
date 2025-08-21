@@ -68,7 +68,16 @@ public class FunctionalModelList : IFunctionalModelList
     public void AddToList(int index)
     {
         FunctionalModel newModel;
+       /* var key = FunctionalModelDictionary.FunctionalModels[index].Model.Key;
+        FunctionalModelDictionary.FunctionalModels[index].Model = FunctionalModelDictionary.FunctionalModels[index]
+            .BuildFunctionalModel(FunctionalModelDictionary.FunctionalModels[index].Model.Name);
+        FunctionalModelDictionary.FunctionalModels[index].Model.Key = key;*/
         // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+        if (FunctionalModels[index].Count <= 1)
+        {
+            FunctionalModelDictionary.FunctionalModels[index].Model = FunctionalModelDictionary.FunctionalModels[index]
+                .BuildFunctionalModel(FunctionalModelDictionary.FunctionalModels[index].Model.Name,index +1);
+        }
         if (FunctionalModels[index].Count > 0)
             newModel = new FunctionalModel(FunctionalModelDictionary.FunctionalModels[index].Model, FunctionalModels[index][^1].Key + 1, false);
         else

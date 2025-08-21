@@ -71,6 +71,10 @@ public class DataPointType : INotifyPropertyChanged
             BigIntegerValue = bi;
             RemoveTestButtonVisibility = Visibility.Collapsed;
             IsEnabled = true;
+            if (bi == -1)
+            {
+                IsEnabled = false;
+            }
         }
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -177,14 +181,16 @@ public class DataPointType : INotifyPropertyChanged
     {
         Address = other.Address;
         Type = other.Type;
-        Value = [];
+        IntValue = [];
         Name = other.Name;
-        IntValue = new ObservableCollection<BigIntegerItem>(other.IntValue
-            .Select(v => new BigIntegerItem(v.BigIntegerValue ?? 0)));
-        for (int i = 0; i < other.Value.Count; i++)
+        Value = [];
+        for (int i = 0; i < other.IntValue.Count; i++)
         {
-            Value.Add(other.Value[i] != null ? new GroupValue(other.Value[i]?.Value) : null);
-        }    }
+            //Console.WriteLine("Copying "+other.IntValue[i].BigIntegerValue );
+            IntValue.Add(new BigIntegerItem(other.IntValue[i].BigIntegerValue ?? 0));
+        }
+        UpdateValue();
+    }
     
     public DataPointType(DataPointType dpt, string address)
     {
@@ -433,9 +439,12 @@ public class DataPointType : INotifyPropertyChanged
         Value.Clear();
         foreach (var value in IntValue)
         {
+            //Console.WriteLine("On est sur " + value.BigIntegerValue);
             if (value.BigIntegerValue == null) return;
             if (value.IsEnabled)
             {
+                //Console.WriteLine("On écrit " + value.BigIntegerValue);
+
                 var updatedValue = value.BigIntegerValue.Value.ToByteArray();
                 if (_size == 1)
                     Value.Add(new GroupValue(BitConverter.ToBoolean(updatedValue, 0)));

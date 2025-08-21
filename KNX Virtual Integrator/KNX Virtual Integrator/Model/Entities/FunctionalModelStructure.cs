@@ -362,14 +362,82 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
     
     public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
-        ObservableCollection<ElementStructure> modelStructure) 
+        ObservableCollection<ElementStructure> modelStructure, int key) 
     {
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
         SetUpDptKeysUpdate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
-        Model = BuildFunctionalModel(name);
+        Model = BuildFunctionalModel(name, key);
 
     }
+    
+     public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
+        ObservableCollection<ElementStructure> modelStructure,List<List<List<int>>> cmdValues, List<List<List<int>>> ieValues, int key)
+    {
+        //Console.WriteLine("Building directly "+name);
+        DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
+        SetUpDptKeysUpdate();
+        ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
+        Model = BuildFunctionalModel(name, key);
+
+
+        for (var i = 0; i < cmdValues.Count; i++)
+        {
+            var cmdValue = cmdValues[i];
+            for (var j = 0; j < cmdValue.Count; j++)
+            {
+                var value = cmdValue[j];
+                for (var k = 0; k < value.Count; k++)
+                {
+                    var toAdd = value[k];
+                    if (Model.ElementList[i].TestsCmd[j].IntValue == null)
+                    {
+                        Model.ElementList[i].TestsCmd[j].IntValue = [];
+                    }
+                    if (Model.ElementList[i].TestsCmd[j].IntValue.Count < k + 1)
+                    {
+                        Model.ElementList[i].TestsCmd[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd));
+                    }
+                    else
+                    {
+                        Model.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd);
+                    }
+                }
+
+                Model.ElementList[i].TestsCmd[j].UpdateValue();
+            }
+        }
+
+        for (var i = 0; i < ieValues.Count; i++)
+        {
+            var ieValue = ieValues[i];
+            for (var j = 0; j < ieValue.Count; j++)
+            {
+                var value = ieValue[j];
+                for (var k = 0; k < value.Count; k++)
+                {
+                    var toAdd = value[k];
+                    if (Model.ElementList[i].TestsIe[j].IntValue == null)
+                    {
+                        Model.ElementList[i].TestsIe[j].IntValue = [];
+                    }
+                    if (Model.ElementList[i].TestsIe[j].IntValue.Count < k + 1)
+                    {
+                        Model.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd));
+                    }
+                    else
+                    {
+                        Model.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd);
+                    }
+                }
+
+                Model.ElementList[i].TestsIe[j].UpdateValue();
+            }
+        }
+    }
+
+    
+    
     
     public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
     {
@@ -377,10 +445,75 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
         SetUpDptKeysUpdate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
+        
     }
-    
-    
-    
+
+    public FunctionalModelStructure(FunctionalModelStructure modelStructure, List<List<List<int>>> cmdValues,
+        List<List<List<int>>> ieValues)
+    {
+        //Console.WriteLine("Entering "+modelStructure.Model.Name);
+        Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key, false);
+        DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
+        SetUpDptKeysUpdate();
+        ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
+
+        foreach (var element in Model.ElementList)
+        {
+            foreach (var dptCmd in element.TestsCmd)
+            {
+                dptCmd.IntValue.Clear();
+                dptCmd.Value.Clear();
+            }
+            foreach (var dptIe in element.TestsIe)
+            {
+                dptIe.IntValue.Clear();
+                dptIe.Value.Clear();
+            }
+        }
+        for (var i = 0; i < cmdValues.Count; i++)
+        {
+            var cmdValue = cmdValues[i];
+            for (var j = 0; j < cmdValue.Count; j++)
+            {
+                var value = cmdValue[j];
+                for (var k = 0; k < value.Count; k++)
+                {
+                    if (Model.ElementList[i].TestsCmd[j].IntValue.Count<k+1)
+                    {
+                        Model.ElementList[i].TestsCmd[j].IntValue.Add(new DataPointType.BigIntegerItem(value[k]));
+                    }
+                    else
+                    {
+                        Model.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(value[k]);
+                    }
+                }
+                Model.ElementList[i].TestsCmd[j].UpdateValue();
+            }
+        }
+        for (var i = 0; i < ieValues.Count; i++)
+        {
+            var ieValue = ieValues[i];
+            for (var j = 0; j < ieValue.Count; j++)
+            {
+                var value = ieValue[j];
+                for (var k = 0; k < value.Count; k++)
+                {
+                    Console.WriteLine("We're adding "+value[k]+" to "+ Model.Name);
+                    if (Model.ElementList[i].TestsIe[j].IntValue.Count<k+1)
+                    {
+                        Model.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(value[k]));
+                    }
+                    else
+                    {
+                        Model.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(value[k]);
+                    }
+                }
+                Model.ElementList[i].TestsIe[j].UpdateValue();
+            }
+        }
+    }
+
+
 
     /// <summary>
     /// Creates a functional model from the list of all the DPTs of a model and its structure
@@ -437,7 +570,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         ModelStructure.Add(new ElementStructure());
     }
 
-    public FunctionalModel BuildFunctionalModel(string name)
+    public FunctionalModel BuildFunctionalModel(string name, int key)
     {
         var res = new FunctionalModel(name);
         foreach (var element in ModelStructure)
@@ -459,11 +592,13 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             }
         }
 
+        res.Key = key;
+
         return res;
     }
 
 
-    public static FunctionalModelStructure ImportFunctionalModelStructure(XmlNode model)
+    public static FunctionalModelStructure ImportFunctionalModelStructure(XmlNode model, int key)
     {
         var name = model.Name;
         var res = new FunctionalModelStructure(name);
@@ -517,7 +652,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 res.DptDictionary = new ObservableDictionary<int, DptAndKeywords>();
                 foreach (XmlNode xPair in dicoOrModelStructure.ChildNodes)
                 {
-                    var key = int.Parse(xPair.Attributes?["Key"]?.Value ?? "");
+                    var myKey = int.Parse(xPair.Attributes?["Key"]?.Value ?? "");
                     var pair = new DptAndKeywords();
                     pair.Dpt = new DataPointType();
                     pair.Keywords = [];
@@ -544,12 +679,12 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                             }
                         }
                     }
-                    res.DptDictionary[key] = pair;
+                    res.DptDictionary[myKey] = pair;
                 }
             }
         }
         
-        res.Model = res.BuildFunctionalModel(name);
+        res.Model = res.BuildFunctionalModel(name, key);
         res.Model.UpdateIntValue();
         return res;
     }

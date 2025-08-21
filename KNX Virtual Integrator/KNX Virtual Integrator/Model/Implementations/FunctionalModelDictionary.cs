@@ -41,9 +41,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                                 2, new FunctionalModelStructure.DptAndKeywords { Keywords = ["etat On/Off"], Dpt = new DataPointType(1) }
                             } //IE
                         },
-                        [new FunctionalModelStructure.ElementStructure([1],[2])]
+                        [new FunctionalModelStructure.ElementStructure([1],[2])],1
+                        //,[[[1,0]]],[[[1,0]]]
                     ),false,["Lumiere on/off", "Lumiere on-off", "Lumiere on_off", "Light on/off", "Eclairage_Simple"]
-                );  //Adding On/Off light functional model
+                    ,[[[1,0]]],[[[1,0]]] );  //Adding On/Off light functional model
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_Variation",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
@@ -67,6 +68,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                             new FunctionalModelStructure.ElementStructure([3],[2,2,5]), //test relative command
                             new FunctionalModelStructure.ElementStructure([4],[2,2,5]) //test absolute command
                         ]
+                        ,[[[1,0]],[[4]],[[0xFF,0]]],[[[1,0],[-1,-1]],[[1],[0],[-1]],[[1,0],[0,1],[0xFF,0]]],2
                     ),false, ["Lumiere variation", "variation", "Lumiere_variation", "Light variation", "Eclairages_variable"]
                 );
             
@@ -93,7 +95,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     [new FunctionalModelStructure.ElementStructure([1],[2,5]), // test on/off
                         new FunctionalModelStructure.ElementStructure([1,3],[2,2,5]), //test stop
                         new FunctionalModelStructure.ElementStructure([4],[2,2,5]) //test absolute command
-                    ]
+                    ],3
                 ),false, ["stre", "blind", "Volets_roulants","Volet_roulant"]
             );
             AddFunctionalModel(new FunctionalModelStructure("Commutation",
@@ -110,7 +112,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                                     { Keywords = ["Etat On/off"], Dpt = new DataPointType(1) }
                             } //IE
                         },
-                        [new FunctionalModelStructure.ElementStructure([1], [2])]
+                        [new FunctionalModelStructure.ElementStructure([1], [2])],4
                     ), false,["Commute", "Commutation", "Convecteur", "Prise", "Arrosage", "Ouvrant"]
                 );//Adding commutation functional model*/
         }
@@ -137,9 +139,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             else if (!functionalModel.Model.Name.Contains("Structure"))
                 newModel.Model.Name += "_Structure";
             if (imported == false)
-                newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name);
-            newModel.Model.Key = FunctionalModels.Count +1 ;
-
+                newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name, FunctionalModels.Count +1);
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
             
@@ -161,13 +161,34 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             else if (!functionalModel.Model.Name.Contains("Structure"))
                 newModel.Model.Name += "_Structure";
             if (imported == false)
-                newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name);
-            newModel.Model.Key = FunctionalModels.Count + 1;
+                newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name,FunctionalModels.Count + 1);
 
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
 
-    }
+        }
+        
+        public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported, List<string> keywords, List<List<List<int>>> cmdValues,List<List<List<int>>> ieValues)
+        {
+            var newModel = new FunctionalModelStructure(functionalModel,cmdValues,ieValues);
+            foreach (var keyword in keywords)
+            {
+                newModel.Keywords.Add(keyword);
+                newModel.Keywords.Add(keyword.Replace(' ','_'));
+                newModel.Keywords.Add(keyword.Replace('_',' '));
+            }
+
+            _nbStructuresCreated++;
+            if (newModel.Model.Name == "New_Structure")
+                newModel.Model.Name += "_" + _nbStructuresCreated;
+            else if (!functionalModel.Model.Name.Contains("Structure"))
+                newModel.Model.Name += "_Structure";
+            if (imported == false)
+                newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name,FunctionalModels.Count + 1);
+
+            FunctionalModels.Add(newModel);
+            OnPropertyChanged(nameof(FunctionalModels));
+        }
 
         public void RemoveFunctionalModel(int index)
         {
@@ -228,7 +249,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 var model = xnList[i];
                 if (model != null){
-                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model),true);
+                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model,i),true);
                     foreach (XmlNode element in model.ChildNodes!)
                     {
                         if (element.Name == "Keywords")

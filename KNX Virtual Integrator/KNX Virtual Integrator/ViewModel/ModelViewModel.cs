@@ -84,6 +84,10 @@ namespace KNX_Virtual_Integrator.ViewModel
             {
                 if (_selectedStructure?.Model.Key == value?.Model.Key)
                     return;
+                /*var key = _selectedStructure.Model.Key;
+                _functionalModelList.FunctionalModelDictionary.FunctionalModels[key-1] = new FunctionalModelStructure(_selectedStructure); 
+                _functionalModelList.FunctionalModelDictionary.FunctionalModels[key-1].Model.Key = key;*/
+                //Console.WriteLine("key "+value?.Model.Key);
                 _selectedStructure = value;
                 WhenPropertyChanged(nameof(SelectedStructure));
                 SelectedStructureModel = SelectedStructure?.Model;

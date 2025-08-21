@@ -378,7 +378,6 @@
                                                                             Width="100" Height="25"
                                                                             VerticalAlignment="Center"
                                                                             FontSize="10"
-                                                                            SelectedIndex="0"
                                                                             ItemsSource="{Binding DataContext.SelectedStructure.DptKeys, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"
                                                                             SelectedItem="{Binding Value, Mode=TwoWay}">
                                                                         </ComboBox>
@@ -443,7 +442,6 @@
                                                                             Width="100" Height="25"
                                                                             VerticalAlignment="Center"
                                                                             FontSize="10"
-                                                                            SelectedIndex="0"
                                                                             ItemsSource="{Binding DataContext.SelectedStructure.DptKeys, RelativeSource={RelativeSource AncestorType=Window}, UpdateSourceTrigger=PropertyChanged}"
                                                                             SelectedItem="{Binding Value, Mode=TwoWay}">
                                                                         </ComboBox>
