@@ -75,6 +75,7 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
             if (testsIe != null)
                 foreach (var ie in testsIe) //Start all the tasks to read 
                 {
+                    if (ie.Address == "") continue;
                     readTaskList.Add(Communication.GroupValuesTimerOrRecievedAWriteAsync(ie.Address, time));
                 }
             else
@@ -82,17 +83,23 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
 
             foreach(var test in testsCmd) //Send all the commands 
             {
+                if (test.Address == "") break;
                 await Communication.GroupValueWriteAsync(test.Address, test.Value[i]!);
             }
-            while (readTaskList.TrueForAll(task => task.Result.Count != 0) && testResult == ResultType.Failure) //While the timer hasn't expired and the test hasn't succeeded
+            while (readTaskList.TrueForAll(task => task.Result.Count != 0) && testResult == ResultType.Failure && readTaskList.Count>0) //While the timer hasn't expired and the test hasn't succeeded
             {
                 for (var j = 0; j < testsIe?.Count; j++) //Goes through all the expected returns (columns)
                 {
-                    if (testsIe[j].Value[i] != null && resList[j] == ResultType.Failure)
+                    if (testsIe[j].Address == "")
+                    {
+                        resList[j] = ResultType.Failure;
+                    } 
+                    else if (testsIe[j].Value[i] != null && resList[j] == ResultType.Failure)
                     {
                         var readValues = readTaskList[j].Result; //Updates readValues, the list of messages read on the bus
                         resList[j] = CheckResult(ref readValues, testsIe[j], i); //Check if the message has arrived
-                    } else if (testsIe[j].Value[i] is null)
+                    } 
+                    else if (testsIe[j].Value[i] is null)
                     {
                         resList[j] = ResultType.Success;
                     }
