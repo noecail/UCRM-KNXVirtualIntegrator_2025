@@ -773,22 +773,9 @@
                             Style="{StaticResource BottomButtonLight}"
                             Click="SaveButtonClick" Visibility="Visible">
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="20" Height="20" Margin="5,0,5,0" VerticalAlignment="Center">
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <DrawingGroup ClipGeometry="M0,0 V200 H200 V0 H0 Z">
-                                                <DrawingGroup Opacity="1">
-                                                    <DrawingGroup Opacity="1">
-                                                        <GeometryDrawing x:Name="SaveButtonDrawing"
-                                                                         Brush="{StaticResource BlackBrush}"
-                                                                         Geometry="F1 M200,200z M0,0z M71.85,170.17C47.88,145.5 24.91,121.87 1.22,97.48 7.66,91.43 13.61,85.84 18.82,80.94 37.15,98.28 55.11,115.27 73.63,132.78 109.14,99.25 145.32,65.08 181.76,30.68 187.89,36.72 193.64,42.39 200.01,48.67 157.4,89.05 115.09,129.17 71.85,170.17z" />
-                                                    </DrawingGroup>
-                                                </DrawingGroup>
-                                            </DrawingGroup>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
+                            <Image x:Name="SaveSettImage"
+                                   Width="20" Height="20" Margin="5,0,5,0" VerticalAlignment="Center"
+                                   Source="{StaticResource CheckmarkLight}">
                             </Image>
                             <TextBlock x:Name="SaveButtonText" FontWeight="Regular" VerticalAlignment="Center"
                                        FontFamily="Aptos" FontSize="16"
@@ -801,23 +788,10 @@
                             Style="{StaticResource BottomButtonLight}"
                             Click="CancelButtonClick" Visibility="Visible">
                         <StackPanel Orientation="Horizontal">
-                            <Image Width="16" Height="16" Margin="5,0,5,0" VerticalAlignment="Center">
-                                <Image.Source>
-                                    <DrawingImage>
-                                        <DrawingImage.Drawing>
-                                            <DrawingGroup ClipGeometry="M0,0 V200 H200 V0 H0 Z">
-                                                <DrawingGroup Opacity="1">
-                                                    <DrawingGroup Opacity="1">
-                                                        <GeometryDrawing x:Name="CancelButtonDrawing"
-                                                                         Brush="{StaticResource BlackBrush}"
-                                                                         Geometry="F1 M200,200z M0,0z M99.63,120.8C72.17,148.17 46.48,173.78 20.39,199.78 13.61,192.76 7.41,186.34 0,178.66 25.77,153.17 51.75,127.46 77.55,101.93 51.64,76.29 25.89,50.81 0.71,25.89 8.13,18.48 14.31,12.29 20.73,5.88 45.36,30.49 71.13,56.23 96.6,81.68 124.58,53.7 151.26,27.02 178.29,0 186.31,8.18 192.53,14.53 200,22.15 173.32,48.58 146.55,75.1 119.98,101.43 146.76,127.82 173.39,154.06 199.66,179.93 191.94,187.46 185.67,193.59 179.11,200 153.67,174.65 127.03,148.11 99.63,120.8z" />
-                                                    </DrawingGroup>
-                                                </DrawingGroup>
-                                            </DrawingGroup>
-                                        </DrawingImage.Drawing>
-                                    </DrawingImage>
-                                </Image.Source>
-                            </Image>
+                            <Image x:Name="CancelButtonImage"
+                                   Width="16" Height="16" Margin="5,0,5,0" VerticalAlignment="Center"
+                                   Source="{StaticResource CrossmarkLight}"/>
+                                
                             <TextBlock x:Name="CancelButtonText" FontWeight="Regular" VerticalAlignment="Center"
                                        FontFamily="Aptos" FontSize="16"
                                        HorizontalAlignment="Center" Margin="5,0,5,0" />

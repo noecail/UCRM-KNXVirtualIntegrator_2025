@@ -27,7 +27,7 @@
     <sys:String x:Key="ExportButton">Exporter le rapport</sys:String>
         <!--Colonne 1-->
     <sys:String x:Key="Library">Bibliothèque</sys:String>
-    <sys:String x:Key="PredefinedStructures">Structures Prédéfinies</sys:String>
+    <sys:String x:Key="PredefinedStructures">Structures de Modèles Fonctionnels</sys:String>
     <sys:String x:Key="PersonalizedStructures">Structures Personnalisées</sys:String>
     <sys:String x:Key="NewStructure">Nouvelle Structure</sys:String>
         <!--Colonne 2-->
@@ -52,13 +52,14 @@
     <!--Structure Edit Window-->
     <sys:String x:Key="StructEditWindowTitle">Fenêtre d'édition de Structure de Modèle Fonctionnel</sys:String>
     <sys:String x:Key="StructRmvText">Supprimer la structure</sys:String>
-    <sys:String x:Key="TestedElementsListTitle">Liste d'Éléments à Tester</sys:String>
+    <sys:String x:Key="FunctionalModelStructure">Structure du Modèle Fonctionnel</sys:String>
     <sys:String x:Key="DptPersonalizationTitle">Personnalisation de DPTs</sys:String>
     <sys:String x:Key="AddTestedElement">Ajouter un Élément à tester</sys:String>
     <sys:String x:Key="PersonalizedDpt">DPT personnalisé numéro</sys:String>
     <sys:String x:Key="Name">Nom :</sys:String>
     <sys:String x:Key="Type">Type :</sys:String>
     <sys:String x:Key="Keywords">Mots-clés</sys:String>
+    <sys:String x:Key="DptNumber">Dpt de numéro :</sys:String>
     <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
     <!--/Structure Edit Window-->
     

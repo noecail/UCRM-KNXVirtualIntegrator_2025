@@ -71,9 +71,12 @@
 
     </Window.Resources>
 
-    <Border BorderBrush="{StaticResource KnxGreenBrush}"
-            BorderThickness="0" x:Name="ConnectionWindowBorder">
-        <Grid>
+    <ScrollViewer BorderBrush="{StaticResource KnxGreenBrush}"
+            BorderThickness="0" x:Name="ConnectionWindowBorder"
+            VerticalScrollBarVisibility="Auto"
+            CanContentScroll="False"
+            PanningMode="VerticalOnly">
+        <Grid >
             <!-- Define rows and columns for the grid -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="50" />
@@ -382,6 +385,6 @@
 
 
         </Grid>
-    </Border>
+    </ScrollViewer>
 
 </mah:MetroWindow>

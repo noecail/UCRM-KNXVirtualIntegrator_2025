@@ -8,7 +8,6 @@ using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.ViewModel;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using Microsoft.Win32;
-
 namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
@@ -48,19 +47,16 @@ public partial class MainWindow
         
         AllColumnBorder.Loaded += (_, _) =>
         {
-            Col0.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col1.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col2.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col3.Width = new GridLength(3f/12f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             ApplyScaling();
         };
     }
 
     private void ApplyScaling()
     {
+        if (AllColumnBorder.IsLoaded is false) return;
         var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
         float scale;
-        if (scaleFactor <= 1f)
+        if (scaleFactor < 1f)
         {
             scale = scaleFactor - 0.1f;
         }
@@ -68,25 +64,26 @@ public partial class MainWindow
         {
             scale = scaleFactor - 0.2f;
         }
-        Col0.Width = new GridLength(1, GridUnitType.Star);
-        Col1.Width = new GridLength(1, GridUnitType.Star);
-        Col2.Width = new GridLength(1, GridUnitType.Star);
-        Col3.Width = new GridLength(1, GridUnitType.Star);
+        Col0.Width = new GridLength(3, GridUnitType.Star);
+        Col1.Width = new GridLength(4, GridUnitType.Star);
+        Col2.Width = new GridLength(4, GridUnitType.Star);
+        Col3.Width = new GridLength(3, GridUnitType.Star);
         MainWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
-        if (1500 * scale > 0.9 * SystemParameters.PrimaryScreenWidth)
+        if (1500 * scale >= 0.9 * SystemParameters.PrimaryScreenWidth)
         {
             Width = 0.9 * SystemParameters.PrimaryScreenWidth;
             Col0.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             Col1.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             Col2.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
-            Col3.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
+            Col3.Width = new GridLength(1, GridUnitType.Star);
+            //Col3.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
         }
         else
         {
             Width = 1500 * scale;
         }
         Height = 786 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 786 * scale;
-        }
+    }
 
     private void ApplyThemeToWindow()
     {
@@ -101,9 +98,11 @@ public partial class MainWindow
         if (_viewModel.AppSettings.EnableLightTheme)
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
-            NameTextBlock.Style= (Style)FindResource("StandardTextBlockLight");
             GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemStyleLight");
-            
+            SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateLight");
+            SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleLight");
+            EditStructButton.Style = (Style)FindResource("EditStructureButtonStyleLight");
+
             titleStyles = (Style)FindResource("TitleTextLight");
             borderStyles = (Style)FindResource("BorderLight");
             borderTitleStyles = (Style)FindResource("BorderTitleLight");
@@ -116,8 +115,10 @@ public partial class MainWindow
         else
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
-            NameTextBlock.Style= (Style)FindResource("StandardTextBlockDark");
             GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemStyleDark");
+            SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateDark");
+            SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleDark");
+            EditStructButton.Style = (Style)FindResource("EditStructureButtonStyleDark");
             
             titleStyles = (Style)FindResource("TitleTextDark");
             borderStyles = (Style)FindResource("BorderDark");
@@ -133,6 +134,8 @@ public partial class MainWindow
         Background = backgrounds;
         StructuresBox.Background = backgrounds;
         ModelsBox.Background = backgrounds;
+        SelectedElementsListBox.Background = backgrounds;
+        
         GroupAddressTreeView.Foreground = foregrounds;
         Number1.Foreground = foregrounds;
         Number2.Foreground = foregrounds;
@@ -147,23 +150,24 @@ public partial class MainWindow
         ModelBibText.Style = titleStyles;
         ModelSettingsText.Style = titleStyles;
         AddressTitleText.Style = titleStyles;
+        NameTextBlock.Style = titleStyles;
         
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
-        //BorderDefStruct.Style = borderStyles;
         BorderAllModels.Style = borderStyles;
         BorderModelTitle.Style = borderTitleStyles;
-        //BorderModels.Style = borderStyles;
         BorderAddModel.Style = borderStyles;
         BorderModelBib.Style = borderStyles;
         BorderStructBib.Style = borderStyles;
-        AdressTitleBorder.Style = borderTitleStyles;
+        BorderAddress.Style = borderStyles;
+        BorderElement.Style = borderStyles;
+        BorderModelNameTitle.Style = borderTitleStyles;
         
         
         SearchDefStructButton.Style = searchbuttonStyle;
         SearchModelButton.Style = searchbuttonStyle;
         SearchAddressButton.Style = searchbuttonStyle;
-        ModelSupprButton.Style = supprButtonStyle;
+        StructSupprButton.Style = supprButtonStyle;
         ModelSupprButton.Style = supprButtonStyle;
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
@@ -206,18 +210,18 @@ public partial class MainWindow
             Resources["ExportButton"] = "Export test report";
             
             Resources["Library"] = "Library";
-            Resources["PredefinedStructures"] = "Predefined Structures";
+            Resources["PredefinedStructures"] = "Structures of Functional Models";
             Resources["NewStructure"] = "New Structure";
             Resources["ModelsTitle"] = "Functional Models";
             Resources["CreateFunctionalModel"] = "New Functional Model";
             Resources["ModelsParametersTitle"] = "Model Parameters";
-            Resources["Name:"] = "Name :";
+            Resources["Name:"] = "Name:";
             
-            Resources["TestedElement"] = "Test Elements";
+            Resources["TestedElement"] = "Tested Element";
             Resources["DptType"] = "DPT Type:";
-            Resources["LinkedAddress"] = "Linked Address :";
-            Resources["Values"] = "Values :";
-            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["LinkedAddress"] = "Linked Address:";
+            Resources["Values"] = "Values:";
+            Resources["Dispatch(es)"] = "Dispatch(es)";
             Resources["Reception(s)"] = "Reception(s)";
             Resources["ShowAllModels"] = "Show all models";
             Resources["ShowTheModel"] = "Show selected model";
@@ -708,7 +712,7 @@ public partial class MainWindow
     }
 
     /// <summary>
-    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// Handles the button click to reset to 0 an Ie Value that has been deactivated because it was unknown 
     /// </summary>
     private void DeactivateValueCmdButtonClick(object sender, RoutedEventArgs e)
     {

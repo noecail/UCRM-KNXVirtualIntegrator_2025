@@ -74,7 +74,7 @@ public partial class StructureEditWindow
         {
             Resources["StructEditWindowTitle"]="Fenêtre d'édition de Structure de Modèle Fonctionnel";
             Resources["StructRmvText"]="Supprimer la structure";
-            Resources["TestedElementsListTitle"]="Liste d'Éléments à Tester";
+            Resources["FunctionalModelStructure"]="Structure du Modèle Fonctionnel";
             Resources["DptPersonalizationTitle"]="Personnalisation de DPTs";
             Resources["TestedElement"]="Élément à tester";
             Resources["DptType"] = "Type de DPT :";
@@ -82,24 +82,28 @@ public partial class StructureEditWindow
             Resources["Reception(s)"] = "Réception(s)";
             Resources["AddTestedElement"]="Ajouter un Élément à tester";
             Resources["Key"]="Clé";
-            Resources["Type"]="Type";
+            Resources["Name"]="Nom :";
+            Resources["Type"]="Type :";
             Resources["Keywords"]="Mots-clés";
+            Resources["DptNumber"]="Dpt de numéro :";
             Resources["AddDpt"]="Ajouter un DataPointType";
         }
         else
         {
-            Resources["StructEditWindowTitle"]="Functional Model's Structure Edition";
+            Resources["StructEditWindowTitle"]="Edition of the Structures";
             Resources["StructRmvText"]="Remove the structure";
-            Resources["TestedElementsListTitle"]="List of Test Elements";
-            Resources["TestedElement"]="Test Element";
+            Resources["FunctionalModelStructure"]="Your Functional Model Structure";
+            Resources["TestedElement"]="Tested Element";
             Resources["DptType"] = "DPT Type:";
-            Resources["Dispatch(es)"] = "Dispatch(s)";
+            Resources["Dispatch(es)"] = "Dispatch(es)";
             Resources["Reception(s)"] = "Reception(s)";
             Resources["DptPersonalizationTitle"]="DPT Customization";
-            Resources["AddTestedElement"]="Add a Test Element";
+            Resources["AddTestedElement"]="Add a Tested Element";
             Resources["Key"]="Key";
-            Resources["Type"]="Type";
+            Resources["Name"]="Name:";
+            Resources["Type"]="Type:";
             Resources["Keywords"]="Keywords";
+            Resources["DptNumber"]="Dpt number:";
             Resources["AddDpt"]="Add a DataPointType";
         }
     }
@@ -111,7 +115,19 @@ public partial class StructureEditWindow
     }
     private void ApplyScaling()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyScaling is not implemented");
+        var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
+        float scale;
+        if (scaleFactor < 1f)
+        {
+            scale = scaleFactor - 0.1f;
+        }
+        else
+        {
+            scale = scaleFactor - 0.2f;
+        }
+        StructEditWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
+        Width = 1500 * scale >= 0.9*SystemParameters.PrimaryScreenWidth? 0.9*SystemParameters.PrimaryScreenWidth : 1500 * scale;
+        Height = 786 * scale >= 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 786 * scale;
     }
     
     
@@ -163,9 +179,11 @@ public partial class StructureEditWindow
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
-        
-        _viewModel.AddDptCmdToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        if (dep != null)
+        {
+            var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+            _viewModel.AddDptCmdToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        }
     }
     
     /// <summary>
@@ -176,9 +194,11 @@ public partial class StructureEditWindow
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
-        var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
-        
-        _viewModel.AddDptIeToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        if (dep != null)
+        {
+            var indexElement = TestedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
+            _viewModel.AddDptIeToElementStructureCommand.Execute(_viewModel.SelectedStructure?.ModelStructure[indexElement]);
+        }
     }
 
     private void AddDptToDictionaryButtonClick(object sender, RoutedEventArgs e)
@@ -198,14 +218,23 @@ public partial class StructureEditWindow
 
     private void PrintDptDictionaryButtonClick(object sender, RoutedEventArgs e)
     {
+        Console.WriteLine("SelectedStructure : " + _viewModel.SelectedStructure?.FullName);
+        Console.WriteLine("with allkeywords : " + _viewModel.SelectedStructure?.AllKeywords);
+        if (_viewModel.SelectedStructure?.Keywords != null)
+            foreach (var kw in _viewModel.SelectedStructure.Keywords)
+                Console.WriteLine("with keywords : " + kw);
+
         var dptDico = _viewModel.SelectedStructure?.DptDictionary;
         if (dptDico == null) return;
         foreach (var kvp in dptDico)
         {
             Console.WriteLine("--------------------------");
             Console.WriteLine("DICO Printing key " + kvp.Key);
-            Console.WriteLine("DICO Printing value.Dpt.Type " + kvp.Value.Dpt.Type);
             Console.WriteLine("DICO Printing value.Dpt.Name " + kvp.Value.Dpt.Name);
+            Console.WriteLine("DICO Printing value.Dpt.Type " + kvp.Value.Dpt.Type);
+            Console.WriteLine("DICO Printing value.AllKeywords " + kvp.Value.AllKeywords);
+            foreach (var kw in kvp.Value.Keywords)
+                Console.WriteLine("DICO Printing value.Dpt.Keywords " + kw);
             Console.WriteLine("--------------------------");
         }
     }

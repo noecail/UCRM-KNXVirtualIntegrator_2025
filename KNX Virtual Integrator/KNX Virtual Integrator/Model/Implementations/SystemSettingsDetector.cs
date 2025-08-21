@@ -100,4 +100,51 @@ public class SystemSettingsDetector (ILogger logger) : ISystemSettingsDetector
 
         return "";
     }
+    
+    // Fonction permettant de détecter le thème de windows (clair/sombre)
+    /// <summary>
+    /// Detects the current Windows scale (100%,125%,...).
+    /// Attempts to read the scale setting from the Windows registry.
+    /// Returns the value : 100% returns 100.
+    /// If an error occurs or the registry value is not found, defaults to 100% .
+    /// </summary>
+    /// <returns>
+    /// An integer value indicating the System scale.
+    /// </returns>
+    public int DetectWindowsScale()
+    {
+        try
+        {
+            // Ouverture de la clé de registre contenant les informations sur l'échelle de Windows.
+            using var key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop\WindowMetrics");
+        
+            // Récupérer la valeur du registre qui indique l'échelle du système.
+            var registryValue = key?.GetValue("AppliedDpi");
+
+            // Si la valeur récupérée est un entier on retourne le facteur d'échelle correspondant
+            if (registryValue is int value)
+            {
+                logger.ConsoleAndLogWriteLine($"Device DPI detected : {value}");
+                return value switch
+                {
+                    96  => 100,
+                    120 => 125,
+                    144 => 150,
+                    192 => 200,
+                    _   => 100
+                }; // Retourne la valeur de l'échelle.
+            }
+        }
+        catch (Exception ex)
+        {
+            // En cas d'erreur lors de l'accès à la clé de registre, on écrit sur le log l'erreur avec un message explicatif.
+            logger.ConsoleAndLogWriteLine($"Erreur : Une erreur s'est produite lors de la récupération du thème Windows : {ex.Message}. Thème par défaut : clair.");
+
+            // En cas d'erreur, on retourne 100, ce qui signifie que l'échelle 100% est utilisée par défaut.
+            return 100; 
+        }
+
+        // Si aucune information n'a pu être récupérée, on retourne 100, indiquant que l'échelle 100% est utilisée.
+        return 100;
+    }
 }

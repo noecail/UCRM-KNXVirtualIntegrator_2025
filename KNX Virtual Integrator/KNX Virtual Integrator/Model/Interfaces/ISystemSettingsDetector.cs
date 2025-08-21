@@ -30,5 +30,17 @@
         /// If an error occurs during the registry access or if the language code is not supported, an empty string is returned.
         /// </remarks>
         string DetectWindowsLanguage();
+
+        // Fonction permettant de détecter le thème de windows (clair/sombre)
+        /// <summary>
+        /// Detects the current Windows scale (100%,125%,...).
+        /// Attempts to read the scale setting from the Windows registry.
+        /// Returns the value : 100% returns 100.
+        /// If an error occurs or the registry value is not found, defaults to 100% .
+        /// </summary>
+        /// <returns>
+        /// An integer value indicating the System scale.
+        /// </returns>
+        int DetectWindowsScale();
     }
 }

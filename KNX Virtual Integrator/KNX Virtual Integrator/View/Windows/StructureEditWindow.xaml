@@ -33,7 +33,7 @@
         </CollectionViewSource>
     </Window.Resources>
     
-    <Border>
+    <ScrollViewer x:Name="StructEditWindowBorder" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/> <!--Bandeau supérieur-->
@@ -45,10 +45,11 @@
             <Border Grid.Row="0" Style="{StaticResource BorderTitleLight}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>    <!--Nom de la structure-->
-                        <ColumnDefinition Width="Auto"/> <!--Bouton suppression de la structure-->
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    
+                
                     <!--Nom de la structure-->
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <Image Source="{StaticResource PencilDrawingImage}" Height="20" Margin="15,0,0,0"/>
@@ -58,11 +59,43 @@
                                  Style="{StaticResource StandardTextBoxLight}"
                                  HorizontalAlignment="Left"
                                  Margin="10,0,0,0"/>
-                        
+                    </StackPanel>
+                    
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Image Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="0,0,5,0">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Background="White"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                            Aide - Mots-clés
+                                        </TextBlock>
+                                        <TextBlock>
+                                            Rentrer des mots-clés pour faciliter la reconnaissance des adresses de groupe de votre projet.
+                                            <LineBreak/>
+                                            Rentrer les mots-clés à la suite, en les séparant par une virgule (,) sans espace entre les mots-clés.
+                                            <LineBreak/>
+                                            Le mot-clé devrait être ce par quoi commence le nom de votre adresse de groupe.
+                                            <LineBreak/>
+                                            exemple : Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon. Rentrer dans les mots clés Cmd_Eclairage_OnOff.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                        <TextBlock Text="{DynamicResource Keywords}" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                        <TextBox Text="{Binding SelectedStructure.AllKeywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource StandardTextBoxLight}"
+                                 FontSize="15"
+                                 Width="200"/>
                     </StackPanel>
                     
                     <!--Bouton de suppression de la structure-->
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                         <TextBlock Text="{DynamicResource StructRmvText}"
                                    Foreground="{StaticResource LightGrayForegroundBrush}"
                                    Margin="0,0,3,0"
@@ -76,7 +109,7 @@
                                 Click="DeleteStructureButtonClick"
                                 />
                     </StackPanel>
-                </Grid>
+               </Grid>
             </Border>
             
             <!--Conteneur principal-->
@@ -110,16 +143,15 @@
                                                VerticalAlignment="Center"
                                                Margin="10,0,0,0"/>
                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="{StaticResource NoColorBrush}" Grid.Column="0" VerticalAlignment="Center">
-                                        <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
+                                        <Image Source="{StaticResource PersonalizationDrawingImage}" Height="20"/>
                                         <TextBlock x:Name="DptsTitleText"
                                                    Style="{StaticResource TitleTextLight}"
                                                    Text="{DynamicResource DptPersonalizationTitle}"/>
-                                        <!--Button Content="Afficher dico"
-                                                Click="PrintDptDictionaryButtonClick"/-->
+                                        <Button Content="Afficher dico"
+                                                Click="PrintDptDictionaryButtonClick" Visibility="Collapsed"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
-                            <!--ItemsSource="{Binding Source={StaticResource SortedSelectedStructureDptDictionary}}"-->
                             <ListBox Grid.Row="1"
                                      ItemsSource="{Binding SelectedStructure.DptDictionary}"
                                      Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -184,7 +216,7 @@
                                                             HorizontalAlignment="Left"
                                                             FontSize="10"
                                                             SelectedIndex="0"
-                                                            SelectedItem="{Binding Value.Dpt.Type, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                                            SelectedItem="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                             ItemsSource="{Binding DataContext.SelectedStructure.DefaultDptToChoose, RelativeSource={RelativeSource AncestorType=Window}}">
                                                         </ComboBox>
                                                     </StackPanel>
@@ -209,7 +241,7 @@
                                                                         <TextBlock>
                                                                             Rentrer des mots-clés pour faciliter la reconnaissance des adresses de groupe de votre projet.
                                                                             <LineBreak/>
-                                                                            Rentrer les mots-clés à la suite, en les séparant par une virgule, sans espace entre eux.
+                                                                            Rentrer les mots-clés à la suite, en les séparant par une virgule (,) sans espace entre les mots-clés.
                                                                             <LineBreak/>
                                                                             Le mot-clé devrait être ce par quoi commence le nom de votre adresse de groupe.
                                                                             <LineBreak/>
@@ -220,7 +252,7 @@
                                                             </ToolTipService.ToolTip>
                                                         </Image>
                                                     </StackPanel>
-                                                    <TextBox Text="{Binding Value.Keywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                                    <TextBox Text="{Binding Value.AllKeywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                              Height="101"
                                                              Width="210"
                                                              TextWrapping="Wrap"/>
@@ -262,11 +294,11 @@
                                                VerticalAlignment="Center"
                                                Margin="10,0,0,0"/>
                                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Background="{StaticResource NoColorBrush}" VerticalAlignment="Center" Margin="10,0">
-                                        <!--<Button Content="Afficher ModelStructure" Click="PrintModelStructureButtonClick"/>-->
-                                        <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
+                                        <Button Content="Afficher ModelStructure" Click="PrintModelStructureButtonClick" Visibility="Collapsed"/>
+                                        <Image Source="{StaticResource FunctionalModelStructureDrawingImage}" Height="20"/>
                                         <TextBlock x:Name="TETitleText"
                                                    Style="{StaticResource TitleTextLight}"
-                                                   Text="{DynamicResource TestedElementsListTitle}"/>
+                                                   Text="{DynamicResource FunctionalModelStructure}"/>
                                     </StackPanel>
                                     <Image HorizontalAlignment="Right"
                                            Style="{StaticResource TooltipImage}"
@@ -299,7 +331,7 @@
                             <Border Grid.Row="1" Background="{StaticResource OffWhiteBackgroundBrush}">
                                 <ListBox Name="TestedElementsListBox"
                                          ItemsSource="{Binding SelectedStructure.ModelStructure, FallbackValue=''}"
-                                         ItemContainerStyle="{StaticResource TestedElementListListBoxItemContainerStyle}"
+                                         ItemContainerStyle="{StaticResource TestedElementItemContainerStyleLight}"
                                          Background="{StaticResource OffWhiteBackgroundBrush}"
                                          AlternationCount="9999">
                                     <ListBox.ItemTemplate>
@@ -342,7 +374,7 @@
                                                         </Grid.ColumnDefinitions>
                                                         
                                                         <!--Colonne 1 : Titres-->
-                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource DptType}" VerticalAlignment="Center"/>
+                                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource DptNumber}" VerticalAlignment="Center"/>
                                                         
                                                         <!--Colonne 2 : Cmd(s)-->
                                                         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="5,0,10,5">
@@ -363,7 +395,7 @@
                                                         <ListBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0"
                                                                  ItemsSource="{Binding Cmd}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}"
                                                                  AlternationCount="9999">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -389,7 +421,8 @@
                                                                                     VerticalAlignment="Bottom"
                                                                                     Margin="2,0,0,0"
                                                                                     Style="{StaticResource DeactivateValueButtonStyle}"
-                                                                                    Command="{Binding DataContext.RemoveCmdDptFromElementStructureCommand, RelativeSource={RelativeSource AncestorType=Window}}">
+                                                                                    Command="{Binding DataContext.RemoveCmdDptFromElementStructureCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                                                    Visibility="{Binding RemoveDptButtonVisibility }">
                                                                                     <Button.CommandParameter>
                                                                                         <MultiBinding Converter="{StaticResource IndicesToTupleConverter}">
                                                                                             <!-- Index du ModelStructure -->
@@ -427,7 +460,7 @@
                                                         <ListBox Grid.Row="1" Grid.Column="2"
                                                                  ItemsSource="{Binding Ie}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}"
                                                                  AlternationCount="9999">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -488,5 +521,5 @@
             </Border>
             
         </Grid>
-    </Border>
+    </ScrollViewer>
 </mah:MetroWindow>

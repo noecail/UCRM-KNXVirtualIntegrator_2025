@@ -1585,6 +1585,8 @@ public partial class SettingsWindow
             OngletDebug.Style = (Style)FindResource("LightOnglet");
             OngletInformations.Style = (Style)FindResource("LightOnglet");
             OngletParametresApplication.Style = (Style)FindResource("LightOnglet");
+            SaveSettImage.Source = (DrawingImage)FindResource("CheckmarkLight");
+            CancelButtonImage.Source = (DrawingImage)FindResource("CrossmarkLight");
         }
         else // Sinon, on met le thème sombre
         {
@@ -1603,6 +1605,8 @@ public partial class SettingsWindow
             OngletDebug.Style = (Style)FindResource("DarkOnglet");
             OngletInformations.Style = (Style)FindResource("DarkOnglet");
             OngletParametresApplication.Style = (Style)FindResource("DarkOnglet");
+            SaveSettImage.Source = (DrawingImage)FindResource("CheckmarkDark");
+            CancelButtonImage.Source = (DrawingImage)FindResource("CrossmarkDark");
         }
         // Arrière plan de la fenêtre
         Background = backgroundColorBrush;
@@ -1624,9 +1628,7 @@ public partial class SettingsWindow
         // Pied de page avec les boutons save et cancel
         SettingsWindowFooter.Background = deepBackgroundColorBrush;
         FooterPath.Stroke = pathColorBrush;
-        CancelButtonDrawing.Brush = textColorBrush;
         CancelButtonText.Foreground = textColorBrush;
-        SaveButtonDrawing.Brush = textColorBrush;
         SaveButtonText.Foreground = textColorBrush;
         CreateArchiveDebugText.Foreground = textColorBrush;
 

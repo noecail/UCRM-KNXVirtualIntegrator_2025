@@ -24,6 +24,7 @@ public partial class ReportCreationWindow
         InitializeComponent();
         _mainViewModel = mv;
         MyBrowser.RenderSize = new Size(400, 600);
+        UpdateWindowContents(true, true, true);
     }
     
     
@@ -56,10 +57,10 @@ public partial class ReportCreationWindow
             Resources["ReportWindowTitle"] = "Test report creation";
             Resources["TestGenerationTitle"] = "Test report generation";
             Resources["DocParametersTitle"] = "Document parameters";
-            Resources["AuthorReport"] = "Report author :";
-            Resources["ReportPath"] = "Report path :";
-            Resources["ReportFullPath"] = "Report full path :";
-            Resources["ReportPreview"] = "Report preview :";
+            Resources["AuthorReport"] = "Report author:";
+            Resources["ReportPath"] = "Report path:";
+            Resources["ReportFullPath"] = "Report full path:";
+            Resources["ReportPreview"] = "Report preview:";
             Resources["GenerationButton"] = "Generate report";
             Resources["CancelButton"] = "Cancel";
         }
@@ -67,7 +68,55 @@ public partial class ReportCreationWindow
 
     private void ApplyThemeToWindow()
     {
-        _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("ReportCreationWindow.ApplyTheme is not implemented");
+        Style titleStyles;
+        Style textBlockStyles;
+        Brush backgrounds;
+        
+        if (_mainViewModel.AppSettings.EnableLightTheme)
+        {
+            titleStyles = (Style)FindResource("TitleTextLight");
+            textBlockStyles = (Style)FindResource("StandardTextBlockLight");
+            
+            backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
+            PdfImageReport.Source = (DrawingImage)FindResource("PdfCreationImageLight");
+            AuthorNameTextBox.Style = (Style)FindResource("StandardTextBoxLight");
+            SetPdfPathButton.Style = (Style)FindResource("ImportKeysButtonLight");
+            SaveButton.Style = (Style)FindResource("BottomButtonLight");
+            CancelButton.Style = (Style)FindResource("BottomButtonLight");
+            GenerateRepImage.Source = (DrawingImage)FindResource("CheckmarkLight");
+            CancelRepImage.Source = (DrawingImage)FindResource("CrossmarkLight");
+            ReportWindowFooter.Background = (Brush)FindResource("WhiteBackgroundBrush");
+            Background = (Brush)FindResource("WhiteBackgroundBrush");
+        }
+        else
+        {
+            titleStyles = (Style)FindResource("TitleTextDark");
+            textBlockStyles = (Style)FindResource("StandardTextBlockDark");
+            
+            backgrounds = (Brush)FindResource("DarkGrayBackgroundBrush");
+            
+            PdfImageReport.Source = (DrawingImage)FindResource("PdfCreationImageDark");
+            AuthorNameTextBox.Style = (Style)FindResource("StandardTextBoxDark");
+            SetPdfPathButton.Style = (Style)FindResource("ImportKeysButtonDark");
+            SaveButton.Style = (Style)FindResource("BottomButtonDark");
+            CancelButton.Style = (Style)FindResource("BottomButtonDark");
+            GenerateRepImage.Source = (DrawingImage)FindResource("CheckmarkDark");
+            CancelRepImage.Source = (DrawingImage)FindResource("CrossmarkDark");
+            ReportWindowFooter.Background = (Brush)FindResource("DarkGrayBackgroundBrush");
+            Background = (Brush)FindResource("DarkGrayBackgroundBrush");
+        }
+        
+        ReportWindowTopTitle.Style = titleStyles;
+        DocParamTextTitle.Style = titleStyles;
+        ReportAuthorText.Style = textBlockStyles;
+        ReportPathTextBlock.Style = textBlockStyles;
+        PdfPathText.Style = textBlockStyles;
+        ReportPreviewText.Style = textBlockStyles;
+        SaveButtonText.Style = textBlockStyles;
+        CancelButtonText.Style = textBlockStyles;
+
+        ReportCreationWindowBorder.Background = backgrounds;
+        //Background = backgrounds;
     }
     
     private void ApplyScaling()
@@ -84,8 +133,8 @@ public partial class ReportCreationWindow
         }
         ReportCreationWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
             
-        Height = 650 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 650 * scale;
-        Width = 500 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 500 * scale;
+        Height = 525 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 525 * scale;
+        Width = 515 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 515 * scale;
     }
     
     
@@ -125,7 +174,7 @@ public partial class ReportCreationWindow
         if (_mainViewModel.PdfPath.Length <= 0)
             return;
         MyBrowser.Navigate(uri);
-        
+        MyBrowser.Visibility = Visibility.Visible;
     }
 
     /// <summary>
@@ -142,6 +191,7 @@ public partial class ReportCreationWindow
     {
         e.Cancel = true;
         Hide();
+        UpdateWindowContents(true, true, true);
     }
 
     private void SetPdfPathButton_OnClick(object sender, RoutedEventArgs e)
