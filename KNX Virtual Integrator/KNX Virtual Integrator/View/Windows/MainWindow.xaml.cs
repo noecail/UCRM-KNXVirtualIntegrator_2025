@@ -98,9 +98,11 @@ public partial class MainWindow
         if (_viewModel.AppSettings.EnableLightTheme)
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
-            NameTextBlock.Style= (Style)FindResource("StandardTextBlockLight");
             GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemStyleLight");
-            
+            SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateLight");
+            SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleLight");
+            EditStructButton.Style = (Style)FindResource("EditStructureButtonStyleLight");
+
             titleStyles = (Style)FindResource("TitleTextLight");
             borderStyles = (Style)FindResource("BorderLight");
             borderTitleStyles = (Style)FindResource("BorderTitleLight");
@@ -113,8 +115,10 @@ public partial class MainWindow
         else
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
-            NameTextBlock.Style= (Style)FindResource("StandardTextBlockDark");
             GroupAddressTreeView.ItemContainerStyle = (Style)FindResource("TreeViewItemStyleDark");
+            SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateDark");
+            SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleDark");
+            EditStructButton.Style = (Style)FindResource("EditStructureButtonStyleDark");
             
             titleStyles = (Style)FindResource("TitleTextDark");
             borderStyles = (Style)FindResource("BorderDark");
@@ -130,6 +134,8 @@ public partial class MainWindow
         Background = backgrounds;
         StructuresBox.Background = backgrounds;
         ModelsBox.Background = backgrounds;
+        SelectedElementsListBox.Background = backgrounds;
+        
         GroupAddressTreeView.Foreground = foregrounds;
         Number1.Foreground = foregrounds;
         Number2.Foreground = foregrounds;
@@ -144,6 +150,7 @@ public partial class MainWindow
         ModelBibText.Style = titleStyles;
         ModelSettingsText.Style = titleStyles;
         AddressTitleText.Style = titleStyles;
+        NameTextBlock.Style = titleStyles;
         
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
@@ -154,12 +161,13 @@ public partial class MainWindow
         BorderStructBib.Style = borderStyles;
         BorderAddress.Style = borderStyles;
         BorderElement.Style = borderStyles;
+        BorderModelNameTitle.Style = borderTitleStyles;
         
         
         SearchDefStructButton.Style = searchbuttonStyle;
         SearchModelButton.Style = searchbuttonStyle;
         SearchAddressButton.Style = searchbuttonStyle;
-        ModelSupprButton.Style = supprButtonStyle;
+        StructSupprButton.Style = supprButtonStyle;
         ModelSupprButton.Style = supprButtonStyle;
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
@@ -202,7 +210,7 @@ public partial class MainWindow
             Resources["ExportButton"] = "Export test report";
             
             Resources["Library"] = "Library";
-            Resources["PredefinedStructures"] = "Predefined Structures";
+            Resources["PredefinedStructures"] = "Structures of Functional Models";
             Resources["NewStructure"] = "New Structure";
             Resources["ModelsTitle"] = "Functional Models";
             Resources["CreateFunctionalModel"] = "New Functional Model";

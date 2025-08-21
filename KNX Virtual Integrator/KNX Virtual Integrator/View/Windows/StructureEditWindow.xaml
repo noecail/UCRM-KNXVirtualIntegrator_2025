@@ -331,7 +331,7 @@
                             <Border Grid.Row="1" Background="{StaticResource OffWhiteBackgroundBrush}">
                                 <ListBox Name="TestedElementsListBox"
                                          ItemsSource="{Binding SelectedStructure.ModelStructure, FallbackValue=''}"
-                                         ItemContainerStyle="{StaticResource TestedElementListListBoxItemContainerStyle}"
+                                         ItemContainerStyle="{StaticResource TestedElementItemContainerStyleLight}"
                                          Background="{StaticResource OffWhiteBackgroundBrush}"
                                          AlternationCount="9999">
                                     <ListBox.ItemTemplate>
@@ -395,7 +395,7 @@
                                                         <ListBox Grid.Row="1" Grid.Column="1" Margin="0,0,10,0"
                                                                  ItemsSource="{Binding Cmd}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}"
                                                                  AlternationCount="9999">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>
@@ -461,7 +461,7 @@
                                                         <ListBox Grid.Row="1" Grid.Column="2"
                                                                  ItemsSource="{Binding Ie}"
                                                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyle}"
+                                                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}"
                                                                  AlternationCount="9999">
                                                             <ListBox.ItemsPanel>
                                                                 <ItemsPanelTemplate>

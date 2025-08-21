@@ -107,7 +107,9 @@ public partial class TestConfigWindow
             ChosenTestModelesListBox.Style = (Style)FindResource("StandardListBoxLight");
             ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerLight");
             ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
-            
+            SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateLight");
+            SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleLight");
+            NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
 
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleLight");
             
@@ -124,8 +126,10 @@ public partial class TestConfigWindow
             ChosenTestModelesListBox.Style = (Style)FindResource("ListBoxStyleDark");
             ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerDark");
             ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemDark");
-            
+            SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateDark");
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleDark");
+            SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleDark");
+            NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
             
             titleStyles = (Style)FindResource("TitleTextDark");
             borderStyles = (Style)FindResource("BorderDark");
@@ -137,14 +141,19 @@ public partial class TestConfigWindow
         }
 
         Background = backgrounds;
+        SelectedElementsListBox.Background = backgrounds;
+        DefStructureBox.Background = backgrounds;
+        ModelsBox.Background = backgrounds;
+        TestConfigWindowBorder.Background = backgrounds;
         
         ChosenTestModelesTitle.Style = titleStyles;
         StructBibTitleText.Style = titleStyles;
         BorderDefStructTitleText.Style = titleStyles;
         BorderModelsTitleText.Style = titleStyles;
         ModelBibText.Style = titleStyles;
+        NameTextBlock.Style = titleStyles;
+        ModelSettingsText.Style = titleStyles;
         
-        AllModelsAndElementsColumn.Style = borderStyles;
         ChosenModelsColumn.Style = borderStyles;
         BorderAllStruct.Style = borderStyles;
         BorderDefStructTitle.Style = borderTitleStyles;
@@ -152,6 +161,8 @@ public partial class TestConfigWindow
         BorderModelTitle.Style = borderTitleStyles;
         BorderModelBib.Style = borderStyles;
         BorderStructBib.Style = borderStyles;
+        BorderModelNameTitle.Style = borderTitleStyles;
+        BorderElement.Style = borderStyles;
         
         SearchDefStructButton.Style = searchbuttonStyle;
         SearchModelButton.Style = searchbuttonStyle;
