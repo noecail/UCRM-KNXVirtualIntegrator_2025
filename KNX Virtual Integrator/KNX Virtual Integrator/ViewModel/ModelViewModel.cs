@@ -86,7 +86,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                     return;
                 _selectedStructure = value;
                 WhenPropertyChanged(nameof(SelectedStructure));
-                SelectedStructureModel = SelectedStructure?.Model;
                 
                 // updating the second column
                 if (value is null) return;
@@ -94,21 +93,6 @@ namespace KNX_Virtual_Integrator.ViewModel
                 SelectedModels = new ObservableCollection<FunctionalModel>(source);
             }
         }
-        
-        /// <summary>
-        /// StructureEditWindow and Column 2. Name of the selected model structure.
-        /// </summary>
-        private FunctionalModel? _selectedStructureModel;
-        public FunctionalModel? SelectedStructureModel
-        {
-            get => _selectedStructureModel;
-            set
-            {
-                if (_selectedStructureModel != null && _selectedStructureModel.Key == value?.Key)
-                    return;
-                _selectedStructureModel = value;
-                WhenPropertyChanged(nameof(SelectedStructureModel));
-            }
-        }
+
     }
 }

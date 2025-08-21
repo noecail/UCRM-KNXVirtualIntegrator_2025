@@ -24,13 +24,6 @@
     <Window.Resources>
         <utils:IndicesToTupleConverter x:Key="IndicesToTupleConverter"/>
         
-        <CollectionViewSource x:Key="SortedSelectedStructureDptDictionary"
-                              Source="{Binding SelectedStructure.DptDictionary}">
-            <CollectionViewSource.SortDescriptions>
-                <scm:SortDescription PropertyName="Key"
-                                     Direction="Ascending" />
-            </CollectionViewSource.SortDescriptions>
-        </CollectionViewSource>
     </Window.Resources>
     
     <ScrollViewer x:Name="StructEditWindowBorder" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
@@ -54,7 +47,7 @@
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <Image Source="{StaticResource PencilDrawingImage}" Height="20" Margin="15,0,0,0"/>
                         <TextBox
-                                 Text="{Binding SelectedStructureModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
+                                 Text="{Binding SelectedStructure.Model.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
                                  FontSize="15"
                                  Style="{StaticResource StandardTextBoxLight}"
                                  HorizontalAlignment="Left"
@@ -215,9 +208,8 @@
                                                             VerticalAlignment="Center"
                                                             HorizontalAlignment="Left"
                                                             FontSize="10"
-                                                            SelectedIndex="0"
-                                                            SelectedItem="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                            ItemsSource="{Binding DataContext.SelectedStructure.DefaultDptToChoose, RelativeSource={RelativeSource AncestorType=Window}}">
+                                                            ItemsSource="{Binding DataContext.SelectedStructure.DefaultDptToChoose, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                            SelectedItem="{Binding Value.Dpt.Type, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                                         </ComboBox>
                                                     </StackPanel>
                                                 </StackPanel>

@@ -365,6 +365,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     else
                         _functionalModelList.AddToList(SelectedStructure.Model.Key - 1);
                     SelectedModels = SelectedStructure != null ? _functionalModelList.FunctionalModels[SelectedStructure.Model.Key - 1] : null;
+                    SelectedModel = SelectedModels?.Last();
                     /*
                      * Je le garde dans un coin pour le moment
                      * SelectedModels?.Clear();
@@ -408,6 +409,21 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             parameters.structure.RemoveDpt(parameters.key);
         });
         
+        UpdateFunctionalModelListCommand = new Commands.RelayCommand<object>(_ =>
+        {
+            if (SelectedStructure == null) return;
+
+            int structureKey = SelectedStructure.Model.Key - 1;
+            _functionalModelList.FunctionalModels[structureKey].Clear();
+            _functionalModelList.ReinitializeNbModels(structureKey);
+            _functionalModelList.AddToList(structureKey);
+            
+            var source = _functionalModelList.FunctionalModels[SelectedStructure.Model.Key-1];
+            SelectedModels = new ObservableCollection<FunctionalModel>(source);
+            SelectedModel = SelectedModels.First();
+        });
+            
+            
         ExportDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
                 if (path != null)

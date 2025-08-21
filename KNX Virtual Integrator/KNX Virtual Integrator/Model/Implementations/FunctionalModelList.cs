@@ -267,7 +267,13 @@ public class FunctionalModelList : IFunctionalModelList
 
     public void ReinitializeNbModels(int index)
     {
-        _nbModelsCreated.RemoveAt(index);
+        _nbModelsCreated[index]=0;
+    }
+
+    public void AddNewEmptyStruct()
+    {
+        FunctionalModels.Add([]);
+        _nbModelsCreated.Add(0);
     }
     
 }

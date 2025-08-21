@@ -1090,7 +1090,7 @@
                                 
                                 <TextBlock Style="{StaticResource TitleTextLight}"
                                            x:Name="BorderModelsTitleText"
-                                           Text="{Binding SelectedStructureModel.Name, FallbackValue=''}"
+                                           Text="{Binding SelectedStructure.Model.Name, FallbackValue=''}"
                                 />
                             </Border>
 

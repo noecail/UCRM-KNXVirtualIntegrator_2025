@@ -384,7 +384,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         if (modelStructures != null)
         {
             _groupAddressStructure = DetermineGroupAddressStructureGroupAddressFile(modelStructures); //Determines if the address structure is in 2 or 3 levels
-            for (var i = 0; i < functionalModelList.FunctionalModelDictionary.FunctionalModels.Count; i++) //Clears the list of list
+            for (var i = 0; i < functionalModelList.FunctionalModels.Count; i++) //Clears the list of list
             {
                 functionalModelList.FunctionalModels[i].Clear();
                 functionalModelList.ResetCount(i);
