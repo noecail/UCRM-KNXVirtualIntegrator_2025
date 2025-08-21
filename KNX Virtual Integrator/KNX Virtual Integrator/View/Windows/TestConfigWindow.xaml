@@ -765,7 +765,8 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
-                       Height="20" />
+                       Visibility="Collapsed"
+                       Height="10" />
                 <TextBlock Name="InterfaceItemsText" 
                            Text="{Binding Path=FullName}"
                            Style="{StaticResource ItalicTextBlockLight}"
@@ -778,6 +779,10 @@
                        Style="{StaticResource ItalicTextBlockDark}" />
         </DataTemplate>
 
+        <Style x:Key="ListBoxStyleLight" TargetType="ListBox" BasedOn="{StaticResource StandardListBoxLight}">
+            <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/> 
+        </Style>
+        
         <!-- ReSharper disable once Xaml.RedundantResource -->
         <Style x:Key="ListBoxStyleDark" TargetType="ListBox" BasedOn="{StaticResource StandardListBoxDark}">
             <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}"/> 
@@ -1097,7 +1102,7 @@
                                Text="{DynamicResource ChosenTestModelsTitle}" />
 
                     <ListBox Grid.Row="1" Name="ChosenTestModelesListBox" Width="200" Height="320"
-                             Style="{StaticResource StandardListBoxLight}"
+                             Style="{StaticResource ListBoxStyleLight}"
                              ItemsSource="{Binding SelectedTestModels}"
                              SelectionMode="Single"
                              ItemContainerStyle="{StaticResource ListBoxContainerLight}"
