@@ -23,12 +23,6 @@ namespace KNX_Virtual_Integrator.ViewModel
     {
         private IFunctionalModelList _functionalModelList;
 
-        private int _boxWidth = 40;
-        public int BoxWidth{
-            get => _boxWidth;
-        }
-
-
         /// <summary>
         /// Gets the collection of functional models.
         /// </summary>

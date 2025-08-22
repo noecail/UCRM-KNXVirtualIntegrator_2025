@@ -186,7 +186,6 @@ public class DataPointType : INotifyPropertyChanged
         Value = [];
         for (int i = 0; i < other.IntValue.Count; i++)
         {
-            //Console.WriteLine("Copying "+other.IntValue[i].BigIntegerValue );
             IntValue.Add(new BigIntegerItem(other.IntValue[i].BigIntegerValue ?? 0));
         }
         //UpdateValue();
