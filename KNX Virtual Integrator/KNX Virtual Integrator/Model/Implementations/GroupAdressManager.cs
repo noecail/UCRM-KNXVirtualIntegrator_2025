@@ -1005,7 +1005,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         {
             foreach (var element in models[i].ElementList)
             {
-                if (element.TestsCmd[0].Name.Contains(suffix))
+                if (element.TestsCmd.Count <0 && element.TestsCmd[0].Name.Contains(suffix))
                     return i;
             }
         }
