@@ -50,8 +50,6 @@ public partial class StructureEditWindow
         Hide();
     }    
     
-    
-    
     // TODO : implement later
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
