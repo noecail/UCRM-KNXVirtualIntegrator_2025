@@ -246,7 +246,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// <summary>
     /// Takes all the keywords associated to a dpt and group them, separating them with commas
     /// </summary>
-    private void UpdateKeywordList()
+    public void UpdateKeywordList()
     {
         if (Keywords == null || Keywords.Count == 0)
             return;

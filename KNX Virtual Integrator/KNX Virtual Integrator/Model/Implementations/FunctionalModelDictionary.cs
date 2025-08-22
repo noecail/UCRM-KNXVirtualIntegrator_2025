@@ -156,6 +156,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 newModel.Keywords.Add(keyword.Replace(' ','_'));
                 newModel.Keywords.Add(keyword.Replace('_',' '));
             }
+            newModel.UpdateKeywordList();
 
             _nbStructuresCreated++;
             if (newModel.Model.Name == "New_Structure")
