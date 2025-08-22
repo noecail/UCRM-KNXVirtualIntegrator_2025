@@ -42,6 +42,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     /// </summary>
     /// <param name="fileName">The file path where the PDF will be saved.</param>
     /// <param name="authorName">The name of the author to include in the project information section.</param>
+    /// <param name="testedList"></param>
     /// <param name="testResults"></param>
     public void CreatePdf(string fileName, string authorName, ObservableCollection<FunctionalModel>  testedList, List<List<List<List<ResultType>>>> testResults)
     {
@@ -57,6 +58,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
             var newPdf = new PdfDocument(_writer);
             var doc = new Document(newPdf, PageSize.A4);
             doc.SetMargins(72, 72, 72, 72);
+            doc.SetFontSize(14);
 
             
             // Écriture du contenu du document PDF
@@ -110,6 +112,18 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         var emptyParagraph = new Paragraph("\n");
         document.Add(emptyParagraph);
         
+        // Information du lexique du rapport
+        document.Add(new Paragraph("Chaque modèle testé est nommé et les résultats sont présentés commande par commande, avec un résultat par réception.\n"+
+                                   "Il y a 5 types de résultat pour l'analyse : "));
+        document.SetFontSize(12);
+        document.Add(new Paragraph(" - Success indique que la réception a reçu la valeur attendue de l'adresse concernée\n" +
+                                   " - Response indique que la réception a reçu le message de présence mais pas la\n\t valeur (cela peut être normal si la même valeur est attendue/envoyée 2 fois de suite)\n"+
+                                   " - Failure indique que la réception n'a ni reçu le message de présence, ni le message\n\t d'acquittement avec la valeur attendue\n"+
+                                   " - Address Error indique que la commande et/ou la réception sont mal configurées\n\t pour l'adresse\n" + 
+                                   " - L'absence d'information indique une absence de réception ou d'envoi"));
+        document.SetFontSize(14);
+        document.Add(new Paragraph("\n\n"));
+        
         // Titre du document
         var titleParagraph = new Paragraph("RAPPORT DE FONCTIONNEMENT DE L’INSTALLATION KNX");
         document.Add(titleParagraph);
@@ -131,13 +145,12 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         // Définition de la couleur du trait de séparation
         
         // Ajout d'un trait de séparation avec la couleur définie
-    
         
         // Nom de l'installation évaluée
         
         if (!string.IsNullOrWhiteSpace(manager.ProjectName))
         {
-            var installationChunk = new Paragraph("Projet évalué :");
+            var installationChunk = new Paragraph("Projet évalué : ");
             var projectNameChunk = new Paragraph($" {manager.ProjectName}");
 
             // Combiner les deux Chunk dans un Paragraph
@@ -160,14 +173,6 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
             // Ajouter le paragraphe au document
             document.Add(evaluatorNameParagraph);
         }
-        
-        // TODO Portion de code à remplacer par la génération de deux arborescences:
-        // TODO 1 pour montrer le lien entre les CMD, les IE et les modèles de tests
-        // TODO 1 pour montrer la structure du bâtiment
-        
-        // Ajout d'un trait de séparation avec la couleur définie
-        
-        // TODO ICI IL MANQUE DU COUP L'AFFICHAGE DE TOUS LES RÉSULTATS (Voir fonction GenerateTestList)
     }
 
     /// <summary>
@@ -195,7 +200,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
                     {
                         if (testedIe.Address == "")
                         {
-                            resultString += " Address Error.";
+                            resultString += "Address Error " + (testedElement.TestsIe.Count==1 || testedElement.TestsIe.Last().IsEqual(testedIe)?"":", ") ;
                             break;
                         }
                         resultString += testResults[i][j][k][l] + (testedElement.TestsIe.Count==1 || testedElement.TestsIe.Last().IsEqual(testedIe)?"":", ") ;

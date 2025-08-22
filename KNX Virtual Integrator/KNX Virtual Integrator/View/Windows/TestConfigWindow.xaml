@@ -917,7 +917,7 @@
                             <ListBox Grid.Row="1"
                                      x:Name="DefStructureBox"
                                      ItemsSource="{Binding Structures}"
-                                     SelectedItem="{Binding SelectedStructureTestWindow,Mode=TwoWay}"
+                                     SelectedItem="{Binding SelectedStructureTestWindow,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                      ScrollViewer.VerticalScrollBarVisibility="Visible"
                                      ScrollViewer.HorizontalScrollBarVisibility="Auto"
                                      ScrollViewer.CanContentScroll="False"

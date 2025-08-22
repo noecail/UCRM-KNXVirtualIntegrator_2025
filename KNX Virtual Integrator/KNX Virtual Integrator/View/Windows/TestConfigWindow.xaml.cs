@@ -193,52 +193,21 @@ public partial class TestConfigWindow
         Width = 1200 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 1200 * scale;
     }
 
-    private void CheckedModelsHandler(object? sender, EventArgs? e)
+    private void CheckedModelsHandler(object? sender, RoutedEventArgs? e)
     {
-        // On cherche à récupérer l'index des modèles/structures qui ont été cochées
-        // les index sont disponibles à partir des checkbox associées au listbox items
-        // on parcourt tous les listbox items
-        for (var i = 0; i < ModelsBox.Items.Count; i++)
-        {
-            // Récupère le ListBoxItem correspondant
-            var itemContainer = ModelsBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-
-            // Récupère la CheckBox dans le template
-            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
-                continue;
-            
-            var newTestModel = ModelsBox.Items[i] as FunctionalModel; // La Structure
-            // Si la case est cochée on supprime la structure
-            if (newTestModel is null || checkBox.IsChecked is false) 
-                continue;
-            if (_viewModel.SelectedTestModels.Contains(newTestModel))
-                continue;
-            _viewModel.SelectedTestModels.Add(newTestModel);
-        }
-        
+        if (e is null) return;
+        var newTestModel = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModel; // La Structure
+        if (newTestModel is null) return;
+        if (_viewModel.SelectedTestModels.Contains(newTestModel)) return;
+        _viewModel.SelectedTestModels.Add(newTestModel);
     }
     
-    private void UncheckedModelsHandler(object? sender, EventArgs? e)
+    private void UncheckedModelsHandler(object? sender, RoutedEventArgs? e)
     {
-        // On cherche à récupérer l'index des structures à supprimer
-        // les index sont disponibles à partir des checkbox associées au listbox items
-        // on parcourt tous les listbox items
-        for (var i = 0; i < ModelsBox.Items.Count; i++)
-        {
-            // Récupère le ListBoxItem correspondant
-            var itemContainer = ModelsBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-
-            // Récupère la CheckBox dans le template
-            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
-                continue;
-            var newTestModel = ModelsBox.Items[i] as FunctionalModel; // La Structure
-
-            // Si la case est cochée on supprime la structure
-            if (newTestModel is null || checkBox.IsChecked is true) 
-                continue;
-            _viewModel.SelectedTestModels.Remove(newTestModel);
-        }
-        
+        if (e is null) return;
+        var newTestModel = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModel; // La Structure
+        if (newTestModel is null) return;
+        _viewModel.SelectedTestModels.Remove(newTestModel);
     }
     
     private void CheckIfModelsWasCheckedHandler(object? sender, EventArgs? e)
@@ -259,7 +228,7 @@ public partial class TestConfigWindow
                 continue;
             var structure = ModelsBox.Items[i] as FunctionalModel; // La Structure
 
-            // Si la case est cochée on supprime la structure
+            
             if (structure == null) continue;
             if (_viewModel.SelectedTestModels.Contains(structure))
                 checkBox.IsChecked = true;
@@ -269,57 +238,32 @@ public partial class TestConfigWindow
             
     }
 
-    private void CheckedStructureHandler(object? sender, EventArgs? e)
+    private void CheckedStructureHandler(object? sender, RoutedEventArgs? e)
     {
-        // On cherche à récupérer l'index des modèles/structures qui ont été cochées
-        // les index sont disponibles à partir des checkbox associées au listbox items
-        // on parcourt tous les listbox items
-        for (var i = 0; i < DefStructureBox.Items.Count; i++)
+        if (e is null) return;
+        var newTestStruct = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModelStructure;
+        // Si la case est cochée on supprime la structure
+        if (newTestStruct is null) 
+            return;
+        _viewModel.AddStructToTestModels(newTestStruct.Model.Key - 1);
+        if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
         {
-            // Récupère le ListBoxItem correspondant
-            var itemContainer = DefStructureBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-
-            // Récupère la CheckBox dans le template
-            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
-                continue;
-            
-            var newTestStruct = DefStructureBox.Items[i] as FunctionalModelStructure; // La Structure
-            // Si la case est cochée on update les modèles de la structure
-            if (newTestStruct is null || checkBox.IsChecked is false) 
-                continue;
-            _viewModel.AddStructToTestModels(newTestStruct.Model.Key - 1);
-            if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
-            {
-                CheckIfModelsWasCheckedHandler(sender, e);
-            }
+            CheckIfModelsWasCheckedHandler(sender, e);
         }
     }
 
-    private void UncheckedStructureHandler(object? sender, EventArgs? e)
+    private void UncheckedStructureHandler(object? sender, RoutedEventArgs? e)
     {
-        // On cherche à récupérer l'index des structures à supprimer
-        // les index sont disponibles à partir des checkbox associées au listbox items
-        // on parcourt tous les listbox items
-        for (var i = 0; i < DefStructureBox.Items.Count; i++)
+        if (e is null) return;
+        var newTestStruct = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModelStructure;
+        // Si la case est cochée on supprime la structure
+        if (newTestStruct is null) 
+            return;
+        _viewModel.RmvStructFromTestModels(newTestStruct.Model.Key - 1);
+        if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
         {
-            // Récupère le ListBoxItem correspondant
-            var itemContainer = DefStructureBox.ItemContainerGenerator.ContainerFromIndex(i) as ListBoxItem;
-
-            // Récupère la CheckBox dans le template
-            if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
-                continue;
-            var newTestStruct = DefStructureBox.Items[i] as FunctionalModelStructure; // La Structure
-
-            // Si la case est cochée on supprime la structure
-            if (newTestStruct is null || checkBox.IsChecked is true) 
-                continue;
-            _viewModel.RmvStructFromTestModels(newTestStruct.Model.Key - 1);
-            if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
-            {
-                CheckIfModelsWasCheckedHandler(sender, e);
-            }
+            CheckIfModelsWasCheckedHandler(sender, e);
         }
-        
     }
     
     private void LaunchTestButton_OnClick(object sender, RoutedEventArgs e)
