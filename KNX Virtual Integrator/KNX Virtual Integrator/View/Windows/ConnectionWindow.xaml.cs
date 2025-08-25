@@ -8,11 +8,19 @@ namespace KNX_Virtual_Integrator.View.Windows;
 
 public partial class ConnectionWindow
 {
+    /* ------------------------------------------------------------------------------------------------
+    ------------------------------------------- ATTRIBUTS  --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    //Permet à la fenêtre à accéder aux services du ViewModel
+    /// <summary>
+    /// MainViewModel instance to allow communication with the backend
+    /// </summary>
     private readonly MainViewModel _viewModel;
     
     /// <summary>
     /// Initializes a new instance of the <see cref="ConnectionWindow"/> class,
     /// loading and applying settings from the appSettings file, and setting default values where necessary.
+    /// Allows the viewModel to be accessed from this window.
     /// </summary>
     public ConnectionWindow(MainViewModel viewModel)
     {
@@ -36,7 +44,7 @@ public partial class ConnectionWindow
     }
 
     /// <summary>
-    /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the connection window according to the application settings.
     /// </summary>
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
@@ -44,7 +52,10 @@ public partial class ConnectionWindow
         if (themeChanged) ApplyThemeToWindow();
         if (scaleChanged) ApplyScaling();
     }
-
+    
+    /// <summary>
+    /// Updates the text contents of the connection window (only French and English).
+    /// </summary>
     private void TranslateWindowContents()
     {
         if (_viewModel.AppSettings.AppLang == "FR")
@@ -85,7 +96,10 @@ public partial class ConnectionWindow
             
         }
     }
-
+    
+    /// <summary>
+    /// Updates the color theme of the window according to <see cref="Model.Interfaces.IApplicationSettings.EnableLightTheme"/> state.
+    /// </summary>
     private void ApplyThemeToWindow()
     {
         Brush textColorBrush;
@@ -138,7 +152,10 @@ public partial class ConnectionWindow
         NatIconText.Foreground = textColorBrush;
         
     }
-
+    
+    /// <summary>
+    /// Update the size of the window and its contents according to <see cref="Model.Interfaces.IApplicationSettings.AppScaleFactor"/>
+    /// </summary>
     private void ApplyScaling()
     {
         var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
@@ -161,22 +178,30 @@ public partial class ConnectionWindow
     /// <summary>
     /// Handles the button click event to import a keys file.
     /// Displays an OpenFileDialog for the user to select the file,
-    /// extracts necessary files.
+    /// then extracts necessary files.
     /// </summary>
     /// <param name="sender">The object that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void ImportKeysFileButtonClick(object sender, RoutedEventArgs e)
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select a keys file");
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select a KNX keys file");
 
         // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
         OpenFileDialog openFileDialog = new()
         {
             // Définir des propriétés optionnelles
-            Title = "Sélectionnez un fichier de clés à importer",
-            // Applique un filtre pour n'afficher que les fichiers knxkeys ou tous les fichiers
-            Filter = "Fichiers de clés|*.knxkeys",
-            // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
+            Title = _viewModel.AppSettings.AppLang switch
+            { 
+                "FR" =>"Sélectionnez un fichier de clés KNX",
+                _ => "Select a KNX keys file"
+            },
+            // Applique un filtre pour n'afficher que les fichiers knxkeys
+            Filter = _viewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Fichier de clés KNX|*.knxkeys",
+                _ => "KNX keys file|*.knxkeys"
+            },
+            // Définit l'index par défaut du filtre
             FilterIndex = 1,
             // N'autorise pas la sélection de plusieurs fichiers à la fois
             Multiselect = false
@@ -188,14 +213,14 @@ public partial class ConnectionWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"KNX keys file selected: {openFileDialog.FileName}");
 
             // Donner le chemin au Model
             _viewModel.BusConnection.KeysPath = openFileDialog.FileName;
         }
         else
         {
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the knxkeys file selection operation");
         }
 
     }

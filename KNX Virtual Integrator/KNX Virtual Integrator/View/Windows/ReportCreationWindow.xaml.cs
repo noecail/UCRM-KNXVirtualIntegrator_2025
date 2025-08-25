@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,8 +14,19 @@ namespace KNX_Virtual_Integrator.View.Windows;
 /// </summary>
 public partial class ReportCreationWindow
 {
+    /* ------------------------------------------------------------------------------------------------
+    ------------------------------------------- ATTRIBUTS  --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    //Permet à la fenêtre à accéder aux services du ViewModel
+    /// <summary>
+    /// MainViewModel instance to allow communication with the backend
+    /// </summary>
     private readonly MainViewModel _mainViewModel;
 
+    
+    /* ------------------------------------------------------------------------------------------------
+    -------------------------------------------- MÉTHODES  --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
     /// <summary>
     /// Initializes a new instance of the <see cref="ReportCreationWindow"/> class.
     /// </summary>
@@ -29,7 +41,7 @@ public partial class ReportCreationWindow
     
     
     /// <summary>
-    /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the report window according to the application settings.
     /// </summary>
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
@@ -38,6 +50,9 @@ public partial class ReportCreationWindow
         if (scaleChanged) ApplyScaling();
     }
 
+    /// <summary>
+    /// Updates the text contents of the report window (only French and English).
+    /// </summary>
     private void TranslateWindowContents()
     {
         if (_mainViewModel.AppSettings.AppLang == "FR")
@@ -65,7 +80,10 @@ public partial class ReportCreationWindow
             Resources["CancelButton"] = "Cancel";
         }
     }
-
+    
+    /// <summary>
+    /// Updates the color theme of the window according to <see cref="Model.Interfaces.IApplicationSettings.EnableLightTheme"/> state.
+    /// </summary>
     private void ApplyThemeToWindow()
     {
         Style titleStyles;
@@ -119,6 +137,9 @@ public partial class ReportCreationWindow
         //Background = backgrounds;
     }
     
+    /// <summary>
+    /// Update the size of the window and its contents according to <see cref="Model.Interfaces.IApplicationSettings.AppScaleFactor"/>
+    /// </summary>
     private void ApplyScaling()
     {
         var scaleFactor = _mainViewModel.AppSettings.AppScaleFactor / 100f;
@@ -166,7 +187,8 @@ public partial class ReportCreationWindow
                 _mainViewModel.ConsoleAndLogWriteLineCommand.Execute("The pdf URI Address has to be absolute");
                 return;
             }
-
+            
+            //Disabled due to issues
             /*if (uri.Equals(MyBrowser.Source))
             {
                 _mainViewModel.ConsoleAndLogWriteLineCommand.Execute(
@@ -178,6 +200,7 @@ public partial class ReportCreationWindow
                 _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
             if (_mainViewModel.PdfPath.Length <= 0)
                 return;
+            // Disabled due to issues
             //MyBrowser.Navigate(uri);
             //MyBrowser.Visibility = Visibility.Visible;
         }
@@ -188,50 +211,72 @@ public partial class ReportCreationWindow
     }
 
     /// <summary>
-    /// Handles the click event of the cancel button. This method is not yet implemented.
+    /// Handles the click event of the cancel button. It only clears the text
     /// </summary>
     /// <param name="sender">The source of the event.</param>
     /// <param name="e">The event data.</param>
     private void CancelButtonClick(object sender, RoutedEventArgs e)
     {
         AuthorNameTextBox.Text = string.Empty;
+        _mainViewModel.PdfPath = "";
     }
 
+    /// <summary>
+    /// Handles the Connection window closing event by canceling the closure, restoring previous settings, and hiding the window.
+    /// </summary>
     private void ClosingReportCreationWindow(object? sender, CancelEventArgs e)
     {
+        AuthorNameTextBox.Text = string.Empty;
+        _mainViewModel.PdfPath = "";
         e.Cancel = true;
         Hide();
         UpdateWindowContents(true, true, true);
     }
 
+    /// <summary>
+    /// Handles the button click event to choose the file path to which the PDF report should be saved.
+    /// </summary>
+    /// <param name="sender">The source of the event.</param>
+    /// <param name="e">The event data.</param>
     private void SetPdfPathButton_OnClick(object sender, RoutedEventArgs e)
     {
         // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
-        OpenFileDialog openFileDialog = new()
+        SaveFileDialog saveFileDialog = new()
         {
             // Définir des propriétés optionnelles
-            Title = "Choisissez un nom pour le rapport",
+            Title = _mainViewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Choisissez un nom pour le rapport",
+                _ => "Choose a name for the report"
+            },
             // Applique un filtre pour n'afficher que les fichiers pdf ou tous les fichiers
-            Filter = "Fichiers pdf|*.pdf",
+            Filter = _mainViewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Fichiers pdf|*.pdf",
+                _ => "PDF File|*.pdf"
+            },
             // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
             FilterIndex = 1,
-            // N'autorise pas la sélection de plusieurs fichiers à la fois
-            Multiselect = false,
             // N'indique pas de warning si le fichier n'existe pas
-            CheckFileExists = false
+            CheckFileExists = true,
+            FileName = $"KNXVI-Analysis_Report-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.pdf",
+            DefaultExt = ".pdf"
         };
 
         // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
-        var result = openFileDialog.ShowDialog();
+        var result = saveFileDialog.ShowDialog();
 
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
-
+            _mainViewModel.ConsoleAndLogWriteLineCommand.Execute($"Saving the pdf to : {saveFileDialog.FileName}");
+            
+            // Supprimer le fichier s'il existe déjà
+            if (File.Exists(saveFileDialog.FileName)) File.Delete(saveFileDialog.FileName);
+            
             // Donner le chemin au Model
-            _mainViewModel.PdfPath = openFileDialog.FileName;
-            PdfPathText.Text = openFileDialog.FileName;
+            _mainViewModel.PdfPath = saveFileDialog.FileName;
+            PdfPathText.Text = saveFileDialog.FileName;
         }
         else
         {

@@ -9,11 +9,28 @@ using Microsoft.Extensions.DependencyModel;
 
 namespace KNX_Virtual_Integrator.View.Windows;
 
+// Cette fenêtre peut éventuellement être changée en onglet de fenêtre principale
+/// <summary>
+/// The class of the window that handles the test configuration.
+/// </summary>
 public partial class TestConfigWindow
 {
+    /* ------------------------------------------------------------------------------------------------
+    ------------------------------------------- ATTRIBUTS  --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    //Permet à la fenêtre à accéder aux services du ViewModel
+    /// <summary>
+    /// MainViewModel instance to allow communication with the backend
+    /// </summary>
     private readonly MainViewModel _viewModel;
     
-    
+    /* ------------------------------------------------------------------------------------------------
+    -------------------------------------------- MÉTHODES  --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TestConfigWindow"/> class,
+    /// loading and applying settings from the appSettings, and subscribing its checkBox handlers to the listBox events
+    /// </summary>
     public TestConfigWindow(MainViewModel viewModel)
     {
         InitializeComponent();
@@ -40,9 +57,8 @@ public partial class TestConfigWindow
         Hide();
     }
     
-    
     /// <summary>
-    /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the test configuration window according to the application settings.
     /// </summary>
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
@@ -50,7 +66,10 @@ public partial class TestConfigWindow
         if (themeChanged) ApplyThemeToWindow();
         if (scaleChanged) ApplyScaling();
     }
-
+    /// <summary>
+    /// This function translates all the texts contained in the test configuration window to the application language.
+    /// Only English and French are supported
+    /// </summary>
     private void TranslateWindowContents()
     {
         if (_viewModel.AppSettings.AppLang == "FR")
@@ -93,6 +112,9 @@ public partial class TestConfigWindow
         }
     }
 
+    /// <summary>
+    /// This functions applies the light/dark theme to the test configuration window
+    /// </summary>
     private void ApplyThemeToWindow()
     {
         Style titleStyles;
@@ -169,12 +191,11 @@ public partial class TestConfigWindow
         
         DefStructureBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
-        
-        
-        
-        
     }
     
+    /// <summary>
+    /// Applies scaling to the window by adjusting the layout transform and resizing the window based on the specified scale factor.
+    /// </summary>
     private void ApplyScaling()
     {
         var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
@@ -192,30 +213,51 @@ public partial class TestConfigWindow
         Height = 700 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 700 * scale;
         Width = 1200 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 1200 * scale;
     }
-
+    
+    /// <summary>
+    /// Handles the check event of the checkbox for the model to add it to the list to test
+    /// See also <see cref="ViewModel.MainViewModel.SelectedTestModels"/>
+    /// </summary>
+    /// <param name="sender">The source of the event, the checkbox of a model list item.</param>
+    /// <param name="e">Event data containing information about the mouse button event.</param>
     private void CheckedModelsHandler(object? sender, RoutedEventArgs? e)
     {
+        // On ne continue que si le modèle existe réellement
         if (e is null) return;
         var newTestModel = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModel; // La Structure
         if (newTestModel is null) return;
+        
+        // On vérifie que le modèle n'existe pas déjà pour éviter les doublons puis on l'ajoute à la liste
         if (_viewModel.SelectedTestModels.Contains(newTestModel)) return;
         _viewModel.SelectedTestModels.Add(newTestModel);
     }
     
+    /// <summary>
+    /// Handles the uncheck event of the checkbox for the model to remove it from the list to test
+    /// See also <see cref="ViewModel.MainViewModel.SelectedTestModels"/>
+    /// </summary>
+    /// <param name="sender">The source of the event, the checkbox of a model list item.</param>
+    /// <param name="e">Event data containing information about the mouse button event.</param>
     private void UncheckedModelsHandler(object? sender, RoutedEventArgs? e)
     {
+        // On ne continue que si le modèle existe réellement
         if (e is null) return;
         var newTestModel = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModel; // La Structure
         if (newTestModel is null) return;
+        // La méthode remove enlève le modèle du test en vérifiant son appartenance éventuelle
         _viewModel.SelectedTestModels.Remove(newTestModel);
     }
     
+    /// <summary>
+    /// Checks all models of the current structure to see if they were checked at some point in time
+    /// </summary>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">Event data containing information about the mouse button event.</param>
     private void CheckIfModelsWasCheckedHandler(object? sender, EventArgs? e)
     {
-        if (_viewModel.SelectedModelsTestWindow == null)
-            return;
+        if (_viewModel.SelectedModelsTestWindow == null) return;
         
-        // On cherche à récupérer l'index des structures à supprimer
+        // On cherche à récupérer l'index des modèles à vérifier
         // les index sont disponibles à partir des checkbox associées au listbox items
         // on parcourt tous les listbox items
         for (var i = 0; i < _viewModel.SelectedModelsTestWindow.Count; i++)
@@ -226,46 +268,62 @@ public partial class TestConfigWindow
             // Récupère la CheckBox dans le template
             if (itemContainer?.Template.FindName("DeleteCheckBox", itemContainer) is not CheckBox checkBox)
                 continue;
-            var structure = ModelsBox.Items[i] as FunctionalModel; // La Structure
-
+            var model = ModelsBox.Items[i] as FunctionalModel; // Le Functional Model
+            if (model == null) continue;
             
-            if (structure == null) continue;
-            if (_viewModel.SelectedTestModels.Contains(structure))
-                checkBox.IsChecked = true;
-            else
-                checkBox.IsChecked = false;
+            // Vérifie que le modèle a été coché en le cherchant dans la liste des tests
+            checkBox.IsChecked = _viewModel.SelectedTestModels.Contains(model);
         }
             
     }
 
+    /// <summary>
+    /// Handles the check event of the checkbox for structures to check all of its models.
+    /// See also <see cref="ViewModel.MainViewModel.AddStructToTestModels"/>
+    /// </summary>
+    /// <param name="sender">The source of the event, the checkbox of a structure list item.</param>
+    /// <param name="e">Event data containing information about the mouse button event.</param>
     private void CheckedStructureHandler(object? sender, RoutedEventArgs? e)
     {
+        // On ne continue que si la checkbox existe et que sa structure aussi
         if (e is null) return;
         var newTestStruct = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModelStructure;
-        // Si la case est cochée on supprime la structure
-        if (newTestStruct is null) 
-            return;
+        if (newTestStruct is null) return;
+        // On coche tous les modèles de la structure
         _viewModel.AddStructToTestModels(newTestStruct.Model.Key - 1);
+        // Mettre à jour l'affichage
         if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
         {
             CheckIfModelsWasCheckedHandler(sender, e);
         }
     }
 
+    /// <summary>
+    /// Handles the uncheck event of the checkbox for structures to uncheck all of its models.
+    /// See also <see cref="ViewModel.MainViewModel.RmvStructFromTestModels"/>
+    /// </summary>
+    /// <param name="sender">The source of the event, the checkbox of a structure list item.</param>
+    /// <param name="e">Event data containing information about the mouse button event.</param>
     private void UncheckedStructureHandler(object? sender, RoutedEventArgs? e)
     {
+        // On ne continue que si la checkbox existe et que sa structure aussi
         if (e is null) return;
         var newTestStruct = ((FrameworkElement)e.OriginalSource).DataContext as FunctionalModelStructure;
-        // Si la case est cochée on supprime la structure
-        if (newTestStruct is null) 
-            return;
+        if (newTestStruct is null) return;
+        // On décoche tous les modèles de la structure
         _viewModel.RmvStructFromTestModels(newTestStruct.Model.Key - 1);
+        // Mettre à jour l'affichage
         if (newTestStruct.Equals(_viewModel.SelectedStructureTestWindow))
         {
             CheckIfModelsWasCheckedHandler(sender, e);
         }
     }
     
+    /// <summary>
+    /// Handles the launch of the analysis on a different thread to not freeze the UI (WIP)
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the header control.</param>
+    /// <param name="e">Event data containing information about the mouse button event.</param>
     private void LaunchTestButton_OnClick(object sender, RoutedEventArgs e)
     {
 

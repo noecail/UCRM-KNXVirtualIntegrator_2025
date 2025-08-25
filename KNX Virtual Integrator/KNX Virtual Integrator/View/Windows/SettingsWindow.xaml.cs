@@ -17,20 +17,24 @@ using KNX_Virtual_Integrator.ViewModel;
 namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
-///  Window used to set the application settings.
+///  Window used to set the application settings and create reports.
 /// </summary>
 public partial class SettingsWindow
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    //Permet à la fenêtre à accéder aux services du ViewModel
+    /// <summary>
+    /// MainViewModel instance to allow communication with the backend
+    /// </summary>
     private readonly MainViewModel _viewModel;
     
     
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- MÉTHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
-    // Constructeur par défaut. Charge les paramètres contenus dans le fichier appSettings et les affiche également
+    // Constructeur. Charge les paramètres contenus dans le fichier appSettings et les affiche également
     // dans la fenêtre de paramétrage de l'application. Si la valeur est incorrecte ou vide, une valeur par défaut
     // est affectée.
     /// <summary>
@@ -50,8 +54,7 @@ public partial class SettingsWindow
         ScaleSlider.AddHandler(MouseLeftButtonUpEvent, new MouseButtonEventHandler(_viewModel.SliderMouseLeftButtonUp), true);
         ScaleSlider.AddHandler(MouseMoveEvent, new MouseEventHandler(_viewModel.SliderMouseMove), true);
     }
-
-
+    
     // Fonction s'exécutant à la fermeture de la fenêtre de paramètres
     /// <summary>
     /// Handles the settings window closing event by canceling the closure, restoring previous settings, and hiding the window.
@@ -62,8 +65,7 @@ public partial class SettingsWindow
         UpdateWindowContents(); // Mise à jour du contenu de la fenêtre pour remettre les valeurs précédentes
         Hide(); // On masque la fenêtre à la place
     }
-
-
+    
     // Fonction permettant de mettre à jour les champs dans la fenêtre de paramétrage
     /// <summary>
     /// Updates the contents (texts, textboxes, checkboxes, ...) of the settings window accordingly to the application settings.
@@ -112,8 +114,7 @@ public partial class SettingsWindow
         }
 
     }
-
-
+    
     // Fonction traduisant tous les textes de la fenêtre paramètres
     /// <summary>
     /// This function translates all the texts contained in the setting window to the application language
@@ -1550,16 +1551,13 @@ public partial class SettingsWindow
         }
             
     }
-
-
+    
     // Fonction qui applique le thème au contenu de la fenêtre
     /// <summary>
     /// This functions applies the light/dark theme to the settings window
     /// </summary>
     private void ApplyThemeToWindow()
     {
-        
-
         Style checkboxStyle;
         Brush textColorBrush;
         Brush backgroundColorBrush;
@@ -1651,12 +1649,8 @@ public partial class SettingsWindow
         // Menu Informations
         OngletInformations.Foreground = textColorBrush;
         InformationsText.Foreground = textColorBrush;
-        
-        
-        
     }
-
-
+    
     // ----- GESTION DES BOUTONS -----
     // Fonction s'exécutant lors du clic sur le bouton sauvegarder
     /// <summary>
@@ -1692,10 +1686,10 @@ public partial class SettingsWindow
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("Settings are unchanged. No need to save them.");
         }
 
-        // Mise à jour éventuellement du contenu pour update la langue du menu
+        // Mise à jour éventuellement du contenu pour update le menu
         UpdateWindowContents(previousAppLang != _viewModel.AppSettings.AppLang, previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, _viewModel.AppSettings.AppScaleFactor != previousAppScaleFactor);
 
-        // Mise à jour de la fenêtre principale
+        // Mise à jour des autres fenêtres
         App.WindowManager?.MainWindow.UpdateWindowContents(
             previousAppLang != _viewModel.AppSettings.AppLang, 
             previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
@@ -1718,8 +1712,7 @@ public partial class SettingsWindow
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
         
     }
-
-
+    
     // Fonction s'exécutant lors du clic sur le bouton annuler
     /// <summary>
     /// Handles the cancel button click event by restoring previous settings and hiding the settings window.
@@ -1731,8 +1724,8 @@ public partial class SettingsWindow
         UpdateWindowContents(); // Restauration des paramètres précédents dans la fenêtre de paramétrage
         Hide(); // Masquage de la fenêtre de paramétrage
     }
-
     
+    // Gère l'évènement pour rendre visible les objets du nouvel onglet et cache les anciens
     /// <summary>
     /// Handles the <see cref="TabControl.SelectionChanged"/> event to adjust the visibility of buttons based on the selected tab.
     /// </summary>
@@ -1764,8 +1757,7 @@ public partial class SettingsWindow
                 break;
         }
     }
-
-
+    
     /// <summary>
     /// Creates a debug report based on the state of various checkboxes and the include address list.
     /// </summary>
@@ -1779,8 +1771,7 @@ public partial class SettingsWindow
 
         _viewModel.CreateDebugArchiveCommand.Execute(((bool)includeOsInfo!, (bool)includeHardwareInfo!, (bool)includeImportedProjects!));
     }
-
-
+    
     // ----- GESTION DES LIENS HYPERTEXTE -----
     // Fonction gérant le clic sur un lien hypertexte
     /// <summary>
@@ -1813,9 +1804,7 @@ public partial class SettingsWindow
 
         e.Handled = true;
     }
-
-
-        
+    
     // ----- GESTION DES INPUTS CLAVIER/SOURIS -----
     // Fonction permettant d'effectuer des actions quand une touche spécifique du clavier est appuyée
     /// <summary>
@@ -1840,8 +1829,7 @@ public partial class SettingsWindow
             //     break;
         }
     }
-
-
+    
     // Fonction gérant le clic sur l'en-tête de la fenêtre de paramètres, de manière que l'on puisse
     // déplacer la fenêtre avec la souris.
     /// <summary>
@@ -1854,9 +1842,7 @@ public partial class SettingsWindow
         if (e.LeftButton != MouseButtonState.Pressed) return;
         DragMove();
     }
-
-
-        
+    
     // ----- GESTION DU SCALING -----
     /// <summary>
     /// Applies scaling to the window by adjusting the layout transform and resizing the window based on the specified scale factor.
@@ -1870,9 +1856,13 @@ public partial class SettingsWindow
         Height = 605 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 605 * scale;
         Width = 500 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 500 * scale;
     }
-
-
+    
     // ----- GESTION DU CLIC SUR UN SLIDER -----
+    /// <summary>
+    /// Handles the click event on the slider by delegating it to <see cref="ViewModel.MainViewModel.OnSliderClick"/>
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void OnSliderClick(object sender, RoutedEventArgs e)
     {
         _viewModel.OnSliderClick(sender, e);
