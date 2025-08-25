@@ -67,6 +67,18 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             OnPropertyChanged(nameof(AllKeywords));
         }
 
+        public DptAndKeywords() { }
+        
+        public DptAndKeywords(DptAndKeywords other)
+        {
+            Key = other.Key;
+            _keywords = other._keywords != null ? new List<string>(other._keywords) : new List<string>();
+            _allKeywords = other._allKeywords ?? string.Empty;
+            Dpt = new DataPointType(other.Dpt);
+
+            PropertyChanged = null; // les handlers ne doivent pas être copiés
+        }
+        
         public event PropertyChangedEventHandler? PropertyChanged = null;
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
     }
@@ -180,6 +192,16 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 AddToCmd(cmdInt);
             foreach (var ieInt in ieCollection)
                 AddToIe(ieInt);
+        }
+
+        public ElementStructure(ElementStructure otherStructure)
+        {
+            Cmd = new ObservableCollection<IntItem>();
+            Ie = new ObservableCollection<IntItem>();
+            foreach(var cmd in otherStructure.Cmd)
+                Cmd.Add(new IntItem(cmd));
+            foreach (var ie in otherStructure.Ie)
+                Ie.Add(new IntItem(ie));
         }
 
         private void UpdateRemoveDptButtonVisibility()
@@ -487,9 +509,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         }
     }
 
-    
-    
-    
+    // ce constructeur fait bien une copie profonde, indépendante de la strucuture passée en argument
     public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
     {
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key,false);
