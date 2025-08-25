@@ -7,7 +7,6 @@
         d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
         xmlns:utils="clr-namespace:KNX_Virtual_Integrator.View.Utils"
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-        xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         mc:Ignorable="d"
         Title="{DynamicResource StructEditWindowTitle}"
         Height="700"
@@ -26,40 +25,29 @@
         
     </Window.Resources>
     
-    <ScrollViewer x:Name="StructEditWindowBorder" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+    <Border x:Name="StructEditWindowBorder">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/> <!--Bandeau supérieur-->
                 <RowDefinition Height="*"/>    <!--Conteneur principal-->
-                <RowDefinition Height="Auto"/> <!--Bouton ajout de modèle fonctionnel-->
+                <RowDefinition Height="Auto"/> <!--Bouton valider/annuler-->
             </Grid.RowDefinitions>
             
             <!--Bandeau supérieur-->
             <Border Grid.Row="0" Style="{StaticResource BorderTitleLight}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>     <!--Mots-clés-->
+                        <ColumnDefinition Width="Auto"/>  <!--Nom+Suppr-->
                     </Grid.ColumnDefinitions>
                 
-                    <!--Nom de la structure-->
-                    <StackPanel Grid.Column="0" Orientation="Horizontal">
-                        <Image Source="{StaticResource PencilDrawingImage}" Height="20" Margin="15,0,0,0"/>
-                        <TextBox
-                                 Text="{Binding SelectedStructure.Model.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
-                                 FontSize="15"
-                                 Style="{StaticResource StandardTextBoxLight}"
-                                 HorizontalAlignment="Left"
-                                 Margin="10,0,0,0"/>
-                    </StackPanel>
-                    
-                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <!--Mots-clés-->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="15,10,10,10">
                         <Image Style="{StaticResource TooltipImage}"
                                Height="15"
-                               VerticalAlignment="Center"
+                               VerticalAlignment="Top"
                                HorizontalAlignment="Left"
-                               Margin="0,0,5,0">
+                               Margin="3,0,5,0">
                             <ToolTipService.ToolTip>
                                 <ToolTip Background="White"
                                          BorderBrush="{StaticResource KnxGreenBrush}">
@@ -80,27 +68,39 @@
                                 </ToolTip>
                             </ToolTipService.ToolTip>
                         </Image>
-                        <TextBlock Text="{DynamicResource Keywords}" VerticalAlignment="Center" Margin="0,0,3,0"/>
+                        <TextBlock Text="{DynamicResource Keywords}" VerticalAlignment="Top" Margin="0,0,3,0"/>
                         <TextBox Text="{Binding SelectedStructure.AllKeywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource StandardTextBoxLight}"
                                  FontSize="15"
-                                 Width="200"/>
+                                 Width="600" Height="60"
+                                 TextWrapping="Wrap"/>
+                        
                     </StackPanel>
                     
-                    <!--Bouton de suppression de la structure-->
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                        <TextBlock Text="{DynamicResource StructRmvText}"
-                                   Foreground="{StaticResource LightGrayForegroundBrush}"
-                                   Margin="0,0,3,0"
-                                   VerticalAlignment="Center"
-                                   />
-                        <Button
-                                x:Name="StructSupprButton"
-                                Style="{StaticResource DeleteStructureButtonStyleLight}"
-                                Height="35"
-                                Margin="5"
-                                Click="DeleteStructureButtonClick"
-                                />
+                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="10">
+                        <!--Nom de la structure-->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                            <Image Source="{StaticResource PencilDrawingImage}" Height="20" />
+                            <TextBox
+                                Text="{Binding SelectedStructure.Model.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, FallbackValue=''}"
+                                FontSize="15"
+                                Width="250"
+                                Style="{StaticResource StandardTextBoxLight}"
+                                HorizontalAlignment="Left"
+                                Margin="10,0,0,0"/>
+                        </StackPanel>
+                        <!--Bouton de suppression de la structure-->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBlock Text="{DynamicResource StructRmvText}"
+                                       Foreground="{StaticResource LightGrayForegroundBrush}"
+                                       VerticalAlignment="Center"/>
+                            <Button
+                                    x:Name="StructSupprButton"
+                                    Style="{StaticResource DeleteStructureButtonStyleLight}"
+                                    Margin="10,0,0,0"
+                                    Height="35"
+                                    Click="DeleteStructureButtonClick"/>
+                        </StackPanel>
                     </StackPanel>
                </Grid>
             </Border>
@@ -140,8 +140,6 @@
                                         <TextBlock x:Name="DptsTitleText"
                                                    Style="{StaticResource TitleTextLight}"
                                                    Text="{DynamicResource DptPersonalizationTitle}"/>
-                                        <Button Content="Afficher dico"
-                                                Click="PrintDptDictionaryButtonClick" Visibility="Collapsed"/>
                                     </StackPanel>
                                 </Grid>
                             </Border>
@@ -511,7 +509,16 @@
                     </Border>
                 </Grid>
             </Border>
-            
+            <Border Grid.Row="2" Style="{StaticResource BorderLight}" >
+                <Grid Margin="10,0,10,10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                </Grid>
+            </Border>
         </Grid>
-    </ScrollViewer>
+    </Border>
+    
 </mah:MetroWindow>

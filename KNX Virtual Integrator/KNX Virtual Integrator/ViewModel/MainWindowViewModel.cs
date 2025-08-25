@@ -1,9 +1,4 @@
-﻿using System.Windows;
-using CommunityToolkit.Mvvm.Input;
-using KNX_Virtual_Integrator.Model.Entities;
-
-
-namespace KNX_Virtual_Integrator.ViewModel
+﻿namespace KNX_Virtual_Integrator.ViewModel
 {
     /// <summary>
     /// ViewModel for managing the layout and commands in the MainWindow.

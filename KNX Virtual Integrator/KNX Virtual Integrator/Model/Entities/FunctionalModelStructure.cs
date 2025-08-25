@@ -9,7 +9,7 @@ namespace KNX_Virtual_Integrator.Model.Entities;
 public class FunctionalModelStructure : INotifyPropertyChanged
 {
 
-    public FunctionalModel Model{get; set; }
+    public FunctionalModel Model {get; set; }
 
     public class DptAndKeywords : INotifyPropertyChanged
     {
@@ -67,11 +67,23 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             OnPropertyChanged(nameof(AllKeywords));
         }
 
+        public DptAndKeywords() { }
+        
+        public DptAndKeywords(DptAndKeywords other)
+        {
+            Key = other.Key;
+            _keywords = other._keywords != null ? new List<string>(other._keywords) : new List<string>();
+            _allKeywords = other._allKeywords ?? string.Empty;
+            Dpt = new DataPointType(other.Dpt);
+
+            PropertyChanged = null; // les handlers ne doivent pas être copiés
+        }
+        
         public event PropertyChangedEventHandler? PropertyChanged = null;
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
     }
 
-    //J'ai choisir de faire démarrer les clés à 1 pour plus de logique pour l'utilisateur
+    //J'ai choisi de faire démarrer les clés à 1 pour plus de logique pour l'utilisateur
     public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; set; }
 
     // utilisée dans la liste déroulante de clé à choisir pour les dpts des element structure
@@ -182,6 +194,16 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 AddToIe(ieInt);
         }
 
+        public ElementStructure(ElementStructure otherStructure)
+        {
+            Cmd = new ObservableCollection<IntItem>();
+            Ie = new ObservableCollection<IntItem>();
+            foreach(var cmd in otherStructure.Cmd)
+                Cmd.Add(new IntItem(cmd));
+            foreach (var ie in otherStructure.Ie)
+                Ie.Add(new IntItem(ie));
+        }
+
         private void UpdateRemoveDptButtonVisibility()
         {
             var vis = Cmd.Count > 1 ? Visibility.Visible : Visibility.Hidden;
@@ -202,7 +224,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         Model = new FunctionalModel(name);
         ModelStructure = [];
         DptDictionary = [];
-        SetUpDptKeysUpdate();
+        SetUpNotifs();
     }
 
     private List<string> _keywords = [];
@@ -260,7 +282,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         ModelStructure = [];
         int index;
         DptDictionary = [];
-        SetUpDptKeysUpdate();
+        SetUpNotifs();
 
         foreach (var element in  model.ElementList)
         {
@@ -337,7 +359,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         ModelStructure = [];
         int index;
         DptDictionary = [];
-        SetUpDptKeysUpdate();
+        SetUpNotifs();
 
         foreach (var element in model.ElementList)
         {
@@ -417,9 +439,9 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         ObservableCollection<ElementStructure> modelStructure, int key) 
     {
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
-        SetUpDptKeysUpdate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
         Model = BuildFunctionalModel(name, key);
+        SetUpNotifs();
 
     }
     
@@ -427,9 +449,9 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         ObservableCollection<ElementStructure> modelStructure,List<List<List<int>>> cmdValues, List<List<List<int>>> ieValues, int key)
     {
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
-        SetUpDptKeysUpdate();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
         Model = BuildFunctionalModel(name, key);
+        SetUpNotifs();
 
 
         for (var i = 0; i < cmdValues.Count; i++)
@@ -487,15 +509,15 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         }
     }
 
-    
-    
-    
+    // ce constructeur fait bien une copie profonde, indépendante de la strucuture passée en argument
     public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
     {
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key,false);
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
-        SetUpDptKeysUpdate();
-        ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
+        SetUpNotifs();
+        ModelStructure = new ObservableCollection<ElementStructure>();
+        foreach(var elementStructure in modelStructure.ModelStructure)
+            ModelStructure.Add(new ElementStructure(elementStructure));
     }
 
     public FunctionalModelStructure(FunctionalModelStructure modelStructure, List<List<List<int>>> cmdValues,
@@ -503,7 +525,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     {
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key, false);
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
-        SetUpDptKeysUpdate();
+        SetUpNotifs();
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure.ModelStructure);
 
         foreach (var element in Model.ElementList)
@@ -803,12 +825,8 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         xModel.AppendChild(xModelStructure);
         return xModel;
      }
-    
-    public override string ToString()
-    {
-        return $"S{Model.Key} | {Model.Name}";
-        
-    }
+
+    public override string ToString() => FullName;
 
     public void CreateDpt()
     {
@@ -839,6 +857,23 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             }
         }
         return -1;
+    }
+
+    private void SetUpNotifs()
+    {
+        SetUpFullNameUpdate();
+        SetUpDptKeysUpdate();
+    }
+
+    private void SetUpFullNameUpdate()
+    {
+        Model.PropertyChanged += (s, e) =>
+        {
+            if (e.PropertyName is nameof(Model.Key) or nameof(Model.Name))
+            {
+                OnPropertyChanged(nameof(FullName));
+            }
+        };
     }
 
     // Ces quelques fonctions (SetUpDptKeysUpdate / SubscribeToDpt / UnsubscribeFromDpt / OnDptPropertyChanged) sont là pour gérer la liste de noms de Dpts du dictionnaire

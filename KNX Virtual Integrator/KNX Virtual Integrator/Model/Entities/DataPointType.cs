@@ -188,7 +188,7 @@ public class DataPointType : INotifyPropertyChanged
         {
             IntValue.Add(new BigIntegerItem(other.IntValue[i].BigIntegerValue ?? 0));
         }
-        //UpdateValue();
+        UpdateValue();
     }
     
     public DataPointType(DataPointType dpt, string address)
@@ -442,7 +442,6 @@ public class DataPointType : INotifyPropertyChanged
             if (value.BigIntegerValue == null) return;
             if (value.IsEnabled)
             {
-                //Console.WriteLine("On écrit " + value.BigIntegerValue);
 
                 var updatedValue = value.BigIntegerValue.Value.ToByteArray();
                 if (_size == 1)

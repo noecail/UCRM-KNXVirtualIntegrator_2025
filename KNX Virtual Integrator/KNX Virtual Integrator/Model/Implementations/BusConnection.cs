@@ -475,7 +475,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
                 break;
             
             default:
-                errorMessage = "Erreur non reconnue, contactez les développeurs.";
+                errorMessage = "Erreur non reconnue.";
                 break;
         }
 

@@ -144,12 +144,12 @@
                 </DrawingGroup.Transform>
                 <GeometryDrawing Geometry="F1 M25,25z M0,0z M3,21.32L21,3.32001">
                     <GeometryDrawing.Pen>
-                        <Pen Brush="{StaticResource GrayBorderBrush}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+                        <Pen Brush="{StaticResource WhiteBrush}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
                 <GeometryDrawing Geometry="F1 M25,25z M0,0z M3,3.32001L21,21.32">
                     <GeometryDrawing.Pen>
-                        <Pen Brush="{StaticResource GrayBorderBrush}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
+                        <Pen Brush="{StaticResource WhiteBrush}" Thickness="1.5" StartLineCap="Round" EndLineCap="Round" LineJoin="Round" MiterLimit="1" />
                     </GeometryDrawing.Pen>
                 </GeometryDrawing>
             </DrawingGroup>

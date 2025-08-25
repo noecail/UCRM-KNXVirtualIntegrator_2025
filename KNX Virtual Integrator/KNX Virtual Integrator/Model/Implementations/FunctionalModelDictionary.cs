@@ -144,7 +144,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 newModel.Model = newModel.BuildFunctionalModel(newModel.Model.Name, FunctionalModels.Count +1);
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
-
         }
 
         public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported, List<string> keywords)
