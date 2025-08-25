@@ -1004,6 +1004,11 @@
                                      ScrollViewer.PanningMode="VerticalOnly"
                                      IsManipulationEnabled="True"
                                      ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FullName}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
                             </ListBox>
 
                             <!-- Bandeau inférieur -->
@@ -1041,7 +1046,7 @@
                         </Grid>
                     </Border>
 
-                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ShowsPreview="True"></GridSplitter>
+                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" ShowsPreview="True"/>
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Deuxième colonne
                     Liste des Modèles Fonctionnels correspondant à la Structure Sélectionnée
@@ -1131,19 +1136,12 @@
                              <!-- Bandeau inférieur -->
                             <Grid Grid.Row="2">
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
-                        
-                                <!--Bouton de suppression -->
-                                <Button Grid.Column="0"
-                                        x:Name="ModelSupprButton"
-                                        Style="{StaticResource DeleteStructureButtonStyleLight}"
-                                        Height="35"
-                                        Click="DeleteFunctionalModelFromListButtonClick"
-                                />
+                                
                                 <!-- Bouton d'ajout d'élément à tester-->
-                                <Border Grid.Column="1"
+                                <Border Grid.Column="0"
                                         x:Name="BorderAddModel"
                                         Style="{StaticResource BorderLight}"
                                         BorderThickness="0,0,1,0">
@@ -1152,12 +1150,19 @@
                                             Style="{StaticResource NewSomethingButtonStyle}"
                                             Tag="{DynamicResource CreateFunctionalModel}"/>
                                 </Border>
+                                <!--Bouton de suppression -->
+                                <Button Grid.Column="1"
+                                        x:Name="ModelSupprButton"
+                                        Style="{StaticResource DeleteStructureButtonStyleLight}"
+                                        Height="35"
+                                        Click="DeleteFunctionalModelFromListButtonClick"
+                                />
                             </Grid>
                         </Grid>
                     </Border>
                     
                     
-                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" ShowsPreview="True"></GridSplitter>
+                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="3" ShowsPreview="True"/>
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Troisième colonne
                     Liste des Éléments à Tester d'un Modèle Fonctionnel
@@ -1241,7 +1246,7 @@
                         </Grid>
                     </Border>
                     
-                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="5" ShowsPreview="True"></GridSplitter>
+                    <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="5" ShowsPreview="True"/>
                         
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Quatrième colonne

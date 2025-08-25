@@ -161,12 +161,10 @@ public class FunctionalModelList : IFunctionalModelList
     /// <param name="imported">Boolean to check if the functionalModelStructure to add is created manually or by the application during importation</param>
     public void AddToDictionary(FunctionalModelStructure model, bool imported)
     {
-
         var newModel = new FunctionalModelStructure(model);
         if (string.IsNullOrEmpty(model.Model.Name))
             newModel.Model.Name = "New_Structure";
         FunctionalModelDictionary.AddFunctionalModel(newModel, imported);
-
     }
 
     /// <summary>
@@ -175,8 +173,7 @@ public class FunctionalModelList : IFunctionalModelList
     /// <param name="index">Index of the Structure to delete from in the dictionary. </param>
     public void DeleteFromDictionary(int index)
     {
-        if (index >= FunctionalModelDictionary.FunctionalModels.Count)
-            return;
+        if (index >= FunctionalModelDictionary.FunctionalModels.Count) return;
         for (var i = FunctionalModelDictionary.FunctionalModels[index].Model.Key; i < FunctionalModelDictionary.FunctionalModels[^1].Model.Key; i++)
             FunctionalModelDictionary.FunctionalModels[i].Model.Key--;
         FunctionalModelDictionary.RemoveFunctionalModel(index);

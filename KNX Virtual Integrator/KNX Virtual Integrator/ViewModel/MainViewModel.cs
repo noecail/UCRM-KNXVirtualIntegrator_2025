@@ -5,7 +5,6 @@ using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
-using System.Windows.Threading;
 using System.Xml.Linq;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
@@ -426,7 +425,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             SelectedModels = new ObservableCollection<FunctionalModel>(source);
             SelectedModel = SelectedModels.First();
         });
-            
             
         ExportDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
