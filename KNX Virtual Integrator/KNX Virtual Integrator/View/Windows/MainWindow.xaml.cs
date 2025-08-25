@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -163,8 +164,6 @@ public partial class MainWindow
         BorderElement.Style = borderStyles;
         BorderModelNameTitle.Style = borderTitleStyles;
         
-        
-        SearchDefStructButton.Style = searchbuttonStyle;
         SearchModelButton.Style = searchbuttonStyle;
         SearchAddressButton.Style = searchbuttonStyle;
         StructSupprButton.Style = supprButtonStyle;
@@ -511,6 +510,117 @@ public partial class MainWindow
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
 
+    }
+
+    /// <summary>
+    /// Handles the button click event to export a dictionary file.
+    /// Displays an OpenFileDialog for the user to select the file,
+    /// extracts necessary files.
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event data.</param>
+    private void ExportDictionnaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select dictionary file");
+
+        // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
+        SaveFileDialog saveFileDialog = new()
+        {
+            // Définir des propriétés optionnelles
+            Title = _viewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Sélectionnez un dictionnaire de modèles à exporter",
+                _ => "Select a model dictionary file to export"
+            },
+
+            // Applique un filtre pour n'afficher que les fichiers XML ou tous les fichiers
+            Filter = _viewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Fichier de dictionnaire|*.xml",
+                _ => "dictionary file|*.xml"
+            },
+
+            // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
+            FilterIndex = 1,
+            FileName = $"KNXVI-dictionnary-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.xml",
+            DefaultExt = ".xml"
+        };
+
+        // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
+        var result = saveFileDialog.ShowDialog();
+        if (result == true)
+        {
+            // Récupérer le chemin du fichier sélectionné
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"Dictionnary saved at: {saveFileDialog.FileName}");
+            
+            if (File.Exists(saveFileDialog.FileName)) File.Delete(saveFileDialog.FileName);
+            //File.Copy(debugArchiveName, $"{saveFileDialog.FileName}");
+            
+            // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
+            //if (_viewModel.ExtractGroupAddressFileCommand is RelayCommandWithResult<string, bool> command &&
+            //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
+            
+            _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
+            // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
+        }
+        else
+        {
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
+        }
+    }
+
+    /// <summary>
+    /// Handles the button click event to import a dictionary file.
+    /// Displays an OpenFileDialog for the user to select the file,
+    /// extracts necessary files.
+    /// </summary>
+    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="e">The event data.</param>
+    private void ImportDictionnaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select dictionary file");
+
+        // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
+        OpenFileDialog openFileDialog = new()
+        {
+            // Définir des propriétés optionnelles
+            Title = _viewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Sélectionnez un dictionnaire de modèles à importer",
+                _ => "Select a model dictionary file to import"
+            },
+
+            // Applique un filtre pour n'afficher que les fichiers XML ou tous les fichiers
+            Filter = _viewModel.AppSettings.AppLang switch
+            {
+                "FR" => "Fichier de dictionnaire|*.xml|Tous les fichiers|*.*",
+                _ => "dictionary file|*.xml|All files|*.*"
+            },
+
+            // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
+            FilterIndex = 1,
+            // N'autorise pas la sélection de plusieurs fichiers à la fois
+            Multiselect = false
+        };
+
+        // Afficher la boîte de dialogue et vérifier si l'utilisateur a sélectionné un fichier
+        var result = openFileDialog.ShowDialog();
+        if (result == true)
+        {
+            // Récupérer le chemin du fichier sélectionné
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
+
+            // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
+            //if (_viewModel.ExtractGroupAddressFileCommand is RelayCommandWithResult<string, bool> command &&
+            //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
+            
+            _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
+            // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
+        }
+        else
+        {
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
+        }
     }
 
     /// <summary>

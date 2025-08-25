@@ -811,6 +811,7 @@
                             Style="{StaticResource ConnectWindowButton}"
                             Margin="5,0,0,0"
                         />
+                        
 
                     </StackPanel>
             
@@ -827,6 +828,7 @@
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 Click="ImportGroupAddressFileButtonClick"        
                                 Content="{DynamicResource ImportXmlButton}"
+                                FontSize="12"
                                 Background="{StaticResource BlueBrush}"
                                 Margin="5,0,0,0"
                         />
@@ -836,6 +838,7 @@
                                 Style="{StaticResource IconTextButtonStyle}"
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 Tag="{StaticResource ImportedDrawingImage}"
+                                FontSize="12"
                                 Click="ImportProjectButtonClick"
                                 Background="{StaticResource BlueBrush}"
                                 Margin="5,0"
@@ -851,11 +854,14 @@
                                    VerticalAlignment="Center"
                                    Margin="0,0,10,0"/>
                         
+                        
                         <!-- Bouton de Test -->
                         <Button Content="{DynamicResource TestButton}"
                             Style="{StaticResource IconTextButtonStyle}"
                             Foreground="{StaticResource DarkForegroundBrush}"
                             Tag="{StaticResource PlayDrawingImage}"
+                            Background="{StaticResource BlueBrush}"
+                            FontSize="12"
                             Click="OnTestConfigButtonClick"
                             Margin="5,0"
                         />
@@ -863,9 +869,11 @@
                         <!-- Bouton d'Exportation -->
                         <Button x:Name="CreateTestReportButton"
                                 Content="{DynamicResource ExportButton}"
+                                FontSize="12"
                                 Style="{StaticResource IconTextButtonStyle}"
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 Tag="{StaticResource ExportedDrawingImage}"
+                                Background="{StaticResource BlueBrush}"
                                 Click="OnCreateTestReportButtonClick"
                         />
                         
@@ -910,7 +918,8 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
-                                <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
+                                <ColumnDefinition Width="Auto" /> <!--Bouton d'import-->
+                                <ColumnDefinition Width="Auto" /> <!--Bouton d'export-->
                             </Grid.ColumnDefinitions>
                             
                             <!-- Bandeau supérieur -->
@@ -933,16 +942,28 @@
                                 />
                             </StackPanel>
 
-                            <!-- Bouton de recherche,(Non-implémenté)-->
+                            <!-- Bouton d'import,(Non-implémenté)-->
                             <Button Grid.Column="2"
-                                    x:Name="SearchDefStructButton"
+                                    x:Name="ImportDictButton"
                                     HorizontalAlignment="Right"
-                                    Style="{StaticResource SearchButtonLight}"
-                                    BorderThickness="1"
-                                    Margin="5"
-                                    Padding="5"
-                                    Height="30"
-                                    Visibility="Hidden"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Tag="{StaticResource ImportedDrawingImage}"
+                                    Foreground="{StaticResource DarkForegroundBrush}"
+                                    Click="ImportDictionnaryButtonClick"
+                                    Background="{StaticResource BlueBrush}"
+                                    Margin="2"
+                            />
+                            <!-- Bouton d'export,(Non-implémenté)-->
+                            <Button Grid.Column="3"
+                                    x:Name="ExportDictButton"
+                                    HorizontalAlignment="Right"
+                                    Style="{StaticResource IconButtonStyle}"
+                                    Tag="{StaticResource ExportedDrawingImage}"
+                                    Foreground="{StaticResource DarkForegroundBrush}"
+                                    Click="ExportDictionnaryButtonClick"
+                                    Background="{StaticResource BlueBrush}"
+                                    BorderBrush="{StaticResource BlueBrush}"
+                                    Margin="2"
                             />
                         </Grid>
                     </Border>
