@@ -130,6 +130,16 @@ public partial class StructureEditWindow
     
     
     // --------------------------------------  Boutons  --------------------------------------
+
+    private void UndoChangesButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.UndoChangesSelectedStructureCommand.Execute(null);
+    }
+    
+    private void ApplyChangesButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ApplyChangesSelectedStructureCommand.Execute(null);
+    }
     
     private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
     {

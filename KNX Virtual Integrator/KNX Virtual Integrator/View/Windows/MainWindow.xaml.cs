@@ -736,7 +736,10 @@ public partial class MainWindow
     private void EditStructureButtonClick(object sender, RoutedEventArgs e)
     {
         if (_viewModel.SelectedStructure != null)
+        {
+            _viewModel.EditedStructureSave = new FunctionalModelStructure(_viewModel.SelectedStructure);
             _windowManager.ShowStructureEditWindow(); // ouvre la fenêtre d'édition selon la structure sélectionnée
+        }
     }
     
     /// <summary>

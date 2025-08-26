@@ -120,7 +120,9 @@ namespace KNX_Virtual_Integrator.ViewModel
             
         public ICommand RemoveDptFromDictionaryCommand { get; private set; }
         
-        public ICommand UpdateFunctionalModelListCommand { get; private set; }
+        public ICommand UndoChangesSelectedStructureCommand {get; private set;}
+        
+        public ICommand ApplyChangesSelectedStructureCommand {get; private set;}
         
         public ICommand ImportDictionaryCommand  { get; private set; }
 

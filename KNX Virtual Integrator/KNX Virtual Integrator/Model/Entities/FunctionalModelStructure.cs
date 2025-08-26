@@ -21,6 +21,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             get => _keywords;
             set
             {
+                if (_keywords == value) return;
                 _keywords = value;
                 OnPropertyChanged();
                 UpdateKeywordList();
@@ -233,6 +234,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         get => _keywords;
         set
         {
+            if (_keywords == value) return;
             _keywords = value; 
             OnPropertyChanged();
             UpdateKeywordList();
@@ -245,6 +247,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         get => _allKeywords;
         set
         {
+            if (_allKeywords == value) return;
             _allKeywords = value;
             OnPropertyChanged();
             UpdateKeywords();
@@ -512,6 +515,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     // ce constructeur fait bien une copie profonde, indépendante de la strucuture passée en argument
     public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
     {
+        AllKeywords = modelStructure.AllKeywords;
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key,false);
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
         SetUpNotifs();
@@ -523,6 +527,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     public FunctionalModelStructure(FunctionalModelStructure modelStructure, List<List<List<int>>> cmdValues,
         List<List<List<int>>> ieValues)
     {
+        AllKeywords = modelStructure.AllKeywords;
         Model = new FunctionalModel(modelStructure.Model, modelStructure.Model.Key, false);
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(modelStructure.DptDictionary);
         SetUpNotifs();

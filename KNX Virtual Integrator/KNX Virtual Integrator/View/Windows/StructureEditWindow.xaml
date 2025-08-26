@@ -47,7 +47,7 @@
                                Height="15"
                                VerticalAlignment="Top"
                                HorizontalAlignment="Left"
-                               Margin="3,0,5,0">
+                               Margin="3,5,5,0">
                             <ToolTipService.ToolTip>
                                 <ToolTip Background="White"
                                          BorderBrush="{StaticResource KnxGreenBrush}">
@@ -68,7 +68,7 @@
                                 </ToolTip>
                             </ToolTipService.ToolTip>
                         </Image>
-                        <TextBlock Text="{DynamicResource Keywords}" VerticalAlignment="Top" Margin="0,0,3,0"/>
+                        <TextBlock Text="{DynamicResource Keywords}" VerticalAlignment="Top" Margin="0,5,3,0"/>
                         <TextBox Text="{Binding SelectedStructure.AllKeywords, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                  Style="{StaticResource StandardTextBoxLight}"
                                  FontSize="15"
@@ -110,7 +110,8 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="3*"/>  <!--Panneau de gauche : Édition de la structure-->
-                        <ColumnDefinition Width="4*"/> <!--Panneau de droite : Personnalisation de DPTs-->
+                        <ColumnDefinition Width="3"/>   <!--GridSplitter-->
+                        <ColumnDefinition Width="4*"/>  <!--Panneau de droite : Personnalisation de DPTs-->
                     </Grid.ColumnDefinitions>
                     
 <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
@@ -141,6 +142,29 @@
                                                    Style="{StaticResource TitleTextLight}"
                                                    Text="{DynamicResource DptPersonalizationTitle}"/>
                                     </StackPanel>
+                                    <Image HorizontalAlignment="Right"
+                                           Style="{StaticResource TooltipImage}"
+                                           Height="15"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,5,0">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Background="White"
+                                                     BorderBrush="{StaticResource KnxGreenBrush}">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                                        Aide - Personnalisation de DPTs
+                                                    </TextBlock>
+                                                    <TextBlock>
+                                                        Créer des DPTs personnalisés.
+                                                        <LineBreak/>
+                                                        Les DPTs crées dans cette section seront utilisables dans les éléments à tester de la Structure du Modèle Fonctionnel.
+                                                        <LineBreak/>
+                                                        Pour chaque DPT, choisir le nom, le type de DPT et ajouter des mots-clés pour faciliter l'assignation des adresses de groupe aux DPTs.
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </ToolTipService.ToolTip>
+                                    </Image>
                                 </Grid>
                             </Border>
                             <ListBox Grid.Row="1"
@@ -261,9 +285,11 @@
                         </Grid>
                     </Border>
                     
+                    <GridSplitter Grid.Column="1" ShowsPreview="True"/>
+
 <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!--Panneau de droite : Édition de la structure-->
-                    <Border Grid.Column="1">
+                    <Border Grid.Column="2">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/> <!--Bandeau supérieur-->
@@ -300,15 +326,14 @@
                                                      BorderBrush="{StaticResource KnxGreenBrush}">
                                                 <StackPanel Orientation="Vertical">
                                                     <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
-                                                        Aide - Liste d'Éléments à Tester
+                                                        Aide - Structure du Modèle Fonctionnel
                                                     </TextBlock>
                                                     <TextBlock>
                                                         Créer ou modifier une structure de Modèle Fonctionnel.
                                                         <LineBreak/>
-                                                        Les Modèles Fonctionnels déjà créés ne seront pas modifiés.
+                                                        Les Modèles Fonctionnels déjà créés ne seront pas modifiés tant que le bouton Valider n'est pas pressé.
                                                         <LineBreak/>
-                                                        Après que cette fenêtre soit fermée, les Modèles Fonctionnels créés auront les mêmes champs que la structure modifiée.
-                                                        <!-- TODO: à revoir-->
+                                                        Un élément à tester contient 1 ou + DPTs à envoyer, et contient 0 ou + DPTs attendus en réception.
                                                     </TextBlock>
                                                 </StackPanel>
                                             </ToolTip>
@@ -509,6 +534,8 @@
                     </Border>
                 </Grid>
             </Border>
+            
+            <!--Boutons valider/annuler-->
             <Border Grid.Row="2" Style="{StaticResource BorderLight}" >
                 <Grid Margin="10,0,10,10">
                     <Grid.ColumnDefinitions>
@@ -516,6 +543,68 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Button Style="{StaticResource IconTextButtonStyle}"
+                                Content="Annuler les changements"
+                                Tag="{StaticResource CloseDrawingImage}"
+                                Foreground="{StaticResource DarkForegroundBrush}"
+                                HorizontalAlignment="Left"
+                                Click="UndoChangesButtonClick"/>
+                        <Image Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               VerticalAlignment="Center"
+                               Margin="5,0,0,0">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Background="White"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                            Aide - Annuler les changements
+                                        </TextBlock>
+                                        <TextBlock>
+                                            Annuler les changements faits à la Structure de Modèle Fonctionnel.
+                                            <LineBreak/>
+                                            La Structure sera restaurée à la version qui existait lors de la dernière ouverture de la fenêtre d'édition.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Hidden">
+                        <Button Content="Afficher Struct" Click="PrintSelectedStructureButtonClick"/>
+                        <Button Content="Afficher Save" Click="PrintEditedStructureSaveButtonClick"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <Image Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Background="White"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                            Aide - Valider les changements
+                                        </TextBlock>
+                                        <TextBlock>
+                                            Valider les changements faits à la Structure de Modèle Fonctionnel.
+                                            <LineBreak/>
+                                            La liste de Modèles Fonctionnels associés à cette Structure sera supprimée.
+                                            <LineBreak/>
+                                            Un nouveau Modèle Fonctionnel correspondant à la nouvelle Structure sera créé.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                        <Button Style="{StaticResource IconTextButtonStyle}"
+                                Content="Valider les changements"
+                                Tag="{StaticResource PlayDrawingImage}"
+                                Foreground="{StaticResource DarkForegroundBrush}"
+                                HorizontalAlignment="Right"
+                                Click="ApplyChangesButtonClick"/>
+                    </StackPanel>
                 </Grid>
             </Border>
         </Grid>

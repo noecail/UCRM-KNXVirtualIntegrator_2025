@@ -24,7 +24,27 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
     /// <param name="dictionary">The dictionary to initialize this dictionary. </param>
     public ObservableDictionary(IDictionary<TKey, TValue> dictionary)
     {
-        _dictionary = new Dictionary<TKey, TValue>(dictionary);
+        _dictionary = new Dictionary<TKey, TValue>();
+
+        // copie profonde du dico
+        foreach (var kvp in dictionary)
+        {
+            TValue value;
+
+            if (typeof(TValue) == typeof(FunctionalModelStructure.DptAndKeywords))
+            {
+                // On appelle explicitement le constructeur de copie
+                var original = (FunctionalModelStructure.DptAndKeywords)(object)kvp.Value;
+                value = (TValue)(object)new FunctionalModelStructure.DptAndKeywords(original);
+            }
+            else
+            {
+                // Fallback : copie directe (shallow)
+                value = kvp.Value;
+            }
+
+            _dictionary.Add(kvp.Key, value);
+        }
     }
 
     /// <summary>Initializes a new instance of the <see cref="ObservableDictionary{TKey, TValue}"/> class. </summary>
