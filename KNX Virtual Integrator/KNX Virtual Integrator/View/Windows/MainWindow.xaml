@@ -22,15 +22,16 @@
         Closing="ClosingMainWindow">
     
         <!--
-    
         Note :
-        All design elements and their interactions are contained 
-        in the mockup available on GitHub. 
-    
+        This is the main window, like other windows, its design and interaction elements can be found in the readme
+        on GitHub. 
         -->
+        
     <Window.Resources>
+        <!-- Permet d'accéder plus facilement au BigIntergerToStringConverter -->
         <utils:BigIntegerToStringConverter x:Key="BigIntegerConverter"/>
 
+        <!-- Syles pour les Élements à Tester (assez long, recommandé de Collapse dans l'éditeur de code) -->
         <DataTemplate x:Key="ElementListBoxTemplateLight" DataType="{x:Type entities:TestedElement}">
             <!--Élément à Tester-->
             <Border Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -753,7 +754,7 @@
         
     </Window.Resources>
 
-    <!-- Paramètres du logo dans la barre de titre, le logo est à modifier, 15 10 -->
+    <!-- Paramètres du logo dans la barre de titre, 15 10 -->
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
             <StackPanel Background="{StaticResource NoColorBrush}"  HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -766,7 +767,7 @@
         <TaskbarItemInfo x:Name="TaskbarInfo"/>
     </mah:MetroWindow.TaskbarItemInfo>
 
-    <!-- Conteneur principal -->
+    <!-- Conteneur principal avec un scrollViewer pour éviter l'entassement (uniquement de manière horizontale)-->
     <ScrollViewer HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Disabled" BorderBrush="{StaticResource KnxGreenBrush}"
             BorderThickness="0" x:Name="MainWindowBorder">
         <Grid>
@@ -889,15 +890,15 @@
                         <RowDefinition Height="Auto" />  <!-- Titres  -->
                         <RowDefinition Height="*" />     <!-- Contenu -->
                     </Grid.RowDefinitions>
-                    <!-- TODO: régler largeur panneaux-->
+                    <!-- La largeur des colonnes se règle avec les GridSplitter -->
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="Col0" Width="3*"/>   <!-- Modèles -->
-                        <ColumnDefinition Width="3"/>
-                        <ColumnDefinition x:Name="Col1" Width="4*"/>   <!--{Binding ModelColumnWidth}" />-->  <!-- Param Modèles + Gestion de la visibilité de la colonne -->
-                        <ColumnDefinition Width="3"/>
-                        <ColumnDefinition x:Name="Col2" Width="4*"/>   <!--{Binding AdressColumnWidth}" />--> <!-- Param Adresses + Gestion de la visibilité de la colonne -->
-                        <ColumnDefinition Width="3"/>
-                        <ColumnDefinition x:Name="Col3" Width="3*"/>     <!-- Adresses -->
+                        <ColumnDefinition x:Name="Col0" Width="3*"/>    <!-- Structures de Modèles -->
+                        <ColumnDefinition Width="3"/>                   <!-- GridSplitter -->
+                        <ColumnDefinition x:Name="Col1" Width="4*"/>    <!-- Modèles Fonctionnels -->
+                        <ColumnDefinition Width="3"/>                   <!-- GridSplitter -->
+                        <ColumnDefinition x:Name="Col2" Width="4*"/>    <!-- Éléments à Tester -->
+                        <ColumnDefinition Width="3"/>                   <!-- GridSplitter -->
+                        <ColumnDefinition x:Name="Col3" Width="3*"/>    <!-- Adresses -->
                     </Grid.ColumnDefinitions>
                         
                         
@@ -1251,7 +1252,7 @@
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
                     <!-- Quatrième colonne
                     Adresses de groupe à tester
-                    ex : 0/1/1 Lampe salon etc
+                    ex : Lampe_salon 0/1/1 dpt 1, ...
                     -->
                     
                     <!-- En-tête -->
@@ -1277,7 +1278,7 @@
                                 />
                             </StackPanel>
 
-                            <!--Bouton de recherche : Non-implementer-->
+                            <!--Bouton de recherche : Non-implémenté-->
                             <Button Grid.Column="1"
                                     x:Name="SearchAddressButton"
                                     HorizontalAlignment="Right"
@@ -1292,6 +1293,7 @@
                         </Grid>
                     </Border>
                     
+                    <!-- Zone d'affichage des adresses de groupe extraites du projet -->
                     <Border x:Name="BorderAddressTree" Grid.Row="1" Grid.Column="6">
                         <TreeView
                             x:Name="GroupAddressTreeView"
