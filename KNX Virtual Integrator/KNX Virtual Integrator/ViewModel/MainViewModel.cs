@@ -5,7 +5,6 @@ using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
-using System.Xml.Linq;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -31,20 +30,6 @@ namespace KNX_Virtual_Integrator.ViewModel;
 /// 
 public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
-
-    /// <summary>
-    /// Occurs when a property value changes.
-    /// </summary>
-    public new event PropertyChangedEventHandler? PropertyChanged;
-    public ObservableCollection<string> ConnectionTypes { get; } = [
-        "IP",
-        "IP à distance (NAT)",
-        "USB"
-    ];
-    
-    public XDocument? GroupAddressFile { get; set; }
-
-
     /* ------------------------------------------------------------------------------------------------
     ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
     ------------------------------------------------------------------------------------------------ */

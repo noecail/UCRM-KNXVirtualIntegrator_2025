@@ -6,13 +6,21 @@ namespace KNX_Virtual_Integrator.ViewModel;
 
 public partial class MainViewModel
 {
-
+    /// <summary>
+    /// The full list of all the test results.
+    /// It is structured by : Structures -> Models -> Test Elements ->
+    /// Commands (value lines in Test CMD) -> Receptions (value column of Test IE).
+    /// <seealso cref="ResultType"/> 
+    /// </summary>  
     public List<List<List<List<ResultType>>>> LastTestResults=[];
     
     /// <summary>
-    /// Gets or sets the currently selected tested element.
+    /// The models selected to be tested.
     /// </summary>  
     private ObservableCollection<FunctionalModel> _selectedTestModels = [];
+    /// <summary>
+    /// Gets or sets the models selected to be tested.
+    /// </summary>  
     public ObservableCollection<FunctionalModel> SelectedTestModels
     {
         get => _selectedTestModels;
@@ -25,9 +33,12 @@ public partial class MainViewModel
     }
     
     /// <summary>
-    /// Column 1. Selected model structure.
+    /// Selected structure of functional models.
     /// </summary>  
     private FunctionalModelStructure? _selectedStructureTestWindow;
+    /// <summary>
+    /// Gets or sets the selected structure of functional models.
+    /// </summary>
     public FunctionalModelStructure? SelectedStructureTestWindow
     {
         get => _selectedStructureTestWindow;
@@ -43,12 +54,13 @@ public partial class MainViewModel
         }
     }
     
-    
     /// <summary>
-    /// Not seen on the UI
-    /// List of Models that corresponds to the Selected Structure
+    /// List of Models that corresponds to the Selected Structure.
     /// </summary>
     private ObservableCollection<FunctionalModel>? _selectedModelsTestWindow = [];
+    /// <summary>
+    /// Gets or sets the list of <see cref="FunctionalModel"/> that corresponds to the <see cref="SelectedStructureTestWindow"/>.
+    /// </summary>
     public ObservableCollection<FunctionalModel>? SelectedModelsTestWindow
     {
         get => _selectedModelsTestWindow;
@@ -65,9 +77,12 @@ public partial class MainViewModel
     }
     
     /// <summary>
-    /// Column 2. Selected Model among the Selected Models
+    /// The selected Model among the Selected Models.
     /// </summary>  
     private FunctionalModel? _selectedModelTestWindow;
+    /// <summary>
+    /// Gets or sets the selected Model among the <see cref="SelectedModelsTestWindow"/>.
+    /// </summary>  
     public FunctionalModel? SelectedModelTestWindow
     {
         get => _selectedModelTestWindow;
@@ -81,7 +96,12 @@ public partial class MainViewModel
                 
         }
     }
-
+    
+    /// <summary>
+    /// Adds all the <see cref="FunctionalModel"/> of the Structure to the <see cref="SelectedTestModels"/>
+    /// for them to be tested.
+    /// </summary>
+    /// <param name="structKey">The index of the structure in the functionalModelList.</param>
     public void AddStructToTestModels(int structKey)
     {
         foreach (var testedModel in _functionalModelList.FunctionalModels[structKey])
@@ -92,6 +112,11 @@ public partial class MainViewModel
         }
     }
 
+    /// <summary>
+    /// Removes all the <see cref="FunctionalModel"/> of the Structure from the <see cref="SelectedTestModels"/>
+    /// for them to not be tested anymore if they were supposed to.
+    /// </summary>
+    /// <param name="structKey">The index of the structure in the functionalModelList.</param>
     public void RmvStructFromTestModels(int structKey)
     {
         foreach (var testedModel in _functionalModelList.FunctionalModels[structKey])
