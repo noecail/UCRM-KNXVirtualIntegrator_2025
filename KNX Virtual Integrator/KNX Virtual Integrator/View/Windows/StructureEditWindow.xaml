@@ -575,6 +575,16 @@
                         <Button Content="Afficher Struct" Click="PrintSelectedStructureButtonClick"/>
                         <Button Content="Afficher Save" Click="PrintEditedStructureSaveButtonClick"/>
                     </StackPanel>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"
+                               Margin="0,0,30,0"
+                               Visibility="{Binding ApplyChangesErrorMessageVisibility}"
+                               Text="{DynamicResource ApplyChangesErrorMessage}"
+                               FontWeight="Bold"
+                               FontSize="15"
+                               Foreground="Red"
+                               Width="600"
+                               Height="40"
+                               TextWrapping="Wrap" />
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
                         <Image Style="{StaticResource TooltipImage}"
                                Height="15"

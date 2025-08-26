@@ -406,6 +406,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         RemoveDptFromDictionaryCommand = new Commands.RelayCommand<(int key, FunctionalModelStructure structure)>(parameters =>
         {
+            // delete types in the element structures if they have selected the soon-to-be-removed dpt
+            var keyToRemove = parameters.key;
+            foreach (var elementStructure in parameters.structure.ModelStructure)
+            {
+                foreach (var cmd in elementStructure.Cmd)
+                    if (cmd.Value == keyToRemove)
+                        cmd.Value = 0;
+
+                foreach (var ie in elementStructure.Ie)
+                    if (ie.Value == keyToRemove)
+                        ie.Value = 0;
+            }
+            
+            // remove the dpt
             parameters.structure.RemoveDpt(parameters.key);
         });
 
@@ -425,14 +439,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             OnPropertyChanged(nameof(Structures));
             OnPropertyChanged(nameof(SelectedStructure));
                 
-            // restore (or not) the previously selected structure and model
-            /*if (previouslySelectedStructure is null) return;
-            if (!_functionalModelList.FunctionalModelDictionary.FunctionalModels.Contains(
-                    previouslySelectedStructure) ||
-                _functionalModelList.FunctionalModelDictionary.FunctionalModels[
-                    _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(
-                        previouslySelectedStructure)].Model.Name != previouslySelectedStructure.Model.Name) return;
-            SelectedStructure =  previouslySelectedStructure;*/
+            // restore the previously selected structure and model
             SelectedStructure = Structures[index];
         });
         
@@ -440,6 +447,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         {
             if (SelectedStructure == null) return;
 
+            if (!SelectedStructure.IsValid())
+            {
+                ApplyChangesErrorMessageVisibility = Visibility.Visible;
+                Console.WriteLine("paraguay " + ApplyChangesErrorMessageVisibility);
+                return;
+            }
+            ApplyChangesErrorMessageVisibility = Visibility.Hidden;
+            Console.WriteLine("uruguay " + ApplyChangesErrorMessageVisibility);
+            
             int structureKey = SelectedStructure.Model.Key - 1;
             
             // nettoyer liste MFs associés à la structure
