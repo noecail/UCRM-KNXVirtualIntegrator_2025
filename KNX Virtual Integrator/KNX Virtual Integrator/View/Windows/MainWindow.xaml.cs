@@ -12,18 +12,22 @@ using Microsoft.Win32;
 namespace KNX_Virtual_Integrator.View.Windows;
 
 /// <summary>
-/// Interaction logic for MainWindow.xaml
+/// Class for the Main Window. It implements interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow
 {
     /* ------------------------------------------------------------------------------------------------
     ------------------------------------------- ATTRIBUTS  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    /// <summary>
+    /// Instance of <see cref="MainViewModel"/> to communicate with the backend
+    /// </summary>
     private readonly MainViewModel _viewModel;
+    /// <summary>
+    /// Instance of <see cref="View.WindowManager"/> to access windows
+    /// </summary>
     private readonly WindowManager _windowManager;
-
-        
-        
+    
     /// <summary>
     /// True if the user choose to import a group addresses file, false if it's a project knx file 
     /// </summary>
@@ -37,6 +41,12 @@ public partial class MainWindow
     /* ------------------------------------------------------------------------------------------------
     --------------------------------------------- MÉTHODES --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    /// <summary>
+    /// Initializes the window with the specified MainViewModel and WindowManager.
+    /// To ensure correct loading of content, the scaling is only applied once the window is mostly loaded.
+    /// </summary>
+    /// <param name="viewModel">The <see cref="ViewModel.MainViewModel"/> given to the windows</param>
+    /// <param name="wm">The <see cref="View.WindowManager"/> given to this window</param>
     public MainWindow(MainViewModel viewModel, WindowManager wm)
     {
         InitializeComponent();
@@ -52,9 +62,14 @@ public partial class MainWindow
         };
     }
 
+    /// <summary>
+    /// Update the size of the window and its contents according to <see cref="Model.Interfaces.IApplicationSettings.AppScaleFactor"/>
+    /// </summary>
     private void ApplyScaling()
     {
+        // Only scale when the border is loaded to  ensure it has the correct size before scaling
         if (AllColumnBorder.IsLoaded is false) return;
+        // The scaleFactor is used to transform the window but the reason for -0.1f or -0.2f is not known
         var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
         float scale;
         if (scaleFactor < 1f)
@@ -65,14 +80,19 @@ public partial class MainWindow
         {
             scale = scaleFactor - 0.2f;
         }
+        // This is done to automatically change the Width according to the others and the content needed for the grid.Column
         Col0.Width = new GridLength(3, GridUnitType.Star);
         Col1.Width = new GridLength(4, GridUnitType.Star);
         Col2.Width = new GridLength(4, GridUnitType.Star);
         Col3.Width = new GridLength(3, GridUnitType.Star);
+        
+        // Scales the whole window but does not allow it to become bigger than the screen
         MainWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
         if (1500 * scale >= 0.9 * SystemParameters.PrimaryScreenWidth)
         {
+            // Limits the width of the window but not the content so we can use the scrollViewer to scroll its scaled content
             Width = 0.9 * SystemParameters.PrimaryScreenWidth;
+            // Forces the width, so that the column width wont automatically change and ruin the layout
             Col0.Width = new GridLength(3f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             Col1.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
             Col2.Width = new GridLength(4f/14f * AllColumnBorder.ActualWidth, GridUnitType.Pixel);
@@ -84,8 +104,12 @@ public partial class MainWindow
             Width = 1500 * scale;
         }
         Height = 786 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 786 * scale;
+        
     }
 
+    /// <summary>
+    /// Updates the color theme of the window according to <see cref="Model.Interfaces.IApplicationSettings.EnableLightTheme"/> state.
+    /// </summary>
     private void ApplyThemeToWindow()
     {
         Style titleStyles;
@@ -173,6 +197,9 @@ public partial class MainWindow
         
     }
 
+    /// <summary>
+    /// Updates the text contents of the connection window (only French and English).
+    /// </summary>
     private void TranslateWindowContents()
     {
         if (_viewModel.AppSettings.AppLang == "FR")
@@ -229,6 +256,9 @@ public partial class MainWindow
         }
     }
 
+    /// <summary>
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the connection window according to the application settings.
+    /// </summary>
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
         if (langChanged)
@@ -254,10 +284,10 @@ public partial class MainWindow
     // <<<<<<<<<<<<<<<<<<<< BANDEAU SUPÉRIEUR >>>>>>>>>>>>>>>>>>>>
     
     /// <summary>
-    /// Handles the button click event to open the connection window.
-    /// Opens an instance of ConnectionWindow
+    /// Handles the button click event to open the <see cref="View.Windows.ConnectionWindow"/>.
+    /// Opens an instance of ConnectionWindow or focuses on it.
     /// </summary>
-    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void OpenConnectionWindow(object sender, RoutedEventArgs e)
     {
@@ -266,10 +296,9 @@ public partial class MainWindow
     
     /// <summary>
     /// Handles the button click event to import a KNX project file.
-    /// Displays an OpenFileDialog for the user to select the project file,
-    /// extracts necessary files.
+    /// Displays an OpenFileDialog for the user to select the project file and extracts necessary files.
     /// </summary>
-    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void ImportProjectButtonClick(object sender, RoutedEventArgs e)
     {
@@ -431,7 +460,7 @@ public partial class MainWindow
             _viewModel.FindZeroXmlCommand.Execute(_viewModel.ProjectFolderPath);
             // Exécute la commande pour extraire les adresses de groupe du projet
             _viewModel.ExtractGroupAddressCommand.Execute(null);
-            
+            // Modifie l'affichage pour que les adresses de groupes soient mises dans un TreeView
             Application.Current.Dispatcher.InvokeAsync( async() =>
             {
                 await LoadAddressesOntoTreeViewAsync(GroupAddressTreeView);
@@ -448,10 +477,9 @@ public partial class MainWindow
     
     /// <summary>
     /// Handles the button click event to import a group addresses file.
-    /// Displays an OpenFileDialog for the user to select the file,
-    /// extracts necessary files.
+    /// Displays an OpenFileDialog for the user to select the file and extracts necessary files.
     /// </summary>
-    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void ImportGroupAddressFileButtonClick(object sender, RoutedEventArgs e)
     {
@@ -514,16 +542,15 @@ public partial class MainWindow
 
     /// <summary>
     /// Handles the button click event to export a dictionary file.
-    /// Displays an OpenFileDialog for the user to select the file,
-    /// extracts necessary files.
+    /// Displays an SaveFileDialog for the user to select the filepath to which should be saved the dictionary.
     /// </summary>
-    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void ExportDictionnaryButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("Waiting for user to select dictionary file");
 
-        // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
+        // Créer une nouvelle instance de SaveFileDialog pour permettre à l'utilisateur de sauvegarder le fichier
         SaveFileDialog saveFileDialog = new()
         {
             // Définir des propriétés optionnelles
@@ -533,14 +560,14 @@ public partial class MainWindow
                 _ => "Select a model dictionary file to export"
             },
 
-            // Applique un filtre pour n'afficher que les fichiers XML ou tous les fichiers
+            // Applique un filtre pour n'afficher que les fichiers XML
             Filter = _viewModel.AppSettings.AppLang switch
             {
                 "FR" => "Fichier de dictionnaire|*.xml",
                 _ => "dictionary file|*.xml"
             },
 
-            // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
+            // Définit l'index par défaut du filtre (fichiers XML du dictionnaire)
             FilterIndex = 1,
             FileName = $"KNXVI-dictionnary-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.xml",
             DefaultExt = ".xml"
@@ -551,7 +578,7 @@ public partial class MainWindow
         if (result == true)
         {
             // Récupérer le chemin du fichier sélectionné
-            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"Dictionnary saved at: {saveFileDialog.FileName}");
+            _viewModel.ConsoleAndLogWriteLineCommand.Execute($"Dictionary saved at: {saveFileDialog.FileName}");
             
             if (File.Exists(saveFileDialog.FileName)) File.Delete(saveFileDialog.FileName);
             //File.Copy(debugArchiveName, $"{saveFileDialog.FileName}");
@@ -561,7 +588,6 @@ public partial class MainWindow
             //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
-            // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
         }
         else
         {
@@ -571,10 +597,9 @@ public partial class MainWindow
 
     /// <summary>
     /// Handles the button click event to import a dictionary file.
-    /// Displays an OpenFileDialog for the user to select the file,
-    /// extracts necessary files.
+    /// Displays an OpenFileDialog for the user to select the file and extracts the necessary information.
     /// </summary>
-    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void ImportDictionnaryButtonClick(object sender, RoutedEventArgs e)
     {
@@ -597,7 +622,7 @@ public partial class MainWindow
                 _ => "dictionary file|*.xml|All files|*.*"
             },
 
-            // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
+            // Définit l'index par défaut du filtre (fichiers XML du dictionnaire)
             FilterIndex = 1,
             // N'autorise pas la sélection de plusieurs fichiers à la fois
             Multiselect = false
@@ -615,7 +640,6 @@ public partial class MainWindow
             //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
-            // Exécute la commande pour extraire les adresses de groupes du fichier sélectionné
         }
         else
         {
@@ -624,21 +648,33 @@ public partial class MainWindow
     }
 
     /// <summary>
-    /// Handles the button click event to open the settings window.
-    /// Opens an instance of SettingsWindow
+    /// Handles the button click event to open the <see cref="View.Windows.SettingsWindow"/>..
+    /// Opens an instance of SettingsWindow or focuses on it.
     /// </summary>
-    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void SettingsButtonClick(object sender, RoutedEventArgs e)
     {
         _windowManager.ShowSettingsWindow();
     }
-
+    
+    /// <summary>
+    /// Handles the button click event to open the <see cref="View.Windows.TestConfigWindow"/>.
+    /// Opens an instance of the Test Configuration Window or focuses on it.
+    /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void OnTestConfigButtonClick(object sender, RoutedEventArgs e)
     {
         _windowManager.ShowTestConfigWindow();
     }
     
+    /// <summary>
+    /// Handles the button click event to open the <see cref="View.Windows.ReportCreationWindow"/>.
+    /// Opens an instance of Report Creation Window or focuses on it.
+    /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void OnCreateTestReportButtonClick(object sender, RoutedEventArgs e)
     {
         _windowManager.ShowReportCreationWindow();
@@ -648,7 +684,7 @@ public partial class MainWindow
     /// Handles the event of closing the main window.
     /// Shuts the application down.
     /// </summary>
-    /// <param name="sender">The object that raised the event.</param>
+    /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The event data.</param>
     private void ClosingMainWindow(object? sender, CancelEventArgs e)
     {
@@ -664,6 +700,8 @@ public partial class MainWindow
     /// Handles the button click event to create a Structure.
     /// Adds a Structure to the Dictionary of Functional Model Structures.
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void CreateStructureButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.CreateStructureDictionaryCommand.Execute(null);
@@ -681,18 +719,32 @@ public partial class MainWindow
     /// Handles the button click event to duplicate a Structure.
     /// Adds a Structure to the Dictionary of Functional Model Structures by copying the selected one.
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void DuplicateStructureButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.DuplicateStructureDictionaryCommand.Execute(null);
         // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
     }
-
+    
+    /// <summary>
+    /// Handles the button click event to modify a Structure.
+    /// Opens an instance of <see cref="View.Windows.StructureEditWindow"/> and disables the other windows.
+    /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void EditStructureButtonClick(object sender, RoutedEventArgs e)
     {
         if (_viewModel.SelectedStructure != null)
             _windowManager.ShowStructureEditWindow(); // ouvre la fenêtre d'édition selon la structure sélectionnée
     }
     
+    /// <summary>
+    /// Handles the button click event to delete a Structure.
+    /// Removes a Structure from the Dictionary of Functional Model Structures and all its models.
+    /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void DeleteStructuresButtonClick(object sender, RoutedEventArgs e)
     {
         // Store all indexes to delete
@@ -733,6 +785,8 @@ public partial class MainWindow
     /// <summary>
     /// Handles the button click event to add a Functional Model to the list corresponding to the selected structure.
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void AddFunctionalModelToListButtonClick(object sender, RoutedEventArgs e)
     {
         _viewModel.AddFunctionalModelToListCommand.Execute(null);
@@ -744,6 +798,8 @@ public partial class MainWindow
     /// <summary>
     /// Handles the button click event to delete a Functional Model.
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The event data.</param>
     private void DeleteFunctionalModelFromListButtonClick(object sender, RoutedEventArgs e)
     {
         // Store all indexes to delete
@@ -787,6 +843,8 @@ public partial class MainWindow
     /// Adds a line of values to the Tested Element
     /// The number of fields added is equal to the number of DPTs in the Tested Element
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
     private void AddTestToElementButtonClick(object sender, RoutedEventArgs e)
     {
         // Code que je ne comprends pas qui sert à récupérer l'index de l'item depuis lequel le clic a été effectué
@@ -794,8 +852,10 @@ public partial class MainWindow
         // Pour utiliser ce segment de code, il faut avoir une référence sur la listbox
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep);
-        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
+        if (dep is null) return;
+        // Trouve l'élément qui possède le bouton qui a été cliqué et exécute l'ajout du test
+        var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         _viewModel.AddTestToElementCommand.Execute(_viewModel.SelectedModel?.ElementList[indexElement]);
     }
     
@@ -803,51 +863,66 @@ public partial class MainWindow
     /// Handles the button click event to remove a Test from a Tested Element
     /// Deletes a full line of values to the Tested Element
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
     private void RemoveTestFromElementButtonClick(object sender, RoutedEventArgs e)
     {
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        if (dep is null) return;
         dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        if (dep is null) return;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        if (dep is null) return;
         var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
 
         // Find the Test's index
         var button = (Button)sender;
         var currentItem = button.DataContext; // L'élément lié à ce bouton (BigIntegerValue)
         var itemsControl = FindParent<ItemsControl>(button); // L'ItemsControl parent (lié à IntValue)
-        int indexTest = 0;
+        var indexTest = 0;
         if (itemsControl != null)
             indexTest = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
         _viewModel.RemoveTestFromElementCommand.Execute((_viewModel.SelectedModel?.ElementList[indexElement], indexTest));
     }
 
     /// <summary>
-    /// Handles the button click to reset to 0 an Ie Value that has been deactivated because it was unknown 
+    /// Handles the button click to deactivate a testCmd value(not used)
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
     private void DeactivateValueCmdButtonClick(object sender, RoutedEventArgs e)
     {
         DeactivateValue(sender, e, "TestsCmd");
     }
     
     /// <summary>
-    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// Handles the button click to deactivate a testIE value
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
     private void DeactivateValueIeButtonClick(object sender, RoutedEventArgs e)
     {
         DeactivateValue(sender, e, "TestsIe");
     }
 
     /// <summary>
-    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// Handles the button click to deactivate a test value
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
+    /// <param name="tests">the type of Test value that is deactivated (TestCmd or TestIe).</param>
     private void DeactivateValue(object sender, RoutedEventArgs e, string tests)
     {
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the data point type
+        if (dep is null) return;
         dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        if (dep is null) return;
         dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        if (dep is null) return;
         var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
         var button = (Button)sender;
@@ -890,6 +965,8 @@ public partial class MainWindow
     /// <summary>
     /// Handles the button click to reset to 0 a Cmd Value that has been deactivated because it was unknown 
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
     private void ResetValueCmdButtonClick(object sender, RoutedEventArgs e)
     {
         ResetValue(sender, e, "TestsCmd");
@@ -898,6 +975,8 @@ public partial class MainWindow
     /// <summary>
     /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
     private void ResetValueIeButtonClick(object sender, RoutedEventArgs e)
     {
         ResetValue(sender, e, "TestsIe");
@@ -906,15 +985,19 @@ public partial class MainWindow
     /// <summary>
     /// Handles the reset to 0 a Value that has been deactivated because it was unknown 
     /// </summary>
+    /// <param name="sender">The button that raised the event.</param>
+    /// <param name="e">The click event data.</param>
+    /// <param name="tests">the type of Test value that is reset (TestCmd or TestIe).</param>
     private void ResetValue(object sender, RoutedEventArgs e, string tests)
     {
         // Find the Tested Element's index 
         var dep = (DependencyObject)e.OriginalSource;
         dep = FindParent<ListBoxItem>(dep); // reach the data point type
-        if (dep != null)
-            dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
-        if (dep != null)
-            dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        if (dep is null) return;
+        dep = VisualTreeHelper.GetParent(dep); // jump on parent higher
+        if (dep is null) return;
+        dep = FindParent<ListBoxItem>(dep); // reach the tested element
+        if (dep is null) return;
         var indexElement = SelectedElementsListBox.ItemContainerGenerator.IndexFromContainer(dep);
         
         var button = (Button)sender;
@@ -964,19 +1047,11 @@ public partial class MainWindow
             }
         }
     }
-        
-    // Méthode récursive qui remonte les parents d'un objet jusqu'à atteindre le parent du type passé en paramètre
-    // Utilisée dans RemoveTestedElementFromStructureButtonClick
-    // Utilisée dans AddTestToElementButtonClick
-    // Utilisée dans RemoveTestFromElementButtonClick
-    private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
-    {
-        var parentObject = VisualTreeHelper.GetParent(child);
-        if (parentObject == null) return null;
-        if (parentObject is T parent) return parent;
-        return FindParent<T>(parentObject);
-    }
 
+    /// <summary>
+    /// Aynschronously loads addresses onto a treeView to be displayed.
+    /// </summary>
+    /// <param name="treeView">The treeView onto which will be loaded the addresses.</param>
     private async Task LoadAddressesOntoTreeViewAsync(TreeView treeView)
     {
         var doc = _viewModel.GroupAddressFile?? new XDocument();
@@ -1063,7 +1138,7 @@ public partial class MainWindow
             FontSize = 12
         };
         text = ((XElement)xmlNode).Attribute("DPTs") is not null? " - " + ((XElement)xmlNode).Attribute("DPTs")?.Value : "";
-        var textDPTs = new TextBlock
+        var textDpts = new TextBlock
         {
             Text = text,
             FontSize = 12
@@ -1071,7 +1146,7 @@ public partial class MainWindow
         stack.Children.Add(icon);
         stack.Children.Add(textName);
         stack.Children.Add(textAddress);
-        stack.Children.Add(textDPTs);
+        stack.Children.Add(textDpts);
 
         var treeNode = new TreeViewItem
         {
@@ -1089,7 +1164,31 @@ public partial class MainWindow
     }
     
     // <<<<<<<<<<<<<<<<<<<< UTILS >>>>>>>>>>>>>>>>>>>>
-
+    
+    // Méthode récursive qui remonte les parents d'un objet jusqu'à atteindre le parent du type passé en paramètre
+    // Utilisée dans RemoveTestedElementFromStructureButtonClick
+    // Utilisée dans AddTestToElementButtonClick
+    // Utilisée dans RemoveTestFromElementButtonClick
+    /// <summary>
+    /// Recursive method that searches for the parent of the child object that is of the specified type.
+    /// </summary>
+    /// <param name="child">The child from which we search for the parent.</param>
+    /// <typeparam name="T">The type of item that should be the parent.</typeparam>
+    /// <returns>Either null if not parent is found or the parent (found recursively or not).</returns>
+    private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        var parentObject = VisualTreeHelper.GetParent(child);
+        if (parentObject == null) return null;
+        if (parentObject is T parent) return parent;
+        return FindParent<T>(parentObject);
+    }
+    
+    /// <summary>
+    /// Recursive method that searches for the child of the parent that is of the specified type.
+    /// </summary>
+    /// <param name="parent">The parent from which to search.</param>
+    /// <typeparam name="T">The type of the child.</typeparam>
+    /// <returns>The child of the specified type, found recursively.</returns>
    private static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)

@@ -17,6 +17,9 @@ public partial class ConnectionWindow
     /// </summary>
     private readonly MainViewModel _viewModel;
     
+    /* ------------------------------------------------------------------------------------------------
+    --------------------------------------------- MÉTHODES --------------------------------------------
+    ------------------------------------------------------------------------------------------------ */
     /// <summary>
     /// Initializes a new instance of the <see cref="ConnectionWindow"/> class,
     /// loading and applying settings from the appSettings file, and setting default values where necessary.
@@ -154,7 +157,7 @@ public partial class ConnectionWindow
     }
     
     /// <summary>
-    /// Update the size of the window and its contents according to <see cref="Model.Interfaces.IApplicationSettings.AppScaleFactor"/>
+    /// Updates the size of the window and its contents according to <see cref="Model.Interfaces.IApplicationSettings.AppScaleFactor"/>
     /// </summary>
     private void ApplyScaling()
     {
