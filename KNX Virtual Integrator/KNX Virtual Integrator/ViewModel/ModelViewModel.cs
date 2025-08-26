@@ -88,5 +88,7 @@ namespace KNX_Virtual_Integrator.ViewModel
             }
         }
 
+        public FunctionalModelStructure? EditedStructureSave;
+
     }
 }

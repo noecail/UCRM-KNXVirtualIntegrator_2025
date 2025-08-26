@@ -180,6 +180,25 @@ public class FunctionalModelList : IFunctionalModelList
         FunctionalModels.RemoveAt(index);
         OnPropertyChanged(nameof(FunctionalModels)); //notifier la UI
     }
+
+    public void ResetInDictionary(int index, FunctionalModelStructure savedStructure)
+    {
+        List<FunctionalModelStructure> firstPart = [];
+        List<FunctionalModelStructure> secondPart = [];
+        foreach (var structure in FunctionalModelDictionary.FunctionalModels)
+            if (structure.Model.Key-1 < index)
+                firstPart.Add(structure); 
+            else if (structure.Model.Key-1 > index)
+                    secondPart.Add(structure);
+        
+        FunctionalModelDictionary.FunctionalModels.Clear();
+        foreach(var structure in firstPart)
+            FunctionalModelDictionary.FunctionalModels.Add(structure);
+        FunctionalModelDictionary.FunctionalModels.Add(new FunctionalModelStructure(savedStructure));
+        foreach(var structure in secondPart)
+            FunctionalModelDictionary.FunctionalModels.Add(structure);
+        OnPropertyChanged(nameof(FunctionalModelDictionary.FunctionalModels));
+    }
     
     /// <summary>
     /// Creates an XML file representing the dictionary.

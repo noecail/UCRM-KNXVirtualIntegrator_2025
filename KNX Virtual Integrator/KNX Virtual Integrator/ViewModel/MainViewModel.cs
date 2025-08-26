@@ -102,14 +102,23 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         _functionalModelList.PropertyChanged += (_, e) =>
         {
-            if (e.PropertyName != nameof(_functionalModelList.FunctionalModelDictionary)) 
-                return;
-            // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
-            Structures.Clear();
-            var newStructures = new ObservableCollection<FunctionalModelStructure>(_functionalModelList.GetAllModels());
-            foreach (var newstructure in newStructures)
+            if (e.PropertyName == nameof(_functionalModelList.FunctionalModelDictionary))
             {
-                Structures.Add(newstructure);
+                // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
+                Structures.Clear();
+                var newStructures =
+                    new ObservableCollection<FunctionalModelStructure>(_functionalModelList.GetAllModels());
+                foreach (var newstructure in newStructures)
+                    Structures.Add(newstructure);
+            }
+            else if (e.PropertyName == nameof(_functionalModelList.FunctionalModelDictionary.FunctionalModels))
+            {
+                // Updating the Models list, using Clear and Add commands triggers the Observable to send a notification to the UI
+                Structures.Clear();
+                var newStructures =
+                    new ObservableCollection<FunctionalModelStructure>(_functionalModelList.GetAllModels());
+                foreach (var newstructure in newStructures)
+                    Structures.Add(newstructure);
             }
         };
 
@@ -231,6 +240,13 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
+        PrintStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
+        {
+            Console.WriteLine("############-- STRUCTURE DICTIONARY --############");
+            Console.WriteLine("A total of " + _functionalModelList.FunctionalModelDictionary.FunctionalModels.Count + " structures");
+            foreach(var structure in _functionalModelList.FunctionalModelDictionary.FunctionalModels)
+                Console.WriteLine("structure " + structure.FullName);
+        });
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {
@@ -407,20 +423,53 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         {
             parameters.structure.RemoveDpt(parameters.key);
         });
+
+        UndoChangesSelectedStructureCommand = new Commands.RelayCommand<object>(_ =>
+        {
+            if (EditedStructureSave == null || SelectedStructure == null) return;
+
+            var index = SelectedStructure.Model.Key-1;
+            
+            // save the previously selected structure and model
+            //var previouslySelectedStructure = SelectedStructure;
+            // unselect the structure and model
+            SelectedStructure = null;
+            
+            // delete the structure
+            _functionalModelList.ResetInDictionary(index, EditedStructureSave);
+            OnPropertyChanged(nameof(Structures));
+            OnPropertyChanged(nameof(SelectedStructure));
+                
+            // restore (or not) the previously selected structure and model
+            /*if (previouslySelectedStructure is null) return;
+            if (!_functionalModelList.FunctionalModelDictionary.FunctionalModels.Contains(
+                    previouslySelectedStructure) ||
+                _functionalModelList.FunctionalModelDictionary.FunctionalModels[
+                    _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(
+                        previouslySelectedStructure)].Model.Name != previouslySelectedStructure.Model.Name) return;
+            SelectedStructure =  previouslySelectedStructure;*/
+            SelectedStructure = Structures[index];
+        });
         
-        UpdateFunctionalModelListCommand = new Commands.RelayCommand<object>(_ =>
+        ApplyChangesSelectedStructureCommand = new Commands.RelayCommand<object>(_ =>
         {
             if (SelectedStructure == null) return;
 
             int structureKey = SelectedStructure.Model.Key - 1;
+            
+            // nettoyer liste MFs associés à la structure
             _functionalModelList.FunctionalModels[structureKey].Clear();
-            var key = structureKey + 1;
-            _functionalModelList.FunctionalModelDictionary.FunctionalModels[structureKey].Model = _functionalModelList
-                .FunctionalModelDictionary.FunctionalModels[structureKey].BuildFunctionalModel(_functionalModelList
-                    .FunctionalModelDictionary.FunctionalModels[structureKey].Model.Name,key);
+            
+            // la structure
+            var structure = _functionalModelList.FunctionalModelDictionary.FunctionalModels[structureKey];
+            // construire le nouveau modèle selon la structure
+            structure.Model = structure.BuildFunctionalModel(structure.Model.Name, structureKey+1);
+            
+            // reconstruire la liste de MFs
             _functionalModelList.ReinitializeNbModels(structureKey);
             _functionalModelList.AddToList(structureKey);
             
+            // update UI
             var source = _functionalModelList.FunctionalModels[SelectedStructure.Model.Key-1];
             SelectedModels = new ObservableCollection<FunctionalModel>(source);
             SelectedModel = SelectedModels.First();

@@ -86,6 +86,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand AllModelsConsoleWriteCommand { get; private set; }
         public ICommand SelectedModelConsoleWriteCommand { get; private set; }
         
+        public ICommand PrintStructureDictionaryCommand { get; private set; }
         public ICommand CreateStructureDictionaryCommand { get; private set; }
 
         public ICommand DuplicateStructureDictionaryCommand { get;private set; }
@@ -120,7 +121,9 @@ namespace KNX_Virtual_Integrator.ViewModel
             
         public ICommand RemoveDptFromDictionaryCommand { get; private set; }
         
-        public ICommand UpdateFunctionalModelListCommand { get; private set; }
+        public ICommand UndoChangesSelectedStructureCommand {get; private set;}
+        
+        public ICommand ApplyChangesSelectedStructureCommand {get; private set;}
         
         public ICommand ImportDictionaryCommand  { get; private set; }
 
