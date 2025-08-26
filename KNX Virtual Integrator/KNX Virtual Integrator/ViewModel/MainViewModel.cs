@@ -60,7 +60,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     RemoteConnexionVisibility = Visibility.Collapsed;
                     SecureConnectionVisibility = Visibility.Visible;
                 }
-                else if (BusConnection.SelectedConnectionType is "IP à distance (NAT)")
+                else if (BusConnection.SelectedConnectionType is "Remote IP (NAT)")
                 {
                     DiscoveredInterfacesVisibility = Visibility.Collapsed;
                     RemoteConnexionVisibility = Visibility.Visible;

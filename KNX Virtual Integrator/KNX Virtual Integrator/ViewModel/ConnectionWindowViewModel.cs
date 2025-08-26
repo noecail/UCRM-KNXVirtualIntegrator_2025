@@ -7,11 +7,11 @@ public partial class MainViewModel
 {
     /// <summary>
     /// The list of strings that represents all three possible connection types handled by the application.
-    /// The three types are : "IP", "IP à distance (NAT)" and "USB".
+    /// The three types are : "IP", "Remote IP (NAT)" and "USB".
     /// </summary>
     public ObservableCollection<string> ConnectionTypes { get; } = [
         "IP",
-        "IP à distance (NAT)",
+        "Remote IP (NAT)",
         "USB"
     ];
     

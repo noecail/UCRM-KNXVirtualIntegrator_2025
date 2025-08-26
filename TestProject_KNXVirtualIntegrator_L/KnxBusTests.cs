@@ -203,7 +203,7 @@ namespace TestProject_KNXVirtualIntegrator_L
             _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus)
             {
                 SelectedInterface = _selectedInterfaceIpNat,
-                SelectedConnectionType = "IP à distance (NAT)",
+                SelectedConnectionType = "Remote IP (NAT)",
                 KeysPath = @"..\..\..\..\.github\workflows\MCP-KNX-V2.knxkeys",
                 KeysFilePassword = "Demo2025#"
             };

@@ -58,7 +58,7 @@ public class KnxBusTestsIntegration
     [Theory]
     [InlineData("USB")]
     [InlineData("IP")]
-    [InlineData("IP à distance (NAT)")]
+    [InlineData("Remote IP (NAT)")]
     public async Task Discover_KnxInterfaces(string connectiontype)
     {
         // Arrange
@@ -127,7 +127,7 @@ public class KnxBusTestsIntegration
     [InlineData("USB")]
     [InlineData("IP")]
     [InlineData("IPSec")]
-    [InlineData("IP à distance (NAT)")]
+    [InlineData("Remote IP (NAT)")]
     public async Task Test_KnxBus_Connect(string connectionType)
     {
         // Arrange
@@ -146,10 +146,10 @@ public class KnxBusTestsIntegration
                 _busConnection.KeysFilePassword = "Demo2025#";
                 _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.252.knxkeys";
                 break;
-            case "IP à distance (NAT)":
+            case "Remote IP (NAT)":
                 _busConnection.SelectedInterface = _selectedInterfaceIpNat;
                 _busConnection.InterfaceAddress = "1.1.255";
-                _busConnection.SelectedConnectionType = "IP à distance (NAT)";
+                _busConnection.SelectedConnectionType = "Remote IP (NAT)";
                 _busConnection.KeysFilePassword = "Demo2025#";
                 _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.255.knxkeys";
                 _busConnection.NatAddress = "92.174.145.34";
@@ -394,7 +394,7 @@ public class KnxBusTestsIntegration
         // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés et c'est dans le constructeur
         // Assignez l'interface sélectionnée à la connexion au bus
         _busConnection.SelectedInterface = _selectedInterfaceIpNat;
-        _busConnection.SelectedConnectionType = "IP à distance (NAT)";
+        _busConnection.SelectedConnectionType = "Remote IP (NAT)";
         _busConnection.KeysFilePassword = "Demo2025#";
         _busConnection.KeysPath = @"..\..\..\..\.github\workflows\1.1.255.knxkeys";
         _busConnection.NatAddress = "92.174.145.34";

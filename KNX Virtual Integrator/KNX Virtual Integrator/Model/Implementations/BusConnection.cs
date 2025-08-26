@@ -361,7 +361,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
             
             switch (SelectedConnectionType) //Prépare la connexion en fonction du type de connexion voulue
             {
-                case "IP à distance (NAT)": 
+                case "Remote IP (NAT)": 
                     //Crée les paramètres de connexion
                     parameters = new IpTunnelingConnectorParameters(NatAddress, NatPort, useNat: true) 
                             {
@@ -426,41 +426,41 @@ public sealed class BusConnection : ObservableObject, IBusConnection
         switch (SelectedConnectionType)
         {
             case "IP" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase):
-            case "IP à distance (NAT)" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase):
+            case "Remote IP (NAT)" when e.Message.Contains("The value cannot be an empty string. (Parameter 'path')", StringComparison.OrdinalIgnoreCase):
                 // Connexion Secure mais pas de knxkeys fourni
                 errorMessage = "Cette connexion est sécurisée IP Secure. Veuillez fournir un fichier de clés .knxkeys";
                 break;
 
             case "IP" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase):
-            case "IP à distance (NAT)" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase):
+            case "Remote IP (NAT)" when e.Message.Contains("Not a valid keyring file (Invalid signature)", StringComparison.OrdinalIgnoreCase):
                 // Connexion Secure avec knxkeys fourni mais pas de mdp fourni, ou mdp fourni ne correspond pas
                 errorMessage = "Veuillez renseigner un mot de passe correspondant au fichier knxkeys fourni.";
                 break;
 
             case "IP" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase):
-            case "IP à distance (NAT)" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase):
+            case "Remote IP (NAT)" when e.Message.Contains("Could not connect to IP interface (The requested address is not available)", StringComparison.OrdinalIgnoreCase):
                 // Connexion réussie, mais le bus est déjà utilisé
                 errorMessage = "Un autre appareil est déjà connecté au bus KNX.";
                 break;
 
-            case "IP à distance (NAT)" when NatAddress == "":
+            case "Remote IP (NAT)" when NatAddress == "":
                 // Connexion NAT mais pas d'IP fourni
                 errorMessage = "Pour établir une connexion NAT, veuillez renseigner une adresse IP au format IPv4. Exemple : 203.0.113.2";
                 break;
 
-            case "IP à distance (NAT)" when !ValidateIPv4(NatAddress):
+            case "Remote IP (NAT)" when !ValidateIPv4(NatAddress):
                 // Connexion NAT mais IP fourni n'est pas une adresse IP
                 errorMessage = "Veuillez renseigner une adresse IP au format IPv4. Exemple : 203.0.113.2";
                 break;
 
-            case "IP à distance (NAT)" when e.Message.Contains("No reply from interface", StringComparison.OrdinalIgnoreCase):
-            case "IP à distance (NAT)" when e.Message.Contains("Failed to read device description", StringComparison.OrdinalIgnoreCase):
+            case "Remote IP (NAT)" when e.Message.Contains("No reply from interface", StringComparison.OrdinalIgnoreCase):
+            case "Remote IP (NAT)" when e.Message.Contains("Failed to read device description", StringComparison.OrdinalIgnoreCase):
                 // Connexion NAT avec IP fourni valide mais ne permettant pas une connexion KNX
                 errorMessage = "L'adresse IP fournie n'a pas permis d'établir une connexion à un bus KNX.";
                 break;
             
             case "IP" when e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase):
-            case "IP à distance (NAT)" when e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase):
+            case "Remote IP (NAT)" when e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase):
                 // User Login Failed 2 fois de suite
                 errorMessage = "Il y a une erreur dans le fichier ou le mot de passe";
                 break;
@@ -496,7 +496,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
                 throw new InvalidOperationException("La connexion au bus a échoué.");
 
             Bus.ConnectionStateChanged += BusConnectionStateChanged!;
-            CurrentInterface = SelectedConnectionType is "IP à distance (NAT)" ?
+            CurrentInterface = SelectedConnectionType is "Remote IP (NAT)" ?
                 "À distance via l'IP publique " + NatAddress : SelectedInterface?.DisplayName is not null ? 
                     SelectedInterface.DisplayName : "";
             
@@ -506,7 +506,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
             _logger.ConsoleAndLogWriteLine("Connexion réussie au bus en " + SelectedConnectionType switch
                 {
                     "IP" => "IP",
-                    "IP à distance (NAT)" => "IP(NAT)",
+                    "Remote IP (NAT)" => "IP(NAT)",
                     "USB" => "USB",
                     _ => "???"
                 }
