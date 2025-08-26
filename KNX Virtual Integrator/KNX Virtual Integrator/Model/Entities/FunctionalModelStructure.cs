@@ -46,7 +46,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         /// Takes a string, and puts all the keywords inside it into the keywords associated
         /// </summary>
         /// <param name="keywordList">String containing all the keywords separated with commas</param>
-        private void UpdateKeywords()
+        public void UpdateKeywords()
         {
             _keywords.Clear();
             foreach (var kw in AllKeywords.Split(',').ToList())
@@ -59,7 +59,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         /// <summary>
         /// Takes all the keywords associated to a dpt and group them, separating them with commas
         /// </summary>
-        private void UpdateKeywordList()
+        public void UpdateKeywordList()
         {
             if (Keywords == null || Keywords.Count == 0)
                 return;
@@ -742,6 +742,8 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                                     }
                             }
                         }
+
+                        pair.UpdateKeywordList();
                     }
                     res.DptDictionary[myKey] = pair;
                 }

@@ -226,7 +226,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             {
                 var model = xnList[i];
                 if (model != null){
-                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model,i),true);
+                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model,i+1),true);
                     foreach (XmlNode element in model.ChildNodes!)
                     {
                         if (element.Name == "Keywords")
@@ -237,6 +237,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                             }
                         }
                     }
+                    FunctionalModels[i].UpdateKeywordList();
                 }
             }
         }
