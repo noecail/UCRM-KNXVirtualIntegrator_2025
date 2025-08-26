@@ -78,18 +78,20 @@
         <Grid >
             <!-- Define rows and columns for the grid -->
             <Grid.RowDefinitions>
-                <RowDefinition Height="50" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="50" />
+                <RowDefinition Height="50"/>    <!-- Bus Connection Type Selection Section -->
+                <RowDefinition Height="Auto"/>  <!-- Discovered Interfaces Section -->
+                <RowDefinition Height="Auto"/>  <!-- Section connexion à distance-->
+                <RowDefinition Height="*"/>     <!-- Section connexion IP Secure-->
+                <RowDefinition Height="Auto"/>  <!-- Error Message Section -->
+                <RowDefinition Height="Auto"/>  <!-- Current Interface Display Section -->
+                <RowDefinition Height="50"/>    <!-- Section for connection and disconnection -->
             </Grid.RowDefinitions>
 
             <!-- Bus Connection Type Selection Section -->
             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,5">
-                <TextBlock Name="ConnectionTypeText" Text="{DynamicResource ConnectionType}" VerticalAlignment="Center"
+                <TextBlock Name="ConnectionTypeText"
+                           Text="{DynamicResource ConnectionType}"
+                           VerticalAlignment="Center"
                            Margin="0,0,10,0" />
                 <ComboBox Name="ConnectionTypeComboBox"
                           Style="{StaticResource LightComboBoxStyle}"
@@ -98,8 +100,7 @@
                           FontSize="10"
                           SelectedIndex="0" 
                           SelectedItem="{Binding SelectedConnectionType, Mode=TwoWay}"
-                          ItemsSource="{Binding ConnectionTypes}">
-                </ComboBox>
+                          ItemsSource="{Binding ConnectionTypes}"/>
             </StackPanel>
 
             <!-- Discovered Interfaces Section -->
@@ -200,128 +201,142 @@
                          Style="{StaticResource TextBoxLight}"
                          Width="90"
                          Text="{Binding BusConnection.NatAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
             </Grid>
-
+            
             <!-- Section connexion IP Secure-->
-            <StackPanel Grid.Row="3" Orientation="Vertical" Visibility="{Binding SecureConnectionVisibility}">
-                <TextBlock Name="SecurisedConectionText"
-                           Foreground="{StaticResource LightForegroundBrush}"
-                           VerticalAlignment="Center"
-                           TextAlignment="Left"
-                           FontStyle="Italic"
-                           Margin="21,10,0,0"
-                           Text="{DynamicResource ToFillWhenSecure}" />
-
-                <Grid HorizontalAlignment="Center" Width="255">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="90" />
-                    </Grid.ColumnDefinitions>
+            <Border Grid.Row="3"
+                    BorderBrush="{StaticResource DarkGrayBorderBrush}"
+                    BorderThickness="0,1,0,0"
+                    Margin="22,10,22,0"
+                    Visibility="{Binding SecureConnectionVisibility}">
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="15" />
+                        <RowDefinition Height="Auto"/> <!-- Warning message -->
+                        <RowDefinition Height="Auto"/> <!-- Section title -->
+                        <RowDefinition Height="Auto"/> <!-- .knxkeys import -->
+                        <RowDefinition Height="Auto"/> <!-- imported file title -->
+                        <RowDefinition Height="Auto"/> <!-- imported file name -->
+                        <RowDefinition Height="Auto"/> <!-- keys file password -->
                     </Grid.RowDefinitions>
-
-                    <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Name="LockIconText"
-                                   Text="🔒"
-                                   Foreground="{StaticResource LightForegroundBrush}"
-                                   FontWeight="SemiBold"
-                                   TextAlignment="Left"
-                                   VerticalAlignment="Center" />
-                        <TextBlock Name="ConnectionIpSecText"
-                                   Text="{DynamicResource IPSecureConnection}"
-                                   Foreground="{StaticResource LightForegroundBrush}"
-                                   Margin="5,0,0,0"
-                                   TextAlignment="Left"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center" />
-                    </StackPanel>
-
-                    <Image Grid.Row="0" Grid.Column="1"
-                           Style="{StaticResource TooltipImage}"
-                           Height="15"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Right">
-                        <ToolTipService.ToolTip>
-                            <ToolTip HorizontalOffset="10" VerticalOffset="20"
-                                     Background="{StaticResource WhiteBackgroundBrush}"
-                                     BorderBrush="{StaticResource KnxGreenBrush}">
-                                <StackPanel Orientation="Vertical">
-                                    <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
-                                        Aide - Connexion via IP secure
-                                    </TextBlock>
-                                    <TextBlock>
-                                        Cette section permet de se connecter à un bus protégé par une interface IP Secure.
-                                        <LineBreak />
-                                        Connexion IP                  -> Sélectionnez dans la liste ci-dessus l'interface IP Secure. <LineBreak />
-                                        Connexion IP à distance (NAT) -> Renseignez ci-dessus l'adresse de l'interface IP Secure. <LineBreak />
-                                        Sélectionnez le fichier de clés exporté au préalable depuis ETS (Propriétés > IP Secure).
-                                        <LineBreak />
-                                        Renseignez le mot de passe correspondant au fichier de clés. <LineBreak />
-                                        Cliquez sur Connexion.
-                                    </TextBlock>
-                                </StackPanel>
-                            </ToolTip>
-                        </ToolTipService.ToolTip>
-                    </Image>
-
-                    <TextBlock Grid.Row="1" Grid.Column="0"
-                               Name="FileKeysText"
-                               Text="{DynamicResource KnxKeysFile}"
+                    
+                    <!-- Warning message -->
+                    <TextBlock Grid.Row="0"
+                               Name="SecurisedConnectionText"
+                               Foreground="{StaticResource LightForegroundBrush}"
                                VerticalAlignment="Center"
-                               TextAlignment="Left" />
-
-                    <Button Grid.Row="1" Grid.Column="1" Name="ImportKnxKeys"
-                            Style="{StaticResource ImportKeysButtonLight}"
-                            Click="ImportKeysFileButtonClick">
-                        <TextBlock Text="{DynamicResource ImportKeys}"
-                                   Width="78"
-                                   FontSize="10"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center" />
-                    </Button>
-
-                    <TextBlock Grid.Row="2" Grid.Column="0"
-                               Name="ImportedKeysFileText"
-                               Margin="0,0,0,0"
+                               TextAlignment="Left"
                                FontStyle="Italic"
-                               FontSize="10">
-                        Fichier de clés importé :
-                    </TextBlock>
+                               Margin="0,5,0,5"
+                               Text="{DynamicResource ToFillWhenSecure}"/>
+                    
+                    <!-- Section title -->
+                    <Grid Grid.Row="1" Margin="0,0,0,5">
+                        <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Name="LockIconText"
+                                       Text="🔒"
+                                       Foreground="{StaticResource LightForegroundBrush}"
+                                       FontWeight="SemiBold"
+                                       TextAlignment="Left"
+                                       VerticalAlignment="Center"/>
+                            <TextBlock Name="ConnectionIpSecText"
+                                       Text="{DynamicResource IPSecureConnection}"
+                                       Foreground="{StaticResource LightForegroundBrush}"
+                                       Margin="5,0,0,0"
+                                       TextAlignment="Left"
+                                       FontWeight="SemiBold"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <Image HorizontalAlignment="Right"
+                               Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               VerticalAlignment="Center">
+                            <ToolTipService.ToolTip>
+                                <ToolTip HorizontalOffset="10" VerticalOffset="20"
+                                         Background="{StaticResource WhiteBackgroundBrush}"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
+                                            Aide - Connexion via IP secure
+                                        </TextBlock>
+                                        <TextBlock>
+                                            Cette section permet de se connecter à un bus protégé par une interface IP Secure.
+                                            <LineBreak />
+                                            Connexion IP                  -> Sélectionnez dans la liste ci-dessus l'interface IP Secure. <LineBreak />
+                                            Connexion IP à distance (NAT) -> Renseignez ci-dessus l'adresse de l'interface IP Secure. <LineBreak />
+                                            Sélectionnez le fichier de clés exporté au préalable depuis ETS (Propriétés > IP Secure).
+                                            <LineBreak />
+                                            Renseignez le mot de passe correspondant au fichier de clés. <LineBreak />
+                                            Cliquez sur Connexion.
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                    </Grid>
+                        
+                    <!-- .knxkeys import -->
+                    <Grid Grid.Row="2">
+                        <TextBlock HorizontalAlignment="Left"
+                                   Name="FileKeysText"
+                                   Text="{DynamicResource KnxKeysFile}"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Left" />
+
+                        <Button HorizontalAlignment="Right"
+                                Name="ImportKnxKeys"
+                                Style="{StaticResource ImportKeysButtonLight}"
+                                Click="ImportKeysFileButtonClick">
+                            <TextBlock Text="{DynamicResource ImportKeys}"
+                                       Width="78"
+                                       FontSize="10"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Center" />
+                        </Button>
+                    </Grid>
+                    
+                    <!-- imported file title and name -->
+                    <Border Grid.Row="3"
+                            BorderBrush="{StaticResource LightGrayBorderBrush}"
+                            BorderThickness="1,0,0,1"
+                            Margin="5,2,0,5">
+                        <StackPanel Orientation="Vertical">
+                            <!-- imported file title -->
+                            <TextBlock Margin="6,0,0,0"
+                                       Name="ImportedKeysFileText"
+                                       FontStyle="Italic"
+                                       FontSize="10">
+                                Fichier de clés importé :
+                            </TextBlock>
+                            
+                            <!-- imported file name -->
+                            <TextBlock
+                                Name="ImportKeyPathText"
+                                Margin="5,0,0,2"
+                                Text="{Binding BusConnection.KeysPath}"
+                                TextAlignment="Left"
+                                FontSize="10"
+                                TextWrapping="Wrap">
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                    
+                    <!-- keys file password -->
+                    <Grid Grid.Row="5"  Height="30">
+
+                        <TextBlock HorizontalAlignment="Left"
+                                   Name="PwdKeysFileText"
+                                   Text="{DynamicResource PwdKeys}"
+                                   VerticalAlignment="Center" />
+
+                        <TextBox HorizontalAlignment="Right"
+                                 Name="ActualPwdKeysFileTextBox"
+                                 Style="{StaticResource TextBoxLight}"
+                                 Text="{Binding BusConnection.KeysFilePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </Grid>
                 </Grid>
-
-                <TextBlock
-                    Name="ImportKeyPathText"
-                    Margin="21,0,0,5"
-                    Text="{Binding BusConnection.KeysPath}"
-                    TextAlignment="Left"
-                    FontSize="10"
-                    TextWrapping="Wrap">
-                </TextBlock>
-
-                <Grid Margin="22,0" Height="30">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="90" />
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0"
-                               Name="PwdKeysFileText"
-                               Text="{DynamicResource PwdKeys}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left" />
-
-                    <TextBox Grid.Column="1"
-                             Name="ActualPwdKeysFileTextBox"
-                             Style="{StaticResource TextBoxLight}"
-                             Text="{Binding BusConnection.KeysFilePassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </Grid>
-
-            </StackPanel>
-
+            </Border>
+                
+            <!-- Error Message Section -->
             <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,0"
                         Visibility="{Binding ErrorMessageVisibility}">
                 <TextBlock
