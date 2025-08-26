@@ -941,6 +941,8 @@
                                            Style="{StaticResource TitleTextLight}"
                                            Text="{DynamicResource Library}"
                                 />
+                                <Button Content="Afficher Structures" Click="PrintStructuresButtonClick"    Visibility="Hidden"/>
+                                <Button Content="Afficher Dico" Click="PrintStructureDictionaryButtonClick" Visibility="Hidden"/>
                             </StackPanel>
 
                             <!-- Bouton d'import,(Non-implémenté)-->

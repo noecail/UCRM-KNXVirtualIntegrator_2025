@@ -474,6 +474,20 @@ public partial class MainWindow
 
 
     }
+
+    private void PrintStructuresButtonClick(object sender, RoutedEventArgs e)
+    {
+        Console.WriteLine("############-- STRUCTURES --############");
+        Console.WriteLine("A total of " + _viewModel.Structures.Count + " structures");
+        foreach(var structure in _viewModel.Structures)
+            Console.WriteLine("structure " + structure.FullName);
+    }
+
+    private void PrintStructureDictionaryButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.PrintStructureDictionaryCommand.Execute(null);
+    }
+
     
     /// <summary>
     /// Handles the button click event to import a group addresses file.

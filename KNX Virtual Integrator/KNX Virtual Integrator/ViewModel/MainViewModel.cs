@@ -240,6 +240,13 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
+        PrintStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
+        {
+            Console.WriteLine("############-- STRUCTURE DICTIONARY --############");
+            Console.WriteLine("A total of " + _functionalModelList.FunctionalModelDictionary.FunctionalModels.Count + " structures");
+            foreach(var structure in _functionalModelList.FunctionalModelDictionary.FunctionalModels)
+                Console.WriteLine("structure " + structure.FullName);
+        });
 
         CreateStructureDictionaryCommand = new Commands.RelayCommand<object>(_ =>
             {

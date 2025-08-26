@@ -86,6 +86,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand AllModelsConsoleWriteCommand { get; private set; }
         public ICommand SelectedModelConsoleWriteCommand { get; private set; }
         
+        public ICommand PrintStructureDictionaryCommand { get; private set; }
         public ICommand CreateStructureDictionaryCommand { get; private set; }
 
         public ICommand DuplicateStructureDictionaryCommand { get;private set; }

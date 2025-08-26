@@ -141,6 +141,16 @@ public partial class StructureEditWindow
         _viewModel.ApplyChangesSelectedStructureCommand.Execute(null);
     }
     
+    private void PrintSelectedStructureButtonClick(object sender, RoutedEventArgs e)
+    {
+        PrintStructure(_viewModel.SelectedStructure);
+    }
+    
+    private void PrintEditedStructureSaveButtonClick(object sender, RoutedEventArgs e)
+    {
+        PrintStructure(_viewModel.EditedStructureSave);
+    }
+    
     private void DeleteStructureButtonClick(object sender, RoutedEventArgs e)
     {
         if (_viewModel.SelectedStructure != null)
@@ -223,17 +233,16 @@ public partial class StructureEditWindow
             _viewModel.RemoveDptFromDictionaryCommand.Execute((kvp.Key,_viewModel.SelectedStructure));
     }
 
-
-    private void PrintDptDictionaryButtonClick(object sender, RoutedEventArgs e)
+    private void PrintStructure(FunctionalModelStructure? structure)
     {
-        Console.WriteLine("SelectedStructure : " + _viewModel.SelectedStructure?.FullName);
-        Console.WriteLine("with allkeywords : " + _viewModel.SelectedStructure?.AllKeywords);
-        if (_viewModel.SelectedStructure?.Keywords != null)
-            foreach (var kw in _viewModel.SelectedStructure.Keywords)
-                Console.WriteLine("with keywords : " + kw);
-
-        var dptDico = _viewModel.SelectedStructure?.DptDictionary;
-        if (dptDico == null) return;
+        if (structure == null) return;
+        Console.WriteLine("oooooooooooooooooooooooooo");
+        Console.WriteLine("SelectedStructure : " + structure.FullName);
+        Console.WriteLine("with allkeywords : " + structure.AllKeywords);
+        foreach (var kw in structure.Keywords)
+            Console.WriteLine("with keywords : " + kw);
+        
+        var dptDico = structure.DptDictionary;
         foreach (var kvp in dptDico)
         {
             Console.WriteLine("--------------------------");
@@ -244,6 +253,18 @@ public partial class StructureEditWindow
             foreach (var kw in kvp.Value.Keywords)
                 Console.WriteLine("DICO Printing value.Dpt.Keywords " + kw);
             Console.WriteLine("--------------------------");
+        }
+
+        var modelStructure = structure.ModelStructure;
+        foreach (var elementStructure in modelStructure)
+        {
+            Console.WriteLine(">> element structure");
+            var cmd = elementStructure.Cmd;
+            foreach (var item in cmd)
+                Console.WriteLine("MODEL Printing cmd " + item);
+            var ie = elementStructure.Ie;
+            foreach (var item in ie)
+                Console.WriteLine("MODEL Printing ie " + item);
         }
     }
     
