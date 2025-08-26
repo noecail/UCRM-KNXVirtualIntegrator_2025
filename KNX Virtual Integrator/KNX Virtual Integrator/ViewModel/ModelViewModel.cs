@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Entities;
 
@@ -89,6 +90,18 @@ namespace KNX_Virtual_Integrator.ViewModel
         }
 
         public FunctionalModelStructure? EditedStructureSave;
+
+        private Visibility _applyChangesErrorMessageVisibility = Visibility.Hidden;
+        public Visibility ApplyChangesErrorMessageVisibility
+        {
+            get => _applyChangesErrorMessageVisibility;
+            set
+            {
+                if (ApplyChangesErrorMessageVisibility == value) return;
+                _applyChangesErrorMessageVisibility = value;
+                WhenPropertyChanged(nameof(ApplyChangesErrorMessageVisibility));
+            }
+        }
 
     }
 }

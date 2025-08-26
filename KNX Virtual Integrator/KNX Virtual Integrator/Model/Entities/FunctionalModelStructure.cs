@@ -220,6 +220,24 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
     public ObservableCollection<ElementStructure> ModelStructure { get; set; } = [];
 
+    public bool IsValid()
+    {
+        if (ModelStructure.Count == 0) return false;
+        List<int> dptsInDictionary = [];
+        foreach (var kvp in DptDictionary)
+            dptsInDictionary.Add(kvp.Key);
+
+        foreach (var elementStructure in ModelStructure)
+        {
+            foreach (var cmd in elementStructure.Cmd)
+                if (!dptsInDictionary.Contains(cmd.Value)) return false;
+
+            foreach (var ie in elementStructure.Ie)
+                if (!dptsInDictionary.Contains(ie.Value)) return false;
+        }
+        return true;
+    }
+    
     public FunctionalModelStructure(string name)
     {
         Model = new FunctionalModel(name);
