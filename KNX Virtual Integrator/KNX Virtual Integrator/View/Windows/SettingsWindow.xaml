@@ -15,6 +15,7 @@
     <Window.Resources>
 
         <!-- ************************ Style pour le bouton de fermeture de la fenêtre ************************ -->
+        <!-- Le bouton de fermeture de la fenêtre doit être stylisé car la fenêtre est mise en WindowStyle="None" -->
         <Style x:Key="CloseButtonStyle" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="{StaticResource RedBrush}" />
             <Setter Property="Template">
@@ -51,7 +52,7 @@
         </Style>
 
 
-        <!-- ************************ Style pour les boutons en bas de la fenêtre ************************ -->
+        <!-- ************************ Styles pour les boutons en bas de la fenêtre ************************ -->
         <Style x:Key="BottomButtonLight" TargetType="Button" BasedOn="{StaticResource BaseButtonStyle}">
             <Setter Property="Background" Value="{StaticResource WhiteBackgroundBrush}" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -107,7 +108,7 @@
             </Setter>
         </Style>
 
-        <!-- ************************ Style pour les onglets ************************ -->
+        <!-- ************************ Styles pour les onglets ************************ -->
         <Style x:Key="LightOnglet" TargetType="TabItem">
             <Setter Property="Template">
                 <Setter.Value>
@@ -196,7 +197,7 @@
         </Style>
 
 
-        <!-- ************************ Style pour le slider ************************ -->
+        <!-- ************************ Styles pour le slider ************************ -->
         <Style x:Key="LightSliderThumbStyle" TargetType="Thumb">
             <Setter Property="Width" Value="15" />
             <Setter Property="Height" Value="15" />
@@ -322,8 +323,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-
-
+        
         <!-- ReSharper disable once Xaml.RedundantResource -->
         <Style x:Key="DarkSlider" TargetType="Slider">
             <Setter Property="Template">
@@ -446,6 +446,9 @@
                 <Border x:Name="MainContentBorder" Grid.Column="1" Margin="10"
                         BorderBrush="{StaticResource LightGrayBorderBrush}"
                         BorderThickness="0">
+                    
+                    <!-- TabControl qui permet d'avoir plusieurs onglets pour les paramètres, le debug et les informations -->
+                    <!-- Chaque Item possède un ScrollViewer pour éviter les entassements de contenu -->
                     <TabControl x:Name="ControlOnglet" SelectionChanged="TabControl_SelectionChanged"
                                 BorderBrush="{StaticResource WhiteBrush}"
                                 BorderThickness="2" Padding="-1,-1,-1,-1">

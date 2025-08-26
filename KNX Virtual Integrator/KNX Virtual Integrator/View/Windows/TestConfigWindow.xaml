@@ -21,8 +21,11 @@
 
     <Window.Resources>
         
+        <!-- Clé permettant d'appeler les BigIntegerToStringConverter plus facilement -->
         <utils:BigIntegerToStringConverter x:Key="BigIntegerConverter"/>
         
+        <!-- Styles pour les Éléments à Tester (affichage assez long, 
+             recommandé de garder Collapsed dans l'éditeur de code) -->
         <DataTemplate x:Key="ElementListBoxTemplateLight" DataType="{x:Type entities:TestedElement}">
             <!--Élément à Tester-->
             <Border Background="{StaticResource OffWhiteBackgroundBrush}"
@@ -758,9 +761,9 @@
             </Border>
         </DataTemplate>
         
-        <!-- Style pour les Modèles Fonctionnels choisis -->
+        <!-- Styles pour les Modèles Fonctionnels choisis, l'image pour test n'est pas implémentée -->
         <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type entities:FunctionalModel}">
-            <StackPanel>
+            <StackPanel Orientation="Horizontal">
                 <Image Source="{TemplateBinding Tag}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
@@ -775,10 +778,21 @@
         </DataTemplate>
 
         <DataTemplate x:Key="ListBoxItemDark" DataType="{x:Type entities:FunctionalModel}">
-            <TextBlock Name="InterfaceItemsText" Text="{Binding Path=FullName}"
-                       Style="{StaticResource ItalicTextBlockDark}" />
+            <StackPanel Orientation="Horizontal">
+                <Image Source="{TemplateBinding Tag}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Collapsed"
+                       Height="10" />
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FullName}"
+                           Style="{StaticResource ItalicTextBlockLight}"
+                />
+            </StackPanel>
         </DataTemplate>
 
+        <!-- Styles pour la liste des Modèles Fonctionnels choisis -->
         <Style x:Key="ListBoxStyleLight" TargetType="ListBox" BasedOn="{StaticResource StandardListBoxLight}">
             <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/> 
         </Style>
@@ -788,6 +802,7 @@
             <Setter Property="Background" Value="{StaticResource DarkGrayBackgroundBrush}"/> 
         </Style>
 
+        <!-- Styles pour le bouton de lancer de test -->
         <Style x:Key="LaunchTestButtonStyleLight" TargetType="Button" BasedOn="{StaticResource IconTextButtonStyle}">
             <Setter Property="Background" Value="{StaticResource GrayBackgroundBrush}"/>
             <Setter Property="BorderBrush" Value="{StaticResource DarkGrayBackgroundBrush}"/>
@@ -822,6 +837,7 @@
     </Window.Resources>
 
 
+    <!-- ScrollViewer qui contient tout le contenu pour que le scaling n'entasse pas tout -->
     <ScrollViewer BorderBrush="{StaticResource KnxGreenBrush}"
             BorderThickness="0" x:Name="TestConfigWindowBorder"
             HorizontalScrollBarVisibility="Auto"

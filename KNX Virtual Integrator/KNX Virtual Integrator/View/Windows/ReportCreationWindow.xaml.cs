@@ -154,7 +154,7 @@ public partial class ReportCreationWindow
         }
         ReportCreationWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
             
-        Height = 525 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 525 * scale;
+        Height = 475 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 475 * scale;
         Width = 515 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 515 * scale;
     }
     
