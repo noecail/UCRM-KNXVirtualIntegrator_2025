@@ -1,10 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Xml;
-using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 /// <summary>
@@ -21,7 +18,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// <summary>
     /// Dictionary of DPTs and their keywords of the structure.
     /// </summary>
-    public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; set; }
+    public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; private set; }
     
     // utilisée dans la liste déroulante de clé à choisir pour les dpts des element structure
     /// <summary>
@@ -33,14 +30,14 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// <summary>
     /// List of all implemented DPTs from which to choose.
     /// </summary>
-    public static List<int> DefaultDptToChoose { get; } = new List<int>
-    {
+    public static List<int> DefaultDptToChoose { get; } =
+    [
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30,
         31, 200, 201, 202, 203, 204, 205, 206, 207, 209, 211, 212, 213, 215, 216, 217, 218, 219,
         221, 222, 223, 224, 225, 229, 230, 232, 234, 235, 236, 237, 238, 239, 240, 242, 243, 244,
         245, 246, 247, 248, 250, 251, 252, 254, 255, 256, 257, 265, 266, 267, 268, 269, 270, 271,
         272, 273, 274, 277, 278, 279, 280, 281, 282, 283, 284
-    };
+    ];
     
     /// <summary>
     /// Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
@@ -50,7 +47,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// <summary>
     /// The list of ElementStructures of the model
     /// </summary>
-    public ObservableCollection<ElementStructure> ModelStructure { get; set; } = [];
+    public ObservableCollection<ElementStructure> ModelStructure { get; set; }
     /// <summary>
     /// Checks whether the structure is correctly filled (every necessary option is filled)
     /// </summary>
@@ -153,13 +150,13 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     {
         Model = new FunctionalModel(model, myKey, false);
         ModelStructure = [];
-        int index;
         DptDictionary = [];
         SetUpNotifs();
 
         foreach (var element in  model.ElementList)
         {
             ElementStructure elementStructure = new ElementStructure();
+            int index;
             foreach (var dpt in element.TestsCmd)
             {
                 index = -1;
@@ -176,9 +173,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
                 if (index == -1)
                 {
-                    var newDpt = new DptAndKeywords();
-                    newDpt.Dpt = dpt;
-                    newDpt.Keywords = [];
+                    var newDpt = new DptAndKeywords
+                    {
+                        Dpt = dpt,
+                        Keywords = []
+                    };
                     int newKey;
                     if (DptDictionary.Keys.ToList().Count > 0)
                     {
@@ -211,9 +210,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
                 if (index == -1)
                 {
-                    var newDpt = new DptAndKeywords();
-                    newDpt.Dpt = dpt;
-                    newDpt.Keywords = [];
+                    var newDpt = new DptAndKeywords
+                    {
+                        Dpt = dpt,
+                        Keywords = []
+                    };
                     var newKey = DptDictionary.Keys.ToList()[^1] + 1;
                     newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
@@ -241,9 +242,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
         foreach (var element in model.ElementList)
         {
-            ElementStructure elementStructure = new ElementStructure();
-            elementStructure.Ie = [];
-            elementStructure.Cmd = [];
+            ElementStructure elementStructure = new ElementStructure
+            {
+                Ie = [],
+                Cmd = []
+            };
             foreach (var dpt in element.TestsCmd)
             {
                 index = -1;
@@ -260,9 +263,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
                 if (index == -1)
                 {
-                    var newDpt = new DptAndKeywords();
-                    newDpt.Dpt = dpt;
-                    newDpt.Keywords = [];
+                    var newDpt = new DptAndKeywords
+                    {
+                        Dpt = dpt,
+                        Keywords = []
+                    };
                     int newKey;
                     if (DptDictionary.Keys.ToList().Count > 0)
                     {
@@ -295,9 +300,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
                 if (index == -1)
                 {
-                    var newDpt = new DptAndKeywords();
-                    newDpt.Dpt = dpt;
-                    newDpt.Keywords = [];
+                    var newDpt = new DptAndKeywords
+                    {
+                        Dpt = dpt,
+                        Keywords = []
+                    };
                     var newKey = DptDictionary.Keys.ToList()[^1] + 1;
                     newDpt.Key = newKey;
                     DptDictionary.Add(newKey, newDpt);
@@ -615,7 +622,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     {
                         if (keyList.Name == "Command" && keyList.Attributes != null)
                         {
-                            var list = keyList.Attributes;
                             foreach (XmlAttribute cmd in keyList.Attributes)
                             {
                                 var indexStr = cmd.Name.Substring("Key_".Length); //Takes the index of the key
@@ -652,9 +658,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 foreach (XmlNode xPair in dicoOrModelStructure.ChildNodes)
                 {
                     var myKey = int.Parse(xPair.Attributes?["Key"]?.Value ?? "");
-                    var pair = new DptAndKeywords();
-                    pair.Dpt = new DataPointType();
-                    pair.Keywords = [];
+                    var pair = new DptAndKeywords
+                    {
+                        Dpt = new DataPointType(),
+                        Keywords = []
+                    };
                     foreach (XmlNode xDptAndKeywords in xPair.ChildNodes)
                     {
                         pair.Dpt.Type = int.Parse(xDptAndKeywords.Attributes?["Type"]?.Value ?? "0");
@@ -800,8 +808,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     {
         foreach (var key in DptDictionary.Keys)
         {
-            if (DptDictionary[key].Keywords.Any(p =>
-                    name.StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
+            if (DptDictionary[key].Keywords.Any(p => name.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
             {
                 return key;
             }
@@ -874,7 +881,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// Invokes <see cref="PropertyChanged"/> when called.
     /// </summary>
     /// <param name="propertyName">The name of the property that was changed.</param>
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

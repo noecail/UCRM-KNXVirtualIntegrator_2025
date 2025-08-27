@@ -10,17 +10,22 @@ namespace KNX_Virtual_Integrator.Model.Entities;
     public class ElementStructure
     {
         /// <summary>
-        /// The number of Cmd DPTs in the Element.
+        /// The keys of the Cmd DPTs in the Element.
         /// </summary>
         public ObservableCollection<IntItem> Cmd { get; set; }
         /// <summary>
-        /// The number of Ie DPTs in the Element.
+        /// The keys of the Ie DPTs in the Element.
         /// </summary>
         public ObservableCollection<IntItem> Ie { get; set; }
         
-        // CmdValues [0][1] -> 1er DPT d'envoi (=1ere colonne), 2eme value (=2eme ligne)
-        public ObservableCollection<ObservableCollection<BigIntegerItem>> CmdValues { get; set; }
-        public ObservableCollection<ObservableCollection<BigIntegerItem>> IeValues { get; set; }
+        /// <summary>
+        /// All the values predefined in the structure, to be sent
+        /// </summary>
+        public ObservableCollection<ObservableCollection<BigIntegerItem>> CmdValues { get; }
+        /// <summary>
+        /// All the values predefined in the structure, to be read
+        /// </summary>
+        public ObservableCollection<ObservableCollection<BigIntegerItem>> IeValues { get; }
 
         /// <summary>
         /// Adds a new Cmd Dpt.
@@ -31,7 +36,7 @@ namespace KNX_Virtual_Integrator.Model.Entities;
             Cmd.Add(new IntItem(value));
             UpdateRemoveDptButtonVisibility();
             CmdValues.Add(new ObservableCollection<BigIntegerItem>());
-            foreach (var test in CmdValues[0])
+            foreach (var unused in CmdValues[0])
                 CmdValues[^1].Add(new BigIntegerItem(0));
         }
 
@@ -42,8 +47,8 @@ namespace KNX_Virtual_Integrator.Model.Entities;
         public void AddToIe(int value)
         {
             Ie.Add(new IntItem(value));
-            IeValues.Add(new ObservableCollection<BigIntegerItem>());
-            foreach (var test in CmdValues[0])
+            IeValues.Add([]);
+            foreach (var unused in CmdValues[0])
                 IeValues[^1].Add(new BigIntegerItem(0));
             UpdateRemoveTestButtonVisibility();
         }
@@ -59,7 +64,7 @@ namespace KNX_Virtual_Integrator.Model.Entities;
         }
 
         /// <summary>
-        /// Removes a Ie Dpt at an index.
+        /// Removes an Ie Dpt at an index.
         /// </summary>
         /// <param name="ieIndex">The index of the DPT to remove.</param>
         public void RemoveIeAt(int ieIndex)
@@ -69,28 +74,9 @@ namespace KNX_Virtual_Integrator.Model.Entities;
             UpdateRemoveTestButtonVisibility();
         }
         
-        public void AddValueToCmd(int cmdIndex)
-        {
-            CmdValues[cmdIndex].Add(new BigIntegerItem(new BigInteger(0)));
-        }
-        
-        public void AddValueToIe(int ieIndex)
-        {
-            IeValues[ieIndex].Add(new BigIntegerItem(new BigInteger(0)));
-            UpdateRemoveTestButtonVisibility();
-        }
-
-        public void RemoveCmdValueAt(int cmdIndex, int valueIndex)
-        {
-            CmdValues[cmdIndex].RemoveAt(valueIndex);
-        }
-
-        public void RemoveIeValueAt(int ieIndex, int valueIndex)
-        {
-            IeValues[ieIndex].RemoveAt(valueIndex);
-            UpdateRemoveTestButtonVisibility();
-        }
-        
+        /// <summary>
+        /// Adds a line of values to an element structure, both to be sent and to be read
+        /// </summary>
         public void AddTest()
         {
             foreach (var dptValues in CmdValues)
@@ -100,7 +86,12 @@ namespace KNX_Virtual_Integrator.Model.Entities;
                
             UpdateRemoveTestButtonVisibility();
         }
-
+        
+        /// <summary>
+        /// Removes a line of values from an element structure, both to be sent and to be read
+        /// One parameter : the index of the test line
+        /// </summary>
+        /// <param name="indexTest"></param>
         public void RemoveTestAt(int indexTest)
         {
             foreach (var dptValues in CmdValues)
@@ -110,7 +101,9 @@ namespace KNX_Virtual_Integrator.Model.Entities;
    
             UpdateRemoveTestButtonVisibility();
         }
+        
         /// <summary>
+        /// Constructor
         /// Creates an empty ElementStructure.
         /// </summary>
         public ElementStructure()
@@ -121,11 +114,13 @@ namespace KNX_Virtual_Integrator.Model.Entities;
             IeValues = [];
             UpdateRemoveTestButtonVisibility();
         }
+        
         /// <summary>
+        /// Constructor
         /// Creates a filled ElementStructure with <see cref="ObservableCollection{T}"/>.
         /// </summary>
         /// <param name="cmdCollection">The collection of Cmd DPT to copy.</param>
-        /// <param name="ieCollection">The collectio of Ie DPT to copy.</param>
+        /// <param name="ieCollection">The collection of Ie DPT to copy.</param>
         public ElementStructure(ObservableCollection<IntItem> cmdCollection, ObservableCollection<IntItem> ieCollection)
         {
             Cmd = cmdCollection;

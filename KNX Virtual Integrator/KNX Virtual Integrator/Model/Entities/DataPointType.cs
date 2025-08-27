@@ -38,8 +38,7 @@ public class DataPointType : INotifyPropertyChanged
    /// <summary>
     /// Gets or sets the collection parallel to <see cref="Value"/>.
     /// </summary>
-    /// <seealso cref="_intValue"/>
-    public ObservableCollection<BigIntegerItem> IntValue { get; set;  } = new ObservableCollection<BigIntegerItem>();
+    public ObservableCollection<BigIntegerItem> IntValue { get; set; }
     /// <summary>
     /// The type of the Data Point (1, 2, ...).
     /// </summary>
@@ -386,7 +385,7 @@ public class DataPointType : INotifyPropertyChanged
     {
         Value.Add(value);
         if (value != null)
-            IntValue.Add(new BigIntegerItem(new BigInteger(value.Value))); //celle qui m'intéresse, Noé
+            IntValue.Add(new BigIntegerItem(new BigInteger(value.Value)));
     }
     
     /// <summary>
@@ -426,7 +425,6 @@ public class DataPointType : INotifyPropertyChanged
         Value.Clear();
         foreach (var value in IntValue)
         {
-            //Console.WriteLine("On est sur " + value.BigIntegerValue);
             if (value.BigIntegerValue == null) return;
             if (value.IsEnabled)
             {
@@ -443,6 +441,11 @@ public class DataPointType : INotifyPropertyChanged
         }
     }
 
+    /// <summary>
+    /// Update the visibility of the button that deletes a test line, ie all dispatch/receive values on a line
+    /// Should be called anytime the number of DPTs in the element changes
+    /// </summary>
+    /// <param name="vis"></param>
     public void UpdateRemoveTestButtonVisibility(Visibility vis)
     {
         foreach (var bigIntegerItem in IntValue)
@@ -475,7 +478,7 @@ public class DataPointType : INotifyPropertyChanged
     /// Invokes <see cref="PropertyChanged"/> when called.
     /// </summary>
     /// <param name="propertyName">The name of the property that was changed.</param>
-    protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }

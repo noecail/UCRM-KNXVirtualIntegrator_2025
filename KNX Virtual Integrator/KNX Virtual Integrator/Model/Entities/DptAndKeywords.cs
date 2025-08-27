@@ -11,7 +11,7 @@ public class DptAndKeywords : INotifyPropertyChanged
     /// <summary>
     /// Key/Number of the instance.
     /// </summary>
-    public int Key = 0;
+    public int Key;
     
     /// <summary>
     /// List of keywords associated with the <see cref="Dpt"/>.
@@ -89,7 +89,7 @@ public class DptAndKeywords : INotifyPropertyChanged
     /// <summary>
     /// Copies a DptAndKeywords.
     /// </summary>
-    /// <param name="other">The DptAndKeywors to copy</param>
+    /// <param name="other">The DptAndKeywords to copy</param>
     public DptAndKeywords(DptAndKeywords other)
     {
         Key = other.Key;
