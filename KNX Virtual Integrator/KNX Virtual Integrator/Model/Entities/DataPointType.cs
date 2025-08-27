@@ -30,94 +30,6 @@ public class DataPointType : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Class used only for Value collections,
-    /// used by the UI to access and modify BigInteger values,
-    /// which do not raise notifications by default.
-    /// It is a sort of wrapper
-    /// </summary>
-    public class BigIntegerItem : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// The visibility of the Value box in TestedElement.
-        /// </summary>
-        private Visibility? _removeTestButtonVisibility ;
-        /// <summary>
-        /// Gets or sets the visibility of the Value box in TestedElement.
-        /// </summary>
-        public Visibility? RemoveTestButtonVisibility
-        {
-            get => _removeTestButtonVisibility;
-            set
-            {
-                if (_removeTestButtonVisibility == value) return;
-                _removeTestButtonVisibility = value;
-                OnPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// The wrapped BigInteger.
-        /// </summary>
-        private BigInteger? _bigIntegervalue;
-        /// <summary>
-        /// Gets or sets the wrapped BigInteger.
-        /// </summary>
-        public BigInteger? BigIntegerValue
-        {
-            get => _bigIntegervalue;
-            set
-            {
-                if (_bigIntegervalue != value)
-                {
-                    _bigIntegervalue = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        /// <summary>
-        /// Boolean determining whether the box is enabled or not.
-        /// </summary>
-        private bool _isEnabled;
-        /// <summary>
-        /// Gets or sets the boolean determining whether the box is enabled or not.
-        /// </summary>
-        public bool IsEnabled
-        {
-            get => _isEnabled;
-            set
-            {
-                if (_isEnabled != value)
-                {
-                    _isEnabled = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        /// <summary>
-        /// Initializes the wrapper with a Collapsed visibility and unless the parameter is equal to -1,
-        /// the box is enabled.
-        /// </summary>
-        /// <param name="bi">The <see cref="BigInteger"/> to be wrapped</param>
-        public BigIntegerItem(BigInteger bi)
-        {
-            BigIntegerValue = bi;
-            RemoveTestButtonVisibility = Visibility.Collapsed;
-            IsEnabled = true;
-            if (bi == -1)
-            {
-                IsEnabled = false;
-            }
-        }
-        /// <summary>
-        /// The event that occurs when the BigIntegerItem changes. 
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-        /// <summary>
-        /// Invokes the event <see cref="PropertyChanged"/> when the BigIntegerItem changes.
-        /// </summary>
-        private void OnPropertyChanged([CallerMemberName] string? name = null)
-            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-    /// <summary>
     /// List of GroupValues to send/read.
     /// GroupValues is the type understood by KNX.
     /// GroupValues cannot be accessed/modified on the UI because they are not a common type.
@@ -168,6 +80,11 @@ public class DataPointType : INotifyPropertyChanged
     }
     
     //Constructors
+    
+    /// <summary>
+    /// Constructor for DataPointType
+    /// No parameters
+    /// </summary>
     public DataPointType()
     {
         Type = 1;
@@ -176,6 +93,10 @@ public class DataPointType : INotifyPropertyChanged
         GetSizeOf();
     }
     
+    /// <summary>
+    /// Constructor for DataPointType
+    /// One parameter : the type  of the DPT
+    /// </summary>
     public DataPointType(int type)
     {
         Type = type;
@@ -184,6 +105,10 @@ public class DataPointType : INotifyPropertyChanged
         GetSizeOf();
     }
 
+    /// <summary>
+    /// Constructor for DataPointType
+    /// Two parameters : the type of the DPT and the name of the DPT
+    /// </summary>
     public DataPointType(int type, string name)
     {
         Type = type;
@@ -193,6 +118,10 @@ public class DataPointType : INotifyPropertyChanged
         GetSizeOf();
     }
 
+    /// <summary>
+    /// Constructor for DataPointType
+    /// Three parameters : the type of the DPT, the address of the DPT and a list of GroupValues to be sent/read
+    /// </summary>
     public DataPointType(int type, string  address, List<GroupValue?> values)
     {
         Type = type;
@@ -208,6 +137,10 @@ public class DataPointType : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Constructor for DataPointType
+    /// Four parameters : the type of the DPT, the address of the DPT, a list of GroupValues to be sent/read, the name of the DPT
+    /// </summary>
     public DataPointType(int type, string  address, List<GroupValue?> values, string name)
     {
         Name = name;
@@ -224,6 +157,10 @@ public class DataPointType : INotifyPropertyChanged
         }
     }
     
+    /// <summary>
+    /// Constructor for DataPointType. Duplicator
+    /// One parameter : the DPT to duplicate
+    /// </summary>
     public DataPointType(DataPointType other)
     {
         Address = other.Address;
@@ -238,6 +175,10 @@ public class DataPointType : INotifyPropertyChanged
         UpdateValue();
     }
     
+    /// <summary>
+    /// Constructor for DataPointType. Duplicator
+    /// Two parameters : the DPT to duplicate, the address of the new DPT
+    /// </summary>
     public DataPointType(DataPointType dpt, string address)
     {
         Type = dpt.Type;

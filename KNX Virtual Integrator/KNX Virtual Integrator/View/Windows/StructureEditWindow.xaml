@@ -712,7 +712,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel Grid.Column="0" Orientation="Horizontal">
                         <Button Style="{StaticResource IconTextButtonStyle}"
-                                Content="Annuler les changements"
+                                Content="{DynamicResource UndoChanges}"
                                 Tag="{StaticResource CloseDrawingImage}"
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 HorizontalAlignment="Left"
@@ -776,7 +776,7 @@
                             </ToolTipService.ToolTip>
                         </Image>
                         <Button Style="{StaticResource IconTextButtonStyle}"
-                                Content="Valider les changements"
+                                Content="{DynamicResource ApplyChanges}"
                                 Tag="{StaticResource PlayDrawingImage}"
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 HorizontalAlignment="Right"
