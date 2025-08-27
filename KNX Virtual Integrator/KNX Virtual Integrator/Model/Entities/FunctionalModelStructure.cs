@@ -5,17 +5,31 @@ using System.Windows;
 using System.Xml;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
-
+/// <summary>
+/// Class holding the structure of functional models in a Structure.
+/// </summary>
 public class FunctionalModelStructure : INotifyPropertyChanged
 {
-
+    /// <summary>
+    /// The model to be used as a Structure example.
+    /// </summary>
     public FunctionalModel Model {get; set; }
-
+    /// <summary>
+    /// The class holding defining a DPT and the keywords associated with it.
+    /// </summary>
     public class DptAndKeywords : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Key/Number of the instance.
+        /// </summary>
         public int Key = 0;
-
+        /// <summary>
+        /// List of keywords associated with the <see cref="Dpt"/>.
+        /// </summary>
         private List<string> _keywords = [];
+        /// <summary>
+        /// Gets or sets the list of keywords associated with the <see cref="Dpt"/>.
+        /// </summary>
         public List<string> Keywords
         {
             get => _keywords;
@@ -27,8 +41,13 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 UpdateKeywordList();
             }
         }
-
+        /// <summary>
+        /// String of all the keywords associated with the <see cref="Dpt"/>.
+        /// </summary>
         private string _allKeywords = "";
+        /// <summary>
+        /// Gets or sets the string of all the keywords associated with the <see cref="Dpt"/>.
+        /// </summary>
         public string AllKeywords
         {
             get => _allKeywords;
@@ -40,13 +59,14 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 UpdateKeywords();
             }
         }
-
+        /// <summary>
+        /// The DPT associated with the <see cref="Keywords"/>.
+        /// </summary>
         public DataPointType Dpt { get; set; } = new ();
 
         /// <summary>
         /// Takes a string, and puts all the keywords inside it into the keywords associated
         /// </summary>
-        /// <param name="keywordList">String containing all the keywords separated with commas</param>
         public void UpdateKeywords()
         {
             _keywords.Clear();
@@ -67,9 +87,14 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             _allKeywords = string.Join(',', Keywords);
             OnPropertyChanged(nameof(AllKeywords));
         }
-
+        /// <summary>
+        /// Empty constructor since everything is already initialized.
+        /// </summary>
         public DptAndKeywords() { }
-        
+        /// <summary>
+        /// Copies a DptAndKeywords.
+        /// </summary>
+        /// <param name="other">The DptAndKeywors to copy</param>
         public DptAndKeywords(DptAndKeywords other)
         {
             Key = other.Key;
@@ -79,18 +104,34 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
             PropertyChanged = null; // les handlers ne doivent pas être copiés
         }
-        
-        public event PropertyChangedEventHandler? PropertyChanged = null;
+
+        /// <summary>
+        /// Event that occurs when the DptAndKeywords changes.
+        /// </summary>
+        public event PropertyChangedEventHandler? PropertyChanged;
+        /// <summary>
+        /// Invokes <see cref="PropertyChanged"/> when called.
+        /// </summary>
+        /// <param name="propertyName">The name of the property that was changed.</param>
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
     }
 
     //J'ai choisi de faire démarrer les clés à 1 pour plus de logique pour l'utilisateur
+    /// <summary>
+    /// Dictionary of DPTs and their keywords of the structure.
+    /// </summary>
     public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; set; }
-
+    
     // utilisée dans la liste déroulante de clé à choisir pour les dpts des element structure
+    /// <summary>
+    /// List of DPT keys used when choosing which DPT to use in the TestedElement. 
+    /// </summary>
     public ObservableCollection<int> DptKeys { get; } = new();
 
     // utilisée dans la liste déroulante de dpt à choisir dans un dpt personnalisé
+    /// <summary>
+    /// List of all implemented DPTs from which to choose.
+    /// </summary>
     public static List<int> DefaultDptToChoose { get; } = new List<int>
     {
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 29, 30,
@@ -102,9 +143,18 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     
     // classe qui enrobe un string, notamment pour pouvoir y mettre un setter
     // configurée de manière à ce que son utilisation soit invisible, çàd on peut mettre un item à la place d'un IntItem et ça fonctionne
+    /// <summary>
+    /// Int wrapper to implement <see cref="PropertyChanged"/> and interface visibility handling.
+    /// </summary>
     public class IntItem : INotifyPropertyChanged
     {
+        /// <summary>
+        /// Value of the DPT
+        /// </summary>
         private int _value;
+        /// <summary>
+        /// Gets or sets the value of the DPT
+        /// </summary>
         public int Value
         {
             get => _value;
@@ -114,8 +164,15 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 OnPropertyChanged();
             }
         }
-
+        
+        /// <summary>
+        /// Visibility of the button used to remove a DPT in <see cref="View.Windows.StructureEditWindow"/>
+        /// </summary>
         private Visibility? _removeDptButtonVisibility;
+        /// <summary>
+        /// Gets or sets the visibility of the button used to
+        /// remove a DPT in <see cref="View.Windows.StructureEditWindow"/>
+        /// </summary>
         public Visibility? RemoveDptButtonVisibility
         {
             get => _removeDptButtonVisibility;
@@ -126,65 +183,114 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 OnPropertyChanged();
             }
         }
-        
+        /// <summary>
+        /// Used to "quicken" search of the value since using the item will output directly its value.
+        /// </summary>
+        /// <param name="item">The item whose value will be returned.</param>
+        /// <returns>The value of the item.</returns>
         public static implicit operator int(IntItem item) => item.Value;
-
+        /// <summary>
+        /// To print only the <see cref="Value"/> of the item.
+        /// </summary>
+        /// <returns>The value as a string</returns>
         public override string ToString()
         {
             return Value.ToString();
         }
-        
+        /// <summary>
+        /// Constructs the class with hidden visibility. 
+        /// </summary>
+        /// <param name="value">the value to which <see cref="Value"/> will be initialised.</param>
         public IntItem(int value)
         {
             Value = value;
             RemoveDptButtonVisibility = Visibility.Hidden;
         }
-
+        /// <summary>
+        /// Event that occurs when the IntItem changes.
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
+        /// <summary>
+        /// Invokes <see cref="PropertyChanged"/> when called.
+        /// </summary>
+        /// <param name="name">The name of the property that was changed.</param>
         protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
     
-    // configurée de manière à ce que le IntItem soit invisible, çàd on peut mettre un item à la place d'un IntItem et ça fonctionne
+    /// <summary>
+    /// Barebone structure of TestedElements. It holds the number of CMD, IE and the DPT associated with it.
+    /// </summary>
     public class ElementStructure
     {
+        /// <summary>
+        /// The number of Cmd DPTs in the Element.
+        /// </summary>
         public ObservableCollection<IntItem> Cmd { get; set; }
+        /// <summary>
+        /// The number of Ie DPTs in the Element.
+        /// </summary>
         public ObservableCollection<IntItem> Ie { get; set; }
 
+        /// <summary>
+        /// Adds a new Cmd Dpt.
+        /// </summary>
+        /// <param name="value">The key of the DPT at which the Cmd is initialized.</param>
         public void AddToCmd(int value)
         {
             Cmd.Add(new IntItem(value));
             UpdateRemoveDptButtonVisibility();
         }
 
+        /// <summary>
+        /// Adds a new Ie Dpt.
+        /// </summary>
+        /// <param name="value">The key of the DPT at which the Cmd is initialized.</param>
         public void AddToIe(int value)
         {
             Ie.Add(new IntItem(value));
         }
-
+        /// <summary>
+        /// Removes a Cmd Dpt at an index.
+        /// </summary>
+        /// <param name="cmdIndex">The index of the DPT to remove.</param>
         public void RemoveCmdAt(int cmdIndex)
         {
             Cmd.RemoveAt(cmdIndex);
             UpdateRemoveDptButtonVisibility();
         }
 
+        /// <summary>
+        /// Removes a Ie Dpt at an index.
+        /// </summary>
+        /// <param name="ieIndex">The index of the DPT to remove.</param>
         public void RemoveIeAt(int ieIndex)
         {
             Ie.RemoveAt(ieIndex);
         }
-        
+        /// <summary>
+        /// Creates an empty ElementStructure.
+        /// </summary>
         public ElementStructure()
         {
             Cmd = [];
             Ie = [];
         }
-        
+        /// <summary>
+        /// Creates a filled ElementStructure with <see cref="ObservableCollection{T}"/>.
+        /// </summary>
+        /// <param name="cmdCollection">The collection of Cmd DPT to copy.</param>
+        /// <param name="ieCollection">The collectio of Ie DPT to copy.</param>
         public ElementStructure(ObservableCollection<IntItem> cmdCollection, ObservableCollection<IntItem> ieCollection)
         {
             Cmd = cmdCollection;
             Ie = ieCollection;
         }
-
+        /// <summary>
+        /// Creates a filled ElementStructure with lists.
+        /// </summary>
+        /// <param name="cmdCollection">The list of Cmd DPT to copy.</param>
+        /// <param name="ieCollection">The list of Ie DPT to copy.</param>
         public ElementStructure(List<int> cmdCollection, List<int> ieCollection)
         {
             Cmd = [];
@@ -194,7 +300,10 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             foreach (var ieInt in ieCollection)
                 AddToIe(ieInt);
         }
-
+        /// <summary>
+        /// Copies an ElementStructure.
+        /// </summary>
+        /// <param name="otherStructure">The structure to copy.</param>
         public ElementStructure(ElementStructure otherStructure)
         {
             Cmd = new ObservableCollection<IntItem>();
@@ -204,7 +313,10 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             foreach (var ie in otherStructure.Ie)
                 Ie.Add(new IntItem(ie));
         }
-
+        /// <summary>
+        /// Hides the Cmd remove button if there is only one Cmd DPT.
+        /// Shows the button if there is more.
+        /// </summary>
         private void UpdateRemoveDptButtonVisibility()
         {
             var vis = Cmd.Count > 1 ? Visibility.Visible : Visibility.Hidden;
@@ -214,12 +326,19 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         
     }
     
-    // Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
-    // FullName is used to display the Key and the Name in the SelectedModels listbox in the Mainwindow
+    /// <summary>
+    /// Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
+    /// FullName is used to display the Key and the Name in the SelectedModels listbox in the Mainwindow
+    /// </summary>
     public string FullName => $"S{Model.Key} | {Model.Name}";
-
+    /// <summary>
+    /// The list of ElementStructures of the model
+    /// </summary>
     public ObservableCollection<ElementStructure> ModelStructure { get; set; } = [];
-
+    /// <summary>
+    /// Checks whether the structure is correctly filled (every necessary option is filled)
+    /// </summary>
+    /// <returns>true if it is correctly filled.</returns>
     public bool IsValid()
     {
         if (ModelStructure.Count == 0) return false;
@@ -237,7 +356,10 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         }
         return true;
     }
-    
+    /// <summary>
+    /// Constructor with only the name of the structure and no DPT, keyword or ElementStructure.
+    /// </summary>
+    /// <param name="name"></param>
     public FunctionalModelStructure(string name)
     {
         Model = new FunctionalModel(name);
@@ -245,8 +367,13 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         DptDictionary = [];
         SetUpNotifs();
     }
-
+    /// <summary>
+    /// Keywords of the structure (with the whole structure).
+    /// </summary>
     private List<string> _keywords = [];
+    /// <summary>
+    /// Gets or sets keywords of the structure (with the whole structure).
+    /// </summary>
     public List<string> Keywords
     {
         get => _keywords;
@@ -258,8 +385,13 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             UpdateKeywordList();
         }
     }
-
+    /// <summary>
+    /// The string of all keywords of the structure (of the whole structure).
+    /// </summary>
     private string _allKeywords = "";
+    /// <summary>
+    /// Gets or sets the string of all keywords of the structure (of the whole structure).
+    /// </summary>
     public string AllKeywords
     {
         get => _allKeywords;
@@ -275,7 +407,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// <summary>
     /// Takes a string, and puts all the keywords inside it into the keywords associated
     /// </summary>
-    /// <param name="keywordList">String containing all the keywords separated with commas</param>
     private void UpdateKeywords()
     {
         _keywords.Clear();
@@ -297,6 +428,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         OnPropertyChanged(nameof(AllKeywords));
     }
     
+    /// <summary>
+    /// Creates a ModelStructure.
+    /// </summary>
+    /// <param name="model">The structure.</param>
+    /// <param name="myKey">The future key.</param>
     public FunctionalModelStructure(FunctionalModel model, int myKey)
     {
         Model = new FunctionalModel(model, myKey, false);
@@ -373,7 +509,12 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
     }
 
-    
+    /// <summary>
+    /// Creates a ModelStructure.
+    /// </summary>
+    /// <param name="myName">The future name.</param>
+    /// <param name="model">The structure.</param>
+    /// <param name="myKey">The future key.</param>
     public FunctionalModelStructure(FunctionalModel model, string myName, int myKey)
     {
         Model = new FunctionalModel(model, myKey, false);
@@ -455,7 +596,13 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
     }
 
-    
+    /// <summary>
+    /// Creates a ModelStructure with most of its attributes/properties but only with default CMD/IE. 
+    /// </summary>
+    /// <param name="name">The future name.</param>
+    /// <param name="functionalModels">The future dictionary.</param>
+    /// <param name="modelStructure">The structure of elements.</param>
+    /// <param name="key">The future key.</param>
     public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
         ObservableCollection<ElementStructure> modelStructure, int key) 
     {
@@ -463,9 +610,17 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
         Model = BuildFunctionalModel(name, key);
         SetUpNotifs();
-
     }
     
+    /// <summary>
+    /// Creates a ModelStructure with most of its attributes/properties. 
+    /// </summary>
+    /// <param name="name">The future name.</param>
+    /// <param name="functionalModels">The future dictionary.</param>
+    /// <param name="modelStructure">The structure.</param>
+    /// <param name="cmdValues">The Command DPTs to insert.</param>
+    /// <param name="ieValues">The Ie DPTs to insert.</param>
+    /// <param name="key">The future key.</param>
      public FunctionalModelStructure(string name, Dictionary<int, DptAndKeywords> functionalModels,
         ObservableCollection<ElementStructure> modelStructure,List<List<List<int>>> cmdValues, List<List<List<int>>> ieValues, int key)
     {
@@ -530,7 +685,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         }
     }
 
-    // ce constructeur fait bien une copie profonde, indépendante de la strucuture passée en argument
+    // ce constructeur fait bien une copie profonde, indépendante de la structure passée en argument
+    /// <summary>
+    /// Copy of a modelStructure, independent of the one given in parameters.
+    /// </summary>
+    /// <param name="modelStructure">The structure from which the key, dptDictionary and keywords are taken.</param>
     public FunctionalModelStructure(FunctionalModelStructure modelStructure) 
     {
         AllKeywords = modelStructure.AllKeywords;
@@ -541,7 +700,12 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         foreach(var elementStructure in modelStructure.ModelStructure)
             ModelStructure.Add(new ElementStructure(elementStructure));
     }
-
+    /// <summary>
+    /// Copies a ModelStructure with most of its attributes. 
+    /// </summary>
+    /// <param name="modelStructure">The structure from which the key, dptDictionary and keywords are taken.</param>
+    /// <param name="cmdValues">The Command DPTs to insert.</param>
+    /// <param name="ieValues">The Ie DPTs to insert.</param>
     public FunctionalModelStructure(FunctionalModelStructure modelStructure, List<List<List<int>>> cmdValues,
         List<List<List<int>>> ieValues)
     {
@@ -656,13 +820,20 @@ public class FunctionalModelStructure : INotifyPropertyChanged
 
         return -1;
     }
-    
+    /// <summary>
+    /// Adds an ElementStructure to the ModelStructure.
+    /// </summary>
     public void AddElement()
     {
         ModelStructure.Add(new ElementStructure());
     }
 
-    // Retourne un modèle fabriqué à partir du model structure du functional model structure
+    /// <summary>
+    /// Returns a model built from the model structure.
+    /// </summary>
+    /// <param name="name">the name of the model to build.</param>
+    /// <param name="key">The key of the model to build.</param>
+    /// <returns>The built model.</returns>
     public FunctionalModel BuildFunctionalModel(string name, int key)
     {
         var res = new FunctionalModel(name);
@@ -684,7 +855,12 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         return res;
     }
 
-
+    /// <summary>
+    /// Imports a ModelStructure from an XmlNode.
+    /// </summary>
+    /// <param name="model">The XmlNode from which the ModelStructure is imported.</param>
+    /// <param name="key">The key of the model to build.</param>
+    /// <returns>The new ModelStructure.</returns>
     public static FunctionalModelStructure ImportFunctionalModelStructure(XmlNode model, int key)
     {
         var name = model.Name;
@@ -777,7 +953,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         res.Model.UpdateIntValue();
         return res;
     }
-    
+    /// <summary>
+    /// Exports a ModelStructure by creating an XmlElement from an XmlDocument.
+    /// </summary>
+    /// <param name="doc">The XmlDocument in which the XmlElement is created.</param>
+    /// <returns>The new XmlElement.</returns>
     public XmlElement ExportFunctionalModelStructure(XmlDocument doc)
     {
         var xModel = doc.CreateElement(Model.Name);
@@ -850,9 +1030,15 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         xModel.AppendChild(xModelStructure);
         return xModel;
      }
-
+    /// <summary>
+    /// Override to only display the <see cref="FullName"/> of the modelStructure.
+    /// </summary>
+    /// <returns><see cref="FullName"/>.</returns>
     public override string ToString() => FullName;
-
+    
+    /// <summary>
+    /// Creates a Dpt at the last position in the dictionary.
+    /// </summary>
     public void CreateDpt()
     {
         int newKey = 1;
@@ -860,7 +1046,10 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             newKey = DptDictionary.Keys.Max() + 1;
         DptDictionary.Add(newKey,new DptAndKeywords{Key = newKey,Keywords = new List<string>(), AllKeywords = "",Dpt = new DataPointType(1,"DPT Personnalisé " + newKey)});
     }
-    
+    /// <summary>
+    /// Removes a Dpt from the dictionary.
+    /// </summary>
+    /// <param name="key">The key of the dpt to remove</param>
     public void RemoveDpt(int key)
     {
         DptDictionary.Remove(key);
@@ -883,13 +1072,17 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         }
         return -1;
     }
-
+    /// <summary>
+    /// Sets up updates for the DPT. <seealso cref="SetUpDptKeysUpdate"/><seealso cref="SetUpFullNameUpdate"/>
+    /// </summary>
     private void SetUpNotifs()
     {
         SetUpFullNameUpdate();
         SetUpDptKeysUpdate();
     }
-
+    /// <summary>
+    /// Sets up the Dpt FullName's update
+    /// </summary>
     private void SetUpFullNameUpdate()
     {
         Model.PropertyChanged += (s, e) =>
@@ -904,6 +1097,9 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     // Ces quelques fonctions (SetUpDptKeysUpdate / SubscribeToDpt / UnsubscribeFromDpt / OnDptPropertyChanged) sont là pour gérer la liste de noms de Dpts du dictionnaire
     // Devraient être dans le view model
     // A déplacer plus tard
+    /// <summary>
+    /// Sets up the Dpt Key's update.
+    /// </summary>
     private void SetUpDptKeysUpdate()
     {
         // Initialisation
@@ -934,8 +1130,14 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     }
 
     // Obligé de faire du property changed ici pour gérer la déselection du type de dpt lors du changement de nom d'un des dpts personnalisés
+    /// <summary>
+    /// Event that occurs when the IntItem changes.
+    /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
-
+    /// <summary>
+    /// Invokes <see cref="PropertyChanged"/> when called.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that was changed.</param>
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

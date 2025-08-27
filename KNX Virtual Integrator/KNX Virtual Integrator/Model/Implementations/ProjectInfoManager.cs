@@ -6,6 +6,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 public class ProjectInfoManager(NamespaceResolver namespaceResolver) : IProjectInfoManager
 {
     /// <summary>
+    /// UNUSED CLASS AT THE TIME OF THE BETA
     /// Extracts location information from a specified XML document.
     ///
     /// This method processes the XML document to extract information about spaces categorized as

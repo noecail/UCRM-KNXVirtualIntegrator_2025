@@ -315,7 +315,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         }
         
         /// <summary>
-        /// Updates the BigInteger array of all the DPTs
+        /// Updates the BigInteger array of all the DPTs. <seealso cref="Model.Entities.DataPointType.UpdateIntValue"/>
         /// </summary>
         public void UpdateIntValue()
         {
@@ -330,7 +330,7 @@ namespace KNX_Virtual_Integrator.Model.Entities
         }
 
         /// <summary>
-        /// Updates the GroupValue array of all DPTs
+        /// Updates the GroupValue array of all DPTs. <seealso cref="Model.Entities.DataPointType.UpdateValue"/>
         /// </summary>
         public void UpdateValue()
         {

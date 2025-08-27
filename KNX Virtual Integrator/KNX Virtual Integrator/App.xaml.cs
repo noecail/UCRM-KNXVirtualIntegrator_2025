@@ -177,7 +177,9 @@ namespace KNX_Virtual_Integrator;
  *
  * Bon courage 😉
  */
-
+/// <summary>
+/// The class used in Wpf applications to centralize every element, initialize and close the application.
+/// </summary>
 public partial class App
 {
     /* ------------------------------------------------------------------------------------------------
@@ -198,7 +200,7 @@ public partial class App
     /// <summary>
     /// Represents the build of the application. Updated each time portions of code are merged on github.
     /// </summary>
-    public const int AppBuild = 180;
+    public const int AppBuild = 181;
     
         
     
@@ -266,7 +268,6 @@ public partial class App
         var stringManagement = new StringManagement(groupAddressProcessor);
         var groupAddressMerger = new GroupAddressMerger(stringManagement, logger);
         var groupAddressManager = new GroupAddressManager(logger, projectFileManager, fileLoader, namespaceResolver, groupAddressProcessor, groupAddressMerger);
-        var projectInfoManager = new ProjectInfoManager(namespaceResolver);
         var debugArchiveGenerator = new DebugArchiveGenerator(logger, zipArchiveManager, appSettings);
         var busConnection = new BusConnection(logger, new KnxBusWrapper());
         var groupCommunication = new GroupCommunication(busConnection, logger);
@@ -276,13 +277,10 @@ public partial class App
 
         // Instancier ModelManager avec les dépendances
         ModelManager = new ModelManager(
-            fileLoader,
             fileFinder,
             projectFileManager,
             logger,
-            zipArchiveManager,
             groupAddressManager,
-            systemSettingsDetector,
             debugArchiveGenerator,
             applicationFileManager,
             busConnection,
@@ -290,8 +288,7 @@ public partial class App
             appSettings, 
             parentFinder,
             sliderClickHandler,
-            pdfDocumentCreator,
-            projectInfoManager);
+            pdfDocumentCreator);
         
         // Enregistrer un message de démarrage dans la console et le journal
         ModelManager.Logger.ConsoleAndLogWriteLine($"STARTING {AppName.ToUpper()} V{AppVersion.ToString("0.0", CultureInfo.InvariantCulture)} BUILD {AppBuild}...");
@@ -363,6 +360,7 @@ public partial class App
     }
     
 }
+
 
 
 

@@ -48,4 +48,43 @@ public class ParentFinder (ILogger logger) : IParentFinder
             return null;
         }
     }
+    /*
+    // Méthode récursive qui remonte les parents d'un objet jusqu'à atteindre le parent du type passé en paramètre
+    // Utilisée dans RemoveTestedElementFromStructureButtonClick
+    // Utilisée dans AddTestToElementButtonClick
+    // Utilisée dans RemoveTestFromElementButtonClick
+    /// <summary>
+    /// Recursive method that searches for the parent of the child object of a specific type in the visual tree.
+    /// </summary>
+    /// <param name="child">The child from which we search for the parent.</param>
+    /// <typeparam name="T">The type of item that should be the parent.</typeparam>
+    /// <returns>Either null if not parent is found or the parent (found recursively or not).</returns>
+    private static T? FindParent<T>(DependencyObject child) where T : DependencyObject
+    {
+        var parentObject = VisualTreeHelper.GetParent(child);
+        if (parentObject == null) return null;
+        if (parentObject is T parent) return parent;
+        return FindParent<T>(parentObject);
+    }*/
+    
+    /// <summary>
+    /// Recursive method that searches for the child of the parent that is of a specific type in the visual tree.
+    /// </summary>
+    /// <param name="parent">The parent from which to search.</param>
+    /// <typeparam name="T">The type of the child.</typeparam>
+    /// <returns>The child of the specified type, found recursively.</returns>
+    public static T? FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+    {
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+        {
+            var child = VisualTreeHelper.GetChild(parent, i);
+            if (child is T correctlyTyped)
+                return correctlyTyped;
+
+            var childOfChild = FindVisualChild<T>(child);
+            if (childOfChild != null)
+                return childOfChild;
+        }
+        return null;
+    }
 }
