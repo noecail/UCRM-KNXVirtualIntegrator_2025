@@ -44,7 +44,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         [new FunctionalModelStructure.ElementStructure([1],[2])]
                         //,1
                         ,[[[1,0]]],[[[1,0]]],1
-                    ),false,["Lumiere on/off", "Lumiere on-off", "Lumiere on_off", "Light on/off", "Eclairage_Simple"]);  //Adding On/Off light functional model
+                    ),false,[]);  //Adding On/Off light functional model
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_Variation",
                         new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
                         {
