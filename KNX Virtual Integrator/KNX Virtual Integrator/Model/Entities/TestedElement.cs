@@ -138,8 +138,6 @@ namespace KNX_Virtual_Integrator.Model.Entities
             return result;
         }
         
-        
-
         /// <summary>
         /// This method adds a test pair (value to send, value(s) to read) to the list of tests
         /// </summary>
