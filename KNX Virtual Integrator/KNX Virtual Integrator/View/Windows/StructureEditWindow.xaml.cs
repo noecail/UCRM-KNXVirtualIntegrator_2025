@@ -86,6 +86,8 @@ public partial class StructureEditWindow
             Resources["DptNumber"]="Dpt de numéro :";
             Resources["AddDpt"]="Ajouter un DataPointType";
             Resources["ApplyChangesErrorMessage"] = "Vérifiez votre Structure. Il ne peut y avoir d'Élément à Tester avec des DPTs non assignés. Il faut au moins 1 Élément à Tester.";
+            Resources["ApplyChanges"]="Appliquer les changements";
+            Resources["UndoChanges"]="Annuler les changements";
         }
         else
         {
@@ -105,6 +107,8 @@ public partial class StructureEditWindow
             Resources["DptNumber"]="Dpt number:";
             Resources["AddDpt"]="Add a DataPointType";
             Resources["ApplyChangesErrorMessage"] = "Check your Structure. There can not be any Tested Element with unassigned DPTs. There has to be at least one Tested Element.";
+            Resources["ApplyChanges"]="Apply changes";
+            Resources["UndoChanges"]="Undo changes";
         }
     }
 
