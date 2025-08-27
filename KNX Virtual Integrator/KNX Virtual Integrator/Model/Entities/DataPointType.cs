@@ -12,7 +12,13 @@ namespace KNX_Virtual_Integrator.Model.Entities;
 /// </summary>
 public class DataPointType : INotifyPropertyChanged
 {
+    /// <summary>
+    /// The name of the DataPoint.
+    /// </summary>
     private string _name = "";
+    /// <summary>
+    /// Gets or sets the name of the DataPoint.
+    /// </summary>
     public string Name {
         get => _name;
         set
@@ -23,10 +29,21 @@ public class DataPointType : INotifyPropertyChanged
         }
     }
 
-    // Class used only for Value collections, used by the UI to access and modify BigInteger values, which do not raise notifications by default
+    /// <summary>
+    /// Class used only for Value collections,
+    /// used by the UI to access and modify BigInteger values,
+    /// which do not raise notifications by default.
+    /// It is a sort of wrapper
+    /// </summary>
     public class BigIntegerItem : INotifyPropertyChanged
     {
+        /// <summary>
+        /// The visibility of the Value box in TestedElement.
+        /// </summary>
         private Visibility? _removeTestButtonVisibility ;
+        /// <summary>
+        /// Gets or sets the visibility of the Value box in TestedElement.
+        /// </summary>
         public Visibility? RemoveTestButtonVisibility
         {
             get => _removeTestButtonVisibility;
@@ -37,8 +54,13 @@ public class DataPointType : INotifyPropertyChanged
                 OnPropertyChanged();
             }
         }
-        
+        /// <summary>
+        /// The wrapped BigInteger.
+        /// </summary>
         private BigInteger? _bigIntegervalue;
+        /// <summary>
+        /// Gets or sets the wrapped BigInteger.
+        /// </summary>
         public BigInteger? BigIntegerValue
         {
             get => _bigIntegervalue;
@@ -51,8 +73,13 @@ public class DataPointType : INotifyPropertyChanged
                 }
             }
         }
-
+        /// <summary>
+        /// Boolean determining whether the box is enabled or not.
+        /// </summary>
         private bool _isEnabled;
+        /// <summary>
+        /// Gets or sets the boolean determining whether the box is enabled or not.
+        /// </summary>
         public bool IsEnabled
         {
             get => _isEnabled;
@@ -65,7 +92,11 @@ public class DataPointType : INotifyPropertyChanged
                 }
             }
         }
-
+        /// <summary>
+        /// Initializes the wrapper with a Collapsed visibility and unless the parameter is equal to -1,
+        /// the box is enabled.
+        /// </summary>
+        /// <param name="bi">The <see cref="BigInteger"/> to be wrapped</param>
         public BigIntegerItem(BigInteger bi)
         {
             BigIntegerValue = bi;
@@ -76,25 +107,41 @@ public class DataPointType : INotifyPropertyChanged
                 IsEnabled = false;
             }
         }
-
+        /// <summary>
+        /// The event that occurs when the BigIntegerItem changes. 
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        /// <summary>
+        /// Invokes the event <see cref="PropertyChanged"/> when the BigIntegerItem changes.
+        /// </summary>
         private void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
-    
-    // List of GroupValues to send/read
-    // GroupValues is the type understood by KNX
-    // GroupValues cannot be accessed/modified on the UI because they are not a common type
+    /// <summary>
+    /// List of GroupValues to send/read.
+    /// GroupValues is the type understood by KNX.
+    /// GroupValues cannot be accessed/modified on the UI because they are not a common type.
+    /// </summary>
     public List<GroupValue?> Value { get; set; } // Value to send or expected to be read
-
-    // Collection that is parallel to the GroupValues one
-    // Every change on this collection is copied onto the list
-    // BigIntegers are made modifiable through the BigIntegerItem class
+    /// <summary>
+    /// Collection that is parallel to <see cref="Value"/>.
+    /// Every change on this collection is copied onto the list.
+    /// BigIntegers are made modifiable through the BigIntegerItem class.
+    /// </summary>
     private ObservableCollection<BigIntegerItem?> _intValue = [];
+    /// <summary>
+    /// Gets or sets the collection parallel to <see cref="Value"/>.
+    /// </summary>
+    /// <seealso cref="_intValue"/>
     public ObservableCollection<BigIntegerItem> IntValue { get; set;  } = new ObservableCollection<BigIntegerItem>();
-    
+    /// <summary>
+    /// The type of the Data Point (1, 2, ...).
+    /// </summary>
     private int _type;
+    /// <summary>
+    /// Gets or sets the type of the Data point.
+    /// The setter updates the size. <seealso cref="GetSizeOf"/>
+    /// </summary>
     public int Type // DPT code
     {
         get => _type; 
@@ -105,11 +152,17 @@ public class DataPointType : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
+    /// <summary>
+    /// The size of the DataPoint (1 bit, 2 bits, 1 byte,..). <seealso cref="GetSizeOf"/>
+    /// </summary>
     private int _size; // Size of the DPT
-    
+    /// <summary>
+    /// The Group Address associated with the DataPointType (ex : 0/1/1).
+    /// </summary>
     private string _address = "";
-
+    /// <summary>
+    /// Gets or sets the Group Address of the DataPointType.
+    /// </summary>
     public string Address
     {
         get => _address;
@@ -479,14 +532,22 @@ public class DataPointType : INotifyPropertyChanged
         Address = element.Attributes("Address").First().Value;
         Type = int.Parse(element.Attributes("DPTs").First().Value);
     }
-
+    /// <summary>
+    /// Event that occurs when the DataPointType changes.
+    /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
-
+    /// <summary>
+    /// Invokes <see cref="PropertyChanged"/> when called.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that was changed.</param>
     protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
-
+    /// <summary>
+    /// Override to only return the name of the DataPointType.
+    /// </summary>
+    /// <returns><see cref="Name"/></returns>
     public override string ToString()
     {
         return Name;

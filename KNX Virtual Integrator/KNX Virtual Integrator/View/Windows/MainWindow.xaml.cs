@@ -595,11 +595,6 @@ public partial class MainWindow
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"Dictionary saved at: {saveFileDialog.FileName}");
             
             if (File.Exists(saveFileDialog.FileName)) File.Delete(saveFileDialog.FileName);
-            //File.Copy(debugArchiveName, $"{saveFileDialog.FileName}");
-            
-            // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            //if (_viewModel.ExtractGroupAddressFileCommand is RelayCommandWithResult<string, bool> command &&
-            //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
             _viewModel.ExportListAndDictionaryCommand.Execute(saveFileDialog.FileName);
@@ -650,10 +645,6 @@ public partial class MainWindow
             // Récupérer le chemin du fichier sélectionné
             _viewModel.ConsoleAndLogWriteLineCommand.Execute($"File selected: {openFileDialog.FileName}");
 
-            // Si le file manager n'existe pas ou que l'on n'a pas réussi à extraire les fichiers du projet, on annule l'opération
-            //if (_viewModel.ExtractGroupAddressFileCommand is RelayCommandWithResult<string, bool> command &&
-            //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
-            
             _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
             _viewModel.ImportListAndDictionaryCommand
                 .Execute(openFileDialog.FileName);
@@ -1191,7 +1182,7 @@ public partial class MainWindow
     // Utilisée dans AddTestToElementButtonClick
     // Utilisée dans RemoveTestFromElementButtonClick
     /// <summary>
-    /// Recursive method that searches for the parent of the child object that is of the specified type.
+    /// Recursive method that searches for the parent of the child object of a specific type in the visual tree.
     /// </summary>
     /// <param name="child">The child from which we search for the parent.</param>
     /// <typeparam name="T">The type of item that should be the parent.</typeparam>
@@ -1205,7 +1196,7 @@ public partial class MainWindow
     }
     
     /// <summary>
-    /// Recursive method that searches for the child of the parent that is of the specified type.
+    /// Recursive method that searches for the child of the parent that is of a specific type in the visual tree.
     /// </summary>
     /// <param name="parent">The parent from which to search.</param>
     /// <typeparam name="T">The type of the child.</typeparam>
