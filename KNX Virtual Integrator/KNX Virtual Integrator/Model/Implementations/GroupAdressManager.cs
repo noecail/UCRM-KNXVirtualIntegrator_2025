@@ -596,6 +596,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         if (index != -1)
                         {
                             var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
+                            foreach(var newModel in newFunctionalModels)
+                            {
+                                newModel.BuildCmdIntValues(model.Model);
+                            }
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {
                                 var objectType = structureList[i].Elements().ToList();
