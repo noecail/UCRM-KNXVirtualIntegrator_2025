@@ -163,7 +163,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
     ///     Individual Address for the given IP Secure interface
     /// </summary>
     // TODO : Do not hardcode it, use the connectionParameters to have it
-    public string InterfaceAddress = "1.1.255";
+    public string InterfaceAddress { get; set; }= "1.1.255";
 
     /// <summary>
     ///     Private property that is handled by <see cref="KeysFilePassword"/>
