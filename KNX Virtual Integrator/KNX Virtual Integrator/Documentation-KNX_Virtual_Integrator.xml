@@ -304,6 +304,143 @@
             </summary>
             <returns><see cref="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.Name"/></returns>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords">
+            <summary>
+            The class holding defining a DPT and the keywords associated with it.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Key">
+            <summary>
+            Key/Number of the instance.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords._keywords">
+            <summary>
+            List of keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Dpt"/>.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Keywords">
+            <summary>
+            Gets or sets the list of keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Dpt"/>.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords._allKeywords">
+            <summary>
+            String of all the keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Dpt"/>.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.AllKeywords">
+            <summary>
+            Gets or sets the string of all the keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Dpt"/>.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Dpt">
+            <summary>
+            The DPT associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.Keywords"/>.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.UpdateKeywords">
+            <summary>
+            Takes a string, and puts all the keywords inside it into the keywords associated
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.UpdateKeywordList">
+            <summary>
+            Takes all the keywords associated to a dpt and group them, separating them with commas
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.#ctor">
+            <summary>
+            Empty constructor since everything is already initialized.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.#ctor(KNX_Virtual_Integrator.Model.Entities.DptAndKeywords)">
+            <summary>
+            Copies a DptAndKeywords.
+            </summary>
+            <param name="other">The DptAndKeywors to copy</param>
+        </member>
+        <member name="E:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.PropertyChanged">
+            <summary>
+            Event that occurs when the DptAndKeywords changes.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.OnPropertyChanged(System.String)">
+            <summary>
+            Invokes <see cref="E:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.PropertyChanged"/> when called.
+            </summary>
+            <param name="propertyName">The name of the property that was changed.</param>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Entities.ElementStructure">
+            <summary>
+            Barebone structure of TestedElements. It holds the number of CMD, IE and the DPT associated with it.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.ElementStructure.Cmd">
+            <summary>
+            The number of Cmd DPTs in the Element.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.ElementStructure.Ie">
+            <summary>
+            The number of Ie DPTs in the Element.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.AddToCmd(System.Int32)">
+            <summary>
+            Adds a new Cmd Dpt.
+            </summary>
+            <param name="value">The key of the DPT at which the Cmd is initialized.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.AddToIe(System.Int32)">
+            <summary>
+            Adds a new Ie Dpt.
+            </summary>
+            <param name="value">The key of the DPT at which the Cmd is initialized.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.RemoveCmdAt(System.Int32)">
+            <summary>
+            Removes a Cmd Dpt at an index.
+            </summary>
+            <param name="cmdIndex">The index of the DPT to remove.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.RemoveIeAt(System.Int32)">
+            <summary>
+            Removes a Ie Dpt at an index.
+            </summary>
+            <param name="ieIndex">The index of the DPT to remove.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.#ctor">
+            <summary>
+            Creates an empty ElementStructure.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.#ctor(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.IntItem},System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.IntItem})">
+            <summary>
+            Creates a filled ElementStructure with <see cref="T:System.Collections.ObjectModel.ObservableCollection`1"/>.
+            </summary>
+            <param name="cmdCollection">The collection of Cmd DPT to copy.</param>
+            <param name="ieCollection">The collectio of Ie DPT to copy.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.#ctor(System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Creates a filled ElementStructure with lists.
+            </summary>
+            <param name="cmdCollection">The list of Cmd DPT to copy.</param>
+            <param name="ieCollection">The list of Ie DPT to copy.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.#ctor(KNX_Virtual_Integrator.Model.Entities.ElementStructure)">
+            <summary>
+            Copies an ElementStructure.
+            </summary>
+            <param name="otherStructure">The structure to copy.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.UpdateRemoveDptButtonVisibility">
+            <summary>
+            Hides the Cmd remove button if there is only one Cmd DPT.
+            Shows the button if there is more.
+            </summary>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Entities.FunctionalModel">
              <summary>
              Represents a functional model with a unique key, name, and DPT (Data Point Type) value.
@@ -502,73 +639,6 @@
             The model to be used as a Structure example.
             </summary>
         </member>
-        <member name="T:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords">
-            <summary>
-            The class holding defining a DPT and the keywords associated with it.
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Key">
-            <summary>
-            Key/Number of the instance.
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords._keywords">
-            <summary>
-            List of keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Dpt"/>.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Keywords">
-            <summary>
-            Gets or sets the list of keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Dpt"/>.
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords._allKeywords">
-            <summary>
-            String of all the keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Dpt"/>.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.AllKeywords">
-            <summary>
-            Gets or sets the string of all the keywords associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Dpt"/>.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Dpt">
-            <summary>
-            The DPT associated with the <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.Keywords"/>.
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.UpdateKeywords">
-            <summary>
-            Takes a string, and puts all the keywords inside it into the keywords associated
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.UpdateKeywordList">
-            <summary>
-            Takes all the keywords associated to a dpt and group them, separating them with commas
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.#ctor">
-            <summary>
-            Empty constructor since everything is already initialized.
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.#ctor(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords)">
-            <summary>
-            Copies a DptAndKeywords.
-            </summary>
-            <param name="other">The DptAndKeywors to copy</param>
-        </member>
-        <member name="E:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.PropertyChanged">
-            <summary>
-            Event that occurs when the DptAndKeywords changes.
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.OnPropertyChanged(System.String)">
-            <summary>
-            Invokes <see cref="E:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords.PropertyChanged"/> when called.
-            </summary>
-            <param name="propertyName">The name of the property that was changed.</param>
-        </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptDictionary">
             <summary>
             Dictionary of DPTs and their keywords of the structure.
@@ -582,132 +652,6 @@
         <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DefaultDptToChoose">
             <summary>
             List of all implemented DPTs from which to choose.
-            </summary>
-        </member>
-        <member name="T:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem">
-            <summary>
-            Int wrapper to implement <see cref="E:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.PropertyChanged"/> and interface visibility handling.
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem._value">
-            <summary>
-            Value of the DPT
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.Value">
-            <summary>
-            Gets or sets the value of the DPT
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem._removeDptButtonVisibility">
-            <summary>
-            Visibility of the button used to remove a DPT in <see cref="T:KNX_Virtual_Integrator.View.Windows.StructureEditWindow"/>
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.RemoveDptButtonVisibility">
-            <summary>
-            Gets or sets the visibility of the button used to
-            remove a DPT in <see cref="T:KNX_Virtual_Integrator.View.Windows.StructureEditWindow"/>
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.op_Implicit(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem)~System.Int32">
-            <summary>
-            Used to "quicken" search of the value since using the item will output directly its value.
-            </summary>
-            <param name="item">The item whose value will be returned.</param>
-            <returns>The value of the item.</returns>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.ToString">
-            <summary>
-            To print only the <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.Value"/> of the item.
-            </summary>
-            <returns>The value as a string</returns>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.#ctor(System.Int32)">
-            <summary>
-            Constructs the class with hidden visibility. 
-            </summary>
-            <param name="value">the value to which <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.Value"/> will be initialised.</param>
-        </member>
-        <member name="E:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.PropertyChanged">
-            <summary>
-            Event that occurs when the IntItem changes.
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.OnPropertyChanged(System.String)">
-            <summary>
-            Invokes <see cref="E:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem.PropertyChanged"/> when called.
-            </summary>
-            <param name="name">The name of the property that was changed.</param>
-        </member>
-        <member name="T:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure">
-            <summary>
-            Barebone structure of TestedElements. It holds the number of CMD, IE and the DPT associated with it.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.Cmd">
-            <summary>
-            The number of Cmd DPTs in the Element.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.Ie">
-            <summary>
-            The number of Ie DPTs in the Element.
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.AddToCmd(System.Int32)">
-            <summary>
-            Adds a new Cmd Dpt.
-            </summary>
-            <param name="value">The key of the DPT at which the Cmd is initialized.</param>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.AddToIe(System.Int32)">
-            <summary>
-            Adds a new Ie Dpt.
-            </summary>
-            <param name="value">The key of the DPT at which the Cmd is initialized.</param>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.RemoveCmdAt(System.Int32)">
-            <summary>
-            Removes a Cmd Dpt at an index.
-            </summary>
-            <param name="cmdIndex">The index of the DPT to remove.</param>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.RemoveIeAt(System.Int32)">
-            <summary>
-            Removes a Ie Dpt at an index.
-            </summary>
-            <param name="ieIndex">The index of the DPT to remove.</param>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.#ctor">
-            <summary>
-            Creates an empty ElementStructure.
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.#ctor(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem},System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.IntItem})">
-            <summary>
-            Creates a filled ElementStructure with <see cref="T:System.Collections.ObjectModel.ObservableCollection`1"/>.
-            </summary>
-            <param name="cmdCollection">The collection of Cmd DPT to copy.</param>
-            <param name="ieCollection">The collectio of Ie DPT to copy.</param>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.#ctor(System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
-            <summary>
-            Creates a filled ElementStructure with lists.
-            </summary>
-            <param name="cmdCollection">The list of Cmd DPT to copy.</param>
-            <param name="ieCollection">The list of Ie DPT to copy.</param>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.#ctor(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure)">
-            <summary>
-            Copies an ElementStructure.
-            </summary>
-            <param name="otherStructure">The structure to copy.</param>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure.UpdateRemoveDptButtonVisibility">
-            <summary>
-            Hides the Cmd remove button if there is only one Cmd DPT.
-            Shows the button if there is more.
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.FullName">
@@ -778,7 +722,7 @@
             <param name="model">The structure.</param>
             <param name="myKey">The future key.</param>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.#ctor(System.String,System.Collections.Generic.Dictionary{System.Int32,KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords},System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure},System.Int32)">
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.#ctor(System.String,System.Collections.Generic.Dictionary{System.Int32,KNX_Virtual_Integrator.Model.Entities.DptAndKeywords},System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.ElementStructure},System.Int32)">
             <summary>
             Creates a ModelStructure with most of its attributes/properties but only with default CMD/IE. 
             </summary>
@@ -787,7 +731,7 @@
             <param name="modelStructure">The structure of elements.</param>
             <param name="key">The future key.</param>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.#ctor(System.String,System.Collections.Generic.Dictionary{System.Int32,KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.DptAndKeywords},System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ElementStructure},System.Collections.Generic.List{System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}}},System.Collections.Generic.List{System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}}},System.Int32)">
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.#ctor(System.String,System.Collections.Generic.Dictionary{System.Int32,KNX_Virtual_Integrator.Model.Entities.DptAndKeywords},System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.ElementStructure},System.Collections.Generic.List{System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}}},System.Collections.Generic.List{System.Collections.Generic.List{System.Collections.Generic.List{System.Int32}}},System.Int32)">
             <summary>
             Creates a ModelStructure with most of its attributes/properties. 
             </summary>
@@ -903,6 +847,64 @@
             Invokes <see cref="E:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.PropertyChanged"/> when called.
             </summary>
             <param name="propertyName">The name of the property that was changed.</param>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Entities.IntItem">
+            <summary>
+            Int wrapper
+            Used to have a setter
+            <see cref="E:KNX_Virtual_Integrator.Model.Entities.IntItem.PropertyChanged"/> and interface visibility handling.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.IntItem._value">
+            <summary>
+            Value of the DPT
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.IntItem.Value">
+            <summary>
+            Gets or sets the value of the DPT
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.IntItem._removeDptButtonVisibility">
+            <summary>
+            Visibility of the button used to remove a DPT in <see cref="T:KNX_Virtual_Integrator.View.Windows.StructureEditWindow"/>
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.IntItem.RemoveDptButtonVisibility">
+            <summary>
+            Gets or sets the visibility of the button used to
+            remove a DPT in <see cref="T:KNX_Virtual_Integrator.View.Windows.StructureEditWindow"/>
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.IntItem.op_Implicit(KNX_Virtual_Integrator.Model.Entities.IntItem)~System.Int32">
+            <summary>
+            Used to "quicken" search of the value since using the item will output directly its value.
+            </summary>
+            <param name="item">The item whose value will be returned.</param>
+            <returns>The value of the item.</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.IntItem.ToString">
+            <summary>
+            To print only the <see cref="P:KNX_Virtual_Integrator.Model.Entities.IntItem.Value"/> of the item.
+            </summary>
+            <returns>The value as a string</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.IntItem.#ctor(System.Int32)">
+            <summary>
+            Constructs the class with hidden visibility. 
+            </summary>
+            <param name="value">the value to which <see cref="P:KNX_Virtual_Integrator.Model.Entities.IntItem.Value"/> will be initialised.</param>
+        </member>
+        <member name="E:KNX_Virtual_Integrator.Model.Entities.IntItem.PropertyChanged">
+            <summary>
+            Event that occurs when the IntItem changes.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.IntItem.OnPropertyChanged(System.String)">
+            <summary>
+            Invokes <see cref="E:KNX_Virtual_Integrator.Model.Entities.IntItem.PropertyChanged"/> when called.
+            </summary>
+            <param name="name">The name of the property that was changed.</param>
         </member>
         <member name="T:KNX_Virtual_Integrator.Model.Entities.ObservableDictionary`2">
             <summary>
@@ -1358,7 +1360,7 @@
                 Hardcoded default port for connection with NAT (3671 is the default for KNX)
             </summary>
         </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Implementations.BusConnection.InterfaceAddress">
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.BusConnection.InterfaceAddress">
             <summary>
                 Individual Address for the given IP Secure interface
             </summary>
@@ -2572,6 +2574,11 @@
         <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IBusConnection.NatAccess">
             <summary>
                 Property that indicates whether we use NAT to access the interface.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IBusConnection.InterfaceAddress">
+            <summary>
+                Individual Address for the given IP Secure interface
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IBusConnection.KeysFilePassword">
@@ -4659,6 +4666,12 @@
             Handles the Model Edit window closing event by canceling the closure, restoring previous settings, and hiding the window.
             </summary>
         </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.UpdateWindowContents(System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Updates the contents (texts, textboxes, checkboxes, ...) of the structure edit window according to the application settings.
+            TODO: implement later
+            </summary>
+        </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.RemoveTestedElementFromModelStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
             <summary>
             Handles the button click event to remove a Tested Element from a Functional Model.
@@ -4832,6 +4845,36 @@
         <member name="M:KNX_Virtual_Integrator.View.Windows.TestConfigWindow.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
             </summary>
         </member>
     </members>

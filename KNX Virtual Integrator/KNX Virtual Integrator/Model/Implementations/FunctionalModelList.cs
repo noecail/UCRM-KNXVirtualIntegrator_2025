@@ -348,16 +348,16 @@ public class FunctionalModelList : IFunctionalModelList
         doc.Load(path);
         XmlNodeList? xnList = doc.DocumentElement?.ChildNodes;
         foreach (XmlNode ok in xnList){
-            if (ok.Name == "Dictionary")
+            if (ok.Name == "Dictionary"&& ok.ChildNodes[0]?.ChildNodes!=null)
             {
-                ImportDictionary(ok.ChildNodes[0].ChildNodes);
+                ImportDictionary(ok.ChildNodes[0]?.ChildNodes!);
             }
         }
         foreach (XmlNode ok in xnList)
         {
-            if (ok.Name == "List")
+            if (ok.Name == "List"&& ok.ChildNodes[0]?.ChildNodes!=null)
             {
-                ImportList(ok.ChildNodes[0].ChildNodes);
+                ImportList(ok.ChildNodes[0]?.ChildNodes!);
             }
         }     
     }

@@ -47,11 +47,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
         if (namespaceResolver.GlobalKnxNamespace == null) return null;
 
-        if (filePath == manager.ZeroXmlPath)
+        if (filePath == manager.ZeroXmlPath) //If the processes difle is a ets project
         {
             groupAddressFile = NewProcessZeroXmlFile(groupAddressFile, functionalModelList);
         }
-        else
+        else //If it is a group address file
         {
             NewProcessStandardXmlFile(groupAddressFile.Root?.Elements(), functionalModelList);
         }
@@ -78,9 +78,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         var groupAddresses = doc.Descendants(ns + "GroupRanges");
 
         NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);
-        XDocument document = new XDocument(
-            new XElement("Root", GroupedAddresses)
-        );
+        XDocument document = new XDocument(new XElement("Root", groupAddresses));
         return document;
 
     }
