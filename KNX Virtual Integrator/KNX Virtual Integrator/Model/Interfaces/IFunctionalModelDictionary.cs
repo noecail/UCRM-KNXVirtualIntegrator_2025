@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Xml;
 using KNX_Virtual_Integrator.Model.Entities;
 
 namespace KNX_Virtual_Integrator.Model.Interfaces
@@ -32,8 +33,14 @@ namespace KNX_Virtual_Integrator.Model.Interfaces
 
         
         public void ImportDictionary(string path);
+
+        public void ImportDictionary(XmlNodeList? xnList);
+
         
         public void ExportDictionary(string path);
+
+        public XmlElement ExportDictionary(XmlDocument doc);
+
 
         public int CheckName(string name);
 

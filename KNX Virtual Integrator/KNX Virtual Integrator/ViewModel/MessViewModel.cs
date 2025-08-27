@@ -128,7 +128,11 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand ImportDictionaryCommand  { get; private set; }
 
         public ICommand ExportDictionaryCommand  { get; private set; }
-
+        
+        public ICommand ImportListAndDictionaryCommand {get; private set;}
+        
+        public ICommand ExportListAndDictionaryCommand {get; private set;}
+        
         public ICommand ImportListCommand  { get; private set; }
 
         public ICommand ExportListCommand  { get; private set; }

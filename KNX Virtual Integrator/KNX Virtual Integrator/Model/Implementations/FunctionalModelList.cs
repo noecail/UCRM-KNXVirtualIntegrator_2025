@@ -209,6 +209,11 @@ public class FunctionalModelList : IFunctionalModelList
         FunctionalModelDictionary.ExportDictionary(path);
     }
     
+    public XmlElement ExportDictionary(XmlDocument doc)
+    {
+        return (FunctionalModelDictionary.ExportDictionary(doc));
+    }
+    
     /// <summary>
     /// Imports an XML file representing the dictionary.
     /// </summary>
@@ -217,6 +222,12 @@ public class FunctionalModelList : IFunctionalModelList
     {
         FunctionalModels.Clear();
         FunctionalModelDictionary.ImportDictionary(path);
+    }
+    
+    public void ImportDictionary(XmlNodeList xnList)
+    {
+        FunctionalModels.Clear();
+        FunctionalModelDictionary.ImportDictionary(xnList);
     }
 
     /// <summary>
@@ -240,8 +251,25 @@ public class FunctionalModelList : IFunctionalModelList
     /// </summary>
     /// <param name="path">Path where the XML has to be exported </param>
     public void ExportList(string path)
+       {
+           var doc = new XmlDocument();
+           var project = doc.CreateElement("Project");
+           foreach (var modelStructure in FunctionalModels)
+           {
+               var structure = doc.CreateElement(FunctionalModelDictionary.FunctionalModels[FunctionalModels.FindIndex(l => l == modelStructure)].Model.Name);
+               foreach (var model in modelStructure)
+               {
+                   var functionalModel = model.ExportFunctionalModel(doc);
+                   structure.AppendChild(functionalModel);
+               }
+   
+               project.AppendChild(structure);
+           }
+           doc.AppendChild(project);
+           doc.Save(path + ".xml");
+       }
+ public XmlElement ExportList(XmlDocument doc)
     {
-        var doc = new XmlDocument();
         var project = doc.CreateElement("Project");
         foreach (var modelStructure in FunctionalModels)
         {
@@ -255,7 +283,21 @@ public class FunctionalModelList : IFunctionalModelList
             project.AppendChild(structure);
         }
         doc.AppendChild(project);
-        doc.Save(path + ".xml");
+        return project;
+    }
+ 
+    public void ExportListAndDictionary(string path)
+    {
+        var doc = new XmlDocument();
+        var xDictionary = doc.CreateElement("Dictionary");
+        xDictionary.AppendChild(ExportDictionary(doc));
+        var xList = doc.CreateElement("List");
+        xList.AppendChild(ExportList(doc));
+        XmlElement Root = doc.CreateElement("Root");
+        Root.AppendChild(xList);
+        Root.AppendChild(xDictionary);
+        doc.AppendChild(Root);
+        doc.Save(path);
     }
 
     public void ImportList(string path)
@@ -274,6 +316,50 @@ public class FunctionalModelList : IFunctionalModelList
                 _nbModelsCreated[i]++;
             }
         }
+    }
+    
+    public void ImportList(XmlNodeList? xnList)
+    {
+        FunctionalModels.Clear();
+        _nbModelsCreated.Clear();
+        for (var i = 0;i<xnList?.Count;i++) // pour chaque structure
+        {
+            FunctionalModels.Add([]);
+            _nbModelsCreated.Add(0);
+            foreach (XmlNode model in xnList[i]?.ChildNodes!) // pour chaque modèle
+            {
+                FunctionalModels[i].Add(FunctionalModel.ImportFunctionalModel(model));
+                if (FunctionalModels[i].Count > 1)
+                {
+                    FunctionalModels[i][^1].Key = FunctionalModels[i][^2].Key +1;
+                }
+                else
+                {
+                    FunctionalModels[i][^1].Key = 1;
+                }
+                _nbModelsCreated[i]++;
+            }
+        }
+    }
+
+    public void ImportListAndDictionary(string path)
+    {
+        var doc = new XmlDocument();
+        doc.Load(path);
+        XmlNodeList? xnList = doc.DocumentElement?.ChildNodes;
+        foreach (XmlNode ok in xnList){
+            if (ok.Name == "Dictionary")
+            {
+                ImportDictionary(ok.ChildNodes[0].ChildNodes);
+            }
+        }
+        foreach (XmlNode ok in xnList)
+        {
+            if (ok.Name == "List")
+            {
+                ImportList(ok.ChildNodes[0].ChildNodes);
+            }
+        }     
     }
 
     public void ReinitializeNbModels(int index)

@@ -33,6 +33,8 @@ public interface IFunctionalModelList : INotifyPropertyChanged
     public void ImportDictionary(string path);
     public void ExportList(string path);
     public void ImportList(string path);
+    public void ExportListAndDictionary(string path);
+    public void ImportListAndDictionary(string path);
     public void ResetCount(int index);
     public void ReinitializeNbModels(int index);
     public void AddNewEmptyStruct();

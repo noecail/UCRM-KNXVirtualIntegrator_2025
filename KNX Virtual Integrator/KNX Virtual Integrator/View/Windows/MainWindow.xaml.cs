@@ -602,7 +602,7 @@ public partial class MainWindow
             //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
-            _viewModel.ExportDictionaryCommand.Execute(saveFileDialog.FileName);
+            _viewModel.ExportListAndDictionaryCommand.Execute(saveFileDialog.FileName);
         }
         else
         {
@@ -655,7 +655,8 @@ public partial class MainWindow
             //    !command.ExecuteWithResult(openFileDialog.FileName)) return;
             
             _cancellationTokenSource = new CancellationTokenSource(); // à VOIR SI UTILE ICI
-            _viewModel.ImportDictionaryCommand.Execute(openFileDialog.FileName);
+            _viewModel.ImportListAndDictionaryCommand
+                .Execute(openFileDialog.FileName);
         }
         else
         {

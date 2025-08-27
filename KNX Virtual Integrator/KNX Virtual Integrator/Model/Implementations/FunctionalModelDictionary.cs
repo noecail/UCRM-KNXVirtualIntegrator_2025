@@ -209,7 +209,26 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             doc.Save(path + ".xml");
         }
 
-        
+        public XmlElement ExportDictionary(XmlDocument doc)
+        {
+            var project = doc.CreateElement("Dictionary");
+            foreach (var model in GetAllModels())
+            {
+                var functionalModel = model.ExportFunctionalModelStructure(doc);
+                var keywords = doc.CreateElement("Keywords");
+                foreach (var keyword in model.Keywords)
+                {
+                    var xKeyword = doc.CreateElement("Keyword");
+                    xKeyword.InnerText = keyword;
+                    keywords.AppendChild(xKeyword);
+                }
+                functionalModel.AppendChild(keywords);
+                project.AppendChild(functionalModel);
+            }
+
+            return(project);
+        }
+
         /// <summary>
         /// Imports a functional model dictionary from a path.
         /// </summary>
@@ -220,6 +239,32 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             var doc = new XmlDocument();
             doc.Load(path);
             var xnList = doc.DocumentElement?.ChildNodes;
+            if (xnList == null)
+                return;
+            for (var i = 0; i < xnList.Count;i++) // pour chaque modèle
+            {
+                var model = xnList[i];
+                if (model != null){
+                    AddFunctionalModel(FunctionalModelStructure.ImportFunctionalModelStructure(model,i+1),true);
+                    foreach (XmlNode element in model.ChildNodes!)
+                    {
+                        if (element.Name == "Keywords")
+                        {
+                            foreach (XmlNode keyword in element.ChildNodes)
+                            {
+                                FunctionalModels[i].Keywords.Add(keyword.InnerText);
+                            }
+                        }
+                    }
+                    FunctionalModels[i].UpdateKeywordList();
+                }
+            }
+        }
+        
+        public void ImportDictionary(XmlNodeList xnList)
+        {
+            FunctionalModels.Clear();
+            _nbStructuresCreated = 0;
             if (xnList == null)
                 return;
             for (var i = 0; i < xnList.Count;i++) // pour chaque modèle

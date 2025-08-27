@@ -502,6 +502,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     _functionalModelList.ImportList(path);
             }
         );
+        
+        ExportListAndDictionaryCommand = new Commands.RelayCommand<string>(path =>
+            {
+                if (path != null)
+                    _functionalModelList.ExportListAndDictionary(path);
+            }
+        );
+                
+        ImportListAndDictionaryCommand = new Commands.RelayCommand<string>(path =>
+            {
+                if (path != null)
+                    _functionalModelList.ImportListAndDictionary(path);
+            }
+        );
 
 
         ConnectBusCommand = new AsyncRelayCommand(
