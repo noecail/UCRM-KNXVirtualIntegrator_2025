@@ -50,7 +50,10 @@ public partial class StructureEditWindow
         Hide();
     }    
     
-    // TODO : implement later
+    /// <summary>
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the structure edit window according to the application settings.
+    /// TODO: implement later
+    /// </summary>
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
         if (langChanged)
@@ -269,9 +272,9 @@ public partial class StructureEditWindow
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var ieValuesListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        ObservableCollection<DataPointType.BigIntegerItem>? ieValuesItem = null;
+        ObservableCollection<BigIntegerItem>? ieValuesItem = null;
         if (listBoxItem != null)
-            ieValuesItem = (ObservableCollection<DataPointType.BigIntegerItem>)listBoxItem.DataContext; // Élément TestsIe parent
+            ieValuesItem = (ObservableCollection<BigIntegerItem>)listBoxItem.DataContext; // Élément TestsIe parent
         int indexDpt = 0;
         if (ieValuesItem != null) 
             indexDpt = ieValuesListBox.Items.IndexOf(ieValuesItem); // Index de cet élément dans TestsIe
@@ -345,9 +348,9 @@ public partial class StructureEditWindow
         // Find the DPT's index
         var listBoxItem = FindParent<ListBoxItem>(button); // On remonte jusqu’au ListBoxItem parent
         var ieValuesListBox = ItemsControl.ItemsControlFromItemContainer(listBoxItem); // Le ListBox parent est celui lié à TestsIe
-        ObservableCollection<DataPointType.BigIntegerItem>? ieValuesItem = null;
+        ObservableCollection<BigIntegerItem>? ieValuesItem = null;
         if (listBoxItem != null)
-            ieValuesItem = (ObservableCollection<DataPointType.BigIntegerItem>)listBoxItem.DataContext; // Élément TestsIe parent
+            ieValuesItem = (ObservableCollection<BigIntegerItem>)listBoxItem.DataContext; // Élément TestsIe parent
         int indexDpt = 0;
         if (ieValuesItem != null) 
             indexDpt = ieValuesListBox.Items.IndexOf(ieValuesItem); // Index de cet élément dans TestsIe
@@ -438,7 +441,7 @@ public partial class StructureEditWindow
         var button = sender as Button; // Récupérer le bouton cliqué
         if (button == null) return;
         var item = button.DataContext; // Le DataContext est l'élément du dictionnaire (KeyValuePair<,>)
-        if (item is KeyValuePair<int, FunctionalModelStructure.DptAndKeywords> kvp) // Si c'est un KeyValuePair<int, FunctionalModelStructure.DptAndKeywords>
+        if (item is KeyValuePair<int, DptAndKeywords> kvp) // Si c'est un KeyValuePair<int, FunctionalModelStructure.DptAndKeywords>
             _viewModel.RemoveDptFromDictionaryCommand.Execute((kvp.Key,_viewModel.SelectedStructure));
     }
 

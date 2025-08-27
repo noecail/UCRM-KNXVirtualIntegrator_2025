@@ -6,6 +6,9 @@
     <members>
         <member name="T:KNX_Virtual_Integrator.App">
             <summary>
+            The class used in Wpf applications to centralize every element, initialize and close the application.
+            </summary>
+            <summary>
             App
             </summary>
         </member>
@@ -76,6 +79,61 @@
             Application Entry Point.
             </summary>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem">
+            <summary>
+            Class used only for Value collections,
+            used by the UI to access and modify BigInteger values,
+            which do not raise notifications by default.
+            It is a sort of wrapper
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem._removeTestButtonVisibility">
+            <summary>
+            The visibility of the Value box in TestedElement.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.RemoveTestButtonVisibility">
+            <summary>
+            Gets or sets the visibility of the Value box in TestedElement.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem._bigIntegervalue">
+            <summary>
+            The wrapped BigInteger.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.BigIntegerValue">
+            <summary>
+            Gets or sets the wrapped BigInteger.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem._isEnabled">
+            <summary>
+            Boolean determining whether the box is enabled or not.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.IsEnabled">
+            <summary>
+            Gets or sets the boolean determining whether the box is enabled or not.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.#ctor(System.Numerics.BigInteger)">
+            <summary>
+            Initializes the wrapper with a Collapsed visibility and unless the parameter is equal to -1,
+            the box is enabled.
+            </summary>
+            <param name="bi">The <see cref="T:System.Numerics.BigInteger"/> to be wrapped</param>
+        </member>
+        <member name="E:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.PropertyChanged">
+            <summary>
+            The event that occurs when the BigIntegerItem changes. 
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.OnPropertyChanged(System.String)">
+            <summary>
+            Invokes the event <see cref="E:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.PropertyChanged"/> when the BigIntegerItem changes.
+            </summary>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Entities.DataPointType">
             <summary>
             Represents a DataPointType with : its type code, size, address and values expected to be sent or read
@@ -91,61 +149,6 @@
             Gets or sets the name of the DataPoint.
             </summary>
         </member>
-        <member name="T:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem">
-            <summary>
-            Class used only for Value collections,
-            used by the UI to access and modify BigInteger values,
-            which do not raise notifications by default.
-            It is a sort of wrapper
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem._removeTestButtonVisibility">
-            <summary>
-            The visibility of the Value box in TestedElement.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem.RemoveTestButtonVisibility">
-            <summary>
-            Gets or sets the visibility of the Value box in TestedElement.
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem._bigIntegervalue">
-            <summary>
-            The wrapped BigInteger.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem.BigIntegerValue">
-            <summary>
-            Gets or sets the wrapped BigInteger.
-            </summary>
-        </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem._isEnabled">
-            <summary>
-            Boolean determining whether the box is enabled or not.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem.IsEnabled">
-            <summary>
-            Gets or sets the boolean determining whether the box is enabled or not.
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem.#ctor(System.Numerics.BigInteger)">
-            <summary>
-            Initializes the wrapper with a Collapsed visibility and unless the parameter is equal to -1,
-            the box is enabled.
-            </summary>
-            <param name="bi">The <see cref="T:System.Numerics.BigInteger"/> to be wrapped</param>
-        </member>
-        <member name="E:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem.PropertyChanged">
-            <summary>
-            The event that occurs when the BigIntegerItem changes. 
-            </summary>
-        </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem.OnPropertyChanged(System.String)">
-            <summary>
-            Invokes the event <see cref="E:KNX_Virtual_Integrator.Model.Entities.DataPointType.BigIntegerItem.PropertyChanged"/> when the BigIntegerItem changes.
-            </summary>
-        </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.Value">
             <summary>
             List of GroupValues to send/read.
@@ -153,18 +156,11 @@
             GroupValues cannot be accessed/modified on the UI because they are not a common type.
             </summary>
         </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Entities.DataPointType._intValue">
-            <summary>
-            Collection that is parallel to <see cref="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.Value"/>.
-            Every change on this collection is copied onto the list.
-            BigIntegers are made modifiable through the BigIntegerItem class.
-            </summary>
-        </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.IntValue">
             <summary>
             Gets or sets the collection parallel to <see cref="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.Value"/>.
             </summary>
-            <seealso cref="F:KNX_Virtual_Integrator.Model.Entities.DataPointType._intValue"/>
+            <seealso cref="!:_intValue"/>
         </member>
         <member name="F:KNX_Virtual_Integrator.Model.Entities.DataPointType._type">
             <summary>
@@ -190,6 +186,48 @@
         <member name="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.Address">
             <summary>
             Gets or sets the Group Address of the DataPointType.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor">
+            <summary>
+            Constructor for DataPointType
+            No parameters
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32)">
+            <summary>
+            Constructor for DataPointType
+            One parameter : the type  of the DPT
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32,System.String)">
+            <summary>
+            Constructor for DataPointType
+            Two parameters : the type of the DPT and the name of the DPT
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32,System.String,System.Collections.Generic.List{Knx.Falcon.GroupValue})">
+            <summary>
+            Constructor for DataPointType
+            Three parameters : the type of the DPT, the address of the DPT and a list of GroupValues to be sent/read
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32,System.String,System.Collections.Generic.List{Knx.Falcon.GroupValue},System.String)">
+            <summary>
+            Constructor for DataPointType
+            Four parameters : the type of the DPT, the address of the DPT, a list of GroupValues to be sent/read, the name of the DPT
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(KNX_Virtual_Integrator.Model.Entities.DataPointType)">
+            <summary>
+            Constructor for DataPointType. Duplicator
+            One parameter : the DPT to duplicate
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(KNX_Virtual_Integrator.Model.Entities.DataPointType,System.String)">
+            <summary>
+            Constructor for DataPointType. Duplicator
+            Two parameters : the DPT to duplicate, the address of the new DPT
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.GetSizeOf">
@@ -387,12 +425,16 @@
             <param name="model">The XmlNode containing the model.</param>
             <returns>The imported FunctionalModel.</returns>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.HasSameStructure(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.BuildCmdIntValues(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
             <summary>
             Checks whether the functional models have the same structure (same number of elements, in the same order).
             </summary>
-            <param name="functionalModel">The model to be compared with.</param>
+            <param name="model">The model to be compared with.</param>
             <returns>True is the functional models have the same structure.</returns>
+            <summary>
+            Takes a model and fills its commands' int values with the ones of the model in parameters
+            </summary>
+            <param name="model"> Model to copy the int values from.</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.Contains(KNX_Virtual_Integrator.Model.Entities.TestedElement,System.Collections.Generic.HashSet{System.Int32})">
             <summary>
@@ -430,7 +472,7 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.DisplayModel">
             <summary>
-            Dev method : used to dispaly all the Values of the model.
+            Dev method : used to display all the Values of the model.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.FindKey(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure,KNX_Virtual_Integrator.Model.Entities.DataPointType)">
@@ -3708,6 +3750,16 @@
             Command that removes a test (a row of values) from the <see cref="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedModel"/>.
             </summary>  
         </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AddTestToElementStructureCommand">
+            <summary>
+            Command that adds a test (a row of values) to the <see cref="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedModel"/>.
+            </summary>  
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.RemoveTestFromElementStructureCommand">
+            <summary>
+            Command that removes a test (a row of values) from the <see cref="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedStructure"/>.
+            </summary>  
+        </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AddDptCmdToElementStructureCommand">
             <summary>
             Command that adds an CMD <see cref="T:KNX_Virtual_Integrator.Model.Entities.DataPointType"/> to the <see cref="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedStructure"/>.
@@ -4627,6 +4679,60 @@
             Handles the button click event to add a DPT to send to a tested element structure
             </summary>
         </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.ResetValueCmdStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the button click to reset to 0 a Cmd Value that has been deactivated because it was unknown 
+            </summary>
+            <param name="sender">The button that raised the event.</param>
+            <param name="e">The click event data.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.ResetValueIeStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+            </summary>
+            <param name="sender">The button that raised the event.</param>
+            <param name="e">The click event data.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.ResetValueStructure(System.Object,System.Windows.RoutedEventArgs,System.String)">
+            <summary>
+            Handles the reset to 0 a Value that has been deactivated because it was unknown 
+            </summary>
+            <param name="sender">The button that raised the event.</param>
+            <param name="e">The click event data.</param>
+            <param name="tests">the type of Test value that is reset (TestCmd or TestIe).</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.DeactivateValueIeStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the button click to deactivate a testIE value
+            </summary>
+            <param name="sender">The button that raised the event.</param>
+            <param name="e">The click event data.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.DeactivateValueStructure(System.Object,System.Windows.RoutedEventArgs,System.String)">
+            <summary>
+            Handles the button click to deactivate a test value
+            </summary>
+            <param name="sender">The button that raised the event.</param>
+            <param name="e">The click event data.</param>
+            <param name="tests">the type of Test value that is deactivated (TestCmd or TestIe).</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.AddTestToElementStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the button click event to add a Test to a Tested Element
+            Adds a line of values to the Tested Element
+            The number of fields added is equal to the number of DPTs in the Tested Element
+            </summary>
+            <param name="sender">The button that raised the event.</param>
+            <param name="e">The click event data.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.RemoveTestFromElementStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the button click event to remove a Test from a Tested Element
+            Deletes a full line of values to the Tested Element
+            </summary>
+            <param name="sender">The button that raised the event.</param>
+            <param name="e">The click event data.</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.InitializeComponent">
             <summary>
             InitializeComponent
@@ -4726,36 +4832,6 @@
         <member name="M:KNX_Virtual_Integrator.View.Windows.TestConfigWindow.InitializeComponent">
             <summary>
             InitializeComponent
-            </summary>
-        </member>
-        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-            <summary>
-            GeneratedInternalTypeHelper
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-            <summary>
-            CreateInstance
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-            <summary>
-            GetPropertyValue
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-            <summary>
-            SetPropertyValue
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-            <summary>
-            CreateDelegate
-            </summary>
-        </member>
-        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-            <summary>
-            AddEventHandler
             </summary>
         </member>
     </members>

@@ -289,13 +289,13 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
-        AddTestedElementToModelStructureCommand = new Commands.RelayCommand<ObservableCollection<FunctionalModelStructure.ElementStructure>>(modelStructure =>
+        AddTestedElementToModelStructureCommand = new Commands.RelayCommand<ObservableCollection<ElementStructure>>(modelStructure =>
             {
-                modelStructure?.Add(new FunctionalModelStructure.ElementStructure([0],[]));
+                modelStructure?.Add(new ElementStructure([0],[]));
             }
         );
         
-        RemoveTestedElementFromModelStructureCommand = new Commands.RelayCommand<(ObservableCollection<FunctionalModelStructure.ElementStructure> modelStructure, int index)>(parameters =>
+        RemoveTestedElementFromModelStructureCommand = new Commands.RelayCommand<(ObservableCollection<ElementStructure> modelStructure, int index)>(parameters =>
             {
                 parameters.modelStructure.RemoveAt(parameters.index);
             }
@@ -313,25 +313,25 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
-        AddTestToElementStructureCommand = new Commands.RelayCommand<FunctionalModelStructure.ElementStructure>(parameter =>
+        AddTestToElementStructureCommand = new Commands.RelayCommand<ElementStructure>(parameter =>
             {
                 parameter?.AddTest();
             }
         );
         
-        RemoveTestFromElementStructureCommand = new Commands.RelayCommand<(FunctionalModelStructure.ElementStructure elementStructure, int index)>(parameters =>
+        RemoveTestFromElementStructureCommand = new Commands.RelayCommand<(ElementStructure elementStructure, int index)>(parameters =>
             {
                 parameters.elementStructure.RemoveTestAt(parameters.index);
             }
         );
         
-        AddDptCmdToElementStructureCommand = new Commands.RelayCommand<FunctionalModelStructure.ElementStructure>(parameter =>
+        AddDptCmdToElementStructureCommand = new Commands.RelayCommand<ElementStructure>(parameter =>
             {
                 parameter?.AddToCmd(0);
             }
         );
         
-        AddDptIeToElementStructureCommand = new Commands.RelayCommand<FunctionalModelStructure.ElementStructure>(parameter =>
+        AddDptIeToElementStructureCommand = new Commands.RelayCommand<ElementStructure>(parameter =>
             {
                 parameter?.AddToIe(0);
             }
@@ -343,7 +343,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 if (tuple == null) return Task.CompletedTask;
                 var (elementIndex, cmdIndex) = tuple;
 
-                FunctionalModelStructure.ElementStructure? elementStructure = null;
+                ElementStructure? elementStructure = null;
                 if (SelectedStructure != null)
                     elementStructure = SelectedStructure.ModelStructure[elementIndex];
                 if (elementStructure?.Cmd.Count > 1)
@@ -360,7 +360,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 if (tuple == null) return Task.CompletedTask;
                 var (elementIndex, ieIndex) = tuple;
 
-                FunctionalModelStructure.ElementStructure? elementStructure = null;
+                ElementStructure? elementStructure = null;
                 if (SelectedStructure != null)
                     elementStructure = SelectedStructure.ModelStructure[elementIndex];
                 elementStructure?.RemoveIeAt(ieIndex);

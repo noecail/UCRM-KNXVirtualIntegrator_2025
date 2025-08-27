@@ -16,107 +16,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// The model to be used as a Structure example.
     /// </summary>
     public FunctionalModel Model {get; set; }
-    /// <summary>
-    /// The class holding defining a DPT and the keywords associated with it.
-    /// </summary>
-    public class DptAndKeywords : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// Key/Number of the instance.
-        /// </summary>
-        public int Key = 0;
-        /// <summary>
-        /// List of keywords associated with the <see cref="Dpt"/>.
-        /// </summary>
-        private List<string> _keywords = [];
-        /// <summary>
-        /// Gets or sets the list of keywords associated with the <see cref="Dpt"/>.
-        /// </summary>
-        public List<string> Keywords
-        {
-            get => _keywords;
-            set
-            {
-                if (_keywords == value) return;
-                _keywords = value;
-                OnPropertyChanged();
-                UpdateKeywordList();
-            }
-        }
-        /// <summary>
-        /// String of all the keywords associated with the <see cref="Dpt"/>.
-        /// </summary>
-        private string _allKeywords = "";
-        /// <summary>
-        /// Gets or sets the string of all the keywords associated with the <see cref="Dpt"/>.
-        /// </summary>
-        public string AllKeywords
-        {
-            get => _allKeywords;
-            set
-            {
-                if (_allKeywords == value) return;
-                _allKeywords = value;
-                OnPropertyChanged();
-                UpdateKeywords();
-            }
-        }
-        /// <summary>
-        /// The DPT associated with the <see cref="Keywords"/>.
-        /// </summary>
-        public DataPointType Dpt { get; set; } = new ();
-
-        /// <summary>
-        /// Takes a string, and puts all the keywords inside it into the keywords associated
-        /// </summary>
-        public void UpdateKeywords()
-        {
-            _keywords.Clear();
-            foreach (var kw in AllKeywords.Split(',').ToList())
-            {
-                _keywords.Add(kw);
-                OnPropertyChanged(nameof(Keywords));
-            }
-        }
-        
-        /// <summary>
-        /// Takes all the keywords associated to a dpt and group them, separating them with commas
-        /// </summary>
-        public void UpdateKeywordList()
-        {
-            if (Keywords == null || Keywords.Count == 0)
-                return;
-            _allKeywords = string.Join(',', Keywords);
-            OnPropertyChanged(nameof(AllKeywords));
-        }
-        /// <summary>
-        /// Empty constructor since everything is already initialized.
-        /// </summary>
-        public DptAndKeywords() { }
-        /// <summary>
-        /// Copies a DptAndKeywords.
-        /// </summary>
-        /// <param name="other">The DptAndKeywors to copy</param>
-        public DptAndKeywords(DptAndKeywords other)
-        {
-            Key = other.Key;
-            _keywords = other._keywords != null ? new List<string>(other._keywords) : new List<string>();
-            _allKeywords = other._allKeywords ?? string.Empty;
-            Dpt = new DataPointType(other.Dpt);
-
-            PropertyChanged = null; // les handlers ne doivent pas être copiés
-        }
-
-        /// <summary>
-        /// Event that occurs when the DptAndKeywords changes.
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-        /// <summary>
-        /// Invokes <see cref="PropertyChanged"/> when called.
-        /// </summary>
-        /// <param name="propertyName">The name of the property that was changed.</param>
-        private void OnPropertyChanged([CallerMemberName] string? propertyName = null) { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)); }
-    }
 
     //J'ai choisi de faire démarrer les clés à 1 pour plus de logique pour l'utilisateur
     /// <summary>
@@ -142,268 +41,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         245, 246, 247, 248, 250, 251, 252, 254, 255, 256, 257, 265, 266, 267, 268, 269, 270, 271,
         272, 273, 274, 277, 278, 279, 280, 281, 282, 283, 284
     };
-    
-    // classe qui enrobe un int, notamment pour pouvoir y mettre un setter
-    // configurée de manière à ce que son utilisation soit invisible, çàd on peut mettre un item à la place d'un IntItem et ça fonctionne
-    /// <summary>
-    /// Int wrapper to implement <see cref="PropertyChanged"/> and interface visibility handling.
-    /// </summary>
-    public class IntItem : INotifyPropertyChanged
-    {
-        /// <summary>
-        /// Value of the DPT
-        /// </summary>
-        private int _value;
-        /// <summary>
-        /// Gets or sets the value of the DPT
-        /// </summary>
-        public int Value
-        {
-            get => _value;
-            set
-            {
-                _value = value;
-                OnPropertyChanged();
-            }
-        }
-        
-        /// <summary>
-        /// Visibility of the button used to remove a DPT in <see cref="View.Windows.StructureEditWindow"/>
-        /// </summary>
-        private Visibility? _removeDptButtonVisibility;
-        /// <summary>
-        /// Gets or sets the visibility of the button used to
-        /// remove a DPT in <see cref="View.Windows.StructureEditWindow"/>
-        /// </summary>
-        public Visibility? RemoveDptButtonVisibility
-        {
-            get => _removeDptButtonVisibility;
-            set
-            {
-                if (_removeDptButtonVisibility == value) return;
-                _removeDptButtonVisibility = value;
-                OnPropertyChanged();
-            }
-        }
-        /// <summary>
-        /// Used to "quicken" search of the value since using the item will output directly its value.
-        /// </summary>
-        /// <param name="item">The item whose value will be returned.</param>
-        /// <returns>The value of the item.</returns>
-        public static implicit operator int(IntItem item) => item.Value;
-        /// <summary>
-        /// To print only the <see cref="Value"/> of the item.
-        /// </summary>
-        /// <returns>The value as a string</returns>
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
-        /// <summary>
-        /// Constructs the class with hidden visibility. 
-        /// </summary>
-        /// <param name="value">the value to which <see cref="Value"/> will be initialised.</param>
-        public IntItem(int value)
-        {
-            Value = value;
-            RemoveDptButtonVisibility = Visibility.Hidden;
-        }
-        /// <summary>
-        /// Event that occurs when the IntItem changes.
-        /// </summary>
-        public event PropertyChangedEventHandler? PropertyChanged;
-        /// <summary>
-        /// Invokes <see cref="PropertyChanged"/> when called.
-        /// </summary>
-        /// <param name="name">The name of the property that was changed.</param>
-        protected void OnPropertyChanged([CallerMemberName] string? name = null) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-    }
-    
-    /// <summary>
-    /// Barebone structure of TestedElements. It holds the number of CMD, IE and the DPT associated with it.
-    /// </summary>
-    public class ElementStructure
-    {
-        /// <summary>
-        /// The number of Cmd DPTs in the Element.
-        /// </summary>
-        public ObservableCollection<IntItem> Cmd { get; set; }
-        /// <summary>
-        /// The number of Ie DPTs in the Element.
-        /// </summary>
-        public ObservableCollection<IntItem> Ie { get; set; }
-        
-        // CmdValues [0][1] -> 1er DPT d'envoi (=1ere colonne), 2eme value (=2eme ligne)
-        public ObservableCollection<ObservableCollection<DataPointType.BigIntegerItem>> CmdValues { get; set; }
-        public ObservableCollection<ObservableCollection<DataPointType.BigIntegerItem>> IeValues { get; set; }
-
-        /// <summary>
-        /// Adds a new Cmd Dpt.
-        /// </summary>
-        /// <param name="value">The key of the DPT at which the Cmd is initialized.</param>
-        public void AddToCmd(int value)
-        {
-            Cmd.Add(new IntItem(value));
-            UpdateRemoveDptButtonVisibility();
-            CmdValues.Add(new ObservableCollection<DataPointType.BigIntegerItem>());
-            foreach (var test in CmdValues[0])
-                CmdValues[^1].Add(new DataPointType.BigIntegerItem(0));
-        }
-
-        /// <summary>
-        /// Adds a new Ie Dpt.
-        /// </summary>
-        /// <param name="value">The key of the DPT at which the Cmd is initialized.</param>
-        public void AddToIe(int value)
-        {
-            Ie.Add(new IntItem(value));
-            IeValues.Add(new ObservableCollection<DataPointType.BigIntegerItem>());
-            foreach (var test in CmdValues[0])
-                IeValues[^1].Add(new DataPointType.BigIntegerItem(0));
-            UpdateRemoveTestButtonVisibility();
-        }
-        /// <summary>
-        /// Removes a Cmd Dpt at an index.
-        /// </summary>
-        /// <param name="cmdIndex">The index of the DPT to remove.</param>
-        public void RemoveCmdAt(int cmdIndex)
-        {
-            Cmd.RemoveAt(cmdIndex);
-            UpdateRemoveDptButtonVisibility();
-            CmdValues.RemoveAt(cmdIndex);
-        }
-
-        /// <summary>
-        /// Removes a Ie Dpt at an index.
-        /// </summary>
-        /// <param name="ieIndex">The index of the DPT to remove.</param>
-        public void RemoveIeAt(int ieIndex)
-        {
-            Ie.RemoveAt(ieIndex);
-            IeValues.RemoveAt(ieIndex);
-            UpdateRemoveTestButtonVisibility();
-        }
-
-        public void AddValueToCmd(int cmdIndex)
-        {
-            CmdValues[cmdIndex].Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
-        }
-        
-        public void AddValueToIe(int ieIndex)
-        {
-            IeValues[ieIndex].Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
-            UpdateRemoveTestButtonVisibility();
-        }
-
-        public void RemoveCmdValueAt(int cmdIndex, int valueIndex)
-        {
-            CmdValues[cmdIndex].RemoveAt(valueIndex);
-        }
-
-        public void RemoveIeValueAt(int ieIndex, int valueIndex)
-        {
-            IeValues[ieIndex].RemoveAt(valueIndex);
-            UpdateRemoveTestButtonVisibility();
-        }
-        
-        public void AddTest()
-        {
-            foreach (var dptValues in CmdValues)
-                dptValues.Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
-            foreach (var dptValues in IeValues)
-                dptValues.Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
-               
-            UpdateRemoveTestButtonVisibility();
-        }
-
-        public void RemoveTestAt(int indexTest)
-        {
-            foreach (var dptValues in CmdValues)
-                dptValues.RemoveAt(indexTest);
-            foreach (var dptValues in IeValues)
-                dptValues.RemoveAt(indexTest);
-   
-            UpdateRemoveTestButtonVisibility();
-        }
-        /// <summary>
-        /// Creates an empty ElementStructure.
-        /// </summary>
-        public ElementStructure()
-        {
-            Cmd = [];
-            Ie = [];
-            CmdValues = [];
-            IeValues = [];
-            UpdateRemoveTestButtonVisibility();
-        }
-        /// <summary>
-        /// Creates a filled ElementStructure with <see cref="ObservableCollection{T}"/>.
-        /// </summary>
-        /// <param name="cmdCollection">The collection of Cmd DPT to copy.</param>
-        /// <param name="ieCollection">The collectio of Ie DPT to copy.</param>
-        public ElementStructure(ObservableCollection<IntItem> cmdCollection, ObservableCollection<IntItem> ieCollection)
-        {
-            Cmd = cmdCollection;
-            Ie = ieCollection;
-            CmdValues = [];
-            IeValues = [];
-            UpdateRemoveTestButtonVisibility();
-        }
-        /// <summary>
-        /// Creates a filled ElementStructure with lists.
-        /// </summary>
-        /// <param name="cmdCollection">The list of Cmd DPT to copy.</param>
-        /// <param name="ieCollection">The list of Ie DPT to copy.</param>
-        public ElementStructure(List<int> cmdCollection, List<int> ieCollection)
-        {
-            Cmd = [];
-            Ie = [];
-            CmdValues = [];
-            IeValues = [];
-            foreach (var cmdInt in cmdCollection)
-                AddToCmd(cmdInt);
-            foreach (var ieInt in ieCollection)
-                AddToIe(ieInt);
-            UpdateRemoveTestButtonVisibility();
-        }
-        /// <summary>
-        /// Copies an ElementStructure.
-        /// </summary>
-        /// <param name="otherStructure">The structure to copy.</param>
-        public ElementStructure(ElementStructure otherStructure)
-        {
-            Cmd = new ObservableCollection<IntItem>();
-            Ie = new ObservableCollection<IntItem>();
-            CmdValues = [];
-            IeValues = [];
-            foreach(var cmd in otherStructure.Cmd)
-                Cmd.Add(new IntItem(cmd));
-            foreach (var ie in otherStructure.Ie)
-                Ie.Add(new IntItem(ie));
-            UpdateRemoveTestButtonVisibility();
-        }
-        /// <summary>
-        /// Hides the Cmd remove button if there is only one Cmd DPT.
-        /// Shows the button if there is more.
-        /// </summary>
-        private void UpdateRemoveDptButtonVisibility()
-        {
-            var vis = Cmd.Count > 1 ? Visibility.Visible : Visibility.Hidden;
-            foreach (var intItem in Cmd)
-                intItem.RemoveDptButtonVisibility = vis;
-        }
-        
-        private void UpdateRemoveTestButtonVisibility()
-        {
-            foreach (var ie in IeValues)
-            {
-                var vis = ie != IeValues.Last() ? Visibility.Collapsed : Visibility.Visible;
-                foreach (var bigIntegerItem in ie)
-                    bigIntegerItem.RemoveTestButtonVisibility = vis;
-            }
-        }
-    }
     
     /// <summary>
     /// Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
@@ -713,7 +350,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     ModelStructure[i].CmdValues.Add([]);
                 for (var k = 0; k < cmdValues[i][j].Count; k++)
                 {
-                    ModelStructure[i].CmdValues[j].Add(new DataPointType.BigIntegerItem(cmdValues[i][j][k]));
+                    ModelStructure[i].CmdValues[j].Add(new BigIntegerItem(cmdValues[i][j][k]));
                 }
 
             }
@@ -724,7 +361,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     ModelStructure[i].IeValues.Add([]);
                 for (var k = 0; k < ieValues[i][j].Count; k++)
                 {
-                    ModelStructure[i].IeValues[j].Add(new DataPointType.BigIntegerItem(ieValues[i][j][k]));
+                    ModelStructure[i].IeValues[j].Add(new BigIntegerItem(ieValues[i][j][k]));
                 }
 
             }
@@ -916,11 +553,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     }
                     if (res.ElementList[i].TestsCmd[j].IntValue.Count < k + 1)
                     {
-                        res.ElementList[i].TestsCmd[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0));
+                        res.ElementList[i].TestsCmd[j].IntValue.Add(new BigIntegerItem(toAdd.BigIntegerValue ?? 0));
                     }
                     else
                     {
-                        res.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0);
+                        res.ElementList[i].TestsCmd[j].IntValue[k] = new BigIntegerItem(toAdd.BigIntegerValue ?? 0);
                     }
                 }
 
@@ -939,11 +576,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     }
                     if (res.ElementList[i].TestsIe[j].IntValue.Count < k + 1)
                     {
-                        res.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0));
+                        res.ElementList[i].TestsIe[j].IntValue.Add(new BigIntegerItem(toAdd.BigIntegerValue ?? 0));
                     }
                     else
                     {
-                        res.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0);
+                        res.ElementList[i].TestsIe[j].IntValue[k] = new BigIntegerItem(toAdd.BigIntegerValue ?? 0);
                     }
                 }
             }
