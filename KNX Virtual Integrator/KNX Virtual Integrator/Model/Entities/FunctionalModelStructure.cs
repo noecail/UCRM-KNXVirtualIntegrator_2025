@@ -645,11 +645,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     }
                     if (Model.ElementList[i].TestsCmd[j].IntValue.Count < k + 1)
                     {
-                        Model.ElementList[i].TestsCmd[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd));
+                        Model.ElementList[i].TestsCmd[j].IntValue.Add(new BigIntegerItem(toAdd));
                     }
                     else
                     {
-                        Model.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd);
+                        Model.ElementList[i].TestsCmd[j].IntValue[k] = new BigIntegerItem(toAdd);
                     }
                 }
 
@@ -672,11 +672,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     }
                     if (Model.ElementList[i].TestsIe[j].IntValue.Count < k + 1)
                     {
-                        Model.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd));
+                        Model.ElementList[i].TestsIe[j].IntValue.Add(new BigIntegerItem(toAdd));
                     }
                     else
                     {
-                        Model.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd);
+                        Model.ElementList[i].TestsIe[j].IntValue[k] = new BigIntegerItem(toAdd);
                     }
                 }
 
@@ -738,11 +738,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 {
                     if (Model.ElementList[i].TestsCmd[j].IntValue.Count<k+1)
                     {
-                        Model.ElementList[i].TestsCmd[j].IntValue.Add(new DataPointType.BigIntegerItem(value[k]));
+                        Model.ElementList[i].TestsCmd[j].IntValue.Add(new BigIntegerItem(value[k]));
                     }
                     else
                     {
-                        Model.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(value[k]);
+                        Model.ElementList[i].TestsCmd[j].IntValue[k] = new BigIntegerItem(value[k]);
                     }
                 }
                 Model.ElementList[i].TestsCmd[j].UpdateValue();
@@ -758,11 +758,11 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 {
                     if (Model.ElementList[i].TestsIe[j].IntValue.Count<k+1)
                     {
-                        Model.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(value[k]));
+                        Model.ElementList[i].TestsIe[j].IntValue.Add(new BigIntegerItem(value[k]));
                     }
                     else
                     {
-                        Model.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(value[k]);
+                        Model.ElementList[i].TestsIe[j].IntValue[k] = new BigIntegerItem(value[k]);
                     }
                 }
                 Model.ElementList[i].TestsIe[j].UpdateValue();
@@ -937,7 +937,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                                 if(xTypesOrKeywordsOrValues.Attributes!=null)
                                     foreach (XmlAttribute xValue in xTypesOrKeywordsOrValues.Attributes)
                                     {
-                                        pair.Dpt.IntValue.Add(new DataPointType.BigIntegerItem(int.Parse(xValue.Value))); //Then  have to be checked 
+                                        pair.Dpt.IntValue.Add(new BigIntegerItem(int.Parse(xValue.Value))); //Then  have to be checked 
                                     }
                             }
                         }
