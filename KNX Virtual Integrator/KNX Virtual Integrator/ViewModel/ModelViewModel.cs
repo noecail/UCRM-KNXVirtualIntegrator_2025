@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Entities;
 
@@ -21,18 +22,24 @@ namespace KNX_Virtual_Integrator.ViewModel
 
     public partial class MainViewModel
     {
+        /// <summary>
+        /// The attribute storing the list of Functional Models
+        /// </summary>
         private IFunctionalModelList _functionalModelList;
 
         /// <summary>
-        /// Gets the collection of functional models.
+        /// Gets the collection of structure of functional models
+        /// to be displayed in the <see cref="View.Windows.MainWindow"/>.
         /// </summary>
-        public ObservableCollection<FunctionalModelStructure> Structures { get; set; }
+        public ObservableCollection<FunctionalModelStructure> Structures { get; }
         
         /// <summary>
-        /// Not seen on the UI
-        /// List of Models that corresponds to the Selected Structure
+        /// List of Models that corresponds to the Selected Structure.
         /// </summary>
         private ObservableCollection<FunctionalModel>? _selectedModels = [];
+        /// <summary>
+        /// Gets or sets the list of Models that corresponds to the Selected Structure.
+        /// </summary>
         public ObservableCollection<FunctionalModel>? SelectedModels
         {
             get => _selectedModels;
@@ -49,9 +56,12 @@ namespace KNX_Virtual_Integrator.ViewModel
         }
         
         /// <summary>
-        /// Column 2. Selected Model among the Selected Models
+        /// The Selected Model among the <see cref="SelectedModels"/>.
         /// </summary>  
         private FunctionalModel? _selectedModel;
+        /// <summary>
+        /// Gets or sets the Selected Model among the <see cref="SelectedModels"/>.
+        /// </summary>
         public FunctionalModel? SelectedModel
         {
             get => _selectedModel;
@@ -66,11 +76,13 @@ namespace KNX_Virtual_Integrator.ViewModel
             }
         }
         
-
         /// <summary>
-        /// Column 1. Selected model structure.
+        /// The Selected Structure among the list of Structures of Functional Models.
         /// </summary>  
         private FunctionalModelStructure? _selectedStructure;
+        /// <summary>
+        /// Gets or sets the Selected Structure among the list of Structures of Functional Models
+        /// </summary>  
         public FunctionalModelStructure? SelectedStructure
         {
             get => _selectedStructure;
@@ -87,8 +99,23 @@ namespace KNX_Virtual_Integrator.ViewModel
                 SelectedModels = new ObservableCollection<FunctionalModel>(source);
             }
         }
-
+        
+        /// <summary>
+        /// The temporary Structure to buffer its modifications in the <see cref="View.Windows.StructureEditWindow"/>.
+        /// </summary>
         public FunctionalModelStructure? EditedStructureSave;
+
+        private Visibility _applyChangesErrorMessageVisibility = Visibility.Hidden;
+        public Visibility ApplyChangesErrorMessageVisibility
+        {
+            get => _applyChangesErrorMessageVisibility;
+            set
+            {
+                if (ApplyChangesErrorMessageVisibility == value) return;
+                _applyChangesErrorMessageVisibility = value;
+                WhenPropertyChanged(nameof(ApplyChangesErrorMessageVisibility));
+            }
+        }
 
     }
 }

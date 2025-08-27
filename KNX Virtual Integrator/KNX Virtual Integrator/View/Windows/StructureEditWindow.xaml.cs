@@ -85,6 +85,7 @@ public partial class StructureEditWindow
             Resources["Keywords"]="Mots-clés";
             Resources["DptNumber"]="Dpt de numéro :";
             Resources["AddDpt"]="Ajouter un DataPointType";
+            Resources["ApplyChangesErrorMessage"] = "Vérifiez votre Structure. Il ne peut y avoir d'Élément à Tester avec des DPTs non assignés. Il faut au moins 1 Élément à Tester.";
         }
         else
         {
@@ -103,6 +104,7 @@ public partial class StructureEditWindow
             Resources["Keywords"]="Keywords";
             Resources["DptNumber"]="Dpt number:";
             Resources["AddDpt"]="Add a DataPointType";
+            Resources["ApplyChangesErrorMessage"] = "Check your Structure. There can not be any Tested Element with unassigned DPTs. There has to be at least one Tested Element.";
         }
     }
 
@@ -261,10 +263,10 @@ public partial class StructureEditWindow
             Console.WriteLine(">> element structure");
             var cmd = elementStructure.Cmd;
             foreach (var item in cmd)
-                Console.WriteLine("MODEL Printing cmd " + item);
+                Console.WriteLine("MODEL Printing cmd " + item.Value);
             var ie = elementStructure.Ie;
             foreach (var item in ie)
-                Console.WriteLine("MODEL Printing ie " + item);
+                Console.WriteLine("MODEL Printing ie " + item.Value);
         }
     }
     

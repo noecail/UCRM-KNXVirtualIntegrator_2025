@@ -5,7 +5,6 @@ using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
-using System.Xml.Linq;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -31,20 +30,6 @@ namespace KNX_Virtual_Integrator.ViewModel;
 /// 
 public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 {
-
-    /// <summary>
-    /// Occurs when a property value changes.
-    /// </summary>
-    public new event PropertyChangedEventHandler? PropertyChanged;
-    public ObservableCollection<string> ConnectionTypes { get; } = [
-        "IP",
-        "IP à distance (NAT)",
-        "USB"
-    ];
-    
-    public XDocument? GroupAddressFile { get; set; }
-
-
     /* ------------------------------------------------------------------------------------------------
     ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
     ------------------------------------------------------------------------------------------------ */
@@ -75,7 +60,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     RemoteConnexionVisibility = Visibility.Collapsed;
                     SecureConnectionVisibility = Visibility.Visible;
                 }
-                else if (BusConnection.SelectedConnectionType is "IP à distance (NAT)")
+                else if (BusConnection.SelectedConnectionType is "Remote IP (NAT)")
                 {
                     DiscoveredInterfacesVisibility = Visibility.Collapsed;
                     RemoteConnexionVisibility = Visibility.Visible;
@@ -421,6 +406,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         RemoveDptFromDictionaryCommand = new Commands.RelayCommand<(int key, FunctionalModelStructure structure)>(parameters =>
         {
+            // delete types in the element structures if they have selected the soon-to-be-removed dpt
+            var keyToRemove = parameters.key;
+            foreach (var elementStructure in parameters.structure.ModelStructure)
+            {
+                foreach (var cmd in elementStructure.Cmd)
+                    if (cmd.Value == keyToRemove)
+                        cmd.Value = 0;
+
+                foreach (var ie in elementStructure.Ie)
+                    if (ie.Value == keyToRemove)
+                        ie.Value = 0;
+            }
+            
+            // remove the dpt
             parameters.structure.RemoveDpt(parameters.key);
         });
 
@@ -440,14 +439,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             OnPropertyChanged(nameof(Structures));
             OnPropertyChanged(nameof(SelectedStructure));
                 
-            // restore (or not) the previously selected structure and model
-            /*if (previouslySelectedStructure is null) return;
-            if (!_functionalModelList.FunctionalModelDictionary.FunctionalModels.Contains(
-                    previouslySelectedStructure) ||
-                _functionalModelList.FunctionalModelDictionary.FunctionalModels[
-                    _functionalModelList.FunctionalModelDictionary.FunctionalModels.IndexOf(
-                        previouslySelectedStructure)].Model.Name != previouslySelectedStructure.Model.Name) return;
-            SelectedStructure =  previouslySelectedStructure;*/
+            // restore the previously selected structure and model
             SelectedStructure = Structures[index];
         });
         
@@ -455,6 +447,15 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         {
             if (SelectedStructure == null) return;
 
+            if (!SelectedStructure.IsValid())
+            {
+                ApplyChangesErrorMessageVisibility = Visibility.Visible;
+                Console.WriteLine("paraguay " + ApplyChangesErrorMessageVisibility);
+                return;
+            }
+            ApplyChangesErrorMessageVisibility = Visibility.Hidden;
+            Console.WriteLine("uruguay " + ApplyChangesErrorMessageVisibility);
+            
             int structureKey = SelectedStructure.Model.Key - 1;
             
             // nettoyer liste MFs associés à la structure

@@ -725,6 +725,7 @@ public partial class MainWindow
         
         // Also, selecting the newly created model and scrolling down to it
         _viewModel.SelectedStructure = _viewModel.Structures.Last();
+        _viewModel.EditedStructureSave = new FunctionalModelStructure(_viewModel.SelectedStructure);
         
         var predefinedStructuresScrollViewer = FindVisualChild<ScrollViewer>(StructuresBox);
         predefinedStructuresScrollViewer?.ScrollToEnd();

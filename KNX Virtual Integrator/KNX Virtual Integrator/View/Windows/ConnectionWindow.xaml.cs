@@ -141,7 +141,7 @@ public partial class ConnectionWindow
         DiscoveredInterfacesText.Foreground = textColorBrush;
         
         IpRouterText.Foreground = textColorBrush;
-        SecurisedConectionText.Foreground = textColorBrush;
+        SecurisedConnectionText.Foreground = textColorBrush;
         ConnectionIpSecText.Foreground = textColorBrush;
         ImportedKeysFileText.Foreground = textColorBrush;
         ImportKeyPathText.Foreground = textColorBrush;

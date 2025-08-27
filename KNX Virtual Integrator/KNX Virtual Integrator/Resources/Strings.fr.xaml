@@ -61,6 +61,7 @@
     <sys:String x:Key="Keywords">Mots-clés</sys:String>
     <sys:String x:Key="DptNumber">Dpt de numéro :</sys:String>
     <sys:String x:Key="AddDpt">Ajouter un DataPointType</sys:String>
+    <sys:String x:Key="ApplyChangesErrorMessage">Vérifiez votre structure. Il ne peut y avoir d'Élément à Tester avec des DPTs non assignés. Il faut au moins 1 Élément à Tester.</sys:String>
     <!--/Structure Edit Window-->
     
     <!--Connection Window-->
