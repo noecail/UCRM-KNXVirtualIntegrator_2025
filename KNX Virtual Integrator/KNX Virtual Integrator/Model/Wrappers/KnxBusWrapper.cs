@@ -4,7 +4,13 @@ using Knx.Falcon.Discovery;
 using Knx.Falcon.Sdk;
 
 namespace KNX_Virtual_Integrator.Model.Wrappers;
-
+/// <summary>
+///     Class wrapper of <see cref="KnxBus"/>. A Wrapper is used to reduce code dependency from the wrapped class
+///     (for tests or if you want to replace some functionalities).
+///     The Interface is the type of all variables <see cref="Model.Implementations.BusConnection.Bus"/>,
+///     so that during multiple implementations can exist, especially during tests where we may
+///     not want to really communicate with the bus.
+/// </summary>
 public class KnxBusWrapper : IKnxBusWrapper
 {
     /// <summary>

@@ -11,6 +11,10 @@
         <ApplicationManifest>app.manifest</ApplicationManifest>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DocumentationFile>Documentation-KNX_Virtual_Integrator.xml</DocumentationFile>
+    </PropertyGroup>
+
     <ItemGroup>
       <Page Remove="Resources\Images.xaml" />
       <Page Remove="Resources\Strings.MainWindow.fr.xaml" />
@@ -69,11 +73,6 @@
 
     <ItemGroup>
       <None Remove="Resources\resources\VIIcon.ico" />
-      <Content Include="KNX Virtual Integrator_kicx1wdq_wpftmp.csproj" />
-      <Content Include="KNX Virtual Integrator_kliova35_wpftmp.csproj" />
-      <Content Include="KNX Virtual Integrator_ldcya5ak_wpftmp.csproj" />
-      <Content Include="KNX Virtual Integrator_malpxdx3_wpftmp.csproj" />
-      <Content Include="KNX Virtual Integrator_ptjzznje_wpftmp.csproj" />
       <Content Include="Resources\resources\VIIcon.ico">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>

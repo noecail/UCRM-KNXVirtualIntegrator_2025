@@ -597,6 +597,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         if (index != -1)
                         {
                             var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
+                            foreach(var newModel in newFunctionalModels)
+                            {
+                                newModel.BuildCmdIntValues(model.Model);
+                            }
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {
                                 var objectType = structureList[i].Elements().ToList();
@@ -651,46 +655,22 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newDpt = new DataPointType(newType, newAddress, [], dptName);
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                         if (modelIndex == -1) //When the circuit name doesn't exist, maybe take j?? dangerous
-                                        { 
-
+                                        {
                                             lostDataPointTypes.Add(newDpt);
                                             continue;
                                         }
-                                        var dptKey = newFunctionalModels[modelIndex].FindKey(model,newDpt);
+                                        var dptKey = model.FindKeyWithKeywords(prefix);
+                                        if(dptKey == -1) 
+                                            dptKey = newFunctionalModels[modelIndex].FindKey(model,newDpt);
                                         if (dptKey == -1)
                                         {
                                             unrecognizedDataPoints.Add((newDpt,modelIndex));
                                             continue;
                                         }
-                                        
                                         newFunctionalModels[modelIndex].BuildFromStructure(model,newDpt,dptKey);
                                     }
                                 }
                             } 
-                            //Once Cmd and Ie are all taken, copy the tests from the structure
-                            for (var j = 0; j < newFunctionalModels.Count; j++)
-                            {
-                                for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
-                                {
-                                    var indexModel = newFunctionalModels[j].ElementList[k]
-                                        .FindELementInModel(
-                                            functionalModelList.FunctionalModelDictionary.FunctionalModels[index]
-                                                .Model);
-                                    if (indexModel != -1)
-                                    {
-                                        for (var l = 0;
-                                             l < functionalModelList.FunctionalModelDictionary.FunctionalModels[index]
-                                                 .Model
-                                                 .ElementList[indexModel].TestsCmd[0].Value.Count;
-                                             l++)
-                                        {
-                                            newFunctionalModels[j].ElementList[k].CopyTest(
-                                                functionalModelList.FunctionalModelDictionary.FunctionalModels[index]
-                                                    .Model.ElementList[indexModel], l);
-                                        }
-                                    }
-                                }
-                            }
                             
                             foreach (var dpt in unrecognizedDataPoints)//Checks again if the unrecognized dpt corresponds to missing dpt in the model
                             {
