@@ -744,6 +744,16 @@ public partial class MainWindow
         _viewModel.DuplicateStructureDictionaryCommand.Execute(null);
         // TODO : ajouter l'ouverture de la fenêtre d'édition de MF
     }
+
+    private void PrintSelectedModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ModelConsoleWriteCommand.Execute(_viewModel.SelectedModel);
+    }
+
+    private void PrintSelectedStructureModelButtonClick(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ModelConsoleWriteCommand.Execute(_viewModel.SelectedStructure?.Model);
+    }
     
     /// <summary>
     /// Handles the button click event to modify a Structure.
@@ -905,6 +915,7 @@ public partial class MainWindow
         var indexTest = 0;
         if (itemsControl != null)
             indexTest = itemsControl.Items.IndexOf(currentItem); // L'index dans la collection
+        
         _viewModel.RemoveTestFromElementCommand.Execute((_viewModel.SelectedModel?.ElementList[indexElement], indexTest));
     }
 

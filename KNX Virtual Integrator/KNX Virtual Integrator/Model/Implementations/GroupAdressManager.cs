@@ -494,27 +494,6 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
                         }
                         
-                        
-                        //Once Cmd and Ie are all filled, copy the tests from the structure
-                        for (var j = 0; j < newFunctionalModels.Count; j++)
-                        {
-                            for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
-                            {
-                                var indexModel = newFunctionalModels[j].ElementList[k]
-                                    .FindELementInModel(model.Model);
-                                if (indexModel != -1)
-                                {
-                                    for (var l = 0;
-                                         l < model.Model.ElementList[indexModel].TestsCmd[0].Value.Count;
-                                         l++)
-                                    {
-                                        newFunctionalModels[j].ElementList[k].CopyTest(
-                                            model.Model.ElementList[indexModel], l);
-                                    }
-                                }
-                            }
-                        }
-                        
                     }
                     else
                     {

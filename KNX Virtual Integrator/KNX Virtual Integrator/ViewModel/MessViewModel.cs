@@ -126,7 +126,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Command that prints the Model given in parameter.
         /// </summary>  
-        private ICommand ModelConsoleWriteCommand { get; }
+        public ICommand ModelConsoleWriteCommand { get; }
         
         /// <summary>
         /// Command that prints all the Models in <see cref="SelectedModels"/>.
@@ -193,6 +193,16 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// Command that removes a test (a row of values) from the <see cref="SelectedModel"/>.
         /// </summary>  
         public ICommand RemoveTestFromElementCommand{ get; private set; }
+        
+        /// <summary>
+        /// Command that adds a test (a row of values) to the <see cref="SelectedModel"/>.
+        /// </summary>  
+        public ICommand AddTestToElementStructureCommand { get; private set; }
+        
+        /// <summary>
+        /// Command that removes a test (a row of values) from the <see cref="SelectedStructure"/>.
+        /// </summary>  
+        public ICommand RemoveTestFromElementStructureCommand{ get; private set; }
         
         /// <summary>
         /// Command that adds an CMD <see cref="Model.Entities.DataPointType"/> to the <see cref="SelectedStructure"/>.

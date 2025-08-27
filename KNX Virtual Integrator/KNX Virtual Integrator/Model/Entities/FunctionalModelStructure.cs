@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Xml;
+using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Entities;
 
@@ -100,7 +102,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
         272, 273, 274, 277, 278, 279, 280, 281, 282, 283, 284
     };
     
-    // classe qui enrobe un string, notamment pour pouvoir y mettre un setter
+    // classe qui enrobe un int, notamment pour pouvoir y mettre un setter
     // configurée de manière à ce que son utilisation soit invisible, çàd on peut mettre un item à la place d'un IntItem et ça fonctionne
     public class IntItem : INotifyPropertyChanged
     {
@@ -150,59 +152,127 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     {
         public ObservableCollection<IntItem> Cmd { get; set; }
         public ObservableCollection<IntItem> Ie { get; set; }
+        
+        // CmdValues [0][1] -> 1er DPT d'envoi (=1ere colonne), 2eme value (=2eme ligne)
+        public ObservableCollection<ObservableCollection<DataPointType.BigIntegerItem>> CmdValues { get; set; }
+        public ObservableCollection<ObservableCollection<DataPointType.BigIntegerItem>> IeValues { get; set; }
 
         public void AddToCmd(int value)
         {
             Cmd.Add(new IntItem(value));
             UpdateRemoveDptButtonVisibility();
+            CmdValues.Add(new ObservableCollection<DataPointType.BigIntegerItem>());
+            foreach (var test in CmdValues[0])
+                CmdValues[^1].Add(new DataPointType.BigIntegerItem(0));
         }
 
         public void AddToIe(int value)
         {
             Ie.Add(new IntItem(value));
+            IeValues.Add(new ObservableCollection<DataPointType.BigIntegerItem>());
+            foreach (var test in CmdValues[0])
+                IeValues[^1].Add(new DataPointType.BigIntegerItem(0));
+            UpdateRemoveTestButtonVisibility();
         }
 
         public void RemoveCmdAt(int cmdIndex)
         {
             Cmd.RemoveAt(cmdIndex);
             UpdateRemoveDptButtonVisibility();
+            CmdValues.RemoveAt(cmdIndex);
         }
 
         public void RemoveIeAt(int ieIndex)
         {
             Ie.RemoveAt(ieIndex);
+            IeValues.RemoveAt(ieIndex);
+            UpdateRemoveTestButtonVisibility();
+        }
+
+        public void AddValueToCmd(int cmdIndex)
+        {
+            CmdValues[cmdIndex].Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
+        }
+        
+        public void AddValueToIe(int ieIndex)
+        {
+            IeValues[ieIndex].Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
+            UpdateRemoveTestButtonVisibility();
+        }
+
+        public void RemoveCmdValueAt(int cmdIndex, int valueIndex)
+        {
+            CmdValues[cmdIndex].RemoveAt(valueIndex);
+        }
+
+        public void RemoveIeValueAt(int ieIndex, int valueIndex)
+        {
+            IeValues[ieIndex].RemoveAt(valueIndex);
+            UpdateRemoveTestButtonVisibility();
+        }
+        
+        public void AddTest()
+        {
+            foreach (var dptValues in CmdValues)
+                dptValues.Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
+            foreach (var dptValues in IeValues)
+                dptValues.Add(new DataPointType.BigIntegerItem(new BigInteger(0)));
+               
+            UpdateRemoveTestButtonVisibility();
+        }
+
+        public void RemoveTestAt(int indexTest)
+        {
+            foreach (var dptValues in CmdValues)
+                dptValues.RemoveAt(indexTest);
+            foreach (var dptValues in IeValues)
+                dptValues.RemoveAt(indexTest);
+   
+            UpdateRemoveTestButtonVisibility();
         }
         
         public ElementStructure()
         {
             Cmd = [];
             Ie = [];
+            CmdValues = [];
+            IeValues = [];
+            UpdateRemoveTestButtonVisibility();
         }
         
         public ElementStructure(ObservableCollection<IntItem> cmdCollection, ObservableCollection<IntItem> ieCollection)
         {
             Cmd = cmdCollection;
             Ie = ieCollection;
+            CmdValues = [];
+            IeValues = [];
+            UpdateRemoveTestButtonVisibility();
         }
 
         public ElementStructure(List<int> cmdCollection, List<int> ieCollection)
         {
             Cmd = [];
             Ie = [];
+            CmdValues = [];
+            IeValues = [];
             foreach (var cmdInt in cmdCollection)
                 AddToCmd(cmdInt);
             foreach (var ieInt in ieCollection)
                 AddToIe(ieInt);
+            UpdateRemoveTestButtonVisibility();
         }
 
         public ElementStructure(ElementStructure otherStructure)
         {
             Cmd = new ObservableCollection<IntItem>();
             Ie = new ObservableCollection<IntItem>();
+            CmdValues = [];
+            IeValues = [];
             foreach(var cmd in otherStructure.Cmd)
                 Cmd.Add(new IntItem(cmd));
             foreach (var ie in otherStructure.Ie)
                 Ie.Add(new IntItem(ie));
+            UpdateRemoveTestButtonVisibility();
         }
 
         private void UpdateRemoveDptButtonVisibility()
@@ -212,6 +282,15 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 intItem.RemoveDptButtonVisibility = vis;
         }
         
+        private void UpdateRemoveTestButtonVisibility()
+        {
+            foreach (var ie in IeValues)
+            {
+                var vis = ie != IeValues.Last() ? Visibility.Collapsed : Visibility.Visible;
+                foreach (var bigIntegerItem in ie)
+                    bigIntegerItem.RemoveTestButtonVisibility = vis;
+            }
+        }
     }
     
     // Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
@@ -471,63 +550,35 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     {
         DptDictionary = new ObservableDictionary<int, DptAndKeywords>(functionalModels);
         ModelStructure = new ObservableCollection<ElementStructure>(modelStructure);
+        for (var i = 0; i < ModelStructure.Count; i++)
+        {
+            for (var j = 0; j < cmdValues[i].Count; j++)
+            {
+                while (ModelStructure[i].CmdValues.Count < j + 1)
+                    ModelStructure[i].CmdValues.Add([]);
+                for (var k = 0; k < cmdValues[i][j].Count; k++)
+                {
+                    ModelStructure[i].CmdValues[j].Add(new DataPointType.BigIntegerItem(cmdValues[i][j][k]));
+                }
+
+            }
+
+            for (var j = 0; j < ieValues[i].Count; j++)
+            {
+                while (ModelStructure[i].IeValues.Count < j + 1)
+                    ModelStructure[i].IeValues.Add([]);
+                for (var k = 0; k < ieValues[i][j].Count; k++)
+                {
+                    ModelStructure[i].IeValues[j].Add(new DataPointType.BigIntegerItem(ieValues[i][j][k]));
+                }
+
+            }
+        }
         Model = BuildFunctionalModel(name, key);
         SetUpNotifs();
 
 
-        for (var i = 0; i < cmdValues.Count; i++)
-        {
-            var cmdValue = cmdValues[i];
-            for (var j = 0; j < cmdValue.Count; j++)
-            {
-                var value = cmdValue[j];
-                for (var k = 0; k < value.Count; k++)
-                {
-                    var toAdd = value[k];
-                    if (Model.ElementList[i].TestsCmd[j].IntValue == null)
-                    {
-                        Model.ElementList[i].TestsCmd[j].IntValue = [];
-                    }
-                    if (Model.ElementList[i].TestsCmd[j].IntValue.Count < k + 1)
-                    {
-                        Model.ElementList[i].TestsCmd[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd));
-                    }
-                    else
-                    {
-                        Model.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd);
-                    }
-                }
-
-                Model.ElementList[i].TestsCmd[j].UpdateValue();
-            }
-        }
-
-        for (var i = 0; i < ieValues.Count; i++)
-        {
-            var ieValue = ieValues[i];
-            for (var j = 0; j < ieValue.Count; j++)
-            {
-                var value = ieValue[j];
-                for (var k = 0; k < value.Count; k++)
-                {
-                    var toAdd = value[k];
-                    if (Model.ElementList[i].TestsIe[j].IntValue == null)
-                    {
-                        Model.ElementList[i].TestsIe[j].IntValue = [];
-                    }
-                    if (Model.ElementList[i].TestsIe[j].IntValue.Count < k + 1)
-                    {
-                        Model.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd));
-                    }
-                    else
-                    {
-                        Model.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd);
-                    }
-                }
-
-                Model.ElementList[i].TestsIe[j].UpdateValue();
-            }
-        }
+        
     }
 
     // ce constructeur fait bien une copie profonde, indépendante de la strucuture passée en argument
@@ -678,6 +729,54 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 res.ElementList[^1].AddDptToIe(new DataPointType(DptDictionary[ie].Dpt));
             }
         }
+        
+        for (var i = 0; i < ModelStructure.Count; i++)
+        {
+            var elementStructure = ModelStructure[i];
+            for (var j = 0; j < elementStructure.CmdValues.Count; j++)
+            {
+                var cmdValue = elementStructure.CmdValues[j];
+                for (var k = 0; k < cmdValue.Count; k++)
+                {
+                    var toAdd = cmdValue[k];
+                    if (res.ElementList[i].TestsCmd[j].IntValue == null )
+                    {
+                        res.ElementList[i].TestsCmd[j].IntValue = [];
+                    }
+                    if (res.ElementList[i].TestsCmd[j].IntValue.Count < k + 1)
+                    {
+                        res.ElementList[i].TestsCmd[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0));
+                    }
+                    else
+                    {
+                        res.ElementList[i].TestsCmd[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0);
+                    }
+                }
+
+                res.ElementList[i].TestsCmd[j].UpdateValue();
+            }
+
+            for (var j = 0; j < elementStructure.IeValues.Count; j++)
+            {
+                var value = elementStructure.IeValues[j];
+                for (var k = 0; k < value.Count; k++)
+                {
+                    var toAdd = value[k];
+                    if (res.ElementList[i].TestsIe[j].IntValue == null)
+                    {
+                        res.ElementList[i].TestsIe[j].IntValue = [];
+                    }
+                    if (res.ElementList[i].TestsIe[j].IntValue.Count < k + 1)
+                    {
+                        res.ElementList[i].TestsIe[j].IntValue.Add(new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0));
+                    }
+                    else
+                    {
+                        res.ElementList[i].TestsIe[j].IntValue[k] = new DataPointType.BigIntegerItem(toAdd.BigIntegerValue ?? 0);
+                    }
+                }
+            }
+        }
 
         res.Key = key;
 
@@ -780,7 +879,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     
     public XmlElement ExportFunctionalModelStructure(XmlDocument doc)
     {
-        var xModel = doc.CreateElement(Model.Name);
+        var xModel = doc.CreateElement(Model.Name.Replace(' ','_'));
         var xModelStructure = doc.CreateElement("Model_Structure");
         foreach (var element in ModelStructure)
         {

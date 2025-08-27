@@ -91,7 +91,6 @@ public class DataPointType : INotifyPropertyChanged
     // Collection that is parallel to the GroupValues one
     // Every change on this collection is copied onto the list
     // BigIntegers are made modifiable through the BigIntegerItem class
-    private ObservableCollection<BigIntegerItem?> _intValue = [];
     public ObservableCollection<BigIntegerItem> IntValue { get; set;  } = new ObservableCollection<BigIntegerItem>();
     
     private int _type;

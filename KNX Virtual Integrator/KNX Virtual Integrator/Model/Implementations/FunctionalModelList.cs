@@ -273,7 +273,7 @@ public class FunctionalModelList : IFunctionalModelList
         var project = doc.CreateElement("Project");
         foreach (var modelStructure in FunctionalModels)
         {
-            var structure = doc.CreateElement(FunctionalModelDictionary.FunctionalModels[FunctionalModels.FindIndex(l => l == modelStructure)].Model.Name);
+            var structure = doc.CreateElement(FunctionalModelDictionary.FunctionalModels[FunctionalModels.FindIndex(l => l == modelStructure)].Model.Name.Replace(' ','_'));
             foreach (var model in modelStructure)
             {
                 var functionalModel = model.ExportFunctionalModel(doc);

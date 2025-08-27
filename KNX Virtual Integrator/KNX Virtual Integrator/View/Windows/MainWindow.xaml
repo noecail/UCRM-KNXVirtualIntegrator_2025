@@ -28,7 +28,7 @@
         -->
         
     <Window.Resources>
-        <!-- Permet d'accéder plus facilement au BigIntergerToStringConverter -->
+        <!-- Permet d'accéder plus facilement au BigIntegerToStringConverter -->
         <utils:BigIntegerToStringConverter x:Key="BigIntegerConverter"/>
 
         <!-- Syles pour les Élements à Tester (assez long, recommandé de Collapse dans l'éditeur de code) -->
@@ -754,6 +754,12 @@
         
     </Window.Resources>
 
+<!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
+<!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
+<!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
+<!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
+<!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
+        
     <!-- Paramètres du logo dans la barre de titre, 15 10 -->
     <mah:MetroWindow.LeftWindowCommands>
         <mah:WindowCommands>
@@ -845,6 +851,10 @@
                                 Margin="5,0"
                         />
                         
+                        <Button Content="Afficher SelectedModel"
+                                Click="PrintSelectedModelButtonClick" Visibility="Hidden"/>
+                        <Button Content="Afficher SelectedStructure.Model"
+                                Click="PrintSelectedStructureModelButtonClick" Visibility="Hidden"/>
                     </StackPanel>
             
                     <!-- Boutons de droite -->

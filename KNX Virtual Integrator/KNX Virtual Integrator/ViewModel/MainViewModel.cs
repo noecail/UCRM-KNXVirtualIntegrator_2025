@@ -313,6 +313,18 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
         
+        AddTestToElementStructureCommand = new Commands.RelayCommand<FunctionalModelStructure.ElementStructure>(parameter =>
+            {
+                parameter?.AddTest();
+            }
+        );
+        
+        RemoveTestFromElementStructureCommand = new Commands.RelayCommand<(FunctionalModelStructure.ElementStructure elementStructure, int index)>(parameters =>
+            {
+                parameters.elementStructure.RemoveTestAt(parameters.index);
+            }
+        );
+        
         AddDptCmdToElementStructureCommand = new Commands.RelayCommand<FunctionalModelStructure.ElementStructure>(parameter =>
             {
                 parameter?.AddToCmd(0);
