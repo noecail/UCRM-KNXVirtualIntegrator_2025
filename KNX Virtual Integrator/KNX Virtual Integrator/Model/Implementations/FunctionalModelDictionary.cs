@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
-using Knx.Falcon;
 using System.Xml;
 
 
@@ -32,41 +31,41 @@ namespace KNX_Virtual_Integrator.Model.Implementations
         {
             FunctionalModels = [];
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_ON_OFF",
-                        new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
+                        new Dictionary<int, DptAndKeywords>()
                         {
                             {
-                                1, new FunctionalModelStructure.DptAndKeywords { Keywords = ["On/off"], Dpt = new DataPointType(1) }
+                                1, new DptAndKeywords { Keywords = ["On/off"], Dpt = new DataPointType(1) }
                             }, //CMD
                             {
-                                2, new FunctionalModelStructure.DptAndKeywords { Keywords = ["etat On/Off"], Dpt = new DataPointType(1) }
+                                2, new DptAndKeywords { Keywords = ["etat On/Off"], Dpt = new DataPointType(1) }
                             } //IE
                         },
-                        [new FunctionalModelStructure.ElementStructure([1],[2])]
+                        [new ElementStructure([1],[2])]
                         //,1
                         ,[[[1,0]]],[[[1,0]]],1
             ),false,["Lumiere on/off", "Lumiere on-off", "Lumiere on_off", "Light on/off", "Eclairage_Simple"]);  //Adding On/Off light functional model
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_Variation",
-                        new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
+                        new Dictionary<int, DptAndKeywords>()
                         {
                             {
-                                1, new FunctionalModelStructure.DptAndKeywords { Keywords = ["On/off"], Dpt = new DataPointType(1) }
+                                1, new DptAndKeywords { Keywords = ["On/off"], Dpt = new DataPointType(1) }
                             }, //CMD on/off
                             {
-                                2, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etat On/off"], Dpt = new DataPointType(1) }
+                                2, new DptAndKeywords { Keywords = ["Etat On/off"], Dpt = new DataPointType(1) }
                             }, //IE  on/off
                             {
-                                3, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Variations"], Dpt = new DataPointType(3) }
+                                3, new DptAndKeywords { Keywords = ["Variations"], Dpt = new DataPointType(3) }
                             }, //CMD relative
                             {
-                                4, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Valeurs variation"], Dpt = new DataPointType(5) }
+                                4, new DptAndKeywords { Keywords = ["Valeurs variation"], Dpt = new DataPointType(5) }
                             }, //CMD absolue
                             {
-                                5, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etats variation"], Dpt = new DataPointType(5) }
+                                5, new DptAndKeywords { Keywords = ["Etats variation"], Dpt = new DataPointType(5) }
                             }, //IE  absolue
                         },
-                        [new FunctionalModelStructure.ElementStructure([1],[2,5]), // test on/off
-                            new FunctionalModelStructure.ElementStructure([3],[2,2,5]), //test relative command
-                            new FunctionalModelStructure.ElementStructure([4],[2,2,5]) //test absolute command
+                        [new ElementStructure([1],[2,5]), // test on/off
+                            new ElementStructure([3],[2,2,5]), //test relative command
+                            new ElementStructure([4],[2,2,5]) //test absolute command
                         ]
                         ,[[[1,0]],[[4]],[[0xFF,0]]],[[[1,0],[-1,-1]],[[1],[0],[-1]],[[1,0],[0,1],[0xFF,0]]],2
                     ),false, ["Lumiere variation", "variation", "Lumiere_variation", "Light variation", "Eclairages_variable"]
@@ -74,46 +73,46 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             
             
             AddFunctionalModel(new FunctionalModelStructure("Store",
-                    new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
+                    new Dictionary<int, DptAndKeywords>()
                     {
                         {
-                            1, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Montee/descente"], Dpt = new DataPointType(1) }
+                            1, new DptAndKeywords { Keywords = ["Montee/descente"], Dpt = new DataPointType(1) }
                         }, //CMD on/off
                         {
-                            2, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etats Montee/descente"], Dpt = new DataPointType(1) }
+                            2, new DptAndKeywords { Keywords = ["Etats Montee/descente"], Dpt = new DataPointType(1) }
                         }, //IE  on/off
                         {
-                            3, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Stop"], Dpt = new DataPointType(1) }
+                            3, new DptAndKeywords { Keywords = ["Stop"], Dpt = new DataPointType(1) }
                         }, //Stop
                         {
-                            4, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Position"], Dpt = new DataPointType(5) }
+                            4, new DptAndKeywords { Keywords = ["Position"], Dpt = new DataPointType(5) }
                         }, //CMD absolue
                         {
-                            5, new FunctionalModelStructure.DptAndKeywords { Keywords = ["Etat Position"], Dpt = new DataPointType(5) }
+                            5, new DptAndKeywords { Keywords = ["Etat Position"], Dpt = new DataPointType(5) }
                         }, //IE  absolue
                     },
-                    [new FunctionalModelStructure.ElementStructure([1],[2,5]), // test on/off
-                        new FunctionalModelStructure.ElementStructure([1,3],[2,2,5]), //test stop
-                        new FunctionalModelStructure.ElementStructure([4],[2,2,5]) //test absolute command
+                    [new ElementStructure([1],[2,5]), // test on/off
+                        new ElementStructure([1,3],[2,2,5]), //test stop
+                        new ElementStructure([4],[2,2,5]) //test absolute command
                     ],
                     [[[1,0]],[[1],[1]],[[0xFF,0]]],[[[1,0],[-1,-1]],[[1],[0],[-1]],[[1,0],[0,1],[0xFF,0]]],3
                 ),false, ["store", "blind", "Volets_roulants","Volet_roulant"]
             );
             AddFunctionalModel(new FunctionalModelStructure("Commutation",
-                        new Dictionary<int, FunctionalModelStructure.DptAndKeywords>()
+                        new Dictionary<int, DptAndKeywords>()
                         {
                             {
                                 1,
-                                new FunctionalModelStructure.DptAndKeywords
+                                new DptAndKeywords
                                     { Keywords = ["On/Off"], Dpt = new DataPointType(1) }
                             }, //CMD
                             {
                                 2,
-                                new FunctionalModelStructure.DptAndKeywords
+                                new DptAndKeywords
                                     { Keywords = ["Etat On/off"], Dpt = new DataPointType(1) }
                             } //IE
                         },
-                        [new FunctionalModelStructure.ElementStructure([1], [2])],
+                        [new ElementStructure([1], [2])],
                         [[[1,0]]],[[[1,0]]],4
                     ), false,["Commute", "Commutation", "Convecteur", "Prise", "Arrosage", "Ouvrant"]
                 );//Adding commutation functional model*/

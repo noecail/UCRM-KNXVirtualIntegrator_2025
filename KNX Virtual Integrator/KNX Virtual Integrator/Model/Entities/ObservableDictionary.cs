@@ -43,11 +43,11 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
         {
             TValue value;
 
-            if (typeof(TValue) == typeof(FunctionalModelStructure.DptAndKeywords))
+            if (typeof(TValue) == typeof(DptAndKeywords))
             {
                 // On appelle explicitement le constructeur de copie
-                var original = (FunctionalModelStructure.DptAndKeywords)(object)kvp.Value;
-                value = (TValue)(object)new FunctionalModelStructure.DptAndKeywords(original);
+                var original = (DptAndKeywords)(object)kvp.Value;
+                value = (TValue)(object)new DptAndKeywords(original);
             }
             else
             {
