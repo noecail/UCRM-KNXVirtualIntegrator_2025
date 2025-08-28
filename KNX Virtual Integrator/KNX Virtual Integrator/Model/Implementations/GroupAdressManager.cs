@@ -66,19 +66,20 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// groups them based on device links and common names. It handles the creation and updating 
     /// of grouped addresses, avoiding name collisions by appending suffixes if necessary.
     ///
-    /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
     /// </summary>
+    /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+    /// <returns> Returns an Xdocument with only the group addresses. </returns>     
     public XDocument? NewProcessZeroXmlFile(XDocument groupAddressFile, IFunctionalModelList functionalModelList)
     {
-        var doc = groupAddressFile.Root?.Elements();
+        var doc = groupAddressFile.Root?.Elements();  //Extracts all the elements from the 0.xml file
         _groupAddressStructure = DetermineGroupAddressStructure0Xml(groupAddressFile);
         var ns = namespaceResolver.GlobalKnxNamespace ?? null;
         if (null == ns || doc == null)
             return null;
-        var groupAddresses = doc.Descendants(ns + "GroupRanges");
+        var groupAddresses = doc.Descendants(ns + "GroupRanges");  //Extracts the group addresses
 
-        NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);
-        XDocument document = new XDocument(new XElement("Root", groupAddresses));
+        NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);  //Processes the group addresses
+        XDocument document = new XDocument(new XElement("Root", groupAddresses.Elements()));
         return document;
 
     }
@@ -370,8 +371,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// <summary>
     /// Processes an XML file in the standard format to extract and group addresses.
     ///
-    /// This method processes group addresses from the XML file, normalizing the names by removing
-    /// specific prefixes ("Ie" or "Cmd") and grouping addresses based on the remaining common names.
+    /// This method processes group addresses from the XML file. To do so, there are 3 different protocols. First if the name of the
+    /// group address contains keywords linked to a strucutre, the model is associated to this structure and the DPTs are put according to the structure.
+    /// If the name is not recognized, takes all the commands and creates a tested element for each. Then the structure is assessed.
+    /// If it has the same number of elements with the same commands, links it to the structure and puts the DPTs where they should be.
+    /// Otherwise, only connects IE_x with CMD_x.
     ///
     /// <param name="modelStructures">The XML document containing group address data in standard format.</param>
     /// <param name="functionalModelList">The list of lists of functional models.</param>
@@ -485,10 +489,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             var key = newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1);
                             if (key == -1)
                             {
-                                lostDataPointTypes.Add(dpt.Item1);
+                                lostDataPointTypes.Add(dpt.Item1); //If the DPT type doesn't correspond to any dpt missing from the structure, adds it to lost DPTs.
                                 continue;
                             }
-                            newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,key);
+                            newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,key);  // If it corrseponds, adds it wherever it should be
 
                         }
                         
@@ -504,8 +508,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 names.Add(objectType[j].Attribute("Name")?.Value ?? "");
                             }
 
-                            var prefix = FindMajorityPrefix(names);
-                            if (names.Count == 1)
+                            var prefix = FindMajorityPrefix(names); //Takes the prefix of the group addresses names
+                            if (names.Count == 1) //If there is only 1 name, takes the suffix and builds the prefix by deleting the suffix
                             {
                                 names = [];
                                 for (var j = 0; j < structureList.Count; j++)
@@ -525,7 +529,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     var dptName = objectType[j].Attribute("Name")?.Value ?? "";
                                     dptName = dptName.Replace(" ", "_");
                                     var circuitName = dptName;
-                                    if (!string.IsNullOrEmpty(circuitName) &&
+                                    if (!string.IsNullOrEmpty(circuitName) &&  //Builds the circuit name as the group address name minus the prefix
                                         !string.IsNullOrEmpty(prefix)) // && circuitName.Contains(prefix))
                                         circuitName = circuitName.Replace(prefix.Replace(' ','_'), "");
                                     else
@@ -536,8 +540,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                                     1..]); //Takes the name of the object, except the first word 
                                     }
 
-                                    var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                    if (modelIndex == -1 && (dptName.Contains("stop",
+                                    var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels); //Checks if the circut name corresponds to any of the new functional models
+                                    if (modelIndex == -1 && (dptName.Contains("stop", //If not and if the name is a stop or a command, creates a new functional model
                                             StringComparison
                                                 .OrdinalIgnoreCase) ||Prefixes.Any(p =>
                                             objectType[j].Attribute("Name")?.Value
@@ -547,14 +551,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         modelIndex = newFunctionalModels.Count - 1;
                                     }
                                     
-                                    var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                    var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value  //Builds the new DPT from the data in the xml file
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                     var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
                                     if (dptName.Contains("stop",
                                             StringComparison
                                                 .OrdinalIgnoreCase)) //If it's a stop command, create a new element (which is a copy of the first element)
                                     {
-                                        if (newFunctionalModels[j].ElementList.Count >= 1)
+                                        if (newFunctionalModels[j].ElementList.Count >= 1) //Searches for an element corresponding to an on/off command
                                         {
                                             var baseIndex = 0;
                                             for (var k = 0; k < newFunctionalModels[j].ElementList.Count; k++)
@@ -567,6 +571,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                                 }
                                             }
 
+                                            //Builds a new element with an on off command first and then a stop command
                                             newFunctionalModels[j].AddElement(new TestedElement([1],
                                                 [newFunctionalModels[j].ElementList[baseIndex].TestsCmd[0].Address], [
                                                     []
@@ -578,30 +583,30 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     }
                                     else if (Prefixes.Any(p =>
                                                  objectType[j].Attribute("Name")?.Value
-                                                     .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true))
+                                                     .StartsWith(p, StringComparison.OrdinalIgnoreCase) == true)) //If it starts with one of the command prefixes (cmd...)
                                     {
                                         newFunctionalModels[modelIndex].AddElement(new TestedElement([newType], [newAddress],
-                                                [[]], [dptName], circuitName));
+                                                [[]], [dptName], circuitName)); //Creates a new element
                                     }
                                 }
                             }
                         }
-                        if (newFunctionalModels.Count > 0)
+                        if (newFunctionalModels.Count > 0) 
                         {
-                            index = functionalModelList.FunctionalModelDictionary.HasSameStructure(
+                            index = functionalModelList.FunctionalModelDictionary.HasSameStructure( //Once all the commands are put, checks if it can be connected to a structure
                                 newFunctionalModels[0]);
                         }
 
-                        if (index != -1)
+                        if (index != -1) //If the structure is recognized
                         {
-                            var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index];
-                            foreach(var newModel in newFunctionalModels)
+                            var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index]; //Saves the structure recognized
+                            foreach(var newModel in newFunctionalModels) // For all the commands previously built, builds the intvalues
                             {
                                 newModel.BuildCmdIntValues(model.Model);
                             }
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {
-                                var objectType = structureList[i].Elements().ToList();
+                                var objectType = structureList[i].Elements().ToList(); //Processes the names as previously
                                 List<String> names = [];
                                 for (var j = 0; j < objectType.Count; j++)
                                 {
@@ -650,47 +655,47 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
-                                        var newDpt = new DataPointType(newType, newAddress, [], dptName);
+                                        var newDpt = new DataPointType(newType, newAddress, [], dptName); //Builds the new DPT from the data in the xml
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                        if (modelIndex == -1) //When the circuit name doesn't exist, maybe take j?? dangerous
+                                        if (modelIndex == -1) //When the circuit name doesn't exist, maybe take j?? dangerous, adds the DPT to the lost ones
                                         {
                                             lostDataPointTypes.Add(newDpt);
                                             continue;
                                         }
-                                        var dptKey = model.FindKeyWithKeywords(prefix);
+                                        var dptKey = model.FindKeyWithKeywords(prefix); //Tries to recognize the DPT from its name
                                         if(dptKey == -1) 
                                             dptKey = newFunctionalModels[modelIndex].FindKey(model,newDpt);
-                                        if (dptKey == -1)
+                                        if (dptKey == -1) //If the DPT isn't recognised, adds it to a list of unrecognised DPTs
                                         {
                                             unrecognizedDataPoints.Add((newDpt,modelIndex));
                                             continue;
                                         }
-                                        newFunctionalModels[modelIndex].BuildFromStructure(model,newDpt,dptKey);
+                                        newFunctionalModels[modelIndex].BuildFromStructure(model,newDpt,dptKey); //If the DPT is recognised, adds it wherever it's needed
                                     }
                                 }
                             } 
                             
                             foreach (var dpt in unrecognizedDataPoints)//Checks again if the unrecognized dpt corresponds to missing dpt in the model
                             {
-                                var key = newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1);
+                                var key = newFunctionalModels[dpt.Item2].FindKey(model, dpt.Item1); //Once all the recognised IEs are added, tries to reconize the remaining ones from the missing ones in the structure and their types
                                 if (key == -1)
                                 {
 
-                                    lostDataPointTypes.Add(dpt.Item1);
+                                    lostDataPointTypes.Add(dpt.Item1); //If it's still unrecognized, adds it to the list of lost DPTs
                                     continue;
                                 }
-                                newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,key);
+                                newFunctionalModels[dpt.Item2].BuildFromStructure(model, dpt.Item1,key); // If it's recognized, adds it wherever it's needed
 
                             }
 
                         }
-                        else
+                        else // If the structure is still not recognized
                         {
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {
                                 var objectType = structureList[i].Elements().ToList();
                                 List<String> names = [];
-                                for (var j = 0; j < objectType.Count; j++)
+                                for (var j = 0; j < objectType.Count; j++) // Processes the names as previously
                                 {
                                     names.Add(objectType[j].Attribute("Name")?.Value ?? "");
                                 }
@@ -736,16 +741,16 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value!;
-                                        var newDpt = new DataPointType(newType, newAddress, [],dptName);
-                                        var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
-                                        if (modelIndex == -1)
+                                        var newDpt = new DataPointType(newType, newAddress, [],dptName); // Builds the new DPT from the data in the xml
+                                        var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels); // Tries to recognize in which new functional model contains the new DPT
+                                        if (modelIndex == -1) // If the model is not recognized, adds the DPT to the list of lost DPTs
                                         {
                                             lostDataPointTypes.Add(newDpt);
                                             continue;
                                         }
                                         for (var k = 0;
                                              k < newFunctionalModels[modelIndex].ElementList.Count;
-                                             k++) //For each element, if for the same command 
+                                             k++) //For each element, if the command name is the same as the Ie name, adds the ie to the element
                                         {
                                             var newElement = newFunctionalModels[modelIndex].ElementList[k];
                                             var name = string.Join("_",
@@ -754,11 +759,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                                 name = string.Join("_",
                                                     prefix.Replace(circuitName, "").Split(' ')[1..]);
                                             var nbAppearances = newElement.CmdContains(circuitName);
-                                            if (newType == 0 && nbAppearances != 0)
+                                            if (newType == 0 && nbAppearances != 0) // If the type doesn't appear in the xml file, takes the type of the command of the same name
                                             {
                                                 newType = newElement.GetDptType(name);
                                             }
-                                            for (var l = 0; l < nbAppearances; l++)
+                                            for (var l = 0; l < nbAppearances; l++) // Adds the DPT to Ies as many times as it is in the commands
                                             {
                                                 newElement.AddDptToIe(newType, newAddress, []);
                                             }
@@ -770,7 +775,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             index = functionalModelList.FunctionalModelDictionary.FunctionalModels.Count;
 
 
-                            if (newFunctionalModels.Count > 0)
+                            if (newFunctionalModels.Count > 0) // Creates the structure associated to the new models
                             {
                                 functionalModelList.AddToDictionary(
                                     new FunctionalModelStructure(newFunctionalModels[0], modelName, index + 1), true);
@@ -781,7 +786,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                         }
                     }
 
-                    foreach (var newFunctionalModel in newFunctionalModels)
+                    foreach (var newFunctionalModel in newFunctionalModels) // Adds all the new functional models to the list of list
                     {
 
                         newFunctionalModel.UpdateValue();
@@ -789,7 +794,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     }
                 }
 
-                if (lostDataPointTypes.Count > 0)
+                if (lostDataPointTypes.Count > 0) // If there are lost DPTs, creates a structure to store all of them and adds them to the list associated to this structure
                 {
                     functionalModelList.AddNewCount();
                     functionalModelList.AddToDictionary(new FunctionalModelStructure("Unrecognized DPTs"),false);
@@ -804,10 +809,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                     functionalModelList.FunctionalModels[^1][^1].Name=dpt.Name;
                 }
             }
-            else// if (_groupAddressStructure == 2) //Case when Addresses are structured with 2 levels
+            else// if (_groupAddressStructure == 2) //Case when Addresses are structured with 2 levels //TODO:Add the case when the address are divided in two levels or only one
             {
             }
-            //functionalModelList.ExportList(@"C:\Users\manui\Documents\Stage 4A\Test\List");
         }
     }
     
@@ -977,11 +981,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// <returns></returns>
     public int FindStringInElement(string stringToFind, FunctionalModel model)
     {
-        for (var i = 0; i < model.ElementList.Count; i++)
+        for (var i = 0; i < model.ElementList.Count; i++) // Goes through all the DPT from the command of all the elements
         {
             foreach (var dpt in model.ElementList[i].TestsCmd)
             {
-                if (dpt.Name.Contains(stringToFind))
+                if (dpt.Name.Contains(stringToFind)) // If the DPT name contains the string, returns the index of the element
                 {
                     return i;
                 }
