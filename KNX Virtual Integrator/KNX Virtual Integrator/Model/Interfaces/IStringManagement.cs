@@ -1,5 +1,7 @@
 ﻿namespace KNX_Virtual_Integrator.Model.Interfaces;
-
+/// <summary>
+/// Interface of the class handling the comparison of strings
+/// </summary>
 public interface IStringManagement
 {
     /// <summary>

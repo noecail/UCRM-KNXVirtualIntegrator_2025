@@ -5,7 +5,9 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Defines methods for managing group addresses extracted from XML files.
+/// </summary>
 public class GroupAddressManager(Logger logger, ProjectFileManager projectFileManager, FileLoader loader, NamespaceResolver namespaceResolver, GroupAddressProcessor groupAddressProcessor, GroupAddressMerger groupAddressMerger) : IGroupAddressManager
 {
     /// <summary>
@@ -20,8 +22,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
     private int _groupAddressStructure;
     
-    
-
+    /// <summary>
+    /// Group address names prefixes. It is initialized for command
+    /// </summary>
     public string[] Prefixes { get; set; } = { "Cmd", "Command", "Control", "Do","on/off", "Variations", "Montee/Descente", "Position", "Valeurs" }; //Initialize the keywords for command
 
     /// <summary>
@@ -47,11 +50,11 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
 
         if (namespaceResolver.GlobalKnxNamespace == null) return null;
 
-        if (filePath == manager.ZeroXmlPath)
+        if (filePath == manager.ZeroXmlPath) //If the processes difle is a ets project
         {
             groupAddressFile = NewProcessZeroXmlFile(groupAddressFile, functionalModelList);
         }
-        else
+        else //If it is a group address file
         {
             NewProcessStandardXmlFile(groupAddressFile.Root?.Elements(), functionalModelList);
         }
@@ -67,6 +70,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// of grouped addresses, avoiding name collisions by appending suffixes if necessary.
     ///
     /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+    /// <param name="functionalModelList">The list of functional models to fill</param>
     /// </summary>
     public XDocument? NewProcessZeroXmlFile(XDocument groupAddressFile, IFunctionalModelList functionalModelList)
     {
@@ -78,9 +82,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         var groupAddresses = doc.Descendants(ns + "GroupRanges");
 
         NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);
-        XDocument document = new XDocument(
-            new XElement("Root", GroupedAddresses)
-        );
+        XDocument document = new XDocument(new XElement("Root", groupAddresses));
         return document;
 
     }
@@ -94,6 +96,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// of grouped addresses, avoiding name collisions by appending suffixes if necessary.
     ///
     /// <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+    /// <param name="functionalModelList">The list of functional models to fill</param>
     /// </summary>
     public void ProcessZeroXmlFile(XDocument groupAddressFile, IFunctionalModelList functionalModelList)
     {
@@ -860,7 +863,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// If the addresses are detected to overlap, the method returns the value 3.
     /// If no overlaps are found, the method returns the value 2.
     /// 
-    /// <param name="doc">The XML document (XDocument) containing the group address ranges and specific group addresses.</param>
+    /// <param name="modelStructures">The list of XElements containing the group address ranges and specific group addresses.</param>
     /// <returns>An integer indicating the overlap status: 3 for detected overlap, 2 for no overlap.</returns>
     /// </summary>
     public int DetermineGroupAddressStructureGroupAddressFile(IEnumerable<XElement>? modelStructures)

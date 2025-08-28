@@ -59,11 +59,11 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     /// <summary>
-    /// Envoie une valeur de groupe "On" (vraie) de manière asynchrone au bus KNX.
-    /// Vérifie d'abord si le bus est connecté et disponible avant d'envoyer la valeur.
-    /// Affiche un message d'erreur si la connexion au bus échoue.
+    /// Dev method. Sends asynchronously the value "on" to a specified address.
+    /// First verifies the bus state before sending the value.
+    /// Logs an error if it fails. 
     /// </summary>
-    /// <returns>Une tâche représentant l'opération d'écriture asynchrone.</returns>
+    /// <returns>A task representing the completion of the writing.</returns>
     public async Task GroupValueWriteOnAsync()
     {
         try
@@ -90,11 +90,11 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     /// <summary>
-    /// Envoie une valeur de groupe "Off" (fausse) de manière asynchrone au bus KNX.
-    /// Vérifie d'abord si le bus est connecté et disponible avant d'envoyer la valeur.
-    /// Affiche un message d'erreur si la connexion au bus échoue.
+    /// Dev method. Sends asynchronously the value "off" to a specified address.
+    /// First verifies the bus state before sending the value.
+    /// Logs an error if it fails. 
     /// </summary>
-    /// <returns>Une tâche représentant l'opération d'écriture asynchrone.</returns>
+    /// <returns>A task representing the completion of the writing.</returns>
     public async Task GroupValueWriteOffAsync()
     {
         try
@@ -121,13 +121,13 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     /// <summary>
-    /// Envoie une valeur de groupe spécifique de manière asynchrone au bus KNX pour une adresse de groupe donnée.
-    /// Vérifie d'abord si le bus est connecté et disponible avant d'envoyer la valeur.
-    /// Affiche un message d'erreur si la connexion au bus échoue.
+    /// Sends asynchronously a value to a specified address.
+    /// First verifies the bus state before sending the value.
+    /// Logs an error if it fails.
     /// </summary>
-    /// <param name="addr">L'adresse de groupe à laquelle la valeur est envoyée.</param>
-    /// <param name="value">La valeur de groupe à envoyer.</param>
-    /// <returns>Une tâche représentant l'opération d'écriture asynchrone.</returns>
+    /// <param name="addr">The address at which the value is sent.</param>
+    /// <param name="value">The value to send.</param>
+    /// <returns>A task representing the completion of the writing.</returns>
     public async Task<bool> GroupValueWriteAsync(GroupAddress addr, GroupValue value)
     {
         try
@@ -151,10 +151,10 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     ///<summary>
-    /// Convertit une valeur ulong en tableau de bytes pour l'écriture sur le bus.
+    /// Converts a uLong value to a byte table to write on the bus
     ///</summary>
-    /// <param name="toSend">La valeur à envoyer.</param>
-    /// <param name="groupValue">Le tableau à remplir pour envoyer plus tard.</param>
+    /// <param name="toSend">The value to send.</param>
+    /// <param name="groupValue">The table to fill before writing.</param>
     public void ConvertToGroupValue(ulong toSend, byte[] groupValue)
     {
         var intBytes = BitConverter.GetBytes(toSend);
@@ -168,12 +168,12 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     
     //TACHE LECTURE TRAME NORMALE UNIQUE
     /// <summary>
-    /// Lit de manière asynchrone la valeur d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
-    /// Vérifie la connexion et l'état du bus avant d'envoyer la requête.
-    /// Utilise un <see cref="TaskCompletionSource{T}"/> pour capturer la valeur lue.
+    /// Reads asynchronously values from a group address.
+    /// Verifies the bus connection state before sending the request.
+    /// uses a <see cref="TaskCompletionSource{T}"/> to capture the read value.
     /// </summary>
-    /// <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-    /// <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+    /// <param name="groupAddress">The group address at which the value should be read.</param>
+    /// <returns>A task representing the completion of the task, containing the received messages.</returns>
     public async Task<GroupValue?> MaGroupValueReadAsync(GroupAddress groupAddress)
     {
         if (_busConnection is { IsConnected: false, IsBusy: true, Bus: not null })
@@ -230,13 +230,13 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     
     //TACHE LECTURE TRAME NORMALE MULTIPLE SOUS TIMER
     /// <summary>
-    /// Lit de manière asynchrone les valeurs d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
-    /// Vérifie la connexion et l'état du bus avant d'envoyer la requête.
-    /// Utilise un <see cref="TaskCompletionSource{T}"/> pour capturer la valeur lue.
+    /// Reads asynchronously values from a group address until the timer runs out.
+    /// Verifies the bus connection state before sending the request.
+    /// uses a <see cref="TaskCompletionSource{T}"/> to capture the read value.
     /// </summary>
-    /// <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-    ///  <param name="timerDuration">Le timer sous lequel les trames doivent être reçues, en ms</param>
-    /// <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+    /// <param name="groupAddress">The group address at which the value should be read.</param>
+    ///  <param name="timerDuration">Timer in ms under which the message should be received.</param>
+    /// <returns>A task representing the completion of the task, containing the received messages..</returns>
     public async Task<List<GroupMessage>> GroupValuesWithinTimerAsync(GroupAddress groupAddress, int timerDuration)
     {
         var theList = new List<GroupMessage>();
@@ -300,13 +300,13 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     
     //TACHE LECTURE TRAME NORMALE MULTIPLE SOUS TIMER OU RECEPTION D'UNE MESSAGE DE TYPE WRITE
     /// <summary>
-    /// Lit de manière asynchrone les valeurs d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
-    /// Vérifie la connexion et l'état du bus avant d'envoyer la requête.
-    /// Utilise un <see cref="TaskCompletionSource{T}"/> pour capturer la valeur lue.
+    /// Reads asynchronously values from a group address until a Write is received or the timer runs out.
+    /// Verifies the bus connection state before sending the request.
+    /// uses a <see cref="TaskCompletionSource{T}"/> to capture the read value.
     /// </summary>
-    /// <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-    ///  <param name="timerDuration">Le timer sous lequel les trames doivent être reçues, en ms</param>
-    /// <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+    /// <param name="groupAddress">The group address at which the value should be read.</param>
+    ///  <param name="timerDuration">Timer in ms under which the message should be received.</param>
+    /// <returns>A task representing the completion of the task, containing the received messages.</returns>
     public async Task<List<GroupMessage>> GroupValuesTimerOrRecievedAWriteAsync(GroupAddress groupAddress, int timerDuration)
     {
         var theList = new List<GroupMessage>();
@@ -369,21 +369,27 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     
     
     // Liste observable pour les messages reçus
+    /// <summary>
+    /// Observable collection of received messages.
+    /// </summary>
     private ObservableCollection<GroupMessage> Messages { get; } = new ();
-
+    
+    /// <summary>
+    /// The collection of group event args.
+    /// </summary>
     private readonly ObservableCollection<GroupEventArgs> _groupEvents = new ();
 
     /// <summary>
-    /// Obtient la collection observable des événements de groupe reçus.
+    /// Gets the collection of group event args.
     /// </summary>
     public ObservableCollection<GroupEventArgs> GroupEvents => _groupEvents;
 
     /// <summary>
-    /// Gestionnaire d'événement appelé lorsque le bus KNX est prêt à être utilisé.
-    /// Met à jour la connexion du bus et réinitialise la liste des événements de groupe.
+    /// Event handler called when the new bus is ready for interaction.
+    /// Resets the event handlers of message reception.
     /// </summary>
-    /// <param name="sender">L'objet source de l'événement.</param>
-    /// <param name="newBus">Le nouveau bus KNX connecté.</param>
+    /// <param name="sender">The event source.</param>
+    /// <param name="newBus">The new connected knx bus.</param>
     private void OnBusConnectedReady(object? sender, IKnxBusWrapper newBus)
     {
         // Appelle BusChanged avec le nouveau bus
@@ -391,11 +397,11 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         // Attention potentiellement si je me connecte à un nouveau bus l'ancien ne se désabonne pas de l'événement dans BusChanged
     }
     /// <summary>
-    /// Gère les changements de bus en désabonnant l'ancien bus et en abonnissant le nouveau bus aux événements.
-    /// Réinitialise la liste des événements de groupe.
+    /// Unsubscribes the old bus and subscribes the new bus to messages reception.
+    /// Resets the event handlers.
     /// </summary>
-    /// <param name="oldBus">L'ancien bus KNX.</param>
-    /// <param name="newBus">Le nouveau bus KNX.</param>
+    /// <param name="oldBus">The old knx bus.</param>
+    /// <param name="newBus">The new knx bus.</param>
     private void BusChanged(IKnxBusWrapper? oldBus, IKnxBusWrapper? newBus)
     {
         if (oldBus != null)
@@ -406,30 +412,34 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     /// <summary>
-    /// Représente un message de groupe reçu, incluant l'adresse de destination, l'adresse source, la valeur et le type d'événement.
+    /// Represents a message received.
     /// </summary>
     public class GroupMessage
     {
         /// <summary>
-        /// L'adresse de groupe à laquelle le message est destiné.
+        /// The GroupAddress of the destination 
         /// </summary>
         public GroupAddress DestinationAddress { get; init; }
 
         /// <summary>
-        /// L'adresse individuelle de la source du message.
+        /// The individual address of the source.
         /// </summary>
         public IndividualAddress SourceAddress { get; init; }
 
         /// <summary>
-        /// La valeur du groupe associée au message.
+        /// The GroupValue transported by the message.
         /// </summary>
         public GroupValue? Value { get; init; }
 
         /// <summary>
-        /// Le type d'événement associé au message, si nécessaire.
+        /// The type of event associated with the message (Write, Response,..)
         /// </summary>
         public GroupEventType EventType { get; init; }
-
+        /// <summary>
+        /// Checks the equivalence of the Destination and Source address, the EventType and the Value
+        /// </summary>
+        /// <param name="obj">The message to compare</param>
+        /// <returns>true is all are equal(and all except Value are not null). False otherwise</returns>
         public bool Equals(GroupMessage? obj)
         {
             if (obj is null) 
@@ -448,11 +458,11 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
     }
 
     /// <summary>
-    /// Gestionnaire d'événement appelé lorsqu'un message de groupe est reçu.
-    /// Crée une entrée pour le message reçu et met à jour la liste observable des messages.
+    /// Event handler called when a message is received.
+    /// Creates an entry in the list of group messages received.
     /// </summary>
-    /// <param name="sender">L'objet source de l'événement.</param>
-    /// <param name="e">Les arguments de l'événement contenant les détails du message reçu.</param>
+    /// <param name="sender">The source of the event</param>
+    /// <param name="e">The args containing the details of the message.</param>
     private void OnGroupMessageReceived(object? sender, GroupEventArgs e)
     {
         // Crée une nouvelle entrée pour le message reçu

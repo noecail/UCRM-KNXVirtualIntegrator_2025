@@ -202,38 +202,45 @@
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32)">
             <summary>
             Constructor for DataPointType
-            One parameter : the type  of the DPT
             </summary>
+            <param name="type">The type of DPT (1,2,...)</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32,System.String)">
             <summary>
             Constructor for DataPointType
-            Two parameters : the type of the DPT and the name of the DPT
             </summary>
+            <param name="type">The type of DPT (1,2,...)</param>
+            <param name="name">The name of the DPT</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32,System.String,System.Collections.Generic.List{Knx.Falcon.GroupValue})">
             <summary>
-            Constructor for DataPointType
-            Three parameters : the type of the DPT, the address of the DPT and a list of GroupValues to be sent/read
+            Constructor for DataPointType 
             </summary>
+            <param name="type">The type of DPT (1,2,...)</param>
+            <param name="address">The address to which the DPT wil be bound</param>
+            <param name="values">The values this DPT will send/receive</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(System.Int32,System.String,System.Collections.Generic.List{Knx.Falcon.GroupValue},System.String)">
             <summary>
             Constructor for DataPointType
-            Four parameters : the type of the DPT, the address of the DPT, a list of GroupValues to be sent/read, the name of the DPT
             </summary>
+            <param name="type">The type of DPT (1,2,...)</param>
+            <param name="address">The address to which the DPT wil be bound</param>
+            <param name="values">The values this DPT will send/receive</param>
+            <param name="name">The name of the DPT</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(KNX_Virtual_Integrator.Model.Entities.DataPointType)">
             <summary>
-            Constructor for DataPointType. Duplicator
-            One parameter : the DPT to duplicate
+            Constructor for DataPointType : Duplicator
             </summary>
+            <param name="other">The DPT to copy</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.#ctor(KNX_Virtual_Integrator.Model.Entities.DataPointType,System.String)">
             <summary>
-            Constructor for DataPointType. Duplicator
-            Two parameters : the DPT to duplicate, the address of the new DPT
+            Constructor for DataPointType : Duplicator
             </summary>
+            <param name="dpt">The DPT to copy</param>
+            <param name="address">The new address </param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.GetSizeOf">
             <summary>
@@ -521,8 +528,36 @@
         <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.FullName">
             <summary>
             Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
-            FullName is used to display the Key and the Name in the SelectedModels listbox in the Mainwindow
+            FullName is used to display the Key and the Name in the SelectedModels listbox in the Main window
             </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.#ctor(System.String)">
+            <summary>
+            Create a Functional Model with only a name
+            </summary>
+            <param name="name">The name of the model</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.#ctor(System.Collections.Generic.List{KNX_Virtual_Integrator.Model.Entities.TestedElement},System.String)">
+            <summary>
+            Create a Functional Model with both an Element list and a name
+            </summary>
+            <param name="list">The list of elements</param>
+            <param name="name">The name of the model</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.#ctor(KNX_Virtual_Integrator.Model.Entities.FunctionalModel,System.Int32,System.Boolean)">
+            <summary>
+            Copies a model while giving a new key and indicates if it's a copy of a displayed model
+            </summary>
+            <param name="functionalModel">the copied model</param>
+            <param name="key">the key of the copy</param>
+            <param name="copy">Indicates if the copy is a copy of a displayed model</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates a model with only the name and a key
+            </summary>
+            <param name="name">The name of the model</param>
+            <param name="key">The key of the model</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.Rename(System.String)">
             <summary>
@@ -600,14 +635,16 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.BuildCmdIntValues(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
             <summary>
-            Checks whether the functional models have the same structure (same number of elements, in the same order).
-            </summary>
-            <param name="model">The model to be compared with.</param>
-            <returns>True is the functional models have the same structure.</returns>
-            <summary>
             Takes a model and fills its commands' int values with the ones of the model in parameters
             </summary>
             <param name="model"> Model to copy the int values from.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.HasSameStructure(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
+            <summary>
+            Checks whether the two models have the same structure.
+            </summary>
+            <param name="functionalModel">The model to be compared with</param>
+            <returns>true if they have the same structure; otherwise false.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.Contains(KNX_Virtual_Integrator.Model.Entities.TestedElement,System.Collections.Generic.HashSet{System.Int32})">
             <summary>
@@ -660,7 +697,7 @@
             <summary>
             Build the <see cref="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.ElementList"/> of the model according to the structure of the model
             </summary>
-            <param name="modelStructure">The structure of the model to be loaded to the elementlist.</param>
+            <param name="modelStructure">The structure of the model to be loaded to the element list.</param>
             <param name="dpt">The standard DPT of the element list.</param>
             <param name="key">The key of the model.</param>
             <seealso cref="T:KNX_Virtual_Integrator.Model.Entities.DataPointType"/>
@@ -693,7 +730,7 @@
         <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.FullName">
             <summary>
             Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
-            FullName is used to display the Key and the Name in the SelectedModels listbox in the Mainwindow
+            FullName is used to display the Key and the Name in the SelectedModels listbox in the Main window
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure.ModelStructure">
@@ -990,7 +1027,7 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.ObservableDictionary`2.NotifyAdd(`0,`1)">
             <summary>
-            nvokes the change of Count, Item[] and a Add with the key and value
+            invokes the change of Count, Item[] and a Add with the key and value
             </summary>
             <param name="key">The key of the added item</param>
             <param name="value">The value of the added item</param>
@@ -1061,7 +1098,7 @@
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.ObservableDictionary`2.Values">
             <summary>
-            Gets an ICollectio containing the values of the dictionary.
+            Gets an ICollection containing the values of the dictionary.
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.ObservableDictionary`2.Count">
@@ -1122,6 +1159,61 @@
             The first DataPointType of each array is the command and the next ones are the Feedbacks.
             </summary>
         </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsCmd">
+            <summary>
+            The list of commands to send to the bus
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsIe">
+            <summary>
+            The list of expected feedback to be read on the bus
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Entities.TestedElement.Name">
+            <summary>
+            Name of the Element (not used)
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.#ctor">
+            <summary>
+            Barebone constructor
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.#ctor(System.Int32[],System.String[],System.Collections.Generic.List{Knx.Falcon.GroupValue}[],System.Int32[],System.String[],System.Collections.Generic.List{Knx.Falcon.GroupValue}[])">
+            <summary>
+            Full constructor of the Element
+            </summary>
+            <param name="typeCmd">the types of CMD DPTs</param>
+            <param name="addressCmd">the addresses bound to CMD DPTs</param>
+            <param name="valueCmd">the values of the CMD DPTs</param>
+            <param name="typeIe">the types of IE DPTs</param>
+            <param name="addressesIe">the addresses bound to IE DPTs</param>
+            <param name="valueIe">the values of the IE DPTs</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.#ctor(System.Int32[],System.String[],System.Collections.Generic.List{Knx.Falcon.GroupValue}[])">
+            <summary>
+            Command-only constructor
+            </summary>
+            <param name="typeCmd">the types of CMD DPTs</param>
+            <param name="addressCmd">the addresses bound to CMD DPTs</param>
+            <param name="valueCmd">the values of the CMD DPTs</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.#ctor(System.Int32[],System.String[],System.Collections.Generic.List{Knx.Falcon.GroupValue}[],System.String[],System.String)">
+            <summary>
+            Command-only constructor with names included
+            </summary>
+            <param name="typeCmd">the types of CMD DPTs</param>
+            <param name="addressCmd">the addresses bound to CMD DPTs</param>
+            <param name="valueCmd">the values of the CMD DPTs</param>
+            <param name="dptNames">name of the DPTs</param>
+            <param name="circuitName">Name of the element</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.#ctor(KNX_Virtual_Integrator.Model.Entities.TestedElement)">
+            <summary>
+            Copy constructor
+            </summary>
+            <param name="other">The copied Element</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.IsPossible">
             <summary>
             This method checks if all the selected values to send and to read can fit in the selected sizes
@@ -1135,10 +1227,25 @@
             <returns>Returns a boolean acknowledging whether the Elements are equal or not</returns>
             </summary>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.Contains(KNX_Virtual_Integrator.Model.Entities.DataPointType,System.Collections.Generic.HashSet{System.Int32})">
+            <summary>
+            Checks whether the TestsCmd contains the DPT
+            </summary>
+            <param name="other">The DPT to look out for</param>
+            <param name="bannedIndexes">The indexes where searching is not allowed.</param>
+            <returns>the index if it is found; -1 otherwise.</returns>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.AddTest">
             <summary>
             This method adds a test pair (value to send, value(s) to read) to the list of tests
             </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.FindELementInModel(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
+            <summary>
+            Checks whether there is a similar Element in the checked model
+            </summary>
+            <param name="model">The model to check</param>
+            <returns>The index of the element; -1 otherwise.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.CopyTest(KNX_Virtual_Integrator.Model.Entities.TestedElement,System.Int32)">
             <summary>
@@ -1150,12 +1257,12 @@
             This method removes a test pair (value to send, value to read) from the list of tests
             </summary>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.IeContains(KNX_Virtual_Integrator.Model.Entities.DataPointType)">
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.CmdContains(System.String)">
             <summary>
-            Searches for a dpt of the same type of the argument, in the list of dptIe
+            Counts the number of DPTs in the commands that have a certain name.
             </summary>
-            <param name="dpt"> dpt to find in the list</param>
-            <returns>THe index of the dpt in the list of dptIe</returns>
+            <param name="name">The name to look out for.</param>
+            <returns>The number of DPTs with that name</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.IeContains(System.String)">
             <summary>
@@ -1165,6 +1272,43 @@
             to find in the list</param>
             <returns>THe index of the dpt in the list of dptIe</returns>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.AddDptToCmd(System.Int32,System.String,System.Collections.Generic.List{Knx.Falcon.GroupValue})">
+            <summary>
+            Adds a DPT to <see cref="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsCmd"/>
+            </summary>
+            <param name="type">type of the new dpt</param>
+            <param name="address">address bound to the DPT</param>
+            <param name="value">all the values of the DPT</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.AddDptToCmd(System.Int32,System.String,System.String,System.Collections.Generic.List{Knx.Falcon.GroupValue})">
+            <summary>
+            Adds a DPT to <see cref="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsCmd"/>
+            </summary>
+            <param name="type">type of the DPT</param>
+            <param name="name">name of the DPT</param>
+            <param name="address">address bound to the DPT</param>
+            <param name="value">all the values of the DPT</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.AddDptToCmd(KNX_Virtual_Integrator.Model.Entities.DataPointType)">
+            <summary>
+            Adds a DPT to <see cref="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsIe"/>
+            </summary>
+            <param name="dpt">the dpt to add</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.AddDptToIe(System.Int32,System.String,System.Collections.Generic.List{Knx.Falcon.GroupValue})">
+            <summary>
+            Adds a DPT to <see cref="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsIe"/>
+            </summary>
+            <param name="type">type of the new dpt</param>
+            <param name="address">address bound to the DPT</param>
+            <param name="value">all the values of the DPT</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.AddDptToIe(KNX_Virtual_Integrator.Model.Entities.DataPointType)">
+            <summary>
+            Adds a new DPT to <see cref="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsIe"/> of the element.
+            </summary>
+            <param name="dpt">The DPT to copy from</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.UpdateIntValue">
             <summary>
             Updates the BigInteger array of all the DPTs. <seealso cref="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.UpdateIntValue"/>
@@ -1173,6 +1317,51 @@
         <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.UpdateValue">
             <summary>
             Updates the GroupValue array of all DPTs. <seealso cref="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.UpdateValue"/>
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.UpdateRemoveTestButtonVisibility">
+            <summary>
+            Updates the visibility of all the <see cref="P:KNX_Virtual_Integrator.Model.Entities.TestedElement.TestsIe"/> Remove Button : the last one doesn't have it.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.TestedElement.GetDptType(System.String)">
+            <summary>
+            Searches for the type of the dpt with the given name.
+            </summary>
+            <param name="dptName">The name of said DPT</param>
+            <returns>the type of the DPT</returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.Analyze">
+            <summary>
+            Class used to analyze the knx installation according to a list of functional models.
+            The models each have a list of Element, which have a list of commands and expected results.
+            The results are thus listed as a list of (models)lists of (elements)lists of (commands)lists of (expected results)<see cref="T:KNX_Virtual_Integrator.Model.Implementations.ResultType"/>.
+            </summary>
+            <param name="liste">The list of models to analyze</param>
+            <param name="communication">The class handling the messages to send and the reception</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.#ctor(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication)">
+            <summary>
+            Class used to analyze the knx installation according to a list of functional models.
+            The models each have a list of Element, which have a list of commands and expected results.
+            The results are thus listed as a list of (models)lists of (elements)lists of (commands)lists of (expected results)<see cref="T:KNX_Virtual_Integrator.Model.Implementations.ResultType"/>.
+            </summary>
+            <param name="liste">The list of models to analyze</param>
+            <param name="communication">The class handling the messages to send and the reception</param>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.Analyze.FunctionalModels">
+            <summary>
+            The list of models to test
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.Analyze.Results">
+            <summary>
+            Table of results sorted by Tests, in TestedElements, in functionalModels
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.Analyze.Communication">
+            <summary>
+            The class handling the messages to send and the reception
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll">
@@ -1202,6 +1391,35 @@
             <param name="expectedResult">DataPointType where the value has to be found</param>
             <param name="index">Index of the test</param>
             <returns></returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.ResultType">
+            <summary>
+            The 3 possible types of results : <see cref="F:KNX_Virtual_Integrator.Model.Implementations.ResultType.Success"/>, <see cref="F:KNX_Virtual_Integrator.Model.Implementations.ResultType.Response"/> and <see cref="F:KNX_Virtual_Integrator.Model.Implementations.ResultType.Failure"/>.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.ResultType.Success">
+            <summary> The result when the expected value is received (or if no value is expected).</summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.ResultType.Response">
+            <summary> The result when the expected value is not received but there is an answer.</summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.ResultType.Failure">
+            <summary> The result when the expected value is not received from the correct address
+            until the time runs out. Or if there is an error.</summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.ApplicationFileManager">
+            <summary>
+            Provides an interface for managing application files, including log file management, 
+            archiving, and configuration settings.
+            </summary>
+            <param name="logger"></param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.ApplicationFileManager.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger)">
+            <summary>
+            Provides an interface for managing application files, including log file management, 
+            archiving, and configuration settings.
+            </summary>
+            <param name="logger"></param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.ApplicationFileManager.EnsureLogDirectoryExists">
             <summary>
@@ -1298,6 +1516,16 @@
             Serializes the settings and writes them to the XML file. If an error occurs during the saving process, 
             the error should be handled accordingly.
             </remarks>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.BusConnection">
+            <summary>
+            Class handling the connection to and disconnection from the KNX Bus
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.BusConnection.GlobalKnxNamespace">
+            <summary>
+            Name space used for KNX operations
+            </summary>
         </member>
         <member name="F:KNX_Virtual_Integrator.Model.Implementations.BusConnection.Bus">
             <summary>
@@ -1396,7 +1624,7 @@
                 Hardcoded default port for connection with NAT (3671 is the default for KNX)
             </summary>
         </member>
-        <member name="F:KNX_Virtual_Integrator.Model.Implementations.BusConnection.InterfaceAddress">
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.BusConnection.InterfaceAddress">
             <summary>
                 Individual Address for the given IP Secure interface
             </summary>
@@ -1552,6 +1780,22 @@
             <param name="ipString"> The IP address to check.</param>
             <returns> Returns true if the address has the form of an IPv4 address</returns>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.DebugArchiveGenerator">
+            <summary>
+            Generates debug archives
+            </summary>
+            <param name="logger">logs exceptions or end of process</param>
+            <param name="zipManager">manages .zip archives</param>
+            <param name="settings">To get what is to be included in the archives</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.DebugArchiveGenerator.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger,KNX_Virtual_Integrator.Model.Interfaces.IZipArchiveManager,KNX_Virtual_Integrator.Model.Interfaces.IApplicationSettings)">
+            <summary>
+            Generates debug archives
+            </summary>
+            <param name="logger">logs exceptions or end of process</param>
+            <param name="zipManager">manages .zip archives</param>
+            <param name="settings">To get what is to be included in the archives</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.DebugArchiveGenerator.WriteSystemInformationDebugFile(System.Boolean,System.Boolean)">
             <summary>
             Generates a debug file for the application.
@@ -1588,6 +1832,20 @@
             it returns "Date inconnue". If the conversion to DateTime fails, it returns "Date invalide".
             </remarks>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.FileFinder">
+            <summary>
+            Defines the contract for file finding operations.
+            </summary>
+            <param name="logger">logs issues and start and end of processes.</param>
+            <param name="projectFileManager">the manager to import the files</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FileFinder.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger,KNX_Virtual_Integrator.Model.Implementations.ProjectFileManager)">
+            <summary>
+            Defines the contract for file finding operations.
+            </summary>
+            <param name="logger">logs issues and start and end of processes.</param>
+            <param name="projectFileManager">the manager to import the files</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FileFinder.FindFile(System.String,System.String)">
             <summary>
             Searches for a specific file within a given directory and its subdirectories.
@@ -1620,6 +1878,18 @@
             </list>
             </remarks>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.FileLoader">
+            <summary>
+            Defines the contract for file loading operations.
+            </summary>
+            <param name="logger">logs the issues and process state.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FileLoader.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger)">
+            <summary>
+            Defines the contract for file loading operations.
+            </summary>
+            <param name="logger">logs the issues and process state.</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FileLoader.LoadXmlDocument(System.String)">
             <summary>
             Loads an XML document from a specified path.
@@ -1635,17 +1905,103 @@
             </list>
             </remarks>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary">
+             <summary>
+             Manages a dictionary of functional models (FunctionalModel).
+            
+             Provides methods to add, remove, retrieve, and update models in the dictionary.
+             Each model is identified by a unique key (int). This interface enables centralized 
+             management of functional models, allowing standardized operations on the dictionary.
+             
+             - AddFunctionalModel: Adds a functional model to the dictionary.
+             - RemoveFunctionalModel: Removes a functional model using its key.
+             - GetAllModels: Retrieves all functional models from the dictionary.
+             </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary._functionalModels">
+            <summary>
+            List of models
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary._nbStructuresCreated">
+            <summary>
+            The number of structure created.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.FunctionalModels">
+            <summary>
+            Gets or sets the list of models.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.#ctor">
+            <summary>
+            Default constructor of the dictionary. Gives a default list of structures
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.AddKeyword(System.Int32,System.String)">
+            <summary>
+            Adds a keyword to the model at an index in the dictionary
+            </summary>
+            <param name="index">the index in the dictionary</param>
+            <param name="word">the keyword</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.#ctor(System.String)">
+            <summary>
+            Constructor of the dictionary
+            </summary>
+            <param name="path">file path from which to import the dictionary</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.AddFunctionalModel(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure,System.Boolean)">
+            <summary>
+            Adds a model to the dictionary
+            </summary>
+            <param name="functionalModel">the structure of the model</param>
+            <param name="imported">if the model is imported</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.AddFunctionalModel(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Adds a model to the dictionary
+            </summary>
+            <param name="functionalModel">the structure of the model</param>
+            <param name="imported">if the model is imported</param>
+            <param name="keywords">the keywords of the model</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.RemoveFunctionalModel(System.Int32)">
+            <summary>
+            Removes a model at a certain index in the dictionary
+            </summary>
+            <param name="index">the index of the model</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.GetAllModels">
+            <summary>
+            Gets all the models of the dictionary.
+            </summary>
+            <returns>the list of models</returns>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.ExportDictionary(System.String)">
             <summary>
             Creates an XML file representing the dictionary.
             </summary>
             <param name="path">Path where the XML has to be exported </param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.ExportDictionary(System.Xml.XmlDocument)">
+            <summary>
+            Exports the dictionary to an XmlElement 
+            </summary>
+            <param name="doc">The document to which should be exported the dictionary</param>
+            <returns>The created document</returns>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.ImportDictionary(System.String)">
             <summary>
             Imports a functional model dictionary from a path.
             </summary>
             <param name="path">Path of the dictionary</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.ImportDictionary(System.Xml.XmlNodeList)">
+            <summary>
+            Imports a functional model dictionary
+            </summary>
+            <param name="xnList">the list from which to import the dictionary</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.HasSameStructure(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
             <summary>
@@ -1654,11 +2010,73 @@
             <param name="functionalModel">Structure to find in the dictionary</param>
             <returns>Index of the corresponding structure, or null if not found</returns>
         </member>
+        <member name="E:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.PropertyChanged">
+            <summary>
+            The event that occurs when the Dictionary changes. 
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.OnPropertyChanged(System.String)">
+            <summary>
+            Invokes the event <see cref="E:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.PropertyChanged"/> when the BigIntegerItem changes.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelDictionary.CheckName(System.String)">
+            <summary>
+            Checks the index of a model with a certain name
+            </summary>
+            <param name="name">the name of the model</param>
+            <returns>the index of the model if found; -1 otherwise.</returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList">
+             <summary>
+             manages a list of functional models (FunctionalModel).
+            
+             Provides methods to add, remove, retrieve, and update models in the list.
+             Each model is identified by a unique key (int). This interface enables centralized 
+             management of functional models, allowing standardized operations on the dictionary.
+             
+             - AddFunctionalModel: Adds a functional model to the dictionary.
+             - RemoveFunctionalModel: Removes a functional model using its key.
+             - GetAllModels: Retrieves all functional models from the dictionary.
+             </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList._nbModelsCreated">
+            <summary>
+            The number of models created
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.FunctionalModels">
+            <summary>
+            The list structure of functional models.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.FunctionalModelDictionary">
+            <summary>
+            The dictionary of models and structures
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.#ctor">
+            <summary>
+            Default model list constructor
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.#ctor(System.String)">
+            <summary>
+            Model list constructor. Takes the dictionary from a file's path.
+            </summary>
+            <param name="path"></param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.AddToList(System.Int32)">
             <summary>
             Copies a functional model from the dictionary to the list.
             </summary>
             <param name="index">Index in the dictionary of the Functional Model to copy in the list</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ResetCount(System.Int32)">
+            <summary>
+            Resets the count of models in a structure
+            </summary>
+            <param name="index">the structure index</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.AddNewCount">
             <summary>
@@ -1671,7 +2089,7 @@
             </summary>
             <param name="functionalModel">FunctionalModel to add</param>
             <param name="index"> Index of the structure</param>
-            <param name="copy"> boolean indicating whether the model is a copy or not</param>
+            <param name="copy"> boolean indicating whether the model is a copy or not</param>    
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.DeleteFromList(System.Int32,System.Int32)">
             <summary>
@@ -1700,11 +2118,25 @@
             </summary>
             <param name="index">Index of the Structure to delete from in the dictionary. </param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ResetInDictionary(System.Int32,KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure)">
+            <summary>
+            Resets the saved structure by clearing the dictionary then putting back in the structure at the index.
+            </summary>
+            <param name="index">The index at which the structure was saved (and to save)</param>
+            <param name="savedStructure">the structure to be saved</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportDictionary(System.String)">
             <summary>
             Creates an XML file representing the dictionary.
             </summary>
             <param name="path">Path where the XML has to be exported </param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportDictionary(System.Xml.XmlDocument)">
+            <summary>
+            Creates an XMLElement representing the dictionary.
+            </summary>
+            <param name="doc">The document in which the element is created.</param>
+            <returns>The created XmlElement</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportDictionary(System.String)">
             <summary>
@@ -1712,17 +2144,92 @@
             </summary>
             <param name="path">Path of the xml. </param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportDictionary(System.Xml.XmlNodeList)">
+            <summary>
+            Imports a functional model dictionary after clearing the list of models.
+            </summary>
+            <param name="xnList">the list from which to import the dictionary</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.GetAllModels">
             <summary>
             Method to get all the models in the dictionary.
             </summary>
             <returns>Returns a list containing all the functional models. </returns>
         </member>
+        <member name="E:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.PropertyChanged">
+            <summary>
+            The event that occurs when the list changes. 
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.OnPropertyChanged(System.String)">
+            <summary>
+            Invokes the event <see cref="E:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.PropertyChanged"/> when the list changes.
+            </summary>
+            <param name="propertyName">The name of the changed property</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportList(System.String)">
             <summary>
             Creates an XML file representing the list of list.
             </summary>
             <param name="path">Path where the XML has to be exported </param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportList(System.Xml.XmlDocument)">
+            <summary>
+            Exports the list of models in each structure from an XmlDocument
+            </summary>
+            <param name="doc">The XmlDocument in which is created the XmlElement.</param>
+            <returns>The created XmlElement</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportListAndDictionary(System.String)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportDictionary(System.String)"/>
+            </summary>
+            <param name="path">Path of the file where everything has to be exported to.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportList(System.String)">
+            <summary>
+            Imports the structure list from a file
+            </summary>
+            <param name="path">the path of the file</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportList(System.Xml.XmlNodeList)">
+            <summary>
+            Imports the structure list from an XmlNodeList
+            </summary>
+            <param name="xnList">The XmlNodeList to import from</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportListAndDictionary(System.String)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportDictionary(System.String)"/>.
+            </summary>
+            <param name="path">the path of the file to import from.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ReinitializeNbModels(System.Int32)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ResetCount(System.Int32)"/>.
+            </summary>
+            <param name="index">The index of the structure.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.AddNewEmptyStruct">
+            <summary>
+            Adds a new empty structure. <seealso cref="P:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.FunctionalModels"/> <seealso cref="F:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList._nbModelsCreated"/>
+            </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.GroupAddressMerger">
+            <summary>
+            Merges group address with those that have more than 80% similarity with the IeAddressSet.
+            It finds and sort the ie with the cmd after finding the cmd.
+            </summary>
+            <param name="stringManagement">The string manager</param>
+            <param name="logger">To log notable events</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressMerger.#ctor(KNX_Virtual_Integrator.Model.Implementations.StringManagement,KNX_Virtual_Integrator.Model.Interfaces.ILogger)">
+            <summary>
+            Merges group address with those that have more than 80% similarity with the IeAddressSet.
+            It finds and sort the ie with the cmd after finding the cmd.
+            </summary>
+            <param name="stringManagement">The string manager</param>
+            <param name="logger">To log notable events</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressMerger.MergeSingleElementGroups(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Xml.Linq.XElement}},System.Collections.Generic.List{System.Xml.Linq.XElement})">
             <summary>
@@ -1755,6 +2262,18 @@
             <param name="ieAddressesSet">The collection of XElement entries to be compared against the search string.</param>
             <returns>Returns a list of elements from 'ieAddressesSet', sorted by their similarity to the cleaned 'searchString'.</returns>
             </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.GroupAddressProcessor">
+            <summary>
+            Manages the processing of group address names : normalize, according to the architecture and adding one more to the dictionary, but normalized.
+            </summary>
+            <param name="logger">To log notable event</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressProcessor.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger)">
+            <summary>
+            Manages the processing of group address names : normalize, according to the architecture and adding one more to the dictionary, but normalized.
+            </summary>
+            <param name="logger">To log notable event</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressProcessor.NormalizeName(System.String)">
             <summary>
@@ -1813,6 +2332,16 @@
             <returns>A formatted string representing the decoded value based on the group address structure. Returns the original string if conversion fails or if the structure is unrecognized.</returns>
             </summary>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager">
+            <summary>
+            Defines methods for managing group addresses extracted from XML files.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.#ctor(KNX_Virtual_Integrator.Model.Implementations.Logger,KNX_Virtual_Integrator.Model.Implementations.ProjectFileManager,KNX_Virtual_Integrator.Model.Implementations.FileLoader,KNX_Virtual_Integrator.Model.Implementations.NamespaceResolver,KNX_Virtual_Integrator.Model.Implementations.GroupAddressProcessor,KNX_Virtual_Integrator.Model.Implementations.GroupAddressMerger)">
+            <summary>
+            Defines methods for managing group addresses extracted from XML files.
+            </summary>
+        </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.GroupedAddresses">
             <summary>
             Dictionary where each Cmd addresses is grouped with the corresponding Ie adresses
@@ -1821,6 +2350,11 @@
         <member name="F:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.IeAddressesSet">
             <summary>
             List of all the Ie addresses
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.Prefixes">
+            <summary>
+            Group address names prefixes. It is initialized for command
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.ExtractGroupAddress(KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList)">
@@ -1841,6 +2375,7 @@
              of grouped addresses, avoiding name collisions by appending suffixes if necessary.
             
              <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+             <param name="functionalModelList">The list of functional models to fill</param>
              </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.ProcessZeroXmlFile(System.Xml.Linq.XDocument,KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList)">
@@ -1852,6 +2387,7 @@
              of grouped addresses, avoiding name collisions by appending suffixes if necessary.
             
              <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+             <param name="functionalModelList">The list of functional models to fill</param>
              </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.ProcessStandardXmlFile(System.Xml.Linq.XDocument)">
@@ -1899,7 +2435,7 @@
             If the addresses are detected to overlap, the method returns the value 3.
             If no overlaps are found, the method returns the value 2.
             
-            <param name="doc">The XML document (XDocument) containing the group address ranges and specific group addresses.</param>
+            <param name="modelStructures">The list of XElements containing the group address ranges and specific group addresses.</param>
             <returns>An integer indicating the overlap status: 3 for detected overlap, 2 for no overlap.</returns>
             </summary>
         </member>
@@ -1963,119 +2499,136 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupValueWriteOnAsync">
             <summary>
-            Envoie une valeur de groupe "On" (vraie) de manière asynchrone au bus KNX.
-            Vérifie d'abord si le bus est connecté et disponible avant d'envoyer la valeur.
-            Affiche un message d'erreur si la connexion au bus échoue.
+            Dev method. Sends asynchronously the value "on" to a specified address.
+            First verifies the bus state before sending the value.
+            Logs an error if it fails. 
             </summary>
-            <returns>Une tâche représentant l'opération d'écriture asynchrone.</returns>
+            <returns>A task representing the completion of the writing.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupValueWriteOffAsync">
             <summary>
-            Envoie une valeur de groupe "Off" (fausse) de manière asynchrone au bus KNX.
-            Vérifie d'abord si le bus est connecté et disponible avant d'envoyer la valeur.
-            Affiche un message d'erreur si la connexion au bus échoue.
+            Dev method. Sends asynchronously the value "off" to a specified address.
+            First verifies the bus state before sending the value.
+            Logs an error if it fails. 
             </summary>
-            <returns>Une tâche représentant l'opération d'écriture asynchrone.</returns>
+            <returns>A task representing the completion of the writing.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupValueWriteAsync(Knx.Falcon.GroupAddress,Knx.Falcon.GroupValue)">
             <summary>
-            Envoie une valeur de groupe spécifique de manière asynchrone au bus KNX pour une adresse de groupe donnée.
-            Vérifie d'abord si le bus est connecté et disponible avant d'envoyer la valeur.
-            Affiche un message d'erreur si la connexion au bus échoue.
+            Sends asynchronously a value to a specified address.
+            First verifies the bus state before sending the value.
+            Logs an error if it fails.
             </summary>
-            <param name="addr">L'adresse de groupe à laquelle la valeur est envoyée.</param>
-            <param name="value">La valeur de groupe à envoyer.</param>
-            <returns>Une tâche représentant l'opération d'écriture asynchrone.</returns>
+            <param name="addr">The address at which the value is sent.</param>
+            <param name="value">The value to send.</param>
+            <returns>A task representing the completion of the writing.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.ConvertToGroupValue(System.UInt64,System.Byte[])">
             <summary>
-             Convertit une valeur ulong en tableau de bytes pour l'écriture sur le bus.
+             Converts a uLong value to a byte table to write on the bus
             </summary>
-             <param name="toSend">La valeur à envoyer.</param>
-             <param name="groupValue">Le tableau à remplir pour envoyer plus tard.</param>
+             <param name="toSend">The value to send.</param>
+             <param name="groupValue">The table to fill before writing.</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.MaGroupValueReadAsync(Knx.Falcon.GroupAddress)">
             <summary>
-            Lit de manière asynchrone la valeur d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
-            Vérifie la connexion et l'état du bus avant d'envoyer la requête.
-            Utilise un <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> pour capturer la valeur lue.
+            Reads asynchronously values from a group address.
+            Verifies the bus connection state before sending the request.
+            uses a <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> to capture the read value.
             </summary>
-            <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-            <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+            <param name="groupAddress">The group address at which the value should be read.</param>
+            <returns>A task representing the completion of the task, containing the received messages.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupValuesWithinTimerAsync(Knx.Falcon.GroupAddress,System.Int32)">
             <summary>
-            Lit de manière asynchrone les valeurs d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
-            Vérifie la connexion et l'état du bus avant d'envoyer la requête.
-            Utilise un <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> pour capturer la valeur lue.
+            Reads asynchronously values from a group address until the timer runs out.
+            Verifies the bus connection state before sending the request.
+            uses a <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> to capture the read value.
             </summary>
-            <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-             <param name="timerDuration">Le timer sous lequel les trames doivent être reçues, en ms</param>
-            <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+            <param name="groupAddress">The group address at which the value should be read.</param>
+             <param name="timerDuration">Timer in ms under which the message should be received.</param>
+            <returns>A task representing the completion of the task, containing the received messages..</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupValuesTimerOrRecievedAWriteAsync(Knx.Falcon.GroupAddress,System.Int32)">
             <summary>
-            Lit de manière asynchrone les valeurs d'un groupe depuis le bus KNX pour une adresse de groupe donnée.
-            Vérifie la connexion et l'état du bus avant d'envoyer la requête.
-            Utilise un <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> pour capturer la valeur lue.
+            Reads asynchronously values from a group address until a Write is received or the timer runs out.
+            Verifies the bus connection state before sending the request.
+            uses a <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> to capture the read value.
             </summary>
-            <param name="groupAddress">L'adresse de groupe dont la valeur doit être lue.</param>
-             <param name="timerDuration">Le timer sous lequel les trames doivent être reçues, en ms</param>
-            <returns>Une tâche représentant l'opération de lecture asynchrone, contenant la valeur lue.</returns>
+            <param name="groupAddress">The group address at which the value should be read.</param>
+             <param name="timerDuration">Timer in ms under which the message should be received.</param>
+            <returns>A task representing the completion of the task, containing the received messages.</returns>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.Messages">
+            <summary>
+            Observable collection of received messages.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication._groupEvents">
+            <summary>
+            The collection of group event args.
+            </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupEvents">
             <summary>
-            Obtient la collection observable des événements de groupe reçus.
+            Gets the collection of group event args.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.OnBusConnectedReady(System.Object,KNX_Virtual_Integrator.Model.Wrappers.IKnxBusWrapper)">
             <summary>
-            Gestionnaire d'événement appelé lorsque le bus KNX est prêt à être utilisé.
-            Met à jour la connexion du bus et réinitialise la liste des événements de groupe.
+            Event handler called when the new bus is ready for interaction.
+            Resets the event handlers of message reception.
             </summary>
-            <param name="sender">L'objet source de l'événement.</param>
-            <param name="newBus">Le nouveau bus KNX connecté.</param>
+            <param name="sender">The event source.</param>
+            <param name="newBus">The new connected knx bus.</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.BusChanged(KNX_Virtual_Integrator.Model.Wrappers.IKnxBusWrapper,KNX_Virtual_Integrator.Model.Wrappers.IKnxBusWrapper)">
             <summary>
-            Gère les changements de bus en désabonnant l'ancien bus et en abonnissant le nouveau bus aux événements.
-            Réinitialise la liste des événements de groupe.
+            Unsubscribes the old bus and subscribes the new bus to messages reception.
+            Resets the event handlers.
             </summary>
-            <param name="oldBus">L'ancien bus KNX.</param>
-            <param name="newBus">Le nouveau bus KNX.</param>
+            <param name="oldBus">The old knx bus.</param>
+            <param name="newBus">The new knx bus.</param>
         </member>
         <member name="T:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupMessage">
             <summary>
-            Représente un message de groupe reçu, incluant l'adresse de destination, l'adresse source, la valeur et le type d'événement.
+            Represents a message received.
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupMessage.DestinationAddress">
             <summary>
-            L'adresse de groupe à laquelle le message est destiné.
+            The GroupAddress of the destination 
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupMessage.SourceAddress">
             <summary>
-            L'adresse individuelle de la source du message.
+            The individual address of the source.
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupMessage.Value">
             <summary>
-            La valeur du groupe associée au message.
+            The GroupValue transported by the message.
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupMessage.EventType">
             <summary>
-            Le type d'événement associé au message, si nécessaire.
+            The type of event associated with the message (Write, Response,..)
             </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupMessage.Equals(KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.GroupMessage)">
+            <summary>
+            Checks the equivalence of the Destination and Source address, the EventType and the Value
+            </summary>
+            <param name="obj">The message to compare</param>
+            <returns>true is all are equal(and all except Value are not null). False otherwise</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupCommunication.OnGroupMessageReceived(System.Object,Knx.Falcon.GroupEventArgs)">
             <summary>
-            Gestionnaire d'événement appelé lorsqu'un message de groupe est reçu.
-            Crée une entrée pour le message reçu et met à jour la liste observable des messages.
+            Event handler called when a message is received.
+            Creates an entry in the list of group messages received.
             </summary>
-            <param name="sender">L'objet source de l'événement.</param>
-            <param name="e">Les arguments de l'événement contenant les détails du message reçu.</param>
+            <param name="sender">The source of the event</param>
+            <param name="e">The args containing the details of the message.</param>
         </member>
         <member name="T:KNX_Virtual_Integrator.Model.Implementations.Logger">
             <summary>
@@ -2101,6 +2654,11 @@
             <remarks>
             This writer is used for appending log messages to the file specified by <see cref="P:KNX_Virtual_Integrator.Model.Implementations.Logger.LogPath"/>.
             </remarks>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Logger.#ctor">
+            <summary>
+            Default logger constructor (create log and checks the directory)
+            </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.Logger.ConsoleAndLogWrite(System.String)">
             <summary>
@@ -2154,6 +2712,28 @@
             </summary>
             <param name="msg">The message to be written to the log file.</param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Logger.CloseLogWriter">
+            <summary>
+            Closes the log writer and releases any resources associated with it.
+            </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.NamespaceResolver">
+            <summary>
+            Manages the KNX namespaces from a Xml file.
+            </summary>
+            <param name="logger">To log errors</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.NamespaceResolver.#ctor(KNX_Virtual_Integrator.Model.Implementations.Logger)">
+            <summary>
+            Manages the KNX namespaces from a Xml file.
+            </summary>
+            <param name="logger">To log errors</param>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.NamespaceResolver.GlobalKnxNamespace">
+            <summary>
+            Name space of KNX
+            </summary>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.NamespaceResolver.SetNamespaceFromXml(System.String)">
              <summary>
              Sets the global KNX XML namespace from the specified XML file.
@@ -2191,6 +2771,18 @@
             <param name="parent">The parent from which to search.</param>
             <typeparam name="T">The type of the child.</typeparam>
             <returns>The child of the specified type, found recursively.</returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.PdfDocumentCreator">
+            <summary>
+            Class handling the generation of the analysis report PDF
+            </summary>
+            <param name="manager">To get the project name and include it in the PDF</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.PdfDocumentCreator.#ctor(KNX_Virtual_Integrator.Model.Implementations.ProjectFileManager)">
+            <summary>
+            Class handling the generation of the analysis report PDF
+            </summary>
+            <param name="manager">To get the project name and include it in the PDF</param>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.PdfDocumentCreator.LatestReportPath">
             <summary>
@@ -2247,6 +2839,20 @@
             Opens the most recently generated PDF report using the default system application.
             The file path of the latest report is retrieved from the LatestReportPath variable.
             </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.ProjectFileManager">
+            <summary>
+            This class handles importing files or exporting them.
+            </summary>
+            <param name="logger">used to log notable events</param>
+            <param name="settings">to gather the settings from the files</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.ProjectFileManager.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger,KNX_Virtual_Integrator.Model.Implementations.ApplicationSettings)">
+            <summary>
+            This class handles importing files or exporting them.
+            </summary>
+            <param name="logger">used to log notable events</param>
+            <param name="settings">to gather the settings from the files</param>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.ProjectFileManager.ProjectFolderPath">
             <summary>
@@ -2362,9 +2968,20 @@
             </list>
             </remarks>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.ProjectInfoManager">
+            <summary>
+            Class managing the extraction of physical information of the project : building, rooms,...
+            UNUSED CLASS AT THE TIME OF THE BETA
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.ProjectInfoManager.#ctor(KNX_Virtual_Integrator.Model.Implementations.NamespaceResolver)">
+            <summary>
+            Class managing the extraction of physical information of the project : building, rooms,...
+            UNUSED CLASS AT THE TIME OF THE BETA
+            </summary>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.ProjectInfoManager.ExtractLocationInfo(System.Xml.Linq.XDocument)">
              <summary>
-             UNUSED CLASS AT THE TIME OF THE BETA
              Extracts location information from a specified XML document.
             
              This method processes the XML document to extract information about spaces categorized as
@@ -2386,6 +3003,20 @@
              <param name="zeroXmlFile">The XML document to extract information from.</param>
              <returns>A list of anonymous objects representing the extracted location information, where each object
              contains the names of the room, floor, building part, building, and distribution board.</returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.SliderClickHandler">
+            <summary>
+            Class handling the manipulation of the slider in the <see cref="T:KNX_Virtual_Integrator.View.Windows.SettingsWindow"/>.
+            </summary>
+            <param name="logger">To log errors and notable events.</param>
+            <param name="parentFinder">To find the visual parent of the current object</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.SliderClickHandler.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger,KNX_Virtual_Integrator.Model.Implementations.ParentFinder)">
+            <summary>
+            Class handling the manipulation of the slider in the <see cref="T:KNX_Virtual_Integrator.View.Windows.SettingsWindow"/>.
+            </summary>
+            <param name="logger">To log errors and notable events.</param>
+            <param name="parentFinder">To find the visual parent of the current object</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.SliderClickHandler.OnSliderClick(System.Object,System.Windows.RoutedEventArgs)">
             <summary>
@@ -2419,6 +3050,18 @@
             </summary>
             <param name="sender">The source of the event.</param>
             <param name="e">Event data for the mouse movement event.</param>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.StringManagement">
+            <summary>
+            Class handling the comparison of strings
+            </summary>
+            <param name="groupAddressProcessor">To process the strings before comparison</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.StringManagement.#ctor(KNX_Virtual_Integrator.Model.Implementations.GroupAddressProcessor)">
+            <summary>
+            Class handling the comparison of strings
+            </summary>
+            <param name="groupAddressProcessor">To process the strings before comparison</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.StringManagement.CalculateSimilarity(System.String,System.String)">
              <summary>
@@ -2454,6 +3097,16 @@
             <param name="name1">The first name to compare.</param>
             <param name="name2">The second name to compare.</param>
             <returns>True if the names are similar based on the criteria; otherwise, false.</returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.SystemSettingsDetector">
+            <summary>
+            Defines methods for detecting system settings related to Windows, such as theme and language.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.SystemSettingsDetector.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger)">
+            <summary>
+            Defines methods for detecting system settings related to Windows, such as theme and language.
+            </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.SystemSettingsDetector.DetectWindowsTheme">
             <summary>
@@ -2492,6 +3145,18 @@
             An integer value indicating the System scale.
             </returns>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Implementations.ZipArchiveManager">
+            <summary>
+            Defines methods for creating and managing ZIP archives.
+            </summary>
+            <param name="logger">to log errors and process event</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.ZipArchiveManager.#ctor(KNX_Virtual_Integrator.Model.Interfaces.ILogger)">
+            <summary>
+            Defines methods for creating and managing ZIP archives.
+            </summary>
+            <param name="logger">to log errors and process event</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.ZipArchiveManager.CreateZipArchive(System.String,System.String[])">
             <summary>
             Creates a ZIP archive at the specified path, adding files and/or directories to it.
@@ -2511,6 +3176,23 @@
             <param name="directoryPath">The path of the directory whose contents will be added to the archive.</param>
             <param name="entryName">The relative path within the ZIP archive where the contents of the directory will be placed.</param>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IAnalyze">
+            <summary>
+            Class used to analyze the knx installation according to a list of functional models.
+            The models each have a list of Element, which have a list of commands and expected results.
+            The results are thus listed as a list of (models)lists of (elements)lists of (commands)lists of (expected results)<see cref="T:KNX_Virtual_Integrator.Model.Implementations.ResultType"/>.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IAnalyze.Results">
+            <summary>
+            Table of results sorted by Tests, in TestedElements, in functionalModels
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IAnalyze.TestAll">
+            <summary>
+            Tests all the functional models of a list and updates the table of results
+            </summary>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IApplicationFileManager">
             <summary>
                 Provides an interface for managing application files, including log file management, 
@@ -2519,24 +3201,51 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IApplicationFileManager.EnsureLogDirectoryExists">
             <summary>
-                Ensures that the log directory exists by creating it if it does not already exist.
+            Ensures that the log directory exists by creating it if it does not already exist.
+            <para>
+            If the directory cannot be created due to an exception, the application will be terminated with an error message.
+            </para>
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IApplicationFileManager.ArchiveLogs">
             <summary>
-                Archives the log files by compressing them into a ZIP archive when the number of log files exceeds 50.
+            Archives the log files in the log directory by compressing them into a ZIP archive when the number of log files exceeds 50.
+            <para>
+            If there are more than 50 log files, the method will create a new ZIP archive containing all log files, excluding the current log file.
+            If there are already 10 or more existing archives, it will delete the oldest ones before creating a new archive.
+            This ensures that only the log files from the last 50 application runs are retained.
+            </para>
+            <para>
+            If there are fewer than 50 log files, no archiving will be performed.
+            </para>
+            <para>
+            If an error occurs during the process, it logs the error message to the console and log file.
+            </para>
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IApplicationFileManager.DeleteAllExceptLogsAndResources">
             <summary>
-                Deletes all directories in the application directory except for 'logs' and 'resources'.
+            Deletes all directories in the application directory except for those named 'logs' and 'resources'.
+            <para>
+            This method iterates through all subdirectories in the base directory and deletes them, excluding the directories 'logs' and 'resources'.
+            This helps in cleaning up directories from previous sessions, retaining only the specified directories for future use.
+            </para>
+            <para>
+            In case of an error during the deletion, such as unauthorized access or I/O errors, the method logs the error message to the console and continues processing other directories.
+            </para>
+            <para>
+            The method logs the path of each successfully deleted directory to the application log for tracking purposes.
+            </para>
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IApplicationFileManager.EnsureSettingsFileExists(System.String)">
-            <summary>
-                Ensures a configuration file exists at the specified path, creating it and setting defaults if necessary.
-            </summary>
-            <param name="settingsPath">The path to the configuration file.</param>
+             <summary>
+             Ensures a configuration file exists at the specified path. If not, it creates the file and sets defaults 
+             based on the system theme and language. Handles exceptions such as unauthorized access, invalid paths, 
+             and I/O errors, displaying an error message and closing the application if an issue arises.
+            
+             <param name="settingsPath">The path to the configuration file.</param>
+             </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IApplicationSettings">
             <summary>
@@ -2610,6 +3319,11 @@
         <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IBusConnection.NatAccess">
             <summary>
                 Property that indicates whether we use NAT to access the interface.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IBusConnection.InterfaceAddress">
+            <summary>
+                Individual Address for the given IP Secure interface
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IBusConnection.KeysFilePassword">
@@ -2733,6 +3447,89 @@
              - GetAllModels: Retrieves all functional models from the dictionary.
              </summary>
         </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.FunctionalModels">
+            <summary>
+            Gets or sets the list of models.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.AddKeyword(System.Int32,System.String)">
+            <summary>
+            Adds a keyword to the model at an index in the dictionary
+            </summary>
+            <param name="index">the index in the dictionary</param>
+            <param name="word">the keyword</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.AddFunctionalModel(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure,System.Boolean)">
+            <summary>
+            Adds a model to the dictionary
+            </summary>
+            <param name="functionalModel">the structure of the model</param>
+            <param name="imported">if the model is imported</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.AddFunctionalModel(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure,System.Boolean,System.Collections.Generic.List{System.String})">
+            <summary>
+            Adds a model to the dictionary
+            </summary>
+            <param name="functionalModel">the structure of the model</param>
+            <param name="imported">if the model is imported</param>
+            <param name="keywords">the keywords of the model</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.RemoveFunctionalModel(System.Int32)">
+            <summary>
+            Removes a model at a certain index in the dictionary
+            </summary>
+            <param name="index">the index of the model</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.GetAllModels">
+            <summary>
+            Gets all the models of the dictionary.
+            </summary>
+            <returns>the list of models</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.ExportDictionary(System.String)">
+            <summary>
+            Creates an XML file representing the dictionary.
+            </summary>
+            <param name="path">Path where the XML has to be exported </param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.ExportDictionary(System.Xml.XmlDocument)">
+            <summary>
+            Exports the dictionary to an XmlElement 
+            </summary>
+            <param name="doc">The document to which should be exported the dictionary</param>
+            <returns>The created document</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.ImportDictionary(System.String)">
+            <summary>
+            Imports a functional model dictionary from a path.
+            </summary>
+            <param name="path">Path of the dictionary</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.ImportDictionary(System.Xml.XmlNodeList)">
+            <summary>
+            Imports a functional model dictionary
+            </summary> 
+            <param name="xnList">the list from which to import the dictionary</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.HasSameStructure(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
+            <summary>
+            Checks if a Functional Model has the same structure as the ones in the dictionary
+            </summary>
+            <param name="functionalModel">Structure to find in the dictionary</param>
+            <returns>Index of the corresponding structure, or null if not found</returns>
+        </member>
+        <member name="E:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.PropertyChanged">
+            <summary>
+            The event that occurs when the Dictionary changes. 
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelDictionary.CheckName(System.String)">
+            <summary>
+            Checks the index of a model with a certain name
+            </summary>
+            <param name="name">the name of the model</param>
+            <returns>the index of the model if found; -1 otherwise.</returns>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList">
              <summary>
              Interface for managing a list of functional models (FunctionalModel).
@@ -2746,9 +3543,162 @@
              - GetAllModels: Retrieves all functional models from the dictionary.
              </summary>
         </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.FunctionalModels">
+            <summary>
+            The list structure of functional models.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.FunctionalModelDictionary">
+            <summary>
+            The dictionary of models and structures
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportDictionary(System.String)">
+            <summary>
+            Creates an XML file representing the dictionary.
+            </summary>
+            <param name="path">Path where the XML has to be exported </param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.GetAllModels">
+            <summary>
+            Method to get all the models in the dictionary.
+            </summary>
+            <returns>Returns a list containing all the functional models. </returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.AddToDictionary(KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure,System.Boolean)">
+            <summary>
+            Adds a personalized model to the dictionary of models.
+            </summary>
+            <param name="model">The model to add to the dictionary</param>
+            <param name="imported">Boolean to check if the functionalModelStructure to add is created manually or by the application during importation</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.DeleteFromDictionary(System.Int32)">
+            <summary>
+            Deletes a Structure from the dictionary .
+            </summary>
+            <param name="index">Index of the Structure to delete from in the dictionary. </param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ResetInDictionary(System.Int32,KNX_Virtual_Integrator.Model.Entities.FunctionalModelStructure)">
+            <summary>
+            Resets the saved structure by clearing the dictionary then putting back in the structure at the index.
+            </summary>
+            <param name="index">The index at which the structure was saved (and to save)</param>
+            <param name="savedStructure">the structure to be saved</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.AddToList(System.Int32)">
+            <summary>
+            Copies a functional model from the dictionary to the list.
+            </summary>
+            <param name="index">Index in the dictionary of the Functional Model to copy in the list</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.AddToList(System.Int32,KNX_Virtual_Integrator.Model.Entities.FunctionalModel,System.Boolean)">
+            <summary>
+            Copies a functional model to the list.
+            </summary>
+            <param name="functionalModel">FunctionalModel to add</param>
+            <param name="index"> Index of the structure</param>
+            <param name="copy"> boolean indicating whether the model is a copy or not</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.DeleteFromList(System.Int32,System.Int32)">
+            <summary>
+            Deletes a functional model in the list at the desired index.
+            </summary>
+            <param name="indexOfStructure">Index of the structure of the Functional Model to delete in the list</param>
+            <param name="indexOfModel">Index of the Functional Model to delete in the list</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportDictionary(System.Xml.XmlDocument)">
+            <summary>
+            Creates an XMLElement representing the dictionary.
+            </summary>
+            <param name="doc">The document in which the element is created.</param>
+            <returns>The created XmlElement</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportDictionary(System.String)">
+            <summary>
+            Imports an XML file representing the dictionary.
+            </summary>
+            <param name="path">Path of the xml. </param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportDictionary(System.Xml.XmlNodeList)">
+            <summary>
+            Imports a functional model dictionary after clearing the list of models.
+            </summary>
+            <param name="xnList">the list from which to import the dictionary</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportList(System.String)">
+            <summary>
+            Creates an XML file representing the list of list.
+            </summary>
+            <param name="path">Path where the XML has to be exported </param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportList(System.Xml.XmlDocument)">
+            <summary>
+            Exports the list of models in each structure from an XmlDocument
+            </summary>
+            <param name="doc">The XmlDocument in which is created the XmlElement.</param>
+            <returns>The created XmlElement</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportList(System.String)">
+            <summary>
+            Imports the structure list from a file
+            </summary>
+            <param name="path">the path of the file</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportList(System.Xml.XmlNodeList)">
+            <summary>
+            Imports the structure list from an XmlNodeList
+            </summary>
+            <param name="xnList">The XmlNodeList to import from</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportListAndDictionary(System.String)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportDictionary(System.String)"/>
+            </summary>
+            <param name="path">Path of the file where everything has to be exported to.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportListAndDictionary(System.String)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportDictionary(System.String)"/>.
+            </summary>
+            <param name="path">the path of the file to import from.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ResetCount(System.Int32)">
+            <summary>
+            Resets the count of models in a structure
+            </summary>
+            <param name="index">the structure index</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ReinitializeNbModels(System.Int32)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ResetCount(System.Int32)"/>.
+            </summary>
+            <param name="index">The index of the structure.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.AddNewEmptyStruct">
+            <summary>
+            Adds a new empty structure. <seealso cref="P:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.FunctionalModels"/> <seealso cref="F:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList._nbModelsCreated"/>
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.AddNewCount">
+            <summary>
+            Creates a new counter associated to a new list in the list of lists
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.DuplicateModel(System.Collections.Generic.List{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32)">
+            <summary>
+            Duplicates the model of a given index in a list
+            </summary>
+            <param name="models">List containing the model to be copied, and in which the copy will be</param>
+            <param name="index">Index of the model to copy</param>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager">
             <summary>
             Defines methods for managing group addresses extracted from XML files.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.Prefixes">
+            <summary>
+            Group address names prefixes. It is initialized for command
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.ExtractGroupAddress(KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList)">
@@ -2769,6 +3719,7 @@
              of grouped addresses, avoiding name collisions by appending suffixes if necessary.
             
              <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
+             <param name="functionalModelList">The list of functional models to fill</param>
              </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.ProcessStandardXmlFile(System.Xml.Linq.XDocument)">
@@ -2812,8 +3763,14 @@
             If the addresses are detected to overlap, the method returns the value 3.
             If no overlaps are found, the method returns the value 2.
             
-            <param name="doc">The XML document (XDocument) containing the group address ranges and specific group addresses.</param>
+            <param name="modelStructures">The list of XElements containing the group address ranges and specific group addresses.</param>
             <returns>An integer indicating the overlap status: 3 for detected overlap, 2 for no overlap.</returns>
+            </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressMerger">
+            <summary>
+            Interface for merging group address with those that have more than 80% similarity with the IeAddressSet.
+            It finds and sort the ie with the cmd after finding the cmd.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressMerger.MergeSingleElementGroups(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Xml.Linq.XElement}},System.Collections.Generic.List{System.Xml.Linq.XElement})">
@@ -2846,6 +3803,11 @@
             <param name="cmdElement">The XElement representing the command from which the search string is derived.</param>
             <param name="ieAddressesSet">The collection of XElement entries to be compared against the search string.</param>
             <returns>Returns a list of elements from 'ieAddressesSet', sorted by their similarity to the cleaned 'searchString'.</returns>
+            </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressProcessor">
+            <summary>
+            Manages the processing of group address names : normalize, according to the architecture and adding one more to the dictionary, but normalized.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressProcessor.AddToGroupedAddresses(System.Collections.Generic.Dictionary{System.String,System.Collections.Generic.List{System.Xml.Linq.XElement}},System.Xml.Linq.XElement,System.String)">
@@ -2905,6 +3867,91 @@
             <returns>A formatted string representing the decoded value based on the group address structure. Returns the original string if conversion fails or if the structure is unrecognized.</returns>
             </summary>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication">
+            <summary>
+            Represents the communication with the bus in terms of group addresses and values.
+            Allows writing and reading information from the bus while checking its state.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupAddress">
+            <summary>
+            Gets or sets the address with which the program will communicate with the bus.
+            It specifies which Group Address will make use or read the <see cref="P:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupValue"/>.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupValue">
+            <summary>
+            Gets the group value to send to the bus.
+            It represents which state the object will be in.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupValueWriteOnAsync">
+            <summary>
+            Dev method. Sends asynchronously the value "on" to a specified address.
+            First verifies the bus state before sending the value.
+            Logs an error if it fails. 
+            </summary>
+            <returns>A task representing the completion of the writing.</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupValueWriteOffAsync">
+            <summary>
+            Dev method. Sends asynchronously the value "off" to a specified address.
+            First verifies the bus state before sending the value.
+            Logs an error if it fails. 
+            </summary>
+            <returns>A task representing the completion of the writing.</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupValueWriteAsync(Knx.Falcon.GroupAddress,Knx.Falcon.GroupValue)">
+            <summary>
+            Sends asynchronously a value to a specified address.
+            First verifies the bus state before sending the value.
+            Logs an error if it fails.
+            </summary>
+            <param name="addr">The address at which the value is sent.</param>
+            <param name="value">The value to send.</param>
+            <returns>A task representing the completion of the writing.</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.ConvertToGroupValue(System.UInt64,System.Byte[])">
+            <summary>
+             Converts a uLong value to a byte table to write on the bus
+            </summary>
+             <param name="toSend">The value to send.</param>
+             <param name="groupValue">The table to fill before writing.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.MaGroupValueReadAsync(Knx.Falcon.GroupAddress)">
+            <summary>
+            Reads asynchronously values from a group address.
+            Verifies the bus connection state before sending the request.
+            uses a <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> to capture the read value.
+            </summary>
+            <param name="groupAddress">The group address at which the value should be read.</param>
+            <returns>A task representing the completion of the task, containing the received messages.</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupValuesWithinTimerAsync(Knx.Falcon.GroupAddress,System.Int32)">
+            <summary>
+            Reads asynchronously values from a group address until the timer runs out.
+            Verifies the bus connection state before sending the request.
+            uses a <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> to capture the read value.
+            </summary>
+            <param name="groupAddress">The group address at which the value should be read.</param>
+             <param name="timerDuration">Timer in ms under which the message should be received.</param>
+            <returns>A task representing the completion of the task, containing the received messages..</returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupValuesTimerOrRecievedAWriteAsync(Knx.Falcon.GroupAddress,System.Int32)">
+            <summary>
+            Reads asynchronously values from a group address until a Write is received or the timer runs out.
+            Verifies the bus connection state before sending the request.
+            uses a <see cref="T:System.Threading.Tasks.TaskCompletionSource`1"/> to capture the read value.
+            </summary>
+            <param name="groupAddress">The group address at which the value should be read.</param>
+             <param name="timerDuration">Timer in ms under which the message should be received.</param>
+            <returns>A task representing the completion of the task, containing the received messages.</returns>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication.GroupEvents">
+            <summary>
+            Gets the collection of group events args.
+            </summary>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Interfaces.ILogger">
             <summary>
             Defines the contract for logging functionality.
@@ -2943,6 +3990,11 @@
             Closes the log writer and releases any resources associated with it.
             </summary>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.INamespaceResolver">
+            <summary>
+            Manages the KNX namespaces from a Xml file.
+            </summary>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.INamespaceResolver.SetNamespaceFromXml(System.String)">
              <summary>
              Sets the global KNX XML namespace from the specified XML file.
@@ -2968,10 +4020,66 @@
             <param name="child">The starting child object from which to search up the visual tree.</param>
             <returns>The parent of type T, or null if no such parent is found.</returns>
         </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IPdfDocumentCreator">
+            <summary>
+            Interface of the class handling the generation of the analysis report PDF
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IPdfDocumentCreator.LatestReportPath">
+            <summary>
+            Path to the latest PDF report generated
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IPdfDocumentCreator.CreatePdf(System.String,System.String,System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Collections.Generic.List{System.Collections.Generic.List{System.Collections.Generic.List{System.Collections.Generic.List{KNX_Virtual_Integrator.Model.Implementations.ResultType}}}})">
+            <summary>
+            Creates a PDF document at the specified file path, with the given author name.
+            The PDF is generated in A4 format without margins, and includes a header, project information,
+            and a tree structure. The generated file path is stored as the latest report path.
+            </summary>
+            <param name="fileName">The file path where the PDF will be saved.</param>
+            <param name="authorName">The name of the author to include in the project information section.</param>
+            <param name="testedList"></param>
+            <param name="testResults"></param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IPdfDocumentCreator.OpenLatestReport">
+            <summary>
+            Opens the most recently generated PDF report using the default system application.
+            The file path of the latest report is retrieved from the LatestReportPath variable.
+            </summary>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager">
             <summary>
             Interface for managing project files including extraction and handling operations.
             </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.ProjectFolderPath">
+            <summary>
+            Gets the path to the exported project folder.
+            </summary>
+            <remarks>
+            This property holds the file path of the project folder where the project files are exported.
+            </remarks>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.ProjectName">
+            <summary>
+             Gets the name of the project the application is currently working on.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.ZeroXmlPath">
+            <summary>
+            Gets the path to the 0.xml file of the project.
+            </summary>
+            <remarks>
+            This property holds the file path to the 0.xml file associated with the project.
+            </remarks>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.GroupAddressFilePath">
+            <summary>
+            Gets the path to the exported of the group addresses file.
+            </summary>
+            <remarks>
+            This property holds the file path  of the group addresses file
+            </remarks>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.ExtractProjectFiles(System.String)">
             <summary>
@@ -2982,16 +4090,38 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.ExtractGroupAddressFile(System.String)">
             <summary>
-            Extracts the group addresses file at the specified path and places it into the designated export folder.
+            Extracts the group addresses file at the specified path and place it into the designated export folder.
             </summary>
             <param name="groupAddressesSourceFilePath">The path to the group addresses file that will be extracted.</param>
             <returns>Returns <c>true</c> if the file is successfully extracted and the process was not cancelled; otherwise, returns <c>false</c>.</returns>
+            <remarks>
+            This method performs the following steps:
+            <list type="number">
+            <item>Normalizes the path of the group addresses file and handles potential path-related exceptions.</item>
+            <item>Deletes any existing group addresses file to avoid conflicts.</item>
+            <item>Copy the file to the right folder path and indicates successful extraction if no cancellation occurred.</item>
+            </list>
+            </remarks>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.SelectAnotherFile">
             <summary>
             Prompts the user to select a file path using an OpenFileDialog.
             </summary>
             <returns>Returns the selected file path as a string if a file is chosen; otherwise, returns an empty string.</returns>
+            <remarks>
+            This method:
+            <list type="number">
+            <item>Displays a file open dialog with predefined filters and settings.</item>
+            <item>Returns the path of the selected file if the user confirms their choice.</item>
+            <item>Handles potential exceptions, including invalid dialog state, external errors, and other unexpected issues.</item>
+            </list>
+            </remarks>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IProjectInfoManager">
+            <summary>
+            Interface of the class managing the extraction of physical information of the project : building, rooms,...
+            UNUSED CLASS AT THE TIME OF THE BETA
+            </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IProjectInfoManager.ExtractLocationInfo(System.Xml.Linq.XDocument)">
              <summary>
@@ -3016,6 +4146,11 @@
              <param name="zeroXmlFile">The XML document to extract information from.</param>
              <returns>A list of anonymous objects representing the extracted location information, where each object
              contains the names of the room, floor, building part, building, and distribution board.</returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.ISliderClickHandler">
+            <summary>
+            Interface of the class handling the manipulation of the slider in the <see cref="T:KNX_Virtual_Integrator.View.Windows.SettingsWindow"/>.
+            </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.ISliderClickHandler.OnSliderClick(System.Object,System.Windows.RoutedEventArgs)">
             <summary>
@@ -3049,6 +4184,11 @@
             </summary>
             <param name="sender">The source of the event.</param>
             <param name="e">Event data for the mouse movement event.</param>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IStringManagement">
+            <summary>
+            Interface of the class handling the comparison of strings
+            </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IStringManagement.CalculateSimilarity(System.String,System.String)">
              <summary>
@@ -3184,6 +4324,42 @@
             <param name="parentFinder"><see cref="T:KNX_Virtual_Integrator.Model.Implementations.ParentFinder"/>, to organize group addresses</param>
             <param name="settingsSliderClickHandler"><see cref="T:KNX_Virtual_Integrator.Model.Implementations.SliderClickHandler"/>, to handle sliders</param>
             <param name="pdfDocumentCreator"><see cref="T:KNX_Virtual_Integrator.Model.Implementations.PdfDocumentCreator"/>, to create Test report PDF</param>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.FileFinder">
+            <summary> Class used to handle importing files  </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.ProjectFileManager">
+            <summary> Class used to extract information from the imperted files </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.Logger">
+            <summary> Class used to print out information and to log it in a file </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.GroupAddressManager">
+            <summary> Class handling any processing of group addresses </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.DebugArchiveGenerator">
+            <summary> Class handling the generation of the debug file </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.ApplicationFileManager">
+            <summary> Class handling the logs and archives of the app </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.BusConnection">
+            <summary> Class handling the connection to the bus </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.GroupCommunication">
+            <summary> Class handling any connection to the bus after connection </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.AppSettings">
+            <summary> Class handling the logs and archives of the app </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.ParentFinder">
+            <summary> Class handling the search of related elements of the UI </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.SettingsSliderClickHandler">
+            <summary> Class handling the slider of the <see cref="T:KNX_Virtual_Integrator.View.Windows.SettingsWindow"/></summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.ModelManager.PdfDocumentCreator">
+            <summary> Class handling the creation of the PDF analysis report </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.Model.Wrappers.IKnxBusWrapper">
             <summary>
@@ -3632,6 +4808,12 @@
             in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
             </summary>
         </member>
+        <member name="M:KNX_Virtual_Integrator.ViewModel.MainViewModel.#ctor(KNX_Virtual_Integrator.Model.ModelManager)">
+            <summary>
+            Constructor of the ViewModel, subscribes everything concerning the viewModel and initializes every other attribute.
+            </summary>
+            <param name="modelManager"></param>
+        </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.BoxWidth">
             <summary>
             The width of the boxes in the <see cref="T:KNX_Virtual_Integrator.Model.Entities.TestedElement"/> listBoxes (displayed element)
@@ -3711,15 +4893,11 @@
             <summary>
             Command that creates a debug archive with optional OS info, hardware info, and imported projects.
             </summary>
-            <param name="../SettingsWindow.xaml.IncludeOsInfo../SettingsWindow.xaml.IncludeOsInfo">Specifies whether to include OS information in the debug archive.</param>
-            <param name="../SettingsWindow.xaml.IncludeHardwareInfo../SettingsWindow.xaml.IncludeHardwareInfo">Specifies whether to include hardware information in the debug archive.</param>
-            <param name="../SettingsWindow.xaml.IncludeImportedProjects../SettingsWindow.xaml.IncludeImportedProjects">Specifies whether to include imported projects in the debug archive.</param>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.FindZeroXmlCommand">
             <summary>
             Command that finds a zero XML file based on the provided file name.
             </summary>
-            <param name="../FileFinder.fileName../FileFinder.fileName">The name of the file to find.</param>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ModelConsoleWriteCommand">
             <summary>
@@ -3909,14 +5087,12 @@
             <summary>
             Command that extracts a group address file based on the provided file name and returns a boolean indicating success.
             </summary>
-            <param name="../FileFinder.fileName../FileFinder.fileName">The name of the file to extract.</param>
             <returns>True if the extraction was successful; otherwise, false.</returns>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ExtractProjectFilesCommand">
             <summary>
             Command that extracts project files based on the provided file name and returns a boolean indicating success.
             </summary>
-            <param name="../FileFinder.fileName../FileFinder.fileName">The name of the file to extract.</param>
             <returns>True if the extraction was successful; otherwise, false.</returns>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.LaunchAnalysisCommand">
@@ -4005,6 +5181,16 @@
             The temporary Structure to buffer its modifications in the <see cref="T:KNX_Virtual_Integrator.View.Windows.StructureEditWindow"/>.
             </summary>
         </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._applyChangesErrorMessageVisibility">
+            <summary>
+            The visibility of Error Messages. Usually hidden.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ApplyChangesErrorMessageVisibility">
+            <summary>
+            Gets or sets the visibility of Error Messages. Usually hidden.
+            </summary>
+        </member>
         <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._pdfPath">
             <summary>
             The file path to which the pdf analysis report should be saved.
@@ -4087,6 +5273,11 @@
             </summary>
             <param name="structKey">The index of the structure in the functionalModelList.</param>
         </member>
+        <member name="T:KNX_Virtual_Integrator.View.WindowManager">
+            <summary>
+            The class that instantiates every window and helps the MainWindow manage the the interactions with the other ones.
+            </summary>
+        </member>
         <member name="P:KNX_Virtual_Integrator.View.WindowManager.MainWindow">
             <summary>
             The MainWindow instance 
@@ -4156,6 +5347,10 @@
             </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow">
+            <summary>
+            Class handling any change in the UI of the connection Window.
+            The Connection Window handles every part that concerns the connection to the KNX Bus, be it through IP, IP NAT or USB.
+            </summary>
             <summary>
             ConnectionWindow
             </summary>
@@ -4624,7 +5819,7 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.SettingsWindow.TabControl_SelectionChanged(System.Object,System.Windows.Controls.SelectionChangedEventArgs)">
             <summary>
-            Handles the <see cref="!:TabControl.SelectionChanged"/> event to adjust the visibility of buttons based on the selected tab.
+            Handles the <see cref="M:KNX_Virtual_Integrator.View.Windows.SettingsWindow.TabControl_SelectionChanged(System.Object,System.Windows.Controls.SelectionChangedEventArgs)"/> event to adjust the visibility of buttons based on the selected tab.
             </summary>
             <param name="sender">The source of the event, expected to be a <see cref="T:System.Windows.Controls.TabControl"/>.</param>
             <param name="e">The event data.</param>
@@ -4699,8 +5894,7 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.UpdateWindowContents(System.Boolean,System.Boolean,System.Boolean)">
             <summary>
-            Updates the contents (texts, textboxes, checkboxes, ...) of the structure edit window according to the application settings.
-            TODO: implement later
+            Updates the contents (texts, textboxes, checkboxes, ...) of the report window according to the application settings.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.RemoveTestedElementFromModelStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">

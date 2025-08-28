@@ -2,7 +2,9 @@
 using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Defines methods for detecting system settings related to Windows, such as theme and language.
+/// </summary>
 public class SystemSettingsDetector (ILogger logger) : ISystemSettingsDetector
 {
     // Fonction permettant de détecter le thème de windows (clair/sombre)

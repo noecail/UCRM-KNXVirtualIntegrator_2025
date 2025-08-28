@@ -6,13 +6,34 @@ using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// manages a list of functional models (FunctionalModel).
+///
+/// Provides methods to add, remove, retrieve, and update models in the list.
+/// Each model is identified by a unique key (int). This interface enables centralized 
+/// management of functional models, allowing standardized operations on the dictionary.
+/// 
+/// - AddFunctionalModel: Adds a functional model to the dictionary.
+/// - RemoveFunctionalModel: Removes a functional model using its key.
+/// - GetAllModels: Retrieves all functional models from the dictionary.
+/// </summary>
 public class FunctionalModelList : IFunctionalModelList
 {
+    /// <summary>
+    /// The number of models created
+    /// </summary>
     private readonly List<int> _nbModelsCreated = [];
+    /// <summary>
+    /// The list structure of functional models.
+    /// </summary>
     public List<ObservableCollection<FunctionalModel>> FunctionalModels { get; set; } = [];
+    /// <summary>
+    /// The dictionary of models and structures
+    /// </summary>
     public IFunctionalModelDictionary FunctionalModelDictionary { get; set; }
-
+    /// <summary>
+    /// Default model list constructor
+    /// </summary>
     public FunctionalModelList()
     {
         FunctionalModelDictionary = new FunctionalModelDictionary();
@@ -40,9 +61,11 @@ public class FunctionalModelList : IFunctionalModelList
             }
         };
     }
-
-
-    public FunctionalModelList(string path) //Takes the dictionary from a file's path
+    /// <summary>
+    /// Model list constructor. Takes the dictionary from a file's path.
+    /// </summary>
+    /// <param name="path"></param>
+    public FunctionalModelList(string path)
     {
         FunctionalModelDictionary = new FunctionalModelDictionary(path);
         FunctionalModelDictionary.PropertyChanged += (_, e) =>
@@ -60,8 +83,7 @@ public class FunctionalModelList : IFunctionalModelList
         };
 
     }
-
-
+    
     /// <summary>
     /// Copies a functional model from the dictionary to the list.
     /// </summary>
@@ -87,7 +109,10 @@ public class FunctionalModelList : IFunctionalModelList
         }
         FunctionalModels[index].Add(newModel);
     }
-    
+    /// <summary>
+    /// Resets the count of models in a structure
+    /// </summary>
+    /// <param name="index">the structure index</param>
     public void ResetCount(int index)
     {
         _nbModelsCreated[index] = 0;
@@ -106,8 +131,7 @@ public class FunctionalModelList : IFunctionalModelList
     /// </summary>
     /// <param name="functionalModel">FunctionalModel to add</param>
     /// <param name="index"> Index of the structure</param>
-    /// <param name="copy"> boolean indicating whether the model is a copy or not</param>
-    
+    /// <param name="copy"> boolean indicating whether the model is a copy or not</param>    
     public void AddToList(int index, FunctionalModel functionalModel, bool copy)
     {
 
@@ -180,7 +204,11 @@ public class FunctionalModelList : IFunctionalModelList
         FunctionalModels.RemoveAt(index);
         OnPropertyChanged(nameof(FunctionalModels)); //notifier la UI
     }
-
+    /// <summary>
+    /// Resets the saved structure by clearing the dictionary then putting back in the structure at the index.
+    /// </summary>
+    /// <param name="index">The index at which the structure was saved (and to save)</param>
+    /// <param name="savedStructure">the structure to be saved</param>
     public void ResetInDictionary(int index, FunctionalModelStructure savedStructure)
     {
         List<FunctionalModelStructure> firstPart = [];
@@ -208,7 +236,11 @@ public class FunctionalModelList : IFunctionalModelList
     {
         FunctionalModelDictionary.ExportDictionary(path);
     }
-    
+    /// <summary>
+    /// Creates an XMLElement representing the dictionary.
+    /// </summary>
+    /// <param name="doc">The document in which the element is created.</param>
+    /// <returns>The created XmlElement</returns>
     public XmlElement ExportDictionary(XmlDocument doc)
     {
         return (FunctionalModelDictionary.ExportDictionary(doc));
@@ -223,7 +255,10 @@ public class FunctionalModelList : IFunctionalModelList
         FunctionalModels.Clear();
         FunctionalModelDictionary.ImportDictionary(path);
     }
-    
+    /// <summary>
+    /// Imports a functional model dictionary after clearing the list of models.
+    /// </summary>
+    /// <param name="xnList">the list from which to import the dictionary</param>
     public void ImportDictionary(XmlNodeList xnList)
     {
         FunctionalModels.Clear();
@@ -238,9 +273,14 @@ public class FunctionalModelList : IFunctionalModelList
     {
         return FunctionalModelDictionary.GetAllModels();
     }
-
+    /// <summary>
+    /// The event that occurs when the list changes. 
+    /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
-
+    /// <summary>
+    /// Invokes the event <see cref="PropertyChanged"/> when the list changes.
+    /// </summary>
+    /// <param name="propertyName">The name of the changed property</param>
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -268,7 +308,12 @@ public class FunctionalModelList : IFunctionalModelList
            doc.AppendChild(project);
            doc.Save(path + ".xml");
        }
- public XmlElement ExportList(XmlDocument doc)
+    /// <summary>
+    /// Exports the list of models in each structure from an XmlDocument
+    /// </summary>
+    /// <param name="doc">The XmlDocument in which is created the XmlElement.</param>
+    /// <returns>The created XmlElement</returns>
+    public XmlElement ExportList(XmlDocument doc)
     {
         var project = doc.CreateElement("Project");
         foreach (var modelStructure in FunctionalModels)
@@ -285,7 +330,10 @@ public class FunctionalModelList : IFunctionalModelList
         doc.AppendChild(project);
         return project;
     }
- 
+    /// <summary>
+    /// see <see cref="ExportList(string)"/> and <see cref="ExportDictionary(string)"/>
+    /// </summary>
+    /// <param name="path">Path of the file where everything has to be exported to.</param>
     public void ExportListAndDictionary(string path)
     {
         var doc = new XmlDocument();
@@ -299,7 +347,10 @@ public class FunctionalModelList : IFunctionalModelList
         doc.AppendChild(Root);
         doc.Save(path);
     }
-
+    /// <summary>
+    /// Imports the structure list from a file
+    /// </summary>
+    /// <param name="path">the path of the file</param>
     public void ImportList(string path)
     {
         FunctionalModels.Clear();
@@ -317,7 +368,10 @@ public class FunctionalModelList : IFunctionalModelList
             }
         }
     }
-    
+    /// <summary>
+    /// Imports the structure list from an XmlNodeList
+    /// </summary>
+    /// <param name="xnList">The XmlNodeList to import from</param>
     public void ImportList(XmlNodeList? xnList)
     {
         FunctionalModels.Clear();
@@ -341,32 +395,40 @@ public class FunctionalModelList : IFunctionalModelList
             }
         }
     }
-
+    /// <summary>
+    /// see <see cref="ImportList(string)"/> and <see cref="ImportDictionary(string)"/>.
+    /// </summary>
+    /// <param name="path">the path of the file to import from.</param>
     public void ImportListAndDictionary(string path)
     {
         var doc = new XmlDocument();
         doc.Load(path);
         XmlNodeList? xnList = doc.DocumentElement?.ChildNodes;
         foreach (XmlNode ok in xnList){
-            if (ok.Name == "Dictionary")
+            if (ok.Name == "Dictionary"&& ok.ChildNodes[0]?.ChildNodes!=null)
             {
-                ImportDictionary(ok.ChildNodes[0].ChildNodes);
+                ImportDictionary(ok.ChildNodes[0]?.ChildNodes!);
             }
         }
         foreach (XmlNode ok in xnList)
         {
-            if (ok.Name == "List")
+            if (ok.Name == "List"&& ok.ChildNodes[0]?.ChildNodes!=null)
             {
-                ImportList(ok.ChildNodes[0].ChildNodes);
+                ImportList(ok.ChildNodes[0]?.ChildNodes!);
             }
         }     
     }
-
+    /// <summary>
+    /// see <see cref="ResetCount"/>.
+    /// </summary>
+    /// <param name="index">The index of the structure.</param>
     public void ReinitializeNbModels(int index)
     {
         _nbModelsCreated[index]=0;
     }
-
+    /// <summary>
+    /// Adds a new empty structure. <seealso cref="FunctionalModels"/> <seealso cref="_nbModelsCreated"/>
+    /// </summary>
     public void AddNewEmptyStruct()
     {
         FunctionalModels.Add([]);

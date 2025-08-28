@@ -3,9 +3,15 @@ using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Manages the KNX namespaces from a Xml file.
+/// </summary>
+/// <param name="logger">To log errors</param>
 public class NamespaceResolver(Logger logger) : INamespaceResolver 
 {
+    /// <summary>
+    /// Name space of KNX
+    /// </summary>
     public XNamespace? GlobalKnxNamespace ;
     
     // Method that retrieves the namespace to use for searching in .xml files from the zeroFilePath (since the namespace varies depending on the ETS version)

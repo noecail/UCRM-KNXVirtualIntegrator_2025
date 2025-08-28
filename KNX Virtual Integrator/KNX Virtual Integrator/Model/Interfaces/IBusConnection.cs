@@ -57,6 +57,11 @@ public interface IBusConnection : INotifyPropertyChanged
     public bool NatAccess { get; set; }
 
     /// <summary>
+    ///     Individual Address for the given IP Secure interface
+    /// </summary>
+    public string InterfaceAddress { get;set; }
+    
+    /// <summary>
     ///     Password that allows access to the file that holds the knxkeys. See <see cref="KeysPath"/>
     /// </summary>
     string KeysFilePassword { get; set; }

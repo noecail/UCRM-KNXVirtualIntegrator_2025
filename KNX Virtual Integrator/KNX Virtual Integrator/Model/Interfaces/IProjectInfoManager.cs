@@ -1,7 +1,10 @@
 ﻿using System.Xml.Linq;
 
 namespace KNX_Virtual_Integrator.Model.Interfaces;
-
+/// <summary>
+/// Interface of the class managing the extraction of physical information of the project : building, rooms,...
+/// UNUSED CLASS AT THE TIME OF THE BETA
+/// </summary>
 public interface IProjectInfoManager
 {
     /// <summary>

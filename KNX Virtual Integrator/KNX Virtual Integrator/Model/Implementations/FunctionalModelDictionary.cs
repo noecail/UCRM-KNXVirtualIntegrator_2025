@@ -8,14 +8,31 @@ using System.Xml;
 
 namespace KNX_Virtual_Integrator.Model.Implementations
 {
-    //Find Summary in the interface
+    /// <summary>
+    /// Manages a dictionary of functional models (FunctionalModel).
+    ///
+    /// Provides methods to add, remove, retrieve, and update models in the dictionary.
+    /// Each model is identified by a unique key (int). This interface enables centralized 
+    /// management of functional models, allowing standardized operations on the dictionary.
+    /// 
+    /// - AddFunctionalModel: Adds a functional model to the dictionary.
+    /// - RemoveFunctionalModel: Removes a functional model using its key.
+    /// - GetAllModels: Retrieves all functional models from the dictionary.
+    /// </summary>
     public class FunctionalModelDictionary : IFunctionalModelDictionary
     {
+        /// <summary>
+        /// List of models
+        /// </summary>
         private ObservableCollection<FunctionalModelStructure> _functionalModels =[];
         
-        
+        /// <summary>
+        /// The number of structure created.
+        /// </summary>
         private int _nbStructuresCreated ;
-
+        /// <summary>
+        /// Gets or sets the list of models.
+        /// </summary>
         public ObservableCollection<FunctionalModelStructure> FunctionalModels
         {
             get => _functionalModels;
@@ -26,7 +43,9 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             }
         }
 
-
+        /// <summary>
+        /// Default constructor of the dictionary. Gives a default list of structures
+        /// </summary>
         public FunctionalModelDictionary()
         {
             FunctionalModels = [];
@@ -118,12 +137,19 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     ), false,["Commute", "Commutation", "Convecteur", "Prise", "Arrosage", "Ouvrant"]
                 );//Adding commutation functional model*/
         }
-
+        /// <summary>
+        /// Adds a keyword to the model at an index in the dictionary
+        /// </summary>
+        /// <param name="index">the index in the dictionary</param>
+        /// <param name="word">the keyword</param>
         public void AddKeyword(int index, string word)
         {
             FunctionalModels[index].Keywords.Add(word.ToLower());
         }
-        
+        /// <summary>
+        /// Constructor of the dictionary
+        /// </summary>
+        /// <param name="path">file path from which to import the dictionary</param>
         public FunctionalModelDictionary(string path)
         {
             FunctionalModels = [];
@@ -131,7 +157,11 @@ namespace KNX_Virtual_Integrator.Model.Implementations
 
         }
 
-        
+        /// <summary>
+        /// Adds a model to the dictionary
+        /// </summary>
+        /// <param name="functionalModel">the structure of the model</param>
+        /// <param name="imported">if the model is imported</param>
         public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported)
         {
             var newModel = new FunctionalModelStructure(functionalModel);
@@ -145,7 +175,12 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             FunctionalModels.Add(newModel);
             OnPropertyChanged(nameof(FunctionalModels));
         }
-
+        /// <summary>
+        /// Adds a model to the dictionary
+        /// </summary>
+        /// <param name="functionalModel">the structure of the model</param>
+        /// <param name="imported">if the model is imported</param>
+        /// <param name="keywords">the keywords of the model</param>
         public void AddFunctionalModel(FunctionalModelStructure functionalModel, bool imported, List<string> keywords)
         {
             var newModel = new FunctionalModelStructure(functionalModel);
@@ -166,13 +201,19 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             OnPropertyChanged(nameof(FunctionalModels));
 
         }
-
+        /// <summary>
+        /// Removes a model at a certain index in the dictionary
+        /// </summary>
+        /// <param name="index">the index of the model</param>
         public void RemoveFunctionalModel(int index)
         {
             FunctionalModels.RemoveAt(index);
             OnPropertyChanged(nameof(FunctionalModels));
         }
-
+        /// <summary>
+        /// Gets all the models of the dictionary.
+        /// </summary>
+        /// <returns>the list of models</returns>
         public List<FunctionalModelStructure> GetAllModels()
         {
             var liste = new List<FunctionalModelStructure>();
@@ -208,7 +249,11 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             doc.AppendChild(project);
             doc.Save(path + ".xml");
         }
-
+        /// <summary>
+        /// Exports the dictionary to an XmlElement 
+        /// </summary>
+        /// <param name="doc">The document to which should be exported the dictionary</param>
+        /// <returns>The created document</returns>
         public XmlElement ExportDictionary(XmlDocument doc)
         {
             var project = doc.CreateElement("Dictionary");
@@ -260,7 +305,10 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                 }
             }
         }
-        
+        /// <summary>
+        /// Imports a functional model dictionary
+        /// </summary>
+        /// <param name="xnList">the list from which to import the dictionary</param>
         public void ImportDictionary(XmlNodeList xnList)
         {
             FunctionalModels.Clear();
@@ -304,14 +352,22 @@ namespace KNX_Virtual_Integrator.Model.Implementations
             }
             return result;
         }
-
+        /// <summary>
+        /// The event that occurs when the Dictionary changes. 
+        /// </summary>
         public event PropertyChangedEventHandler? PropertyChanged;
-
+        /// <summary>
+        /// Invokes the event <see cref="PropertyChanged"/> when the BigIntegerItem changes.
+        /// </summary>
         private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
+        /// <summary>
+        /// Checks the index of a model with a certain name
+        /// </summary>
+        /// <param name="name">the name of the model</param>
+        /// <returns>the index of the model if found; -1 otherwise.</returns>
         public int CheckName(string name)
         {
             var result = -1;

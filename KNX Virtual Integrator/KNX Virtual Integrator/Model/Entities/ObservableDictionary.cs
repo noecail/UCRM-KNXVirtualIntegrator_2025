@@ -83,7 +83,7 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
         CollectionChanged?.Invoke(this, args);
     }
     /// <summary>
-    /// nvokes the change of Count, Item[] and a Add with the key and value
+    /// invokes the change of Count, Item[] and a Add with the key and value
     /// </summary>
     /// <param name="key">The key of the added item</param>
     /// <param name="value">The value of the added item</param>
@@ -208,7 +208,7 @@ public class ObservableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, INo
     /// </summary>
     public ICollection<TKey> Keys => _dictionary.Keys;
     /// <summary>
-    /// Gets an ICollectio containing the values of the dictionary.
+    /// Gets an ICollection containing the values of the dictionary.
     /// </summary>
     public ICollection<TValue> Values => _dictionary.Values;
     /// <summary>

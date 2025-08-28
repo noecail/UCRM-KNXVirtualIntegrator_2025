@@ -1727,7 +1727,7 @@ public partial class SettingsWindow
     
     // Gère l'évènement pour rendre visible les objets du nouvel onglet et cache les anciens
     /// <summary>
-    /// Handles the <see cref="TabControl.SelectionChanged"/> event to adjust the visibility of buttons based on the selected tab.
+    /// Handles the <see cref="TabControl_SelectionChanged"/> event to adjust the visibility of buttons based on the selected tab.
     /// </summary>
     /// <param name="sender">The source of the event, expected to be a <see cref="TabControl"/>.</param>
     /// <param name="e">The event data.</param>

@@ -5,7 +5,10 @@ using KNX_Virtual_Integrator.ViewModel;
 using Microsoft.Win32;
 
 namespace KNX_Virtual_Integrator.View.Windows;
-
+/// <summary>
+/// Class handling any change in the UI of the connection Window.
+/// The Connection Window handles every part that concerns the connection to the KNX Bus, be it through IP, IP NAT or USB.
+/// </summary>
 public partial class ConnectionWindow
 {
     /* ------------------------------------------------------------------------------------------------
