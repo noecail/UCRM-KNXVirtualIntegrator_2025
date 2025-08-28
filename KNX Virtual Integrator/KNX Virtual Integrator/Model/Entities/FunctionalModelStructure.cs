@@ -20,7 +20,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     /// </summary>
     public ObservableDictionary<int, DptAndKeywords> DptDictionary { get; private set; }
     
-    // utilisée dans la liste déroulante de clé à choisir pour les dpts des element structure
+    // utilisée dans la liste déroulante de clé à choisir pour les Dpts des element structure
     /// <summary>
     /// List of DPT keys used when choosing which DPT to use in the TestedElement. 
     /// </summary>
@@ -41,7 +41,7 @@ public class FunctionalModelStructure : INotifyPropertyChanged
     
     /// <summary>
     /// Gives the same output as ToString method. But ToString does not dynamically change when the name is modified
-    /// FullName is used to display the Key and the Name in the SelectedModels listbox in the Mainwindow
+    /// FullName is used to display the Key and the Name in the SelectedModels listbox in the Main window
     /// </summary>
     public string FullName => $"S{Model.Key} | {Model.Name}";
     /// <summary>

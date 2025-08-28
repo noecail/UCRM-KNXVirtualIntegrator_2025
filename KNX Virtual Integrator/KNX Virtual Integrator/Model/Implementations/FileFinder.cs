@@ -4,6 +4,11 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
+/// <summary>
+/// Defines the contract for file finding operations.
+/// </summary>
+/// <param name="logger">logs issues and start and end of processes.</param>
+/// <param name="projectFileManager">the manager to import the files</param>
 public class FileFinder(ILogger logger, ProjectFileManager projectFileManager) : IFileFinder
 {
     private readonly IProjectFileManager _projectFileManager = projectFileManager;

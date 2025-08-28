@@ -11,23 +11,38 @@ namespace KNX_Virtual_Integrator.Model.Entities
     /// </summary>
     public class TestedElement
     {
-        public ObservableCollection<DataPointType> TestsCmd { get; set; } // List of commands to send to the bus 
-
-        public ObservableCollection<DataPointType> TestsIe { get; set; } // List of expected feedback to be read on the bus
-
-
+        /// <summary>
+        /// The list of commands to send to the bus
+        /// </summary>
+        public ObservableCollection<DataPointType> TestsCmd { get; set; }
+        /// <summary>
+        /// The list of expected feedback to be read on the bus
+        /// </summary>
+        public ObservableCollection<DataPointType> TestsIe { get; set; } 
+        /// <summary>
+        /// Name of the Element (not used)
+        /// </summary>
         public string Name = "";
         
-
         //Constructors
+        /// <summary>
+        /// Barebone constructor
+        /// </summary>
         public TestedElement()
         {
             TestsCmd = []; 
             TestsIe = []; 
             UpdateRemoveTestButtonVisibility();
         } 
-        
-        
+        /// <summary>
+        /// Full constructor of the Element
+        /// </summary>
+        /// <param name="typeCmd">the types of CMD DPTs</param>
+        /// <param name="addressCmd">the addresses bound to CMD DPTs</param>
+        /// <param name="valueCmd">the values of the CMD DPTs</param>
+        /// <param name="typeIe">the types of IE DPTs</param>
+        /// <param name="addressesIe">the addresses bound to IE DPTs</param>
+        /// <param name="valueIe">the values of the IE DPTs</param>
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd,int[] typeIe, string[]  addressesIe, List<GroupValue?>[] valueIe)
         {
             TestsCmd = []; 
@@ -43,8 +58,12 @@ namespace KNX_Virtual_Integrator.Model.Entities
             UpdateRemoveTestButtonVisibility();
         } 
         
-        
-        
+        /// <summary>
+        /// Command-only constructor
+        /// </summary>
+        /// <param name="typeCmd">the types of CMD DPTs</param>
+        /// <param name="addressCmd">the addresses bound to CMD DPTs</param>
+        /// <param name="valueCmd">the values of the CMD DPTs</param>
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd)
         {
             TestsCmd = []; 
@@ -56,6 +75,14 @@ namespace KNX_Virtual_Integrator.Model.Entities
             UpdateRemoveTestButtonVisibility();
         } 
         
+        /// <summary>
+        /// Command-only constructor with names included
+        /// </summary>
+        /// <param name="typeCmd">the types of CMD DPTs</param>
+        /// <param name="addressCmd">the addresses bound to CMD DPTs</param>
+        /// <param name="valueCmd">the values of the CMD DPTs</param>
+        /// <param name="dptNames">name of the DPTs</param>
+        /// <param name="circuitName">Name of the element</param>
         public TestedElement(int[] typeCmd, string[] addressCmd, List<GroupValue?>[] valueCmd, string[] dptNames,string circuitName)
         {
             TestsCmd = []; 
@@ -67,7 +94,10 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
             UpdateRemoveTestButtonVisibility();
         } 
-        
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="other">The copied Element</param>
         public TestedElement(TestedElement other)
         {
             TestsCmd = new ObservableCollection<DataPointType>();
@@ -124,7 +154,12 @@ namespace KNX_Virtual_Integrator.Model.Entities
             } 
             return result;
         }
-
+        /// <summary>
+        /// Checks whether the TestsCmd contains the DPT
+        /// </summary>
+        /// <param name="other">The DPT to look out for</param>
+        /// <param name="bannedIndexes">The indexes where searching is not allowed.</param>
+        /// <returns>the index if it is found; -1 otherwise.</returns>
         public int Contains(DataPointType other, HashSet<int> bannedIndexes)
         {
             var result = -1;
@@ -153,7 +188,12 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }   
             UpdateRemoveTestButtonVisibility();
         }
-
+        
+        /// <summary>
+        /// Checks whether there is a similar Element in the checked model
+        /// </summary>
+        /// <param name="model">The model to check</param>
+        /// <returns>The index of the element; -1 otherwise.</returns>
         public int FindELementInModel(FunctionalModel model)
         {
             for(var i = 0; i<model.ElementList.Count;i++)
@@ -203,18 +243,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
             UpdateRemoveTestButtonVisibility();
         }
-
-        public int CmdContains(int type)
-        {
-            var count = 0;
-            foreach (var myDpt in TestsCmd)
-            {
-                if (myDpt.Type == type)
-                    count++;
-            }
-            return count;
-        }
-        
+        /// <summary>
+        /// Counts the number of DPTs in the commands that have a certain name.
+        /// </summary>
+        /// <param name="name">The name to look out for.</param>
+        /// <returns>The number of DPTs with that name</returns>
         public int CmdContains(string name)
         {
             var count = 0;
@@ -225,22 +258,6 @@ namespace KNX_Virtual_Integrator.Model.Entities
                 {
                     count++;
                 }
-            }
-            return count;
-        }
-        
-        /// <summary>
-        /// Searches for a dpt of the same type of the argument, in the list of dptIe
-        /// </summary>
-        /// <param name="dpt"> dpt to find in the list</param>
-        /// <returns>THe index of the dpt in the list of dptIe</returns>
-        public int IeContains(DataPointType dpt)
-        {
-            var count = 0;
-            foreach (var myDpt in TestsIe)
-            {
-                if (myDpt.Type == dpt.Type)
-                    count++;
             }
             return count;
         }
@@ -262,6 +279,12 @@ namespace KNX_Virtual_Integrator.Model.Entities
             return count;
         }
         
+        /// <summary>
+        /// Adds a DPT to <see cref="TestsCmd"/>
+        /// </summary>
+        /// <param name="type">type of the new dpt</param>
+        /// <param name="address">address bound to the DPT</param>
+        /// <param name="value">all the values of the DPT</param>
         public void AddDptToCmd(int type, string address, List<GroupValue?> value)
         {
             if (TestsCmd == null)
@@ -269,6 +292,13 @@ namespace KNX_Virtual_Integrator.Model.Entities
             TestsCmd.Add(new DataPointType(type, address, value));
         }
         
+        /// <summary>
+        /// Adds a DPT to <see cref="TestsCmd"/>
+        /// </summary>
+        /// <param name="type">type of the DPT</param>
+        /// <param name="name">name of the DPT</param>
+        /// <param name="address">address bound to the DPT</param>
+        /// <param name="value">all the values of the DPT</param>
         public void AddDptToCmd(int type, string address, string name, List<GroupValue?> value)
         {
             if (TestsIe == null)
@@ -276,13 +306,22 @@ namespace KNX_Virtual_Integrator.Model.Entities
             TestsCmd.Add(new DataPointType(type, address, value, name));
         }
         
+        /// <summary>
+        /// Adds a DPT to <see cref="TestsIe"/>
+        /// </summary>
+        /// <param name="dpt">the dpt to add</param>
         public void AddDptToCmd(DataPointType dpt)
         {
             if (TestsCmd == null)
                 TestsCmd = new ObservableCollection<DataPointType>();
             TestsCmd.Add(dpt);
         }
-        
+        /// <summary>
+        /// Adds a DPT to <see cref="TestsIe"/>
+        /// </summary>
+        /// <param name="type">type of the new dpt</param>
+        /// <param name="address">address bound to the DPT</param>
+        /// <param name="value">all the values of the DPT</param>
         public void AddDptToIe(int type, string address, List<GroupValue?> value)
         {
             if (TestsIe == null)
@@ -290,26 +329,13 @@ namespace KNX_Virtual_Integrator.Model.Entities
             TestsIe.Add(new DataPointType(type, address, value));
             UpdateRemoveTestButtonVisibility();
         }
-        
-        public void AddDptToIe(int type, string address, string name, List<GroupValue?> value)
-        {
-            TestsIe.Add(new DataPointType(type, address, value, name));
-        }
-        
+        /// <summary>
+        /// Adds a new DPT to <see cref="TestsIe"/> of the element.
+        /// </summary>
+        /// <param name="dpt">The DPT to copy from</param>
         public void AddDptToIe(DataPointType dpt)
         {
             TestsIe.Add(dpt);
-        }
-
-        public void RemoveDptFromCmd(int index)
-        {
-            TestsCmd.RemoveAt(index);
-        }
-        
-        public void RemoveDptFromIe(int index)
-        {
-            TestsIe.RemoveAt(index);
-            UpdateRemoveTestButtonVisibility();
         }
         
         /// <summary>
@@ -341,7 +367,9 @@ namespace KNX_Virtual_Integrator.Model.Entities
                 test.UpdateValue();
             }
         }
-        
+        /// <summary>
+        /// Updates the visibility of all the <see cref="TestsIe"/> Remove Button : the last one doesn't have it.
+        /// </summary>
         private void UpdateRemoveTestButtonVisibility()
         {
             foreach (var test in TestsIe)
@@ -351,7 +379,11 @@ namespace KNX_Virtual_Integrator.Model.Entities
             }
         }
         
-        
+        /// <summary>
+        /// Searches for the type of the dpt with the given name.
+        /// </summary>
+        /// <param name="dptName">The name of said DPT</param>
+        /// <returns>the type of the DPT</returns>
         public int GetDptType(string dptName)
         {
             var res = 0;

@@ -1,7 +1,9 @@
 ﻿using System.Xml.Linq;
 
 namespace KNX_Virtual_Integrator.Model.Interfaces;
-
+/// <summary>
+/// Manages the processing of group address names : normalize, according to the architecture and adding one more to the dictionary, but normalized.
+/// </summary>
 public interface IGroupAddressProcessor
 {
     /// <summary>

@@ -3,6 +3,12 @@ using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
+/// <summary>
+/// Merges group address with those that have more than 80% similarity with the IeAddressSet.
+/// It finds and sort the ie with the cmd after finding the cmd.
+/// </summary>
+/// <param name="stringManagement">The string manager</param>
+/// <param name="logger">To log notable events</param>
 public class GroupAddressMerger( StringManagement stringManagement, ILogger logger) : IGroupAddressMerger
 {
         

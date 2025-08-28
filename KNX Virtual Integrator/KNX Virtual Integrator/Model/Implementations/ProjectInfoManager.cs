@@ -2,11 +2,13 @@
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Class managing the extraction of physical information of the project : building, rooms,...
+/// UNUSED CLASS AT THE TIME OF THE BETA
+/// </summary>
 public class ProjectInfoManager(NamespaceResolver namespaceResolver) : IProjectInfoManager
 {
     /// <summary>
-    /// UNUSED CLASS AT THE TIME OF THE BETA
     /// Extracts location information from a specified XML document.
     ///
     /// This method processes the XML document to extract information about spaces categorized as

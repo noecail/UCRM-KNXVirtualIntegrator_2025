@@ -2,22 +2,19 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Net.Mime;
 using System.Windows;
-using iText.IO.Image;
-using iText.Kernel.Colors;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Element;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
-using KNX_Virtual_Integrator.ViewModel;
-using TextAlignment = iText.Layout.Properties.TextAlignment;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Class handling the generation of the analysis report PDF
+/// </summary>
+/// <param name="manager">To get the project name and include it in the PDF</param>
 public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreator
 {
     /* ------------------------------------------------------------------------------------------------
@@ -270,17 +267,6 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         // // Add some text after the tree structure
         // document.Add(new Paragraph("Texte après l'arborescence pour vérifier la continuité du contenu.", normalFont));
     }
-
-
-    // Fonction à implémenter, elle servira à générer les résultats de tests de manière générique
-    /*private void GenerateTestList(Document document, PdfWriter writer)
-    {
-        foreach (var st in _modelesFonctionnels)
-        {
-            
-        }
-    }*/
-
 
     /// <summary>
     /// Opens the most recently generated PDF report using the default system application.

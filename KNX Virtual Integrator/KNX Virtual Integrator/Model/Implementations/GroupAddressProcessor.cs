@@ -2,7 +2,10 @@
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations ;
-
+/// <summary>
+/// Manages the processing of group address names : normalize, according to the architecture and adding one more to the dictionary, but normalized.
+/// </summary>
+/// <param name="logger">To log notable event</param>
 public class GroupAddressProcessor(ILogger logger) : IGroupAddressProcessor
 {
     /// <summary>

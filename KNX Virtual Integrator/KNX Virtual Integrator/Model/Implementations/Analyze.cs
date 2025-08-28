@@ -5,13 +5,27 @@ using Knx.Falcon;
 
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Class used to analyze the knx installation according to a list of functional models.
+/// The models each have a list of Element, which have a list of commands and expected results.
+/// The results are thus listed as a list of (models)lists of (elements)lists of (commands)lists of (expected results)<see cref="ResultType"/>.
+/// </summary>
+/// <param name="liste">The list of models to analyze</param>
+/// <param name="communication">The class handling the messages to send and the reception</param>
 public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommunication communication) : IAnalyze
 {
+    /// <summary>
+    /// The list of models to test
+    /// </summary>
     public readonly ObservableCollection<FunctionalModel> FunctionalModels = liste;
-    public List<List<List<List<ResultType>>>> Results { get; set; } = []; //Table of results sorted by Tests, in TestedElements, in functionalModels
+    /// <summary>
+    /// Table of results sorted by Tests, in TestedElements, in functionalModels
+    /// </summary>
+    public List<List<List<List<ResultType>>>> Results { get; set; } = [];
+    /// <summary>
+    /// The class handling the messages to send and the reception
+    /// </summary>
     public IGroupCommunication Communication = communication;
-
     
     /// <summary>
     /// Tests all the functional models of a list and updates the table of results
@@ -155,4 +169,16 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
     }
 }
 
-public enum ResultType {Success, Response, Failure}
+/// <summary>
+/// The 3 possible types of results : <see cref="Success"/>, <see cref="Response"/> and <see cref="Failure"/>.
+/// </summary>
+public enum ResultType
+{
+    /// <summary> The result when the expected value is received (or if no value is expected).</summary>
+    Success, 
+    /// <summary> The result when the expected value is not received but there is an answer.</summary>
+    Response, 
+    /// <summary> The result when the expected value is not received from the correct address
+    /// until the time runs out. Or if there is an error.</summary>
+    Failure
+}

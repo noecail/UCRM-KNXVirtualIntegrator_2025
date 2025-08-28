@@ -1,7 +1,10 @@
 ﻿using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Class handling the comparison of strings
+/// </summary>
+/// <param name="groupAddressProcessor">To process the strings before comparison</param>
 public class StringManagement(GroupAddressProcessor groupAddressProcessor) : IStringManagement
 {
     /// <summary>

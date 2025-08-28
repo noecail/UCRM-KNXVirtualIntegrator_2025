@@ -4,7 +4,11 @@ using System.Windows;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Provides an interface for managing application files, including log file management, 
+/// archiving, and configuration settings.
+/// </summary>
+/// <param name="logger"></param>
 public class ApplicationFileManager (ILogger logger) : IApplicationFileManager
 {
     /// <summary>

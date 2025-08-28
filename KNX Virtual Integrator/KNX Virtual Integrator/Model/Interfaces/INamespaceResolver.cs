@@ -1,5 +1,7 @@
 ﻿namespace KNX_Virtual_Integrator.Model.Interfaces;
-
+/// <summary>
+/// Manages the KNX namespaces from a Xml file.
+/// </summary>
 public interface INamespaceResolver
 {
     /// <summary>

@@ -5,6 +5,10 @@ using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
 
+/// <summary>
+/// Defines the contract for file loading operations.
+/// </summary>
+/// <param name="logger">logs the issues and process state.</param>
 public class FileLoader(ILogger logger) : IFileLoader
 {
     /// <summary>

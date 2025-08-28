@@ -5,7 +5,11 @@ using System.Windows.Input;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Class handling the manipulation of the slider in the <see cref="View.Windows.SettingsWindow"/>.
+/// </summary>
+/// <param name="logger">To log errors and notable events.</param>
+/// <param name="parentFinder">To find the visual parent of the current object</param>
 public class SliderClickHandler (ILogger logger, ParentFinder parentFinder) : ISliderClickHandler
 {
     private bool _isDragging;

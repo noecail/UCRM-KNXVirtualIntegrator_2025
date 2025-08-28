@@ -3,7 +3,10 @@ using System.IO.Compression;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Defines methods for creating and managing ZIP archives.
+/// </summary>
+/// <param name="logger">to log errors and process event</param>
 public class ZipArchiveManager(ILogger logger) : IZipArchiveManager
 {
 
