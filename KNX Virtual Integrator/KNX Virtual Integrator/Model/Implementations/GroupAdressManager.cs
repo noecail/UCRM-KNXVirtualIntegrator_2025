@@ -56,7 +56,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
         }
         else //If it is a group address file
         {
-            NewProcessStandardXmlFile(groupAddressFile.Root?.Elements(), functionalModelList);
+            NewProcessStandardXmlFile(groupAddressFile.Root?.Elements(), functionalModelList, false);
         }
         return groupAddressFile;
     }
@@ -82,7 +82,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
             return null;
         var groupAddresses = doc.Descendants(ns + "GroupRanges");  //Extracts the group addresses
 
-        NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList);  //Processes the group addresses
+        NewProcessStandardXmlFile(groupAddresses.Elements(), functionalModelList, true);  //Processes the group addresses
         XDocument document = new XDocument(new XElement("Root", groupAddresses.Elements()));
         return document;
 
@@ -384,8 +384,9 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     ///
     /// <param name="modelStructures">The XML document containing group address data in standard format.</param>
     /// <param name="functionalModelList">The list of lists of functional models.</param>
+        <param name="is0"> The boolean acknowledging if the document is a 0.xml (true) or a group address file (false) </param>
     /// </summary>
-    public void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList)
+    public void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList, bool is0)
     {
         List<DataPointType> lostDataPointTypes = [];
         if (modelStructures != null)
@@ -476,6 +477,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                     .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                 var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
+                                if (is0 && newAddress != "Error")
+                                {
+                                    var intAddress = int.Parse(newAddress);
+                                    var firstValue = intAddress / 2048;
+                                    var secondValue = (intAddress % 2048) / 256;
+                                    var lastValue = intAddress % 256;
+                                    newAddress = firstValue.ToString()+"/"+secondValue.ToString()+"/"+lastValue.ToString();
+                                }
                                 var newDpt = new DataPointType(newType, newAddress, [], dptName); //Builds the dpt
                                 var dptKey = model.FindKeyWithKeywords(prefix); //Checks if the dpt name corresponds to a key in the dictionary of the structure
 
@@ -559,6 +568,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value  //Builds the new DPT from the data in the xml file
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                     var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
+                                    if (is0 && newAddress != "Error")
+                                    {
+                                        var intAddress = int.Parse(newAddress);
+                                        var firstValue = intAddress / 2048;
+                                        var secondValue = (intAddress % 2048) / 256;
+                                        var lastValue = intAddress % 256;
+                                        newAddress = firstValue.ToString()+"/"+secondValue.ToString()+"/"+lastValue.ToString();
+                                    }
                                     if (dptName.Contains("stop",
                                             StringComparison
                                                 .OrdinalIgnoreCase)) //If it's a stop command, create a new element (which is a copy of the first element)
@@ -660,6 +677,14 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
+                                        if (is0 && newAddress != "Error")
+                                        {
+                                            var intAddress = int.Parse(newAddress);
+                                            var firstValue = intAddress / 2048;
+                                            var secondValue = (intAddress % 2048) / 256;
+                                            var lastValue = intAddress % 256;
+                                            newAddress = firstValue.ToString()+"/"+secondValue.ToString()+"/"+lastValue.ToString();
+                                        }                                        
                                         var newDpt = new DataPointType(newType, newAddress, [], dptName); //Builds the new DPT from the data in the xml
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels);
                                         if (modelIndex == -1) //When the circuit name doesn't exist, maybe take j?? dangerous, adds the DPT to the lost ones
@@ -746,6 +771,13 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
                                             .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value!;
+                                        if (is0 && newAddress != "Error") 
+                                        {
+                                            var intAddress = int.Parse(newAddress);                                            var firstValue = intAddress / 2048;
+                                            var secondValue = (intAddress % 2048) / 256;
+                                            var lastValue = intAddress % 256;
+                                            newAddress = firstValue.ToString()+"/"+secondValue.ToString()+"/"+lastValue.ToString();
+                                        }
                                         var newDpt = new DataPointType(newType, newAddress, [],dptName); // Builds the new DPT from the data in the xml
                                         var modelIndex = FindSuffixInModels(circuitName, newFunctionalModels); // Tries to recognize in which new functional model contains the new DPT
                                         if (modelIndex == -1) // If the model is not recognized, adds the DPT to the list of lost DPTs
