@@ -479,7 +479,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
                 break;
             
             default:
-                errorMessage = "Erreur non reconnue.";
+                errorMessage = "Erreur non reconnue." + Environment.NewLine + e.Message;
                 break;
         }
 
