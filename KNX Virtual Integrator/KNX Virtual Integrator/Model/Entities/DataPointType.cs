@@ -91,11 +91,11 @@ public class DataPointType : INotifyPropertyChanged
         IntValue = [new BigIntegerItem(new BigInteger(Value[0]!.Value))];//[BitConverter.ToUInt128(Value[0]!.Value)];
         GetSizeOf();
     }
-    
+
     /// <summary>
     /// Constructor for DataPointType
-    /// One parameter : the type  of the DPT
     /// </summary>
+    /// <param name="type">The type of DPT (1,2,...)</param>
     public DataPointType(int type)
     {
         Type = type;
@@ -103,11 +103,11 @@ public class DataPointType : INotifyPropertyChanged
         IntValue = [new BigIntegerItem(new BigInteger(Value[0]!.Value))];
         GetSizeOf();
     }
-
     /// <summary>
     /// Constructor for DataPointType
-    /// Two parameters : the type of the DPT and the name of the DPT
     /// </summary>
+    /// <param name="type">The type of DPT (1,2,...)</param>
+    /// <param name="name">The name of the DPT</param>
     public DataPointType(int type, string name)
     {
         Type = type;
@@ -116,11 +116,12 @@ public class DataPointType : INotifyPropertyChanged
         IntValue = [new BigIntegerItem(new BigInteger(Value[0]!.Value))];
         GetSizeOf();
     }
-
     /// <summary>
-    /// Constructor for DataPointType
-    /// Three parameters : the type of the DPT, the address of the DPT and a list of GroupValues to be sent/read
+    /// Constructor for DataPointType 
     /// </summary>
+    /// <param name="type">The type of DPT (1,2,...)</param>
+    /// <param name="address">The address to which the DPT wil be bound</param>
+    /// <param name="values">The values this DPT will send/receive</param>
     public DataPointType(int type, string  address, List<GroupValue?> values)
     {
         Type = type;
@@ -135,11 +136,13 @@ public class DataPointType : INotifyPropertyChanged
                 IntValue.Add(new BigIntegerItem(new BigInteger(Value[^1]!.Value)));
         }
     }
-    
     /// <summary>
     /// Constructor for DataPointType
-    /// Four parameters : the type of the DPT, the address of the DPT, a list of GroupValues to be sent/read, the name of the DPT
     /// </summary>
+    /// <param name="type">The type of DPT (1,2,...)</param>
+    /// <param name="address">The address to which the DPT wil be bound</param>
+    /// <param name="values">The values this DPT will send/receive</param>
+    /// <param name="name">The name of the DPT</param>
     public DataPointType(int type, string  address, List<GroupValue?> values, string name)
     {
         Name = name;
@@ -155,11 +158,10 @@ public class DataPointType : INotifyPropertyChanged
                 IntValue.Add(new BigIntegerItem(new BigInteger(Value[^1]!.Value)));
         }
     }
-    
     /// <summary>
-    /// Constructor for DataPointType. Duplicator
-    /// One parameter : the DPT to duplicate
+    /// Constructor for DataPointType : Duplicator
     /// </summary>
+    /// <param name="other">The DPT to copy</param>
     public DataPointType(DataPointType other)
     {
         Address = other.Address;
@@ -173,11 +175,11 @@ public class DataPointType : INotifyPropertyChanged
         }
         UpdateValue();
     }
-    
     /// <summary>
-    /// Constructor for DataPointType. Duplicator
-    /// Two parameters : the DPT to duplicate, the address of the new DPT
+    /// Constructor for DataPointType : Duplicator
     /// </summary>
+    /// <param name="dpt">The DPT to copy</param>
+    /// <param name="address">The new address </param>
     public DataPointType(DataPointType dpt, string address)
     {
         Type = dpt.Type;

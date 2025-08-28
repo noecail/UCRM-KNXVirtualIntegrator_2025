@@ -6,7 +6,11 @@ using Microsoft.Win32;
 // ReSharper disable NullableWarningSuppressionIsUsed
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// This class handles importing files or exporting them.
+/// </summary>
+/// <param name="logger">used to log notable events</param>
+/// <param name="settings">to gather the settings from the files</param>
 public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : IProjectFileManager
 {
 
@@ -21,12 +25,10 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
     /// </remarks>
     public string ProjectFolderPath { get; set; } = ""; // Chemin d'accès au dossier exporté du projet
     
-    
     /// <summary>
     ///  Gets the name of the project the application is currently working on.
     /// </summary>
     public string ProjectName { get; private set; } = "";
-    
     
     /// <summary>
     /// Gets the path to the 0.xml file of the project.

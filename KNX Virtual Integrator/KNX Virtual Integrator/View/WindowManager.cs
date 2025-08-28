@@ -2,7 +2,9 @@
 using KNX_Virtual_Integrator.ViewModel;
 
 namespace KNX_Virtual_Integrator.View;
-
+/// <summary>
+/// The class that instantiates every window and helps the MainWindow manage the the interactions with the other ones.
+/// </summary>
 public class WindowManager
 {
     /* ------------------------------------------------------------------------------------------------

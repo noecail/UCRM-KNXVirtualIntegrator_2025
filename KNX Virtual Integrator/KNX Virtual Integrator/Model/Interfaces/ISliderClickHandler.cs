@@ -3,6 +3,9 @@ using System.Windows.Input;
 
 namespace KNX_Virtual_Integrator.Model.Interfaces
 {
+    /// <summary>
+    /// Interface of the class handling the manipulation of the slider in the <see cref="View.Windows.SettingsWindow"/>.
+    /// </summary>
     public interface ISliderClickHandler
     {
         /// <summary>

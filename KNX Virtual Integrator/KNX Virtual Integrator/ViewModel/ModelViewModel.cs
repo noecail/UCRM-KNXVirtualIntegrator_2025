@@ -104,8 +104,13 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// The temporary Structure to buffer its modifications in the <see cref="View.Windows.StructureEditWindow"/>.
         /// </summary>
         public FunctionalModelStructure? EditedStructureSave;
-
+        /// <summary>
+        /// The visibility of Error Messages. Usually hidden.
+        /// </summary>
         private Visibility _applyChangesErrorMessageVisibility = Visibility.Hidden;
+        /// <summary>
+        /// Gets or sets the visibility of Error Messages. Usually hidden.
+        /// </summary>
         public Visibility ApplyChangesErrorMessageVisibility
         {
             get => _applyChangesErrorMessageVisibility;

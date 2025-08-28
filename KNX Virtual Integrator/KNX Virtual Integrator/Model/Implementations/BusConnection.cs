@@ -13,12 +13,16 @@ using Knx.Falcon.Sdk;
 using KNX_Virtual_Integrator.Model.Wrappers;
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Class handling the connection to and disconnection from the KNX Bus
+/// </summary>
 public sealed class BusConnection : ObservableObject, IBusConnection
 {
-    public static XNamespace
-        GlobalKnxNamespace = "http://knx.org/xml/ga-export/01"; // Namespace utilisé pour les opérations KNX
-
+    /// <summary>
+    /// Name space used for KNX operations
+    /// </summary>
+    public static XNamespace GlobalKnxNamespace = "http://knx.org/xml/ga-export/01"; 
+    
 /*--------------------------------------------------------------------------------------------------------------------*/
 /************************************** Properties and Instances ******************************************************/
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -685,7 +689,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
     }
 
     /// <summary>
-    ///     Resets the CancellationTokenSource if it exists with <see cref="CancellationTokenSource.Dispose"/>.
+    ///     Resets the CancellationTokenSource if it exists with <see cref="CancellationTokenSource.Dispose()"/>.
     ///     It then creates a new CancellationTokenSource. It is used to create a new one for ongoing operations.
     /// </summary>
     private void ResetCancellationTokenSource()

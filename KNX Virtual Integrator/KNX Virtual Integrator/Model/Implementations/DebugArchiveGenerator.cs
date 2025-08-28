@@ -7,7 +7,12 @@ using Microsoft.Win32;
 // ReSharper disable StringLiteralTypo
 
 namespace KNX_Virtual_Integrator.Model.Implementations;
-
+/// <summary>
+/// Generates debug archives
+/// </summary>
+/// <param name="logger">logs exceptions or end of process</param>
+/// <param name="zipManager">manages .zip archives</param>
+/// <param name="settings">To get what is to be included in the archives</param>
 public class DebugArchiveGenerator (ILogger logger, IZipArchiveManager zipManager, IApplicationSettings settings) : IDebugArchiveGenerator
 {
     /// <summary>

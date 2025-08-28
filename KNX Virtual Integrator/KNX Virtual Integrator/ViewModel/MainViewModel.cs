@@ -33,6 +33,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
     /* ------------------------------------------------------------------------------------------------
     ----------------------------------------- CONSTRUCTEUR  -------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    /// <summary>
+    /// Constructor of the ViewModel, subscribes everything concerning the viewModel and initializes every other attribute.
+    /// </summary>
+    /// <param name="modelManager"></param>
     public MainViewModel(ModelManager modelManager)
     {
         // Initialisation des attributs
@@ -83,7 +87,6 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         _functionalModelList = new FunctionalModelList();
         Structures = [];
         
-        //_functionalModelList.ImportDictionary(@"C:\Users\manui\Documents\Stage 4A\Test\Pray.xml");
 
         _functionalModelList.PropertyChanged += (_, e) =>
         {

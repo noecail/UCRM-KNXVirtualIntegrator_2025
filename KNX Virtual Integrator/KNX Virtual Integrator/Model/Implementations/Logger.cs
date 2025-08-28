@@ -37,6 +37,9 @@ public class Logger : ILogger
     /* ------------------------------------------------------------------------------------------------
     -------------------------------------------- MÉTHODES  --------------------------------------------
     ------------------------------------------------------------------------------------------------ */
+    /// <summary>
+    /// Default logger constructor (create log and checks the directory)
+    /// </summary>
     public Logger()
     {
         try
@@ -146,7 +149,9 @@ public class Logger : ILogger
         _writer.Flush(); // Nettoyage du buffer du stream d'écriture
     }
     
-    
+    /// <summary>
+    /// Closes the log writer and releases any resources associated with it.
+    /// </summary>
     public void CloseLogWriter()
     {
         _writer.Close();

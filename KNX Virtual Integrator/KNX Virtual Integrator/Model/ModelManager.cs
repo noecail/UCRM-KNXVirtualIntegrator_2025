@@ -33,17 +33,29 @@ namespace KNX_Virtual_Integrator.Model
     {
         
         // Instances de toutes les classes
+        /// <summary> Class used to handle importing files  </summary>
         public IFileFinder FileFinder { get; } = fileFinder;
+        /// <summary> Class used to extract information from the imperted files </summary>
         public IProjectFileManager ProjectFileManager { get; } = projectFileManager;
+        /// <summary> Class used to print out information and to log it in a file </summary>
         public ILogger Logger { get; } = logger;
+        /// <summary> Class handling any processing of group addresses </summary>
         public IGroupAddressManager GroupAddressManager { get; } = groupAddressManager;
+        /// <summary> Class handling the generation of the debug file </summary>
         public IDebugArchiveGenerator DebugArchiveGenerator { get; } = debugArchiveGenerator;
+        /// <summary> Class handling the logs and archives of the app </summary>
         public IApplicationFileManager ApplicationFileManager { get; } = applicationFileManager;
+        /// <summary> Class handling the connection to the bus </summary>
         public IBusConnection BusConnection { get; } = busConnection;
+        /// <summary> Class handling any connection to the bus after connection </summary>
         public IGroupCommunication GroupCommunication { get; } = groupCommunication;
+        /// <summary> Class handling the logs and archives of the app </summary>
         public IApplicationSettings AppSettings { get; } = appSettings;
+        /// <summary> Class handling the search of related elements of the UI </summary>
         public IParentFinder ParentFinder { get; } = parentFinder;
+        /// <summary> Class handling the slider of the <see cref="View.Windows.SettingsWindow"/></summary>
         public ISliderClickHandler SettingsSliderClickHandler { get; } = settingsSliderClickHandler;
+        /// <summary> Class handling the creation of the PDF analysis report </summary>
         public IPdfDocumentCreator PdfDocumentCreator { get; } = pdfDocumentCreator;
     }
 }

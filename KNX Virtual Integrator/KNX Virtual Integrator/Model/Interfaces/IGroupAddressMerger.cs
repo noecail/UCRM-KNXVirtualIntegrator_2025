@@ -1,7 +1,10 @@
 ﻿using System.Xml.Linq;
 
 namespace KNX_Virtual_Integrator.Model.Interfaces;
-
+/// <summary>
+/// Interface for merging group address with those that have more than 80% similarity with the IeAddressSet.
+/// It finds and sort the ie with the cmd after finding the cmd.
+/// </summary>
 public interface IGroupAddressMerger
 {
     /// <summary>
