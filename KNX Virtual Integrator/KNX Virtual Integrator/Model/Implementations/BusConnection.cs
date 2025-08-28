@@ -166,7 +166,6 @@ public sealed class BusConnection : ObservableObject, IBusConnection
     /// <summary>
     ///     Individual Address for the given IP Secure interface
     /// </summary>
-    // TODO : Do not hardcode it, use the connectionParameters to have it
     public string InterfaceAddress { get; set; }= "1.1.255";
 
     /// <summary>
@@ -466,7 +465,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
             case "IP" when e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase):
             case "Remote IP (NAT)" when e.Message.Contains("User login failed", StringComparison.OrdinalIgnoreCase):
                 // User Login Failed 2 fois de suite
-                errorMessage = "Il y a une erreur dans le fichier ou le mot de passe";
+                errorMessage = "Il y a une erreur dans le fichier de clés, le mot de passe ou l'adresse individuelle";
                 break;
             
             case "IP" when e.Message.Contains("Connection type and string have to be set before connecting.", StringComparison.OrdinalIgnoreCase):
@@ -479,7 +478,7 @@ public sealed class BusConnection : ObservableObject, IBusConnection
                 break;
             
             default:
-                errorMessage = "Erreur non reconnue." + Environment.NewLine + e.Message;
+                errorMessage = "Erreur non reconnue." + Environment.NewLine + e.Message + Environment.NewLine + e.Data + " " + e.HelpLink;
                 break;
         }
 
