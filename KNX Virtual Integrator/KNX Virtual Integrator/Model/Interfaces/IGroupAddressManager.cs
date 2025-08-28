@@ -48,7 +48,8 @@ public interface IGroupAddressManager
     /// </summary>
     /// <param name="modelStructures"> The list containing all the Xelements with the gorup addresses. </param>
     /// <param name="functionalModelList"> The list where to put all the recognized models. </param>
-    void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList);
+    /// <param name="is0"> The boolean acknowledging if the document is a 0.xml (true) or a group address file (false) </param>
+    void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList, bool is0);
 
 
     /// <summary>
