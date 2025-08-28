@@ -370,7 +370,6 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 {
                     ModelStructure[i].IeValues[j].Add(new BigIntegerItem(ieValues[i][j][k]));
                 }
-
             }
         }
         Model = BuildFunctionalModel(name, key);

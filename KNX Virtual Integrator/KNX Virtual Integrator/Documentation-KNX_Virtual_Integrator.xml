@@ -124,6 +124,12 @@
             </summary>
             <param name="bi">The <see cref="T:System.Numerics.BigInteger"/> to be wrapped</param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.#ctor(KNX_Virtual_Integrator.Model.Entities.BigIntegerItem)">
+            <summary>
+            Constructor. Duplicator.
+            </summary>
+            <param name="other"></param>
+        </member>
         <member name="E:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.PropertyChanged">
             <summary>
             The event that occurs when the BigIntegerItem changes. 
@@ -5266,6 +5272,59 @@
             for them to not be tested anymore if they were supposed to.
             </summary>
             <param name="structKey">The index of the structure in the functionalModelList.</param>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.View.Utils.BigIntegerToStringConverter">
+            <summary>
+            Converter class used to convert between BigInteger type and String type
+            BigIntegers are needed in the software as they are the type that KNX GroupValue uses
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Utils.BigIntegerToStringConverter.Convert(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Convert from BigInteger to String
+            </summary>
+            <param name="value"></param>
+            <param name="targetType"></param>
+            <param name="parameter"></param>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Utils.BigIntegerToStringConverter.ConvertBack(System.Object,System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Convert from String to BigInteger
+            </summary>
+            <param name="value"></param>
+            <param name="targetType"></param>
+            <param name="parameter"></param>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.View.Utils.IndicesToTupleConverter">
+            <summary>
+            Converter class used to convert from two Int values to a Tuple
+            Specifically used in the Structure Edit Window, delete DPT button, to pass both the element structure's index and the to-be-deleted DPT's index
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Utils.IndicesToTupleConverter.Convert(System.Object[],System.Type,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Convert from the two Int values to the Tuple
+            </summary>
+            <param name="values"></param>
+            <param name="targetType"></param>
+            <param name="parameter"></param>
+            <param name="culture"></param>
+            <returns></returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Utils.IndicesToTupleConverter.ConvertBack(System.Object,System.Type[],System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            Convert from the Tuple to the two Int values
+            </summary>
+            <param name="value"></param>
+            <param name="targetTypes"></param>
+            <param name="parameter"></param>
+            <param name="culture"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:KNX_Virtual_Integrator.View.WindowManager">
             <summary>

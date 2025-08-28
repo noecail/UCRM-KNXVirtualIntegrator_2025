@@ -83,6 +83,18 @@ public class BigIntegerItem : INotifyPropertyChanged
             IsEnabled = false;
         }
     }
+
+    /// <summary>
+    /// Constructor. Duplicator.
+    /// </summary>
+    /// <param name="other"></param>
+    public BigIntegerItem(BigIntegerItem other)
+    {
+        BigIntegerValue = other.BigIntegerValue;
+        RemoveTestButtonVisibility = other.RemoveTestButtonVisibility;
+        IsEnabled = other.IsEnabled;
+    }
+    
     /// <summary>
     /// The event that occurs when the BigIntegerItem changes. 
     /// </summary>

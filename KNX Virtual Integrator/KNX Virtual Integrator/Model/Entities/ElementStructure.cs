@@ -150,6 +150,7 @@ namespace KNX_Virtual_Integrator.Model.Entities;
                 AddToIe(ieInt);
             UpdateRemoveTestButtonVisibility();
         }
+        
         /// <summary>
         /// Copies an ElementStructure.
         /// </summary>
@@ -160,10 +161,23 @@ namespace KNX_Virtual_Integrator.Model.Entities;
             Ie = new ObservableCollection<IntItem>();
             CmdValues = [];
             IeValues = [];
-            foreach(var cmd in otherStructure.Cmd)
+            foreach (var cmd in otherStructure.Cmd)
+            {
                 Cmd.Add(new IntItem(cmd));
+                CmdValues.Add([]);
+                var indexCmd = otherStructure.Cmd.IndexOf(cmd);
+                foreach (var value in otherStructure.CmdValues[indexCmd])
+                    CmdValues[indexCmd].Add(new BigIntegerItem(value));
+            }
+
             foreach (var ie in otherStructure.Ie)
+            {
                 Ie.Add(new IntItem(ie));
+                IeValues.Add([]);
+                var indexIe = otherStructure.Ie.IndexOf(ie);
+                foreach (var value in otherStructure.IeValues[indexIe])
+                    IeValues[indexIe].Add(new BigIntegerItem(value));
+            }
             UpdateRemoveTestButtonVisibility();
         }
         /// <summary>
