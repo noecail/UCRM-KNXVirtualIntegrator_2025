@@ -384,7 +384,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     ///
     /// <param name="modelStructures">The XML document containing group address data in standard format.</param>
     /// <param name="functionalModelList">The list of lists of functional models.</param>
-        <param name="is0"> The boolean acknowledging if the document is a 0.xml (true) or a group address file (false) </param>
+    /// <param name="is0"> The boolean acknowledging if the document is a 0.xml (true) or a group address file (false) </param>
     /// </summary>
     public void NewProcessStandardXmlFile(IEnumerable<XElement>? modelStructures, IFunctionalModelList functionalModelList, bool is0)
     {
