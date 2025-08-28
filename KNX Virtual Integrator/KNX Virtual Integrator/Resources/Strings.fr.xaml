@@ -73,6 +73,7 @@
     <sys:String x:Key="Refresh">Rafraîchir</sys:String>
     <sys:String x:Key="NatConnection">Connexion à distance (NAT)</sys:String>
     <sys:String x:Key="PublicIp">IP publique du routeur</sys:String>
+    <sys:String x:Key="IndivAddressInterface">Adresse Individuelle de l'interface</sys:String>
     <sys:String x:Key="ToFillWhenSecure">À ne remplir que pour une connexion sécurisée</sys:String>
     <sys:String x:Key="IPSecureConnection">Connexion via IP Secure</sys:String>
     <sys:String x:Key="KnxKeysFile">Fichier de clés .knxkeys</sys:String>
