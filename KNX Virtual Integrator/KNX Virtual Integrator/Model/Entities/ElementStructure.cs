@@ -48,8 +48,12 @@ namespace KNX_Virtual_Integrator.Model.Entities;
         {
             Ie.Add(new IntItem(value));
             IeValues.Add([]);
-            foreach (var unused in CmdValues[0])
-                IeValues[^1].Add(new BigIntegerItem(0));
+            if (CmdValues.Count >= 1)
+            {
+                foreach (var unused in CmdValues[0])
+                    IeValues[^1].Add(new BigIntegerItem(0));
+            }
+
             UpdateRemoveTestButtonVisibility();
         }
         /// <summary>
