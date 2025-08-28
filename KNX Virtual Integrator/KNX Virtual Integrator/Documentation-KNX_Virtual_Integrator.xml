@@ -2401,7 +2401,7 @@
              <param name="groupAddressFile">The XML document containing group address data in standard format.</param>
              </summary>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.NewProcessStandardXmlFile(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList)">
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.NewProcessStandardXmlFile(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList,System.Boolean)">
              <summary>
              Processes an XML file in the standard format to extract and group addresses.
             
@@ -2413,6 +2413,7 @@
             
              <param name="modelStructures">The XML document containing group address data in standard format.</param>
              <param name="functionalModelList">The list of lists of functional models.</param>
+             <param name="is0"> The boolean acknowledging if the document is a 0.xml (true) or a group address file (false) </param>
              </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.DetermineGroupAddressStructure0Xml(System.Xml.Linq.XDocument)">
@@ -3736,12 +3737,13 @@
              <param name="groupAddressFile">The XML document containing group address data in standard format.</param>
              </summary>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.NewProcessStandardXmlFile(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList)">
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.NewProcessStandardXmlFile(System.Collections.Generic.IEnumerable{System.Xml.Linq.XElement},KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList,System.Boolean)">
             <summary>
             Processes a list of XElement obtained from a XDocument to get the group addresses and fill the functional models
             </summary>
             <param name="modelStructures"> The list containing all the Xelements with the gorup addresses. </param>
             <param name="functionalModelList"> The list where to put all the recognized models. </param>
+            <param name="is0"> The boolean acknowledging if the document is a 0.xml (true) or a group address file (false) </param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.DetermineGroupAddressStructure0Xml(System.Xml.Linq.XDocument)">
             <summary>

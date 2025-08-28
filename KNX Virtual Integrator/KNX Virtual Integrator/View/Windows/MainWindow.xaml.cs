@@ -1154,7 +1154,24 @@ public partial class MainWindow
             Text = ((XElement)xmlNode).Attribute("Name")?.Value,
             FontSize = 12
         };
-        var text = ((XElement)xmlNode).Attribute("Address") is not null? " - " + ((XElement)xmlNode).Attribute("Address")?.Value : "";
+        string text;
+        if (((XElement)xmlNode).Attribute("Address") is not null)
+        {
+            text = ((XElement)xmlNode).Attribute("Address")?.Value?? "Error";
+            if (text != "Error" && UserChooseToImportGroupAddressFile is false )
+            {
+                var intAddress = int.Parse(text);
+                var firstValue = intAddress / 2048;
+                var secondValue = (intAddress % 2048) / 256;
+                var lastValue = intAddress % 256;
+                text = " - " + firstValue.ToString() + "/" + secondValue.ToString() + "/" + lastValue.ToString();
+            }
+        }
+        else
+        {
+            text = "";
+        }
+        
         var textAddress = new TextBlock
         {
             Text = text,
