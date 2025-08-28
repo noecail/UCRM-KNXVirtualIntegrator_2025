@@ -951,11 +951,11 @@
                                            Style="{StaticResource TitleTextLight}"
                                            Text="{DynamicResource Library}"
                                 />
-                                <Button Content="Afficher Structures" Click="PrintStructuresButtonClick"    Visibility="Hidden"/>
-                                <Button Content="Afficher Dico" Click="PrintStructureDictionaryButtonClick" Visibility="Hidden"/>
+                                <Button Content="Afficher Structures" Click="PrintStructuresButtonClick"    Visibility="Collapsed"/>
+                                <Button Content="Afficher Dico" Click="PrintStructureDictionaryButtonClick" Visibility="Collapsed"/>
                             </StackPanel>
 
-                            <!-- Bouton d'import,(Non-implémenté)-->
+                            <!-- Bouton d'import -->
                             <Button Grid.Column="2"
                                     x:Name="ImportDictButton"
                                     HorizontalAlignment="Right"
@@ -966,7 +966,7 @@
                                     Background="{StaticResource BlueBrush}"
                                     Margin="2"
                             />
-                            <!-- Bouton d'export,(Non-implémenté)-->
+                            <!-- Bouton d'export -->
                             <Button Grid.Column="3"
                                     x:Name="ExportDictButton"
                                     HorizontalAlignment="Right"

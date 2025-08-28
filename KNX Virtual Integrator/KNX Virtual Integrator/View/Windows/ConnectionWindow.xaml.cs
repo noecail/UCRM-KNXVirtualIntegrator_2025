@@ -72,6 +72,7 @@ public partial class ConnectionWindow
             Resources["Refresh"]="Rafraîchir";
             Resources["NatConnection"]="Connexion à distance (NAT)";
             Resources["PublicIp"]="IP publique du routeur";
+            Resources["IndivAddressInterface"]="Adresse Individuelle de l'interface";
             Resources["ToFillWhenSecure"]="À ne remplir que pour une connexion sécurisée";
             Resources["IPSecureConnection"]="Connexion via IP Secure";
             Resources["KnxKeysFile"]="Fichier de clés (.knxkeys)";
@@ -90,6 +91,7 @@ public partial class ConnectionWindow
             Resources["Refresh"]="Refresh";
             Resources["NatConnection"]="Connection (NAT)";
             Resources["PublicIp"]="Router public IP";
+            Resources["IndivAddressInterface"]="Individual address of the interface";
             Resources["ToFillWhenSecure"]="To fill only when connection is IP Secure";
             Resources["IPSecureConnection"]="IP Secure connection";
             Resources["KnxKeysFile"]="Keys file .knxkeys";
@@ -116,6 +118,7 @@ public partial class ConnectionWindow
             textColorBrush = (Brush)FindResource("LightForegroundBrush");
             backgroundColorBrush = (Brush)FindResource("OffWhiteBackgroundBrush");
             NatAddressTextBox.Style = (Style)FindResource("TextBoxLight");
+            IndivAddressTextBox.Style = (Style)FindResource("TextBoxLight");
             ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxLight");
             ImportKnxKeys.Style = (Style)FindResource("ImportKeysButtonLight");
             ConnectionTypeComboBox.Style = (Style)FindResource("LightComboBoxStyle");
@@ -129,6 +132,7 @@ public partial class ConnectionWindow
             textColorBrush = (Brush)FindResource("DarkOffWhiteForegroundBrush");
             backgroundColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
             NatAddressTextBox.Style = (Style)FindResource("TextBoxDark");
+            IndivAddressTextBox.Style = (Style)FindResource("TextBoxDark");
             ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxDark");
             ImportKnxKeys.Style = (Style)FindResource("ImportKeysButtonDark");   
             ConnectionTypeComboBox.Style = (Style)FindResource("DarkComboBoxStyle");
@@ -153,6 +157,7 @@ public partial class ConnectionWindow
         CurrentInterfaceText.Foreground = textColorBrush;
         FileKeysText.Foreground = textColorBrush;
         NatConnectionText.Foreground = textColorBrush;
+        IndivAddressText.Foreground = textColorBrush;
         LockIconText.Foreground = textColorBrush;
         CurrCoInterfaceText.Tag = textColorBrush;
         NatIconText.Foreground = textColorBrush;

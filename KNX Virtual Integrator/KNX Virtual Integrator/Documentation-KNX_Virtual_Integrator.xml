@@ -2377,6 +2377,7 @@
              <param name="groupAddressFile">The XML document containing group address data in Zero format.</param>
              <param name="functionalModelList">The list of functional models to fill</param>
              </summary>
+             <returns> Returns an Xdocument with only the group addresses. </returns>     
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.ProcessZeroXmlFile(System.Xml.Linq.XDocument,KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList)">
              <summary>
@@ -2404,8 +2405,11 @@
              <summary>
              Processes an XML file in the standard format to extract and group addresses.
             
-             This method processes group addresses from the XML file, normalizing the names by removing
-             specific prefixes ("Ie" or "Cmd") and grouping addresses based on the remaining common names.
+             This method processes group addresses from the XML file. To do so, there are 3 different protocols. First if the name of the
+             group address contains keywords linked to a strucutre, the model is associated to this structure and the DPTs are put according to the structure.
+             If the name is not recognized, takes all the commands and creates a tested element for each. Then the structure is assessed.
+             If it has the same number of elements with the same commands, links it to the structure and puts the DPTs where they should be.
+             Otherwise, only connects IE_x with CMD_x.
             
              <param name="modelStructures">The XML document containing group address data in standard format.</param>
              <param name="functionalModelList">The list of lists of functional models.</param>

@@ -147,6 +147,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
                     <RowDefinition Height="40" />
+                    <RowDefinition Height="40" />
                 </Grid.RowDefinitions>
 
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
@@ -201,6 +202,17 @@
                          Style="{StaticResource TextBoxLight}"
                          Width="90"
                          Text="{Binding BusConnection.NatAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                
+                <TextBlock Name="IndivAddressText" Grid.Row="2" Grid.Column="0"
+                           Foreground="{StaticResource LightForegroundBrush}"
+                           Text="{DynamicResource IndivAddressInterface}"
+                           VerticalAlignment="Center"
+                           TextAlignment="Left" />
+
+                <TextBox Name="IndivAddressTextBox" Grid.Row="2" Grid.Column="1"
+                         Style="{StaticResource TextBoxLight}"
+                         Width="70"
+                         Text="{Binding BusConnection.InterfaceAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </Grid>
             
             <!-- Section connexion IP Secure-->
