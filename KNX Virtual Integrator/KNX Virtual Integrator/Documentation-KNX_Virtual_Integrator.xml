@@ -124,6 +124,12 @@
             </summary>
             <param name="bi">The <see cref="T:System.Numerics.BigInteger"/> to be wrapped</param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.#ctor(KNX_Virtual_Integrator.Model.Entities.BigIntegerItem)">
+            <summary>
+            Constructor. Duplicator.
+            </summary>
+            <param name="other"></param>
+        </member>
         <member name="E:KNX_Virtual_Integrator.Model.Entities.BigIntegerItem.PropertyChanged">
             <summary>
             The event that occurs when the BigIntegerItem changes. 
@@ -160,7 +166,6 @@
             <summary>
             Gets or sets the collection parallel to <see cref="P:KNX_Virtual_Integrator.Model.Entities.DataPointType.Value"/>.
             </summary>
-            <seealso cref="!:_intValue"/>
         </member>
         <member name="F:KNX_Virtual_Integrator.Model.Entities.DataPointType._type">
             <summary>
@@ -275,6 +280,13 @@
             Updates the GroupValue array by copying the intValue array and turning it into group values
             </summary>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.UpdateRemoveTestButtonVisibility(System.Windows.Visibility)">
+            <summary>
+            Update the visibility of the button that deletes a test line, ie all dispatch/receive values on a line
+            Should be called anytime the number of DPTs in the element changes
+            </summary>
+            <param name="vis"></param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.DataPointType.CompareGroupValue(Knx.Falcon.GroupValue,System.Int32)">
             <summary>
             This method checks if the group value of the DPT is the same as the one in parameter.
@@ -358,7 +370,7 @@
             <summary>
             Copies a DptAndKeywords.
             </summary>
-            <param name="other">The DptAndKeywors to copy</param>
+            <param name="other">The DptAndKeywords to copy</param>
         </member>
         <member name="E:KNX_Virtual_Integrator.Model.Entities.DptAndKeywords.PropertyChanged">
             <summary>
@@ -378,12 +390,22 @@
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.ElementStructure.Cmd">
             <summary>
-            The number of Cmd DPTs in the Element.
+            The keys of the Cmd DPTs in the Element.
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.Model.Entities.ElementStructure.Ie">
             <summary>
-            The number of Ie DPTs in the Element.
+            The keys of the Ie DPTs in the Element.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.ElementStructure.CmdValues">
+            <summary>
+            All the values predefined in the structure, to be sent
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Entities.ElementStructure.IeValues">
+            <summary>
+            All the values predefined in the structure, to be read
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.AddToCmd(System.Int32)">
@@ -406,21 +428,35 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.RemoveIeAt(System.Int32)">
             <summary>
-            Removes a Ie Dpt at an index.
+            Removes an Ie Dpt at an index.
             </summary>
             <param name="ieIndex">The index of the DPT to remove.</param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.AddTest">
+            <summary>
+            Adds a line of values to an element structure, both to be sent and to be read
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.RemoveTestAt(System.Int32)">
+            <summary>
+            Removes a line of values from an element structure, both to be sent and to be read
+            One parameter : the index of the test line
+            </summary>
+            <param name="indexTest"></param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.#ctor">
             <summary>
+            Constructor
             Creates an empty ElementStructure.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.#ctor(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.IntItem},System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.IntItem})">
             <summary>
+            Constructor
             Creates a filled ElementStructure with <see cref="T:System.Collections.ObjectModel.ObservableCollection`1"/>.
             </summary>
             <param name="cmdCollection">The collection of Cmd DPT to copy.</param>
-            <param name="ieCollection">The collectio of Ie DPT to copy.</param>
+            <param name="ieCollection">The collection of Ie DPT to copy.</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Entities.ElementStructure.#ctor(System.Collections.Generic.List{System.Int32},System.Collections.Generic.List{System.Int32})">
             <summary>
@@ -4840,6 +4876,36 @@
         <member name="M:KNX_Virtual_Integrator.View.Windows.TestConfigWindow.InitializeComponent">
             <summary>
             InitializeComponent
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
             </summary>
         </member>
     </members>

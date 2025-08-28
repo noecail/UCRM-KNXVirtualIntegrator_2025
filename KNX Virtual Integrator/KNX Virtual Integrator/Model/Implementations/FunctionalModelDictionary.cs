@@ -44,6 +44,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                         //,1
                         ,[[[1,0]]],[[[1,0]]],1
             ),false,["Lumiere on/off", "Lumiere on-off", "Lumiere on_off", "Light on/off", "Eclairage_Simple"]);  //Adding On/Off light functional model
+            
             AddFunctionalModel(new FunctionalModelStructure("Lumiere_Variation",
                         new Dictionary<int, DptAndKeywords>()
                         {
@@ -71,7 +72,6 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     ),false, ["Lumiere variation", "variation", "Lumiere_variation", "Light variation", "Eclairages_variable"]
                 );
             
-            
             AddFunctionalModel(new FunctionalModelStructure("Store",
                     new Dictionary<int, DptAndKeywords>()
                     {
@@ -98,6 +98,7 @@ namespace KNX_Virtual_Integrator.Model.Implementations
                     [[[1,0]],[[1],[1]],[[0xFF,0]]],[[[1,0],[-1,-1]],[[1],[0],[-1]],[[1,0],[0,1],[0xFF,0]]],3
                 ),false, ["store", "blind", "Volets_roulants","Volet_roulant"]
             );
+            
             AddFunctionalModel(new FunctionalModelStructure("Commutation",
                         new Dictionary<int, DptAndKeywords>()
                         {

@@ -473,10 +473,20 @@ public partial class StructureEditWindow
             Console.WriteLine(">> element structure");
             var cmd = elementStructure.Cmd;
             foreach (var item in cmd)
-                Console.WriteLine("MODEL Printing cmd " + item.Value);
+            {
+                Console.WriteLine("MODEL Printing cmd " + item.Value + " : ");
+                foreach (var value in elementStructure.CmdValues[cmd.IndexOf(item)])
+                    Console.Write(value.BigIntegerValue + "/");
+                Console.WriteLine();
+            }
             var ie = elementStructure.Ie;
             foreach (var item in ie)
-                Console.WriteLine("MODEL Printing ie " + item.Value);
+            {
+                Console.WriteLine("MODEL Printing ie " + item.Value + " : ");
+                foreach(var value in elementStructure.IeValues[cmd.IndexOf(item)])
+                    Console.Write(value.BigIntegerValue + "/");
+                Console.WriteLine();
+            }
         }
     }
     

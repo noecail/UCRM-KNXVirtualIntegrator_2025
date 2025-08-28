@@ -349,7 +349,12 @@
                                          ItemsSource="{Binding SelectedStructure.ModelStructure, FallbackValue=''}"
                                          ItemContainerStyle="{StaticResource TestedElementItemContainerStyleLight}"
                                          Background="{StaticResource OffWhiteBackgroundBrush}"
-                                         AlternationCount="9999">
+                                         AlternationCount="9999"
+                                         ScrollViewer.CanContentScroll="False"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                                         ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                         ScrollViewer.PanningMode="Both"
+                                         IsManipulationEnabled="True">
                                     <ListBox.ItemTemplate>
                                         <DataTemplate>
                                             

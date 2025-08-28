@@ -462,11 +462,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             if (!SelectedStructure.IsValid())
             {
                 ApplyChangesErrorMessageVisibility = Visibility.Visible;
-                Console.WriteLine("paraguay " + ApplyChangesErrorMessageVisibility);
                 return;
             }
             ApplyChangesErrorMessageVisibility = Visibility.Hidden;
-            Console.WriteLine("uruguay " + ApplyChangesErrorMessageVisibility);
             
             int structureKey = SelectedStructure.Model.Key - 1;
             
