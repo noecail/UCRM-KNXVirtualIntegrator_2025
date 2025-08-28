@@ -51,9 +51,9 @@ public partial class StructureEditWindow
     }    
     
     /// <summary>
-    /// Updates the contents (texts, textboxes, checkboxes, ...) of the structure edit window according to the application settings.
-    /// TODO: implement later
+    /// Updates the contents (texts, textboxes, checkboxes, ...) of the report window according to the application settings.
     /// </summary>
+    //TODO To implement
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
         if (langChanged)

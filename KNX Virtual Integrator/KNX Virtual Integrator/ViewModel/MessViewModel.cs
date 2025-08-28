@@ -112,15 +112,11 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Command that creates a debug archive with optional OS info, hardware info, and imported projects.
         /// </summary>
-        /// <param name="../SettingsWindow.xaml.IncludeOsInfo">Specifies whether to include OS information in the debug archive.</param>
-        /// <param name="../SettingsWindow.xaml.IncludeHardwareInfo">Specifies whether to include hardware information in the debug archive.</param>
-        /// <param name="../SettingsWindow.xaml.IncludeImportedProjects">Specifies whether to include imported projects in the debug archive.</param>
         public ICommand CreateDebugArchiveCommand { get; private set; }
 
         /// <summary>
         /// Command that finds a zero XML file based on the provided file name.
         /// </summary>
-        /// <param name="../FileFinder.fileName">The name of the file to find.</param>
         public ICommand FindZeroXmlCommand { get; private set; }
         
         /// <summary>
@@ -336,14 +332,12 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// <summary>
         /// Command that extracts a group address file based on the provided file name and returns a boolean indicating success.
         /// </summary>
-        /// <param name="../FileFinder.fileName">The name of the file to extract.</param>
         /// <returns>True if the extraction was successful; otherwise, false.</returns>
         public ICommand ExtractGroupAddressFileCommand { get; private set; }
 
         /// <summary>
         /// Command that extracts project files based on the provided file name and returns a boolean indicating success.
         /// </summary>
-        /// <param name="../FileFinder.fileName">The name of the file to extract.</param>
         /// <returns>True if the extraction was successful; otherwise, false.</returns>
         public ICommand ExtractProjectFilesCommand { get; private set; }
         
