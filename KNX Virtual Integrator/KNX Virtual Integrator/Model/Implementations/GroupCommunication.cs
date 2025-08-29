@@ -84,8 +84,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Erreur lors du test de l'envoi de la trame : {ex.Message}");
-            //MessageBox.Show($"Erreur lors du test de l'envoi de la trame : {ex.Message}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            _logger.ConsoleAndLogWriteLine($"Error sending the message : {ex.Message}");
         }
     }
 
@@ -139,13 +138,13 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
                     _busConnection.CancellationTokenSource.Token);
 
             _logger.ConsoleAndLogWriteLine(
-                "Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour écrire.");
+                "The Knx bus is not connected. Please connect before writing.");
             return false;
 
         }
         catch (Exception ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Erreur lors de l'envoi de la trame : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Error sending the message : {ex.Message}");
             return false;
         }
     }
@@ -313,13 +312,13 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         Timer timer = new Timer(timerDuration);
         if (!_busConnection.IsConnected)
         {
-            _logger.ConsoleAndLogWriteLine("Le bus KNX n'est pas connecté. Veuillez vous connecter d'abord pour lire une valeur.");
+            _logger.ConsoleAndLogWriteLine("The Knx bus is not connected. Please connect before reading a value.");
             return [];
         }
 
         if (_busConnection.IsBusy)
         {
-            _logger.ConsoleAndLogWriteLine("Le bus est occupé");
+            _logger.ConsoleAndLogWriteLine("The bus is occupied");
             return [];
         }
  
@@ -359,7 +358,7 @@ public class GroupCommunication : ObservableObject, IGroupCommunication
         }
         catch (Exception ex)
         {
-            _logger.ConsoleAndLogWriteLine($"Erreur lors de la lecture des valeurs de groupe : {ex.Message}");
+            _logger.ConsoleAndLogWriteLine($"Error reading the group value : {ex.Message}");
             return [];
         }
 

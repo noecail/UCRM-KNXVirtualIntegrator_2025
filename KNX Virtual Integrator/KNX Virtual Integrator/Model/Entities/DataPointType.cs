@@ -437,7 +437,6 @@ public class DataPointType : INotifyPropertyChanged
                 else
                     Value.Add(new GroupValue(updatedValue));
             }
-
             else
                 Value.Add(null);
         }

@@ -1165,6 +1165,13 @@ public partial class MainWindow
                 var secondValue = (intAddress % 2048) / 256;
                 var lastValue = intAddress % 256;
                 text = " - " + firstValue.ToString() + "/" + secondValue.ToString() + "/" + lastValue.ToString();
+            } else if (text == "Error")
+            {
+                text = " - Error Importing Address";
+            }
+            else
+            {
+                text = " - " + text;
             }
         }
         else
