@@ -11,6 +11,10 @@ public interface IGroupAddressManager
     /// Group address names prefixes. It is initialized for command
     /// </summary>
     public string[] Prefixes { get; set; } 
+    /// <summary>
+    /// The structure of the Group Addresses : 2 or 3 levels
+    /// </summary>
+    public int GroupAddressStructure { get; set; }
     
     /// <summary>
     /// Extracts group address information from a specified XML file.

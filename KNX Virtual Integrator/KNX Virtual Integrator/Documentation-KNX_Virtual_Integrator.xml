@@ -2352,6 +2352,16 @@
             List of all the Ie addresses
             </summary>
         </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager._groupAddressStructure">
+            <summary>
+            The structure of the Group Addresses : 2 or 3 levels
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.GroupAddressStructure">
+            <summary>
+            The structure of the Group Addresses : 2 or 3 levels
+            </summary>
+        </member>
         <member name="P:KNX_Virtual_Integrator.Model.Implementations.GroupAddressManager.Prefixes">
             <summary>
             Group address names prefixes. It is initialized for command
@@ -3704,6 +3714,11 @@
         <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.Prefixes">
             <summary>
             Group address names prefixes. It is initialized for command
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.GroupAddressStructure">
+            <summary>
+            The structure of the Group Addresses : 2 or 3 levels
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IGroupAddressManager.ExtractGroupAddress(KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList)">

@@ -110,7 +110,7 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         document.Add(emptyParagraph);
         
         // Information du lexique du rapport
-        document.Add(new Paragraph("Chaque modèle testé est nommé et les résultats sont présentés commande par commande, avec un résultat par réception.\n"+
+        document.Add(new Paragraph("Les résultats sont présentés commande par commande, avec un résultat par réception.\n"+
                                    "Il y a 5 types de résultat pour l'analyse : "));
         document.SetFontSize(12);
         document.Add(new Paragraph(" - Success indique que la réception a reçu la valeur attendue de l'adresse concernée\n" +

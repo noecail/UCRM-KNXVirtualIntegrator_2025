@@ -20,8 +20,23 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// </summary>
     public readonly List<XElement> IeAddressesSet = new();
 
+    /// <summary>
+    /// The structure of the Group Addresses : 2 or 3 levels
+    /// </summary>
     private int _groupAddressStructure;
-    
+    /// <summary>
+    /// The structure of the Group Addresses : 2 or 3 levels
+    /// </summary>
+    public int GroupAddressStructure
+    {
+        get=>_groupAddressStructure;
+        set
+        {
+            if (value != _groupAddressStructure) return;
+            _groupAddressStructure = value;
+        }
+    }
+
     /// <summary>
     /// Group address names prefixes. It is initialized for command
     /// </summary>

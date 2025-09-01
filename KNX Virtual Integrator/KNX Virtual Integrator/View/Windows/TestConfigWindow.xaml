@@ -787,7 +787,7 @@
                        Height="10" />
                 <TextBlock Name="InterfaceItemsText" 
                            Text="{Binding Path=FullName}"
-                           Style="{StaticResource ItalicTextBlockLight}"
+                           Style="{StaticResource ItalicTextBlockDark}"
                 />
             </StackPanel>
         </DataTemplate>

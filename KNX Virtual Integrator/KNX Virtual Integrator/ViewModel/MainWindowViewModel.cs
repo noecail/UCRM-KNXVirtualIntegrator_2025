@@ -23,5 +23,7 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// The group address file used to display the addresses in the <see cref="View.Windows.MainWindow"/>
         /// </summary>
         public XDocument? GroupAddressFile { get; private set; }
+
+        public int GroupAddressStruct => _modelManager.GroupAddressManager.GroupAddressStructure;
     }
 }
