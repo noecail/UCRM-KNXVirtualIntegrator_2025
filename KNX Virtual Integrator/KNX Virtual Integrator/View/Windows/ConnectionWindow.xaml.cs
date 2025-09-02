@@ -126,6 +126,7 @@ public partial class ConnectionWindow
             InterfaceListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
             InterfaceListBox.Style = (Style)FindResource("StandardListBoxLight");
             CurrCoInterfaceText.Style = (Style)FindResource("InterfaceTextBlockLight");
+            IPSecureBorder.BorderBrush = (Brush)FindResource("DarkGrayBorderBrush");
         }
         else
         {
@@ -140,6 +141,7 @@ public partial class ConnectionWindow
             InterfaceListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemDark");
             InterfaceListBox.Style = (Style)FindResource("StandardListBoxDark");
             CurrCoInterfaceText.Style = (Style)FindResource("InterfaceTextBlockDark");
+            IPSecureBorder.BorderBrush = (Brush)FindResource("LightGrayBorderBrush");
         }
         
         Background = backgroundColorBrush;

@@ -217,6 +217,7 @@
             
             <!-- Section connexion IP Secure-->
             <Border Grid.Row="3"
+                    Name="IPSecureBorder"
                     BorderBrush="{StaticResource DarkGrayBorderBrush}"
                     BorderThickness="0,1,0,0"
                     Margin="22,10,22,0"
