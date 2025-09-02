@@ -195,6 +195,11 @@ public partial class MainWindow
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
+        Application.Current.Dispatcher.InvokeAsync( async() =>
+        {
+            await LoadAddressesOntoTreeViewAsync(GroupAddressTreeView);
+        });
+        
     }
 
     /// <summary>

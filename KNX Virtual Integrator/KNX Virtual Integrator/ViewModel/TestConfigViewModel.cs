@@ -140,66 +140,71 @@ public partial class MainViewModel
     }
 
     /// <summary>
-    /// 
+    /// Collection used to display the chosen test models along with various information.
     /// </summary>
     public ObservableCollection<TestedFunctionalModel> ChosenModelsAndState { get; set; } = [];
 
 }
 
 /// <summary>
-/// 
+/// Class handling the grouping of various information. It is used to display the chosen test models,
+/// the state of their analysis and handle window theme changes.
 /// </summary>
 public class TestedFunctionalModel
 {
     /// <summary>
-    /// 
+    /// The chosen functional model. Linked in some ways with <see cref="ViewModel.MainViewModel.SelectedTestModels"/>.
     /// </summary>
     public FunctionalModel FunctionalModel { get; set; }
     /// <summary>
-    /// 
+    /// Status of the model analysis. It has 3 (or 4) states : "", "Waiting", "Running", "Finished".
+    /// Except for "", each state is associated with a corresponding image in the UI.
+    /// "" is associated with a collapsed image.
     /// </summary>
     public string State;
     /// <summary>
-    /// 
+    /// The theme of the App. <seealso cref="ApplicationSettings.EnableLightTheme"/>
+    /// It is changed when the collection <see cref="ViewModel.MainViewModel.ChosenModelsAndState"/> is
+    /// either updated or there is a new TestedFunctionalModel.
     /// </summary>
     public bool LightTheme;
-
-    public TestedFunctionalModel()
-    {
-        FunctionalModel = new FunctionalModel("b");
-        State = "";
-        LightTheme = true;
-    }
-    public TestedFunctionalModel(FunctionalModel functionalModel, string state)
-    {
-        FunctionalModel = functionalModel;
-        State = state;
-        LightTheme = true;
-    }
-
+    /// <summary>
+    /// Constructor with only a functional model
+    /// </summary>
+    /// <param name="functionalModel">The functional model to test</param>
     public TestedFunctionalModel(FunctionalModel functionalModel)
     {
         FunctionalModel = functionalModel;
         State = "";
         LightTheme = true;
     }
-
-    public TestedFunctionalModel(FunctionalModel functionalModel, string state, bool lightTheme)
-    {
-        FunctionalModel = functionalModel;
-        State = state;
-        LightTheme = lightTheme;
-    }
+    /// <summary>
+    /// Constructor handling the theme
+    /// </summary>
+    /// <param name="functionalModel">The functional model to test</param>
+    /// <param name="lightTheme">The current app theme</param>
     public TestedFunctionalModel(FunctionalModel functionalModel, bool lightTheme)
     {
         FunctionalModel = functionalModel;
         State = "";
         LightTheme = lightTheme;
     }
-    public TestedFunctionalModel(bool lightTheme)
+    /// <summary>
+    /// Override to only test the equality of the <see cref="FunctionalModel"/>.
+    /// Done to reduces issues when adding or checking the chosen test models.
+    /// </summary>
+    /// <param name="obj">The compared object (should be a TestedFunctionalModel)</param>
+    /// <returns>True if the FunctionalModels are equal; false otherwise.</returns>
+    public override bool Equals(object? obj)
     {
-        FunctionalModel = new FunctionalModel("b");
-        State = "";
-        LightTheme = lightTheme;
+        return FunctionalModel.Equals(((TestedFunctionalModel)obj).FunctionalModel);
+    }
+    /// <summary>
+    /// Override to allow Equals to work as intended.
+    /// </summary>
+    /// <returns>The <see cref="FunctionalModel"/> <see cref="FunctionalModel.GetHashCode"/> .</returns>
+    public override int GetHashCode()
+    {
+        return FunctionalModel.GetHashCode();
     }
 }
