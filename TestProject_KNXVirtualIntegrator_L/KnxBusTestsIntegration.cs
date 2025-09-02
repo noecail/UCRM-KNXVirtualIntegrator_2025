@@ -350,7 +350,7 @@ public class KnxBusTestsIntegration
     [Fact]
     public void Test_ModelImport_SampleMFXml_Integration()
     {
-        var fullPath = @"C:\Users\HP ELITEBOOK\Documents\GitHub\UCRM-KNXVirtualIntegrator_2025\.github\workflows\SampleMF.xml";
+        var fullPath = @"..\..\..\..\.github\workflows\SampleMF.xml";
 
         Assert.True(File.Exists(fullPath), $"Fichier non trouvé : {fullPath}");
 
