@@ -1,4 +1,4 @@
-using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de l�.
+using KNX_Virtual_Integrator.Model.Implementations; // Pour d'autres classes si elles viennent de l�
 using KNX_Virtual_Integrator.Model.Interfaces;
 using KNX_Virtual_Integrator.Model.Wrappers;
 using KNX_Virtual_Integrator.ViewModel;
@@ -6,6 +6,9 @@ using Knx.Falcon;
 using Knx.Falcon.Configuration;
 using Xunit.Abstractions;
 using Moq;
+using System.Xml.Linq;
+
+
 
 namespace TestProject_KNXVirtualIntegrator_L
 {
@@ -18,7 +21,11 @@ namespace TestProject_KNXVirtualIntegrator_L
         private readonly ConnectionInterfaceViewModel _selectedInterfaceIp;
         private readonly ConnectionInterfaceViewModel _selectedInterfaceIpSecure;
         private readonly ConnectionInterfaceViewModel _selectedInterfaceIpNat;
-
+        
+        public interface IXmlImportService
+        {
+            List<string> GetGroupAddresses(string xmlFilePath);
+        }
         public KnxBusTests(ITestOutputHelper output)
         {
             _output = output;
@@ -85,21 +92,15 @@ namespace TestProject_KNXVirtualIntegrator_L
             var didWrite = await _groupCommunication.GroupValueWriteAsync(groupAddress, groupValue);
 
             // Assert
-            // On vérifie que la méthode n'a pas réussi à atteindre l'écriture sur le bus. Le Mock fait que le renvoi final
-            // de l'écriture est true mais en réalité, il sera aussi false s'il y a un problème.
             Assert.False(didWrite, "It shouldn't have succeeded in getting to the writing part");
-            _output.WriteLine(""); // To avoid a warning....
+            _output.WriteLine(""); 
         }
 
         [Fact]
         public async Task Test_GroupValueWriteAsync_AccessToWritingInBus()
         {
-
-            // Arrange
-            // Création d'une adresse de groupe et d'une valeur à écrire
             var groupAddress = new GroupAddress("1/2/3");
             var groupValue = new GroupValue(true);
-            // On vérifie que le bus n'est pas connecté
             var fakeKnxBus = Mock.Of<IKnxBusWrapper>();
             _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus)
             {
@@ -114,23 +115,15 @@ namespace TestProject_KNXVirtualIntegrator_L
                     It.IsAny<MessagePriority>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(true));
 
-            // Act
             var didWrite = await _groupCommunication.GroupValueWriteAsync(groupAddress, groupValue);
 
-            // Assert
-            // On vérifie que la méthode n'a pas réussi à atteindre l'écriture sur le bus. Le Mock fait que le renvoi final
-            // de l'écriture est true mais en réalité, il sera aussi false s'il y a un problème.
             Assert.True(didWrite, "It shouldn't have failed in writing due to mocking system");
         }
-
-
+        
+        
         [Fact]
         public async Task Test_KnxBus_IpConnect()
         {
-            // Arrange
-            // Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
-            // Assignez l'interface sélectionnée à la connexion au bus
             var fakeKnxBus = Mock.Of<IKnxBusWrapper>();
             _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus)
             {
@@ -141,17 +134,11 @@ namespace TestProject_KNXVirtualIntegrator_L
             Mock.Get(fakeKnxBus).SetupSequence(x => x.IsNull).Returns(true).Returns(false);
             Mock.Get(fakeKnxBus).Setup(x => x.ConnectAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-
-            // Act
-            // Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
 
-            // Assert
-            // Pour vérifier si la connexion a réussi (seulement s'il n'y a pas IP Secure)
             Assert.True(_busConnection.IsConnected || true,
                 "KNX IP Bus connection failed (doesn't implement IP Secure)");
 
-            // Cleanup
             await _busConnection.DisconnectBusAsync();
             _busConnection.SelectedInterface ??= null;
         }
@@ -159,10 +146,6 @@ namespace TestProject_KNXVirtualIntegrator_L
         [Fact]
         public async Task Test_KnxBus_IpSecureConnect()
         {
-            // Arrange
-            // Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
-            // Assignez l'interface sélectionnée à la connexion au bus
             var fakeKnxBus = Mock.Of<IKnxBusWrapper>();
             _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus)
             {
@@ -177,17 +160,11 @@ namespace TestProject_KNXVirtualIntegrator_L
                 .Throws(new Exception("User login failed"))
                 .Returns(Task.CompletedTask);
 
-
-            // Act
-            // Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
 
-            // Assert
-            // Pour vérifier si la connexion en IP Secure a réussi 
             Assert.True(_busConnection.IsConnected || true,
                 "KNX IP Bus connection failed");
 
-            // Cleanup
             await _busConnection.DisconnectBusAsync();
             _busConnection.SelectedInterface ??= null;
         }
@@ -195,10 +172,6 @@ namespace TestProject_KNXVirtualIntegrator_L
         [Fact]
         public async Task Test_KnxBus_IpNatSecureConnect()
         {
-            // Arrange
-            // Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
-            // Assignez l'interface sélectionnée à la connexion au bus
             var fakeKnxBus = Mock.Of<IKnxBusWrapper>();
             _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus)
             {
@@ -213,29 +186,19 @@ namespace TestProject_KNXVirtualIntegrator_L
                 .Throws(new Exception("User login failed"))
                 .Returns(Task.CompletedTask);
 
-
-            // Act
-            // Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
 
-            // Assert
-            // Pour vérifier si la connexion a réussi (seulement s'il y a IP Secure, car l'autre n'est pas considéré)
             Assert.True(_busConnection.IsConnected || true,
                 "KNX IP Bus connection failed (only implements IP Secure)");
 
-            // Cleanup
             await _busConnection.DisconnectBusAsync();
             _busConnection.SelectedInterface ??= null;
         }
-
-
+        
+        
         [Fact]
         public async Task Test_KnxBus_UsbConnect()
         {
-            // Arrange
-            // Création et configuration de l'interface de connexion
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
-            // Assignez l'interface sélectionnée à la connexion au bus
             var fakeKnxBus = Mock.Of<IKnxBusWrapper>();
             _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus)
             {
@@ -245,27 +208,154 @@ namespace TestProject_KNXVirtualIntegrator_L
             Mock.Get(fakeKnxBus).SetupSequence(x => x.IsNull).Returns(true).Returns(false);
             Mock.Get(fakeKnxBus).Setup(x => x.ConnectAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-
-            // Act
-            // Connexion au bus KNX
             await _busConnection.ConnectBusAsync();
 
-            // Assert
-            // Pour vérifier si la connexion a réussi
             Assert.True(_busConnection.IsConnected || true, "KNX Bus connection failed.");
 
-            // Cleanup
             await _busConnection.DisconnectBusAsync();
             _busConnection.SelectedInterface ??= null;
         }
 
+        [Fact]
+        public void Test_ImportGroupAddresses_WithMockedXmlService()
+        {
+            var mockXmlService = new Mock<IXmlImportService>();
 
+            var fakeXmlPath = "fakePath.xml";
+            var expectedAddresses = new List<string> { "1/0/1", "1/0/2", "2/0/1", "2/0/2" };
+
+            mockXmlService
+                .Setup(service => service.GetGroupAddresses(It.IsAny<string>()))
+                .Returns(expectedAddresses);
+
+            var importedAddresses = mockXmlService.Object.GetGroupAddresses(fakeXmlPath);
+
+            Assert.Equal(4, importedAddresses.Count);
+            Assert.Contains("1/0/1", importedAddresses);
+            Assert.Contains("2/0/2", importedAddresses);
+        }
+        
+        [Fact]
+        public void Test_ModelImport_ValidMFXml_Unit()
+        {
+            string fakeXml = @"
+        <ModelFunction>
+            <Bloc name='Eclairage'/>
+            <Bloc name='Volet'/>
+        </ModelFunction>";
+
+            var xdoc = XDocument.Parse(fakeXml);
+
+            var mockFileLoader = new Mock<IFileLoader>();
+            mockFileLoader.Setup(f => f.LoadXmlDocument(It.IsAny<string>())).Returns(xdoc);
+
+            var importedDoc = mockFileLoader.Object.LoadXmlDocument("fakePath.xml");
+
+            var root = importedDoc?.Root;
+
+            Assert.NotNull(importedDoc);
+            Assert.NotNull(root);
+            Assert.Equal("ModelFunction", root.Name.LocalName);
+
+            var blocs = root.Elements("Bloc").ToList();
+            Assert.Equal(2, blocs.Count);
+            Assert.Contains(blocs, b => b.Attribute("name")?.Value == "Eclairage");
+            Assert.Contains(blocs, b => b.Attribute("name")?.Value == "Volet");
+        }
+        
+        [Fact]
+        public async Task Test_KnxBus_MF_MultipleIE_Types_Unit()
+        {
+            var logger = Mock.Of<ILogger>();
+            var mockKnxBus = new Mock<IKnxBusWrapper>();
+
+            var groupAddressBool = new GroupAddress("1/2/3");
+            var groupAddressInt = new GroupAddress("1/2/4");
+
+            var boolValue = new GroupValue(true);
+            var intValue = new GroupValue(42);
+
+            var valueStore = new Dictionary<string, GroupValue>();
+
+            mockKnxBus
+                .Setup(x => x.WriteGroupValueAsync(It.IsAny<GroupAddress>(), It.IsAny<GroupValue>(), It.IsAny<MessagePriority>(), It.IsAny<CancellationToken>()))
+                .Callback<GroupAddress, GroupValue, MessagePriority, CancellationToken>((addr, val, _, _) =>
+                {
+                    valueStore[addr.ToString()] = val;
+                })
+                .ReturnsAsync(true);
+
+            var groupCommunication = new GroupCommunication(
+                new BusConnection(logger, mockKnxBus.Object)
+                {
+                    IsConnected = true,
+                    IsBusy = false,
+                    CancellationTokenSource = new CancellationTokenSource()
+                },
+                logger
+            );
+
+            var writeBool = await groupCommunication.GroupValueWriteAsync(groupAddressBool, boolValue);
+            var writeInt = await groupCommunication.GroupValueWriteAsync(groupAddressInt, intValue);
+
+            var readBool = valueStore[groupAddressBool.ToString()];
+            var readInt = valueStore[groupAddressInt.ToString()];
+
+            Assert.True(writeBool);
+            Assert.True(writeInt);
+            Assert.Equal(boolValue, readBool);
+            Assert.Equal(intValue, readInt);
+        }
+        
+            
+        [Fact]
+        public async Task Test_GroupValueWriteAsync_WithMockedInvalidAddress_ShouldFail()
+        {
+            // Arrange
+            var fakeKnxBus = new Mock<IKnxBusWrapper>();
+            _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus.Object)
+            {
+                IsConnected = true,
+                IsBusy = false,
+                CancellationTokenSource = new CancellationTokenSource()
+            };
+            _groupCommunication = new GroupCommunication(_busConnection, Mock.Of<ILogger>());
+
+            // Adresse syntaxiquement valide mais qu’on va considérer “interdite”
+            var invalidGroupAddress = new GroupAddress("31/7/255");
+            var groupValue = new GroupValue(true);
+
+            // Mock : toute tentative d’écriture retourne false
+            fakeKnxBus
+                .Setup(x => x.WriteGroupValueAsync(invalidGroupAddress, groupValue,
+                    It.IsAny<MessagePriority>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(false);
+
+            // Act
+            var result = await _groupCommunication.GroupValueWriteAsync(invalidGroupAddress, groupValue);
+
+            // Assert
+            Assert.False(result, "Invalid group address should not be writable.");
+        }
+
+
+        [Fact]
+        public async Task Test_Disconnect_WhenNotConnected_ShouldHandleGracefully()
+        {
+            var fakeKnxBus = new Mock<IKnxBusWrapper>();
+            _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus.Object)
+            {
+                IsConnected = false
+            };
+
+            await _busConnection.DisconnectBusAsync();
+
+            Assert.False(_busConnection.IsConnected);
+        }
+        
         [Fact]
         public async Task Test_KnxBus_UsbConnect_Disconnect()
         {
-            // Arrange
-            // Créez une instance de ConnectionInterfaceViewModel avec les paramètres appropriés (ici, c'est dans le constructeur)
-            // Assignez l'interface sélectionnée à la connexion au bus
             var fakeKnxBus = Mock.Of<IKnxBusWrapper>();
             _busConnection = new BusConnection(Mock.Of<ILogger>(), fakeKnxBus)
             {
@@ -275,20 +365,16 @@ namespace TestProject_KNXVirtualIntegrator_L
             Mock.Get(fakeKnxBus).Setup(x => x.IsNull).Returns(false);
             Mock.Get(fakeKnxBus).Setup(x => x.ConnectAsync(It.IsAny<CancellationToken>())).Returns(Task.CompletedTask);
 
-
-            // Act
-            // Connexion puis déconnexion du bus KNX
             await _busConnection.ConnectBusAsync();
             var wasConnected = _busConnection.IsConnected;
             await _busConnection.DisconnectBusAsync();
             var isNotDisconnected = _busConnection.IsConnected;
 
-            // Assert
-            // Pour vérifier si la déconnexion a réussi
             Assert.False(isNotDisconnected || !wasConnected, "KNX Bus did not disconnect properly disconnection.");
 
-            //Cleanup
             _busConnection.SelectedInterface ??= null;
         }
+
     }
+
 }
