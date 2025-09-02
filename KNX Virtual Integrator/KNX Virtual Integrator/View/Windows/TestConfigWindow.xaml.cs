@@ -46,6 +46,9 @@ public partial class TestConfigWindow
         ModelsBox.LayoutUpdated += CheckIfModelsWasCheckedHandler;
         DefStructureBox.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(CheckedStructureHandler));
         DefStructureBox.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(UncheckedStructureHandler));
+        
+        // C'est la manière la plus simple que je connais pour déclencher l'event "CollectionChanged" pour
+        // appeler à nouveau le ItemTemplateSelector
         _viewModel.PropertyChanged += (_, args) =>
         {
             if (args.PropertyName != nameof(_viewModel.AnalysisState)) return;
@@ -208,7 +211,10 @@ public partial class TestConfigWindow
             tempCollection.Add(testedModel);
         _viewModel.ChosenModelsAndState.Clear();
         foreach (var testedModel in tempCollection)
+        {
+            testedModel.LightTheme = _viewModel.AppSettings.EnableLightTheme;
             _viewModel.ChosenModelsAndState.Add(testedModel);
+        }
     }
     
     /// <summary>
@@ -356,16 +362,18 @@ public partial class TestConfigWindow
 }
 
 /// <summary>
-/// .
+/// Implementation of DataTemplateSelector in order to update the status of the analysis between 3 images :
+/// Waiting, Running and Finished.
+/// Handles Theme changes.
 /// </summary>
 public class ChosenModelDataTemplateSelector : DataTemplateSelector
 {
     /// <summary>
-    /// .
+    /// The method called when the CollectionChanged event of the listBox ItemSource is raised.
     /// </summary>
-    /// <param name="item">.</param>
-    /// <param name="container">.</param>
-    /// <returns>.</returns>
+    /// <param name="item">The item concerned by CollectionChanged.</param>
+    /// <param name="container">The visual container.</param>
+    /// <returns>The concerned item data template.</returns>
     public override DataTemplate? SelectTemplate(object? item, DependencyObject container)
     {
         FrameworkElement? element = container as FrameworkElement;

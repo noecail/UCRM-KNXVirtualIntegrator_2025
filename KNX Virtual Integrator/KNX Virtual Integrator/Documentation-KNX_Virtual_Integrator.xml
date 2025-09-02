@@ -5336,6 +5336,32 @@
             
             </summary>
         </member>
+        <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.#ctor(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
+            <summary>
+            
+            </summary>
+            <param name="functionalModel"></param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.#ctor(KNX_Virtual_Integrator.Model.Entities.FunctionalModel,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="functionalModel"></param>
+            <param name="lightTheme"></param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.Equals(System.Object)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+            <returns></returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.GetHashCode">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:KNX_Virtual_Integrator.View.Utils.BigIntegerToStringConverter">
             <summary>
             Converter class used to convert between BigInteger type and String type
