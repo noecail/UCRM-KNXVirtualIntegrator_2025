@@ -1337,16 +1337,14 @@
             The models each have a list of Element, which have a list of commands and expected results.
             The results are thus listed as a list of (models)lists of (elements)lists of (commands)lists of (expected results)<see cref="T:KNX_Virtual_Integrator.Model.Implementations.ResultType"/>.
             </summary>
-            <param name="liste">The list of models to analyze</param>
             <param name="communication">The class handling the messages to send and the reception</param>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.#ctor(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication)">
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.#ctor(KNX_Virtual_Integrator.Model.Interfaces.IGroupCommunication)">
             <summary>
             Class used to analyze the knx installation according to a list of functional models.
             The models each have a list of Element, which have a list of commands and expected results.
             The results are thus listed as a list of (models)lists of (elements)lists of (commands)lists of (expected results)<see cref="T:KNX_Virtual_Integrator.Model.Implementations.ResultType"/>.
             </summary>
-            <param name="liste">The list of models to analyze</param>
             <param name="communication">The class handling the messages to send and the reception</param>
         </member>
         <member name="F:KNX_Virtual_Integrator.Model.Implementations.Analyze.FunctionalModels">
@@ -1364,7 +1362,19 @@
             The class handling the messages to send and the reception
             </summary>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll">
+        <member name="E:KNX_Virtual_Integrator.Model.Implementations.Analyze.PropertyChanged">
+            <summary>
+            Event that occurs when the model analysis state changes (Between waiting, running, finished and none).
+            Not yet implemented.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.OnPropertyChanged(System.String)">
+            <summary>
+            Invokes <see cref="E:KNX_Virtual_Integrator.Model.Implementations.Analyze.PropertyChanged"/> when called.
+            </summary>
+            <param name="propertyName">The name of the property that was changed.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel})">
             <summary>
             Tests all the functional models of a list and updates the table of results
             </summary>
@@ -3203,7 +3213,7 @@
             Table of results sorted by Tests, in TestedElements, in functionalModels
             </summary>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IAnalyze.TestAll">
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IAnalyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel})">
             <summary>
             Tests all the functional models of a list and updates the table of results
             </summary>
@@ -5240,6 +5250,13 @@
             <seealso cref="T:KNX_Virtual_Integrator.Model.Implementations.ResultType"/> 
             </summary>  
         </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel.AnalysisState">
+            <summary>
+            The list of the model current analysis state.
+            It can have 4 states : Waiting, Running, Finished, None.
+            "None" means that the correspondingly displayed image is hidden.
+            </summary>
+        </member>
         <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._selectedTestModels">
             <summary>
             The models selected to be tested.
@@ -5293,6 +5310,31 @@
             for them to not be tested anymore if they were supposed to.
             </summary>
             <param name="structKey">The index of the structure in the functionalModelList.</param>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ChosenModelsAndState">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.FunctionalModel">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.State">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.LightTheme">
+            <summary>
+            
+            </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.View.Utils.BigIntegerToStringConverter">
             <summary>
@@ -6145,6 +6187,19 @@
             <summary>
             InitializeComponent
             </summary>
+        </member>
+        <member name="T:KNX_Virtual_Integrator.View.Windows.ChosenModelDataTemplateSelector">
+            <summary>
+            .
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.ChosenModelDataTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)">
+            <summary>
+            .
+            </summary>
+            <param name="item">.</param>
+            <param name="container">.</param>
+            <returns>.</returns>
         </member>
         <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
             <summary>

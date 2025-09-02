@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
@@ -45,6 +46,16 @@ public partial class TestConfigWindow
         ModelsBox.LayoutUpdated += CheckIfModelsWasCheckedHandler;
         DefStructureBox.AddHandler(ToggleButton.CheckedEvent, new RoutedEventHandler(CheckedStructureHandler));
         DefStructureBox.AddHandler(ToggleButton.UncheckedEvent, new RoutedEventHandler(UncheckedStructureHandler));
+        _viewModel.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName != nameof(_viewModel.AnalysisState)) return;
+            ObservableCollection<TestedFunctionalModel> tempCollection = [];
+            foreach (var testedModel in _viewModel.ChosenModelsAndState)
+                tempCollection.Add(testedModel);
+            _viewModel.ChosenModelsAndState.Clear();
+            foreach (var testedModel in tempCollection)
+                _viewModel.ChosenModelsAndState.Add(testedModel);
+        };
     }
     
     /// <summary>
@@ -128,7 +139,6 @@ public partial class TestConfigWindow
         {
             ChosenTestModelesListBox.Style = (Style)FindResource("ListBoxStyleLight");
             ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerLight");
-            ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemLight");
             SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateLight");
             SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleLight");
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
@@ -147,7 +157,6 @@ public partial class TestConfigWindow
         {
             ChosenTestModelesListBox.Style = (Style)FindResource("ListBoxStyleDark");
             ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerDark");
-            ChosenTestModelesListBox.ItemTemplate = (DataTemplate)FindResource("ListBoxItemDark");
             SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateDark");
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleDark");
             SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleDark");
@@ -191,6 +200,15 @@ public partial class TestConfigWindow
         
         DefStructureBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
+        
+        // C'est la manière la plus simple que je connais pour déclencher l'event "CollectionChanged" pour
+        // appeler à nouveau le ItemTemplateSelector
+        ObservableCollection<TestedFunctionalModel> tempCollection = [];
+        foreach (var testedModel in _viewModel.ChosenModelsAndState)
+            tempCollection.Add(testedModel);
+        _viewModel.ChosenModelsAndState.Clear();
+        foreach (var testedModel in tempCollection)
+            _viewModel.ChosenModelsAndState.Add(testedModel);
     }
     
     /// <summary>
@@ -230,6 +248,8 @@ public partial class TestConfigWindow
         // On vérifie que le modèle n'existe pas déjà pour éviter les doublons puis on l'ajoute à la liste
         if (_viewModel.SelectedTestModels.Contains(newTestModel)) return;
         _viewModel.SelectedTestModels.Add(newTestModel);
+        if (_viewModel.ChosenModelsAndState.Contains(new TestedFunctionalModel(newTestModel))) return;
+        _viewModel.ChosenModelsAndState.Add(new TestedFunctionalModel(newTestModel,_viewModel.AppSettings.EnableLightTheme));
     }
     
     /// <summary>
@@ -246,6 +266,7 @@ public partial class TestConfigWindow
         if (newTestModel is null) return;
         // La méthode remove enlève le modèle du test en vérifiant son appartenance éventuelle
         _viewModel.SelectedTestModels.Remove(newTestModel);
+        _viewModel.ChosenModelsAndState.Remove(new TestedFunctionalModel(newTestModel));
     }
     
     /// <summary>
@@ -331,5 +352,39 @@ public partial class TestConfigWindow
         {
             _viewModel.LaunchAnalysisCommand.Execute(_viewModel.SelectedTestModels);
         });
+    }
+}
+
+/// <summary>
+/// .
+/// </summary>
+public class ChosenModelDataTemplateSelector : DataTemplateSelector
+{
+    /// <summary>
+    /// .
+    /// </summary>
+    /// <param name="item">.</param>
+    /// <param name="container">.</param>
+    /// <returns>.</returns>
+    public override DataTemplate? SelectTemplate(object? item, DependencyObject container)
+    {
+        FrameworkElement? element = container as FrameworkElement;
+        if (element is not null && item is not null && item is TestedFunctionalModel)
+        {
+                TestedFunctionalModel? model = item as TestedFunctionalModel;
+                if (model is null) return null;
+                if (model.LightTheme)
+                {
+                    if (model.State == "Waiting") return element.FindResource("WaitListBoxItemLight") as DataTemplate;
+                    if (model.State == "Running") return element.FindResource("RunListBoxItemLight") as DataTemplate;
+                    if (model.State == "Finished") return element.FindResource("FinListBoxItemLight") as DataTemplate;
+                    return element.FindResource("InvListBoxItemLight") as DataTemplate;
+                }
+                if (model.State == "Waiting") return element.FindResource("WaitListBoxItemDark") as DataTemplate;
+                if (model.State == "Running") return element.FindResource("RunListBoxItemDark") as DataTemplate;
+                if (model.State == "Finished") return element.FindResource("FinListBoxItemDark") as DataTemplate;
+                return element.FindResource("InvListBoxItemDark") as DataTemplate;
+        }
+        return null;
     }
 }

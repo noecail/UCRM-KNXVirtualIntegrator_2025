@@ -1,4 +1,6 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 using Knx.Falcon;
@@ -10,14 +12,13 @@ namespace KNX_Virtual_Integrator.Model.Implementations;
 /// The models each have a list of Element, which have a list of commands and expected results.
 /// The results are thus listed as a list of (models)lists of (elements)lists of (commands)lists of (expected results)<see cref="ResultType"/>.
 /// </summary>
-/// <param name="liste">The list of models to analyze</param>
 /// <param name="communication">The class handling the messages to send and the reception</param>
-public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommunication communication) : IAnalyze
+public class Analyze(IGroupCommunication communication) : IAnalyze
 {
     /// <summary>
     /// The list of models to test
     /// </summary>
-    public readonly ObservableCollection<FunctionalModel> FunctionalModels = liste;
+    public ObservableCollection<FunctionalModel> FunctionalModels = [];
     /// <summary>
     /// Table of results sorted by Tests, in TestedElements, in functionalModels
     /// </summary>
@@ -28,16 +29,32 @@ public class Analyze(ObservableCollection<FunctionalModel>  liste, IGroupCommuni
     public IGroupCommunication Communication = communication;
     
     /// <summary>
+    /// Event that occurs when the model analysis state changes (Between waiting, running, finished and none).
+    /// Not yet implemented.
+    /// </summary>
+    public event PropertyChangedEventHandler? PropertyChanged;
+    /// <summary>
+    /// Invokes <see cref="PropertyChanged"/> when called.
+    /// </summary>
+    /// <param name="propertyName">The name of the property that was changed.</param>
+    private void OnPropertyChanged(string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+    /// <summary>
     /// Tests all the functional models of a list and updates the table of results
     /// </summary>
-    public async Task TestAll()
+    public async Task TestAll(ObservableCollection<FunctionalModel> listModels)
     {
+        FunctionalModels = listModels;
         Results = [];
         List<List<List<List<ResultType>>>> resList = [];
         foreach (var functionalModelToTest in FunctionalModels) //
         {
+                OnPropertyChanged("Running");
                 var res = await TestModel(functionalModelToTest);
                 resList.Add(res);
+                OnPropertyChanged("Finished");
         }
         Results = resList;
     }

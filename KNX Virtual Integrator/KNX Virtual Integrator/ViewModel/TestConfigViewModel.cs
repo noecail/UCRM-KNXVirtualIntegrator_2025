@@ -13,7 +13,14 @@ public partial class MainViewModel
     /// <seealso cref="ResultType"/> 
     /// </summary>  
     public List<List<List<List<ResultType>>>> LastTestResults=[];
-    
+
+    /// <summary>
+    /// The list of the model current analysis state.
+    /// It can have 4 states : Waiting, Running, Finished, None.
+    /// "None" means that the correspondingly displayed image is hidden.
+    /// </summary>
+    public List<string> AnalysisState = [];
+
     /// <summary>
     /// The models selected to be tested.
     /// </summary>  
@@ -28,6 +35,9 @@ public partial class MainViewModel
         {
             if (_selectedTestModels.Equals(value)) return;
             _selectedTestModels = value;
+            ChosenModelsAndState = new ObservableCollection<TestedFunctionalModel>();
+            foreach (var model in value)
+                ChosenModelsAndState.Add(new TestedFunctionalModel(model,AppSettings.EnableLightTheme));
             WhenPropertyChanged(nameof(SelectedTestModels));
         }
     }
@@ -109,6 +119,9 @@ public partial class MainViewModel
             if (SelectedTestModels.Contains(testedModel))
                 continue;
             SelectedTestModels.Add(testedModel);
+            if (ChosenModelsAndState.Contains(new TestedFunctionalModel(testedModel))) 
+                continue;
+            ChosenModelsAndState.Add(new TestedFunctionalModel(testedModel, AppSettings.EnableLightTheme));
         }
     }
 
@@ -122,7 +135,71 @@ public partial class MainViewModel
         foreach (var testedModel in _functionalModelList.FunctionalModels[structKey])
         {
             SelectedTestModels.Remove(testedModel);
+            ChosenModelsAndState.Remove(new TestedFunctionalModel(testedModel));
         }
     }
-    
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public ObservableCollection<TestedFunctionalModel> ChosenModelsAndState { get; set; } = [];
+
+}
+
+/// <summary>
+/// 
+/// </summary>
+public class TestedFunctionalModel
+{
+    /// <summary>
+    /// 
+    /// </summary>
+    public FunctionalModel FunctionalModel { get; set; }
+    /// <summary>
+    /// 
+    /// </summary>
+    public string State;
+    /// <summary>
+    /// 
+    /// </summary>
+    public bool LightTheme;
+
+    public TestedFunctionalModel()
+    {
+        FunctionalModel = new FunctionalModel("b");
+        State = "";
+        LightTheme = true;
+    }
+    public TestedFunctionalModel(FunctionalModel functionalModel, string state)
+    {
+        FunctionalModel = functionalModel;
+        State = state;
+        LightTheme = true;
+    }
+
+    public TestedFunctionalModel(FunctionalModel functionalModel)
+    {
+        FunctionalModel = functionalModel;
+        State = "";
+        LightTheme = true;
+    }
+
+    public TestedFunctionalModel(FunctionalModel functionalModel, string state, bool lightTheme)
+    {
+        FunctionalModel = functionalModel;
+        State = state;
+        LightTheme = lightTheme;
+    }
+    public TestedFunctionalModel(FunctionalModel functionalModel, bool lightTheme)
+    {
+        FunctionalModel = functionalModel;
+        State = "";
+        LightTheme = lightTheme;
+    }
+    public TestedFunctionalModel(bool lightTheme)
+    {
+        FunctionalModel = new FunctionalModel("b");
+        State = "";
+        LightTheme = lightTheme;
+    }
 }

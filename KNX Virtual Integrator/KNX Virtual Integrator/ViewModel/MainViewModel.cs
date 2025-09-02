@@ -5,6 +5,7 @@ using KNX_Virtual_Integrator.Model;
 using KNX_Virtual_Integrator.ViewModel.Commands;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Threading;
 using Knx.Falcon;
 using KNX_Virtual_Integrator.Model.Implementations;
 using KNX_Virtual_Integrator.Model.Entities;
@@ -576,15 +577,40 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         LaunchAnalysisCommand = new RelayCommandWithResult<ObservableCollection<FunctionalModel>, Task<List<List<List<List<ResultType>>>>>>(
             async testModels =>
             {
-                Analyze analysis = new Analyze(testModels, _modelManager.GroupCommunication);
+                Analyze analysis = new Analyze(_modelManager.GroupCommunication);
+                AnalysisState = new List<string>(testModels.Count);
+                for (int i = 0; i < testModels.Count; i++)
+                {
+                    AnalysisState.Add("Waiting");
+                    ChosenModelsAndState[i].State = "Waiting";
+                    WhenPropertyChanged(nameof(AnalysisState));
+                }
+                analysis.PropertyChanged += (_, e) =>
+                {
+                    if (e.PropertyName == "Running")
+                    {
+                        for (int i = 0; i < AnalysisState.Count; i++)
+                        {
+                            if (AnalysisState[i] != "Waiting") continue;
+                            AnalysisState[i] = "Running";
+                            ChosenModelsAndState[i].State = "Running";
+                            WhenPropertyChanged(nameof(AnalysisState));
+                            return;
+                        }
+                    } else if (e.PropertyName == "Finished")
+                    {
+                        for (int i = 0; i < AnalysisState.Count; i++)
+                        {
+                            if (AnalysisState[i] != "Running") continue;
+                            AnalysisState[i] = "Finished";
+                            ChosenModelsAndState[i].State = "Finished";
+                            WhenPropertyChanged(nameof(AnalysisState));
+                            return;
+                        }   
+                    }
+                };
                 ConsoleAndLogWriteLineCommand.Execute("Analysis Started");
-                await analysis.TestAll();
-                    /*foreach(var model in analysis.Results)
-                        foreach (var element in model)
-                            foreach(var cmd in element)
-                                foreach (var cmd2 in cmd)
-                                ConsoleAndLogWriteLineCommand.Execute($"{cmd} : {cmd2}");
-                    */
+                await analysis.TestAll(testModels);
                 ConsoleAndLogWriteLineCommand.Execute("Analysis Finished");
                 LastTestResults = analysis.Results;
                 return analysis.Results;

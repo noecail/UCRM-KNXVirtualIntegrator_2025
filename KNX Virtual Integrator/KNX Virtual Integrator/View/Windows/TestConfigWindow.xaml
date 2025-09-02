@@ -7,6 +7,7 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                  xmlns:entities="clr-namespace:KNX_Virtual_Integrator.Model.Entities"
+                 xmlns:windows="clr-namespace:KNX_Virtual_Integrator.View.Windows"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
                  Title="{DynamicResource TestWindowTitle}" Height="700" Width="1200"
@@ -23,6 +24,8 @@
         
         <!-- Clé permettant d'appeler les BigIntegerToStringConverter plus facilement -->
         <utils:BigIntegerToStringConverter x:Key="BigIntegerConverter"/>
+        
+        <windows:ChosenModelDataTemplateSelector x:Key="ChosenModelTemplateSelector"/>
         
         <!-- Styles pour les Éléments à Tester (affichage assez long, 
              recommandé de garder Collapsed dans l'éditeur de code) -->
@@ -762,31 +765,154 @@
         </DataTemplate>
         
         <!-- Styles pour les Modèles Fonctionnels choisis, l'image pour test n'est pas implémentée -->
-        <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type entities:FunctionalModel}">
+        <DataTemplate x:Key="ListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{TemplateBinding Tag}"
+                <Image x:Name="TagImage"
+                       Source="{StaticResource WaitImage}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Visible"
+                       Height="10"
+                       Width="10"/>
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FunctionalModel.FullName}"
+                           Style="{StaticResource ItalicTextBlockLight}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="WaitListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="TagImage"
+                       Source="{StaticResource WaitImage}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Visible"
+                       Height="10" 
+                       Width="10"/>
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FunctionalModel.FullName}"
+                           Style="{StaticResource ItalicTextBlockLight}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="RunListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="TagImage"
+                       Source="{StaticResource RunningImage}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Visible"
+                       Height="10" 
+                       Width="10"/>
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FunctionalModel.FullName}"
+                           Style="{StaticResource ItalicTextBlockLight}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="FinListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="TagImage"
+                       Source="{StaticResource FinishedImage}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Visible"
+                       Height="10" 
+                       Width="10"/>
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FunctionalModel.FullName}"
+                           Style="{StaticResource ItalicTextBlockLight}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="InvListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="TagImage"
+                       Source="{StaticResource WaitImage}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
                        Visibility="Collapsed"
-                       Height="10" />
+                       Height="10" 
+                       Width="10"/>
                 <TextBlock Name="InterfaceItemsText" 
-                           Text="{Binding Path=FullName}"
+                           Text="{Binding Path=FunctionalModel.FullName}"
                            Style="{StaticResource ItalicTextBlockLight}"
                 />
             </StackPanel>
         </DataTemplate>
 
-        <DataTemplate x:Key="ListBoxItemDark" DataType="{x:Type entities:FunctionalModel}">
+        <DataTemplate x:Key="WaitListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
-                <Image Source="{TemplateBinding Tag}"
+                <Image x:Name="TagImage"
+                       Source="{StaticResource WaitImage}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Visible"
+                       Height="10" 
+                       Width="10"/>
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FunctionalModel.FullName}"
+                           Style="{StaticResource ItalicTextBlockDark}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="RunListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="TagImage"
+                       Source="{StaticResource RunningImage}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Visible"
+                       Height="10" 
+                       Width="10"/>
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FunctionalModel.FullName}"
+                           Style="{StaticResource ItalicTextBlockDark}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="FinListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="TagImage"
+                       Source="{StaticResource FinishedImage}"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,5,0"
+                       Visibility="Visible"
+                       Height="10" 
+                       Width="10"/>
+                <TextBlock Name="InterfaceItemsText" 
+                           Text="{Binding Path=FunctionalModel.FullName}"
+                           Style="{StaticResource ItalicTextBlockDark}"
+                />
+            </StackPanel>
+        </DataTemplate>
+        
+        <DataTemplate x:Key="InvListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
+            <StackPanel Orientation="Horizontal">
+                <Image x:Name="TagImage"
+                       Source="{StaticResource WaitImage}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
                        Visibility="Collapsed"
-                       Height="10" />
+                       Height="10" 
+                       Width="10"/>
                 <TextBlock Name="InterfaceItemsText" 
-                           Text="{Binding Path=FullName}"
+                           Text="{Binding Path=FunctionalModel.FullName}"
                            Style="{StaticResource ItalicTextBlockDark}"
                 />
             </StackPanel>
@@ -1119,11 +1245,10 @@
 
                     <ListBox Grid.Row="1" Name="ChosenTestModelesListBox" Width="200" Height="320"
                              Style="{StaticResource ListBoxStyleLight}"
-                             ItemsSource="{Binding SelectedTestModels}"
+                             ItemsSource="{Binding ChosenModelsAndState}"
                              SelectionMode="Single"
                              ItemContainerStyle="{StaticResource ListBoxContainerLight}"
-                             ItemTemplate="{StaticResource ListBoxItemLight}">
-                        <!-- ItemTemplate pour afficher les données -->
+                             ItemTemplateSelector="{StaticResource ChosenModelTemplateSelector}">
                     </ListBox>
 
                     <Button Grid.Row="2" Name="LaunchTestButton"
