@@ -197,7 +197,9 @@ public class TestedFunctionalModel
     /// <returns>True if the FunctionalModels are equal; false otherwise.</returns>
     public override bool Equals(object? obj)
     {
-        return FunctionalModel.Equals(((TestedFunctionalModel)obj).FunctionalModel);
+        if (obj is  TestedFunctionalModel functionalModel)
+            return FunctionalModel.Equals(functionalModel.FunctionalModel);
+        return false;
     }
     /// <summary>
     /// Override to allow Equals to work as intended.

@@ -835,7 +835,7 @@
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 Click="ImportGroupAddressFileButtonClick"        
                                 Content="{DynamicResource ImportXmlButton}"
-                                FontSize="12"
+                                FontSize="16"
                                 Background="{StaticResource BlueBrush}"
                                 Margin="5,0,0,0"
                         />
@@ -845,7 +845,7 @@
                                 Style="{StaticResource IconTextButtonStyle}"
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 Tag="{StaticResource ImportedDrawingImage}"
-                                FontSize="12"
+                                FontSize="16"
                                 Click="ImportProjectButtonClick"
                                 Background="{StaticResource BlueBrush}"
                                 Margin="5,0"
@@ -872,7 +872,7 @@
                             Foreground="{StaticResource DarkForegroundBrush}"
                             Tag="{StaticResource PlayDrawingImage}"
                             Background="{StaticResource BlueBrush}"
-                            FontSize="12"
+                            FontSize="16"
                             Click="OnTestConfigButtonClick"
                             Margin="5,0"
                         />
@@ -880,7 +880,7 @@
                         <!-- Bouton d'Exportation -->
                         <Button x:Name="CreateTestReportButton"
                                 Content="{DynamicResource ExportButton}"
-                                FontSize="12"
+                                FontSize="16"
                                 Style="{StaticResource IconTextButtonStyle}"
                                 Foreground="{StaticResource DarkForegroundBrush}"
                                 Tag="{StaticResource ExportedDrawingImage}"
