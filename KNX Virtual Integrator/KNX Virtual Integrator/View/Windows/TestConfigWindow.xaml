@@ -1234,6 +1234,7 @@
                         <RowDefinition MinHeight="25" Height="Auto" />
                         <!-- Titre Modèles Fonctionnels sélectionnés-->
                         <RowDefinition MinHeight="400" Height="*" />         <!-- TextBox avec les modèles -->
+                        <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto" />                      <!-- Bouton de Lancement de Tests-->
                     </Grid.RowDefinitions>
 
@@ -1250,12 +1251,22 @@
                              ItemContainerStyle="{StaticResource ListBoxContainerLight}"
                              ItemTemplateSelector="{StaticResource ChosenModelTemplateSelector}">
                     </ListBox>
+                    
+                    <Button Grid.Row="2" Name="ClearTestButton"
+                            Content="{DynamicResource ClearTest}"
+                            Style="{StaticResource LaunchTestButtonStyleLight}"
+                            Margin="7"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            MinHeight="50"
+                            Click="OnClearButtonClick_ClearModelsToTest" />
 
-                    <Button Grid.Row="2" Name="LaunchTestButton"
+
+                    <Button Grid.Row="3" Name="LaunchTestButton"
                             Content="{DynamicResource LaunchTest}"
                             Style="{StaticResource LaunchTestButtonStyleLight}"
                             Tag="{StaticResource PlayDrawingImage}"
-                            Margin="7,7"
+                            Margin="7,0,7,7"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Right"
                             MinHeight="50"

@@ -103,6 +103,7 @@ public partial class TestConfigWindow
             
             Resources["TestWindowTitle"] = "Configuration du test";
             Resources["ChosenTestModelsTitle"] = "Modèles Fonctionnels Choisis";
+            Resources["ClearTest"] = "Annuler";
             Resources["LaunchTest"] = "Lancer le test";
         }
         else
@@ -122,6 +123,7 @@ public partial class TestConfigWindow
             
             Resources["TestWindowTitle"] = "Test Configuration";
             Resources["ChosenTestModelsTitle"] = "Chosen Functional Models";
+            Resources["ClearTest"] = "Reset";
             Resources["LaunchTest"] = "Launch Test";
         }
     }
@@ -146,6 +148,7 @@ public partial class TestConfigWindow
             SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleLight");
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
 
+            ClearTestButton.Style = (Style)FindResource("LaunchTestButtonStyleLight");
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleLight");
             
             titleStyles = (Style)FindResource("TitleTextLight");
@@ -161,6 +164,8 @@ public partial class TestConfigWindow
             ChosenTestModelesListBox.Style = (Style)FindResource("ListBoxStyleDark");
             ChosenTestModelesListBox.ItemContainerStyle = (Style)FindResource("ListBoxContainerDark");
             SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateDark");
+            
+            ClearTestButton.Style = (Style)FindResource("LaunchTestButtonStyleDark");
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleDark");
             SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleDark");
             NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
@@ -345,6 +350,18 @@ public partial class TestConfigWindow
             CheckIfModelsWasCheckedHandler(sender, e);
         }
     }
+    /// <summary>
+    /// Handles the clear event when the user clicks on the clear button of the window.
+    /// It will clear the Models to test, reset the timeout and the latency.
+    /// </summary>
+    /// <param name="sender">The source of the event, typically the header control.</param>
+    /// <param name="e">Event data containing information about the mouse button event.</param>
+    private void OnClearButtonClick_ClearModelsToTest(object sender, RoutedEventArgs e)
+    {
+        _viewModel.ClearModelsToTestAndResetTimes();
+        CheckIfModelsWasCheckedHandler(sender, e);
+    }
+    
     
     /// <summary>
     /// Handles the launch of the analysis on a different thread to not freeze the UI (WIP)

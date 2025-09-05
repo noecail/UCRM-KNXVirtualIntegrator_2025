@@ -19,6 +19,6 @@ public interface IAnalyze : INotifyPropertyChanged
     /// <summary>
     /// Tests all the functional models of a list and updates the table of results
     /// </summary>
-    Task TestAll(ObservableCollection<FunctionalModel> listModels);
+    Task TestAll(ObservableCollection<FunctionalModel> listModels, int timeout, int latency);
 }
 
