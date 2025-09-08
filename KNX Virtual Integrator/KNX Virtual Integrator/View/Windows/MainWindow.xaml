@@ -90,7 +90,7 @@
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
                             </Image>
-                            <TextBlock Text="{DynamicResource Values}" />
+                            <TextBlock Text="{DynamicResource Values}" VerticalAlignment="Top"/>
                         </StackPanel>
 
                         <!--Colonne 2 : Cmd(s)-->
@@ -427,7 +427,7 @@
                                    Height="15"
                                    VerticalAlignment="Top"
                                    HorizontalAlignment="Left"
-                                   Margin="0,1,3,0">
+                                   Margin="0,0,3,0">
                                 <ToolTipService.ToolTip>
                                     <ToolTip Background="{StaticResource DarkGrayBackgroundBrush}"
                                              BorderBrush="{StaticResource KnxGreenBrush}">
@@ -447,7 +447,9 @@
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
                             </Image>
-                            <TextBlock Text="{DynamicResource Values}" Style="{StaticResource StandardTextBlockDark}"/>
+                            <TextBlock Text="{DynamicResource Values}"
+                                       Style="{StaticResource StandardTextBlockDark}"
+                                       VerticalAlignment="Top"/>
                         </StackPanel>
 
                         <!--Colonne 2 : Cmd(s)-->
@@ -1018,7 +1020,7 @@
                                      ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding FullName}" />
+                                        <TextBlock Text="{Binding Model.Name}"/>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>

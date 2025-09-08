@@ -103,7 +103,28 @@ Pour installer et lancer l’application, veuillez suivre les indications suivan
 
 <br></br>
 # 2. Aperçu de l'application <a name="overview-title"></a>
-## 2.1. Fenêtre principale <a name="main-window"></a>
+## 2.1. 🪟 Fenêtre principale <a name="main-window"></a>
+
+La fenêtre principale est composée de 5 parties principales :
+
+<img src="Images/MainWindow.png" alt="fenetre-principale" style="width:50%;"/>
+
+**1. Le bandeau supérieur :**
+
+Dans ce bandeau, vous pouvez :
+- ⚙️ [Modifier les paramètres](#modify-settings) de l'application en appuyant sur le bouton ⚙️.
+- 📥 [Importer des adresses de groupe KNX](#ets-import) dans l’application en cliquant sur le bouton “**Importer des adresses**”.
+- 📥 [Importer un projet ETS](#ets-import) dans l’application en cliquant sur le bouton “**Importer un projet**”.
+- 📥 [Lancer une analyse de l'installation](#launch-test) en ouvrant la [fenêtre d'analyse](#analysis-window) avec le bouton "**Paramètres de test**".
+- 📤 [Exporter le rapport d'analyse](#create-report) en ouvrant la [fenêtre de rapport](#report-window) avec le bouton "**Exporter le rapport**".
+
+**2. Panneau des adresses originales :**
+
+C’est dans ce panneau que, une fois votre projet importé, les adresses de groupes telles qu’elles sont nommées dans le projet actuellement apparaîtront.
+
+**3. Panneau des adresses corrigées :**
+
+De la même manière, c’est dans ce panneau que les adresses de groupe corrigées apparaîtront. Voir la partie 🚶‍♂️‍➡️ [Naviguer dans le projet modifié](../UtilisationApplication/naviguer-dans-le-projet-modifie.md) pour plus de détails sur ces vues.
 
 ## 2.2. Menu paramètres <a name="settings-window"></a>
 

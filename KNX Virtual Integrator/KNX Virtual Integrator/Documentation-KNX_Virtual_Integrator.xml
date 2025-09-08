@@ -5337,7 +5337,6 @@
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ChosenModelsAndState">
             <summary>
             Collection used to display the chosen test models along with various information.
-            Collection used to display the chosen test models along with various information.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.ViewModel.MainViewModel.ClearModelsToTestAndResetTimes">
