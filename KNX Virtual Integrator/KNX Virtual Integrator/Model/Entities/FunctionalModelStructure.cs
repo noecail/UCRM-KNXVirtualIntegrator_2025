@@ -617,6 +617,8 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                     
                     var cmdList = new List<int>();
                     var ieList = new List<int>();
+                    var cmdValues = new ObservableCollection<ObservableCollection<BigIntegerItem>>() ;
+                    var ieValues = new ObservableCollection<ObservableCollection<BigIntegerItem>>() ;
                     foreach (XmlNode keyList in element.ChildNodes)
                     {
                         if (keyList.Name == "Command" && keyList.Attributes != null)
@@ -646,8 +648,34 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                                 ieList[index] = int.Parse(ie.Value); //Updates the key at the given index
                             }
                         }
+
+                        if (keyList.Name == "Cmd_Values")
+                        {
+                            foreach (XmlNode dptValues in keyList.ChildNodes)
+                            {
+                                cmdValues.Add([]);
+                                foreach (XmlNode testValue in dptValues)
+                                {
+                                    cmdValues[^1].Add(new BigIntegerItem(int.Parse(testValue.Attributes?["Value"]?.Value ?? "0")));
+                                }
+                            }
+                        }
+                        
+                        if (keyList.Name == "Ie_Values")
+                        {
+                            foreach (XmlNode dptValues in keyList.ChildNodes)
+                            {
+                                ieValues.Add([]);
+                                foreach (XmlNode testValue in dptValues)
+                                {
+                                    ieValues[^1].Add(new BigIntegerItem(int.Parse(testValue.Attributes?["Value"]?.Value ?? "0")));
+                                }
+                            }
+                        }
                     }
                     ElementStructure elementStructure = new ElementStructure(cmdList, ieList);
+                    elementStructure.CmdValues = cmdValues;
+                    elementStructure.IeValues = ieValues;
                     res.ModelStructure.Add(elementStructure);
                 }
             }
