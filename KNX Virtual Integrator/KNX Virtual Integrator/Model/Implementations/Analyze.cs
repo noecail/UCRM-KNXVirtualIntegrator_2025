@@ -42,7 +42,6 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
     
     /// <summary>
     /// Event that occurs when the model analysis state changes (Between waiting, running, finished and none).
-    /// Not yet implemented.
     /// </summary>
     public event PropertyChangedEventHandler? PropertyChanged;
     /// <summary>
@@ -111,7 +110,7 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
         var testsCmd = element.TestsCmd;
         var testsIe = element.TestsIe;
         List<List<ResultType>> result = []; //List containing results of each of the tests
-
+        if (testsCmd.Count <= 0) return result;
         for (var i = 0; i < testsCmd[0].Value.Count; i++) //For each of the tests (1 test per value in the Cmd part) (parcourt les lignes)
         {
             var testResult = ResultType.Failure; //Result of the test
