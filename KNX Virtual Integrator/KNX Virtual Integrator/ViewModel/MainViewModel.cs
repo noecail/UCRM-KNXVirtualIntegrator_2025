@@ -499,6 +499,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         ImportDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
+                SelectedTestModels.Clear();
+                ChosenModelsAndState.Clear();
+                LastTestResults.Clear();
                 if (path != null)
                     _functionalModelList.ImportDictionary(path);
             }
@@ -513,6 +516,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         
         ImportListCommand = new Commands.RelayCommand<string>(path =>
             {
+                SelectedTestModels.Clear();
+                ChosenModelsAndState.Clear();
+                LastTestResults.Clear();
                 if (path != null)
                     _functionalModelList.ImportList(path);
             }
@@ -527,6 +533,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 
         ImportListAndDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
+                SelectedTestModels.Clear();
+                ChosenModelsAndState.Clear();
+                LastTestResults.Clear();
                 if (path != null)
                     _functionalModelList.ImportListAndDictionary(path);
             }
@@ -549,12 +558,20 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         );
 
         ExtractGroupAddressFileCommand = new RelayCommandWithResult<string, bool>(
-            fileName => modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName)
+        fileName=>
+            {
+                SelectedTestModels.Clear();
+                ChosenModelsAndState.Clear();
+                var success = modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName);
+                return success;
+            }
         );
 
         ExtractProjectFilesCommand = new RelayCommandWithResult<string, bool>(
             fileName =>
             {
+                SelectedTestModels.Clear();
+                ChosenModelsAndState.Clear();
                 var success = _modelManager.ProjectFileManager.ExtractProjectFiles(fileName);
                 ProjectFolderPath = _modelManager.ProjectFileManager.ProjectFolderPath;
                 return success;
@@ -610,7 +627,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     }
                 };
                 ConsoleAndLogWriteLineCommand.Execute("Analysis Started");
-                await analysis.TestAll(testModels);
+                await analysis.TestAll(testModels, CommandTimeout, ElementLatency);
                 ConsoleAndLogWriteLineCommand.Execute("Analysis Finished");
                 LastTestResults = analysis.Results;
                 return analysis.Results;

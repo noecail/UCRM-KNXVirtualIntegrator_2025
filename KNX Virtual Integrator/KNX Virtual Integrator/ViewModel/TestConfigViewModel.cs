@@ -7,6 +7,17 @@ namespace KNX_Virtual_Integrator.ViewModel;
 public partial class MainViewModel
 {
     /// <summary>
+    /// Default at 2000 ms and set when calling <see cref="Model.Implementations.Analyze.TestAll"/>.
+    /// Used to set an all around timeout for commands.
+    /// </summary>
+    public int CommandTimeout = 2000;
+    /// <summary>
+    /// Default at 0 ms and set when calling <see cref="Model.Implementations.Analyze.TestAll"/>.
+    /// Used to space out tests, to not saturate the installation.
+    /// </summary>
+    public int ElementLatency = 0;
+    
+    /// <summary>
     /// The full list of all the test results.
     /// It is structured by : Structures -> Models -> Test Elements ->
     /// Commands (value lines in Test CMD) -> Receptions (value column of Test IE).
@@ -143,7 +154,17 @@ public partial class MainViewModel
     /// Collection used to display the chosen test models along with various information.
     /// </summary>
     public ObservableCollection<TestedFunctionalModel> ChosenModelsAndState { get; set; } = [];
-
+    
+    /// <summary>
+    /// Clears all the lists used to hold the functional models and resets the timeout and latency.
+    /// </summary>
+    public void ClearModelsToTestAndResetTimes()
+    {
+        CommandTimeout = 2000;
+        ElementLatency = 0;
+        SelectedTestModels.Clear();
+        ChosenModelsAndState.Clear();
+    }
 }
 
 /// <summary>
@@ -197,7 +218,9 @@ public class TestedFunctionalModel
     /// <returns>True if the FunctionalModels are equal; false otherwise.</returns>
     public override bool Equals(object? obj)
     {
-        return FunctionalModel.Equals(((TestedFunctionalModel)obj).FunctionalModel);
+        if (obj is  TestedFunctionalModel functionalModel)
+            return FunctionalModel.Equals(functionalModel.FunctionalModel);
+        return false;
     }
     /// <summary>
     /// Override to allow Equals to work as intended.

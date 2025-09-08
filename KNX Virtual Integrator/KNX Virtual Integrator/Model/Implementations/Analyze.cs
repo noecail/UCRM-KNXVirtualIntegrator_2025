@@ -29,6 +29,18 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
     public IGroupCommunication Communication = communication;
     
     /// <summary>
+    /// Default at 2000 ms and set when calling <see cref="TestAll"/>.
+    /// Used to set an all around timeout for commands.
+    /// </summary>
+    private int _timeout = 2000;
+    
+    /// <summary>
+    /// Default at 0 ms and set when calling <see cref="TestAll"/>.
+    /// Used to space out tests, to not saturate the installation.
+    /// </summary>
+    private int _latency;
+    
+    /// <summary>
     /// Event that occurs when the model analysis state changes (Between waiting, running, finished and none).
     /// Not yet implemented.
     /// </summary>
@@ -44,9 +56,12 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
     /// <summary>
     /// Tests all the functional models of a list and updates the table of results
     /// </summary>
-    public async Task TestAll(ObservableCollection<FunctionalModel> listModels)
+    public async Task TestAll(ObservableCollection<FunctionalModel> listModels, int timeout, int latency)
     {
         FunctionalModels = listModels;
+        
+        _timeout = timeout>=0?timeout:_timeout;
+        _latency = latency>0?latency:_latency;
         Results = [];
         List<List<List<List<ResultType>>>> resList = [];
         foreach (var functionalModelToTest in FunctionalModels) //
@@ -70,8 +85,17 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
         var result = new List<List<List<ResultType>>>();
         foreach (var element in functionalModel.ElementList)
         {
-            var res = await TestElement(element);
-            result.Add(res);
+            if (_latency > 0)
+            {
+                var res = await TestElement(element);
+                result.Add(res);
+                Task.Delay(_latency).Wait();
+            }
+            else
+            {
+                var res = await TestElement(element);
+                result.Add(res);
+            }
         }
 
         return result;
@@ -87,11 +111,6 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
         var testsCmd = element.TestsCmd;
         var testsIe = element.TestsIe;
         List<List<ResultType>> result = []; //List containing results of each of the tests
-        
-        var time = 2000;
-        foreach (var t in testsCmd) // parcourt toutes les colonnes de Cmd et s'il y a un dpt 5, mettre à 5000 ms d'attente
-            if (t.Type == 5) 
-                time = 5000;
 
         for (var i = 0; i < testsCmd[0].Value.Count; i++) //For each of the tests (1 test per value in the Cmd part) (parcourt les lignes)
         {
@@ -107,7 +126,7 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
                 foreach (var ie in testsIe) //Start all the tasks to read 
                 {
                     if (ie.Address == "") continue;
-                    readTaskList.Add(Communication.GroupValuesTimerOrRecievedAWriteAsync(ie.Address, time));
+                    readTaskList.Add(Communication.GroupValuesTimerOrRecievedAWriteAsync(ie.Address, _timeout));
                 }
             else
                 testResult = ResultType.Success;

@@ -1362,6 +1362,18 @@
             The class handling the messages to send and the reception
             </summary>
         </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.Analyze._timeout">
+            <summary>
+            Default at 2000 ms and set when calling <see cref="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)"/>.
+            Used to set an all around timeout for commands.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.Model.Implementations.Analyze._latency">
+            <summary>
+            Default at 0 ms and set when calling <see cref="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)"/>.
+            Used to space out tests, to not saturate the installation.
+            </summary>
+        </member>
         <member name="E:KNX_Virtual_Integrator.Model.Implementations.Analyze.PropertyChanged">
             <summary>
             Event that occurs when the model analysis state changes (Between waiting, running, finished and none).
@@ -1374,7 +1386,7 @@
             </summary>
             <param name="propertyName">The name of the property that was changed.</param>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel})">
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)">
             <summary>
             Tests all the functional models of a list and updates the table of results
             </summary>
@@ -3213,7 +3225,7 @@
             Table of results sorted by Tests, in TestedElements, in functionalModels
             </summary>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IAnalyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel})">
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IAnalyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)">
             <summary>
             Tests all the functional models of a list and updates the table of results
             </summary>
@@ -5242,6 +5254,18 @@
             Gets or sets the name of the author of the Pdf.
             </summary>
         </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel.CommandTimeout">
+            <summary>
+            Default at 2000 ms and set when calling <see cref="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)"/>.
+            Used to set an all around timeout for commands.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel.ElementLatency">
+            <summary>
+            Default at 0 ms and set when calling <see cref="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)"/>.
+            Used to space out tests, to not saturate the installation.
+            </summary>
+        </member>
         <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel.LastTestResults">
             <summary>
             The full list of all the test results.
@@ -5314,6 +5338,12 @@
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ChosenModelsAndState">
             <summary>
             Collection used to display the chosen test models along with various information.
+            Collection used to display the chosen test models along with various information.
+            </summary>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.ViewModel.MainViewModel.ClearModelsToTestAndResetTimes">
+            <summary>
+            Clears all the lists used to hold the functional models and resets the timeout and latency.
             </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel">
@@ -6206,6 +6236,14 @@
             See also <see cref="M:KNX_Virtual_Integrator.ViewModel.MainViewModel.RmvStructFromTestModels(System.Int32)"/>
             </summary>
             <param name="sender">The source of the event, the checkbox of a structure list item.</param>
+            <param name="e">Event data containing information about the mouse button event.</param>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.View.Windows.TestConfigWindow.OnClearButtonClick_ClearModelsToTest(System.Object,System.Windows.RoutedEventArgs)">
+            <summary>
+            Handles the clear event when the user clicks on the clear button of the window.
+            It will clear the Models to test, reset the timeout and the latency.
+            </summary>
+            <param name="sender">The source of the event, typically the header control.</param>
             <param name="e">Event data containing information about the mouse button event.</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.TestConfigWindow.LaunchTestButton_OnClick(System.Object,System.Windows.RoutedEventArgs)">
