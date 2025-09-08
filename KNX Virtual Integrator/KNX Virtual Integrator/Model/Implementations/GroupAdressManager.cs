@@ -412,10 +412,21 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                 functionalModelList.FunctionalModels[i].Clear();
                 functionalModelList.ResetCount(i);
             }
+
+            // Double boucle de vérification pour être sûr de bien supprimer toutes les structures de DPTs non reconnus.
+            for (int i = 0; i < functionalModelList.FunctionalModelDictionary.FunctionalModels.Count; i++)
+            {
+                if (functionalModelList.FunctionalModelDictionary.FunctionalModels[i].Model.Name.Contains("Unrecognized DPTs",StringComparison.OrdinalIgnoreCase)|| functionalModelList.FunctionalModelDictionary.FunctionalModels[i].Model.Name.Contains("Unrecognized_DPTs",StringComparison.OrdinalIgnoreCase))
+                {
+                    functionalModelList.DeleteFromDictionary(i);
+                    i--;
+                }
+            }
             while (functionalModelList.FunctionalModelDictionary.FunctionalModels.Count >0 && (functionalModelList.FunctionalModelDictionary.FunctionalModels[^1].Model.Name.Contains("Unrecognized DPTs",StringComparison.OrdinalIgnoreCase)|| functionalModelList.FunctionalModelDictionary.FunctionalModels[^1].Model.Name.Contains("Unrecognized_DPTs",StringComparison.OrdinalIgnoreCase)))
             {
                 functionalModelList.DeleteFromDictionary(functionalModelList.FunctionalModelDictionary.FunctionalModels.Count-1);
             }
+            
             if (_groupAddressStructure == 3)  //If the address structure is 3 levels
             {
                 foreach (var modelStructure in modelStructures)
