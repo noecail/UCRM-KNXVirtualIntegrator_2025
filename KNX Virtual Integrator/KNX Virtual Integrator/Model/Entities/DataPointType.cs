@@ -412,7 +412,7 @@ public class DataPointType : INotifyPropertyChanged
                 IntValue.Add(new BigIntegerItem(new BigInteger(value.Value)));
             else
             {
-                IntValue.Add(new BigIntegerItem(new BigInteger(0)));
+                IntValue.Add(new BigIntegerItem(0));
                 IntValue[i].IsEnabled = false;
             }
             i++;
