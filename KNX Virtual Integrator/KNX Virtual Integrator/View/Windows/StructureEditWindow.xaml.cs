@@ -53,21 +53,11 @@ public partial class StructureEditWindow
     /// <summary>
     /// Updates the contents (texts, textboxes, checkboxes, ...) of the report window according to the application settings.
     /// </summary>
-    //TODO To implement
     public void UpdateWindowContents(bool langChanged = false, bool themeChanged = false, bool scaleChanged = false)
     {
-        if (langChanged)
-        {
-            TranslateWindowContents();
-        }
-        if (themeChanged)
-        {
-            ApplyThemeToWindow();
-        }
-        if (scaleChanged)
-        {
-            ApplyScaling();
-        }
+        if (langChanged) TranslateWindowContents();
+        if (themeChanged) ApplyThemeToWindow();
+        if (scaleChanged) ApplyScaling();
     }
 
     private void TranslateWindowContents()
@@ -120,7 +110,97 @@ public partial class StructureEditWindow
     private void ApplyThemeToWindow()
     {
         _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyThemeToWindow is not implemented");
+
+        Style textBoxStyle;
+        Style deleteStructureButtonStyle;
+        Style borderStyle;
+        Style titleTextStyle;
+        Style comboBoxStyle;
+        Style dptListBoxItemContainerStyle;
+        Brush textBlockForegroundBrush;
+        Brush elementContainersBackgroundBrush;
+        Style elementContainersStyle;
+        
+        if (_viewModel.AppSettings.EnableLightTheme)
+        {
+            PencilImage.Source = (DrawingImage)FindResource("PencilDrawingImage");
+            TopBannerBorder.Style = (Style)FindResource("BorderTitleLight");
+            textBoxStyle = (Style)FindResource("StructureEditWindowStandardTextBoxLight");
+            textBlockForegroundBrush = (Brush)FindResource("LightForegroundBrush");
+            deleteStructureButtonStyle = (Style)FindResource("DeleteStructureButtonStyleLight");
+            borderStyle = (Style)FindResource("BorderLight");
+            titleTextStyle = (Style)FindResource("TitleTextLight");
+            comboBoxStyle = (Style)FindResource("StructureEditWindowLightComboBoxStyle");
+            elementContainersBackgroundBrush = (Brush)FindResource("OffWhiteBackgroundBrush");
+            elementContainersStyle = (Style)FindResource("TestedElementItemContainerStyleLight");
+            dptListBoxItemContainerStyle = (Style)FindResource("DptListBoxItemContainerStyleLight");
+            Resources["CurrentRemoveTestButtonStyle"] = (Style)FindResource("RemoveTestButtonStyleLight");
+            Resources["CurrentAddTestButtonStyle"] = (Style)FindResource("AddTestButtonStyleLight");
+            Resources["CurrentDPTAndElementBackgroundBrush"] = (Brush)FindResource("WhiteBackgroundBrush");
+            Resources["CurrentDPTBorderBorderBrush"] = (Brush)FindResource("DarkGrayBorderBrush");
+            Resources["CurrentDPTTypeListBoxBackground"] = (Brush)FindResource("OffWhiteBackgroundBrush");
+            Resources["CurrentElementBorderBorderBrush"] = (Brush)FindResource("DarkGrayBorderBrush");
+        }
+        else
+        { 
+            PencilImage.Source = (DrawingImage)FindResource("WhitePencilDrawingImage");
+            TopBannerBorder.Style = (Style)FindResource("BorderTitleDark");
+            textBoxStyle = (Style)FindResource("StandardTextBoxDark");
+            textBlockForegroundBrush = (Brush)FindResource("DarkForegroundBrush");
+            deleteStructureButtonStyle = (Style)FindResource("DeleteStructureButtonStyleDark");
+            borderStyle = (Style)FindResource("BorderDark");
+            titleTextStyle = (Style)FindResource("TitleTextDark");
+            comboBoxStyle = (Style)FindResource("DarkComboBoxStyle");
+            elementContainersBackgroundBrush = (Brush)FindResource("DarkerGrayBackgroundBrush");
+            elementContainersStyle = (Style)FindResource("TestedElementItemContainerStyleDark");    
+            dptListBoxItemContainerStyle = (Style)FindResource("DptListBoxItemContainerStyleLight");
+            Resources["CurrentRemoveTestButtonStyle"] = (Style)FindResource("RemoveTestButtonStyleDark");
+            Resources["CurrentAddTestButtonStyle"] = (Style)FindResource("AddTestButtonStyleDark");
+            Resources["CurrentDPTAndElementBackgroundBrush"] = (Brush)FindResource("DarkGrayBackgroundBrush");
+            Resources["CurrentDPTBorderBorderBrush"] = (Brush)FindResource("GrayBorderBrush");
+            Resources["CurrentDPTTypeListBoxBackground"] = (Brush)FindResource("DarkGrayBackgroundBrush");
+            Resources["CurrentElementBorderBorderBrush"] = (Brush)FindResource("GrayBorderBrush");
+        }
+
+        StructureKeywordsTextBox.Style = textBoxStyle;
+        StructureNameTextBox.Style = textBoxStyle;
+        Resources["CurrentDPTNameTextBoxStyle"] = textBoxStyle;
+        Resources["CurrentDPTKeywordsTextBoxStyle"] = textBoxStyle;
+            
+        StructureSuppressionButton.Style = deleteStructureButtonStyle;
+        Resources["CurrentTESuppressionButtonStyle"] = deleteStructureButtonStyle;
+        Resources["CurrentDPTSuppressionButtonStyle"] = deleteStructureButtonStyle;
+
+        StructEditWindowBorder.Style = borderStyle;
+        MainContainerBorder.Style = borderStyle;
+        DPTsBannerBorder.Style = borderStyle;
+        TEsBorder.Style = borderStyle;
+        BottomBannerBorder.Style = borderStyle;
+
+        DPTsBannerTitleTextBlock.Style = titleTextStyle;
+        TEsSectionTitleTextBlock.Style = titleTextStyle;
+        Resources["CurrentTitleTextStyle"] = titleTextStyle;
+
+        Resources["CurrentComboBoxStyle"] = comboBoxStyle;
+        
+        Resources["CurrentDispatchDPTTypeListBoxStyle"] = dptListBoxItemContainerStyle;
+        Resources["CurrentDispatchValuesListBoxStyle"] = dptListBoxItemContainerStyle;
+        Resources["CurrentReceptionDPTTypeListboxStyle"] = dptListBoxItemContainerStyle;
+        Resources["CurrentReceptionValueListBoxStyle"] = dptListBoxItemContainerStyle;
+
+        StructureKeywordsTextBlock.Foreground = textBlockForegroundBrush;
+        TextBlock1.Foreground = textBlockForegroundBrush;
+        TextBlock2.Foreground = textBlockForegroundBrush;
+        Resources["CurrentTextBlockForeground"] = textBlockForegroundBrush;
+
+        TestedElementsListBox.Background = elementContainersBackgroundBrush;
+        DPTDictionaryListBox.Background = elementContainersBackgroundBrush;
+        Resources["CurrentValueTextBoxBackgroundBrush"] = elementContainersBackgroundBrush;
+
+        TestedElementsListBox.ItemContainerStyle = elementContainersStyle;
+        DPTDictionaryListBox.ItemContainerStyle = elementContainersStyle;
     }
+    
     private void ApplyScaling()
     {
         var scaleFactor = _viewModel.AppSettings.AppScaleFactor / 100f;
@@ -240,7 +320,7 @@ public partial class StructureEditWindow
     }
     
     /// <summary>
-    /// Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+    /// Handles the button click to reset to 0 an Ie Value that has been deactivated because it was unknown 
     /// </summary>
     /// <param name="sender">The button that raised the event.</param>
     /// <param name="e">The click event data.</param>

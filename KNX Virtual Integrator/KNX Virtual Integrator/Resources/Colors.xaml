@@ -60,6 +60,7 @@
     <SolidColorBrush x:Key="LightGrayBorderBrush" Color="{StaticResource GraySeparator}"/>
     <SolidColorBrush x:Key="GrayBorderBrush" Color="{StaticResource GrayColor}"/>
     <SolidColorBrush x:Key="DarkGrayBorderBrush" Color="{StaticResource DarkGrayColor}"/>
+    <SolidColorBrush x:Key="DarkerGrayBorderBrush" Color="{StaticResource DarkerGrayColor}"/>
     
     <SolidColorBrush x:Key="LightGrayMouseOverBrush" Color="{StaticResource WhiteMouseOver}"/>
     <SolidColorBrush x:Key="DarkGrayMouseOverBrush" Color="{StaticResource DarkGrayColor}"/>

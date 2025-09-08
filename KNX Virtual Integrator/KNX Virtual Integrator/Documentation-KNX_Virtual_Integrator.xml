@@ -5313,54 +5313,60 @@
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ChosenModelsAndState">
             <summary>
-            
+            Collection used to display the chosen test models along with various information.
             </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel">
             <summary>
-            
+            Class handling the grouping of various information. It is used to display the chosen test models,
+            the state of their analysis and handle window theme changes.
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.FunctionalModel">
             <summary>
-            
+            The chosen functional model. Linked in some ways with <see cref="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedTestModels"/>.
             </summary>
         </member>
         <member name="F:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.State">
             <summary>
-            
+            Status of the model analysis. It has 3 (or 4) states : "", "Waiting", "Running", "Finished".
+            Except for "", each state is associated with a corresponding image in the UI.
+            "" is associated with a collapsed image.
             </summary>
         </member>
         <member name="F:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.LightTheme">
             <summary>
-            
+            The theme of the App. <seealso cref="P:KNX_Virtual_Integrator.Model.Implementations.ApplicationSettings.EnableLightTheme"/>
+            It is changed when the collection <see cref="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ChosenModelsAndState"/> is
+            either updated or there is a new TestedFunctionalModel.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.#ctor(KNX_Virtual_Integrator.Model.Entities.FunctionalModel)">
             <summary>
-            
+            Constructor with only a functional model
             </summary>
-            <param name="functionalModel"></param>
+            <param name="functionalModel">The functional model to test</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.#ctor(KNX_Virtual_Integrator.Model.Entities.FunctionalModel,System.Boolean)">
             <summary>
-            
+            Constructor handling the theme
             </summary>
-            <param name="functionalModel"></param>
-            <param name="lightTheme"></param>
+            <param name="functionalModel">The functional model to test</param>
+            <param name="lightTheme">The current app theme</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.Equals(System.Object)">
             <summary>
-            
+            Override to only test the equality of the <see cref="P:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.FunctionalModel"/>.
+            Done to reduces issues when adding or checking the chosen test models.
             </summary>
-            <param name="obj"></param>
-            <returns></returns>
+            <param name="obj">The compared object (should be a TestedFunctionalModel)</param>
+            <returns>True if the FunctionalModels are equal; false otherwise.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.GetHashCode">
             <summary>
-            
+            Override to allow Equals to work as intended.
             </summary>
-            <returns></returns>
+            <returns>The <see cref="P:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel.FunctionalModel"/> <see cref="M:KNX_Virtual_Integrator.Model.Entities.FunctionalModel.GetHashCode"/> .</returns>
         </member>
         <member name="T:KNX_Virtual_Integrator.View.Utils.BigIntegerToStringConverter">
             <summary>
@@ -6068,7 +6074,7 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.ResetValueIeStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
             <summary>
-            Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+            Handles the button click to reset to 0 an Ie Value that has been deactivated because it was unknown 
             </summary>
             <param name="sender">The button that raised the event.</param>
             <param name="e">The click event data.</param>
@@ -6216,16 +6222,18 @@
         </member>
         <member name="T:KNX_Virtual_Integrator.View.Windows.ChosenModelDataTemplateSelector">
             <summary>
-            .
+            Implementation of DataTemplateSelector in order to update the status of the analysis between 3 images :
+            Waiting, Running and Finished.
+            Handles Theme changes.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.ChosenModelDataTemplateSelector.SelectTemplate(System.Object,System.Windows.DependencyObject)">
             <summary>
-            .
+            The method called when the CollectionChanged event of the listBox ItemSource is raised.
             </summary>
-            <param name="item">.</param>
-            <param name="container">.</param>
-            <returns>.</returns>
+            <param name="item">The item concerned by CollectionChanged.</param>
+            <param name="container">The visual container.</param>
+            <returns>The concerned item data template.</returns>
         </member>
         <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
             <summary>

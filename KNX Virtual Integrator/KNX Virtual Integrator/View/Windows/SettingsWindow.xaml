@@ -8,7 +8,7 @@
         AllowsTransparency="True"
         Background="{StaticResource OffWhiteBackgroundBrush}"
         BorderThickness="1.5"
-        BorderBrush="{StaticResource DarkGrayBorderBrush}"
+        BorderBrush="{StaticResource GrayBorderBrush}"
         Closing="ClosingSettingsWindow"
         PreviewKeyDown="SettingsWindow_PreviewKeyDown">
 
@@ -465,45 +465,46 @@
                                     <TextBlock x:Name="ThemeTextBox" Margin="10,0,10,2" />
                                     <ComboBox x:Name="ThemeComboBox" Margin="10,0,10,10"
                                               Style="{StaticResource LightComboBoxStyle}">
-                                        <ComboBoxItem x:Name="LightThemeComboBoxItem" IsSelected="True" />
-                                        <ComboBoxItem x:Name="DarkThemeComboBoxItem" />
+                                        <ComboBoxItem x:Name="LightThemeComboBoxItem" IsSelected="True" Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem x:Name="DarkThemeComboBoxItem" Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
                                     </ComboBox>
 
                                     <TextBlock x:Name="AppLanguageTextBlock" Margin="10,0,10,2" />
                                     <ComboBox x:Name="AppLanguageComboBox" Margin="10,0,10,20"
                                               Style="{StaticResource LightComboBoxStyle}">
-                                        <ComboBoxItem Content="AR - العربية" />
-                                        <ComboBoxItem Content="BG - Български" />
-                                        <ComboBoxItem Content="CS - Čeština" />
-                                        <ComboBoxItem Content="DA - Dansk" />
-                                        <ComboBoxItem Content="DE - Deutsch" />
-                                        <ComboBoxItem Content="EL - Ελληνικά" />
-                                        <ComboBoxItem Content="EN - English" />
-                                        <ComboBoxItem Content="ES - Español" />
-                                        <ComboBoxItem Content="ET - Eesti" />
-                                        <ComboBoxItem Content="FI - Suomi" />
+                                        <ComboBoxItem Content="AR - العربية"           Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="BG - Български"        Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="CS - Čeština"          Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="DA - Dansk"            Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="DE - Deutsch"          Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="EL - Ελληνικά"         Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="EN - English"          Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="ES - Español"          Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="ET - Eesti"            Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="FI - Suomi"            Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
                                         <ComboBoxItem x:Name="FrAppLanguageComboBoxItem"
                                                       Content="FR - Français (par défaut)"
-                                                      IsSelected="True" FontWeight="Bold" />
-                                        <ComboBoxItem Content="HU - Magyar" />
-                                        <ComboBoxItem Content="ID - Bahasa Indonesia" />
-                                        <ComboBoxItem Content="IT - Italiano" />
-                                        <ComboBoxItem Content="JA - 日本語" />
-                                        <ComboBoxItem Content="KO - 한국어" />
-                                        <ComboBoxItem Content="LT - Lietuvių" />
-                                        <ComboBoxItem Content="LV - Latviešu" />
-                                        <ComboBoxItem Content="NB - Norsk Bokmål" />
-                                        <ComboBoxItem Content="NL - Nederlands" />
-                                        <ComboBoxItem Content="PL - Polski" />
-                                        <ComboBoxItem Content="PT - Português" />
-                                        <ComboBoxItem Content="RO - Română" />
-                                        <ComboBoxItem Content="RU - Русский" />
-                                        <ComboBoxItem Content="SK - Slovenský" />
-                                        <ComboBoxItem Content="SL - Slovenščina" />
-                                        <ComboBoxItem Content="SV - Svenska" />
-                                        <ComboBoxItem Content="TR - Türkçe" />
-                                        <ComboBoxItem Content="UK - Українська" />
-                                        <ComboBoxItem Content="ZH - 中文" />
+                                                      IsSelected="True" FontWeight="Bold" 
+                                                      Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="HU - Magyar"           Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="ID - Bahasa Indonesia" Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="IT - Italiano"         Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="JA - 日本語"            Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="KO - 한국어"             Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="LT - Lietuvių"         Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="LV - Latviešu"         Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="NB - Norsk Bokmål"     Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="NL - Nederlands"       Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="PL - Polski"           Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="PT - Português"        Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="RO - Română"           Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="RU - Русский"          Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="SK - Slovenský"        Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="SL - Slovenščina"      Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="SV - Svenska"          Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
+                                        <ComboBoxItem Content="TR - Türkçe"           Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="UK - Українська"       Style="{DynamicResource CurrentComboBoxItemContainerStyle}" />
+                                        <ComboBoxItem Content="ZH - 中文"              Style="{DynamicResource CurrentComboBoxItemContainerStyle}"/>
                                     </ComboBox>
 
                                     <TextBlock x:Name="ScalingText"
@@ -789,8 +790,8 @@
                     <!-- Bouton cancel -->
                     <Button x:Name="CancelButton" Margin="15,0,0,0" Height="32"
                             Style="{StaticResource BottomButtonLight}"
-                            Click="CancelButtonClick" Visibility="Visible">
-                        <StackPanel Orientation="Horizontal">
+                            Click="CancelButtonClick" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Visibility="Collapsed">
                             <Image x:Name="CancelButtonImage"
                                    Width="16" Height="16" Margin="5,0,5,0" VerticalAlignment="Center"
                                    Source="{StaticResource CrossmarkLight}"/>
