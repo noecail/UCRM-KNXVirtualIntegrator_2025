@@ -710,6 +710,8 @@ public class FunctionalModelStructure : INotifyPropertyChanged
             var xElement = doc.CreateElement("Element_to_test");
             var xCmd = doc.CreateElement("Command");
             var xIe = doc.CreateElement("State_information");
+            var xCmdValues = doc.CreateElement("Cmd_Values");
+            var xIeValues = doc.CreateElement("Ie_Values");
             for (var i = 0;i<element.Cmd.Count;i++)
             {
                 var cmd = element.Cmd[i];
@@ -724,8 +726,37 @@ public class FunctionalModelStructure : INotifyPropertyChanged
                 key.Value = ie.ToString();
                 xIe.Attributes.Append(key);
             }
+            for (var i = 0; i < element.CmdValues.Count; i++)
+            {
+                var xDptValues = doc.CreateElement("Dpt_Values");
+                for (var j = 0; j < element.CmdValues[i].Count; j++)
+                {
+                    var xTestValue = doc.CreateElement("Test_Value");
+                    var xTestValueAttribute = doc.CreateAttribute("Value");
+                    xTestValueAttribute.Value = element.CmdValues[i][j].BigIntegerValue.ToString();
+                    xTestValue.Attributes.Append(xTestValueAttribute);
+                    xDptValues.AppendChild(xTestValue);
+                }
+                xCmdValues.AppendChild(xDptValues);
+            }
+            
+            for (var i = 0; i < element.IeValues.Count; i++)
+            {
+                var xDptValues = doc.CreateElement("Dpt_Values");
+                for (var j = 0; j < element.IeValues[i].Count; j++)
+                {
+                    var xTestValue = doc.CreateElement("Test_Value");
+                    var xTestValueAttribute = doc.CreateAttribute("Value");
+                    xTestValueAttribute.Value = element.IeValues[i][j].BigIntegerValue.ToString();
+                    xTestValue.Attributes.Append(xTestValueAttribute);
+                    xDptValues.AppendChild(xTestValue);
+                }
+                xIeValues.AppendChild(xDptValues);
+            }
             xElement.AppendChild(xCmd);
             xElement.AppendChild(xIe);
+            xElement.AppendChild(xCmdValues);
+            xElement.AppendChild(xIeValues);
             xModelStructure.AppendChild(xElement);
 
         }

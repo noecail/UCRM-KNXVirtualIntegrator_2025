@@ -21,11 +21,11 @@ namespace KNX_Virtual_Integrator.Model.Entities;
         /// <summary>
         /// All the values predefined in the structure, to be sent
         /// </summary>
-        public ObservableCollection<ObservableCollection<BigIntegerItem>> CmdValues { get; }
+        public ObservableCollection<ObservableCollection<BigIntegerItem>> CmdValues { get; set; }
         /// <summary>
         /// All the values predefined in the structure, to be read
         /// </summary>
-        public ObservableCollection<ObservableCollection<BigIntegerItem>> IeValues { get; }
+        public ObservableCollection<ObservableCollection<BigIntegerItem>> IeValues { get; set; }
 
         /// <summary>
         /// Adds a new Cmd Dpt.
