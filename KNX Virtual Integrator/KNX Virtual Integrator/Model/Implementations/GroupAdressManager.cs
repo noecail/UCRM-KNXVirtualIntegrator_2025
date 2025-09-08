@@ -502,7 +502,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 
                                 //Add the dpt wherever needed
                                 var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
-                                    .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
+                                    .Split('-')[1] ?? objectType[j].Attribute("DatapointType")?.Value.Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                 var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
                                 if (is0 && newAddress != "Error")
                                 {
@@ -591,9 +591,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         newFunctionalModels.Add(new FunctionalModel(modelName+"_"+circuitName));
                                         modelIndex = newFunctionalModels.Count - 1;
                                     }
-                                    
-                                    var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value  //Builds the new DPT from the data in the xml file
-                                            .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
+                                    var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
+                                        .Split('-')[1] ?? objectType[j].Attribute("DatapointType")?.Value.Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                     var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
                                     if (is0 && newAddress != "Error")
                                     {
@@ -654,6 +653,8 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                 newModel.BuildCmdIntValues(model.Model);
                                 for (var i = 0;i<model.Model.ElementList.Count;i++)
                                 {
+                                    while (newModel.ElementList.Count<i+1)
+                                        newModel.ElementList.Add(new TestedElement());
                                     newModel.ElementList[i].TestsIe = new ObservableCollection<DataPointType>(model.Model.ElementList[i].TestsIe);
                                 }
                             }
@@ -706,7 +707,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         }
 
                                         var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
-                                            .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
+                                            .Split('-')[1] ?? objectType[j].Attribute("DatapointType")?.Value.Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value ?? "Error";
                                         if (is0 && newAddress != "Error")
                                         {
@@ -800,7 +801,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                         }
 
                                         var newType = int.Parse(objectType[j].Attribute("DPTs")?.Value
-                                            .Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
+                                            .Split('-')[1] ?? objectType[j].Attribute("DatapointType")?.Value.Split('-')[1] ?? "0"); //gets the type between the dashes in the xml
                                         var newAddress = objectType[j].Attribute("Address")?.Value!;
                                         if (is0 && newAddress != "Error") 
                                         {
