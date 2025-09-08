@@ -87,7 +87,8 @@
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
                             </Image>
-                            <TextBlock Text="{DynamicResource Values}" />
+                            <TextBlock Text="{DynamicResource Values}" 
+                                       VerticalAlignment="Top"/>
                         </StackPanel>
 
                         <!--Colonne 2 : Cmd(s)-->
@@ -452,7 +453,9 @@
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
                             </Image>
-                            <TextBlock Text="{DynamicResource Values}" Style="{StaticResource StandardTextBlockDark}"/>
+                            <TextBlock Text="{DynamicResource Values}"
+                                       Style="{StaticResource StandardTextBlockDark}"
+                                       VerticalAlignment="Top"/>
                         </StackPanel>
 
                         <!--Colonne 2 : Cmd(s)-->

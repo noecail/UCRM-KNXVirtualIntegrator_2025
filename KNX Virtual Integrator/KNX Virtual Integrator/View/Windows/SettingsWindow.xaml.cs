@@ -1713,7 +1713,8 @@ public partial class SettingsWindow
             previousAppLang != _viewModel.AppSettings.AppLang, 
             previousEnableLightTheme != _viewModel.AppSettings.EnableLightTheme, 
             previousAppScaleFactor != _viewModel.AppSettings.AppScaleFactor);
-        
+
+        Hide(); // fermeture de la fenêtre
     }
     
     // Fonction s'exécutant lors du clic sur le bouton annuler
