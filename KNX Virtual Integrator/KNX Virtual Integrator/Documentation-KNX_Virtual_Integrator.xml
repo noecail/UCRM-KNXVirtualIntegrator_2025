@@ -1377,7 +1377,6 @@
         <member name="E:KNX_Virtual_Integrator.Model.Implementations.Analyze.PropertyChanged">
             <summary>
             Event that occurs when the model analysis state changes (Between waiting, running, finished and none).
-            Not yet implemented.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.OnPropertyChanged(System.String)">
