@@ -1579,12 +1579,13 @@ public partial class SettingsWindow
             SaveButton.Style = (Style)FindResource("BottomButtonLight");
             CancelButton.Style = (Style)FindResource("BottomButtonLight");
             CreateArchiveDebugButton.Style = (Style)FindResource("BottomButtonLight");
-            
             OngletDebug.Style = (Style)FindResource("LightOnglet");
             OngletInformations.Style = (Style)FindResource("LightOnglet");
             OngletParametresApplication.Style = (Style)FindResource("LightOnglet");
             SaveSettImage.Source = (DrawingImage)FindResource("CheckmarkLight");
             CancelButtonImage.Source = (DrawingImage)FindResource("CrossmarkLight");
+
+            Resources["CurrentComboBoxItemContainerStyle"] = (Style)FindResource("LightComboBoxItemStyle");
         }
         else // Sinon, on met le thème sombre
         {
@@ -1605,6 +1606,8 @@ public partial class SettingsWindow
             OngletParametresApplication.Style = (Style)FindResource("DarkOnglet");
             SaveSettImage.Source = (DrawingImage)FindResource("CheckmarkDark");
             CancelButtonImage.Source = (DrawingImage)FindResource("CrossmarkDark");
+            
+            Resources["CurrentComboBoxItemContainerStyle"] = (Style)FindResource("DarkComboBoxItemStyle");
         }
         // Arrière plan de la fenêtre
         Background = backgroundColorBrush;

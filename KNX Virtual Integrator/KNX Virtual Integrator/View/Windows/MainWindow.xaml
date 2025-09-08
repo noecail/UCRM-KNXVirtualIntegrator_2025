@@ -100,7 +100,7 @@
                             <ListBox
                                 ItemsSource="{Binding TestsCmd}"
                                 Background="{StaticResource NoColorBrush}"
-                                ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
 
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -130,7 +130,7 @@
                             <ListBox
                                 ItemsSource="{Binding TestsCmd}"
                                 Background="{StaticResource OffWhiteBackgroundBrush}"
-                                ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"
@@ -161,7 +161,7 @@
                         <Border Grid.Row="3" Grid.Column="1">
                             <ListBox ItemsSource="{Binding TestsCmd}"
                                      Background="{StaticResource OffWhiteBackgroundBrush}"
-                                     ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                     ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
@@ -233,7 +233,7 @@
                         <ListBox Grid.Row="1" Grid.Column="2"
                                  ItemsSource="{Binding TestsIe}"
                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                 ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
@@ -261,7 +261,7 @@
                         <ListBox Grid.Row="2" Grid.Column="2"
                                  ItemsSource="{Binding TestsIe}"
                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                 ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"
@@ -291,7 +291,7 @@
                         <ListBox Grid.Row="3" Grid.Column="2"
                                  ItemsSource="{Binding TestsIe}"
                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                 ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
@@ -675,7 +675,6 @@
                                                         HorizontalContentAlignment="Center"
                                                         VerticalContentAlignment="Center"
                                                         Width="{Binding DataContext.BoxWidth, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                        Foreground="{StaticResource DarkForegroundBrush}"
                                                         Background="{StaticResource DarkerGrayBackgroundBrush}"
                                                         Height="35">
 
@@ -683,12 +682,12 @@
                                                         <TextBox.Style>
                                                             <Style TargetType="TextBox">
                                                                 <Setter Property="IsEnabled" Value="True" />
+                                                                <Setter Property="Foreground" Value="{StaticResource DarkForegroundBrush}"/>
                                                                 <Style.Triggers>
                                                                     <DataTrigger Binding="{Binding IsEnabled}"
                                                                         Value="false">
                                                                         <Setter Property="IsEnabled" Value="False" />
-                                                                        <Setter Property="Foreground"
-                                                                            Value="{StaticResource NoColorBrush}" />
+                                                                        <Setter Property="Foreground" Value="{StaticResource NoColorBrush}" />
                                                                     </DataTrigger>
                                                                 </Style.Triggers>
                                                             </Style>
@@ -870,8 +869,8 @@
                         <Button Content="{DynamicResource TestButton}"
                             Style="{StaticResource IconTextButtonStyle}"
                             Foreground="{StaticResource DarkForegroundBrush}"
-                            Tag="{StaticResource PlayDrawingImage}"
                             Background="{StaticResource BlueBrush}"
+                            Tag="{StaticResource PlayDrawingImage}"
                             FontSize="16"
                             Click="OnTestConfigButtonClick"
                             Margin="5,0"

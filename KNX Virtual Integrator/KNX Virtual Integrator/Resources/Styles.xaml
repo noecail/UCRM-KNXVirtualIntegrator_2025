@@ -1244,7 +1244,7 @@
         </Setter>
     </Style>
     
-    <Style x:Key="DptLisBoxItemContainerStyleLight" TargetType="ListBoxItem">
+    <Style x:Key="DptListBoxItemContainerStyleLight" TargetType="ListBoxItem">
         <Setter Property="Padding" Value="5,0,0,0"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -1257,10 +1257,10 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource NoColorBrush}"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource NoColorBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -1423,6 +1423,24 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource LightComboBoxItemStyle}" />
         <Setter Property="Template" Value="{StaticResource ComboBoxTemplateLight}" />
     </Style>
+    
+    <!--Structure Edit Window special styles-->
+    
+    <Style x:Key="StructureEditWindowStandardTextBoxLight" TargetType="TextBox" BasedOn="{StaticResource StandardTextBoxLight}">
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource LightGrayBorderBrush}"/>
+    </Style>
+    
+    <Style x:Key="StructureEditWindowLightComboBoxItemStyle" TargetType="ComboBoxItem" BasedOn="{StaticResource LightComboBoxItemStyle}">
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+    </Style>
+    
+    <Style x:Key="StructureEditWindowLightComboBoxStyle" TargetType="ComboBox" BasedOn="{StaticResource LightComboBoxStyle}">
+        <Setter Property="Background" Value="{StaticResource OffWhiteBackgroundBrush}"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource StructureEditWindowLightComboBoxItemStyle}" />
+    </Style>
+    
+    <!--Structure Edit Window special styles-->
 
     <ControlTemplate x:Key="ComboBoxTemplateDark" TargetType="ComboBox">
         <Grid>

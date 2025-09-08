@@ -97,7 +97,7 @@
                             <ListBox
                                 ItemsSource="{Binding TestsCmd}"
                                 Background="{StaticResource NoColorBrush}"
-                                ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
 
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
@@ -127,7 +127,7 @@
                             <ListBox
                                 ItemsSource="{Binding TestsCmd}"
                                 Background="{StaticResource OffWhiteBackgroundBrush}"
-                                ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal"
@@ -159,7 +159,7 @@
                         <Border Grid.Row="3" Grid.Column="1">
                             <ListBox ItemsSource="{Binding TestsCmd}"
                                      Background="{StaticResource OffWhiteBackgroundBrush}"
-                                     ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                     ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                                 <ListBox.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
@@ -233,7 +233,7 @@
                         <ListBox Grid.Row="1" Grid.Column="2"
                                  ItemsSource="{Binding TestsIe}"
                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                 ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />
@@ -261,7 +261,7 @@
                         <ListBox Grid.Row="2" Grid.Column="2"
                                  ItemsSource="{Binding TestsIe}"
                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                 ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"
@@ -292,7 +292,7 @@
                         <ListBox Grid.Row="3" Grid.Column="2"
                                  ItemsSource="{Binding TestsIe}"
                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                 ItemContainerStyle="{StaticResource DptLisBoxItemContainerStyleLight}">
+                                 ItemContainerStyle="{StaticResource DptListBoxItemContainerStyleLight}">
                             <ListBox.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal" />

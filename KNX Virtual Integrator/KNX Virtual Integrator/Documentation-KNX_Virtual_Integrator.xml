@@ -5338,6 +5338,7 @@
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ChosenModelsAndState">
             <summary>
             Collection used to display the chosen test models along with various information.
+            Collection used to display the chosen test models along with various information.
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.ViewModel.MainViewModel.ClearModelsToTestAndResetTimes">
@@ -6103,7 +6104,7 @@
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.StructureEditWindow.ResetValueIeStructureButtonClick(System.Object,System.Windows.RoutedEventArgs)">
             <summary>
-            Handles the button click to reset to 0 a Ie Value that has been deactivated because it was unknown 
+            Handles the button click to reset to 0 an Ie Value that has been deactivated because it was unknown 
             </summary>
             <param name="sender">The button that raised the event.</param>
             <param name="e">The click event data.</param>
