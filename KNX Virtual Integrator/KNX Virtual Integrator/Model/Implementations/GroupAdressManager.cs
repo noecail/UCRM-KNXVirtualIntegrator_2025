@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Xml.Linq;
 using iText.StyledXmlParser.Jsoup.Select;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
@@ -475,13 +476,13 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                                     for (var k = 0; k < model.ModelStructure.Count; k++)
                                     {
                                         newFunctionalModels[^1].AddElement();
-                                        foreach (var cmd in model.ModelStructure[k].Cmd)
+                                        foreach (var cmd in model.Model.ElementList[k].TestsCmd)
                                         {
-                                            newFunctionalModels[^1].ElementList[^1].TestsCmd.Add(new DataPointType());//Adds a command for every command expected
+                                            newFunctionalModels[^1].ElementList[^1].TestsCmd.Add(new DataPointType(cmd));//Adds a command for every command expected
                                         }
-                                        foreach (var ie in model.ModelStructure[k].Ie)
+                                        foreach (var ie in model.Model.ElementList[k].TestsIe)
                                         {
-                                            newFunctionalModels[^1].ElementList[^1].TestsIe.Add(new DataPointType());//Adds an ie for every command expected
+                                            newFunctionalModels[^1].ElementList[^1].TestsIe.Add(new DataPointType(ie));//Adds an ie for every command expected
                                         }
                                     }
                                     modelIndex = newFunctionalModels.Count - 1;
@@ -640,6 +641,10 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             foreach(var newModel in newFunctionalModels) // For all the commands previously built, builds the intvalues
                             {
                                 newModel.BuildCmdIntValues(model.Model);
+                                for (var i = 0;i<model.Model.ElementList.Count;i++)
+                                {
+                                    newModel.ElementList[i].TestsIe = new ObservableCollection<DataPointType>(model.Model.ElementList[i].TestsIe);
+                                }
                             }
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {
