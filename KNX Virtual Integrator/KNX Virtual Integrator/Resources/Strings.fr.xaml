@@ -88,6 +88,10 @@
     <!--Tests Configuration Window-->
     <sys:String x:Key="TestWindowTitle">Configuration du test</sys:String>
     <sys:String x:Key="ChosenTestModelsTitle">Modèles Fonctionnels Choisis</sys:String>
+    <sys:String x:Key="AnalysisDelayText">Délai entre chaque élément
+        (en ms) :</sys:String>
+    <sys:String x:Key="AnalysisTimeoutText">Temps de réponse maximal
+        (en ms) :</sys:String>
     <sys:String x:Key="ClearTest">Annuler</sys:String>
     <sys:String x:Key="LaunchTest">Lancer le test</sys:String>
     <!--Tests Configuration Window-->

@@ -10,7 +10,7 @@
                  xmlns:windows="clr-namespace:KNX_Virtual_Integrator.View.Windows"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="{DynamicResource TestWindowTitle}" Height="700" Width="1200"
+                 Title="{DynamicResource TestWindowTitle}" Height="710" Width="1225"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
                  Background="{StaticResource WhiteBackgroundBrush}"
@@ -970,7 +970,7 @@
     <ScrollViewer BorderBrush="{StaticResource KnxGreenBrush}"
             BorderThickness="0" x:Name="TestConfigWindowBorder"
             HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Disabled">
+            VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="850" Width="Auto" />
@@ -1235,6 +1235,8 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition MinHeight="25" Height="Auto" />
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto" />
                         <!-- Titre Modèles Fonctionnels sélectionnés-->
                         <RowDefinition MinHeight="400" Height="*" />         <!-- TextBox avec les modèles -->
                         <RowDefinition Height="Auto"/>
@@ -1246,8 +1248,40 @@
                                Style="{StaticResource TitleTextLight}"
                                HorizontalAlignment="Center"
                                Text="{DynamicResource ChosenTestModelsTitle}" />
+                    
+                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal" Margin="10,50,0,0">
+                        <TextBlock Name="AnalysisDelay"
+                                   Style="{StaticResource StandardTextBlockLight}"
+                                   HorizontalAlignment="Left"
+                                   TextAlignment="Left"
+                                   TextWrapping="Wrap"
+                                   Width="175"
+                                   Text="{DynamicResource AnalysisDelayText}"/>
+                        <TextBox Name="DelayBox"
+                                 Style="{StaticResource StandardTextBoxLight}"
+                                 Width="45"
+                                 Margin="5,0"
+                                 Text="{Binding ElementLatency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                    <ListBox Grid.Row="1" Name="ChosenTestModelesListBox" Width="200" Height="320"
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,0,0">
+                        
+                        <TextBlock Name="AnalysisTimeout"
+                                   Style="{StaticResource StandardTextBlockLight}"
+                                   HorizontalAlignment="Left"
+                                   TextAlignment="Left"
+                                   TextWrapping="Wrap"
+                                   Width="175"
+                                   Text="{DynamicResource AnalysisTimeoutText}"/>
+                        <TextBox Name="TimeoutBox"
+                                 Style="{StaticResource StandardTextBoxLight}"
+                                 HorizontalAlignment="Right"
+                                 Margin="5,0"
+                                 Width="45"
+                                 Text="{Binding CommandTimeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                    </StackPanel>
+                    <ListBox Grid.Row="3" Name="ChosenTestModelesListBox" Width="200" Height="320"
                              Style="{StaticResource ListBoxStyleLight}"
                              ItemsSource="{Binding ChosenModelsAndState}"
                              SelectionMode="Single"
@@ -1255,7 +1289,7 @@
                              ItemTemplateSelector="{StaticResource ChosenModelTemplateSelector}">
                     </ListBox>
                     
-                    <Button Grid.Row="2" Name="ClearTestButton"
+                    <Button Grid.Row="4" Name="ClearTestButton"
                             Content="{DynamicResource ClearTest}"
                             Style="{StaticResource LaunchTestButtonStyleLight}"
                             Margin="7"
@@ -1265,7 +1299,7 @@
                             Click="OnClearButtonClick_ClearModelsToTest" />
 
 
-                    <Button Grid.Row="3" Name="LaunchTestButton"
+                    <Button Grid.Row="5" Name="LaunchTestButton"
                             Content="{DynamicResource LaunchTest}"
                             Style="{StaticResource LaunchTestButtonStyleLight}"
                             Tag="{StaticResource PlayDrawingImage}"

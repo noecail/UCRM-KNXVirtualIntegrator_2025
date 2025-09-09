@@ -103,6 +103,8 @@ public partial class TestConfigWindow
             
             Resources["TestWindowTitle"] = "Configuration du test";
             Resources["ChosenTestModelsTitle"] = "Modèles Fonctionnels Choisis";
+            Resources["AnalysisDelayText"] = "Délai entre chaque élément\r\n (en ms) :";
+            Resources["AnalysisTimeoutText"] = "Temps de réponse maximal\r\n (en ms) :";
             Resources["ClearTest"] = "Annuler";
             Resources["LaunchTest"] = "Lancer le test";
         }
@@ -123,6 +125,8 @@ public partial class TestConfigWindow
             
             Resources["TestWindowTitle"] = "Test Configuration";
             Resources["ChosenTestModelsTitle"] = "Chosen Functional Models";
+            Resources["AnalysisDelayText"] = "Delay between elements\r\n (in ms) :";
+            Resources["AnalysisTimeoutText"] = "Maximal answer timeout\r\n (in ms) :";
             Resources["ClearTest"] = "Reset";
             Resources["LaunchTest"] = "Launch Test";
         }
@@ -147,6 +151,10 @@ public partial class TestConfigWindow
             SelectedElementsListBox.ItemTemplate = (DataTemplate)FindResource("ElementListBoxTemplateLight");
             SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleLight");
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
+            DelayBox.Style = (Style)FindResource("StandardTextBoxLight");
+            TimeoutBox.Style = (Style)FindResource("StandardTextBoxLight");
+            AnalysisDelay.Style = (Style)FindResource("StandardTextBlockLight");
+            AnalysisTimeout.Style = (Style)FindResource("StandardTextBlockLight");
 
             ClearTestButton.Style = (Style)FindResource("LaunchTestButtonStyleLight");
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleLight");
@@ -169,6 +177,10 @@ public partial class TestConfigWindow
             LaunchTestButton.Style = (Style)FindResource("LaunchTestButtonStyleDark");
             SelectedElementsListBox.ItemContainerStyle = (Style)FindResource("TestedElementItemContainerStyleDark");
             NomTextBox.Style = (Style)FindResource("StandardTextBoxDark");
+            DelayBox.Style = (Style)FindResource("StandardTextBoxDark");
+            TimeoutBox.Style = (Style)FindResource("StandardTextBoxDark");
+            AnalysisDelay.Style = (Style)FindResource("StandardTextBlockDark");
+            AnalysisTimeout.Style = (Style)FindResource("StandardTextBlockDark");
             
             titleStyles = (Style)FindResource("TitleTextDark");
             borderStyles = (Style)FindResource("BorderDark");
@@ -239,8 +251,8 @@ public partial class TestConfigWindow
         }
         TestConfigWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
             
-        Height = 700 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 700 * scale;
-        Width = 1200 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 1200 * scale;
+        Height = 710 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 710 * scale;
+        Width = 1225 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 1225 * scale;
     }
     
     /// <summary>

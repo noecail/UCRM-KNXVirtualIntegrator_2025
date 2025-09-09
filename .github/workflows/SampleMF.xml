@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ModelFunctions>
+    <Bloc name="Éclairage">
+        <IE name="Lumière Salon"   type="bool" dpt="1.001" groupAddress="1/0/1" />
+        <IE name="Lumière Cuisine" type="bool" dpt="1.001" groupAddress="1/0/2" />
+    </Bloc>
+
+    <Bloc name="Volet">
+        <IE name="Volet Chambre" type="int"  dpt="5.001" groupAddress="2/0/1" />
+        <IE name="Volet Salon"   type="int"  dpt="5.001" groupAddress="2/0/2" />
+    </Bloc>
+</ModelFunctions>

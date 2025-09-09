@@ -363,7 +363,7 @@ public class KnxBusTestsIntegration
         var root = xdoc.Root;
 
         Assert.NotNull(root);
-        Assert.Equal("ModelFunction", root.Name.LocalName);
+        Assert.Equal("ModelFunctions", root.Name.LocalName);
 
         var blocs = root.Elements("Bloc").ToList();
         Assert.True(blocs.Count > 0, "Aucun bloc trouvé dans le modèle fonctionnel.");
