@@ -120,6 +120,9 @@ public partial class MainWindow
         Style supprButtonStyle;
         Brush backgrounds;
         Brush foregrounds;
+        Brush tooltipBackgroundBrush;
+        Style tooltipTextBlockStyle;
+            
         if (_viewModel.AppSettings.EnableLightTheme)
         {
             NomTextBox.Style = (Style)FindResource("StandardTextBoxLight");
@@ -136,6 +139,8 @@ public partial class MainWindow
             supprButtonStyle = (Style)FindResource("DeleteStructureButtonStyleLight");
             backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
             foregrounds = (Brush)FindResource("LightForegroundBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("WhiteBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockLight");
         }
         else
         {
@@ -154,6 +159,8 @@ public partial class MainWindow
 
             backgrounds = (Brush)FindResource("DarkGrayBackgroundBrush");
             foregrounds = (Brush)FindResource("DarkForegroundBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockDark");
         }
         
         Background = backgrounds;
@@ -195,6 +202,9 @@ public partial class MainWindow
         StructuresBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
         
+        Resources["CurrentTooltipBackgroundBrush"] = tooltipBackgroundBrush;
+        Resources["CurrentTooltipTextBlockStyle"] = tooltipTextBlockStyle;
+        
         Application.Current.Dispatcher.InvokeAsync( async() =>
         {
             await LoadAddressesOntoTreeViewAsync(GroupAddressTreeView);
@@ -232,6 +242,48 @@ public partial class MainWindow
             Resources["ShowTheModel"] = "Afficher le modèle sélectionné";
             
             Resources["GroupAdressesTitle"] = "Adresses de Groupe";
+
+            Resources["ValuesTooltipTitle"] = "Aide - Valeurs à envoyer et Valeurs attendues en réception";
+            Resources["ValuesTooltipMessage"] =
+                "Attention. Les valeurs sont à rentrer en décimal.\r\n" +
+                "Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.\r\n" +
+                "exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79";
+            Resources["LibraryTooltipTitle"] = "Aide - Bibliothèque";
+            Resources["LibraryTooltipMessage"] =
+                "Bibliothèque de Structures de Modèles Fonctionnels.\r\n" +
+                "Les Structures doivent être créées et les mots-clés doivent être renseignés avant l'importation du projet ou l'importation des adresses de groupe.\r\n" +
+                "Les Structures de Modèles Fonctionnels seront utilisées lors de l'importation du projet ou des adresses de groupe pour reconnaîtres les adresses de groupe et créer des Modèles.\r\n" +
+                "Créer, Supprimer, Modifier une Structure. Importer, Exporter la Bibliothèque des Structures.";
+            Resources["FunctionalModelsTooltipTitle"] = "Aide - Modèles Fonctionnels";
+            Resources["FunctionalModelsTooltipMessage"] =
+                "Modèles Fonctionnels associés à la Structure sélectionnée.\r\n" +
+                "Les Modèles Fonctionnels ont la même Structure que la Structure de Modèle Fonctionnel associée.\r\n" +
+                "Les Modèles ont le même nombre d'Éléments à Tester et, à l'intérieur de ceux-ci, le même nombre de valeurs à envoyer, à recevoir...\r\n" +
+                "Chaque Modèle Fonctionnel ci-dessous correspond à un participant de l'installation\r\n" +
+                "Lors de l'importation d'un projet ou d'adresses de groupe, les Modèles Fonctionnels correspondant à chaque participant seront créés.\r\n" +
+                "Il est ensuite possible de créer de nouveaux Modèles Fonctionnels.";
+            Resources["FunctionalModelParametersTooltipTitle"] = "Aide - Paramètres du Modèle Fonctionnel";
+            Resources["FunctionalModelParametersTooltipMessage"] =
+                "Paramètres du Modèle Fonctionnel sélectionné.\r\n" +
+                "Paramètres modifiables : adresses de groupe d'envoi, adresses de groupe de réception, valeurs d'envoi, valeurs de réception.\r\n" +
+                "Si la Structure a été configurée correctement au préalable et que le projet ETS a été rempli correctement (structure des adresses, noms des adresses, DPT de chaque commande/information d'état),\r\n" +
+                "alors les paramètres ne devraient pas avoir à être modifiés.";
+            Resources["TopBannerLeftButtonsTooltipTitle"] = "Aide - Bouton de Connexion et Bouton Paramètres";
+            Resources["TopBannerLeftButtonsTooltipMessage"] =
+                "Bouton Connexion - Avant de paramétrer les Structures de Modèles Fonctionnels, ou de réaliser une importation, il est nécessaire de se connecter à l'installation KNX.\r\n" +
+                "Trois types de connexions sont possibles : USB, IP local, IP à distance.\r\n" +
+                "Bouton Paramètres - Modifier les paramètres du logiciel : thème, langue, échelle, paramètres du rapport de bug.\r\n" +
+                "Accès au informations du logiciel.";
+            Resources["TopBannerCenterButtonsTooltipTitle"] = "Aide - Boutons d'Importation";
+            Resources["TopBannerCenterButtonsTooltipMessage"] =
+                "Importer des adresses - Importez le fichier d'adresses de groupe (.xml) depuis votre projet, après l'avoir exporté depuis ETS.\r\n" +
+                "Importer un projet - Importez directement le projet (.knxproj) depuis ETS.\r\n" +
+                "L'importation lancera le processus de reconnaissance des adresses et créera des Modèles Fonctionnels en fonction du fichier.\r\n" +
+                "L'utilisateur peut effectuer plusieurs importations, chacune effaçant la précédente.";
+            Resources["TopBannerRightButtonsTooltipTitle"] = "Aide - Boutons de Test";
+            Resources["TopBannerRightButtonsTooltipMessage"] =
+                "Paramètres de test - Sélectionnez les Modèles Fonctionnels que vous souhaitez tester et lancez le test.\r\n" +
+                "Exporter le rapport - Après avoir exécuté le test, exportez le rapport détaillé de la réussite / de l'échec de chaque test.";
         }
         else
         {
@@ -258,6 +310,48 @@ public partial class MainWindow
             Resources["ShowTheModel"] = "Show selected model";
             
             Resources["GroupAdressesTitle"] = "Group Addresses";
+
+            Resources["ValuesTooltipTitle"] = "Help - Values to be sent and expected values upon receipt";
+            Resources["ValuesTooltipMessage"] = 
+                "Caution. Values must be entered in decimal format.\r\n" +
+                "A value entered in hexadecimal format may be misinterpreted and compromise the validity of the test.\r\n" +
+                "Example: If you want to write hexadecimal (hex)4F, write decimal (dec)79";
+            Resources["LibraryTooltipTitle"] = "Help - Library";
+            Resources["LibraryTooltipMessage"] =
+                "Functional Model Structures Library.\r\n" +
+                "Structures must be created and their keywords must be entered before importing the project or importing the group addresses.\r\n" +
+                "Functional Model Structures will be used when importing the project or group addresses to recognize group addresses and create Models.\r\n" +
+                "Create, Delete, Modify a Structure. Import, Export the Structure Library.";
+            Resources["FunctionalModelsTooltipTitle"] = "Help - Functional Models";
+            Resources["FunctionalModelsTooltipMessage"] =
+                "Functional Models associated with the selected Structure.\r\n" +
+                "Functional Models have the same Structure as the associated Functional Model Structure.\r\n" +
+                "The models have the same number of Tested Elements and, within them, the same number of values to send, receive...\r\n" +
+                "Each Functional Model below corresponds to a participant in the installation.\r\n" +
+                "When importing a project or group addresses, the Functional Models corresponding to each participant will be created.\r\n" +
+                "It is then possible to create new Functional Models.";
+            Resources["FunctionalModelParametersTooltipTitle"] = "Help - Model Parameters";
+            Resources["FunctionalModelParametersTooltipMessage"] =
+                "Parameters of the Selected Functional Model.\r\n" +
+                "Editable parameters: dispatch(es) group addresses, reception(s) group addresses, dispatch(es) values, reception(s) values.\r\n" +
+                "If the Structure has been configured correctly beforehand and the ETS project has been filled in correctly (addresses structures, addresses names, DPT for each command/state information),\r\n" +
+                "then the parameters should not need to be modified.";
+            Resources["TopBannerLeftButtonsTooltipTitle"] = "Help - Connection Button and Settings Button";
+            Resources["TopBannerLeftButtonsTooltipMessage"] =
+                "Connection Button - Before configuring the Functional Model Structures or performing an import, you must connect to the KNX installation.\r\n" +
+                "Three types of connections are possible: USB, local IP, remote IP.\r\n" +
+                "Settings Button - Change the software settings: theme, language, scale, bug report settings.\r\n" +
+                "Access to software information.";
+            Resources["TopBannerCenterButtonsTooltipTitle"] = "Help - Importation Buttons";
+            Resources["TopBannerCenterButtonsTooltipMessage"] =
+                "Import addresses - Import the group addresses file (.xml) from your project, after exporting it from ETS.\r\n" +
+                "Import project - Import directly the project (.knxproj), from ETS.\r\n" +
+                "Importing something will start the adress recognition process, and will create Functional Models based on the file.\r\n" +
+                "The user can import multiple times, each overwriting the previous one.";
+            Resources["TopBannerRightButtonsTooltipTitle"] = "Help - Test Buttons";
+            Resources["TopBannerRightButtonsTooltipMessage"] =
+                "Test parameters - Select the Functional Models which you wish to test and start the test.\r\n" +
+                "Export test report - After executing the test, export the detailed report of the success / failure of each test.";
         }
     }
 

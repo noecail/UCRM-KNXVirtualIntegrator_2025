@@ -73,16 +73,9 @@
                                              BorderBrush="{StaticResource KnxGreenBrush}">
                                         <StackPanel Orientation="Vertical">
                                             <TextBlock Foreground="{StaticResource KnxGreenBrush}"
-                                                       FontWeight="SemiBold">
-                                                Aide - Valeurs à envoyer et Valeurs attendues en réception
-                                            </TextBlock>
-                                            <TextBlock>
-                                                Attention. Les valeurs sont à rentrer en décimal.
-                                                <LineBreak />
-                                                Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.
-                                                <LineBreak />
-                                                exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79
-                                            </TextBlock>
+                                                       FontWeight="SemiBold"
+                                                       Text="{DynamicResource ValuesTooltipTitle}"/>
+                                            <TextBlock Text="{DynamicResource ValuesTooltipMessage}"/>
                                         </StackPanel>
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
@@ -439,16 +432,10 @@
                                              BorderBrush="{StaticResource KnxGreenBrush}">
                                         <StackPanel Orientation="Vertical">
                                             <TextBlock Foreground="{StaticResource KnxLightGreenBrush}"
-                                                       FontWeight="SemiBold">
-                                                Aide - Valeurs à envoyer et Valeurs attendues en réception
-                                            </TextBlock>
-                                            <TextBlock Style="{StaticResource StandardTextBlockDark}">
-                                                Attention. Les valeurs sont à rentrer en décimal.
-                                                <LineBreak />
-                                                Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.
-                                                <LineBreak />
-                                                exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79
-                                            </TextBlock>
+                                                       FontWeight="SemiBold"
+                                                       Text="{DynamicResource ValuesTooltipTitle}"/>
+                                            <TextBlock Style="{StaticResource StandardTextBlockDark}"
+                                                       Text="{DynamicResource ValuesTooltipMessage}"/>
                                         </StackPanel>
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
@@ -1289,26 +1276,66 @@
                              ItemTemplateSelector="{StaticResource ChosenModelTemplateSelector}">
                     </ListBox>
                     
-                    <Button Grid.Row="4" Name="ClearTestButton"
-                            Content="{DynamicResource ClearTest}"
-                            Style="{StaticResource LaunchTestButtonStyleLight}"
-                            Margin="7"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right"
-                            MinHeight="50"
-                            Click="OnClearButtonClick_ClearModelsToTest" />
+                    <StackPanel Grid.Row="4"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Image Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="0,5,5,0">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                   FontWeight="SemiBold"
+                                                   Text="{DynamicResource ClearTooltipTitle}"/>
+                                        <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                   Text="{DynamicResource ClearTooltipMessage}">
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                        <Button Name="ClearTestButton"
+                                Content="{DynamicResource ClearTest}"
+                                Style="{StaticResource LaunchTestButtonStyleLight}"
+                                Margin="7"
+                                MinHeight="50"
+                                Click="OnClearButtonClick_ClearModelsToTest" />
+                    </StackPanel>
 
-
-                    <Button Grid.Row="5" Name="LaunchTestButton"
-                            Content="{DynamicResource LaunchTest}"
-                            Style="{StaticResource LaunchTestButtonStyleLight}"
-                            Tag="{StaticResource PlayDrawingImage}"
-                            Margin="7,0,7,7"
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right"
-                            MinHeight="50"
-                            Click="LaunchTestButton_OnClick" />
-
+                    <StackPanel Grid.Row="5"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Image Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"
+                               Margin="0,5,5,0">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                   FontWeight="SemiBold"
+                                                   Text="{DynamicResource TestConfigurationTooltipTitle}"/>
+                                        <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                   Text="{DynamicResource TestConfigurationTooltipMessage}">
+                                        </TextBlock>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                        <Button Name="LaunchTestButton"
+                                Content="{DynamicResource LaunchTest}"
+                                Style="{StaticResource LaunchTestButtonStyleLight}"
+                                Tag="{StaticResource PlayDrawingImage}"
+                                Margin="7,0,7,7"
+                                MinHeight="50"
+                                Click="LaunchTestButton_OnClick" />
+                    </StackPanel>
 
                 </Grid>
             </Border>
