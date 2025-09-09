@@ -5253,13 +5253,13 @@
             Gets or sets the name of the author of the Pdf.
             </summary>
         </member>
-        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel.CommandTimeout">
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.CommandTimeout">
             <summary>
             Default at 2000 ms and set when calling <see cref="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)"/>.
             Used to set an all around timeout for commands.
             </summary>
         </member>
-        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel.ElementLatency">
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ElementLatency">
             <summary>
             Default at 0 ms and set when calling <see cref="M:KNX_Virtual_Integrator.Model.Implementations.Analyze.TestAll(System.Collections.ObjectModel.ObservableCollection{KNX_Virtual_Integrator.Model.Entities.FunctionalModel},System.Int32,System.Int32)"/>.
             Used to space out tests, to not saturate the installation.

@@ -10,13 +10,14 @@ public partial class MainViewModel
     /// Default at 2000 ms and set when calling <see cref="Model.Implementations.Analyze.TestAll"/>.
     /// Used to set an all around timeout for commands.
     /// </summary>
-    public int CommandTimeout = 2000;
+    public int CommandTimeout { get; set; } = 2000;
+
     /// <summary>
     /// Default at 0 ms and set when calling <see cref="Model.Implementations.Analyze.TestAll"/>.
     /// Used to space out tests, to not saturate the installation.
     /// </summary>
-    public int ElementLatency = 0;
-    
+    public int ElementLatency { get; set; } = 0;
+
     /// <summary>
     /// The full list of all the test results.
     /// It is structured by : Structures -> Models -> Test Elements ->

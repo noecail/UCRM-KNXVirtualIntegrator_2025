@@ -86,9 +86,9 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
         {
             if (_latency > 0)
             {
+                Task.Delay(_latency).Wait();
                 var res = await TestElement(element);
                 result.Add(res);
-                Task.Delay(_latency).Wait();
             }
             else
             {
