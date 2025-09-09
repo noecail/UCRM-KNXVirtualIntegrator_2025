@@ -73,4 +73,10 @@ public interface IProjectFileManager
     /// </list>
     /// </remarks>
     string SelectAnotherFile();
+    
+    /// <summary> 
+    /// Takes the project name and displays it on the top left corner
+    /// </summary>
+    public void UpdateTitle();
+
 }

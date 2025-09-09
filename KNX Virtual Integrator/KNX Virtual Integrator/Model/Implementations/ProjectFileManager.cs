@@ -74,6 +74,10 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
             }
 
             knxprojSourceFilePath = NormalizePath(knxprojSourceFilePath);
+            
+            ProjectName = Path.GetFileNameWithoutExtension(knxprojSourceFilePath);
+
+            UpdateTitle();
 
             var zipArchivePath = GetZipArchivePath(knxprojSourceFilePath);
 
@@ -440,70 +444,8 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
             // On stocke le nom du nouveau projet
             GroupAddressFileName = Path.GetFileNameWithoutExtension(groupAddressesSourceFilePath);
             ProjectName = GroupAddressFileName;
-            
-            App.WindowManager!.MainWindow.Title = settings.AppLang switch
-            {
-                // Arabe
-                "AR" => $"الملف المستورد :  {GroupAddressFileName}",
-                // Bulgare
-                "BG" => $"Импортиран файл: {GroupAddressFileName}",
-                // Tchèque
-                "CS" => $"Importovaný soubor : {GroupAddressFileName}",
-                // Danois
-                "DA" => $"Importeret fil : {GroupAddressFileName}",
-                // Allemand
-                "DE" => $"Importierte Datei : {GroupAddressFileName}",
-                // Grec
-                "EL" => $"Εισαγόμενο αρχείο : {GroupAddressFileName}",
-                // Anglais
-                "EN" => $"Imported file : {GroupAddressFileName}",
-                // Espagnol
-                "ES" => $"Fichero importado : {GroupAddressFileName}",
-                // Estonien
-                "ET" => $"Imporditud fail : {GroupAddressFileName}",
-                // Finnois
-                "FI" => $"Tuotu tiedosto : {GroupAddressFileName}",
-                // Hongrois
-                "HU" => $"Importált fájl : {GroupAddressFileName}",
-                // Indonésien
-                "ID" => $"File yang diimpor : {GroupAddressFileName}",
-                // Italien
-                "IT" => $"File importato : {GroupAddressFileName}",
-                // Japonais
-                "JA" => $"インポートされたファイル：{GroupAddressFileName}",
-                // Coréen
-                "KO" => $"가져온 파일 : {GroupAddressFileName}",
-                // Letton
-                "LV" => $"Importētais fails : {GroupAddressFileName}",
-                // Lituanien
-                "LT" => $"Importuotas failas : {GroupAddressFileName}",
-                // Norvégien
-                "NB" => $"Importert fil : {GroupAddressFileName}",
-                // Néerlandais
-                "NL" => $"Geïmporteerd bestand : {GroupAddressFileName}",
-                // Polonais
-                "PL" => $"Zaimportowany plik : {GroupAddressFileName}",
-                // Portugais
-                "PT" => $"Fișier importat : {GroupAddressFileName}",
-                // Roumain
-                "RO" => $"Proiect importat: {GroupAddressFileName}",
-                // Russe
-                "RU" => $"Импортированный файл : {GroupAddressFileName}",
-                // Slovaque
-                "SK" => $"Importovaný súbor : {GroupAddressFileName}",
-                // Slovène
-                "SL" => $"Uvožena datoteka : {GroupAddressFileName}",
-                // Suédois
-                "SV" => $"Importerad fil : {GroupAddressFileName}",
-                // Turc
-                "TR" => $"İçe aktarılan dosya : {GroupAddressFileName}",
-                // Ukrainien
-                "UK" => $"Імпортований файл : {GroupAddressFileName}",
-                // Chinois simplifié
-                "ZH" => $"导入文件 ： {GroupAddressFileName}",
-                // Cas par défaut (français)
-                _ => $" Fichier importé : {GroupAddressFileName}"
-            };
+            UpdateTitle();
+           
         }
 
         return !cancelOperation && managedToExtractXml;
@@ -578,5 +520,75 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
         }
 
         return "";
+    }
+    
+    /// <summary> 
+    /// Takes the project name and displays it on the top left corner
+    /// </summary>
+    public void UpdateTitle()
+    {
+         App.WindowManager!.MainWindow.Title = settings.AppLang switch
+         {
+             // Arabe
+             "AR" => $"الملف المستورد :  {ProjectName}",
+             // Bulgare
+             "BG" => $"Импортиран файл: {ProjectName}",
+             // Tchèque
+             "CS" => $"Importovaný soubor : {ProjectName}",
+             // Danois
+             "DA" => $"Importeret fil : {ProjectName}",
+             // Allemand
+             "DE" => $"Importierte Datei : {ProjectName}",
+             // Grec
+             "EL" => $"Εισαγόμενο αρχείο : {ProjectName}",
+             // Anglais
+             "EN" => $"Imported file : {ProjectName}",
+             // Espagnol
+             "ES" => $"Fichero importado : {ProjectName}",
+             // Estonien
+             "ET" => $"Imporditud fail : {ProjectName}",
+             // Finnois
+             "FI" => $"Tuotu tiedosto : {ProjectName}",
+             // Hongrois
+             "HU" => $"Importált fájl : {ProjectName}",
+             // Indonésien
+             "ID" => $"File yang diimpor : {ProjectName}",
+             // Italien
+             "IT" => $"File importato : {ProjectName}",
+             // Japonais
+             "JA" => $"インポートされたファイル：{ProjectName}",
+             // Coréen
+             "KO" => $"가져온 파일 : {ProjectName}",
+             // Letton
+             "LV" => $"Importētais fails : {ProjectName}",
+             // Lituanien
+             "LT" => $"Importuotas failas : {ProjectName}",
+             // Norvégien
+             "NB" => $"Importert fil : {ProjectName}",
+             // Néerlandais
+             "NL" => $"Geïmporteerd bestand : {ProjectName}",
+             // Polonais
+             "PL" => $"Zaimportowany plik : {ProjectName}",
+             // Portugais
+             "PT" => $"Fișier importat : {ProjectName}",
+             // Roumain
+             "RO" => $"Proiect importat: {ProjectName}",
+             // Russe
+             "RU" => $"Импортированный файл : {ProjectName}",
+             // Slovaque
+             "SK" => $"Importovaný súbor : {ProjectName}",
+             // Slovène
+             "SL" => $"Uvožena datoteka : {ProjectName}",
+             // Suédois
+             "SV" => $"Importerad fil : {ProjectName}",
+             // Turc
+             "TR" => $"İçe aktarılan dosya : {ProjectName}",
+             // Ukrainien
+             "UK" => $"Імпортований файл : {ProjectName}",
+             // Chinois simplifié
+             "ZH" => $"导入文件 ： {ProjectName}",
+             // Cas par défaut (français)
+             _ => $" Fichier importé : {ProjectName}"              
+         };
     }
 }

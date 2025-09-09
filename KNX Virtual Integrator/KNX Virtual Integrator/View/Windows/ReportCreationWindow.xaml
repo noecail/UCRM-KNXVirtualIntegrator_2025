@@ -116,11 +116,28 @@
                           Background="{StaticResource NoColorBrush}"
                           Margin="10">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                    <TextBlock x:Name="DocParamTextTitle"
-                               Text="{DynamicResource DocParametersTitle}"
-                               Style="{StaticResource TitleTextLight}"
-                               Margin="10,10,0,0" />
-
+                    <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                        <TextBlock x:Name="DocParamTextTitle"
+                                   Text="{DynamicResource DocParametersTitle}"
+                                   Style="{StaticResource TitleTextLight}"
+                                   HorizontalAlignment="Left"/>
+                        <Image Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               HorizontalAlignment="Right">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                   FontWeight="SemiBold"
+                                                   Text="{DynamicResource ReportCreationTooltipTitle}"/>
+                                        <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                   Text="{DynamicResource ReportCreationTooltipMessage}"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                    </StackPanel>
                     <TextBlock x:Name="ReportAuthorText"
                                Text="{DynamicResource AuthorReport}"
                                Style="{StaticResource StandardTextBlockLight}"

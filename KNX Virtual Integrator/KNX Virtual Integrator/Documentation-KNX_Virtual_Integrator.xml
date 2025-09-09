@@ -3006,6 +3006,11 @@
             </list>
             </remarks>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.ProjectFileManager.UpdateTitle">
+            <summary> 
+            Takes the project name and displays it on the top left corner
+            </summary>
+        </member>
         <member name="T:KNX_Virtual_Integrator.Model.Implementations.ProjectInfoManager">
             <summary>
             Class managing the extraction of physical information of the project : building, rooms,...
@@ -4162,6 +4167,11 @@
             <item>Handles potential exceptions, including invalid dialog state, external errors, and other unexpected issues.</item>
             </list>
             </remarks>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IProjectFileManager.UpdateTitle">
+            <summary> 
+            Takes the project name and displays it on the top left corner
+            </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.Model.Interfaces.IProjectInfoManager">
             <summary>

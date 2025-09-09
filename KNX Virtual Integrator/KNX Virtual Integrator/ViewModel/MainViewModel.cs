@@ -537,7 +537,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 ChosenModelsAndState.Clear();
                 LastTestResults.Clear();
                 if (path != null)
+                {
                     _modelManager.ProjectFileManager.ProjectName = _functionalModelList.ImportListAndDictionary(path);
+                    _modelManager.ProjectFileManager.UpdateTitle();
+                }
             }
         );
 
