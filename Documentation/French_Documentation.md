@@ -107,7 +107,7 @@ Pour installer et lancer l’application, veuillez suivre les indications suivan
 
 La fenêtre principale est composée de 5 parties principales :
 
-<img src="Images/MainWindow.png" alt="fenetre-principale" style="width:50%;"/>
+<img src="Images/MainWindow.png" alt="fenetre-principale" style="width:90%;"/>
 
 **1. Le bandeau supérieur :**
 
@@ -118,15 +118,70 @@ Dans ce bandeau, vous pouvez :
 - 📥 [Lancer une analyse de l'installation](#launch-test) en ouvrant la [fenêtre d'analyse](#analysis-window) avec le bouton "**Paramètres de test**".
 - 📤 [Exporter le rapport d'analyse](#create-report) en ouvrant la [fenêtre de rapport](#report-window) avec le bouton "**Exporter le rapport**".
 
-**2. Panneau des adresses originales :**
+**2. Première colonne des Structures :**
 
-C’est dans ce panneau que, une fois votre projet importé, les adresses de groupes telles qu’elles sont nommées dans le projet actuellement apparaîtront.
+C'est dans cette colonne qu'une fois importé ou créé, votre dictionnaire de structures de test apparait.</br>
+Vous pouvez importer et exporter ce dictionnaire et tous les modèles créés avec les boutons en haut à droite, de manière de sauvegarder le 
+projet sur lequel vous travailler, par exemple. </br>
+En dessous, il y a la liste des structures créées. Elles sont sélectionnables et modifiables avec le bandeau inférieur.</br>
+Le bandeau inférieur possède 3 boutons : "**Nouvelle Structure**", Un crayon pour modifier la structure sélectionnée et 
+une poubelle pour supprimer les structures cochées dans la liste.</br>
+Le premier et le deuxième bouton ouvrent la [fenêtre d'édition de structure](#structure-window).
+</br> Attention ! "Sélectionné" signifie que le rectangle de la structure change de couleur et "Coché" signifie qu'une 
+marque apparait dans le carré à gauche du nom de la structure.
 
-**3. Panneau des adresses corrigées :**
+**3. Deuxième colonne des modèles :**
 
-De la même manière, c’est dans ce panneau que les adresses de groupe corrigées apparaîtront. Voir la partie 🚶‍♂️‍➡️ [Naviguer dans le projet modifié](../UtilisationApplication/naviguer-dans-le-projet-modifie.md) pour plus de détails sur ces vues.
+C'est dans cette colonne qu'une fois importées ou créées, les listes des modèles apparaissent.
+Seule la liste de la structure sélectionnée apparait. </br>
+Il est possible de sélectionner un modèle, de le cocher pour le supprimer ou d'en rajouter un.</br>
+Le bandeau inférieur possède 2 boutons : "**Créer un Modèle Fonctionnel**" et une poubelle pour supprimer 
+les structures cochées dans la liste.</br>
+Le premier bouton rajoute un nouveau modèle dans la liste, de la forme usuelle de la structure mais sans adresse ou parfois de valeurs.
+</br> Attention ! "Sélectionné" signifie que le rectangle de la structure change de couleur et "Coché" signifie qu'une
+marque apparait dans le carré à gauche du nom de la structure.
+
+**4. Troisième colonne des éléments de test :**
+
+C'est dans cette colonne que la liste des Éléments de tests du modèle sélectionné apparait.
+Il y est possible de renommer le modèle dans la boite à côté de "Nom :", de modifier les adresses de groupes associées
+aux envois et aux réceptions des éléments. </br>
+Il est possible d'augmenter le nombre de valeurs à envoyer et à recevoir ainsi que de les modifier.
+Il faut mettre les valeurs en entier, préférablement positives. Éviter le -1 pour la version actuelle car cela désactive 
+la valeur à envoyer. </br>
+Chaque valeur possède deux boutons : celui du dessus pour la désactiver (ne pas l'observer en cas de réception) 
+et celui du dessous pour la réactiver si elle est désactivée ou la remettre à 0 sinon.</br> 
+Le bouton avec le signe "**-**" enlève une ligne de valeurs à envoyer ou recevoir, et celui avec le "**+**" en rajoute 
+une.</br>
+
+Il n'est pas possible de désactiver les valeurs à envoyer.
+
+**5. Quatrième colonne des adresses de groupe :**
+
+C'est dans cette colonne que les adresses de groupe du projet importé et leur DPT apparaissent. </br>
+Cet affichage ne fonctionne qu'à l'appui du bouton "**Importer des adresses**" ou du bouton "**Importer un projet**".
+Si vous voulez afficher ces adresses après avoir modifié le dictionnaire ou la liste des modèles, et que vous ne voulez 
+pas écraser des modifications, il est conseillé de sauvegarder le dictionnaire (Voir boutons de la 1ère colonne) puis
+d'importer des adresses ou le projet, puis de importer à nouveau la sauvegarde si des modifications non voulue ont été 
+effectuées.
 
 ## 2.2. Menu paramètres <a name="settings-window"></a>
+
+<img src="Images/SettingsWindow1.png" alt="fenetre-principale" style="width:60%;"/>
+
+Il y a 4 zone dans cette fenêtre : 
+- En haut à droite, le bouton pour fermer la fenêtre et ne pas enregistrer les modifications.
+- Le bandeau supérieur avec les onglets de la fenêtre : Général avec les options, Débogage pour les bugs de l'application et Informations sur l'application.
+- La zone centrale avec les paramètres de l'application.
+- Le bandeau inférieur avec l'enregistrement des paramètres et fermeture de la fenêtre.
+La zone centrale permet de choisir :
+- Le thème de l'application : Clair/Obscur. 
+- La langue de l'application : Seuls le Français et l'Anglais sont complètement implémentés.
+- L'échelle de l'application : Permet d'augment ou rétraicir la taille du texte et de tout objet de l'application. Peut causer quelques problèmes.
+
+Il faut bien appuyer sur "**Enregistrer**" pour que les modifications soient prises en compte.
+
+<img src="Images/SettingsWindow2.png" alt="fenetre-principale" style="width:60%;"/>
 
 ## 2.3. Fenêtre de connexion <a name="connection-window"></a>
 
