@@ -33,7 +33,7 @@ public interface IFunctionalModelList : INotifyPropertyChanged
     /// </summary>
     /// <param name="path">Path where the XML has to be exported </param>
     public void ExportDictionary(string path);
-    /// <summary>
+    /// <summary>>
     /// Method to get all the models in the dictionary.
     /// </summary>
     /// <returns>Returns a list containing all the functional models. </returns>
@@ -118,12 +118,14 @@ public interface IFunctionalModelList : INotifyPropertyChanged
     /// see <see cref="ExportList(string)"/> and <see cref="ExportDictionary(string)"/>
     /// </summary>
     /// <param name="path">Path of the file where everything has to be exported to.</param>
-    public void ExportListAndDictionary(string path);
+    /// <param name="projectName">Name of the imported project or file.</param>
+    public void ExportListAndDictionary(string path, string projectName);
     /// <summary>
     /// see <see cref="ImportList(string)"/> and <see cref="ImportDictionary(string)"/>.
     /// </summary>
     /// <param name="path">the path of the file to import from.</param>
-    public void ImportListAndDictionary(string path);
+    /// <returns> The name of the importef file or project. </returns>
+    public string ImportListAndDictionary(string path);
     /// <summary>
     /// Resets the count of models in a structure
     /// </summary>

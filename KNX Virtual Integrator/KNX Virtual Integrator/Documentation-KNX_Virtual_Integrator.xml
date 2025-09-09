@@ -2201,11 +2201,12 @@
             <param name="doc">The XmlDocument in which is created the XmlElement.</param>
             <returns>The created XmlElement</returns>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportListAndDictionary(System.String)">
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportListAndDictionary(System.String,System.String)">
             <summary>
             see <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportDictionary(System.String)"/>
             </summary>
             <param name="path">Path of the file where everything has to be exported to.</param>
+            <param name="projectName">Name of the imported project or file.</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportList(System.String)">
             <summary>
@@ -2224,6 +2225,7 @@
             see <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportDictionary(System.String)"/>.
             </summary>
             <param name="path">the path of the file to import from.</param>
+            <returns> The name of the importef file or project. </returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ReinitializeNbModels(System.Int32)">
             <summary>
@@ -3596,7 +3598,7 @@
             <param name="path">Path where the XML has to be exported </param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.GetAllModels">
-            <summary>
+            <summary>>
             Method to get all the models in the dictionary.
             </summary>
             <returns>Returns a list containing all the functional models. </returns>
@@ -3686,17 +3688,19 @@
             </summary>
             <param name="xnList">The XmlNodeList to import from</param>
         </member>
-        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportListAndDictionary(System.String)">
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportListAndDictionary(System.String,System.String)">
             <summary>
             see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportDictionary(System.String)"/>
             </summary>
             <param name="path">Path of the file where everything has to be exported to.</param>
+            <param name="projectName">Name of the imported project or file.</param>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportListAndDictionary(System.String)">
             <summary>
             see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportDictionary(System.String)"/>.
             </summary>
             <param name="path">the path of the file to import from.</param>
+            <returns> The name of the importef file or project. </returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ResetCount(System.Int32)">
             <summary>
@@ -4864,6 +4868,11 @@
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.GroupAddressFile">
             <summary>
             The group address file used to display the addresses in the <see cref="T:KNX_Virtual_Integrator.View.Windows.MainWindow"/>
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.GroupAddressStruct">
+            <summary>
+            public variable to access a specific value (group address structure) in a private attribute (model manager)
             </summary>
         </member>
         <member name="E:KNX_Virtual_Integrator.ViewModel.MainViewModel.PropertyChanged">
