@@ -174,19 +174,15 @@
                        VerticalAlignment="Center"
                        HorizontalAlignment="Right">
                     <ToolTipService.ToolTip>
-                        <ToolTip HorizontalOffset="10" VerticalOffset="20" Background="White"
+                        <ToolTip HorizontalOffset="10" VerticalOffset="20" 
+                                 Background="{DynamicResource CurrentTooltipBackgroundBrush}"
                                  BorderBrush="{StaticResource KnxGreenBrush}">
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
-                                    Aide - Connexion à distance (NAT)
-                                </TextBlock>
-                                <TextBlock>
-                                    Cette section permet de se connecter au bus KNX à distance depuis un autre réseau IP.
-                                    <LineBreak />
-                                    Renseignez l'adresse IPv4 publique du routeur permettant l'accès au réseau privé sur lequel le bus est connecté.
-                                    <LineBreak />
-                                    Cliquez sur Connexion.
-                                </TextBlock>
+                                <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                           FontWeight="SemiBold"
+                                           Text="{DynamicResource RemoteConnectionTooltipTitle}"/>
+                                <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                           Text="{DynamicResource RemoteConnectionTooltipMessage}"/>
                             </StackPanel>
                         </ToolTip>
                     </ToolTipService.ToolTip>
@@ -265,22 +261,14 @@
                                VerticalAlignment="Center">
                             <ToolTipService.ToolTip>
                                 <ToolTip HorizontalOffset="10" VerticalOffset="20"
-                                         Background="{StaticResource WhiteBackgroundBrush}"
+                                         Background="{DynamicResource CurrentTooltipBackgroundBrush}"
                                          BorderBrush="{StaticResource KnxGreenBrush}">
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}" FontWeight="SemiBold">
-                                            Aide - Connexion via IP secure
-                                        </TextBlock>
-                                        <TextBlock>
-                                            Cette section permet de se connecter à un bus protégé par une interface IP Secure.
-                                            <LineBreak />
-                                            Connexion IP                  -> Sélectionnez dans la liste ci-dessus l'interface IP Secure. <LineBreak />
-                                            Connexion IP à distance (NAT) -> Renseignez ci-dessus l'adresse de l'interface IP Secure. <LineBreak />
-                                            Sélectionnez le fichier de clés exporté au préalable depuis ETS (Propriétés > IP Secure).
-                                            <LineBreak />
-                                            Renseignez le mot de passe correspondant au fichier de clés. <LineBreak />
-                                            Cliquez sur Connexion.
-                                        </TextBlock>
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                   FontWeight="SemiBold"
+                                                   Text="{DynamicResource SecureConnectionTooltipTitle}"/>
+                                        <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                   Text="{DynamicResource SecureConnectionTooltipMessage}"/>
                                     </StackPanel>
                                 </ToolTip>
                             </ToolTipService.ToolTip>
@@ -317,10 +305,8 @@
                             <TextBlock Margin="6,0,0,0"
                                        Name="ImportedKeysFileText"
                                        FontStyle="Italic"
-                                       FontSize="10">
-                                Fichier de clés importé :
-                            </TextBlock>
-                            
+                                       FontSize="10"
+                                       Text="{DynamicResource ImportedKeysFile}"/>
                             <!-- imported file name -->
                             <TextBlock
                                 Name="ImportKeyPathText"

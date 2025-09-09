@@ -9,7 +9,7 @@
         xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
         xmlns:entities="clr-namespace:KNX_Virtual_Integrator.Model.Entities"
         mc:Ignorable="d"
-        Title="KNX Virtual Integrator (Beta Version)" 
+        Title="KNX Virtual Integrator" 
         WindowState="Maximized"
         ResizeMode="CanResize"
         WindowStyle="None"
@@ -76,16 +76,9 @@
                                              BorderBrush="{StaticResource KnxGreenBrush}">
                                         <StackPanel Orientation="Vertical">
                                             <TextBlock Foreground="{StaticResource KnxGreenBrush}"
-                                                       FontWeight="SemiBold">
-                                                Aide - Valeurs à envoyer et Valeurs attendues en réception
-                                            </TextBlock>
-                                            <TextBlock>
-                                                Attention. Les valeurs sont à rentrer en décimal.
-                                                <LineBreak />
-                                                Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.
-                                                <LineBreak />
-                                                exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79
-                                            </TextBlock>
+                                                       FontWeight="SemiBold"
+                                                       Text="{DynamicResource ValuesTooltipTitle}"/>
+                                            <TextBlock Text="{DynamicResource ValuesTooltipMessage}"/>
                                         </StackPanel>
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
@@ -433,16 +426,10 @@
                                              BorderBrush="{StaticResource KnxGreenBrush}">
                                         <StackPanel Orientation="Vertical">
                                             <TextBlock Foreground="{StaticResource KnxLightGreenBrush}"
-                                                       FontWeight="SemiBold">
-                                                Aide - Valeurs à envoyer et Valeurs attendues en réception
-                                            </TextBlock>
-                                            <TextBlock Style="{StaticResource StandardTextBlockDark}">
-                                                Attention. Les valeurs sont à rentrer en décimal.
-                                                <LineBreak />
-                                                Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.
-                                                <LineBreak />
-                                                exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79
-                                            </TextBlock>
+                                                       FontWeight="SemiBold"
+                                                       Text="{DynamicResource ValuesTooltipTitle}"/>
+                                            <TextBlock Style="{StaticResource StandardTextBlockDark}"
+                                                       Text="{DynamicResource ValuesTooltipMessage}"/>
                                         </StackPanel>
                                     </ToolTip>
                                 </ToolTipService.ToolTip>
@@ -797,10 +784,31 @@
                     
                     <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10">
                         
-                        <TextBlock x:Name="Number1" Text="1"
-                                   FontWeight="Bold"
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="Number1"
+                                       Text="1"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,5,0"/>
+                            <Image Style="{StaticResource TooltipImage}"
+                                   Height="15"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,10,0"/>
+                                   HorizontalAlignment="Left"
+                                   Margin="0,1,0,0">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                             BorderBrush="{StaticResource KnxGreenBrush}">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                       FontWeight="SemiBold"
+                                                       Text="{DynamicResource TopBannerLeftButtonsTooltipTitle}"/>
+                                            <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                       Text="{DynamicResource TopBannerLeftButtonsTooltipMessage}"/>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </ToolTipService.ToolTip>
+                            </Image>
+                        </StackPanel>
                         
                         <!-- Bouton Paramètres -->
                         <Button Style="{StaticResource IconButtonStyle}"
@@ -825,10 +833,32 @@
             
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10">
                         
-                        <TextBlock x:Name="Number3" Text="3"
-                                   FontWeight="Bold"
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="Number3"
+                                       Text="3"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,5,0"/>
+                            <Image Style="{StaticResource TooltipImage}"
+                                   Height="15"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,10,0"/>
+                                   HorizontalAlignment="Left"
+                                   Margin="0,1,0,0">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                             BorderBrush="{StaticResource KnxGreenBrush}">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                       FontWeight="SemiBold"
+                                                       Text="{DynamicResource TopBannerCenterButtonsTooltipTitle}"/>
+                                            <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                       Text="{DynamicResource TopBannerCenterButtonsTooltipMessage}"/>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </ToolTipService.ToolTip>
+                            </Image>
+                        </StackPanel>
+                        
                         
                         <!-- Premier bouton Importation -->
                         <Button Style="{StaticResource IconTextButtonStyle}"
@@ -860,12 +890,31 @@
             
                     <!-- Boutons de droite -->
                     <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="10">
-
-                        <TextBlock x:Name="Number6" Text="6"
-                                   FontWeight="Bold"
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="Number6"
+                                       Text="6"
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,5,0"/>
+                            <Image Style="{StaticResource TooltipImage}"
+                                   Height="15"
                                    VerticalAlignment="Center"
-                                   Margin="0,0,10,0"/>
-                        
+                                   HorizontalAlignment="Left"
+                                   Margin="0,1,0,0">
+                                <ToolTipService.ToolTip>
+                                    <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                             BorderBrush="{StaticResource KnxGreenBrush}">
+                                        <StackPanel Orientation="Vertical">
+                                            <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                       FontWeight="SemiBold"
+                                                       Text="{DynamicResource TopBannerRightButtonsTooltipTitle}"/>
+                                            <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                       Text="{DynamicResource TopBannerRightButtonsTooltipMessage}"/>
+                                        </StackPanel>
+                                    </ToolTip>
+                                </ToolTipService.ToolTip>
+                            </Image>
+                        </StackPanel>
                         
                         <!-- Bouton de Test -->
                         <Button Content="{DynamicResource TestButton}"
@@ -935,11 +984,31 @@
                             </Grid.ColumnDefinitions>
                             
                             <!-- Bandeau supérieur -->
-                            <TextBlock Grid.Column="0"
-                                       x:Name="Number2" Text="2"
-                                       FontWeight="Bold"
-                                       VerticalAlignment="Center"
-                                       Margin="10,0,0,0"/>
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10,0,0,0">
+                                    <TextBlock x:Name="Number2"
+                                               Text="2"
+                                               FontWeight="Bold"
+                                               VerticalAlignment="Center"
+                                               Margin="0,0,5,0"/>
+                                    <Image Style="{StaticResource TooltipImage}"
+                                           Height="15"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Margin="0,1,0,0">
+                                        <ToolTipService.ToolTip>
+                                            <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                                     BorderBrush="{StaticResource KnxGreenBrush}">
+                                                <StackPanel Orientation="Vertical">
+                                                    <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                               FontWeight="SemiBold"
+                                                               Text="{DynamicResource LibraryTooltipTitle}"/>
+                                                    <TextBlock Text="{DynamicResource LibraryTooltipMessage}"
+                                                               Style="{DynamicResource CurrentTooltipTextBlockStyle}"/>
+                                                </StackPanel>
+                                            </ToolTip>
+                                        </ToolTipService.ToolTip>
+                                    </Image>
+                            </StackPanel>
                             
                             <StackPanel Grid.Column="1"
                                         Background="{StaticResource NoColorBrush}" 
@@ -1079,12 +1148,32 @@
                                 <ColumnDefinition Width="*" /> <!-- Titre avec son icon-->
                                 <ColumnDefinition Width="Auto" /> <!--Bouton de recherche-->
                             </Grid.ColumnDefinitions>
-
-                            <TextBlock Grid.Column="0"
-                                       x:Name="Number4" Text="4"
-                                       FontWeight="Bold"
+                            
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10,0,0,0">
+                                <TextBlock x:Name="Number4"
+                                           Text="4"
+                                           FontWeight="Bold"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,5,0"/>
+                                <Image Style="{StaticResource TooltipImage}"
+                                       Height="15"
                                        VerticalAlignment="Center"
-                                       Margin="10,0,0,0"/>
+                                       HorizontalAlignment="Left"
+                                       Margin="0,1,0,0">
+                                    <ToolTipService.ToolTip>
+                                        <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                                 BorderBrush="{StaticResource KnxGreenBrush}">
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                           FontWeight="SemiBold"
+                                                           Text="{DynamicResource FunctionalModelsTooltipTitle}"/>
+                                                <TextBlock Text="{DynamicResource FunctionalModelsTooltipMessage}"
+                                                           Style="{DynamicResource CurrentTooltipTextBlockStyle}"/>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </ToolTipService.ToolTip>
+                                </Image>
+                            </StackPanel>
                             
                             <StackPanel Grid.Column="1" Background="{StaticResource NoColorBrush}" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0">
                                 <Image Source="{StaticResource FunctionalModelDrawingImage}" Height="20"/>
@@ -1195,11 +1284,34 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="0" x:Name="Number5" Text="5"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Left"
+                            
+                           
+                            <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="10,0,0,0">
+                                <TextBlock x:Name="Number5" Text="5"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,5,0"/>
+                                <Image Style="{StaticResource TooltipImage}"
+                                       Height="15"
                                        VerticalAlignment="Center"
-                                       Margin="10,0,0,0"/>
+                                       HorizontalAlignment="Left"
+                                       Margin="0,1,0,0">
+                                    <ToolTipService.ToolTip>
+                                        <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                                 BorderBrush="{StaticResource KnxGreenBrush}">
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                           FontWeight="SemiBold"
+                                                           Text="{DynamicResource FunctionalModelParametersTooltipTitle}"/>
+                                                <TextBlock Text="{DynamicResource FunctionalModelParametersTooltipMessage}"
+                                                           Style="{DynamicResource CurrentTooltipTextBlockStyle}"/>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </ToolTipService.ToolTip>
+                                </Image>
+                            </StackPanel>
+                            
                             <!-- Titre -->
                             <TextBlock Grid.Column="1"
                                        x:Name="ModelSettingsText"

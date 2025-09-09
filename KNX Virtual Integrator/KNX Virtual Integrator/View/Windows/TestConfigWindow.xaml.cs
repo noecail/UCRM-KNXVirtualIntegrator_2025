@@ -107,6 +107,26 @@ public partial class TestConfigWindow
             Resources["AnalysisTimeoutText"] = "Temps de réponse maximal\r\n (en ms) :";
             Resources["ClearTest"] = "Annuler";
             Resources["LaunchTest"] = "Lancer le test";
+
+            Resources["ValuesTooltipTitle"] = "Aide - Valeurs à envoyer et Valeurs attendues en réception";
+            Resources["ValuesTooltipMessage"] =
+                "Attention. Les valeurs sont à rentrer en décimal.\r\n" +
+                "Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.\r\n" +
+                "exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79";
+            Resources["TestConfigurationTooltipTitle"] = "Aide - Configuration du test";
+            Resources["TestConfigurationTooltipMessage"] =
+                "Configuration du lancement du test.\r\n" +
+                "Choisissez les Modèles Fonctionnels que vous souhaitez inclure dans le test.\r\n" +
+                "Le nom des Modèles qui seront testés s'affiche dans l'encadré ci-dessus.\r\n" +
+                "Les DPTs de chaque ligne de test des Éléments à Tester des Modèles Fonctionnels inclus seront envoyés sur le bus KNX.\r\n" +
+                "La réponse reçue sera ensuite analysée pour déterminée si la ligne de test est une réussite ou un échec.";
+            Resources["ClearTooltipTitle"] = "Aide - Annuler";
+            Resources["ClearTooltipMessage"] =
+                "Annuler la sélection de Modèles.\r\n" +
+                "La liste de Modèles sélectionnés sera réinitialisée.\r\n" +
+                "Dans le cas où certaines Structures ou certains Modèles seraient encore cochés, \r\n" +
+                "il convient de se fier aux noms affichés dans l'encadré ci-dessus pour savoir\r\n" +
+                "quels Modèles sont réellement sélectionnés.";
         }
         else
         {
@@ -129,6 +149,26 @@ public partial class TestConfigWindow
             Resources["AnalysisTimeoutText"] = "Maximal answer timeout\r\n (in ms) :";
             Resources["ClearTest"] = "Reset";
             Resources["LaunchTest"] = "Launch Test";
+
+            Resources["ValuesTooltipTitle"] = "Help - Values to be sent and expected values upon receipt";
+            Resources["ValuesTooltipMessage"] = 
+                "Caution. Values must be entered in decimal format.\r\n" +
+                "A value entered in hexadecimal format may be misinterpreted and compromise the validity of the test.\r\n" +
+                "Example: If you want to write hexadecimal (hex)4F, write decimal (dec)79";
+            Resources["TestConfigurationTooltipTitle"] = "Help - Test configuration";
+            Resources["TestConfigurationTooltipMessage"] =
+                "Configuration of the test execution.\r\n" +
+                "Choose which Functional Models you wish to include in the test.\r\n" +
+                "The name of the Models which will be tested is displayed in the box above.\r\n" +
+                "The DPTs of each test line from the Tested Elements of the Functional Models that are included will be sent on the KNX bus.\r\n" +
+                "The response received will then be analyzed to determine whether the test line is a success or a failure.";
+            Resources["ClearTooltipTitle"] = "Help - Reset";
+            Resources["ClearTooltipMessage"] =
+                "Rested the selection of Models.\r\n" +
+                "The liste of selected Models will be reset.\r\n" +
+                "In the event that certain Structures or Models are still checked,\r\n" +
+                "you should refer to the names displayed in the box above\r\n" +
+                "to find out which Models are actually selected.";
         }
     }
 
