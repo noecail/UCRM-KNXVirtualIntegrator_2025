@@ -562,6 +562,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 SelectedTestModels.Clear();
                 ChosenModelsAndState.Clear();
+                LastTestResults.Clear();
                 var success = modelManager.ProjectFileManager.ExtractGroupAddressFile(fileName);
                 return success;
             }
@@ -572,6 +573,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 SelectedTestModels.Clear();
                 ChosenModelsAndState.Clear();
+                LastTestResults.Clear();
                 var success = _modelManager.ProjectFileManager.ExtractProjectFiles(fileName);
                 ProjectFolderPath = _modelManager.ProjectFileManager.ProjectFolderPath;
                 return success;
