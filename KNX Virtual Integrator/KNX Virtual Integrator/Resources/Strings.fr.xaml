@@ -103,8 +103,8 @@
     <sys:String x:Key="AuthorReport">Auteur du rapport :</sys:String>
     <sys:String x:Key="ReportPath">Chemin du rapport :</sys:String>
     <sys:String x:Key="ReportFullPath">Emplacement du rapport</sys:String>
-    <sys:String x:Key="ReportPreview">Prévisualisation du rapport :</sys:String>
-    <sys:String x:Key="GenerationButton">Générer le rapport</sys:String>
+    <sys:String x:Key="ReportPreview">Prévisualisation du rapport (peut causer des erreurs):</sys:String>
+    <sys:String x:Key="GenerationButton">Prévisualiser le rapport</sys:String>
     <sys:String x:Key="CancelButton">Annuler</sys:String>
     <!--Report Creation Window-->
     

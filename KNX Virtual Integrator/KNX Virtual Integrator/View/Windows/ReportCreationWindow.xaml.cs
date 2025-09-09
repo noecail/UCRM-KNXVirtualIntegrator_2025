@@ -61,10 +61,10 @@ public partial class ReportCreationWindow
             Resources["TestGenerationTitle"] = "Génération du rapport de test";
             Resources["DocParametersTitle"] = "Paramètres du document";
             Resources["AuthorReport"] = "Auteur du rapport :";
-            Resources["ReportPath"] = "Chemin du rapport :";
+            Resources["ReportPath"] = "Sauvegardez le rapport :";
             Resources["ReportFullPath"] = "Emplacement du rapport";
-            Resources["ReportPreview"] = "Prévisualisation du rapport : Désactivée pour des raisons de compatibilité";
-            Resources["GenerationButton"] = "Générer le rapport";
+            Resources["ReportPreview"] = "Prévisualisation du rapport (peut causer des erreurs):";
+            Resources["GenerationButton"] = "Prévisualiser le rapport";
             Resources["CancelButton"] = "Annuler";
         }
         else
@@ -72,11 +72,11 @@ public partial class ReportCreationWindow
             Resources["ReportWindowTitle"] = "Test report creation";
             Resources["TestGenerationTitle"] = "Test report generation";
             Resources["DocParametersTitle"] = "Document parameters";
-            Resources["AuthorReport"] = "Report author:";
-            Resources["ReportPath"] = "Report path:";
-            Resources["ReportFullPath"] = "Report full path : ";
-            Resources["ReportPreview"] = "Report preview : Inactive for compatibility reasons";
-            Resources["GenerationButton"] = "Generate report";
+            Resources["AuthorReport"] = "Report author :";
+            Resources["ReportPath"] = "Save the report :";
+            Resources["ReportFullPath"] = "Report full path";
+            Resources["ReportPreview"] = "Report preview (can cause errors):";
+            Resources["GenerationButton"] = "Preview the report";
             Resources["CancelButton"] = "Cancel";
         }
     }
@@ -188,21 +188,19 @@ public partial class ReportCreationWindow
                 return;
             }
             
-            //Disabled due to issues
-            /*if (uri.Equals(MyBrowser.Source))
+            //Because using the same can cause issues, we return
+            if (uri.Equals(MyBrowser.Source))
             {
                 _mainViewModel.ConsoleAndLogWriteLineCommand.Execute(
-                    "The pdf URI Address has to be changed before modifying the file");
+                    "The pdf URI Address has to be changed before viewing the file");
                 return;
-            }*/
-
-            _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
-                _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
+            }
+            
             if (_mainViewModel.PdfPath.Length <= 0)
                 return;
             // Disabled due to issues
-            //MyBrowser.Navigate(uri);
-            //MyBrowser.Visibility = Visibility.Visible;
+            MyBrowser.Navigate(uri);
+            MyBrowser.Visibility = Visibility.Visible;
         }
         catch (Exception ex)
         {
@@ -240,11 +238,8 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void SetPdfPathButton_OnClick(object sender, RoutedEventArgs e)
     {
-        if (_mainViewModel.PdfPath.Length > 0)
-        {
-            File.Delete(_mainViewModel.PdfPath);
-            _mainViewModel.PdfPath = "";
-        }
+        MyBrowser.Visibility = Visibility.Hidden;
+        MyBrowser.Source = null;
         // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
         SaveFileDialog saveFileDialog = new()
         {
@@ -262,8 +257,6 @@ public partial class ReportCreationWindow
             },
             // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
             FilterIndex = 1,
-            // N'indique pas de warning si le fichier n'existe pas
-            //CheckFileExists = true,
             FileName = $"KNXVI-Analysis_Report-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.pdf",
             DefaultExt = ".pdf"
         };
@@ -280,8 +273,11 @@ public partial class ReportCreationWindow
             if (File.Exists(saveFileDialog.FileName)) File.Delete(saveFileDialog.FileName);
             
             // Donner le chemin au Model
+            _mainViewModel.AuthorName = AuthorNameTextBox.Text;
             _mainViewModel.PdfPath = saveFileDialog.FileName;
             PdfPathText.Text = saveFileDialog.FileName;
+            _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
+                _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
         }
         else
         {
