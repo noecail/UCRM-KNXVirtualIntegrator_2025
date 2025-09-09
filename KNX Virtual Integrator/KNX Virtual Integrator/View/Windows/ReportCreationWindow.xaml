@@ -7,7 +7,7 @@
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="{DynamicResource ReportWindowTitle}" Height="475" Width="515"
+                 Title="{DynamicResource ReportWindowTitle}" Height="500" Width="515"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
                  Background="{StaticResource WhiteBackgroundBrush}"
@@ -116,11 +116,28 @@
                           Background="{StaticResource NoColorBrush}"
                           Margin="10">
                 <StackPanel Orientation="Vertical" VerticalAlignment="Top">
-                    <TextBlock x:Name="DocParamTextTitle"
-                               Text="{DynamicResource DocParametersTitle}"
-                               Style="{StaticResource TitleTextLight}"
-                               Margin="10,10,0,0" />
-
+                    <StackPanel Orientation="Horizontal" Margin="10,10,0,0">
+                        <TextBlock x:Name="DocParamTextTitle"
+                                   Text="{DynamicResource DocParametersTitle}"
+                                   Style="{StaticResource TitleTextLight}"
+                                   HorizontalAlignment="Left"/>
+                        <Image Style="{StaticResource TooltipImage}"
+                               Height="15"
+                               HorizontalAlignment="Right">
+                            <ToolTipService.ToolTip>
+                                <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                         BorderBrush="{StaticResource KnxGreenBrush}">
+                                    <StackPanel Orientation="Vertical">
+                                        <TextBlock Foreground="{StaticResource KnxGreenBrush}"
+                                                   FontWeight="SemiBold"
+                                                   Text="{DynamicResource ReportCreationTooltipTitle}"/>
+                                        <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                                   Text="{DynamicResource ReportCreationTooltipMessage}"/>
+                                    </StackPanel>
+                                </ToolTip>
+                            </ToolTipService.ToolTip>
+                        </Image>
+                    </StackPanel>
                     <TextBlock x:Name="ReportAuthorText"
                                Text="{DynamicResource AuthorReport}"
                                Style="{StaticResource StandardTextBlockLight}"
@@ -158,14 +175,16 @@
 
                     <TextBlock x:Name="PdfPathText"
                                Style="{StaticResource StandardTextBlockLight}"
+                               TextWrapping="Wrap"
                                Width="400"
-                               Margin="10, 5, 10, 10" />
+                               Height="40"
+                               Margin="10, 5, 10, 5" />
 
                     <!-- APERCU DU PDF AVEC WEBVIEWER -->
                     <TextBlock x:Name="ReportPreviewText"
                                Text="{DynamicResource ReportPreview}"
                                Style="{StaticResource StandardTextBlockLight}"
-                               Margin="10,10,10,10" />
+                               Margin="10,5,10,10" />
                     <WebBrowser x:Name="MyBrowser" Visibility="Hidden"></WebBrowser>
                 </StackPanel>
             </ScrollViewer>

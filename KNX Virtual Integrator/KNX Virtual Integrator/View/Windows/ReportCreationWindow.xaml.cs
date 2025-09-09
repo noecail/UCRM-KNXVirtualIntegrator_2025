@@ -63,9 +63,17 @@ public partial class ReportCreationWindow
             Resources["AuthorReport"] = "Auteur du rapport :";
             Resources["ReportPath"] = "Chemin du rapport :";
             Resources["ReportFullPath"] = "Emplacement du rapport";
-            Resources["ReportPreview"] = "Prévisualisation du rapport : Désactivée pour la Beta";
+            Resources["ReportPreview"] = "Prévisualisation du rapport : Désactivée pour des raisons de compatibilité";
             Resources["GenerationButton"] = "Générer le rapport";
             Resources["CancelButton"] = "Annuler";
+            Resources["ReportCreationTooltipTitle"] = "Aide - Rapport de Test";
+            Resources["ReportCreationTooltipMessage"] =
+                "Création du rapport de test.\r\n" +
+                "Le nom de l'auteur est optionnel.\r\n" +
+                "Appuyez sur le boutnon Générer le rapport pour exporter le rapport de test.\r\n" +
+                "Une fenêtre de dialogue s'ouvre, vous permettant de définir le nom et la localisation du rapport\r\n." +
+                "À la fermeture de la fenêtre de dialogue, le rapport est généré à la localisation voulue.\r\n" +
+                "La prévisualisation du rapport peut présenter des problèmes, selon l'éditeur de PDF qui est installé sur l'ordinateur utilisé.";
         }
         else
         {
@@ -75,9 +83,17 @@ public partial class ReportCreationWindow
             Resources["AuthorReport"] = "Report author:";
             Resources["ReportPath"] = "Report path:";
             Resources["ReportFullPath"] = "Report full path : ";
-            Resources["ReportPreview"] = "Report preview : Inactive for the Beta";
+            Resources["ReportPreview"] = "Report preview : Inactive for compatibility reasons";
             Resources["GenerationButton"] = "Generate report";
             Resources["CancelButton"] = "Cancel";
+            Resources["ReportCreationTooltipTitle"] = "Help - Test Report";
+            Resources["ReportCreationTooltipMessage"] =
+                "Creating the test report.\r\n" +
+                "The author's name is optional.\r\n" +
+                "Press the Generate Report button to export the test report.\r\n" +
+                "A dialog window will open, allowing you to define the name and location of the report.\r\n" +
+                "When you close the dialog window, the report will be generated in the desired location.\r\n" +
+                "The report preview may have issues, depending on the PDF editor installed on the computer being used.";
         }
     }
     
@@ -89,6 +105,8 @@ public partial class ReportCreationWindow
         Style titleStyles;
         Style textBlockStyles;
         Brush backgrounds;
+        Brush tooltipBackgroundBrush;
+        Style tooltipTextBlockStyle;
         
         if (_mainViewModel.AppSettings.EnableLightTheme)
         {
@@ -105,6 +123,8 @@ public partial class ReportCreationWindow
             CancelRepImage.Source = (DrawingImage)FindResource("CrossmarkLight");
             ReportWindowFooter.Background = (Brush)FindResource("WhiteBackgroundBrush");
             Background = (Brush)FindResource("WhiteBackgroundBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("WhiteBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockLight");
         }
         else
         {
@@ -122,6 +142,8 @@ public partial class ReportCreationWindow
             CancelRepImage.Source = (DrawingImage)FindResource("CrossmarkDark");
             ReportWindowFooter.Background = (Brush)FindResource("DarkGrayBackgroundBrush");
             Background = (Brush)FindResource("DarkGrayBackgroundBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockDark");
         }
         
         ReportWindowTopTitle.Style = titleStyles;
@@ -134,6 +156,9 @@ public partial class ReportCreationWindow
         CancelButtonText.Style = textBlockStyles;
 
         ReportCreationWindowBorder.Background = backgrounds;
+
+        Resources["CurrentTooltipBackgroundBrush"] = tooltipBackgroundBrush;
+        Resources["CurrentTooltipTextBlockStyle"] = tooltipTextBlockStyle;
         //Background = backgrounds;
     }
     
@@ -154,7 +179,7 @@ public partial class ReportCreationWindow
         }
         ReportCreationWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
             
-        Height = 475 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 475 * scale;
+        Height = 500 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 500 * scale;
         Width = 515 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 515 * scale;
     }
     
@@ -240,6 +265,11 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void SetPdfPathButton_OnClick(object sender, RoutedEventArgs e)
     {
+        if (_mainViewModel.PdfPath.Length > 0)
+        {
+            File.Delete(_mainViewModel.PdfPath);
+            _mainViewModel.PdfPath = "";
+        }
         // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
         SaveFileDialog saveFileDialog = new()
         {
@@ -258,7 +288,7 @@ public partial class ReportCreationWindow
             // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
             FilterIndex = 1,
             // N'indique pas de warning si le fichier n'existe pas
-            CheckFileExists = true,
+            //CheckFileExists = true,
             FileName = $"KNXVI-Analysis_Report-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.pdf",
             DefaultExt = ".pdf"
         };

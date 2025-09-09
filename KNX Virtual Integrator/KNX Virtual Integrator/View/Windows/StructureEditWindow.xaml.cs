@@ -82,6 +82,44 @@ public partial class StructureEditWindow
             Resources["ApplyChangesErrorMessage"] = "Vérifiez votre Structure. Il ne peut y avoir d'Élément à Tester avec des DPTs non assignés. Il faut au moins 1 Élément à Tester.";
             Resources["ApplyChanges"]="Appliquer les changements";
             Resources["UndoChanges"]="Annuler les changements";
+
+            Resources["StructureKeywordsTooltipTitle"] = "Aide - Mots-clés";
+            Resources["StructureKeywordsTooltipMessage"] =
+                "Rentrer des mots-clés pour faciliter l'association des participants à la Structure.\r\n" +
+                "Rentrer les mots-clés à la suite, en les séparant par une virgule (,) sans espace entre les mots-clés.\r\n" +
+                "Le mot-clé peut être n'importe quel mot ou groupe de mot permettant de reconnaître le participant.\r\n" +
+                "exemple : Lumiere on/off,Lumiere_on/off,Lumiere on/off,Lumiere on-off,Eclairage_Simple,Eclairage_Simple,Eclairage Simple";
+            Resources["DptPersonalizationTooltipTitle"] = "Aide - Personnalisation de DPTs";
+            Resources["DptPersonalizationTooltipMessage"] =
+                "Créer des DPTs personnalisés.\r\n" +
+                "Les DPTs crées dans cette section seront utilisables dans les éléments à tester de la Structure du Modèle Fonctionnel.\r\n" +
+                "Pour chaque DPT, choisir le nom, le type de DPT et ajouter des mots-clés pour faciliter l'assignation des adresses de groupe aux DPTs.";
+            Resources["DptKeywordsTooltipTitle"] = "Aide - Mots-clés";
+            Resources["DptKeywordsTooltipMessage"] =
+                "Rentrer des mots-clés pour faciliter la reconnaissance des adresses de groupe de votre projet.\r\n" +
+                "Rentrer les mots-clés à la suite, en les séparant par une virgule (,) sans espace entre les mots-clés.\r\n" +
+                "Le mot-clé devrait être ce par quoi commence le nom de votre adresse de groupe.\r\n" +
+                "exemple : Cmd_Eclairage_OnOff_MaisonDupre_RezDeChaussee_Etage_Salon. Rentrer dans les mots clés Cmd_Eclairage_OnOff.";
+            Resources["FunctionalModelStructureTooltipTitle"] = "Aide - Structure du Modèle Fonctionnel";
+            Resources["FunctionalModelStructureTooltipMessage"] =
+                "Créer ou modifier une structure de Modèle Fonctionnel.\r\n" +
+                "Les Modèles Fonctionnels déjà créés ne seront pas modifiés tant que le bouton Valider n'est pas pressé.\r\n" +
+                "Un élément à tester contient 1 ou + DPTs à envoyer, et contient 0 ou + DPTs attendus en réception.";
+            Resources["ValuesTooltipTitle"] = "Aide - Valeurs à envoyer et Valeurs attendues en réception";
+            Resources["ValuesTooltipMessage"] =
+                "Attention. Les valeurs sont à rentrer en décimal.\r\n" +
+                "Une valeur rentrée en hexadécimal pourrait être mal comprise et compromettre la validité du test.\r\n" +
+                "exemple : Si vous voulez écrire en hexadécimal (hex)4F, écrivez en décimal (dec)79";
+            Resources["UndoChangesTooltipTitle"] = "Aide - Annuler les changements";
+            Resources["UndoChangesTooltipMessage"] =
+                "Annuler les changements faits à la Structure de Modèle Fonctionnel.\r\n" +
+                "La Structure sera restaurée à la version qui existait lors de la dernière ouverture de cette fenêtre.";
+            Resources["ApplyChangesTooltipTitle"] = "Aide - Valider les changements";
+            Resources["ApplyChangesTooltipMessage"] =
+                "Valider les changements faits à la Structure de Modèle Fonctionnel.\r\n" +
+                "La liste de Modèles Fonctionnels associés à cette Structure sera supprimée.\r\n" +
+                "Un nouveau Modèle Fonctionnel correspondant à la nouvelle Structure sera créé.";
+            
         }
         else
         {
@@ -103,6 +141,43 @@ public partial class StructureEditWindow
             Resources["ApplyChangesErrorMessage"] = "Check your Structure. There can not be any Tested Element with unassigned DPTs. There has to be at least one Tested Element.";
             Resources["ApplyChanges"]="Apply changes";
             Resources["UndoChanges"]="Undo changes";
+            
+            Resources["StructureKeywordsTooltipTitle"] = "Help - Keywords";
+            Resources["StructureKeywordsTooltipMessage"] =
+                "Enter keywords to facilitate the association of participants with the Structure.\r\n" +
+                "Enter keywords one after the other, separating them with a comma (,) without spaces between keywords.\r\n" +
+                "The keyword can be any word or group of words that identifies the participant.\r\n" +
+                "example: Light on/off,Light_on/off,Light on/off,Light on-off,Simple_Lighting,Simple_Lighting,Simple Lighting";
+            Resources["DptPersonalizationTooltipTitle"] = "Help - Customising DPTs";
+            Resources["DptPersonalizationTooltipMessage"] =
+                "Create custom DPTs.\r\n" +
+                "The DPTs created in this section will be usable in the Tested Elements in the Functional Model Structure.\r\n" +
+                "For each DPT, choose the name, DPT type and add keywords to facilitate the assignment of group addresses to DPTs.";
+            Resources["DptKeywordsTooltipTitle"] = "Help - Keywords";
+            Resources["DptKeywordsTooltipMessage"] =
+                "Enter keywords to facilitate recognition of your project's group addresses.\r\n" +
+                "Enter keywords in sequence, separating them with a comma (,) without spaces between keywords.\r\n" +
+                "The keyword should be the first part of your group address name.\r\n" +
+                "example: Cmd_Lighting_OnOff_DupreHouse_GroundFloor_FirstFloor_LivingRoom. Enter the keywords Cmd_Lighting_OnOff.";
+            Resources["FunctionalModelStructureTooltipTitle"] = "Help - Functional Model Structure";
+            Resources["FunctionalModelStructureTooltipMessage"] =
+                "Create or modify a Functional Model structure.\r\n" +
+                "Functional Models that have already been created will not be modified until the Validate button is pressed.\r\n" +
+                "An Tested Element contains 1 or more DPTs to be sent, and contains 0 or more DPTs expected to be received.";
+            Resources["ValuesTooltipTitle"] = "Help - Values to be sent and expected values upon receipt";
+            Resources["ValuesTooltipMessage"] = 
+                "Caution. Values must be entered in decimal format.\r\n" +
+                "A value entered in hexadecimal format may be misinterpreted and compromise the validity of the test.\r\n" +
+                "Example: If you want to write hexadecimal (hex)4F, write decimal (dec)79";
+            Resources["UndoChangesTooltipTitle"] = "Help - Undo Changes";
+            Resources["UndoChangesTooltipMessage"] =
+                "Undo changes made to the Functional Model Structure.\r\n" +
+                "The Structure will be restored to the version that existed when this window was last opened. ";
+            Resources["ApplyChangesTooltipTitle"] = "Help - Apply changes";
+            Resources["ApplyChangesTooltipMessage"] =
+                "Apply changes made to the Functional Model Structure.\r\n" +
+                "The list of Functional Models associated with this Structure will be deleted.\r\n" +
+                "A new Functional Model corresponding to the new Structure will be created.";
         }
     }
 
@@ -120,6 +195,8 @@ public partial class StructureEditWindow
         Brush textBlockForegroundBrush;
         Brush elementContainersBackgroundBrush;
         Style elementContainersStyle;
+        Brush tooltipBackgroundBrush;
+        Style tooltipTextBlockStyle;
         
         if (_viewModel.AppSettings.EnableLightTheme)
         {
@@ -140,6 +217,8 @@ public partial class StructureEditWindow
             Resources["CurrentDPTBorderBorderBrush"] = (Brush)FindResource("DarkGrayBorderBrush");
             Resources["CurrentDPTTypeListBoxBackground"] = (Brush)FindResource("OffWhiteBackgroundBrush");
             Resources["CurrentElementBorderBorderBrush"] = (Brush)FindResource("DarkGrayBorderBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("WhiteBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockLight");
         }
         else
         { 
@@ -160,6 +239,8 @@ public partial class StructureEditWindow
             Resources["CurrentDPTBorderBorderBrush"] = (Brush)FindResource("GrayBorderBrush");
             Resources["CurrentDPTTypeListBoxBackground"] = (Brush)FindResource("DarkGrayBackgroundBrush");
             Resources["CurrentElementBorderBorderBrush"] = (Brush)FindResource("GrayBorderBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockDark");
         }
 
         StructureKeywordsTextBox.Style = textBoxStyle;
@@ -199,6 +280,9 @@ public partial class StructureEditWindow
 
         TestedElementsListBox.ItemContainerStyle = elementContainersStyle;
         DPTDictionaryListBox.ItemContainerStyle = elementContainersStyle;
+
+        Resources["CurrentTooltipBackgroundBrush"] = tooltipBackgroundBrush;
+        Resources["CurrentTooltipTextBlockStyle"] = tooltipTextBlockStyle;
     }
     
     private void ApplyScaling()

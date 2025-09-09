@@ -77,11 +77,27 @@ public partial class ConnectionWindow
             Resources["IPSecureConnection"]="Connexion via IP Secure";
             Resources["KnxKeysFile"]="Fichier de clés (.knxkeys)";
             Resources["ImportKeys"]="importer clés";
+            Resources["ImportedKeysFile"] = "Fichier de clés importé :";
             Resources["PwdKeys"]="Mot de passe du fichier de clés";
             Resources["ConnectionError"]="Erreur lors de la connexion";
             Resources["CurrentInterface"]="Interface actuellement connectée :";
             Resources["ConnectButtonText"]="Connexion";
             Resources["DisconnectButtonText"]="Déconnexion";
+
+            Resources["RemoteConnectionTooltipTitle"] = "Aide - Connexion à distance (NAT)";
+            Resources["RemoteConnectionTooltipMessage"] =
+                "Cette section permet de se connecter au bus KNX à distance depuis un autre réseau IP.\r\n" +
+                "Renseignez l'adresse IPv4 publique du routeur permettant l'accès au réseau privé sur lequel le bus est connecté.\r\n" +
+                "Cliquez sur Connexion.";
+            
+            Resources["SecureConnectionTooltipTitle"] = "Aide - Connexion via IP Secure";
+            Resources["SecureConnectionTooltipMessage"] =
+                "Cette section permet de se connecter à un bus protégé par une interface IP Secure.\r\n" +
+                "Connexion IP.........................................Sélectionnez dans la liste ci-dessus l'interface IP Secure.\r\n" +
+                "Connexion IP à distance (NAT).......Renseignez ci-dessus l'adresse de l'interface IP Secure.\r\n" +
+                "Sélectionnez le fichier de clés exporté au préalable depuis ETS (Propriétés > IP Secure).\r\n" +
+                "Renseignez le mot de passe correspondant au fichier de clés.\r\n" +
+                "Cliquez sur Connexion.";
         }
         else
         {
@@ -96,12 +112,28 @@ public partial class ConnectionWindow
             Resources["IPSecureConnection"]="IP Secure connection";
             Resources["KnxKeysFile"]="Keys file .knxkeys";
             Resources["ImportKeys"]="Import keys";
+            Resources["ImportedKeysFile"] = "Imported keys file :";
             Resources["PwdKeys"]="Keys file password";
             Resources["ConnectionError"]="Connection error";
             Resources["CurrentInterface"]="Currently connected interface:";
             Resources["ConnectButtonText"]="Connect";
             Resources["DisconnectButtonText"]="Disconnect";
             
+            Resources["RemoteConnectionTooltipTitle"] = "Help - Remote Connection (NAT)";
+            Resources["RemoteConnectionTooltipMessage"] =
+                "This section allows you to connect to the KNX bus remotely from another IP network.\r\n" +
+                "Enter the public IPv4 address of the router allowing access to the private network to which the bus is connected.\r\n" + 
+                "Click Connect.";
+            
+            Resources["SecureConnectionTooltipTitle"] = "Help - Secure IP connection";
+            Resources["SecureConnectionTooltipMessage"] = 
+                "This section allows you to connect to a bus protected by an IP Secure interface.\r\n" + 
+                "IP connection.....................................Select the IP Secure interface from the list above.\r\n" + 
+                "Remote IP connection (NAT).......Enter the address of the IP Secure interface above.\r\n" + 
+                "Select the key file previously exported from ETS (Properties > IP Secure).\r\n" + 
+                "Enter the password for the key file.\r\n" + 
+                "Click Connect.";
+
         }
     }
     
@@ -112,11 +144,15 @@ public partial class ConnectionWindow
     {
         Brush textColorBrush;
         Brush backgroundColorBrush;
+        Brush tooltipBackgroundBrush;
+        Style tooltipTextBlockStyle;
         
         if (_viewModel.AppSettings.EnableLightTheme)
         {
             textColorBrush = (Brush)FindResource("LightForegroundBrush");
             backgroundColorBrush = (Brush)FindResource("OffWhiteBackgroundBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("WhiteBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockLight");
             NatAddressTextBox.Style = (Style)FindResource("TextBoxLight");
             IndivAddressTextBox.Style = (Style)FindResource("TextBoxLight");
             ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxLight");
@@ -132,6 +168,8 @@ public partial class ConnectionWindow
         {
             textColorBrush = (Brush)FindResource("DarkOffWhiteForegroundBrush");
             backgroundColorBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            tooltipBackgroundBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockDark");
             NatAddressTextBox.Style = (Style)FindResource("TextBoxDark");
             IndivAddressTextBox.Style = (Style)FindResource("TextBoxDark");
             ActualPwdKeysFileTextBox.Style = (Style)FindResource("TextBoxDark");
@@ -163,7 +201,10 @@ public partial class ConnectionWindow
         LockIconText.Foreground = textColorBrush;
         CurrCoInterfaceText.Tag = textColorBrush;
         NatIconText.Foreground = textColorBrush;
-        
+
+        Resources["CurrentTooltipBackgroundBrush"] = tooltipBackgroundBrush;
+        Resources["CurrentTooltipTextBlockStyle"] = tooltipTextBlockStyle;
+
     }
     
     /// <summary>

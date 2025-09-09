@@ -111,13 +111,11 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         
         // Information du lexique du rapport
         document.Add(new Paragraph("Les résultats sont présentés commande par commande, avec un résultat par réception.\n"+
-                                   "Il y a 5 types de résultat pour l'analyse : "));
+                                   "Il y a 3 types de résultat pour l'analyse sans compter les erreurs : "));
         document.SetFontSize(12);
         document.Add(new Paragraph(" - Success indique que la réception a reçu la valeur attendue de l'adresse concernée\n" +
                                    " - Response indique que la réception a reçu le message de présence mais pas la\n\t valeur (cela peut être normal si la même valeur est attendue/envoyée 2 fois de suite)\n"+
-                                   " - Failure indique que la réception n'a ni reçu le message de présence, ni le message\n\t d'acquittement avec la valeur attendue\n"+
-                                   " - Address Error indique que la commande et/ou la réception sont mal configurées\n\t pour l'adresse\n" + 
-                                   " - L'absence d'information indique une absence de réception ou d'envoi"));
+                                   " - Failure indique que la réception n'a ni reçu le message de présence, ni le message\n\t d'acquittement avec la valeur attendue\n"));
         document.SetFontSize(14);
         document.Add(new Paragraph("\n\n"));
         
@@ -181,10 +179,14 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     private void GenerateTestListAndResults(Document document, ObservableCollection<FunctionalModel>  testedList, List<List<List<List<ResultType>>>> testResults)
     {
         var i = 0;
+        if (testedList.Count <= 0)
+            document.Add(new Paragraph("No tested model"));
         foreach (var testedModel in testedList)
         {
             var j = 0;
             document.Add(new Paragraph($"Tested Model : {testedModel.FullName}"));
+            if (testedModel.ElementList.Count <= 0)
+                document.Add(new Paragraph("No Element in the model."));
             foreach (var testedElement in testedModel.ElementList)
             {
                 var k = 0;
