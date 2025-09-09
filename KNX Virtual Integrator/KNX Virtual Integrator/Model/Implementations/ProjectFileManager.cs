@@ -74,6 +74,10 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
             }
 
             knxprojSourceFilePath = NormalizePath(knxprojSourceFilePath);
+            
+            ProjectName = Path.GetFileNameWithoutExtension(knxprojSourceFilePath);
+
+            UpdateTitle();
 
             var zipArchivePath = GetZipArchivePath(knxprojSourceFilePath);
 
