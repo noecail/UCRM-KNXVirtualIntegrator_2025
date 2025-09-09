@@ -7,7 +7,7 @@
                  xmlns:viewmodel="clr-namespace:KNX_Virtual_Integrator.ViewModel"
                  d:DataContext="{d:DesignInstance Type=viewmodel:MainViewModel}"
                  mc:Ignorable="d"
-                 Title="{DynamicResource ReportWindowTitle}" Height="475" Width="515"
+                 Title="{DynamicResource ReportWindowTitle}" Height="500" Width="515"
                  TitleCharacterCasing="Normal"
                  ResizeMode="NoResize"
                  Background="{StaticResource WhiteBackgroundBrush}"
@@ -158,14 +158,16 @@
 
                     <TextBlock x:Name="PdfPathText"
                                Style="{StaticResource StandardTextBlockLight}"
+                               TextWrapping="Wrap"
                                Width="400"
-                               Margin="10, 5, 10, 10" />
+                               Height="40"
+                               Margin="10, 5, 10, 5" />
 
                     <!-- APERCU DU PDF AVEC WEBVIEWER -->
                     <TextBlock x:Name="ReportPreviewText"
                                Text="{DynamicResource ReportPreview}"
                                Style="{StaticResource StandardTextBlockLight}"
-                               Margin="10,10,10,10" />
+                               Margin="10,5,10,10" />
                     <WebBrowser x:Name="MyBrowser" Visibility="Hidden"></WebBrowser>
                 </StackPanel>
             </ScrollViewer>
