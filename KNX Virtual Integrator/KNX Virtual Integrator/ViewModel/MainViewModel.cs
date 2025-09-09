@@ -527,7 +527,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ExportListAndDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
                 if (path != null)
-                    _functionalModelList.ExportListAndDictionary(path);
+                    _functionalModelList.ExportListAndDictionary(path,_modelManager.ProjectFileManager.ProjectName);
             }
         );
                 
@@ -537,7 +537,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 ChosenModelsAndState.Clear();
                 LastTestResults.Clear();
                 if (path != null)
-                    _functionalModelList.ImportListAndDictionary(path);
+                    _modelManager.ProjectFileManager.ProjectName = _functionalModelList.ImportListAndDictionary(path);
             }
         );
 

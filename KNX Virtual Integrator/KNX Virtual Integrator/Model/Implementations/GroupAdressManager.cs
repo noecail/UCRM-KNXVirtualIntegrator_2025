@@ -650,13 +650,19 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
                             var model = functionalModelList.FunctionalModelDictionary.FunctionalModels[index]; //Saves the structure recognized
                             foreach(var newModel in newFunctionalModels) // For all the commands previously built, builds the intvalues
                             {
-                                newModel.BuildCmdIntValues(model.Model);
                                 for (var i = 0;i<model.Model.ElementList.Count;i++)
                                 {
                                     while (newModel.ElementList.Count<i+1)
                                         newModel.ElementList.Add(new TestedElement());
+                                    while(newModel.ElementList[i].TestsCmd.Count < model.Model.ElementList[i].TestsCmd.Count)
+                                    {
+                                        newModel.ElementList[i].TestsCmd.Add(new DataPointType(model.Model.ElementList[i].TestsCmd[newModel.ElementList[i].TestsCmd.Count]));
+                                        newModel.ElementList[i].TestsCmd[^1].IntValue.Clear();
+                                        newModel.ElementList[i].TestsCmd[^1].UpdateValue();
+                                    }
                                     newModel.ElementList[i].TestsIe = new ObservableCollection<DataPointType>(model.Model.ElementList[i].TestsIe);
                                 }
+                                newModel.BuildCmdIntValues(model.Model);
                             }
                             for (var i = 0; i < structureList.Count; i++) //Goes through all structures
                             {

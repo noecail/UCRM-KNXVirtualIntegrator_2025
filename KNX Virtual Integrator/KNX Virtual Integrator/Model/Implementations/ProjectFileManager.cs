@@ -28,7 +28,7 @@ public class ProjectFileManager(ILogger logger, ApplicationSettings settings) : 
     /// <summary>
     ///  Gets the name of the project the application is currently working on.
     /// </summary>
-    public string ProjectName { get; private set; } = "";
+    public string ProjectName { get; set; } = "";
     
     /// <summary>
     /// Gets the path to the 0.xml file of the project.

@@ -334,15 +334,19 @@ public class FunctionalModelList : IFunctionalModelList
     /// see <see cref="ExportList(string)"/> and <see cref="ExportDictionary(string)"/>
     /// </summary>
     /// <param name="path">Path of the file where everything has to be exported to.</param>
-    public void ExportListAndDictionary(string path)
+    /// <param name="projectName">Name of the imported project or file.</param>
+    public void ExportListAndDictionary(string path, string projectName)
     {
         var doc = new XmlDocument();
         var xDictionary = doc.CreateElement("Dictionary");
         xDictionary.AppendChild(ExportDictionary(doc));
         var xList = doc.CreateElement("List");
+        var xDocName = doc.CreateAttribute("Name");
+        xDocName.Value = projectName;
         xList.AppendChild(ExportList(doc));
         XmlElement Root = doc.CreateElement("Root");
         Root.AppendChild(xList);
+        Root.Attributes.Append(xDocName);
         Root.AppendChild(xDictionary);
         doc.AppendChild(Root);
         doc.Save(path);
@@ -399,24 +403,30 @@ public class FunctionalModelList : IFunctionalModelList
     /// see <see cref="ImportList(string)"/> and <see cref="ImportDictionary(string)"/>.
     /// </summary>
     /// <param name="path">the path of the file to import from.</param>
-    public void ImportListAndDictionary(string path)
+    /// <returns> The name of the importef file or project. </returns>
+    public string ImportListAndDictionary(string path)
     {
         var doc = new XmlDocument();
         doc.Load(path);
         XmlNodeList? xnList = doc.DocumentElement?.ChildNodes;
-        foreach (XmlNode ok in xnList){
-            if (ok.Name == "Dictionary"&& ok.ChildNodes[0]?.ChildNodes!=null)
+        if (xnList != null)
+        {
+            foreach (XmlNode ok in xnList){
+                if (ok.Name == "Dictionary"&& ok.ChildNodes[0]?.ChildNodes!=null)
+                {
+                    ImportDictionary(ok.ChildNodes[0]?.ChildNodes!);
+                }
+            }
+            foreach (XmlNode ok in xnList)
             {
-                ImportDictionary(ok.ChildNodes[0]?.ChildNodes!);
+                if (ok.Name == "List"&& ok.ChildNodes[0]?.ChildNodes!=null)
+                {
+                    ImportList(ok.ChildNodes[0]?.ChildNodes!);
+                }
             }
         }
-        foreach (XmlNode ok in xnList)
-        {
-            if (ok.Name == "List"&& ok.ChildNodes[0]?.ChildNodes!=null)
-            {
-                ImportList(ok.ChildNodes[0]?.ChildNodes!);
-            }
-        }     
+        var res = doc.DocumentElement?.Attributes?["Name"]?.Value ?? "";
+        return res;
     }
     /// <summary>
     /// see <see cref="ResetCount"/>.

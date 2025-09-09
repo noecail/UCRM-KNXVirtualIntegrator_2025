@@ -17,7 +17,7 @@ public interface IProjectFileManager
     /// <summary>
     ///  Gets the name of the project the application is currently working on.
     /// </summary>
-    string ProjectName { get; }
+    string ProjectName { get; set; }
 
     /// <summary>
     /// Gets the path to the 0.xml file of the project.

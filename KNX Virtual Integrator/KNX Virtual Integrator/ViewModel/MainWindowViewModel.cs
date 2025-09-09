@@ -24,6 +24,9 @@ namespace KNX_Virtual_Integrator.ViewModel
         /// </summary>
         public XDocument? GroupAddressFile { get; private set; }
 
+        /// <summary>
+        /// public variable to access a specific value (group address structure) in a private attribute (model manager)
+        /// </summary>
         public int GroupAddressStruct => _modelManager.GroupAddressManager.GroupAddressStructure;
     }
 }
