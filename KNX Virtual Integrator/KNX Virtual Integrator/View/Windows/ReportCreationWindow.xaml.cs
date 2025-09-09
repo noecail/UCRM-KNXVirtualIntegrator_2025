@@ -70,7 +70,7 @@ public partial class ReportCreationWindow
             Resources["ReportCreationTooltipMessage"] =
                 "Création du rapport de test.\r\n" +
                 "Le nom de l'auteur est optionnel.\r\n" +
-                "Appuyez sur le boutnon Générer le rapport pour exporter le rapport de test.\r\n" +
+                "Ensuite, appuyez sur le bouton Sauvegardez le rapport de test pour qu'il soit exporté en PDF.\r\n" +
                 "Une fenêtre de dialogue s'ouvre, vous permettant de définir le nom et la localisation du rapport\r\n." +
                 "À la fermeture de la fenêtre de dialogue, le rapport est généré à la localisation voulue.\r\n" +
                 "La prévisualisation du rapport peut présenter des problèmes, selon l'éditeur de PDF qui est installé sur l'ordinateur utilisé.";
@@ -90,7 +90,7 @@ public partial class ReportCreationWindow
             Resources["ReportCreationTooltipMessage"] =
                 "Creating the test report.\r\n" +
                 "The author's name is optional.\r\n" +
-                "Press the Generate Report button to export the test report.\r\n" +
+                "Then, press the save the report button to export the test report as a PDF.\r\n" +
                 "A dialog window will open, allowing you to define the name and location of the report.\r\n" +
                 "When you close the dialog window, the report will be generated in the desired location.\r\n" +
                 "The report preview may have issues, depending on the PDF editor installed on the computer being used.";
