@@ -62,10 +62,10 @@ public partial class ReportCreationWindow
             Resources["DocParametersTitle"] = "Paramètres du document";
             Resources["AuthorReport"] = "Auteur du rapport :";
             Resources["ReportPath"] = "Sauvegardez le rapport :";
-            Resources["ReportFullPath"] = "Emplacement du rapport";
+            Resources["ReportFullPath"] = "Sauvegardez le rapport";
             Resources["ReportPreview"] = "Prévisualisation du rapport (peut causer des erreurs):";
             Resources["GenerationButton"] = "Prévisualiser le rapport";
-            Resources["CancelButton"] = "Annuler";
+            Resources["CancelButton"] = "Réinitialiser paramètres";
             Resources["ReportCreationTooltipTitle"] = "Aide - Rapport de Test";
             Resources["ReportCreationTooltipMessage"] =
                 "Création du rapport de test.\r\n" +
@@ -82,10 +82,10 @@ public partial class ReportCreationWindow
             Resources["DocParametersTitle"] = "Document parameters";
             Resources["AuthorReport"] = "Report author :";
             Resources["ReportPath"] = "Save the report :";
-            Resources["ReportFullPath"] = "Report full path";
+            Resources["ReportFullPath"] = "Save the report";
             Resources["ReportPreview"] = "Report preview (can cause errors):";
             Resources["GenerationButton"] = "Preview the report";
-            Resources["CancelButton"] = "Cancel";
+            Resources["CancelButton"] = "Reset parameters";
             Resources["ReportCreationTooltipTitle"] = "Help - Test Report";
             Resources["ReportCreationTooltipMessage"] =
                 "Creating the test report.\r\n" +
