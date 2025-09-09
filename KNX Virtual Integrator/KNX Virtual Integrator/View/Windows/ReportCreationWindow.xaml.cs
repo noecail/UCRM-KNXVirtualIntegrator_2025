@@ -242,6 +242,8 @@ public partial class ReportCreationWindow
     {
         AuthorNameTextBox.Text = string.Empty;
         _mainViewModel.PdfPath = "";
+        MyBrowser.Visibility = Visibility.Hidden;
+        MyBrowser.Source = null;
     }
 
     /// <summary>
