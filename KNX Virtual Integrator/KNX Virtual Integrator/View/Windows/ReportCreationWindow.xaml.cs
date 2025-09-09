@@ -63,7 +63,7 @@ public partial class ReportCreationWindow
             Resources["AuthorReport"] = "Auteur du rapport :";
             Resources["ReportPath"] = "Chemin du rapport :";
             Resources["ReportFullPath"] = "Emplacement du rapport";
-            Resources["ReportPreview"] = "Prévisualisation du rapport : Désactivée pour la Beta";
+            Resources["ReportPreview"] = "Prévisualisation du rapport : Désactivée pour des raisons de compatibilité";
             Resources["GenerationButton"] = "Générer le rapport";
             Resources["CancelButton"] = "Annuler";
             Resources["ReportCreationTooltipTitle"] = "Aide - Rapport de Test";
@@ -83,7 +83,7 @@ public partial class ReportCreationWindow
             Resources["AuthorReport"] = "Report author:";
             Resources["ReportPath"] = "Report path:";
             Resources["ReportFullPath"] = "Report full path : ";
-            Resources["ReportPreview"] = "Report preview : Inactive for the Beta";
+            Resources["ReportPreview"] = "Report preview : Inactive for compatibility reasons";
             Resources["GenerationButton"] = "Generate report";
             Resources["CancelButton"] = "Cancel";
             Resources["ReportCreationTooltipTitle"] = "Help - Test Report";
@@ -179,7 +179,7 @@ public partial class ReportCreationWindow
         }
         ReportCreationWindowBorder.LayoutTransform = new ScaleTransform(scale, scale);
             
-        Height = 475 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 475 * scale;
+        Height = 500 * scale > 0.9*SystemParameters.PrimaryScreenHeight ? 0.9*SystemParameters.PrimaryScreenHeight : 500 * scale;
         Width = 515 * scale > 0.9*SystemParameters.PrimaryScreenWidth ? 0.9*SystemParameters.PrimaryScreenWidth : 515 * scale;
     }
     
@@ -265,6 +265,11 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void SetPdfPathButton_OnClick(object sender, RoutedEventArgs e)
     {
+        if (_mainViewModel.PdfPath.Length > 0)
+        {
+            File.Delete(_mainViewModel.PdfPath);
+            _mainViewModel.PdfPath = "";
+        }
         // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
         SaveFileDialog saveFileDialog = new()
         {
@@ -283,7 +288,7 @@ public partial class ReportCreationWindow
             // Définit l'index par défaut du filtre (fichiers XML d'adresses de groupes)
             FilterIndex = 1,
             // N'indique pas de warning si le fichier n'existe pas
-            CheckFileExists = true,
+            //CheckFileExists = true,
             FileName = $"KNXVI-Analysis_Report-{DateTime.Now:dd-MM-yyyy_HH-mm-ss}.pdf",
             DefaultExt = ".pdf"
         };
