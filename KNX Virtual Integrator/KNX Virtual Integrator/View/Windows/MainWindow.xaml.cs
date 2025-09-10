@@ -1204,6 +1204,10 @@ public partial class MainWindow
         }
         
     }
+
+    private DrawingImage? _lvl1 = Application.Current.Resources["Iconlevel1"] as DrawingImage;
+    private DrawingImage? _lvl2 = Application.Current.Resources["Iconlevel2"] as DrawingImage;
+    private DrawingImage? _lvl3 = Application.Current.Resources["Iconlevel3"] as DrawingImage;
     
     /// <summary>
     /// Adds XML nodes recursively to a TreeView.
@@ -1215,7 +1219,13 @@ public partial class MainWindow
     private void AddNodeRecursively(XNode xmlNode, ItemCollection parentItems, int level, int index)
     {
         if (xmlNode.NodeType != XmlNodeType.Element) return;
-        var treeNode = CreateTreeViewItemFromXmlNode(xmlNode, level, index);
+        Image iconLvl = new()
+        {
+            Width = 16, Height = 16,
+            Margin = new Thickness(0, 0, 5, 0),
+            Source = level switch{0=>_lvl1,1=>_lvl2,_=>_lvl3}
+        };
+        var treeNode = CreateTreeViewItemFromXmlNode(xmlNode, level, index, iconLvl);
         parentItems.Add(treeNode);
         // Parcourir récursivement les enfants
         var elementNode = xmlNode as XElement;
@@ -1226,7 +1236,6 @@ public partial class MainWindow
             AddNodeRecursively(childNode, treeNode.Items, level + 1, childIndex++);
         }
     }
-    
     /// <summary>
     /// Creates a TreeViewItem from an XML node, with its corresponding image.
     /// </summary>
@@ -1234,24 +1243,11 @@ public partial class MainWindow
     /// <param name="level">The depth level of the XML node.</param>
     /// <param name="index">The index of the XML node among its siblings.</param>
     /// <returns>A TreeViewItem representing the XML node.</returns>
-    private TreeViewItem CreateTreeViewItemFromXmlNode(XNode xmlNode, int level, int index)
+    private TreeViewItem CreateTreeViewItemFromXmlNode(XNode xmlNode, int level, int index, Image icon)
     {
         var stack = new StackPanel { Orientation = Orientation.Horizontal };
-
-        // Définir l'icône en fonction du niveau
-        var drawingImageKey = level switch
-        {
-            0 => "Iconlevel1", 1 => "Iconlevel2", _ => "Iconlevel3"
-        };
-
-        var drawingImage = Application.Current.Resources[drawingImageKey] as DrawingImage;
-
-        var icon = new Image
-        {
-            Width = 16, Height = 16,
-            Margin = new Thickness(0, 0, 5, 0),
-            Source = drawingImage
-        };
+        
+        
         var textName = new TextBlock
         {
             Text = ((XElement)xmlNode).Attribute("Name")?.Value,

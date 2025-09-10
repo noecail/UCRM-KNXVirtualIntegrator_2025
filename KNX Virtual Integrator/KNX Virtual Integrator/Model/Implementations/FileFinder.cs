@@ -115,10 +115,11 @@ public class FileFinder(ILogger logger, ProjectFileManager projectFileManager) :
             // Si le fichier n'a pas été trouvé
             if (string.IsNullOrEmpty(foundPath))
             {
+                MessageBox.Show("The group address file necessary for automated recognition, was not found. For secure projects, please directly import the xml group address file.");
                 logger.ConsoleAndLogWriteLine("Unable to find the file '0.xml' in the project folders. "
                                                + "Please ensure that the extracted archive is indeed a KNX ETS project.");
                 // Utilisation de Dispatcher.Invoke pour fermer l'application depuis un thread non-UI
-                await Application.Current.Dispatcher.InvokeAsync(() => Application.Current.Shutdown());
+                // await Application.Current.Dispatcher.InvokeAsync(() => Application.Current.Shutdown());
             }
             else // Sinon
             {

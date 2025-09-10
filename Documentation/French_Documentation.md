@@ -1,6 +1,6 @@
-# DOCUMENTATION – KNX Boost Desktop
+# DOCUMENTATION - KNX Virtual Integrator
 
-Dernière révision : 08/09/2025 (KNX Boost Desktop v1.3)
+Dernière révision : 10/09/2025 (KNX Virtual Integrator v1.3)
 
 ## Langues pour la documentation / Documentation language :
 - [Français](French_Documentation.md)
@@ -204,9 +204,46 @@ Il faut bien appuyer sur "**Enregistrer**" pour que les modifications soient pri
 
 ## 3.5. Lancement d'un test <a name="launch-test"></a>
 
+
 ## 3.6. Création du rapport <a name="create-report"></a>
+Afin de prouver la validité de l'installation ou d'en faire le diagnostic, KNX VI met à disposition la possibilité de
+générer un document PDF compilant les résultats de chaque commande envoyée à l'installation. 
+Après un cours résumé sur le remplissage du rapport et les informations du projet, chaque modèle testé est listé, avec
+ses éléments de test, et les commandes associées. 
+Une ligne d'un élément à tester correspond à une ligne de commande dans le rapport. Les succés, échecs, réponses de présence
+ou les erreurs correspondent au fait que ce qui a été reçu en retour correspond ou non à ce qui a été attendu. 
+Chaque résultat correspond à une case de réception.
+
+Pour la génération du rapport, il faut ouvrir la [fenêtre de rapport d'analyse](#report-window). Ensuit, il est possible de renseigner 
+un nom d'auteur qui apparaitra dans le rapport, mais c'est optionnel. Le nom du projet apparaitra aussi dans le rapport.
+Pour créer et sauvegarder le rapport, il faut cliquer sur le bouton "**Sauvegarder le rapport**" et choisir un nom de fichier
+dans la fenêtre qui s'est ouverte. Faites attention si vous remplacez un fichier, qu'il ne soit pas déjà ouvert quelque part. 
+Enfin, vous pouvez valider votre choix et le chemin où le fichier est sauvegardé apparaitra dans la fenêtre de rapport. 
+Il est possible de prévisualiser le pdf en appuyant sur "**Prévisualiser le rapport**" mais cette option peut causer des 
+problèmes de compatibilité en fonction des lecteurs de PDF présents sur l'ordinateur. 
+
+Le Bouton "**Annuler**" permet de vider le nom d'auteur, le chemin de sauvegarde et donc d'annuler prévisualisation. 
+Cela ne supprime pas les résultats de test ni le rapport s'il est déjà sauvegardé.
 
 ## 3.7. Import/Export de projets KNX VI <a name="vi-import"></a>
+Dans KNX Virtual Integrator, vous avez la possibilité d'exporter votre dictionnaire de structures, les modèles et 
+les valeurs et adresses présentes dans les cases. L'exportation inclue aussi le nom du projet. La sauvegarde des
+adresses de groupes de la [colonne 4 de la fenêtre principale](#main-window) n'est pas encore implémentée. 
+Pour les afficher, il est possible d'importer les adresses avant d'importer le projet KNX VI précédemment exporté pour n'avoir que 
+les adresses sans la reconnaissance automatique qui modifierait votre projet.
+Les paramètres de test ([fenêtre de test](#analysis-window)) ne sont pas exportables.
+
+L'importation écrase toute information présente dans KNX VI qui serait nécessaire à l'exportation. N'oubliez pas de 
+sauvegarder vos projets en avance ! 
+
+La fonctionnalité d'import/export de projets KNX VI est accessible dans la [colonne 1 de la fenêtre principale](#main-window).
+Elle permet donc de sauvegarder vos projets manuellement. Le logiciel ne sauvegarde pas automatiquement et ne prévient pas 
+s'il est fermé sans avoir été sauvegardé. De fait, il est obligatoire de sauvegarder/exporter le projet pour pouvoir le retrouver plus tard.
+
+- Pour mener à bien l'exportation, veuillez choisir un nom de fichier si vous voulez le changer ou garder celui par défaut. 
+Pour vous assurer de la bonne exportation, vous pouvez ouvrir l'explorateur de fichiers et chercher le fichier exporté. 
+- Pour l'importation, veuillez choisir le nom d'un fichier correspondant à un projet précédemment exporté dans la boite 
+ouverte après l'utilisation du bouton d'importation. Enfin, appuyez sur entrée ou choisissez ce fichier pour finaliser l'importation.
 
 
 <br></br>
@@ -215,6 +252,16 @@ Il faut bien appuyer sur "**Enregistrer**" pour que les modifications soient pri
 **Pourquoi n'est-il pas possible d'installer l'application pour tous les utilisateurs en même temps?**</br>
 Probablement à cause de problèmes de dossiers, d'autorisations et de clés de registres, 
 l'application peut ne jamais réussir à se lancer lorsqu'elle est installée autre part que dans les AppData de l'utilisateur.
+
+**Pourquoi n'y a-t-il pas de reconnaissance quand j'importe un projet/des adresses?**
+La reconnaissance ne s'effectue que lorsque les adresses de groupes sont bien configurées. 
+Une adresse de groupe bien configurée doit posséder un DPT. Si le nom de l'adresse n'est pas normé, 
+la reconnaissance sera très souvent mauvaise. [KNX Boost Desktop](https://github.com/Daichi9764/UCRM) est un logiciel
+permettant de renommer les adresses pour qu'elles puissent être plus facilement reconnues !
+
+**Comment pourrais-je afficher les adresses sans utiliser le remplissage automatique des modèles?**
+Malheureusement, cette version de KNX Virtual Integrator ne possède pas la possibilité d'enlever la reconnaissance. 
+Cependant, vous pouvez toujours supprimer les modèles créés après l'importation et les modifier manuellement.
 
 <br></br>
 [← Retour](../README.md)
