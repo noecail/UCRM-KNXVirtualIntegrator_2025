@@ -527,7 +527,18 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         ExportListAndDictionaryCommand = new Commands.RelayCommand<string>(path =>
             {
                 if (path != null)
-                    _functionalModelList.ExportListAndDictionary(path,_modelManager.ProjectFileManager.ProjectName);
+                {
+                    if (GroupAddressFile == null)
+                    {
+                        _functionalModelList.ExportListAndDictionary(path,
+                            _modelManager.ProjectFileManager.ProjectName);
+                    }
+                    else
+                    {
+                        _functionalModelList.ExportListAndDictionary(path,
+                            _modelManager.ProjectFileManager.ProjectName,GroupAddressFile);
+                    }
+                }
             }
         );
                 
@@ -538,7 +549,9 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                 LastTestResults.Clear();
                 if (path != null)
                 {
-                    _modelManager.ProjectFileManager.ProjectName = _functionalModelList.ImportListAndDictionary(path);
+                    var res = _functionalModelList.ImportListAndDictionaryWithDoc(path);
+                    _modelManager.ProjectFileManager.ProjectName = res.Item1;
+                    GroupAddressFile = res.Item2;
                     _modelManager.ProjectFileManager.UpdateTitle();
                 }
             }

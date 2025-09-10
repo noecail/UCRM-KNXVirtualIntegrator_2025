@@ -1,7 +1,9 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using System.Xml;
+using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Interfaces;
 
@@ -351,6 +353,42 @@ public class FunctionalModelList : IFunctionalModelList
         doc.AppendChild(Root);
         doc.Save(path);
     }
+    
+    /// <summary>
+    /// see <see cref="ExportList(string)"/> and <see cref="ExportDictionary(string)"/>
+    /// </summary>
+    /// <param name="path">Path of the file where everything has to be exported to.</param>
+    /// <param name="projectName">Name of the imported project or file.</param>
+    /// <param name="GroupAddressFile">The imported project or file.</param>
+    public void ExportListAndDictionary(string path, string projectName, XDocument? GroupAddressFile)
+    {
+        var doc = new XmlDocument();
+        XmlElement Root = doc.CreateElement("Root");
+        if (GroupAddressFile != null)
+        {
+            // Convertir XDocument en XmlElement
+            XmlDocument tempDoc = new XmlDocument();
+            using (var reader = GroupAddressFile.CreateReader())
+            {
+                tempDoc.Load(reader);
+            }
+
+            XmlNode importedNode = doc.ImportNode(tempDoc.DocumentElement, true);
+            Root.AppendChild(importedNode);
+        }  
+        var xDictionary = doc.CreateElement("Dictionary");
+        xDictionary.AppendChild(ExportDictionary(doc));
+        var xList = doc.CreateElement("List");
+        var xDocName = doc.CreateAttribute("Name");
+        xDocName.Value = projectName;
+        xList.AppendChild(ExportList(doc));
+        Root.AppendChild(xList);
+        Root.Attributes.Append(xDocName);
+        Root.AppendChild(xDictionary);
+        doc.AppendChild(Root);
+        doc.Save(path);
+    }
+        
     /// <summary>
     /// Imports the structure list from a file
     /// </summary>
@@ -428,6 +466,45 @@ public class FunctionalModelList : IFunctionalModelList
         var res = doc.DocumentElement?.Attributes?["Name"]?.Value ?? "";
         return res;
     }
+    
+    /// <summary>
+    /// see <see cref="ImportList(string)"/> and <see cref="ImportDictionary(string)"/>.
+    /// </summary>
+    /// <param name="path">the path of the file to import from.</param>
+    /// <returns> The name of the imported file or project and the file itself. </returns>
+    public (string,XDocument) ImportListAndDictionaryWithDoc(string path)
+    {
+        var doc = new XmlDocument();
+        var resDoc = new XDocument();
+        doc.Load(path);
+        XmlNodeList? xnList = doc.DocumentElement?.ChildNodes;
+        if (xnList != null)
+        {
+            foreach (XmlNode ok in xnList)
+            {
+                if (ok.Name == "Dictionary" && ok.ChildNodes[0]?.ChildNodes != null)
+                {
+                    ImportDictionary(ok.ChildNodes[0]?.ChildNodes!);
+                }
+            }
+            foreach (XmlNode ok in xnList){
+                if (ok.Name == "List"&& ok.ChildNodes[0]?.ChildNodes!=null)
+                {
+                    ImportList(ok.ChildNodes[0]?.ChildNodes!);
+                }
+                else if (ok.Name != "Dictionary")
+                {
+                    using (var reader = new XmlNodeReader(ok))
+                    {
+                        resDoc = XDocument.Load(reader);
+                    }
+                }
+            }
+        }
+        var res = doc.DocumentElement?.Attributes?["Name"]?.Value ?? "";
+        return (res,resDoc);
+    }
+    
     /// <summary>
     /// see <see cref="ResetCount"/>.
     /// </summary>

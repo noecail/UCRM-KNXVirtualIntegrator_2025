@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Xml;
+using System.Xml.Linq;
 using KNX_Virtual_Integrator.Model.Entities;
 
 namespace KNX_Virtual_Integrator.Model.Interfaces;
@@ -120,12 +121,28 @@ public interface IFunctionalModelList : INotifyPropertyChanged
     /// <param name="path">Path of the file where everything has to be exported to.</param>
     /// <param name="projectName">Name of the imported project or file.</param>
     public void ExportListAndDictionary(string path, string projectName);
+
+    /// <summary>
+    /// see <see cref="ExportList(string)"/> and <see cref="ExportDictionary(string)"/>
+    /// </summary>
+    /// <param name="path">Path of the file where everything has to be exported to.</param>
+    /// <param name="projectName">Name of the imported project or file.</param>
+    /// <param name="groupAddressFile">The imported project or file.</param>
+    public void ExportListAndDictionary(string path, string projectName, XDocument? groupAddressFile);
     /// <summary>
     /// see <see cref="ImportList(string)"/> and <see cref="ImportDictionary(string)"/>.
     /// </summary>
     /// <param name="path">the path of the file to import from.</param>
     /// <returns> The name of the importef file or project. </returns>
     public string ImportListAndDictionary(string path);
+
+    /// <summary>
+    /// see <see cref="ImportList(string)"/> and <see cref="ImportDictionary(string)"/>.
+    /// </summary>
+    /// <param name="path">the path of the file to import from.</param>
+    /// <returns> The name of the imported file or project and the file itself. </returns>
+    public (string, XDocument) ImportListAndDictionaryWithDoc(string path);
+    
     /// <summary>
     /// Resets the count of models in a structure
     /// </summary>

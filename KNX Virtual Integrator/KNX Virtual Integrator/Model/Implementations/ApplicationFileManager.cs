@@ -192,8 +192,8 @@ public class ApplicationFileManager (ILogger logger) : IApplicationFileManager
     /// <summary>
     /// Ensures a configuration file exists at the specified path. If not, it creates the file and sets defaults 
     /// based on the system theme and language. Handles exceptions such as unauthorized access, invalid paths, 
-    /// and I/O errors, displaying an error message and closing the application if an issue arises.
-    ///
+    /// and I/O errors, displaying an error messag
+    /// 
     /// <param name="settingsPath">The path to the configuration file.</param>
     /// </summary>
     public bool EnsureSettingsFileExists(string settingsPath)
