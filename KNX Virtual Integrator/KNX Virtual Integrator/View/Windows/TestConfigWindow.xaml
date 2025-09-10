@@ -775,7 +775,7 @@
         <DataTemplate x:Key="WaitListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource WaitImage}"
+                       Source="{StaticResource WaitImageLight}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
@@ -792,7 +792,7 @@
         <DataTemplate x:Key="RunListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource RunningImage}"
+                       Source="{StaticResource RunningImageLight}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
@@ -809,7 +809,7 @@
         <DataTemplate x:Key="FinListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource FinishedImage}"
+                       Source="{StaticResource FinishedImageLight}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
@@ -826,7 +826,7 @@
         <DataTemplate x:Key="InvListBoxItemLight" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource WaitImage}"
+                       Source="{StaticResource WaitImageLight}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
@@ -843,7 +843,7 @@
         <DataTemplate x:Key="WaitListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource WaitImage}"
+                       Source="{StaticResource WaitImageDark}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
@@ -860,7 +860,7 @@
         <DataTemplate x:Key="RunListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource RunningImage}"
+                       Source="{StaticResource RunningImageDark}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
@@ -877,7 +877,7 @@
         <DataTemplate x:Key="FinListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource FinishedImage}"
+                       Source="{StaticResource FinishedImageDark}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"
@@ -894,7 +894,7 @@
         <DataTemplate x:Key="InvListBoxItemDark" DataType="{x:Type viewmodel:TestedFunctionalModel}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="TagImage"
-                       Source="{StaticResource WaitImage}"
+                       Source="{StaticResource WaitImageDark}"
                        VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        Margin="0,0,5,0"

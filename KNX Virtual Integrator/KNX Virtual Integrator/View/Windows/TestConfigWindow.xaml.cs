@@ -183,6 +183,8 @@ public partial class TestConfigWindow
         Style searchbuttonStyle;
         Style boxItemStyle;
         Brush backgrounds;
+        Brush tooltipBackgroundBrush;
+        Style tooltipTextBlockStyle;
 
         if (_viewModel.AppSettings.EnableLightTheme)
         {
@@ -206,6 +208,9 @@ public partial class TestConfigWindow
             boxItemStyle = (Style)FindResource("ModelListBoxItemStyleLight");
             
             backgrounds = (Brush)FindResource("OffWhiteBackgroundBrush");
+            
+            tooltipBackgroundBrush = (Brush)FindResource("WhiteBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockLight");
         } 
         else
         {
@@ -229,6 +234,9 @@ public partial class TestConfigWindow
             boxItemStyle = (Style)FindResource("ModelListBoxItemStyleDark");
             
             backgrounds = (Brush)FindResource("DarkGrayBackgroundBrush");
+            
+            tooltipBackgroundBrush = (Brush)FindResource("DarkGrayBackgroundBrush");
+            tooltipTextBlockStyle = (Style)FindResource("StandardTextBlockDark");
         }
 
         Background = backgrounds;
@@ -260,6 +268,9 @@ public partial class TestConfigWindow
         
         DefStructureBox.ItemContainerStyle = boxItemStyle;
         ModelsBox.ItemContainerStyle = boxItemStyle;
+
+        Resources["CurrentTooltipBackgroundBrush"] = tooltipBackgroundBrush;
+        Resources["CurrentTooltipTextBlockStyle"] = tooltipTextBlockStyle;
         
         // C'est la manière la plus simple que je connais pour déclencher l'event "CollectionChanged" pour
         // appeler à nouveau le ItemTemplateSelector
