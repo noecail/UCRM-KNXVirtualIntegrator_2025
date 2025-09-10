@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-Last revision : 08/09/2025 (KNX Virtual Integrator v1.3)
+Last revision : 10/09/2025 (KNX Virtual Integrator v1.3)
 
 ## Documentation languages:
 - [Français](French_Documentation.md)
@@ -205,7 +205,7 @@ Click **"Save"** to apply changes.
 
 **Why can’t the app be installed for all users at once?**</br>
 Most likely due to folder, permission, and registry key issues,  
-the app may fail to launch when installed outside the user’s AppData folder.
+the app may never launch when installed outside the user’s AppData folder.
 
 <br></br>
 [← Back](../README.md)
