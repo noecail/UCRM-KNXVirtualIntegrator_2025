@@ -5851,7 +5851,7 @@
             <param name="level">The depth level of the current XML node.</param>
             <param name="index">The index of the current XML node among its siblings.</param>
         </member>
-        <member name="M:KNX_Virtual_Integrator.View.Windows.MainWindow.CreateTreeViewItemFromXmlNode(System.Xml.Linq.XNode,System.Int32,System.Int32)">
+        <member name="M:KNX_Virtual_Integrator.View.Windows.MainWindow.CreateTreeViewItemFromXmlNode(System.Xml.Linq.XNode,System.Int32,System.Int32,System.Windows.Controls.Image)">
             <summary>
             Creates a TreeViewItem from an XML node, with its corresponding image.
             </summary>
