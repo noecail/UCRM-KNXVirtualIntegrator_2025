@@ -1234,6 +1234,11 @@
                                      ScrollViewer.PanningMode="VerticalOnly"
                                      IsManipulationEnabled="True"
                                      ItemContainerStyle="{StaticResource ModelListBoxItemStyleLight}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding FullName}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
                             </ListBox>
                             
                              <!-- Bandeau inférieur -->

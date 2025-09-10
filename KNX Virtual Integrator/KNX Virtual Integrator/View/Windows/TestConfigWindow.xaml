@@ -1266,8 +1266,8 @@
                                  Margin="5,0"
                                  Width="45"
                                  Text="{Binding CommandTimeout, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-
                     </StackPanel>
+                    
                     <ListBox Grid.Row="3" Name="ChosenTestModelesListBox" Width="200" Height="320"
                              Style="{StaticResource ListBoxStyleLight}"
                              ItemsSource="{Binding ChosenModelsAndState}"
