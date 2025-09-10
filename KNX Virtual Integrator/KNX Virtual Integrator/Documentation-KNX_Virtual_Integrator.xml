@@ -1482,13 +1482,13 @@
             </summary>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.ApplicationFileManager.EnsureSettingsFileExists(System.String)">
-             <summary>
-             Ensures a configuration file exists at the specified path. If not, it creates the file and sets defaults 
-             based on the system theme and language. Handles exceptions such as unauthorized access, invalid paths, 
-             and I/O errors, displaying an error message and closing the application if an issue arises.
+            <summary>
+            Ensures a configuration file exists at the specified path. If not, it creates the file and sets defaults 
+            based on the system theme and language. Handles exceptions such as unauthorized access, invalid paths, 
+            and I/O errors, displaying an error messag
             
-             <param name="settingsPath">The path to the configuration file.</param>
-             </summary>
+            <param name="settingsPath">The path to the configuration file.</param>
+            </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.Model.Implementations.ApplicationSettings">
             <summary>
@@ -2208,6 +2208,14 @@
             <param name="path">Path of the file where everything has to be exported to.</param>
             <param name="projectName">Name of the imported project or file.</param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportListAndDictionary(System.String,System.String,System.Xml.Linq.XDocument)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ExportDictionary(System.String)"/>
+            </summary>
+            <param name="path">Path of the file where everything has to be exported to.</param>
+            <param name="projectName">Name of the imported project or file.</param>
+            <param name="GroupAddressFile">The imported project or file.</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportList(System.String)">
             <summary>
             Imports the structure list from a file
@@ -2226,6 +2234,13 @@
             </summary>
             <param name="path">the path of the file to import from.</param>
             <returns> The name of the importef file or project. </returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportListAndDictionaryWithDoc(System.String)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ImportDictionary(System.String)"/>.
+            </summary>
+            <param name="path">the path of the file to import from.</param>
+            <returns> The name of the imported file or project and the file itself. </returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Implementations.FunctionalModelList.ReinitializeNbModels(System.Int32)">
             <summary>
@@ -3700,12 +3715,27 @@
             <param name="path">Path of the file where everything has to be exported to.</param>
             <param name="projectName">Name of the imported project or file.</param>
         </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportListAndDictionary(System.String,System.String,System.Xml.Linq.XDocument)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ExportDictionary(System.String)"/>
+            </summary>
+            <param name="path">Path of the file where everything has to be exported to.</param>
+            <param name="projectName">Name of the imported project or file.</param>
+            <param name="groupAddressFile">The imported project or file.</param>
+        </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportListAndDictionary(System.String)">
             <summary>
             see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportDictionary(System.String)"/>.
             </summary>
             <param name="path">the path of the file to import from.</param>
             <returns> The name of the importef file or project. </returns>
+        </member>
+        <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportListAndDictionaryWithDoc(System.String)">
+            <summary>
+            see <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportList(System.String)"/> and <see cref="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ImportDictionary(System.String)"/>.
+            </summary>
+            <param name="path">the path of the file to import from.</param>
+            <returns> The name of the imported file or project and the file itself. </returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.Model.Interfaces.IFunctionalModelList.ResetCount(System.Int32)">
             <summary>

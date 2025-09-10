@@ -752,6 +752,10 @@ public partial class MainWindow
         {
             _viewModel.ConsoleAndLogWriteLineCommand.Execute("User aborted the file selection operation");
         }
+        Application.Current.Dispatcher.InvokeAsync( async() =>
+        {
+            await LoadAddressesOntoTreeViewAsync(GroupAddressTreeView);
+        });
     }
 
     /// <summary>
