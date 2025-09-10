@@ -552,7 +552,11 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     var res = _functionalModelList.ImportListAndDictionaryWithDoc(path);
                     _modelManager.ProjectFileManager.ProjectName = res.Item1;
                     GroupAddressFile = res.Item2;
+                    _modelManager.GroupAddressManager.GroupAddressStructure =
+                        _modelManager.GroupAddressManager.DetermineGroupAddressStructureGroupAddressFile(
+                            GroupAddressFile.Root?.Elements());
                     _modelManager.ProjectFileManager.UpdateTitle();
+                    
                 }
             }
         );
