@@ -1236,12 +1236,14 @@ public partial class MainWindow
             AddNodeRecursively(childNode, treeNode.Items, level + 1, childIndex++);
         }
     }
+
     /// <summary>
     /// Creates a TreeViewItem from an XML node, with its corresponding image.
     /// </summary>
     /// <param name="xmlNode">The XML node to create a TreeViewItem from.</param>
     /// <param name="level">The depth level of the XML node.</param>
     /// <param name="index">The index of the XML node among its siblings.</param>
+    /// <param name="icon">The image to display in front of the address corresponding to its level</param>
     /// <returns>A TreeViewItem representing the XML node.</returns>
     private TreeViewItem CreateTreeViewItemFromXmlNode(XNode xmlNode, int level, int index, Image icon)
     {
@@ -1257,7 +1259,7 @@ public partial class MainWindow
         if (((XElement)xmlNode).Attribute("Address") is not null)
         {
             text = ((XElement)xmlNode).Attribute("Address")?.Value?? "Error";
-            if (text != "Error" && UserChooseToImportGroupAddressFile is false )
+            if (text != "Error" && UserChooseToImportGroupAddressFile is false && !text.Contains("/") )
             {
                 if (_viewModel.GroupAddressStruct == 3)
                 {

@@ -203,14 +203,14 @@ Il faut bien appuyer sur "**Enregistrer**" pour que les modifications soient pri
 ## 3.4. Création d'un test <a name="create-test"></a>
 
 ## 3.5. Lancement d'un test <a name="launch-test"></a>
-
+C'est l'objectif de l'application : tester et analyser une installation ! 
 
 ## 3.6. Création du rapport <a name="create-report"></a>
 Afin de prouver la validité de l'installation ou d'en faire le diagnostic, KNX VI met à disposition la possibilité de
 générer un document PDF compilant les résultats de chaque commande envoyée à l'installation. 
 Après un cours résumé sur le remplissage du rapport et les informations du projet, chaque modèle testé est listé, avec
 ses éléments de test, et les commandes associées. 
-Une ligne d'un élément à tester correspond à une ligne de commande dans le rapport. Les succés, échecs, réponses de présence
+Une ligne d'un élément à tester correspond à une ligne de commande dans le rapport. Les succès, échecs, réponses de présence
 ou les erreurs correspondent au fait que ce qui a été reçu en retour correspond ou non à ce qui a été attendu. 
 Chaque résultat correspond à une case de réception.
 

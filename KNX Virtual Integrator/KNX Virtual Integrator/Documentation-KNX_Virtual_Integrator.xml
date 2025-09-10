@@ -5888,6 +5888,7 @@
             <param name="xmlNode">The XML node to create a TreeViewItem from.</param>
             <param name="level">The depth level of the XML node.</param>
             <param name="index">The index of the XML node among its siblings.</param>
+            <param name="icon">The image to display in front of the address corresponding to its level</param>
             <returns>A TreeViewItem representing the XML node.</returns>
         </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.MainWindow.FindParent``1(System.Windows.DependencyObject)">
