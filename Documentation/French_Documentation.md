@@ -185,11 +185,94 @@ Il faut bien appuyer sur "**Enregistrer**" pour que les modifications soient pri
 
 ## 2.3. Fenêtre de connexion <a name="connection-window"></a>
 
+La fenêtre de connexion est accessible depuis la fenêtre principale en cliquant sur le **bouton rouge de connexion**.  
+Elle permet de configurer et d’établir la communication avec le bus KNX.
+
+<img src="Images/ConnectionWindowIP.png" alt="fenetre-connexion-ip" style="width:50%;"/>
+
+Lorsque le type de connexion choisi est **IP**, la liste des interfaces disponibles apparaît dans la zone centrale.  
+Le bouton **Rafraîchir** relance la recherche en cas de problème de détection.  
+Il est également possible d’activer la **connexion sécurisée via IP Secure**, qui nécessite l’importation d’un fichier de clés au format `.knxkeys` ainsi que la saisie du mot de passe associé.  
+En bas de la fenêtre, les boutons **Connexion** et **Déconnexion** permettent respectivement d’établir ou de couper le lien.  
+L’état de la connexion en cours est affiché dans la zone inférieure.
+
+<img src="Images/ConnectionWindowNAT.png" alt="fenetre-connexion-remoteip" style="width:50%;"/>
+
+Si l’option **Remote IP (NAT)** est sélectionnée, deux champs supplémentaires apparaissent :  
+l’**IP publique du routeur** et l’**adresse individuelle de l’interface** (par défaut de la forme *1.1.255*).  
+La sécurisation IP Secure reste disponible, avec la possibilité d’importer un fichier de clés et son mot de passe associé.  
+Une fois les informations renseignées, le bouton **Connexion** permet d’établir la communication avec l’installation distante.
+
+<img src="Images/ConnectionWindowUSB.png" alt="fenetre-connexion-usb" style="width:50%;"/>
+
+En choisissant le mode **USB**, l’application affiche directement les interfaces matérielles détectées.  
+Il suffit alors de sélectionner celle à utiliser et d’appuyer sur **Connexion**.  
+Le bouton **Rafraîchir** permet de relancer la recherche si l’interface n’apparaît pas.  
+Comme pour les autres modes, le bas de la fenêtre indique l’état de la connexion et propose les boutons **Connexion** et **Déconnexion**.
+
+
 ## 2.4. Fenêtre d'édition des structures <a name="structure-window"></a>
+
+La fenêtre d’édition de structure est accessible depuis la fenêtre principale en cliquant sur le bouton **Nouvelle Structure** ou sur l’icône crayon pour modifier une structure existante.  
+Elle permet de créer et personnaliser les modèles fonctionnels utilisés lors des tests.
+
+<img src="Images/StructureEditWindow.png" alt="fenetre-structure-vide" style="width:70%;"/>
+
+La fenêtre est composée de deux colonnes principales :
+- La colonne de gauche est dédiée à la **personnalisation des DPTs**.
+- La colonne de droite est réservée à la **structure du modèle fonctionnel**.
+
+En bas de la fenêtre se trouvent deux boutons bleus :
+- **Ajouter un DataPointType**, qui ouvre une section pour définir un DPT personnalisé.
+- **Ajouter un Élément à tester**, qui permet d’ajouter et de configurer un élément dans la structure.
+
+### Ajout d’un DataPointType personnalisé
+Lorsqu’on clique sur **Ajouter un DataPointType**, une nouvelle zone apparaît dans la colonne de gauche.  
+Un DPT personnalisé est défini par :
+- Un **nom** donné par l’utilisateur.
+- Un **type** choisi dans une liste déroulante.
+- Des **mots-clés** facilitant la recherche et la catégorisation.
+
+### Ajout d’un élément à tester
+Lorsqu’on clique sur **Ajouter un Élément à tester**, une zone d’édition s’affiche dans la colonne de droite.  
+Un élément à tester est défini par :
+- Le choix du **DPT associé**.
+- Son rôle : **Envoi(s)** et/ou **Réception(s)**.
+- Une ou plusieurs **valeurs de test**, ajoutées avec le bouton **+**.
+
+### Validation ou annulation
+En bas de la fenêtre, deux boutons permettent de gérer la configuration :
+- **Appliquer les changements** pour sauvegarder la structure.
+- **Annuler les changements** pour revenir à l’état initial sans enregistrer.
 
 ## 2.5. Fenêtre d'analyse <a name="analysis-window"></a>
 
+<img src="Images/TestConfigWindow.png" alt="fenetre-analyse" style="width:90%;"/>
+
+Cette fenêtre est accessible depuis la fenêtre principale en cliquant sur le bouton **Paramètres de test**.  
+Elle permet de configurer et lancer une analyse sur les modèles fonctionnels.
+
+Elle se décompose en 4 colonnes :
+- La colonne de gauche liste les **structures prédéfinies**.
+- La deuxième colonne affiche les **modèles fonctionnels** liés à la structure sélectionnée.
+- La troisième colonne permet de configurer des paramètres spécifiques comme le nom du modèle.
+- La colonne de droite regroupe les **modèles choisis pour le test** avec les paramètres de timing (délais, temps de réponse).
+
+En bas de la fenêtre, deux boutons permettent de **lancer le test** ou de l’**annuler**.
+
 ## 2.6. Fenêtre de rapport d'analyse <a name="report-window"></a>
+
+<img src="Images/PDFReportCreationWindow.png" alt="fenetre-rapport" style="width:50%;"/>
+
+Cette fenêtre est accessible depuis la fenêtre principale en cliquant sur le bouton **Exporter le rapport**.  
+Elle permet de générer un rapport des résultats d’analyse.
+
+Elle est composée de 3 zones :
+- En haut, un champ pour renseigner l’**auteur du rapport**.
+- Au centre, une zone pour choisir l’**emplacement de sauvegarde** et générer le rapport.
+- En bas, deux options : **prévisualiser le rapport** avant export ou **réinitialiser** les paramètres.
+
+Une fois validé, le rapport est exporté et peut être partagé.
 
 
 <br></br>
