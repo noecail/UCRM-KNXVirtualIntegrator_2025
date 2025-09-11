@@ -4883,12 +4883,23 @@
             secure connection in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
             </summary>
         </member>
-        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._errorMessageVisibility">
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._connectionErrorMessageVisibility">
             <summary>
             The visibility state of the error messages in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
             </summary>
         </member>
-        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ErrorMessageVisibility">
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ConnectionErrorMessageVisibility">
+            <summary>
+            Gets or sets the visibility state of the error messages
+            in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._analysisErrorMessageVisibility">
+            <summary>
+            The visibility state of the error messages in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AnalysisErrorMessageVisibility">
             <summary>
             Gets or sets the visibility state of the error messages
             in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
@@ -5011,6 +5022,16 @@
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.HideReportGenerationSuccessMessageCommand">
+            <summary>
+            Command that hides the ReportGenerationSuccessMessage
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ShowAnalysisErrorMessageCommand">
+            <summary>
+            Command that shows the ReportGenerationSuccessMessage
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.HideAnalysisErrorMessageCommand">
             <summary>
             Command that hides the ReportGenerationSuccessMessage
             </summary>
@@ -5416,6 +5437,11 @@
         <member name="M:KNX_Virtual_Integrator.ViewModel.MainViewModel.ClearModelsToTestAndResetTimes">
             <summary>
             Clears all the lists used to hold the functional models and resets the timeout and latency.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AnalysisErrorMessage">
+            <summary>
+            Error message for an eventual error on Launch Analysis
             </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel">

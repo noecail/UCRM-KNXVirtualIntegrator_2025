@@ -146,6 +146,16 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand HideReportGenerationSuccessMessageCommand { get; private set; }
         
         /// <summary>
+        /// Command that shows the ReportGenerationSuccessMessage
+        /// </summary>
+        public ICommand ShowAnalysisErrorMessageCommand { get; private set; }
+        
+        /// <summary>
+        /// Command that hides the ReportGenerationSuccessMessage
+        /// </summary>
+        public ICommand HideAnalysisErrorMessageCommand { get; private set; }
+        
+        /// <summary>
         /// Command that prints the <see cref="SelectedModel"/>.
         /// </summary>  
         // ReSharper disable once UnusedAutoPropertyAccessor.Global

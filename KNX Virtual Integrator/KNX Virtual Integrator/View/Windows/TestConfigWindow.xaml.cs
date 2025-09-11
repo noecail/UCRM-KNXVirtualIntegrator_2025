@@ -69,6 +69,7 @@ public partial class TestConfigWindow
         e.Cancel = true;
         UpdateWindowContents(true, true, true);
         Hide();
+        _viewModel.HideAnalysisErrorMessageCommand.Execute(null);
     }
     
     /// <summary>
@@ -105,7 +106,8 @@ public partial class TestConfigWindow
             Resources["ChosenTestModelsTitle"] = "Modèles Fonctionnels Choisis";
             Resources["AnalysisDelayText"] = "Délai entre chaque élément\r\n (en ms) :";
             Resources["AnalysisTimeoutText"] = "Temps de réponse maximal\r\n (en ms) :";
-            Resources["ClearTest"] = "Annuler";
+            Resources["AnalysisError"] = "Erreur lors du test";
+            Resources["ClearTest"] = "Réinitialiser sélection";
             Resources["LaunchTest"] = "Lancer le test";
 
             Resources["ValuesTooltipTitle"] = "Aide - Valeurs à envoyer et Valeurs attendues en réception";
@@ -147,7 +149,8 @@ public partial class TestConfigWindow
             Resources["ChosenTestModelsTitle"] = "Chosen Functional Models";
             Resources["AnalysisDelayText"] = "Delay between elements\r\n (in ms) :";
             Resources["AnalysisTimeoutText"] = "Maximal answer timeout\r\n (in ms) :";
-            Resources["ClearTest"] = "Reset";
+            Resources["AnalysisError"] = "Error during the test";
+            Resources["ClearTest"] = "Reset selection";
             Resources["LaunchTest"] = "Launch Test";
 
             Resources["ValuesTooltipTitle"] = "Help - Values to be sent and expected values upon receipt";

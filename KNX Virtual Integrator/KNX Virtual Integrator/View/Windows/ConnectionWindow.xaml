@@ -337,7 +337,7 @@
                 
             <!-- Error Message Section -->
             <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,0"
-                        Visibility="{Binding ErrorMessageVisibility}">
+                        Visibility="{Binding ConnectionErrorMessageVisibility}">
                 <TextBlock
                     Text="{DynamicResource ConnectionError}"
                     FontWeight="Bold"
