@@ -258,6 +258,7 @@ Elle se décompose en 4 colonnes :
 - La colonne de gauche liste les **structures prédéfinies**.
 - La deuxième colonne affiche les **modèles fonctionnels** liés à la structure sélectionnée.
 - La troisième colonne permet de configurer des paramètres spécifiques comme le nom du modèle.
+- 
 - La colonne de droite regroupe les **modèles choisis pour le test** avec les paramètres de timing (délais entre les éléments, le temps de réponse autorisé avant de passer à un autre test).
 
 En bas de la fenêtre, deux boutons permettent de **lancer le test** ou de l’**annuler**, c'est à dire de remettre aux valeurs par défaut et vider la liste des choisis. L'affichage ne se met pas complètement à jour cependant :
@@ -281,16 +282,104 @@ Une fois généré, le rapport est exporté en PDF et peut être partagé.
 <br></br>
 # 3. Utilisation de l'application <a name="user-title"></a>
 ## 3.1. Modifier les paramêtres <a name="modify-settings"></a>
+L'application KNX Virtual Integrator permet de changer 3 paramètres principaux, en plus d'autoriser le partage de 
+certaines informations pour le débogage. 
+Ces 3 paramètres sont : 
+- Le thème Clair/Obscur qui se change en cliquant sur la boite correspondant au thème, qui déroule les choix possibles 
+et il suffit de cliquer sur le thème préféré. Pour que le changement soit effectif, il faut appuyer sur le bouton en bas de la fenêtre.
+- La langue de l'application : seuls le Français et l'Anglais sont supportés complètement (toute autre langue mettra l'application en Anglais).
+La méchanique de changement de langue est identique à celle du thème.
+- L'échelle de l'application : Elle permet de changer la taille de l'application et de ses textes. Comme l'application
+n'est pas capable de se mettre à l'échelle correctement dans tous les cas, ce paramètre à été ajouté mais reste fautif.
+Pour changer l'échelle, il est possible de cliquer sur le long de la barre ou de maintenir appuyé la souris sur le bouton 
+de la barre et de relacher sur l'échelle voulue. Il faut ensuite valider le choix avec le bouton en bas de la fenêtre.
+
+Les informations de débogages ne sont communiquées à personne sans que vous ne le partagez vous-même puisqu'elle sont 
+simplement récoltées dans le fichier .zip. Toutes les informations récoltées avec les cases cochées sont dans les 
+fichiers "debug info" et "latest logs". Il vous est possible de les modifier pour supprimer des données que vous 
+considéreriez comme sensible.
 
 ## 3.2. Importation depuis ETS <a name="ets-import"></a>
+Il est possible d'importer des adresses de groupe depuis KNX ETS de 2 différentes manières : 
+- En appuyant sur le bouton "**Importer des adresses**" qui permet d'importer un fichier d'adresses de groupes de type .xml.
+- En appuyant sur le bouton "**Importer un projet**" qui permet d'importer un projet de KNX ETS (fichier .knxproj) tout entier, 
+bien que seules les adresses sont utilisées. Les projets sécurisés par un mot de passe ne pouvant pas être importés,
+il faut alors importer les adresses de groupe (en .xml) de ce projet.
+
+Les adresses de groupe sont utilisées pour l'affichage dans la dernière colonne de la [fenêtre principale](#main-window), 
+mais aussi pour la reconnaissance des tests : l'application reconnait les adresses correctement déclarées (avec des DPTs)
+et crée des structures et des modèles de tests (regroupements de tests de l'installation) avec ces adresses en comparant leur
+noms et leur DPTs . Par exemple : les "CMD.." vont uniquement être liées avec les "IE..", mais s'il y a des DPT de variation, 
+les "Pourcentage.." seraient regroupés avec les "CMD.." et les "IE..". 
+La méthode de reconnaissance est détaillée dans la [fenêtre d'édition des structures](#structure-window) et la [création d'un test](#create-test).
+</br> Attention, seules les adresses à 3 niveaux peuvent être reconnues.
+
+Pour créer le fichier d'adresses de groupe en .xml, il faut ouvrir le panneau des adresses de groupes sur KNX ETS et de 
+choisir un groupe ou groupe médian, de cliquer droit dessus et cliquer dans le menu contextuel sur "**Exporter les adresses**" 
+et puis de choisir l'option "**XML**" en haut de la fenêtre. Enfin, valider le choix et l'endroit de sauvegarde.
+Pour créer le fichier de toutes les adresses, il faut cliquer droit sur :
+<img src="Images/GroupAddressETS.png" alt="fenetre-ets-adresses-groupe" style="width:70%;"/>
+et répéter les étapes ci-dessus.
+
+L'importation d'un projet et des adresses n'est pas obligatoire mais permet d'inclure le nom du fichier importé comme 
+nom de projet, ce qui sera affiché dans le rapport d'analyse. Sans nom de projet, le rapport écrit "Nouveau projet".
 
 ## 3.3. Connexion au bus KNX <a name="bus-connection"></a>
+Pour analyser l'installation KNX, il faut se connecter au bus KNX. L'application KNX VI permet d'utiliser 3 manières de se 
+connecter : 
+- En USB (en se connectant au cable)
+- En IP (en local, supporte l'IP Secure et est sensé supporter l'IP routing et l'IP tunneling mais peu de tests ont été effectués).
+- En IP avec NAT/PAT (à distance avec une adresse publique sur le port 3671, supporte l'IP Secure).
+
+Pour choisir le mode de connexion, il faut ouvrir la liste déroulante en haut de la [fenêtre de connexion](#connection-window) puis de choisir l'option choisie.
+Ensuite, renseigner l'adresse IP et l'adresse individuelle de l'interface dans le cas du NAT ou de choisir l'interface voulue dans les autres cas.
+Attention, certaines interface proposées peuvent ne pas être accessibles depuis KNX VI si elles ne possèdent pas d'adresse individuelle.
+Ensuite, si l'interface utilise IP Secure, il faut  renseigner un fichier .knxkeys qui s'exporte depuis ETS :
+<img src="Images/KnxkeysETS.png" alt="exporter-knxkeys-ets" style="width:50%;"/>
+Et puis, il faut inclure le mot de passe du fichier .knxkeys (présent au dessus du bouton d'exportation du fichier).
+</br> Attention, si le mot de passe est changé, il peut falloir re-télécharger le programme sur le participant KNX qui 
+contient l'interface, pour que le fichier knxkeys fonctionne.
+
+Enfin, il est possible d'appuyer sur la touche "**Entrée**" ou sur le bouton "**Connexion**" pour se connecter.
+- Si la connexion fonctionne, un message en vert indiquera le nom de l'interface, le bouton de déconnexion deviendra 
+rouge et le bouton dans la [fenêtre principale](#main-window) apparaitra vert.
+- Si la connexion échoue, cela peut être à cause de plein de raisons. Nous avons explicité certaines raisons connues et 
+remédiables facilement. Ces messages ne sont pour l'instant qu'en Français. La liste des erreurs n'est pas exhaustive :
+1. Oubli de mettre le fichier knxkeys pour l'IP Secure → Renseigner les informations nécessaires.
+2. Mauvais mot de passe pour le bon fichier knxkeys → Vérifier qu'il s'agit du bon mot de passe téléchargé sur l'interface.
+3. L'interface est déjà utilisée → Attendre ou changer d'interface.
+4. Pas d'adresse IP de type IPv4 ou adresse invalide renseignée → Donner l'adresse IP publique correspondant à l'interface.
+5. L'adresse IP n'a pas permis de créer la connexion → Vérifier qu'il s'agit de la bonne adresse IP et la connexion au/aux routeur.s.
+6. Pas d'interface sélectionnée → Bien cliquer sur une interface de la liste proposée dans la fenêtre. Elle doit être surlignée.
+7. Interface non reconnue → Rafraichir la liste et vérifier le branchement.
+
+Nous avons déjà rencontré des routeurs auquel on ne peut pas se connecter, mais pas de solution n'a été trouvé.
 
 ## 3.4. Création d'un test <a name="create-test"></a>
+
 
 ## 3.5. Lancement d'un test <a name="launch-test"></a>
 C'est l'objectif de l'application : tester et analyser une installation ! Pour le faire, il faut ouvrir la [fenêtre de 
 d'analyse/test](#analysis-window) depuis la fenêtre principale. 
+Dans cette fenêtre, **il faut cocher la case d'un modèle** pour le rajouter à la liste des modèles qui seront testés. 
+Il est ausi possible de cocher les cases dans la colonne des structures pour ajouter tous les modèles de la structure au test.
+
+Les tests se feront dans l'ordre chronologique d'ajout dans la liste à tester. Cependant, cela fait que si un modèle est 
+modifié après l'avoir ajouté à la liste, il ne sera pas mis à jour. Il faudra donc l'enlever de la liste en vidant la liste ou en décochant le modèle.
+
+Maintenant, il est possible de changer les délais entre chaque élément pour ralentir le test et ne pas surcharger le bus. 
+Il est aussi possible de changer le temps de réponse maximal autorisé pour la réception : certaines fonctions peuvent prendre
+du temps avant de se terminer, d'où le besoin de pouvoir le changer. 
+</br> Attention, ces paramètres sont généraux et s'appliquent à tous les modèles qui seront testés !
+
+En cas d'importation la liste est automatiquement vidée, mais il est possible de le faire manuellement avec le bouton "**Annuler**"
+Enfin, pour lancer l'analyse de la liste, il faudra tout simplement appuyer sur le bouton "**Lancer le test**". 
+
+Pendant le test, l'application est très ralentie (ne fonctionne que pendant le court instant entre chaque commande) mais 
+elle affiche le stade d'avancement des tests avec des icones : le sablier pour indiquer l'attente, le cercle quand le test
+est en cours et la coche quand il est terminé (correctement ou non). Quand tout est terminé l'application reprend son fonctionnement habituel.
+</br> À ce moment, il est possible de passer à la [Création du rapport d'analyse](#create-report).
+
 
 ## 3.6. Création du rapport <a name="create-report"></a>
 Afin de prouver la validité de l'installation ou d'en faire le diagnostic, KNX VI met à disposition la possibilité de
