@@ -1613,8 +1613,7 @@ public partial class SettingsWindow
         Background = backgroundColorBrush;
 
         // En-tête de la fenêtre
-        SettingsIconPath1.Brush = textColorBrush;
-        SettingsIconPath2.Brush = textColorBrush;
+        SettingsIcon.Brush = textColorBrush;
         SettingsWindowTopTitle.Foreground = textColorBrush;
         HeaderPath.Stroke = pathColorBrush;
 
@@ -1646,8 +1645,7 @@ public partial class SettingsWindow
         OngletParametresApplication.BorderBrush = borderBrush;
         OngletDebug.Foreground = textColorBrush;
         OngletParametresApplication.Foreground = textColorBrush;
-        DebugBrush1.Brush = textColorBrush;
-        DebugBrush2.Brush = textColorBrush;
+        Resources["CurrentDebugDrawingImageBrush"] = textColorBrush;
         
         // Menu Informations
         OngletInformations.Foreground = textColorBrush;
