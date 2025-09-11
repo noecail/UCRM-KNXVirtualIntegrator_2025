@@ -379,7 +379,6 @@ elle affiche le stade d'avancement des tests avec des icones : le sablier pour i
 est en cours et la coche quand il est terminé (correctement ou non). Quand tout est terminé l'application reprend son fonctionnement habituel.
 </br> À ce moment, il est possible de passer à la [Création du rapport d'analyse](#create-report).
 
-
 ## 3.6. Création du rapport <a name="create-report"></a>
 Afin de prouver la validité de l'installation ou d'en faire le diagnostic, KNX VI met à disposition la possibilité de
 générer un document PDF compilant les résultats de chaque commande envoyée à l'installation. 
@@ -388,6 +387,11 @@ ses éléments de test, et les commandes associées.
 Une ligne d'un élément à tester correspond à une ligne de commande dans le rapport. Les succès, échecs, réponses de présence
 ou les erreurs correspondent au fait que ce qui a été reçu en retour correspond ou non à ce qui a été attendu. 
 Chaque résultat correspond à une case de réception.
+
+Attention, si la valeur est désactivée il peut y avoir plusieurs possibilités : 
+- s'il n'y a pas de valeur, la réception sera automatiquement un succès.
+- s'il y a une valeur, la réception sera évaluée comme habituellement, donc si rien n'est reçu, elle sera indiqué comme un échec.
+Il ne faut donc pas oublier que cette réception précise peut ne pas être pertinente.
 
 Pour la génération du rapport, il faut ouvrir la [fenêtre de rapport d'analyse](#report-window). Ensuit, il est possible de renseigner 
 un nom d'auteur qui apparaitra dans le rapport, mais c'est optionnel. Le nom du projet apparaitra aussi dans le rapport.

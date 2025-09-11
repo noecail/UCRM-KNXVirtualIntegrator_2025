@@ -80,7 +80,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
             else if (e.PropertyName == nameof(BusConnection.ConnectionErrorMessage))
             {
-                ErrorMessageVisibility = BusConnection.ConnectionErrorMessage==""? Visibility.Collapsed : Visibility.Visible;
+                ConnectionErrorMessageVisibility = BusConnection.ConnectionErrorMessage==""? Visibility.Collapsed : Visibility.Visible;
             }
         };
         
@@ -139,6 +139,22 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
 
         HideReportGenerationSuccessMessageCommand = new Commands.RelayCommand<object>(_ => 
             ReportGenerationSuccessMessageVisibility = Visibility.Hidden
+        );
+
+        ShowAnalysisErrorMessageCommand = new Commands.RelayCommand<object>(_ => 
+            AnalysisErrorMessageVisibility = Visibility.Visible
+        );
+
+        CollapseAnalysisErrorMessageCommand = new Commands.RelayCommand<object>(_ => 
+            AnalysisErrorMessageVisibility = Visibility.Collapsed
+        );
+
+        ShowAnalysisSuccessMessageCommand = new Commands.RelayCommand<object>(_ => 
+            AnalysisSuccessMessageVisibility = Visibility.Visible
+        );
+
+        CollapseAnalysisSuccessMessageCommand = new Commands.RelayCommand<object>(_ => 
+            AnalysisSuccessMessageVisibility = Visibility.Collapsed
         );
 
         SelectedModelConsoleWriteCommand = new Commands.RelayCommand<object>(_ =>
@@ -628,43 +644,58 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
         LaunchAnalysisCommand = new RelayCommandWithResult<ObservableCollection<FunctionalModel>, Task<List<List<List<List<ResultType>>>>>>(
             async testModels =>
             {
-                Analyze analysis = new Analyze(_modelManager.GroupCommunication);
-                AnalysisState = new List<string>(testModels.Count);
-                for (int i = 0; i < testModels.Count; i++)
+                try
                 {
-                    AnalysisState.Add("Waiting");
-                    ChosenModelsAndState[i].State = "Waiting";
-                    WhenPropertyChanged(nameof(AnalysisState));
-                }
-                analysis.PropertyChanged += (_, e) =>
-                {
-                    if (e.PropertyName == "Running")
+                    CollapseAnalysisErrorMessageCommand.Execute(null);
+                    CollapseAnalysisSuccessMessageCommand.Execute(null);
+                    
+                    Analyze analysis = new Analyze(_modelManager.GroupCommunication);
+                    AnalysisState = new List<string>(testModels.Count);
+                    for (int i = 0; i < testModels.Count; i++)
                     {
-                        for (int i = 0; i < AnalysisState.Count; i++)
-                        {
-                            if (AnalysisState[i] != "Waiting") continue;
-                            AnalysisState[i] = "Running";
-                            ChosenModelsAndState[i].State = "Running";
-                            WhenPropertyChanged(nameof(AnalysisState));
-                            return;
-                        }
-                    } else if (e.PropertyName == "Finished")
-                    {
-                        for (int i = 0; i < AnalysisState.Count; i++)
-                        {
-                            if (AnalysisState[i] != "Running") continue;
-                            AnalysisState[i] = "Finished";
-                            ChosenModelsAndState[i].State = "Finished";
-                            WhenPropertyChanged(nameof(AnalysisState));
-                            return;
-                        }   
+                        AnalysisState.Add("Waiting");
+                        ChosenModelsAndState[i].State = "Waiting";
+                        WhenPropertyChanged(nameof(AnalysisState));
                     }
-                };
-                ConsoleAndLogWriteLineCommand.Execute("Analysis Started");
-                await analysis.TestAll(testModels, CommandTimeout, ElementLatency);
-                ConsoleAndLogWriteLineCommand.Execute("Analysis Finished");
-                LastTestResults = analysis.Results;
-                return analysis.Results;
+
+                    analysis.PropertyChanged += (_, e) =>
+                    {
+                        if (e.PropertyName == "Running")
+                        {
+                            for (int i = 0; i < AnalysisState.Count; i++)
+                            {
+                                if (AnalysisState[i] != "Waiting") continue;
+                                AnalysisState[i] = "Running";
+                                ChosenModelsAndState[i].State = "Running";
+                                WhenPropertyChanged(nameof(AnalysisState));
+                                return;
+                            }
+                        }
+                        else if (e.PropertyName == "Finished")
+                        {
+                            for (int i = 0; i < AnalysisState.Count; i++)
+                            {
+                                if (AnalysisState[i] != "Running") continue;
+                                AnalysisState[i] = "Finished";
+                                ChosenModelsAndState[i].State = "Finished";
+                                WhenPropertyChanged(nameof(AnalysisState));
+                                return;
+                            }
+                        }
+                    };
+                    ConsoleAndLogWriteLineCommand.Execute("Analysis Started");
+                    await analysis.TestAll(testModels, CommandTimeout, ElementLatency);
+                    ConsoleAndLogWriteLineCommand.Execute("Analysis Finished");
+                    LastTestResults = analysis.Results;
+                    ShowAnalysisSuccessMessageCommand.Execute(null);
+                    return analysis.Results;
+                }
+                catch (Exception e)
+                {
+                    AnalysisErrorMessage = e.Message;
+                    ShowAnalysisErrorMessageCommand.Execute(null);
+                    return [];
+                }
             }
         );
         

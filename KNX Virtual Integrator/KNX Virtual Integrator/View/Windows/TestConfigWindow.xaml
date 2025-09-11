@@ -1225,6 +1225,7 @@
                         <RowDefinition Height="Auto" />
                         <!-- Titre Modèles Fonctionnels sélectionnés-->
                         <RowDefinition MinHeight="400" Height="*" />         <!-- TextBox avec les modèles -->
+                        <RowDefinition Height="Auto"/>                       <!--Message d'erreur-->
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto" />                      <!-- Bouton de Lancement de Tests-->
                     </Grid.RowDefinitions>
@@ -1275,7 +1276,29 @@
                              ItemTemplateSelector="{StaticResource ChosenModelTemplateSelector}">
                     </ListBox>
                     
-                    <StackPanel Grid.Row="4"
+                    <!-- Error Message Section -->
+                    <StackPanel Grid.Row="4" Orientation="Vertical" HorizontalAlignment="Left" Margin="20,0"
+                                Visibility="{Binding AnalysisErrorMessageVisibility}">
+                        <TextBlock
+                            Text="{DynamicResource AnalysisError}"
+                            FontWeight="Bold"
+                            Foreground="{StaticResource RedBrush}" />
+                        <TextBlock
+                            Text="{Binding AnalysisErrorMessage}"
+                            FontWeight="SemiBold"
+                            Foreground="{StaticResource RedBrush}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                    
+                    <TextBlock Grid.Row="4"
+                               Margin="20,0"
+                               Visibility="{Binding AnalysisSuccessMessageVisibility}"
+                               Text="{DynamicResource AnalysisSuccess}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource KnxGreenBrush}"
+                               TextWrapping="Wrap" />
+                    
+                    <StackPanel Grid.Row="5"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right">
                         <Image Style="{StaticResource TooltipImage}"
@@ -1305,7 +1328,7 @@
                                 Click="OnClearButtonClick_ClearModelsToTest" />
                     </StackPanel>
 
-                    <StackPanel Grid.Row="5"
+                    <StackPanel Grid.Row="6"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right">
                         <Image Style="{StaticResource TooltipImage}"

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows;
 using KNX_Virtual_Integrator.Model.Entities;
 using KNX_Virtual_Integrator.Model.Implementations;
 
@@ -165,6 +166,57 @@ public partial class MainViewModel
         ElementLatency = 0;
         SelectedTestModels.Clear();
         ChosenModelsAndState.Clear();
+    }
+
+    private string _analysisErrorMessage;
+    /// <summary>
+    /// Error message for an eventual error on Launch Analysis
+    /// </summary>
+    public string AnalysisErrorMessage
+    {
+        get => _analysisErrorMessage;
+        set
+        {
+            if (_analysisErrorMessage == value) return;
+            _analysisErrorMessage = value;
+            WhenPropertyChanged(nameof(AnalysisErrorMessage));
+        }
+    }
+    
+    /// <summary>
+    /// The visibility state of the analysis error message
+    /// </summary>
+    private Visibility _analysisErrorMessageVisibility = Visibility.Collapsed;
+    /// <summary>
+    /// Gets or sets the visibility state of the analysis error message
+    /// </summary>
+    public Visibility AnalysisErrorMessageVisibility
+    {
+        get => _analysisErrorMessageVisibility;
+        set
+        {
+            if (_analysisErrorMessageVisibility == value) return;
+            _analysisErrorMessageVisibility = value;
+            WhenPropertyChanged(nameof(AnalysisErrorMessageVisibility));
+        }
+    }
+    
+    /// <summary>
+    /// The visibility state of the analysis success message
+    /// </summary>
+    private Visibility _analysisSuccessMessageVisibility = Visibility.Collapsed;
+    /// <summary>
+    /// Gets or sets the visibility state of the analysis success message
+    /// </summary>
+    public Visibility AnalysisSuccessMessageVisibility
+    {
+        get => _analysisSuccessMessageVisibility;
+        set
+        {
+            if (_analysisSuccessMessageVisibility == value) return;
+            _analysisSuccessMessageVisibility = value;
+            WhenPropertyChanged(nameof(AnalysisSuccessMessageVisibility));
+        }
     }
 }
 
