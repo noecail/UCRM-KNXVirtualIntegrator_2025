@@ -4894,17 +4894,6 @@
             in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
             </summary>
         </member>
-        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._analysisErrorMessageVisibility">
-            <summary>
-            The visibility state of the error messages in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
-            </summary>
-        </member>
-        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AnalysisErrorMessageVisibility">
-            <summary>
-            Gets or sets the visibility state of the error messages
-            in <see cref="T:KNX_Virtual_Integrator.View.Windows.ConnectionWindow"/>.
-            </summary>
-        </member>
         <member name="M:KNX_Virtual_Integrator.ViewModel.MainViewModel.#ctor(KNX_Virtual_Integrator.Model.ModelManager)">
             <summary>
             Constructor of the ViewModel, subscribes everything concerning the viewModel and initializes every other attribute.
@@ -5028,12 +5017,22 @@
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ShowAnalysisErrorMessageCommand">
             <summary>
-            Command that shows the ReportGenerationSuccessMessage
+            Command that shows the AnalysisErrorMessage
             </summary>
         </member>
-        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.HideAnalysisErrorMessageCommand">
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.CollapseAnalysisErrorMessageCommand">
             <summary>
-            Command that hides the ReportGenerationSuccessMessage
+            Command that hides the AnalysisErrorMessage
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ShowAnalysisSuccessMessageCommand">
+            <summary>
+            Command that shows the AnalysisSuccessMessage
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.CollapseAnalysisSuccessMessageCommand">
+            <summary>
+            Command that hides the AnalysisSuccessMessage
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedModelConsoleWriteCommand">
@@ -5442,6 +5441,26 @@
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AnalysisErrorMessage">
             <summary>
             Error message for an eventual error on Launch Analysis
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._analysisErrorMessageVisibility">
+            <summary>
+            The visibility state of the analysis error message
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AnalysisErrorMessageVisibility">
+            <summary>
+            Gets or sets the visibility state of the analysis error message
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._analysisSuccessMessageVisibility">
+            <summary>
+            The visibility state of the analysis success message
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.AnalysisSuccessMessageVisibility">
+            <summary>
+            Gets or sets the visibility state of the analysis success message
             </summary>
         </member>
         <member name="T:KNX_Virtual_Integrator.ViewModel.TestedFunctionalModel">

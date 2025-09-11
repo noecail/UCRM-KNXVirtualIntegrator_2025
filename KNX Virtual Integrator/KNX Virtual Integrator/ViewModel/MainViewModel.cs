@@ -145,8 +145,16 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             AnalysisErrorMessageVisibility = Visibility.Visible
         );
 
-        HideAnalysisErrorMessageCommand = new Commands.RelayCommand<object>(_ => 
-            AnalysisErrorMessageVisibility = Visibility.Hidden
+        CollapseAnalysisErrorMessageCommand = new Commands.RelayCommand<object>(_ => 
+            AnalysisErrorMessageVisibility = Visibility.Collapsed
+        );
+
+        ShowAnalysisSuccessMessageCommand = new Commands.RelayCommand<object>(_ => 
+            AnalysisSuccessMessageVisibility = Visibility.Visible
+        );
+
+        CollapseAnalysisSuccessMessageCommand = new Commands.RelayCommand<object>(_ => 
+            AnalysisSuccessMessageVisibility = Visibility.Collapsed
         );
 
         SelectedModelConsoleWriteCommand = new Commands.RelayCommand<object>(_ =>
@@ -638,7 +646,8 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             {
                 try
                 {
-                    HideAnalysisErrorMessageCommand.Execute(null);
+                    CollapseAnalysisErrorMessageCommand.Execute(null);
+                    CollapseAnalysisSuccessMessageCommand.Execute(null);
                     
                     Analyze analysis = new Analyze(_modelManager.GroupCommunication);
                     AnalysisState = new List<string>(testModels.Count);
@@ -678,6 +687,7 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
                     await analysis.TestAll(testModels, CommandTimeout, ElementLatency);
                     ConsoleAndLogWriteLineCommand.Execute("Analysis Finished");
                     LastTestResults = analysis.Results;
+                    ShowAnalysisSuccessMessageCommand.Execute(null);
                     return analysis.Results;
                 }
                 catch (Exception e)
