@@ -957,7 +957,7 @@
     <ScrollViewer BorderBrush="{StaticResource KnxGreenBrush}"
             BorderThickness="0" x:Name="TestConfigWindowBorder"
             HorizontalScrollBarVisibility="Auto"
-            VerticalScrollBarVisibility="Auto">
+            VerticalScrollBarVisibility="Disabled">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition MinWidth="850" Width="Auto" />
@@ -1199,7 +1199,6 @@
                                  Margin="10,0,0,0"
                                  ItemsSource="{Binding SelectedModelTestWindow.ElementList, FallbackValue=''}"
                                  Background="{StaticResource OffWhiteBackgroundBrush}"
-                                 Height="Auto"
                                  ItemContainerStyle="{StaticResource TestedElementItemContainerStyleLight}"
                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
                                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
@@ -1214,11 +1213,11 @@
             </Border>
             
     <!-- ___________________________________________________________________________________________________________________________________________________________________________________________ -->
-
-            <Border Grid.Column="1" Name="ChosenModelsColumn"
+            <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <Border Name="ChosenModelsColumn"
                     Style="{StaticResource BorderTitleLight}"
                     BorderThickness="1,0,0,0">
-
+                
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition MinHeight="25" Height="Auto" />
@@ -1236,7 +1235,7 @@
                                HorizontalAlignment="Center"
                                Text="{DynamicResource ChosenTestModelsTitle}" />
                     
-                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal" Margin="10,50,0,0">
+                    <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal" Margin="10,40,0,0">
                         <TextBlock Name="AnalysisDelay"
                                    Style="{StaticResource StandardTextBlockLight}"
                                    HorizontalAlignment="Left"
@@ -1339,7 +1338,7 @@
 
                 </Grid>
             </Border>
-
+            </ScrollViewer>
 
         </Grid>
 
