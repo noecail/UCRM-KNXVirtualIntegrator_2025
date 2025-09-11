@@ -166,6 +166,21 @@ public partial class MainViewModel
         SelectedTestModels.Clear();
         ChosenModelsAndState.Clear();
     }
+
+    private string _analysisErrorMessage;
+    /// <summary>
+    /// Error message for an eventual error on Launch Analysis
+    /// </summary>
+    public string AnalysisErrorMessage
+    {
+        get => _analysisErrorMessage;
+        set
+        {
+            if (_analysisErrorMessage == value) return;
+            _analysisErrorMessage = value;
+            WhenPropertyChanged(nameof(AnalysisErrorMessage));
+        }
+    }
 }
 
 /// <summary>
