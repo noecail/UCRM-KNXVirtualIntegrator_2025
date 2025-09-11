@@ -121,6 +121,24 @@ namespace KNX_Virtual_Integrator.ViewModel
                 WhenPropertyChanged(nameof(ApplyChangesErrorMessageVisibility));
             }
         }
+        
+        /// <summary>
+        /// The visibility of this Success Message. Usually hidden.
+        /// </summary>
+        private Visibility _reportGenerationSuccessMessageVisibility = Visibility.Hidden;
+        /// <summary>
+        /// Gets or sets the visibility of this Success Message. Usually hidden.
+        /// </summary>
+        public Visibility ReportGenerationSuccessMessageVisibility
+        {
+            get => _reportGenerationSuccessMessageVisibility;
+            set
+            {
+                if (ReportGenerationSuccessMessageVisibility == value) return;
+                _reportGenerationSuccessMessageVisibility = value;
+                WhenPropertyChanged(nameof(ReportGenerationSuccessMessageVisibility));
+            }
+        }
 
     }
 }

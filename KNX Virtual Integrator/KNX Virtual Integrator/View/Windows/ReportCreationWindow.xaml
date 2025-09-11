@@ -179,7 +179,24 @@
                                Width="400"
                                Height="40"
                                Margin="10, 5, 10, 5" />
-
+                    
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left"
+                               Visibility="{Binding ReportGenerationSuccessMessageVisibility}"
+                               Text="{DynamicResource ReportGenerationSuccessMessage}"
+                               FontWeight="Bold"
+                               FontSize="13"
+                               Foreground="{StaticResource KnxGreenBrush}"
+                               Height="40"
+                               TextWrapping="Wrap" >
+                        <ToolTipService.ToolTip>
+                            <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                     BorderBrush="{StaticResource KnxGreenBrush}">
+                                <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                           Text="{DynamicResource ReportGenerationSuccessMessage}"/>
+                            </ToolTip>
+                        </ToolTipService.ToolTip>
+                    </TextBlock>
+                    
                     <!-- APERCU DU PDF AVEC WEBVIEWER -->
                     <TextBlock x:Name="ReportPreviewText"
                                Text="{DynamicResource ReportPreview}"

@@ -133,6 +133,14 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             ApplyChangesErrorMessageVisibility = Visibility.Hidden
         );
 
+        ShowReportGenerationSuccessMessageCommand = new Commands.RelayCommand<object>(_ => 
+            ReportGenerationSuccessMessageVisibility = Visibility.Visible
+        );
+
+        HideReportGenerationSuccessMessageCommand = new Commands.RelayCommand<object>(_ => 
+            ReportGenerationSuccessMessageVisibility = Visibility.Hidden
+        );
+
         SelectedModelConsoleWriteCommand = new Commands.RelayCommand<object>(_ =>
             ModelConsoleWriteCommand?.Execute(SelectedModel)
         );

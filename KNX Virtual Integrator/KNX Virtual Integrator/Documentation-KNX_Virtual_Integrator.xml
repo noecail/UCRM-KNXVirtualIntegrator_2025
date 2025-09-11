@@ -5005,6 +5005,16 @@
             Command that hides the ApplyChangesErrorMessage
             </summary>
         </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ShowReportGenerationSuccessMessageCommand">
+            <summary>
+            Command that shows the ReportGenerationSuccessMessage
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.HideReportGenerationSuccessMessageCommand">
+            <summary>
+            Command that hides the ReportGenerationSuccessMessage
+            </summary>
+        </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedModelConsoleWriteCommand">
             <summary>
             Command that prints the <see cref="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedModel"/>.
@@ -5285,6 +5295,16 @@
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ApplyChangesErrorMessageVisibility">
             <summary>
             Gets or sets the visibility of Error Messages. Usually hidden.
+            </summary>
+        </member>
+        <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._reportGenerationSuccessMessageVisibility">
+            <summary>
+            The visibility of this Success Message. Usually hidden.
+            </summary>
+        </member>
+        <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ReportGenerationSuccessMessageVisibility">
+            <summary>
+            Gets or sets the visibility of this Success Message. Usually hidden.
             </summary>
         </member>
         <member name="F:KNX_Virtual_Integrator.ViewModel.MainViewModel._pdfPath">

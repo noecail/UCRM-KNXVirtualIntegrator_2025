@@ -35,6 +35,7 @@ public partial class ReportCreationWindow
     {
         InitializeComponent();
         _mainViewModel = mv;
+        DataContext = _mainViewModel;
         MyBrowser.RenderSize = new Size(400, 600);
         UpdateWindowContents(true, true, true);
     }
@@ -66,6 +67,7 @@ public partial class ReportCreationWindow
             Resources["ReportPreview"] = "Prévisualisation du rapport (peut causer des erreurs):";
             Resources["GenerationButton"] = "Prévisualiser le rapport";
             Resources["CancelButton"] = "Réinitialiser paramètres";
+            Resources["ReportGenerationSuccessMessage"] = "Rapport de test correctement généré.";
             Resources["ReportCreationTooltipTitle"] = "Aide - Rapport de Test";
             Resources["ReportCreationTooltipMessage"] =
                 "Création du rapport de test.\r\n" +
@@ -86,6 +88,7 @@ public partial class ReportCreationWindow
             Resources["ReportPreview"] = "Report preview (can cause errors):";
             Resources["GenerationButton"] = "Preview the report";
             Resources["CancelButton"] = "Reset parameters";
+            Resources["ReportGenerationSuccessMessage"] = "Test report successfully generated.";
             Resources["ReportCreationTooltipTitle"] = "Help - Test Report";
             Resources["ReportCreationTooltipMessage"] =
                 "Creating the test report.\r\n" +
@@ -256,6 +259,7 @@ public partial class ReportCreationWindow
         e.Cancel = true;
         Hide();
         UpdateWindowContents(true, true, true);
+        _mainViewModel.HideReportGenerationSuccessMessageCommand.Execute(null);
     }
 
     /// <summary>
@@ -265,6 +269,7 @@ public partial class ReportCreationWindow
     /// <param name="e">The event data.</param>
     private void SetPdfPathButton_OnClick(object sender, RoutedEventArgs e)
     {
+        _mainViewModel.HideReportGenerationSuccessMessageCommand.Execute(null);
         MyBrowser.Visibility = Visibility.Hidden;
         MyBrowser.Source = null;
         // Créer une nouvelle instance de OpenFileDialog pour permettre à l'utilisateur de sélectionner un fichier
@@ -305,6 +310,7 @@ public partial class ReportCreationWindow
             PdfPathText.Text = saveFileDialog.FileName;
             _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
                 _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
+            _mainViewModel.ShowReportGenerationSuccessMessageCommand.Execute(null);
         }
         else
         {
