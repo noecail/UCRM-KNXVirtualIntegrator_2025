@@ -129,6 +129,10 @@ public partial class MainViewModel : ObservableObject, INotifyPropertyChanged
             }
         );
 
+        HideApplyChangesErrorMessageCommand = new Commands.RelayCommand<object>(_ => 
+            ApplyChangesErrorMessageVisibility = Visibility.Hidden
+        );
+
         SelectedModelConsoleWriteCommand = new Commands.RelayCommand<object>(_ =>
             ModelConsoleWriteCommand?.Execute(SelectedModel)
         );

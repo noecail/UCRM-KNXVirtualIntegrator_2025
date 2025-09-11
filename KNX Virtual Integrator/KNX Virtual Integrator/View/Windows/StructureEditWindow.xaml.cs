@@ -48,6 +48,7 @@ public partial class StructureEditWindow
         e.Cancel = true;
         UpdateWindowContents(true, true, true);
         Hide();
+        _viewModel.HideApplyChangesErrorMessageCommand.Execute(null);
     }    
     
     /// <summary>

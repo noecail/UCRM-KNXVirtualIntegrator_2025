@@ -131,6 +131,11 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand AllModelsConsoleWriteCommand { get; private set; }
         
         /// <summary>
+        /// Command that hides the ApplyChangesErrorMessage
+        /// </summary>
+        public ICommand HideApplyChangesErrorMessageCommand { get; private set; }
+        
+        /// <summary>
         /// Command that prints the <see cref="SelectedModel"/>.
         /// </summary>  
         // ReSharper disable once UnusedAutoPropertyAccessor.Global

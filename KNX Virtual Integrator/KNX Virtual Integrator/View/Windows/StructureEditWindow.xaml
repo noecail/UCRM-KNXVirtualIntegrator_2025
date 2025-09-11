@@ -799,20 +799,22 @@
                             </ToolTipService.ToolTip>
                         </Image>
                     </StackPanel>
-                    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" Visibility="Hidden">
-                        <Button Content="Afficher Struct" Click="PrintSelectedStructureButtonClick"/>
-                        <Button Content="Afficher Save" Click="PrintEditedStructureSaveButtonClick"/>
-                    </StackPanel>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right"
-                               Margin="0,0,30,0"
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"
                                Visibility="{Binding ApplyChangesErrorMessageVisibility}"
                                Text="{DynamicResource ApplyChangesErrorMessage}"
                                FontWeight="Bold"
-                               FontSize="15"
+                               FontSize="12"
                                Foreground="Red"
-                               Width="600"
                                Height="40"
-                               TextWrapping="Wrap" />
+                               TextWrapping="Wrap" >
+                        <ToolTipService.ToolTip>
+                            <ToolTip Background="{DynamicResource CurrentTooltipBackgroundBrush}"
+                                     BorderBrush="{StaticResource RedBrush}">
+                                 <TextBlock Style="{DynamicResource CurrentTooltipTextBlockStyle}"
+                                               Text="{DynamicResource ApplyChangesErrorMessage}"/>
+                            </ToolTip>
+                        </ToolTipService.ToolTip>
+                    </TextBlock>
                     <StackPanel Grid.Column="2" Orientation="Horizontal">
                         <Image Style="{StaticResource TooltipImage}"
                                Height="15"
