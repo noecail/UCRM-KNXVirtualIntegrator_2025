@@ -6326,14 +6326,6 @@
             <param name="sender">The source of the event, typically the header control.</param>
             <param name="e">Event data containing information about the mouse button event.</param>
         </member>
-        <member name="M:KNX_Virtual_Integrator.View.Windows.TestConfigWindow.FindVisualChild``1(System.Windows.DependencyObject)">
-            <summary>
-            Recursive method that searches for the child of the parent that is of a specific type in the visual tree.
-            </summary>
-            <param name="parent">The parent from which to search.</param>
-            <typeparam name="T">The type of the child.</typeparam>
-            <returns>The child of the specified type, found recursively.</returns>
-        </member>
         <member name="M:KNX_Virtual_Integrator.View.Windows.TestConfigWindow.InitializeComponent">
             <summary>
             InitializeComponent

@@ -43,13 +43,10 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
     /// <param name="testResults"></param>
     public void CreatePdf(string fileName, string authorName, ObservableCollection<FunctionalModel>  testedList, List<List<List<List<ResultType>>>> testResults)
     {
-        try
-        {
             if (fileName.Length == 0)
             {
                 return;
             }
-
             // Génération d'un PDF et du writer pour écrire dans le Pdf
             _writer = new PdfWriter(new FileStream(fileName, FileMode.Create));
             var newPdf = new PdfDocument(_writer);
@@ -73,11 +70,6 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
             _writer.Close();
             // Mise à jour du path du dernier pdf généré
             LatestReportPath = fileName;
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message + "         " + ex.HelpLink + " :: "  + ex.Source);
-        }
     }
 
 
@@ -181,74 +173,74 @@ public class PdfDocumentCreator (ProjectFileManager manager) : IPdfDocumentCreat
         var i = 0;
         if (testedList.Count <= 0)
             document.Add(new Paragraph("No tested model"));
-        foreach (var testedModel in testedList)
-        {
-            var j = 0;
-            document.Add(new Paragraph($"Tested Model : {testedModel.FullName}"));
-            if (testedModel.ElementList.Count <= 0)
-                document.Add(new Paragraph("No Element in the model."));
-            foreach (var testedElement in testedModel.ElementList)
+        else if (testResults.Count != testedList.Count )
+            document.Add(new Paragraph("Error : Difference in number between the results and the currently selected tested models."));
+        else
+            foreach (var testedModel in testedList)
             {
-                var k = 0;
-                document.Add(new Paragraph("Element n°" + (j+1)));
-                if (testedElement.TestsCmd.Count <= 0)
-                {
-                    document.Add(new Paragraph("No command."));
-                } else if (testedElement.TestsCmd[0].Value.Count <= 0)
-                {
-                    document.Add(new Paragraph("No command value."));
-                } else
-                {
-                    foreach (var testedCommand in testedElement.TestsCmd[0].Value)
+                var j = 0;
+                document.Add(new Paragraph($"Tested Model : {testedModel.FullName}"));
+                if (testedModel.ElementList.Count <= 0)
+                    document.Add(new Paragraph("No Element in the model."));
+                else if (testResults[i].Count != testedModel.ElementList.Count)
+                    document.Add(new Paragraph("Error : Difference in number between the results and the current model number of elements."));
+                else
+                    foreach (var testedElement in testedModel.ElementList)
                     {
-                        string resultString;
-                        var l = 0;
-                        if (testedElement.TestsCmd[0].Address == "")
-                        {
-                            resultString = "Address Error on command n°" + (k + 1) + ".";
-                        }
-                        else if (testedCommand is null || testedCommand.Value.Length <= 0)
-                        {
-                            resultString = "Value Error on command n°" + (k + 1) + ".";
-                        }
+                        var k = 0;
+                        document.Add(new Paragraph("Element n°" + (j+1)));
+                        if (testedElement.TestsCmd.Count <= 0)
+                            document.Add(new Paragraph("No command."));
+                        else if (testedElement.TestsCmd[0].Value.Count <= 0)
+                            document.Add(new Paragraph("No command value."));
+                        else if (testResults[i][j].Count != testedElement.TestsCmd[0].Value.Count)
+                            document.Add(new Paragraph("Error : Difference in number between the results and the current element number of commands."));
                         else
-                        {
-                            resultString = "Result(s) of command n°" + (k + 1) + " :   ";
-                            if (testedElement.TestsIe.Count <= 0)
+                            foreach (var testedCommand in testedElement.TestsCmd[0].Value)
                             {
-                                resultString += "No Reception.";
-                            }
-
-                            foreach (var testedIe in testedElement.TestsIe)
-                            {
-                                if (testedIe.Address == "")
+                                string resultString;
+                                var l = 0;
+                                if (testedElement.TestsCmd[0].Address == "")
+                                    resultString = "Address Error on command n°" + (k + 1) + ".";
+                                else if (testedCommand is null || testedCommand.Value.Length <= 0)
+                                    resultString = "Value Error on command n°" + (k + 1) + ".";
+                                else if (testResults[i][j][k].Count != testedElement.TestsIe.Count)
+                                    resultString = "Error : Difference in number between the results and the current command number of receptions.";
+                                else
                                 {
-                                    resultString += "Address Error " +
-                                                    (testedElement.TestsIe.Count == 1 ||
-                                                     testedElement.TestsIe.Last().IsEqual(testedIe)
-                                                        ? ""
-                                                        : ", ");
-                                    break;
+                                    resultString = "Result(s) of command n°" + (k + 1) + " :   ";
+                                    if (testedElement.TestsIe.Count <= 0)
+                                        resultString += "No Reception.";
+                                    else
+                                        foreach (var testedIe in testedElement.TestsIe)
+                                        {
+                                            if (testedIe.Address == "")
+                                            {
+                                                resultString += "Address Error " +
+                                                                (testedElement.TestsIe.Count == 1 ||
+                                                                 testedElement.TestsIe.Last().IsEqual(testedIe)
+                                                                    ? ""
+                                                                    : ", ");
+                                                break;
+                                            }
+
+                                            resultString += testResults[i][j][k][l] +
+                                                            (testedElement.TestsIe.Count == 1 ||
+                                                             testedElement.TestsIe.Last().IsEqual(testedIe)
+                                                                ? ""
+                                                                : ", ");
+                                            l++;
+                                        }
                                 }
 
-                                resultString += testResults[i][j][k][l] +
-                                                (testedElement.TestsIe.Count == 1 ||
-                                                 testedElement.TestsIe.Last().IsEqual(testedIe)
-                                                    ? ""
-                                                    : ", ");
-                                l++;
+                                Paragraph resultParagraph = new Paragraph(resultString);
+                                document.Add(resultParagraph);
+                                k++;
                             }
-                        }
-
-                        Paragraph resultParagraph = new Paragraph(resultString);
-                        document.Add(resultParagraph);
-                        k++;
+                        j++;
                     }
-                }
-                j++;
+                i++;
             }
-            i++;
-        }
     }
     
     
