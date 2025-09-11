@@ -194,7 +194,7 @@ Lorsque le type de connexion choisi est **IP**, la liste des interfaces disponib
 Le bouton **Rafraîchir** relance la recherche en cas de problème de détection.  
 Il est également possible d’activer la **connexion sécurisée via IP Secure**, qui nécessite l’importation d’un fichier de clés au format `.knxkeys` ainsi que la saisie du mot de passe associé.  
 En bas de la fenêtre, les boutons **Connexion** et **Déconnexion** permettent respectivement d’établir ou de couper le lien.  
-L’état de la connexion en cours est affiché dans la zone inférieure.
+L’état de la connexion en cours est affiché dans la zone inférieure. Juste au dessus de celle-ci, des messages d'erreur peuvent apparaître quand la connexion ne fonctionne pas comme prévu.
 
 <img src="Images/ConnectionWindowNAT.png" alt="fenetre-connexion-remoteip" style="width:50%;"/>
 
@@ -202,13 +202,14 @@ Si l’option **Remote IP (NAT)** est sélectionnée, deux champs supplémentair
 l’**IP publique du routeur** et l’**adresse individuelle de l’interface** (par défaut de la forme *1.1.255*).  
 La sécurisation IP Secure reste disponible, avec la possibilité d’importer un fichier de clés et son mot de passe associé.  
 Une fois les informations renseignées, le bouton **Connexion** permet d’établir la communication avec l’installation distante.
+Les messages d'erreur de connexion peuvent apparaître au dessus de l'état de connexion quand elle ne fonctionne pas comme prévu.
 
 <img src="Images/ConnectionWindowUSB.png" alt="fenetre-connexion-usb" style="width:50%;"/>
 
 En choisissant le mode **USB**, l’application affiche directement les interfaces matérielles détectées.  
 Il suffit alors de sélectionner celle à utiliser et d’appuyer sur **Connexion**.  
 Le bouton **Rafraîchir** permet de relancer la recherche si l’interface n’apparaît pas.  
-Comme pour les autres modes, le bas de la fenêtre indique l’état de la connexion et propose les boutons **Connexion** et **Déconnexion**.
+Comme pour les autres modes, le bas de la fenêtre indique les erreurs, l’état de la connexion et propose les boutons **Connexion** et **Déconnexion**.
 
 
 ## 2.4. Fenêtre d'édition des structures <a name="structure-window"></a>
@@ -223,7 +224,7 @@ La fenêtre est composée de deux colonnes principales :
 - La colonne de droite est réservée à la **structure du modèle fonctionnel**.
 
 En bas de la fenêtre se trouvent deux boutons bleus :
-- **Ajouter un DataPointType**, qui ouvre une section pour définir un DPT personnalisé.
+- **Ajouter un DataPointType**, qui ajoute une section pour définir un DPT personnalisé.
 - **Ajouter un Élément à tester**, qui permet d’ajouter et de configurer un élément dans la structure.
 
 ### Ajout d’un DataPointType personnalisé
@@ -236,14 +237,15 @@ Un DPT personnalisé est défini par :
 ### Ajout d’un élément à tester
 Lorsqu’on clique sur **Ajouter un Élément à tester**, une zone d’édition s’affiche dans la colonne de droite.  
 Un élément à tester est défini par :
-- Le choix du **DPT associé**.
+- Le choix du **DPT associé**. Il se choisit avec son numéro, qui se trouve en haut à gauche du DataPointType personnalisé.
 - Son rôle : **Envoi(s)** et/ou **Réception(s)**.
-- Une ou plusieurs **valeurs de test**, ajoutées avec le bouton **+**.
+- Une ou plusieurs **valeurs de test**, ajoutées avec le bouton **+**. Cette partie est optionnelle.
 
 ### Validation ou annulation
 En bas de la fenêtre, deux boutons permettent de gérer la configuration :
 - **Appliquer les changements** pour sauvegarder la structure.
 - **Annuler les changements** pour revenir à l’état initial sans enregistrer.
+Il peut aussi être présent des messages d'erreur dans le cas où l'édtion n'est pas correcte.
 
 ## 2.5. Fenêtre d'analyse <a name="analysis-window"></a>
 
@@ -256,9 +258,10 @@ Elle se décompose en 4 colonnes :
 - La colonne de gauche liste les **structures prédéfinies**.
 - La deuxième colonne affiche les **modèles fonctionnels** liés à la structure sélectionnée.
 - La troisième colonne permet de configurer des paramètres spécifiques comme le nom du modèle.
-- La colonne de droite regroupe les **modèles choisis pour le test** avec les paramètres de timing (délais, temps de réponse).
+- La colonne de droite regroupe les **modèles choisis pour le test** avec les paramètres de timing (délais entre les éléments, le temps de réponse autorisé avant de passer à un autre test).
 
-En bas de la fenêtre, deux boutons permettent de **lancer le test** ou de l’**annuler**.
+En bas de la fenêtre, deux boutons permettent de **lancer le test** ou de l’**annuler**, c'est à dire de remettre aux valeurs par défaut et vider la liste des choisis. L'affichage ne se met pas complètement à jour cependant :
+la liste des modèles se met à jour mais les structure cochées et les timings se mettent à jour de manière fonctionnelle mais pas visuellement.
 
 ## 2.6. Fenêtre de rapport d'analyse <a name="report-window"></a>
 
@@ -272,7 +275,7 @@ Elle est composée de 3 zones :
 - Au centre, une zone pour choisir l’**emplacement de sauvegarde** et générer le rapport.
 - En bas, deux options : **prévisualiser le rapport** avant export ou **réinitialiser** les paramètres.
 
-Une fois validé, le rapport est exporté et peut être partagé.
+Une fois généré, le rapport est exporté en PDF et peut être partagé.
 
 
 <br></br>
@@ -286,7 +289,8 @@ Une fois validé, le rapport est exporté et peut être partagé.
 ## 3.4. Création d'un test <a name="create-test"></a>
 
 ## 3.5. Lancement d'un test <a name="launch-test"></a>
-C'est l'objectif de l'application : tester et analyser une installation ! 
+C'est l'objectif de l'application : tester et analyser une installation ! Pour le faire, il faut ouvrir la [fenêtre de 
+d'analyse/test](#analysis-window) depuis la fenêtre principale. 
 
 ## 3.6. Création du rapport <a name="create-report"></a>
 Afin de prouver la validité de l'installation ou d'en faire le diagnostic, KNX VI met à disposition la possibilité de
