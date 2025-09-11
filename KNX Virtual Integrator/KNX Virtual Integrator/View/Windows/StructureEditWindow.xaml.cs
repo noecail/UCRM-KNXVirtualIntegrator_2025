@@ -184,7 +184,8 @@ public partial class StructureEditWindow
 
     private void ApplyThemeToWindow()
     {
-        _viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyThemeToWindow is not implemented");
+        // Ci-git la commande du Not implemented, dernière du nom et abandonnée par Mr. Front-End.
+        //_viewModel.ConsoleAndLogWriteLineCommand.Execute("StructureEditWindow.ApplyThemeToWindow is not implemented");
 
         Style textBoxStyle;
         Style deleteStructureButtonStyle;
