@@ -308,9 +308,17 @@ public partial class ReportCreationWindow
             _mainViewModel.AuthorName = AuthorNameTextBox.Text;
             _mainViewModel.PdfPath = saveFileDialog.FileName;
             PdfPathText.Text = saveFileDialog.FileName;
-            _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
-                _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
-            _mainViewModel.ShowReportGenerationSuccessMessageCommand.Execute(null);
+            try
+            {
+                _mainViewModel.GenerateReportCommand.Execute((_mainViewModel.PdfPath, _mainViewModel.AuthorName,
+                    _mainViewModel.SelectedTestModels, _mainViewModel.LastTestResults));
+                _mainViewModel.ShowReportGenerationSuccessMessageCommand.Execute(null);
+            }
+            catch (Exception ex)
+            {
+                _mainViewModel.ConsoleAndLogWriteLineCommand.Execute(ex.Message + " - " +  ex.Source + " - " + ex.HelpLink + " - " + ex.Data);
+                MessageBox.Show(ex.Message + " - " +  ex.Source + " - " + ex.HelpLink + " - " + ex.Data);
+            }
         }
         else
         {
