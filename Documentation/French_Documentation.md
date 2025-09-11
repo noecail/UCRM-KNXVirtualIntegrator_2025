@@ -232,20 +232,20 @@ Lorsqu’on clique sur **Ajouter un DataPointType**, une nouvelle zone apparaît
 Un DPT personnalisé est défini par :
 - Un **nom** donné par l’utilisateur.
 - Un **type** choisi dans une liste déroulante.
-- Des **mots-clés** facilitant la recherche et la catégorisation.
+- Des **mots-clés** facilitant la recherche et la catégorisation. Une adresse de groupe doit commencer par un de ces mots-clés pour qu'il soit reconnu.
 
 ### Ajout d’un élément à tester
 Lorsqu’on clique sur **Ajouter un Élément à tester**, une zone d’édition s’affiche dans la colonne de droite.  
 Un élément à tester est défini par :
 - Le choix du **DPT associé**. Il se choisit avec son numéro, qui se trouve en haut à gauche du DataPointType personnalisé.
 - Son rôle : **Envoi(s)** et/ou **Réception(s)**.
-- Une ou plusieurs **valeurs de test**, ajoutées avec le bouton **+**. Cette partie est optionnelle.
+- Une ou plusieurs **valeurs de test**, ajoutées avec le bouton **+**, qui correspondent aux valeurs à envoyer et attendues sur le bus. Cette partie est optionnelle.
 
 ### Validation ou annulation
 En bas de la fenêtre, deux boutons permettent de gérer la configuration :
 - **Appliquer les changements** pour sauvegarder la structure.
 - **Annuler les changements** pour revenir à l’état initial sans enregistrer.
-Il peut aussi être présent des messages d'erreur dans le cas où l'édtion n'est pas correcte.
+Il peut aussi y avoir des messages d'erreur dans le cas où l'édition n'est pas correcte.
 
 ## 2.5. Fenêtre d'analyse <a name="analysis-window"></a>
 
@@ -255,10 +255,9 @@ Cette fenêtre est accessible depuis la fenêtre principale en cliquant sur le b
 Elle permet de configurer et lancer une analyse sur les modèles fonctionnels.
 
 Elle se décompose en 4 colonnes :
-- La colonne de gauche liste les **structures prédéfinies**.
+- La colonne de gauche liste les **structures de modèles**.
 - La deuxième colonne affiche les **modèles fonctionnels** liés à la structure sélectionnée.
 - La troisième colonne permet de configurer des paramètres spécifiques comme le nom du modèle.
-- 
 - La colonne de droite regroupe les **modèles choisis pour le test** avec les paramètres de timing (délais entre les éléments, le temps de réponse autorisé avant de passer à un autre test).
 
 En bas de la fenêtre, deux boutons permettent de **lancer le test** ou de l’**annuler**, c'est à dire de remettre aux valeurs par défaut et vider la liste des choisis. L'affichage ne se met pas complètement à jour cependant :

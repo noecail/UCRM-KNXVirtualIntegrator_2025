@@ -178,11 +178,98 @@ Click **"Save"** to apply changes.
 
 ## 2.3. Connection Window <a name="connection-window"></a>
 
+The connexion window can be accessed from the main window by clicking on the **red connection button**.
+From there, the communication with the KNX bus can be configured and established.
+
+<img src="Images/ConnectionWindowIP.png" alt="fenetre-connexion-ip" style="width:50%;"/>
+
+When the selected connection type is **IP**, the list of available interfaces appears in the central zone.
+The **Refresh** button starts a new interface research, and can be useful when there have been research issues.
+It is also possible to activate the **secured connection via IP Secure**, but a keys file in the `.knxkeys` format have to be imported and its password filled.
+At the bottom of the window, the connection with the bus can be set or removed with respectively **Connection** and **Disconnection** buttons 
+The current connection state is displayed in the lower zone of the window. Error messages may appear right above it if the connection cannot be set.
+
+<img src="Images/ConnectionWindowNAT.png" alt="fenetre-connexion-remoteip" style="width:50%;"/>
+
+If the **Remote IP (NAT)** option is selected, two more boxes will appear :
+the **Router public address** and the **interface individual address**(*1.1.255* by default)
+The IP Secure securization remains, with the possibility to import a keys file and to fill the associated password.
+Once all the fields have been filled, the connection can be set with the installation by using the **Connection** button.
+Error messages will appear above the connection state if any error occurs during the connection.
+
+<img src="Images/ConnectionWindowUSB.png" alt="fenetre-connexion-usb" style="width:50%;"/>
+
+When the **USB** mode is selected, the application immediately displays all the detected interfaces.
+An interface has to be selected and then the **Connection** button can be pressed to initiate the connection.
+The **Refresh** button can be pressed to refresh the interfaces if the wanted interfcae doesn't appear.
+
+
 ## 2.4. Structure Editing Window <a name="structure-window"></a>
+
+As with the other connection modes, the errors will appear in the bottom of the window, as well as the connection states and the **Connection** and **Disconnection** buttons.
+Functional models can be created and personalized in this window.
+
+<img src="Images/StructureEditWindow.png" alt="fenetre-structure-vide" style="width:70%;"/>
+
+There are two main columns:
+- The left one is used for **personnalizing DPTs**.
+- The **functional model's structure** can be modified in the right column.
+
+There are two blue buttons at the bottom of the window:
+- **Add a DataPointType**, creating a new DPT that can be personalized,
+- **Add a Tested Element**, adding a new element to the structure.
+
+### Adding a personalized DataPointType
+A new zone appears in the left column when **Add a DataPointType** is clicked.
+A personalized DPT is defined by :
+- a **name** given by the user,
+- a **type** chosen from the list,
+- **keywords** to be able to recognize a DPT. To be recognized, the name of the group address must start with one of the keywords.
+
+### Adding a Tested Element
+An editing section appears in the right column after clicking on **Add a Tested Element**.
+A Tested Element is defined by :
+- Associated **DataPointTypes** : chosen from their number, which can be found in the top left corner of the DPT in the left column.
+- Whether the DPT is **Sent** or **Received**
+- One or more **test values**, added with the **+** button, which will be the values to send and expected. This is an optional part, 
+
+### Validation and cancellation
+At the bottom of the window, there are two buttons:
+- **Apply changes** to save the structure,
+- **Cancel changes** to cancel all the modifications since the last save.
+If the structure is not possible, error messages will appear when **Apply changes** is pressed.
+
 
 ## 2.5. Analysis Window <a name="analysis-window"></a>
 
+<img src="Images/TestConfigWindow.png" alt="fenetre-analyse" style="width:90%;"/>
+
+This window can be accessed by clicking on **Test parameters** in the main window.
+The analysis can be configured and started in this window.
+
+In this window, there are 4 columns :
+- The **Structures of models** are listed in the column on the left.
+- In the second column, the **functional models** corresponding to the selected structure are displayed.
+- Specific parameters of a selected functional model can be set in the third column.
+- In the last column are displayed all the **functional models selected** for the test.
+
+At the bottom of the window, there are two buttons to **start the test**, or **cancel** it and clear the selected models. 
+However, there are view updating issues meaning that the application will untick everything, but the view won't untick previously ticked models.
+
+
 ## 2.6. Analysis Report Window <a name="report-window"></a>
+
+<img src="Images/PDFReportCreationWindow.png" alt="fenetre-rapport" style="width:50%;"/>
+
+This window can be accessed after clicking on **Export report** in the main window.
+Analysis result report can be generated here.
+
+There are 3 different zones :
+- At the top, there is a field for the **author's name**.
+- In the middle, the **saving path** can be selected and there is a button to generate the report.
+- At the bottom, there are two buttons to **preview the report** and to **reinitialize** the parameters.
+
+Once generated, the report is exported in a pdf format and can be shared.
 
 <br></br>
 # 3. Using the Application <a name="user-title"></a>
