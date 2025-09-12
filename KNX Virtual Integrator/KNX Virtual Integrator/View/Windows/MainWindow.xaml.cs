@@ -225,7 +225,7 @@ public partial class MainWindow
             Resources["ExportButton"] = "Exporter le rapport";
             
             Resources["Library"] = "Bibliothèque";
-            Resources["PredefinedStructures"] = "Structures Prédéfinies";
+            Resources["PredefinedStructures"] = "Structures de Modèles";
             Resources["NewStructure"] = "Nouvelle Structure";
             Resources["ModelsTitle"] = "Modèles Fonctionnels";
             Resources["CreateFunctionalModel"] = "Créer un Modèle Fonctionnel";
@@ -293,7 +293,7 @@ public partial class MainWindow
             Resources["ExportButton"] = "Export test report";
             
             Resources["Library"] = "Library";
-            Resources["PredefinedStructures"] = "Structures of Functional Models";
+            Resources["PredefinedStructures"] = "Structures of Models";
             Resources["NewStructure"] = "New Structure";
             Resources["ModelsTitle"] = "Functional Models";
             Resources["CreateFunctionalModel"] = "New Functional Model";
