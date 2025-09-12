@@ -393,20 +393,21 @@ Donc le succès ne sera décidé que sur la présence d'une réponse et pas de c
 C'est l'objectif de l'application : tester et analyser une installation ! Pour le faire, il faut ouvrir la [fenêtre de 
 d'analyse/test](#analysis-window) depuis la fenêtre principale. 
 Dans cette fenêtre, **il faut cocher la case d'un modèle** pour le rajouter à la liste des modèles qui seront testés. 
-Il est ausi possible de cocher les cases dans la colonne des structures pour ajouter tous les modèles de la structure au test.
+Il est aussi possible de cocher les cases dans la colonne des structures pour ajouter tous les modèles de la structure au test.
 
-Les tests se feront dans l'ordre chronologique d'ajout dans la liste à tester. Cependant, cela fait que si un modèle est 
-modifié après l'avoir ajouté à la liste, il ne sera pas mis à jour. Il faudra donc l'enlever de la liste en vidant la liste ou en décochant le modèle.
+Les tests se feront dans l'ordre chronologique d'ajout dans la liste de modèles à tester. Cependant, si un modèle est 
+modifié après avoir été ajouté à la liste, il ne sera pas mis à jour dans la liste des modèles à tester.
+Il faudra donc l'enlever de la liste en vidant la liste ou en décochant le modèle, et ensuite l'ajouter de nouveau.
 
 Maintenant, il est possible de changer les délais entre chaque élément pour ralentir le test et ne pas surcharger le bus. 
 Il est aussi possible de changer le temps de réponse maximal autorisé pour la réception : certaines fonctions peuvent prendre
 du temps avant de se terminer, d'où le besoin de pouvoir le changer. 
 </br> Attention, ces paramètres sont généraux et s'appliquent à tous les modèles qui seront testés !
 
-En cas d'importation la liste est automatiquement vidée, mais il est possible de le faire manuellement avec le bouton "**Annuler**"
+En cas d'importation la liste est automatiquement vidée, mais il est possible de le faire manuellement avec le bouton "**Réinitialiser sélection**".
 Enfin, pour lancer l'analyse de la liste, il faudra tout simplement appuyer sur le bouton "**Lancer le test**". 
 
-Pendant le test, l'application est très ralentie (ne fonctionne que pendant le court instant entre chaque commande) mais 
+Pendant le test, l'application est très ralentie (et ne fonctionne que pendant le court instant entre chaque commande) mais 
 elle affiche le stade d'avancement des tests avec des icones : le sablier pour indiquer l'attente, le cercle quand le test
 est en cours et la coche quand il est terminé (correctement ou non). Quand tout est terminé l'application reprend son fonctionnement habituel.
 </br> À ce moment, il est possible de passer à la [Création du rapport d'analyse](#create-report).
@@ -460,19 +461,19 @@ ouverte après l'utilisation du bouton d'importation. Enfin, appuyez sur entrée
 <br></br>
 # 4. FAQ <a name="faq-title"></a>
 
-**Pourquoi n'est-il pas possible d'installer l'application pour tous les utilisateurs en même temps?**</br>
+**Pourquoi n'est-il pas possible d'installer l'application pour tous les utilisateurs en même temps ?**</br>
 Probablement à cause de problèmes de dossiers, d'autorisations et de clés de registres, 
 l'application peut ne jamais réussir à se lancer lorsqu'elle est installée autre part que dans les AppData de l'utilisateur.
 
-**Pourquoi n'y a-t-il pas de reconnaissance quand j'importe un projet/des adresses?**
+**Pourquoi n'y a-t-il pas de reconnaissance quand j'importe un projet/des adresses ?**
 La reconnaissance ne s'effectue que lorsque les adresses de groupes sont bien configurées. 
 Une adresse de groupe bien configurée doit posséder un DPT. Si le nom de l'adresse n'est pas normé, 
 la reconnaissance sera très souvent mauvaise. [KNX Boost Desktop](https://github.com/Daichi9764/UCRM) est un logiciel
 permettant de renommer les adresses pour qu'elles puissent être plus facilement reconnues !
 
-**Comment pourrais-je afficher les adresses sans utiliser le remplissage automatique des modèles?**
+**Comment pourrais-je afficher les adresses sans utiliser le remplissage automatique des modèles ?**
 Malheureusement, cette version de KNX Virtual Integrator ne possède pas la possibilité d'enlever la reconnaissance. 
-Cependant, vous pouvez toujours supprimer les modèles créés après l'importation et les modifier manuellement.
+Cependant, vous pouvez toujours supprimer les modèles créés après l'importation, ou les modifier manuellement.
 
 <br></br>
 [← Retour](../README.md)
