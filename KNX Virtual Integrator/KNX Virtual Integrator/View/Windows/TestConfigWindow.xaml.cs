@@ -90,7 +90,7 @@ public partial class TestConfigWindow
         if (_viewModel.AppSettings.AppLang == "FR")
         {
             Resources["Library"] = "Bibliothèque";
-            Resources["PredefinedStructures"] = "Structures Prédéfinies";
+            Resources["PredefinedStructures"] = "Structures de Modèles";
             Resources["ModelsTitle"] = "Modèles Fonctionnels";
             Resources["ModelsParametersTitle"] = "Paramètres du Modèle Fonctionnel";
             Resources["Name:"] = "Nom :";
@@ -133,7 +133,7 @@ public partial class TestConfigWindow
         else
         {
             Resources["Library"] = "Library";
-            Resources["PredefinedStructures"] = "Predefined Structures";
+            Resources["PredefinedStructures"] = "Structures of Models";
             Resources["ModelsTitle"] = "Functional Models";
             Resources["ModelsParametersTitle"] = "Model Parameters";
             Resources["Name:"] = "Name:";

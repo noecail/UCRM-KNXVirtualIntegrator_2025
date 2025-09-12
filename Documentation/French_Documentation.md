@@ -269,6 +269,7 @@ la liste des modèles se met à jour mais les structure cochées et les timings 
 <img src="Images/PDFReportCreationWindow.png" alt="fenetre-rapport" style="width:50%;"/>
 
 Cette fenêtre est accessible depuis la fenêtre principale en cliquant sur le bouton **Exporter le rapport**.  
+
 Elle permet de générer un rapport des résultats d’analyse.
 
 Elle est composée de 3 zones :
@@ -356,6 +357,37 @@ remédiables facilement. Ces messages ne sont pour l'instant qu'en Français. La
 Nous avons déjà rencontré des routeurs auquel on ne peut pas se connecter, mais pas de solution n'a été trouvé.
 
 ## 3.4. Création d'un test <a name="create-test"></a>
+Pour vérifier que les adresses sont bien liées aux bons participants, que ces participants fonctionnent et que la transmission 
+d'information est correcte dans l'installation, il faut créer des tests !
+</br>KNX Virtual Integrator permet de créer ces tests qui envoient une commande ou plus et attendent certaine(s) 
+valeur(s) en réception pendant un certain temps. La réussite des tests se repose sur la comparaison entre la valeur
+attendue et la valeur reçue.
+</br>Il y a plusieurs méthodes et étapes pour construire ces tests, elles utilisent les 4 colonnes et les boutons du numéro 3 
+présentes sur la [fenêtre principale](#main-window). </br>
+La première vient de l'importation sans modifier ce qui est créé par l'application. Pour cette méthode, il faut commencer
+à l'étape 3 qui est d'importer les adresses ou un projet KNX. Se référer à l'[importation depuis ETS](#ets-import) pour cette étape.
+Les étapes 4 et 5 contiennent la vérification de la bonne importation : il faut parcourir à la main les structures et 
+les modèles pour vérifier que toutes les cases de la 3e colonne (ou étape 5) de la [fenêtre principale](#main-window) soient correctement remplies.
+
+Pour considérer les cases comme correctement remplies, il faut vérifier que tous les modèles d'une structure possèdent 
+la même forme : le même nombre "**d'Éléments de test**", de **commandes**, de **réceptions** et de **valeurs à envoyer/recevoir**.
+Les valeurs devraient être aussi les mêmes entre les modèles de la structure tant que ce n'est pas rempli manuellement. 
+</br>Les adresses doivent être différentes mais pour que tout soit correctement rempli, chaque case d'adresse doit être remplie. 
+S'il manque des adresses, se référer à la colonne 4, c'est à dire à la liste d'adresses pour remplir les cases vides à la main.
+Un mauvais remplissage peut être causé par un manque d'adresses, des adresses mal configurées (des noms non 
+normés, des DPTs manquants,...),etc.
+
+Pour les valeurs, elles doivent être des entiers et en code décimal. Par exemple, s'il faut rentrer du texte, il faut transformer 
+chaque lettre en son code en décimal. Les valeurs sont préférablement des entiers positifs mais nous n'avons pas pris en 
+compte tous les cas donc la valeur **-1** ne posera pas de problème pour les tests mais pour la [sauvegarde KNX VI](vi-import),
+elle pourra en poser. Car parmi les boutons, il est possible de désactiver la valeur (la case se grise) et après importation, 
+toute valeur à -1 se désactive automatiquement. Il est possible de réactiver en cliquant sur le bouton bleu de la case.
+Les valeurs désactivées correspondent aux adresses dont on attend une réponse mais on ne sait pas quelle est la réponse. 
+Donc le succès ne sera décidé que sur la présence d'une réponse et pas de comparaison sur la valeur. 
+
+
+
+
 
 
 ## 3.5. Lancement d'un test <a name="launch-test"></a>
