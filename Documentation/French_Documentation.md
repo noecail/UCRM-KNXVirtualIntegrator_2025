@@ -99,6 +99,10 @@ Pour installer et lancer l’application, veuillez suivre les indications suivan
 
    Une fois l’installation terminée, vous verrez une fenêtre de confirmation. Cochez la case **"Exécuter KNX Boost Desktop"** si vous souhaitez démarrer l’application immédiatement, puis cliquez sur **"Terminer"**.
 
+Attention, certaines adresses peuvent ne pas être reconnues et vont dans la structure Unrecognized DPTs.
+
+Il est toujours possible de sauvegarder le dictionnaire de structures créé (avant de faire la reconnaissance) ou 
+directement tout ce qui a été créé (après la reconnaissance) avec les boutons d'[import/export de KNX VI](#vi-import).
 
 
 <br></br>
@@ -113,16 +117,17 @@ La fenêtre principale est composée de 5 parties principales :
 
 Dans ce bandeau, vous pouvez :
 - ⚙️ [Modifier les paramètres](#modify-settings) de l'application en appuyant sur le bouton ⚙️.
-- 📥 [Importer des adresses de groupe KNX](#ets-import) dans l’application en cliquant sur le bouton “**Importer des adresses**”.
-- 📥 [Importer un projet ETS](#ets-import) dans l’application en cliquant sur le bouton “**Importer un projet**”.
+- 🔌️ ️ [Se connecter à l'installation](#connection-window) par USB, IP, ou IP à distance.
+- 📥 [Importer des adresses de groupe KNX](#ets-import) dans l’application en cliquant sur le bouton “**Importer des adresses**”. Les adresses de groupe de projets sécurisés ou non peuvent être importées.
+- 📥 [Importer un projet ETS](#ets-import) dans l’application en cliquant sur le bouton “**Importer un projet**”. Seulement les projets sans mot de passe peuvent être importés.
 - 📥 [Lancer une analyse de l'installation](#launch-test) en ouvrant la [fenêtre d'analyse](#analysis-window) avec le bouton "**Paramètres de test**".
 - 📤 [Exporter le rapport d'analyse](#create-report) en ouvrant la [fenêtre de rapport](#report-window) avec le bouton "**Exporter le rapport**".
 
 **2. Première colonne des Structures :**
 
 C'est dans cette colonne qu'une fois importé ou créé, votre dictionnaire de structures de test apparait.</br>
-Vous pouvez importer et exporter ce dictionnaire et tous les modèles créés avec les boutons en haut à droite, de manière de sauvegarder le 
-projet sur lequel vous travailler, par exemple. </br>
+Vous pouvez importer et exporter ce dictionnaire et tous les modèles créés avec les boutons en haut à droite, de manière à sauvegarder le 
+projet sur lequel vous travaillez, par exemple. </br>
 En dessous, il y a la liste des structures créées. Elles sont sélectionnables et modifiables avec le bandeau inférieur.</br>
 Le bandeau inférieur possède 3 boutons : "**Nouvelle Structure**", Un crayon pour modifier la structure sélectionnée et 
 une poubelle pour supprimer les structures cochées dans la liste.</br>
@@ -363,31 +368,57 @@ valeur(s) en réception pendant un certain temps. La réussite des tests se repo
 attendue et la valeur reçue.
 </br>Il y a plusieurs méthodes et étapes pour construire ces tests, elles utilisent les 4 colonnes et les boutons du numéro 3 
 présentes sur la [fenêtre principale](#main-window). </br>
-La première vient de l'importation sans modifier ce qui est créé par l'application. Pour cette méthode, il faut commencer
-à l'étape 3 qui est d'importer les adresses ou un projet KNX. Se référer à l'[importation depuis ETS](#ets-import) pour cette étape.
-Les étapes 4 et 5 contiennent la vérification de la bonne importation : il faut parcourir à la main les structures et 
+La première est d'importer sans modifier ce qui est créé par l'application. Pour cette méthode, il faut commencer
+à l'étape 3 qui est d'importer les adresses ou un projet ETS. Se référer à l'[importation depuis ETS](#ets-import) pour cette étape.
+(Pour les projets ETS sécurisés, exportez les adresses depuis ETS et importez-les dans KNX VI, ou supprimez le mot de passe dans ETS,
+puis importez le projet dans KNX VI. Un projet sécurisé par un mot de passe ne peut pas être importé dans KNX VI.)
+Les étapes 4 et 5 sont la vérification de la bonne importation : il faut parcourir à la main les structures et 
 les modèles pour vérifier que toutes les cases de la 3e colonne (ou étape 5) de la [fenêtre principale](#main-window) soient correctement remplies.
 
+<img src="Images/Elements.png" alt="colonne-elements" style="width:50%;"/>
+
 Pour considérer les cases comme correctement remplies, il faut vérifier que tous les modèles d'une structure possèdent 
-la même forme : le même nombre "**d'Éléments de test**", de **commandes**, de **réceptions** et de **valeurs à envoyer/recevoir**.
+la même forme : le même nombre "**d'éléments de test**", de **commandes**, de **réceptions** et de **valeurs à envoyer/recevoir**.
 Les valeurs devraient être aussi les mêmes entre les modèles de la structure tant que ce n'est pas rempli manuellement. 
 </br>Les adresses doivent être différentes mais pour que tout soit correctement rempli, chaque case d'adresse doit être remplie. 
 S'il manque des adresses, se référer à la colonne 4, c'est à dire à la liste d'adresses pour remplir les cases vides à la main.
-Un mauvais remplissage peut être causé par un manque d'adresses, des adresses mal configurées (des noms non 
-normés, des DPTs manquants,...),etc.
+**Un mauvais remplissage peut être causé par un manque d'adresses, des adresses mal configurées (des noms non 
+normés, des DPTs manquants,...),etc.**
 
-Pour les valeurs, elles doivent être des entiers et en code décimal. Par exemple, s'il faut rentrer du texte, il faut transformer 
+Les valeurs doivent être des entiers et en code décimal. Par exemple, s'il faut rentrer du texte, il faut transformer 
 chaque lettre en son code en décimal. Les valeurs sont préférablement des entiers positifs mais nous n'avons pas pris en 
 compte tous les cas donc la valeur **-1** ne posera pas de problème pour les tests mais pour la [sauvegarde KNX VI](vi-import),
-elle pourra en poser. Car parmi les boutons, il est possible de désactiver la valeur (la case se grise) et après importation, 
-toute valeur à -1 se désactive automatiquement. Il est possible de réactiver en cliquant sur le bouton bleu de la case.
+elle pourra en poser. Car parmi les boutons, il est possible de désactiver la valeur (la case se grise et la valeur devient invisible)
+et après importation, toute valeur à -1 se désactive automatiquement et toute valeur désactivée se met à -1. Il est possible de la réactiver en cliquant sur le bouton bleu de la case.</br>
 Les valeurs désactivées correspondent aux adresses dont on attend une réponse mais on ne sait pas quelle est la réponse. 
-Donc le succès ne sera décidé que sur la présence d'une réponse et pas de comparaison sur la valeur. 
+Donc le succès ne sera décidé que sur la présence d'une réponse et pas de comparaison sur la valeur. </br>
+Lorsque toutes ces cases ont été vérifiées, il est possible de passer au [lancement de test](#launch-test).
+
+Une autre méthode est le remplissage manuel. </br> 
+Il est possible d'importer les adresses ou le projet puis de supprimer tout ce qui est créé (ou d'importer un fichier 
+sans DPT pour qu'il n'y ait pas de reconnaissance). Ne pas importer empêche de donner un nom au projet.</br>
 
 
+<img src="Images/StructElement.png" alt="colonne-elements" style="width:50%;"/>
 
+1. Il faut modifier les structures ou en créer des nouvelles : ouvrir la [fenêtre d'édition de structures](#structure-window)
+puis ajouter des DPTs dans la colonne de gauche et modifier leurs types, ils correspondent à la liste de DPTs qui seront 
+présents dans les tests de cette structure. Ensuite, ajouter des éléments à tester, ajuster le nombre d'envois/réception
+avec les boutons à côté de "Envoi(s)" et "Réception(s)", leur assigner les DPTs voulus en envoi/réception avec la liste 
+déroulante. Par exemple, pour une lumière ON/OFF, mettre deux DPTs de type 1 avec un en envoi et un en réception. 
+C'est optionnel mais il est possible de rajouter des valeurs par défaut avec les "**+**" et "**-**" en bas à 
+droite de l'élément. Ces valeurs sont modifiables. 
+2. Valider la structure, fermer la fenêtre d'édition et ajouter le nombre de modèles fonctionnels voulu.
+3. Sélectionner chaque modèle pour ajouter les adresses de groupe à associer à chaque DPT. Elles doivent être de la forme 1/250, 
+1/3/16, etc. Enfin, ajouter les valeurs à envoyer et recevoir comme dans la fenêtre d'édition de structure, 
+les boutons à côté des cases des valeurs permettent de les désactiver (bouton du haut) et les remettre à 0 (bouton du bas).</br>
 
-
+La dernière méthode regroupe les deux premières : débuter par la modification des structures mais cette fois en 
+rajoutant des mots-clés à la structure et aux DPTs. Les mots-clés de la structure permettent de regrouper les adresses de 
+groupe en fonction de leur nom et les mots-clés des DPTs permettent de classer ces adresses en envoi, réception dans le bon élément.</br>
+Il est possible de s'inspirer des mots-clés déjà présents dans les structures de l'application mais la reconnaissance 
+n'est pas parfaite. Ensuite, il faut importer des adresses comme dans la première méthode pour activer la reconnaissance.
+Il faut alors vérifier que tout correspond aux tests voulus et compléter les cases ou le nombre de modèles si besoin. 
 
 ## 3.5. Lancement d'un test <a name="launch-test"></a>
 C'est l'objectif de l'application : tester et analyser une installation ! Pour le faire, il faut ouvrir la [fenêtre de 
@@ -421,12 +452,9 @@ Une ligne d'un élément à tester correspond à une ligne de commande dans le r
 ou les erreurs correspondent au fait que ce qui a été reçu en retour correspond ou non à ce qui a été attendu. 
 Chaque résultat correspond à une case de réception.
 
-Attention, si la valeur est désactivée il peut y avoir plusieurs possibilités : 
-- s'il n'y a pas de valeur, la réception sera automatiquement un succès.
-- s'il y a une valeur, la réception sera évaluée comme habituellement, donc si rien n'est reçu, elle sera indiqué comme un échec.
-Il ne faut donc pas oublier que cette réception précise peut ne pas être pertinente.
+Si la valeur de réception est désactivée, la réception sera automatiquement un succès.
 
-Pour la génération du rapport, il faut ouvrir la [fenêtre de rapport d'analyse](#report-window). Ensuit, il est possible de renseigner 
+Pour la génération du rapport, il faut ouvrir la [fenêtre de rapport d'analyse](#report-window). Ensuite, il est possible de renseigner 
 un nom d'auteur qui apparaitra dans le rapport, mais c'est optionnel. Le nom du projet apparaitra aussi dans le rapport.
 Pour créer et sauvegarder le rapport, il faut cliquer sur le bouton "**Sauvegarder le rapport**" et choisir un nom de fichier
 dans la fenêtre qui s'est ouverte. Faites attention si vous remplacez un fichier, qu'il ne soit pas déjà ouvert quelque part. 
@@ -434,28 +462,27 @@ Enfin, vous pouvez valider votre choix et le chemin où le fichier est sauvegard
 Il est possible de prévisualiser le pdf en appuyant sur "**Prévisualiser le rapport**" mais cette option peut causer des 
 problèmes de compatibilité en fonction des lecteurs de PDF présents sur l'ordinateur. 
 
-Le Bouton "**Annuler**" permet de vider le nom d'auteur, le chemin de sauvegarde et donc d'annuler prévisualisation. 
+Le Bouton **Réinitialiser paramètres** permet de vider le nom d'auteur, le chemin de sauvegarde et donc d'annuler prévisualisation. 
 Cela ne supprime pas les résultats de test ni le rapport s'il est déjà sauvegardé.
 
 ## 3.7. Import/Export de projets KNX VI <a name="vi-import"></a>
 Dans KNX Virtual Integrator, vous avez la possibilité d'exporter votre dictionnaire de structures, les modèles et 
 les valeurs et adresses présentes dans les cases. L'exportation inclue aussi le nom du projet. La sauvegarde des
 adresses de groupes de la [colonne 4 de la fenêtre principale](#main-window) n'est pas encore implémentée. 
-Pour les afficher, il est possible d'importer les adresses avant d'importer le projet KNX VI précédemment exporté pour n'avoir que 
+Pour les afficher, il est possible d'importer les adresses avant d'importer le projet KNX VI précédemment exporté, pour n'avoir que 
 les adresses sans la reconnaissance automatique qui modifierait votre projet.
 Les paramètres de test ([fenêtre de test](#analysis-window)) ne sont pas exportables.
 
-L'importation écrase toute information présente dans KNX VI qui serait nécessaire à l'exportation. N'oubliez pas de 
-sauvegarder vos projets en avance ! 
+L'importation écrase toute information présente dans KNX VI. L'utilisateur ne devrait pas oublier de sauvegarder ses projets en avance ! 
 
 La fonctionnalité d'import/export de projets KNX VI est accessible dans la [colonne 1 de la fenêtre principale](#main-window).
 Elle permet donc de sauvegarder vos projets manuellement. Le logiciel ne sauvegarde pas automatiquement et ne prévient pas 
-s'il est fermé sans avoir été sauvegardé. De fait, il est obligatoire de sauvegarder/exporter le projet pour pouvoir le retrouver plus tard.
+s'il est fermé sans qu'il y ait eu de projet sauvegardé. De fait, il est obligatoire de sauvegarder/exporter le projet pour pouvoir le retrouver plus tard.
 
-- Pour mener à bien l'exportation, veuillez choisir un nom de fichier si vous voulez le changer ou garder celui par défaut. 
-Pour vous assurer de la bonne exportation, vous pouvez ouvrir l'explorateur de fichiers et chercher le fichier exporté. 
-- Pour l'importation, veuillez choisir le nom d'un fichier correspondant à un projet précédemment exporté dans la boite 
-ouverte après l'utilisation du bouton d'importation. Enfin, appuyez sur entrée ou choisissez ce fichier pour finaliser l'importation.
+- Pour mener à bien l'exportation, il faut choisir un nom de fichier ou garder celui par défaut. 
+Pour s'assurer de la bonne exportation, il est possible d'ouvrir l'explorateur de fichiers et de chercher le fichier exporté. 
+- Pour l'importation, il faut choisir le nom d'un fichier correspondant à un projet précédemment exporté dans la boite 
+ouverte après l'utilisation du bouton d'importation. Enfin, il faut appuyer sur entrée ou choisir ce fichier pour finaliser l'importation.
 
 
 <br></br>

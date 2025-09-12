@@ -111,14 +111,15 @@ To install and launch the application, please follow these steps:
 
 The main window is composed of 5 main sections:
 
-<img src="Images/MainWindow.png" alt="main-window" style="width:90%;"/>
+<img src="Images/MainWindow-eng.png" alt="main-window" style="width:90%;"/>
 
 **1. Top Toolbar:**
 
 In this toolbar, you can:
 - ⚙️ [Modify application settings](#modify-settings) with the ⚙️ button.
-- 📥 [Import KNX group addresses](#ets-import) by clicking on “**Import addresses**”.
-- 📥 [Import an ETS project](#ets-import) by clicking on “**Import project**”.
+- 🔌️ ️ [Connect to the installation](#connection-window) via USB, IP, ou IP à distance.
+- 📥 [Import KNX group addresses](#ets-import) by clicking on “**Import addresses**”. Group addresses from securized projects or not can be imported.
+- 📥 [Import an ETS project](#ets-import) by clicking on “**Import project**”. Only the projects without password can be imported.
 - 📥 [Run installation analysis](#launch-test) by opening the [Analysis Window](#analysis-window) with the “**Test Settings**” button.
 - 📤 [Export analysis report](#create-report) by opening the [Report Window](#report-window) with the “**Export report**” button.
 
@@ -159,7 +160,7 @@ If you want to refresh addresses after modifying the dictionary or models withou
 
 ## 2.2. Settings Menu <a name="settings-window"></a>
 
-<img src="Images/SettingsWindow1.png" alt="settings-window" style="width:60%;"/>
+<img src="Images/SettingsWindow1-eng.png" alt="settings-window" style="width:60%;"/>
 
 There are 4 sections in this window:
 - Top right: close button (discard changes).
@@ -174,14 +175,14 @@ Central settings include:
 
 Click **"Save"** to apply changes.
 
-<img src="Images/SettingsWindow2.png" alt="settings-window" style="width:60%;"/>
+<img src="Images/SettingsWindow2-eng.png" alt="settings-window" style="width:60%;"/>
 
 ## 2.3. Connection Window <a name="connection-window"></a>
 
-The connexion window can be accessed from the main window by clicking on the **red connection button**.
+The connection window can be accessed from the main window by clicking on the **red connection button**.
 From there, the communication with the KNX bus can be configured and established.
 
-<img src="Images/ConnectionWindowIP.png" alt="fenetre-connexion-ip" style="width:50%;"/>
+<img src="Images/ConnectionWindowIP-eng.png" alt="fenetre-connexion-ip" style="width:50%;"/>
 
 When the selected connection type is **IP**, the list of available interfaces appears in the central zone.
 The **Refresh** button starts a new interface research, and can be useful when there have been research issues.
@@ -189,7 +190,7 @@ It is also possible to activate the **secured connection via IP Secure**, but a 
 At the bottom of the window, the connection with the bus can be set or removed with respectively **Connection** and **Disconnection** buttons 
 The current connection state is displayed in the lower zone of the window. Error messages may appear right above it if the connection cannot be set.
 
-<img src="Images/ConnectionWindowNAT.png" alt="fenetre-connexion-remoteip" style="width:50%;"/>
+<img src="Images/ConnectionWindowNAT-eng.png" alt="fenetre-connexion-remoteip" style="width:50%;"/>
 
 If the **Remote IP (NAT)** option is selected, two more boxes will appear :
 the **Router public address** and the **interface individual address**(*1.1.255* by default)
@@ -197,7 +198,7 @@ The IP Secure securization remains, with the possibility to import a keys file a
 Once all the fields have been filled, the connection can be set with the installation by using the **Connection** button.
 Error messages will appear above the connection state if any error occurs during the connection.
 
-<img src="Images/ConnectionWindowUSB.png" alt="fenetre-connexion-usb" style="width:50%;"/>
+<img src="Images/ConnectionWindowUSB-eng.png" alt="fenetre-connexion-usb" style="width:50%;"/>
 
 When the **USB** mode is selected, the application immediately displays all the detected interfaces.
 An interface has to be selected and then the **Connection** button can be pressed to initiate the connection.
@@ -209,7 +210,7 @@ The **Refresh** button can be pressed to refresh the interfaces if the wanted in
 As with the other connection modes, the errors will appear in the bottom of the window, as well as the connection states and the **Connection** and **Disconnection** buttons.
 Functional models can be created and personalized in this window.
 
-<img src="Images/StructureEditWindow.png" alt="fenetre-structure-vide" style="width:70%;"/>
+<img src="Images/StructureEditWindow-eng.png" alt="fenetre-structure-vide" style="width:70%;"/>
 
 There are two main columns:
 - The left one is used for **personnalizing DPTs**.
@@ -242,7 +243,7 @@ If the structure is not possible, error messages will appear when **Apply change
 
 ## 2.5. Analysis Window <a name="analysis-window"></a>
 
-<img src="Images/TestConfigWindow.png" alt="fenetre-analyse" style="width:90%;"/>
+<img src="Images/TestConfigWindow-eng.png" alt="fenetre-analyse" style="width:90%;"/>
 
 This window can be accessed by clicking on **Test parameters** in the main window.
 The analysis can be configured and started in this window.
@@ -259,7 +260,7 @@ However, there are view updating issues meaning that the application will untick
 
 ## 2.6. Analysis Report Window <a name="report-window"></a>
 
-<img src="Images/PDFReportCreationWindow.png" alt="fenetre-rapport" style="width:50%;"/>
+<img src="Images/PDFReportCreationWindow-eng.png" alt="fenetre-rapport" style="width:50%;"/>
 
 This window can be accessed after clicking on **Export report** in the main window.
 
@@ -345,6 +346,63 @@ However, they are only available in french. Here are the issues they cover:
 7. Interface non reconnue → Please refresh the list and check the plugging.
 
 ## 3.4. Create a Test <a name="create-test"></a>
+In order to verify that the addresses are correctly linked to the good participants, that these participants function
+and that the transmission of information is correct in the installation, one must create tests!
+</br>KNX Virtual Integrator allows to create tests which send a command or more and wait for (a) certain value(s) in reception
+for a certain amount of time. The success of tests is based on the comparison between the expected value and the received value.
+</br>There are multiple methods and steps to build these tests, they use the 4 columns and the buttons of number 3 present
+on the [main window](#main-window). </br>
+The first method is to import without modifying what the software first created. For this method, one should start at step 3
+which is to import addresses or an ETS project. Please refer to the [import from ETS](#ets-import) for this step.
+(For secured KNX projects, either export the addresses from ETS and import them in KNX VI,
+or remove the password in ETS and then import the project in KNX VI. A project secured with a password cannot be imported in KNX VI.)
+The steps 4 and 5 are the verification of the good import : the user should manually browse the structures and the models
+in order to verify that all the boxes from the 3rd column (or the step 5) of the [main window](#main-window) are correctly filled.
+
+<img src="Images/Elements.png" alt="colonne-elements" style="width:50%;"/>
+
+To consider the boxes correctly filled in, all models in a structure should have the same format:
+the same number of ‘**tested elements**’, **commands**, **receptions** and **values to send/receive**.
+The values should also be the same between the models in the structure, unless they are filled in manually.
+</br>The addresses must be different, but for everything to be filled in correctly, each address box must be filled in.
+If any addresses are missing, refer to column 4, i.e. the list of addresses, to fill in the empty boxes by hand.
+**Incorrect completion may be caused by missing addresses, incorrectly configured addresses (non-standard names,
+missing DPTs, etc.), etc.**
+
+The values must be integers and in decimal code. For example, if the input needs to be text, each letter must be transformed
+into its decimal code. The values are preferably positive integers, but we have not taken all cases into account,
+so the value **-1** will not cause any problems for testing, but for [KNX VI save](#vi-import), it may cause problems.
+Because, among the buttons, it is possible to deactivate the value (the box turns grey and the value goes invisible)
+and after the import, each value set to -1 will be automatically deactivated. It is possible to reactivate it by clicking
+on the blue button next to the box. The deactivated values correspond to the addresses which a response is expected
+but its value is unknown. So the success will be decided only on the presence of the response and not on its value. </br>
+When all the boxes have been verified, it is possible to go to the [test launch](#launch-test).
+
+Another method is the manual filling. </br>
+It is possible to import the addresses or the project and then to suppress everything that was created
+(or import a file without DPT so there is no recognition). Not importing makes it impossible to give a name to the project.
+
+
+<img src="Images/StructElement.png" alt="colonne-elements" style="width:50%;"/>
+
+1. One should modify the structures or create new ones: open the [structure edit window](#structure-window) and then
+add DPTs in the left column and modify their types, they correspond to the list of DPTs which will be present in the
+tests of this structure. Then, add tested elements, adjust the number of dispatches/receptions with the buttons next to
+"Dispatch(es)" and "Reception(s)", assign them the desired DPTs in dispatch/reception with the combobox. For example,
+with an ON/OFF light, two type 1 DPTs should be put, one as a dispatch and the other as a reception.
+It is optional, but it is also possible to add default values with the "**+**" and "**-**" on the bottom-right side 
+of the element. These values can be modified.
+2. Validate the structure, close the edition window and add the desired number of functional models.
+3. Select each model to add the group addresses to associate to each DPT. The addresses must be formated the same as
+1/250, 1/3/16... Finally, add the values to send and to receive just like in the structure edit window,
+the buttons next to the values allow to deactivate them (top button) or set them back to 0 (bottom button).</br>
+
+The last method combines the first two: start with modifying the structures but this time add keywords to the structure
+and to the DPTs. The structure keywords allow you to classify the group addresses as dispatch or reception
+in the correct element.</br> 
+It is possible to draw inspiration from the keywords already present in the structures predefined by the software
+but the recognition is not perfect. Next, one should import addresses, as in the first method, to activate recognition.
+You must then check that everything corresponds to the desired tests and complete the boxes or the number of templates if necessary.
 
 ## 3.5. Run a Test <a name="launch-test"></a>
 It is the purpose of this software: to test and analyze an installation! To do so, the [test configuration window](#analysis-window)
@@ -361,7 +419,7 @@ It is also possible to change the maximal answer timeout allowed for the recepti
 to finish. That is why there is a need to be able to change the timeout.
 </br> Caution, these parameters are general and apply to all the models that will be tested!
 
-In case of a new importation, the list of models to be tested will be emptied automatically, but it is also possible to do
+In case of a new import, the list of models to be tested will be emptied automatically, but it is also possible to do
 it manually using the **Reset selection** button. Finally, to launch the analysis of the list, there is simply need to press
 the **Launch Test** button.
 
@@ -371,8 +429,44 @@ the checkmark means "finished" (either successfully or not, same icon). When eve
 </br> At this moment, it is possible to go to the [Report creation window](#create-report).
 
 ## 3.6. Generate a Report <a name="create-report"></a>
+In order to prove the validity of the installation or to diagnose it, KNX VI makes available the possibility of
+generating a PDF document compiling the results from each command sent to the installation.
+After a short summary on how the report is filled and the information of the project, each tested model is listed,
+with its tested, and the associated commands.
+One line in a tested element corresponds to one command line in the report. The successes, failures, responses that show presence
+or errors correspond to the fact that what was received in return corresponds or not to what was expected.
+Each result corresponds to a reception box.
+
+If the reception value is deactivated, the reception will automatically be a success.
+
+To generate to report, the [report creation window](#report-window) needs to be opened. Then, it is possible to fill in
+an author name which will appear in the report, but it is optional. The project name will also appear in the report.
+To create and save the report, the **Save the report** button needs to be clicked and then a filename needs to be chosen
+in the window that opens. Be careful when replacing a file, as it may already be open somewhere. Finally, you can confirm
+your choice and the path where the file is saved will appear in the report window. You can preview the PDF by clicking on
+**Preview report**, but this option may cause compatibility issues depending on the PDF readers installed on your computer.
+
+The **Reset parameters** button clears the author name, save path and cancels the preview.
+It does not delete the test results nor the report if it has already been saved.
 
 ## 3.7. Import/Export KNX VI Projects <a name="vi-import"></a>
+In KNX Virtual Integrator, you have the possibility to export your dictionary of structures, the models and the values and
+addresses present in the boxes. The export also includes the name of the project. Saving the addresses from the
+[fourth column of the main window](#main-window) is not yet implemented. To display them,
+it is advised to first import the addresses and then import the previously exported KNX VI project, in order to get only
+the addresses without the automatic recognition which would modify your project.
+The test parameters ([test config window](#analysis-window)) are not exportable.
+
+The import overwrites all information present in KNX VI. The user should not forget to save their projects in advance!
+
+The KNX VI project import/export functionality is accessible in the [first column of the main window](#main-window).
+It allows for the manual save of your projects. The software does not automatically save and does not warn if it is closed
+without a project having been saved. In fact, it is mandator to save/export the project in order to be able to come back to it later.
+
+- In order to successfully complete the export, a file name needs to be chosen. or the default one can be kept.
+To ensure a correct export, it is possible to open a file explorer and to look for the exported file.
+- For the import, a file name corresponding to a previously exported project needs to be chosen in the dialof window opened
+after the use of the export button. Finally, either the entry key needs to be pressed or the file needs to be chosen to finalize the import.
 
 
 <br></br>
@@ -390,7 +484,7 @@ that makes it possible to rename addresses so they can easily be recognized!
 
 **How could I display the addresses without using the automatic filling of the models?**
 Unfortunately, the current version of KNX Virtual Integrator does not allow the possibility of removing the recognition.
-However, you may still delete the models that were created after the importation, or modify them manually. 
+However, you may still delete the models that were created after the import, or modify them manually. 
 
 <br></br>
 [← Back](../README.md)
