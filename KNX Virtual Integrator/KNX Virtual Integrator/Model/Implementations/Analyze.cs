@@ -172,7 +172,7 @@ public class Analyze(IGroupCommunication communication) : IAnalyze
         var result = ResultType.Failure;
         var alternateResult = ResultType.Failure;
         var i=0;
-        if (expectedResult.Value[index] == null)
+        if (expectedResult.Value[index] == null || (expectedResult.IntValue[index].IsEnabled is false && readValues.Count != 0))
             result = ResultType.Success;
         while (!result.Equals(ResultType.Success) && i < readValues.Count)
         {
