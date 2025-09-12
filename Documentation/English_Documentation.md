@@ -282,10 +282,33 @@ Once generated, the report is exported in a pdf format and can be shared.
 ## 3.4. Create a Test <a name="create-test"></a>
 
 ## 3.5. Run a Test <a name="launch-test"></a>
+It is the purpose of this software: to test and analyze an installation! To do so, the [test configuration window](#analysis-window)
+needs to be opened from the main window.
+In this window, **a model's checkbox must be checked** in order to add it to the list of models which will be tested.
+It is also possible to check the checkboxes in the column of structures to add all the structure's models to the test.
+
+The tests will be done in the chronological order of addition to the list of models to test. However, if a model is modified
+after being added to the list, it will not be updated in the list of models to test.
+It needs to be removed from the list by emptying the list or unchecking the model, and then added again.
+
+Now, it is possible to change the delay between each element to slow down the test and not overload the bus.
+It is also possible to change the maximal answer timeout allowed for the reception: certain functions might take a longer time
+to finish. That is why there is a need to be able to change the timeout.
+</br> Caution, these parameters are general and apply to all the models that will be tested!
+
+In case of a new importation, the list of models to be tested will be emptied automatically, but it is also possible to do
+it manually using the **Reset selection** button. Finally, to launch the analysis of the list, there is simply need to press
+the **Launch Test** button.
+
+During the test, the software is slowed down quite a lot (and functions only in short lapse of time between each command) but
+it displays the advancement state of each test with icons: the hourglass means "waiting", the circle means "running" and
+the checkmark means "finished" (either successfully or not, same icon). When everything is finished the software returns to its usually state.
+</br> At this moment, it is possible to go to the [Report creation window](#create-report).
 
 ## 3.6. Generate a Report <a name="create-report"></a>
 
 ## 3.7. Import/Export KNX VI Projects <a name="vi-import"></a>
+
 
 <br></br>
 # 4. FAQ <a name="faq-title"></a>
@@ -293,6 +316,16 @@ Once generated, the report is exported in a pdf format and can be shared.
 **Why can’t the app be installed for all users at once?**</br>
 Most likely due to folder, permission, and registry key issues,  
 the app may never launch when installed outside the user’s AppData folder.
+
+**Why is there no recognition when I import a project/when I import addresses?**
+The recognition happens only when group addresses are correctly configured.
+A group address is said to be correctly configured when it has a DPT. If the address's name is not standardized,
+the recognition will very often be bad. [KNX Boost Desktop](https://github.com/Daichi9764/UCRM) is a software
+that makes it possible to rename addresses so they can easily be recognized!
+
+**How could I display the addresses without using the automatic filling of the models?**
+Unfortunately, the current version of KNX Virtual Integrator does not allow the possibility of removing the recognition.
+However, you may still delete the models that were created after the importation, or modify them manually. 
 
 <br></br>
 [← Back](../README.md)
