@@ -1,6 +1,6 @@
 # DOCUMENTATION - KNX Virtual Integrator
 
-Dernière révision : 10/09/2025 (KNX Virtual Integrator v1.3)
+Dernière révision : 12/09/2025 (KNX Virtual Integrator v1.5)
 
 ## Langues pour la documentation / Documentation language :
 - [Français](French_Documentation.md)

@@ -2,7 +2,7 @@
 
 ## Table of Contents
 
-Last revision : 10/09/2025 (KNX Virtual Integrator v1.3)
+Last revision : 12/09/2025 (KNX Virtual Integrator v1.5)
 
 ## Documentation languages:
 - [Français](French_Documentation.md)

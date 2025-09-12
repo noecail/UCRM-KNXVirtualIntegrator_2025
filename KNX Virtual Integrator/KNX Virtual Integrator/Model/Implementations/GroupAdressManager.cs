@@ -41,7 +41,7 @@ public class GroupAddressManager(Logger logger, ProjectFileManager projectFileMa
     /// <summary>
     /// Group address names prefixes. It is initialized for command
     /// </summary>
-    public string[] Prefixes { get; set; } = { "Cmd", "Command", "Control", "Do","on/off", "Variations", "Montee/Descente", "Position", "Valeurs" }; //Initialize the keywords for command
+    public string[] Prefixes { get; set; } = { "Cmd", "Command"}; //Initialize the keywords for command
 
     /// <summary>
     /// Extracts group address information from a specified XML file.
