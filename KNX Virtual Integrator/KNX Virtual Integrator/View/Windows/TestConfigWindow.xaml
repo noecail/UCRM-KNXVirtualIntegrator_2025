@@ -1282,13 +1282,21 @@
                         <TextBlock
                             Text="{DynamicResource AnalysisError}"
                             FontWeight="Bold"
-                            Foreground="Red" />
+                            Foreground="{StaticResource RedBrush}" />
                         <TextBlock
                             Text="{Binding AnalysisErrorMessage}"
                             FontWeight="SemiBold"
-                            Foreground="Red"
+                            Foreground="{StaticResource RedBrush}"
                             TextWrapping="Wrap" />
                     </StackPanel>
+                    
+                    <TextBlock Grid.Row="4"
+                               Margin="20,0"
+                               Visibility="{Binding AnalysisSuccessMessageVisibility}"
+                               Text="{DynamicResource AnalysisSuccess}"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource KnxGreenBrush}"
+                               TextWrapping="Wrap" />
                     
                     <StackPanel Grid.Row="5"
                                 Orientation="Horizontal"

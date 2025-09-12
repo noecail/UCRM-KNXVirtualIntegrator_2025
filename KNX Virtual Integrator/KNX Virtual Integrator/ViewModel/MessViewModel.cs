@@ -146,14 +146,24 @@ namespace KNX_Virtual_Integrator.ViewModel
         public ICommand HideReportGenerationSuccessMessageCommand { get; private set; }
         
         /// <summary>
-        /// Command that shows the ReportGenerationSuccessMessage
+        /// Command that shows the AnalysisErrorMessage
         /// </summary>
         public ICommand ShowAnalysisErrorMessageCommand { get; private set; }
         
         /// <summary>
-        /// Command that hides the ReportGenerationSuccessMessage
+        /// Command that collapses the AnalysisErrorMessage
         /// </summary>
-        public ICommand HideAnalysisErrorMessageCommand { get; private set; }
+        public ICommand CollapseAnalysisErrorMessageCommand { get; private set; }
+        
+        /// <summary>
+        /// Command that shows the AnalysisSuccessMessage
+        /// </summary>
+        public ICommand ShowAnalysisSuccessMessageCommand { get; private set; }
+        
+        /// <summary>
+        /// Command that collapses the AnalysisSuccessMessage
+        /// </summary>
+        public ICommand CollapseAnalysisSuccessMessageCommand { get; private set; }
         
         /// <summary>
         /// Command that prints the <see cref="SelectedModel"/>.

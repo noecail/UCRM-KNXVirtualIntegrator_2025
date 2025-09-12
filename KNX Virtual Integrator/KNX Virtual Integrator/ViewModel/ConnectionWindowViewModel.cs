@@ -91,23 +91,4 @@ public partial class MainViewModel
             WhenPropertyChanged(nameof(ConnectionErrorMessageVisibility));
         }
     }
-    
-    /// <summary>
-    /// The visibility state of the error messages in <see cref="View.Windows.ConnectionWindow"/>.
-    /// </summary>
-    private Visibility _analysisErrorMessageVisibility = Visibility.Collapsed;
-    /// <summary>
-    /// Gets or sets the visibility state of the error messages
-    /// in <see cref="View.Windows.ConnectionWindow"/>.
-    /// </summary>
-    public Visibility AnalysisErrorMessageVisibility
-    {
-        get => _analysisErrorMessageVisibility;
-        set
-        {
-            if (_analysisErrorMessageVisibility == value) return;
-            _analysisErrorMessageVisibility = value;
-            WhenPropertyChanged(nameof(AnalysisErrorMessageVisibility));
-        }
-    }
 }
