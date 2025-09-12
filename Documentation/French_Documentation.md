@@ -331,10 +331,10 @@ connecter :
 - En IP (en local, supporte l'IP Secure et est sensé supporter l'IP routing et l'IP tunneling mais peu de tests ont été effectués).
 - En IP avec NAT/PAT (à distance avec une adresse publique sur le port 3671, supporte l'IP Secure).
 
-Pour choisir le mode de connexion, il faut ouvrir la liste déroulante en haut de la [fenêtre de connexion](#connection-window) puis de choisir l'option choisie.
+Pour choisir le mode de connexion, il faut ouvrir la liste déroulante en haut de la [fenêtre de connexion](#connection-window) puis de choisir l'option voulue.
 Ensuite, renseigner l'adresse IP et l'adresse individuelle de l'interface dans le cas du NAT ou de choisir l'interface voulue dans les autres cas.
 Attention, certaines interface proposées peuvent ne pas être accessibles depuis KNX VI si elles ne possèdent pas d'adresse individuelle.
-Ensuite, si l'interface utilise IP Secure, il faut  renseigner un fichier .knxkeys qui s'exporte depuis ETS :
+Ensuite, si l'interface utilise IP Secure, il faut  renseigner un fichier .knxkeys qui s'exporte depuis ETS  et son mot de passe :
 <img src="Images/KnxkeysETS.png" alt="exporter-knxkeys-ets" style="width:50%;"/>
 Et puis, il faut inclure le mot de passe du fichier .knxkeys (présent au dessus du bouton d'exportation du fichier).
 </br> Attention, si le mot de passe est changé, il peut falloir re-télécharger le programme sur le participant KNX qui 

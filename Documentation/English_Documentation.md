@@ -316,6 +316,33 @@ Importing a project or group addresses is not mandatory but the title of the pro
 
 ## 3.3. Connect to the KNX Bus <a name="bus-connection"></a>
 
+The connection with the KNX bus must be set to analyse the KNX installation in the building.
+The connection can be set via :
+- USB (connection with a cable),
+- IP (locally, should be able to connect with IP tunnelling and IP routing, but only few tests have been done),
+- IP with NAT/PAT (remotely with a public IP address, with the port 3671, allows IP Secure).
+
+The connection mode can be chosen by selecting the desired option after clicking on the combobox at the top of the window.
+Then, the interface must be chosen, and for remote connection, the IP address and the individual address must be filled too.
+Warning, some displayed interfaces may not be accessible via KNX VI if they don't have an individual address.
+If the interface is an IP Secure interface, a .knxkeys format file and its password must be included and can be exported directly in ETS :
+<img src="Images/KnxkeysETS.png" alt="exporter-knxkeys-ets" style="width:50%;"/>
+Then, a password must be created in the box above the exportation button to protect the .knxkeys file.
+</br> Warning, if the password above the export button is changed, the application may have to be redownloaded in the KNX device
+containing the interface.
+
+Finally, pressing **Enter** or **connection** button initiates the connection.
+- If the connection succeeds, a green message will display the interface name, the disconnect button will become red, and the button in
+the [main window](#main-window) will be green.
+  - If the connection fails, it may have different causes. Some of them have been treated and will display specific error messages.
+However, they are only available in french. Here are the issues they cover:
+1. Oubli de mettre le fichier knxkeys pour l'IP Secure → The interface is an IP Secure and no .knxkeys file is loaded.
+2. Mauvais mot de passe pour le bon fichier knxkeys → The passowrd for the .knxkeys file is wrong.
+3. L'interface est déjà utilisée → The interface is already used, so wait or try another interface.
+4. Pas d'adresse IP de type IPv4 ou adresse invalide renseignée → The public address given is not valid (when NAT)
+5. L'adresse IP n'a pas permis de créer la connexion → The router IP address may be wrong or the app is unable to reach it.
+6. Pas d'interface sélectionnée → No interface is selected in the combo box.
+7. Interface non reconnue → Please refresh the list and check the plugging.
 
 ## 3.4. Create a Test <a name="create-test"></a>
 
