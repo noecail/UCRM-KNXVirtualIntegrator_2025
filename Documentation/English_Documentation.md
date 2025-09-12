@@ -262,6 +262,7 @@ However, there are view updating issues meaning that the application will untick
 <img src="Images/PDFReportCreationWindow.png" alt="fenetre-rapport" style="width:50%;"/>
 
 This window can be accessed after clicking on **Export report** in the main window.
+
 Analysis result report can be generated here.
 
 There are 3 different zones :
@@ -274,10 +275,47 @@ Once generated, the report is exported in a pdf format and can be shared.
 <br></br>
 # 3. Using the Application <a name="user-title"></a>
 ## 3.1. Modify Settings <a name="modify-settings"></a>
+In the KNX Virtual Integrator app, there are three main parameters, excluding the possibility to save log archive for debugging.
+These three parameters are :
+- Clicking on the theme box will display the two available modes: light and dark.
+The theme can be selected by just clicking on the desired one. The button at the bottom of the window must be pressed to save the changes.
+- The application language: only French and English are fully implemented. English is the default language for all the other languages.
+To change it, the procedure is the same as for changing the theme.
+- Application scale : to change the application's and texts' sizes. This parameter exists since
+the application isn't able to scale automatically, but doesn't always work well.
+To change the scale the procedure is to click in the bar on the desired scale, or to slide the button with the mouse. 
+Then, the button must be pressed to save it.
+
+The debugging data isn't communicated to anyone. There are only saved in the .zip file.
+All the data ticked to be saved will be saved in "debug info" and "latest logs" files.
+They can directly be modified to delete sensible data.
 
 ## 3.2. Import from ETS <a name="ets-import"></a>
+There are two ways to import group addresses from a KNX project:
+- Clicking on **Import addresses** to import a group adresses file in .xml format,
+- Clicking on **Import project** to import an entire KNX project in .knxproj format.
+When using this option, only the group addresses will be taken from the project. As secured projects cannot be directly imported,
+the group addresses must be imported form the group addresses file in .xml format.
+
+The imported group addresses are directly displayed in the last column of the [main window](#main-window).
+They are also processed to recognize specific structures. The application takes the addresses and tries 
+to recognize their structure and build the associated functional model, by building the tested elements.
+They will be associated form their names by recognizing "CMD.." and "IE..".
+"Percentage.." will also be associated with "CMD.." and "IE..".
+The full method is fully explained in [structure editing window](#structure-window) and [Test creation](#create-test).
+</br> Warning, only projects with 3 levels group addresses can be processed.
+
+Creating a group addresses file in .xml format can be done by opening the group addresses panel in KNX ETS,
+then by selecting a group, and by right-clicking on it and clicking on **Export group addresses**.
+A window will be open, where .xml format must be chosen at the top right part, as well as the saving path.
+Right-clicking on <img src="Images/GroupAddressETS.png" alt="fenetre-ets-adresses-groupe" style="width:70%;"/>
+and following the same procedure as the one explained above will create a group addresses file with all the address of the project.
+
+Importing a project or group addresses is not mandatory but the title of the project in the report will be
+"new project" if nothing is imported.
 
 ## 3.3. Connect to the KNX Bus <a name="bus-connection"></a>
+
 
 ## 3.4. Create a Test <a name="create-test"></a>
 

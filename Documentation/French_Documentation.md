@@ -288,9 +288,9 @@ Ces 3 paramètres sont :
 - Le thème Clair/Obscur qui se change en cliquant sur la boite correspondant au thème, qui déroule les choix possibles 
 et il suffit de cliquer sur le thème préféré. Pour que le changement soit effectif, il faut appuyer sur le bouton en bas de la fenêtre.
 - La langue de l'application : seuls le Français et l'Anglais sont supportés complètement (toute autre langue mettra l'application en Anglais).
-La méchanique de changement de langue est identique à celle du thème.
+La mécanique de changement de langue est identique à celle du thème.
 - L'échelle de l'application : Elle permet de changer la taille de l'application et de ses textes. Comme l'application
-n'est pas capable de se mettre à l'échelle correctement dans tous les cas, ce paramètre à été ajouté mais reste fautif.
+n'est pas capable de se mettre à l'échelle correctement dans tous les cas, ce paramètre a été ajouté mais reste fautif.
 Pour changer l'échelle, il est possible de cliquer sur le long de la barre ou de maintenir appuyé la souris sur le bouton 
 de la barre et de relacher sur l'échelle voulue. Il faut ensuite valider le choix avec le bouton en bas de la fenêtre.
 
@@ -314,7 +314,7 @@ les "Pourcentage.." seraient regroupés avec les "CMD.." et les "IE..".
 La méthode de reconnaissance est détaillée dans la [fenêtre d'édition des structures](#structure-window) et la [création d'un test](#create-test).
 </br> Attention, seules les adresses à 3 niveaux peuvent être reconnues.
 
-Pour créer le fichier d'adresses de groupe en .xml, il faut ouvrir le panneau des adresses de groupes sur KNX ETS et de 
+Pour créer le fichier d'adresses de groupe en .xml, il faut ouvrir le panneau des adresses de groupes sur KNX ETS et 
 choisir un groupe ou groupe médian, de cliquer droit dessus et cliquer dans le menu contextuel sur "**Exporter les adresses**" 
 et puis de choisir l'option "**XML**" en haut de la fenêtre. Enfin, valider le choix et l'endroit de sauvegarde.
 Pour créer le fichier de toutes les adresses, il faut cliquer droit sur :
