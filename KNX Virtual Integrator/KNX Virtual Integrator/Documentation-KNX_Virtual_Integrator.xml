@@ -5022,7 +5022,7 @@
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.CollapseAnalysisErrorMessageCommand">
             <summary>
-            Command that hides the AnalysisErrorMessage
+            Command that collapses the AnalysisErrorMessage
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.ShowAnalysisSuccessMessageCommand">
@@ -5032,7 +5032,7 @@
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.CollapseAnalysisSuccessMessageCommand">
             <summary>
-            Command that hides the AnalysisSuccessMessage
+            Command that collapses the AnalysisSuccessMessage
             </summary>
         </member>
         <member name="P:KNX_Virtual_Integrator.ViewModel.MainViewModel.SelectedModelConsoleWriteCommand">

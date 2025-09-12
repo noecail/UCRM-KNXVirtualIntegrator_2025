@@ -99,6 +99,10 @@ Pour installer et lancer l’application, veuillez suivre les indications suivan
 
    Une fois l’installation terminée, vous verrez une fenêtre de confirmation. Cochez la case **"Exécuter KNX Boost Desktop"** si vous souhaitez démarrer l’application immédiatement, puis cliquez sur **"Terminer"**.
 
+Attention, certaines adresses peuvent ne pas être reconnues et vont dans la structure Unrecognized DPTs.
+
+Il est toujours possible de sauvegarder le dictionnaire de structures créé (avant de faire la reconnaissance) ou 
+directement tout ce qui a été créé (après la reconnaissance) avec les boutons d'[import/export de KNX VI](#vi-import).
 
 
 <br></br>
@@ -368,6 +372,8 @@ La première vient de l'importation sans modifier ce qui est créé par l'applic
 Les étapes 4 et 5 contiennent la vérification de la bonne importation : il faut parcourir à la main les structures et 
 les modèles pour vérifier que toutes les cases de la 3e colonne (ou étape 5) de la [fenêtre principale](#main-window) soient correctement remplies.
 
+<img src="Images/Elements.png" alt="colonne-elements" style="width:50%;"/>
+
 Pour considérer les cases comme correctement remplies, il faut vérifier que tous les modèles d'une structure possèdent 
 la même forme : le même nombre "**d'Éléments de test**", de **commandes**, de **réceptions** et de **valeurs à envoyer/recevoir**.
 Les valeurs devraient être aussi les mêmes entre les modèles de la structure tant que ce n'est pas rempli manuellement. 
@@ -379,14 +385,38 @@ normés, des DPTs manquants,...),etc.
 Pour les valeurs, elles doivent être des entiers et en code décimal. Par exemple, s'il faut rentrer du texte, il faut transformer 
 chaque lettre en son code en décimal. Les valeurs sont préférablement des entiers positifs mais nous n'avons pas pris en 
 compte tous les cas donc la valeur **-1** ne posera pas de problème pour les tests mais pour la [sauvegarde KNX VI](vi-import),
-elle pourra en poser. Car parmi les boutons, il est possible de désactiver la valeur (la case se grise) et après importation, 
-toute valeur à -1 se désactive automatiquement. Il est possible de réactiver en cliquant sur le bouton bleu de la case.
-Les valeurs désactivées correspondent aux adresses dont on attend une réponse mais on ne sait pas quelle est la réponse. 
-Donc le succès ne sera décidé que sur la présence d'une réponse et pas de comparaison sur la valeur. 
+elle pourra en poser. Car parmi les boutons, il est possible de désactiver la valeur (bouton gris et la case se grise) 
+et après importation, toute valeur à -1 se désactive automatiquement et toute valeur désactivée se met à -1. 
+Il est possible de réactiver en cliquant sur le bouton bleu de la case.</br>
+Les valeurs désactivées correspondent aux adresses dont on attend une réponse mais on ne sait pas quelle est la réponse.
+Donc le succès ne sera décidé que sur la présence d'une réponse et pas de comparaison sur la valeur. </br>
+Lorsque toutes ces cases ont été vérifiées, il est possible de passer au [lancement de test](#launch-test).
+
+Une autre méthode est le remplissage manuel. </br> 
+Il est possible d'importer les adresses ou le projet puis de supprimer tout ce qui est créé (ou d'importer un fichier 
+sans DPT pour qu'il n'y ait pas de reconnaissance). Ne pas importer empèche de donner un nom au projet.</br>
 
 
+<img src="Images/StructElement.png" alt="colonne-elements" style="width:50%;"/>
 
+1. Il faut modifier les structures ou en créer des nouvelles : ouvrir la [fenêtre d'édition de structures](#structure-window)
+puis ajouter des DPTs dans la colonne de gauche et modifier leurs types, ils correspondent à la liste de DPTs qui seront 
+présents dans les tests de cette structure. Ensuite, ajouter des Éléments à tester, ajuster le nombre d'envois/réception
+avec les boutons à côté de "Envoi" et "Réception", leur assigner les DPTs voulus en envoi/réception avec la liste 
+déroulante. Par exemple, pour une lumière ON/OFF, mettre deux DPTs de type 1 avec un en envoi et un en réception. 
+C'est optionnel mais il est possible de rajouter des valeurs par défaut avec les "**+**" et "**-**" en bas à 
+droite de l'élément. Ces valeurs peuvent être modifiable. 
+2. Valider la structure et fermer la fenêtre d'édition et ajouter le nombre de modèles fonctionnels voulu.
+3. Sélectionner chaque modèle pour ajouter les adresses de groupe à associer au DPT. Elles doivent être de la forme 1/250, 
+1/3/16, etc. Enfin, ajouter la quantité de valeur à envoyer et recevoir comme dans la fenêtre d'édition de structures, 
+les boutons à côté des cases des valeurs permettent de les désactiver (bouton du haut) et les remettre à 0 (bouton du bas).</br>
 
+La dernière méthode regroupe les deux premières : débuter par la modification des structures mais cette fois en 
+rajoutant des mots-clés à la structure et aux DPTs. Les mots-clés de la structure permettent de regrouper les adresses de 
+groupe en fonction de leur nom et les mots-clés des DPTs permettent de classer ces adresses en envoi, réception dans le bon élément.</br>
+Il est possible de s'inspirer des mots-clés déjà présents dans les structures de l'application mais la reconnaissance 
+n'est pas parfaite. Ensuite, il faut importer des adresses comme dans la première méthode pour activer la reconnaissance.
+Il faut alors vérifier que tout correspond aux tests voulus et compléter les cases ou le nombre de modèles si besoin. 
 
 
 ## 3.5. Lancement d'un test <a name="launch-test"></a>
