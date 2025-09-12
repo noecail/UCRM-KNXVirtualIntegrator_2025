@@ -421,12 +421,9 @@ Une ligne d'un élément à tester correspond à une ligne de commande dans le r
 ou les erreurs correspondent au fait que ce qui a été reçu en retour correspond ou non à ce qui a été attendu. 
 Chaque résultat correspond à une case de réception.
 
-Attention, si la valeur est désactivée il peut y avoir plusieurs possibilités : 
-- s'il n'y a pas de valeur, la réception sera automatiquement un succès.
-- s'il y a une valeur, la réception sera évaluée comme habituellement, donc si rien n'est reçu, elle sera indiqué comme un échec.
-Il ne faut donc pas oublier que cette réception précise peut ne pas être pertinente.
+Si la valeur de réception est désactivée, la réception sera automatiquement un succès.
 
-Pour la génération du rapport, il faut ouvrir la [fenêtre de rapport d'analyse](#report-window). Ensuit, il est possible de renseigner 
+Pour la génération du rapport, il faut ouvrir la [fenêtre de rapport d'analyse](#report-window). Ensuite, il est possible de renseigner 
 un nom d'auteur qui apparaitra dans le rapport, mais c'est optionnel. Le nom du projet apparaitra aussi dans le rapport.
 Pour créer et sauvegarder le rapport, il faut cliquer sur le bouton "**Sauvegarder le rapport**" et choisir un nom de fichier
 dans la fenêtre qui s'est ouverte. Faites attention si vous remplacez un fichier, qu'il ne soit pas déjà ouvert quelque part. 
@@ -434,28 +431,27 @@ Enfin, vous pouvez valider votre choix et le chemin où le fichier est sauvegard
 Il est possible de prévisualiser le pdf en appuyant sur "**Prévisualiser le rapport**" mais cette option peut causer des 
 problèmes de compatibilité en fonction des lecteurs de PDF présents sur l'ordinateur. 
 
-Le Bouton "**Annuler**" permet de vider le nom d'auteur, le chemin de sauvegarde et donc d'annuler prévisualisation. 
+Le Bouton **Réinitialiser paramètres** permet de vider le nom d'auteur, le chemin de sauvegarde et donc d'annuler prévisualisation. 
 Cela ne supprime pas les résultats de test ni le rapport s'il est déjà sauvegardé.
 
 ## 3.7. Import/Export de projets KNX VI <a name="vi-import"></a>
 Dans KNX Virtual Integrator, vous avez la possibilité d'exporter votre dictionnaire de structures, les modèles et 
 les valeurs et adresses présentes dans les cases. L'exportation inclue aussi le nom du projet. La sauvegarde des
 adresses de groupes de la [colonne 4 de la fenêtre principale](#main-window) n'est pas encore implémentée. 
-Pour les afficher, il est possible d'importer les adresses avant d'importer le projet KNX VI précédemment exporté pour n'avoir que 
+Pour les afficher, il est possible d'importer les adresses avant d'importer le projet KNX VI précédemment exporté, pour n'avoir que 
 les adresses sans la reconnaissance automatique qui modifierait votre projet.
 Les paramètres de test ([fenêtre de test](#analysis-window)) ne sont pas exportables.
 
-L'importation écrase toute information présente dans KNX VI qui serait nécessaire à l'exportation. N'oubliez pas de 
-sauvegarder vos projets en avance ! 
+L'importation écrase toute information présente dans KNX VI. L'utilisateur ne devrait pas oublier de sauvegarder ses projets en avance ! 
 
 La fonctionnalité d'import/export de projets KNX VI est accessible dans la [colonne 1 de la fenêtre principale](#main-window).
 Elle permet donc de sauvegarder vos projets manuellement. Le logiciel ne sauvegarde pas automatiquement et ne prévient pas 
-s'il est fermé sans avoir été sauvegardé. De fait, il est obligatoire de sauvegarder/exporter le projet pour pouvoir le retrouver plus tard.
+s'il est fermé sans qu'il y ait eu de projet sauvegardé. De fait, il est obligatoire de sauvegarder/exporter le projet pour pouvoir le retrouver plus tard.
 
-- Pour mener à bien l'exportation, veuillez choisir un nom de fichier si vous voulez le changer ou garder celui par défaut. 
-Pour vous assurer de la bonne exportation, vous pouvez ouvrir l'explorateur de fichiers et chercher le fichier exporté. 
-- Pour l'importation, veuillez choisir le nom d'un fichier correspondant à un projet précédemment exporté dans la boite 
-ouverte après l'utilisation du bouton d'importation. Enfin, appuyez sur entrée ou choisissez ce fichier pour finaliser l'importation.
+- Pour mener à bien l'exportation, il faut choisir un nom de fichier ou garder celui par défaut. 
+Pour s'assurer de la bonne exportation, il est possible d'ouvrir l'explorateur de fichiers et de chercher le fichier exporté. 
+- Pour l'importation, il faut choisir le nom d'un fichier correspondant à un projet précédemment exporté dans la boite 
+ouverte après l'utilisation du bouton d'importation. Enfin, il faut appuyer sur entrée ou choisir ce fichier pour finaliser l'importation.
 
 
 <br></br>

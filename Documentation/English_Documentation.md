@@ -334,7 +334,7 @@ It is also possible to change the maximal answer timeout allowed for the recepti
 to finish. That is why there is a need to be able to change the timeout.
 </br> Caution, these parameters are general and apply to all the models that will be tested!
 
-In case of a new importation, the list of models to be tested will be emptied automatically, but it is also possible to do
+In case of a new import, the list of models to be tested will be emptied automatically, but it is also possible to do
 it manually using the **Reset selection** button. Finally, to launch the analysis of the list, there is simply need to press
 the **Launch Test** button.
 
@@ -344,8 +344,44 @@ the checkmark means "finished" (either successfully or not, same icon). When eve
 </br> At this moment, it is possible to go to the [Report creation window](#create-report).
 
 ## 3.6. Generate a Report <a name="create-report"></a>
+In order to prove the validity of the installation or to diagnose it, KNX VI makes available the possibility of
+generating a PDF document compiling the results from each command sent to the installation.
+After a short summary on how the report is filled and the information of the project, each tested model is listed,
+with its tested, and the associated commands.
+One line in a tested element corresponds to one command line in the report. The successes, failures, responses that show presence
+or errors correspond to the fact that what was received in return corresponds or not to what was expected.
+Each result corresponds to a reception box.
+
+If the reception value is deactivated, the reception will automatically be a success.
+
+To generate to report, the [report creation window](#report-window) needs to be opened. Then, it is possible to fill in
+an author name which will appear in the report, but it is optional. The project name will also appear in the report.
+To create and save the report, the **Save the report** button needs to be clicked and then a filename needs to be chosen
+in the window that opens. Be careful when replacing a file, as it may already be open somewhere. Finally, you can confirm
+your choice and the path where the file is saved will appear in the report window. You can preview the PDF by clicking on
+**Preview report**, but this option may cause compatibility issues depending on the PDF readers installed on your computer.
+
+The **Reset parameters** button clears the author name, save path and cancels the preview.
+It does not delete the test results nor the report if it has already been saved.
 
 ## 3.7. Import/Export KNX VI Projects <a name="vi-import"></a>
+In KNX Virtual Integrator, you have the possibility to export your dictionary of structures, the models and the values and
+addresses present in the boxes. The export also includes the name of the project. Saving the addresses from the
+[fourth column of the main window](#main-window) is not yet implemented. To display them,
+it is advised to first import the addresses and then import the previously exported KNX VI project, in order to get only
+the addresses without the automatic recognition which would modify your project.
+The test parameters ([test config window](#analysis-window)) are not exportable.
+
+The import overwrites all information present in KNX VI. The user should not forget to save their projects in advance!
+
+The KNX VI project import/export functionality is accessible in the [first column of the main window](#main-window).
+It allows for the manual save of your projects. The software does not automatically save and does not warn if it is closed
+without a project having been saved. In fact, it is mandator to save/export the project in order to be able to come back to it later.
+
+- In order to successfully complete the export, a file name needs to be chosen. or the default one can be kept.
+To ensure a correct export, it is possible to open a file explorer and to look for the exported file.
+- For the import, a file name corresponding to a previously exported project needs to be chosen in the dialof window opened
+after the use of the export button. Finally, either the entry key needs to be pressed or the file needs to be chosen to finalize the import.
 
 
 <br></br>
@@ -363,7 +399,7 @@ that makes it possible to rename addresses so they can easily be recognized!
 
 **How could I display the addresses without using the automatic filling of the models?**
 Unfortunately, the current version of KNX Virtual Integrator does not allow the possibility of removing the recognition.
-However, you may still delete the models that were created after the importation, or modify them manually. 
+However, you may still delete the models that were created after the import, or modify them manually. 
 
 <br></br>
 [← Back](../README.md)
